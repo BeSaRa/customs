@@ -20,6 +20,33 @@
       ],
       "@enums/*": [
         "./src/enums/*"
+      ],
+      "@model-interceptors/*": [
+        "./src/model-interceptors/*"
+      ],
+      "@http-interceptors/*": [
+        "./src/http-interceptors/*"
+      ],
+      "@http-contexts/*": [
+        "./src/http-contexts/*"
+      ],
+      "@pipes/*": [
+        "./src/pipes/*"
+      ],
+      "@guards/*": [
+        "./src/guards/*"
+      ],
+      "@resolvers/*": [
+        "./src/resolvers/*"
+      ],
+      "@validators/*": [
+        "./src/validators/*"
+      ],
+      "@tokens/*": [
+        "./src/tokens/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
       ]
     },
     "baseUrl": "./",
