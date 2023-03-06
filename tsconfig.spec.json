@@ -1,8 +1,8 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
     "outDir": "./out-tsc/spec",
     "types": [
       "jest",
@@ -10,7 +10,7 @@
     ]
   },
   "files": [
-    "./src/setup.jest.ts"
+    "./src/test.ts"
   ],
   "include": [
     "src/**/*.spec.ts",
