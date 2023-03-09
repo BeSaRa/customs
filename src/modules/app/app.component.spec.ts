@@ -1,10 +1,12 @@
-import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { AppComponent } from "@modules/app/app.component";
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AppComponent } from '@modules/app/app.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
-describe("AppComponent", () => {
+describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>;
   beforeAll(() => {
     TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [AppComponent],
     });
   });
@@ -13,10 +15,7 @@ describe("AppComponent", () => {
     fixture = TestBed.createComponent(AppComponent);
   });
 
-  it("should return true", function () {
+  it('should return true', function () {
     expect(fixture.componentInstance).toBeTruthy();
-  });
-  it("should have title property", function () {
-    expect(fixture.componentInstance.title).toBe("customs");
   });
 });

@@ -1,0 +1,11 @@
+:host {
+  @apply flex-grow
+}
+.rotated-background {
+  @apply hidden md:block rounded-[150px] bg-primary w-screen h-screen xl:translate-y-40 absolute origin-center rotate-[35deg] translate-x-1/2
+}
+:host-context(html[dir='ltr']) {
+  .rotated-background {
+    @apply -translate-x-1/2 -rotate-[35deg]
+  }
+}

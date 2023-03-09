@@ -1,0 +1,15 @@
+<div
+  class="h-full w-full relative flex flex-col rtl:bg-gradient-to-br ltr:bg-gradient-to-bl from-primary to-primary-dark overflow-hidden"
+>
+  <div class="bg-primary w-40 h-40 absolute md:block hidden"></div>
+  <div class="rotated-background"></div>
+  <button class="fixed" (click)="toggleLanguage()">toggle</button>
+  <app-screen-size
+    (md)="log($event, 'md')"
+    (xs)="log($event, 'xs')"
+    (lg)="log($event, 'lg')"
+    (sm)="log($event, 'sm')"
+    (xl)="log($event, 'xl')"
+    (xxl)="log($event, 'xxl')"
+  />
+</div>
