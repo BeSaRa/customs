@@ -1,0 +1,12 @@
+.toast-error {
+  --mdc-snackbar-container-color: theme('colors.red.600');
+}
+.toast-warning {
+  --mdc-snackbar-container-color: theme('colors.yellow.600');
+}
+.toast-success {
+  --mdc-snackbar-container-color: theme('colors.green.600');
+}
+.toast-info {
+  --mdc-snackbar-container-color: theme('colors.blue.600');
+}
