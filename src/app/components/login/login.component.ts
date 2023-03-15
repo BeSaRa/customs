@@ -13,7 +13,7 @@ export class LoginComponent {
     this.lang.toggleLang();
   }
 
-  log($event: { name: string; width: number }, size: string): void {
-    console.log($event, size);
+  log(): void {
+    // console.log($event, size);
   }
 }
