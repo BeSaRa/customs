@@ -10,9 +10,8 @@
       "files": "*.html",
       "options": {
         "parser": "angular",
-        "printWidth": 100,
-        "bracketSameLine": true,
-        "singleAttributePerLine": true
+        "printWidth": 120,
+        "bracketSameLine": true
       }
     }
   ]

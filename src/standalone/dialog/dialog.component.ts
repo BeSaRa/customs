@@ -6,6 +6,8 @@ import { DefaultDialogDataContract } from '@contracts/default-dialog-data-contra
 import { DialogContract } from '@contracts/dialog-contract';
 import { ButtonComponent } from '@standalone/button/button.component';
 import { ButtonTypeContract } from '@contracts/button-type-contract';
+import { UserClick } from '@enums/user-click';
+import { DialogType } from '@enums/dialog-type';
 
 type DialogSelectedClasses = {
   bg: string;
@@ -32,28 +34,24 @@ export class DialogComponent {
       text: 'text-sky-500',
       icon: 'information-outline',
       btn: 'info',
-      secondBtn: 'info-outline',
     },
     success: {
       bg: 'bg-green-500',
       text: 'text-green-500',
       icon: 'check-circle-outline',
       btn: 'success',
-      secondBtn: 'success-outline',
     },
     warning: {
       bg: 'bg-yellow-500',
       text: 'text-yellow-500',
       icon: 'alert-outline',
       btn: 'warning',
-      secondBtn: 'warning-outline',
     },
     error: {
       bg: 'bg-red-500',
       text: 'text-red-500',
       icon: 'alert-circle-outline',
       btn: 'error',
-      secondBtn: 'error-outline',
     },
     confirm: {
       bg: 'bg-primary',
@@ -75,14 +73,14 @@ export class DialogComponent {
   }
 
   yes(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(UserClick.yes);
   }
 
   no(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(UserClick.no);
   }
 
-  log($event: MouseEvent) {
-    console.log($event);
+  isConfirmDialog(): boolean {
+    return this.data.type === DialogType.confirm;
   }
 }

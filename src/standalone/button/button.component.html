@@ -1,11 +1,4 @@
-<button
-  [disabled]="disabled"
-  (click)="clickEvent($event)"
-  [ngClass]="type"
-  class="btn {{ size }}">
-  <mat-icon
-    *ngIf="inProgress"
-    class="animate-spin duration-200 size-18"
-    svgIcon="dots-circle"></mat-icon>
+<button [disabled]="disabled" (click)="clickEvent($event)" [ngClass]="type" class="btn {{ size }}">
+  <mat-icon *ngIf="inProgress" class="animate-spin duration-200 size-18" svgIcon="dots-circle"></mat-icon>
   <ng-content></ng-content>
 </button>
