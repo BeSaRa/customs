@@ -23,6 +23,7 @@ import { MatIconRegistry } from '@angular/material/icon';
     MatDialogModule,
   ],
   providers: [],
+
   bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.dialog
-      .confirm('Please Select One of the below Items First')
+      .error('Please Select One of the below Items First', 'Delete Content')
       .afterClosed()
       .subscribe((value) => {
         console.log(value);

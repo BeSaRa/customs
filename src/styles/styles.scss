@@ -23,14 +23,21 @@ html[dir='rtl'] body {
     width: 18px !important;
     height: 18px !important;
   }
+
   &.size-36 {
     width: 36px !important;
     height: 36px !important;
   }
+
   &.size-48 {
     width: 48px !important;
     height: 48px !important;
   }
+}
+
+
+.dialog-footer {
+  @apply border border-t p-3 space-x-4 rtl:space-x-reverse flex justify-center
 }
 
 
