@@ -30,7 +30,7 @@ export class DialogService implements DialogContract {
         data: {
           title,
           content,
-          type: DialogType.error,
+          type: DialogType.ERROR,
         },
       }
     );
@@ -49,7 +49,7 @@ export class DialogService implements DialogContract {
         data: {
           title,
           content,
-          type: DialogType.warning,
+          type: DialogType.WARNING,
         },
       }
     );
@@ -68,7 +68,7 @@ export class DialogService implements DialogContract {
         data: {
           title,
           content,
-          type: DialogType.success,
+          type: DialogType.SUCCESS,
         },
       }
     );
@@ -87,7 +87,7 @@ export class DialogService implements DialogContract {
         data: {
           title,
           content,
-          type: DialogType.info,
+          type: DialogType.INFO,
         },
       }
     );
@@ -110,7 +110,7 @@ export class DialogService implements DialogContract {
         title,
         content,
         buttons,
-        type: DialogType.confirm,
+        type: DialogType.CONFIRM,
       },
     });
   }

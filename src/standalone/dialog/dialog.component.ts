@@ -73,14 +73,14 @@ export class DialogComponent {
   }
 
   yes(): void {
-    this.dialogRef.close(UserClick.yes);
+    this.dialogRef.close(UserClick.YES);
   }
 
   no(): void {
-    this.dialogRef.close(UserClick.no);
+    this.dialogRef.close(UserClick.NO);
   }
 
   isConfirmDialog(): boolean {
-    return this.data.type === DialogType.confirm;
+    return this.data.type === DialogType.CONFIRM;
   }
 }

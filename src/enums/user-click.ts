@@ -1,4 +1,4 @@
 export enum UserClick {
-  no = 'no',
-  yes = 'yes',
+  NO = 'NO',
+  YES = 'YES',
 }
