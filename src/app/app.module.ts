@@ -10,7 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
-import { Observable, of } from 'rxjs';
+import { forkJoin, Observable, tap } from 'rxjs';
+import { ConfigService } from '@services/config.service';
+import { UrlService } from '@services/url.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -26,9 +28,9 @@ import { Observable, of } from 'rxjs';
   providers: [
     {
       provide: APP_INITIALIZER,
-      multi: true,
       useFactory: AppModule.initialize,
-      deps: [],
+      deps: [ConfigService, UrlService],
+      multi: true,
     },
   ],
   bootstrap: [AppComponent],
@@ -40,9 +42,14 @@ export class AppModule {
     );
   }
 
-  static initialize(): () => Observable<boolean> {
+  static initialize(
+    config: ConfigService,
+    urlService: UrlService
+  ): () => Observable<unknown> {
     return () => {
-      return of(true);
+      return forkJoin([config.load()])
+        .pipe(tap(() => urlService.setConfigService(config)))
+        .pipe(tap(() => urlService.prepareUrls()));
     };
   }
 }

@@ -49,6 +49,9 @@
       ],
       "@standalone/*": [
         "./src/standalone/*"
+      ],
+      "@constants/*": [
+        "./src/constants/*"
       ]
     },
     "baseUrl": "./",
