@@ -52,7 +52,13 @@
       ],
       "@constants/*": [
         "./src/constants/*"
-      ]
+      ],
+      "@abstracts/*": [
+        "./src/abstracts/*"
+      ],
+      "@app-types/*": [
+        "./src/app-types/*"
+      ],
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

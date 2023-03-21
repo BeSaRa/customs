@@ -10,9 +10,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
-import { forkJoin, Observable, tap } from 'rxjs';
+import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
+import { InfoService } from '@services/info.service';
+import { LookupService } from '@services/lookup.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -29,7 +31,7 @@ import { UrlService } from '@services/url.service';
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
-      deps: [ConfigService, UrlService],
+      deps: [ConfigService, UrlService, InfoService, LookupService],
       multi: true,
     },
   ],
@@ -44,12 +46,16 @@ export class AppModule {
 
   static initialize(
     config: ConfigService,
-    urlService: UrlService
+    urlService: UrlService,
+    info: InfoService,
+    lookup: LookupService
   ): () => Observable<unknown> {
     return () => {
       return forkJoin([config.load()])
         .pipe(tap(() => urlService.setConfigService(config)))
-        .pipe(tap(() => urlService.prepareUrls()));
+        .pipe(tap(() => urlService.prepareUrls()))
+        .pipe(switchMap(() => info.load()))
+        .pipe(tap((info) => lookup.setLookups(info.lookupMap)));
     };
   }
 }

@@ -33,7 +33,10 @@ export class UrlService {
   public prepareUrls(): EndpointsType {
     this.URLS.BASE_URL = UrlService.removeTrailingSlash(this.config.BASE_URL);
     for (const key in this.urls) {
-      if (this.urls[key as keyof EndpointsType] !== 'BASE_URL') {
+      if (
+        key !== 'BASE_URL' &&
+        Object.prototype.hasOwnProperty.call(this.urls, key)
+      ) {
         this.URLS[key as keyof EndpointsType] = this.addBaseUrl(
           this.urls[key as keyof EndpointsType]
         );
