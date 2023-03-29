@@ -1,6 +1,7 @@
-import { Cloner } from '@abstracts/cloner';
+import { ClonerMixin } from '@mixins/cloner-mixin';
+import { CloneContract } from '@contracts/clone-contract';
 
-export class Lookup extends Cloner {
+export class Lookup extends ClonerMixin(class {}) implements CloneContract {
   id!: number;
   arName!: string;
   category!: number;

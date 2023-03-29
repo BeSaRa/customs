@@ -17,7 +17,7 @@ export class ButtonComponent {
   @Input()
   inProgress = false;
   @Input()
-  size: 'md' | 'sm' | 'xl' = 'md';
+  size: 'md' | 'sm' | 'lg' = 'md';
   @Input()
   type: keyof ButtonTypeContract = 'primary';
 

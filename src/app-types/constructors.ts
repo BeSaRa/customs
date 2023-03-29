@@ -1,2 +1,3 @@
-export type Constructor<T> = new (...args: unknown[]) => T;
-export type AbstractConstructor<T> = abstract new (...args: unknown[]) => T;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type Constructor<T> = new (...args: any[]) => T;
+export type AbstractConstructor<T> = abstract new (...args: any[]) => T;

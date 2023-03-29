@@ -15,6 +15,10 @@ import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
 import { InfoService } from '@services/info.service';
 import { LookupService } from '@services/lookup.service';
+import { InputComponent } from '@standalone/input/input.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { ControlDirective } from '@standalone/directives/control.directive';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -26,6 +30,11 @@ import { LookupService } from '@services/lookup.service';
     BrowserAnimationsModule,
     MatSnackBarModule,
     MatDialogModule,
+    InputComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxMaskDirective,
+    ControlDirective,
   ],
   providers: [
     {
@@ -34,6 +43,7 @@ import { LookupService } from '@services/lookup.service';
       deps: [ConfigService, UrlService, InfoService, LookupService],
       multi: true,
     },
+    provideNgxMask(),
   ],
   bootstrap: [AppComponent],
 })

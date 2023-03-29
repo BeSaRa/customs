@@ -5,11 +5,13 @@ import { delay, distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
 import { LangCodes } from '@enums/lang-codes';
 import { DOCUMENT } from '@angular/common';
+import { BaseService } from '@abstracts/base-service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LangService {
+export class LangService extends BaseService {
+  serviceName = 'LangService';
   private languages: LangContract[] = [
     {
       id: 1,
@@ -33,7 +35,7 @@ export class LangService {
     .asObservable()
     .pipe(distinctUntilChanged());
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[0];
+  private current: LangContract = this.languages[1];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };
@@ -45,6 +47,7 @@ export class LangService {
     private _http: HttpClient,
     @Inject(DOCUMENT) private document: Document
   ) {
+    super();
     this.setDirection(this.current.direction);
   }
 
