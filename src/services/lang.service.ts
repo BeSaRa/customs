@@ -35,7 +35,7 @@ export class LangService extends BaseService {
     .asObservable()
     .pipe(distinctUntilChanged());
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[1];
+  private current: LangContract = this.languages[0];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };

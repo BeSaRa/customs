@@ -19,6 +19,8 @@ import { InputComponent } from '@standalone/input/input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ControlDirective } from '@standalone/directives/control.directive';
+import { ButtonComponent } from '@standalone/button/button.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -35,6 +37,8 @@ import { ControlDirective } from '@standalone/directives/control.directive';
     ReactiveFormsModule,
     NgxMaskDirective,
     ControlDirective,
+    ButtonComponent,
+    NgOptimizedImage,
   ],
   providers: [
     {
