@@ -2,6 +2,7 @@
   <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
   <ng-container *ngIf="!hasMask">
     <input
+      autocomplete="off"
       [type]="type"
       (blur)="inputTouch()"
       [name]="name"
