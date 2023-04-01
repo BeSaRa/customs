@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
 import { LocalizationService } from '@services/localization.service';
@@ -8,16 +8,10 @@ import { LocalizationService } from '@services/localization.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   dialog = inject(DialogService);
   lang = inject(LangService);
   localizationService = inject(LocalizationService);
-
-  ngOnInit(): void {
-    this.localizationService.load().subscribe((value) => {
-      console.log({ value });
-    });
-  }
 
   @HostListener('window:keydown.alt.control.a')
   openAddLanguage(): void {

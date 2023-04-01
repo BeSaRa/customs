@@ -8,7 +8,7 @@ import { Lookup } from '@models/lookup';
 export class LookupService {
   lookups: LookupMapContract = {} as LookupMapContract;
 
-  setLookups(lookups: LookupMapContract): void {
+  setLookups(lookups: LookupMapContract) {
     const keys = Object.keys(lookups);
     keys.forEach((key) => {
       const realKey = key as keyof LookupMapContract;
@@ -16,5 +16,6 @@ export class LookupService {
         new Lookup().clone(item)
       );
     });
+    return this.lookups;
   }
 }

@@ -1,8 +1,14 @@
 import { AdminResult } from '@models/admin-result';
 import { InternalUserContract } from '@contracts/internal-user-contract';
+import { ClonerMixin } from '@mixins/cloner-mixin';
+import { LangMixin } from '@mixins/lang-mixin';
+import { GetNamesContract } from '@contracts/get-names-contract';
+import { CloneContract } from '@contracts/clone-contract';
 
-export class InternalUser implements InternalUserContract {
-  arName!: string;
+export class InternalUser
+  extends LangMixin(ClonerMixin(class {}))
+  implements InternalUserContract, GetNamesContract, CloneContract
+{
   customRoleId!: number;
   defaultDepartmentInfo!: AdminResult;
   defaultOUId!: number;
@@ -10,7 +16,6 @@ export class InternalUser implements InternalUserContract {
   domainName!: string;
   email!: string;
   empNum!: string;
-  enName!: string;
   id!: number;
   jobTitle!: number;
   jobTitleInfo!: AdminResult;

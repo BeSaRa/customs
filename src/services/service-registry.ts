@@ -2,8 +2,8 @@ export class ServiceRegistry {
   private static services: Map<string, unknown> = new Map<string, unknown>();
 
   static set(name: string, service: unknown): void {
+    console.log('name', name);
     ServiceRegistry.services.set(name, service);
-    // console.log(service);
   }
 
   static get<T>(name: string): T {

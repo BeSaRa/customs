@@ -1,5 +1,6 @@
 import { InternalUser } from '@models/internal-user';
 import { LookupMapContract } from '@contracts/lookup-map-contract';
+import { Permission } from '@models/permission';
 
 export interface LoginDataContract {
   internalUser: InternalUser;
@@ -7,7 +8,7 @@ export interface LoginDataContract {
   menuItems: unknown[];
   organizationUnit: object;
   organizationUnits: unknown[];
-  permissionSet: unknown[];
+  permissionSet: Permission[];
   teams: unknown[];
   token: string;
   type: number;

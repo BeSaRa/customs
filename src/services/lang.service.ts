@@ -5,12 +5,12 @@ import { delay, distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
 import { LangCodes } from '@enums/lang-codes';
 import { DOCUMENT } from '@angular/common';
-import { BaseService } from '@abstracts/base-service';
+import { BaseServiceMixin } from '@mixins/base-service-mixin';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LangService extends BaseService {
+export class LangService extends BaseServiceMixin(class {}) {
   serviceName = 'LangService';
   private languages: LangContract[] = [
     {
@@ -31,6 +31,7 @@ export class LangService extends BaseService {
   private change = new Subject<LangContract>();
   private langChangerNotifier: Subject<LangChangeProcess> =
     new Subject<LangChangeProcess>();
+
   langChangeProcess$ = this.langChangerNotifier
     .asObservable()
     .pipe(distinctUntilChanged());

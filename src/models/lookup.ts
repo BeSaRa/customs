@@ -1,11 +1,14 @@
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
+import { LangMixin } from '@mixins/lang-mixin';
+import { GetNamesContract } from '@contracts/get-names-contract';
 
-export class Lookup extends ClonerMixin(class {}) implements CloneContract {
+export class Lookup
+  extends LangMixin(ClonerMixin(class {}))
+  implements CloneContract, GetNamesContract
+{
   id!: number;
-  arName!: string;
   category!: number;
-  enName!: string;
   itemOrder!: null;
   lookupKey!: number;
   lookupStrKey?: string;
