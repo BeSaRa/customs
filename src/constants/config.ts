@@ -6,6 +6,7 @@ export const Config = {
   API_VERSION: 'v1',
   EXTERNAL_PROTOCOLS: ['http', 'https'],
   BASE_URL: '',
+  TOKEN_HEADER_KEY: 'Authorization',
   TOKEN_STORE_KEY: '$$_T_$$',
 };
 

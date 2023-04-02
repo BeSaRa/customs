@@ -21,6 +21,9 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { ButtonComponent } from '@standalone/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
+import { CookieModule } from 'ngx-cookie';
+import { httpInterceptors } from '@http-interceptors/index';
+import { AuthService } from '@services/auth.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -28,6 +31,7 @@ import { NgOptimizedImage } from '@angular/common';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    CookieModule.withOptions(),
     SharedModule,
     BrowserAnimationsModule,
     MatSnackBarModule,
@@ -44,9 +48,16 @@ import { NgOptimizedImage } from '@angular/common';
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
-      deps: [ConfigService, UrlService, InfoService, LookupService],
+      deps: [
+        ConfigService,
+        UrlService,
+        InfoService,
+        LookupService,
+        AuthService,
+      ],
       multi: true,
     },
+    httpInterceptors,
     provideNgxMask(),
   ],
   bootstrap: [AppComponent],
@@ -62,14 +73,16 @@ export class AppModule {
     config: ConfigService,
     urlService: UrlService,
     info: InfoService,
-    lookup: LookupService
+    lookup: LookupService,
+    auth: AuthService
   ): () => Observable<unknown> {
     return () => {
       return forkJoin([config.load()])
         .pipe(tap(() => urlService.setConfigService(config)))
         .pipe(tap(() => urlService.prepareUrls()))
         .pipe(switchMap(() => info.load()))
-        .pipe(tap((info) => lookup.setLookups(info.lookupMap)));
+        .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
+        .pipe(switchMap(() => auth.validateToken()));
     };
   }
 }

@@ -2,13 +2,15 @@ import { inject, Injectable } from '@angular/core';
 import { CookieOptions, CookieService, ICookieService } from 'ngx-cookie';
 
 import { EncryptionService } from './encryption.service';
-import { BaseService } from '@abstracts/base-service';
+import { BaseServiceMixin } from '@mixins/base-service-mixin';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ECookieService extends BaseService implements ICookieService {
-  serviceName = 'ECookieService';
+export class ECookieService
+  extends BaseServiceMixin(class {})
+  implements ICookieService
+{
   readonly encryptedKeyPrefix = '$$';
   private readonly service = inject(CookieService);
   private readonly encryptionService = inject(EncryptionService);

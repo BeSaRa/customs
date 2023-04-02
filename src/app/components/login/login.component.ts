@@ -5,6 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroupControlsNonNullable } from '@app-types/form-group-controls';
 import { CredentialsContract } from '@contracts/credentials-contract';
 import { Subject, switchMap } from 'rxjs';
+import { LocalizationService } from '@services/localization.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   authService = inject(AuthService);
   lang = inject(LangService);
   fb = inject(FormBuilder);
+  localizationService = inject(LocalizationService);
   form: FormGroupControlsNonNullable<CredentialsContract> =
     this.fb.nonNullable.group({
       lang: ['AR'],
@@ -37,6 +39,9 @@ export class LoginComponent implements OnInit {
       .pipe(switchMap(() => this.authService.login(this.form.value)))
       .subscribe((value) => {
         console.log(value.internalUser.getNames());
+        this.localizationService.load().subscribe((v) => {
+          console.log(v);
+        });
       });
   }
 }
