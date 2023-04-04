@@ -1,10 +1,10 @@
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
-import { LangMixin } from '@mixins/lang-mixin';
+import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
 
 export class Lookup
-  extends LangMixin(ClonerMixin(class {}))
+  extends GetNamesMixin(ClonerMixin(class {}))
   implements CloneContract, GetNamesContract
 {
   id!: number;
