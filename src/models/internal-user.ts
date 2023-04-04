@@ -1,12 +1,12 @@
 import { AdminResult } from '@models/admin-result';
 import { InternalUserContract } from '@contracts/internal-user-contract';
 import { ClonerMixin } from '@mixins/cloner-mixin';
-import { LangMixin } from '@mixins/lang-mixin';
+import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
 import { CloneContract } from '@contracts/clone-contract';
 
 export class InternalUser
-  extends LangMixin(ClonerMixin(class {}))
+  extends GetNamesMixin(ClonerMixin(class {}))
   implements InternalUserContract, GetNamesContract, CloneContract
 {
   customRoleId!: number;
