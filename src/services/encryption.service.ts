@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AES, enc, MD5 } from 'crypto-js';
-import { BaseServiceMixin } from '@mixins/base-service-mixin';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EncryptionService extends BaseServiceMixin(class {}) {
+export class EncryptionService extends RegisterServiceMixin(class {}) {
   encrypt<T = unknown>(model: T): string {
     const randomPrivateKey = MD5(Math.random().toString()).toString();
     return (

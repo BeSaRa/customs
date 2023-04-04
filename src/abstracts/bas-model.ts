@@ -9,11 +9,15 @@ import { CloneContract } from '@contracts/clone-contract';
 import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
 
-export abstract class BasModel<M, S extends BaseCrudServiceContract<M>>
+export abstract class BasModel<
+    M,
+    S extends BaseCrudServiceContract<M, PrimaryType>,
+    PrimaryType = number
+  >
   extends HasServiceMixin(ClonerMixin(GetNamesMixin(class {})))
   implements
     HasServiceNameContract,
-    ModelCrudContract<M>,
+    ModelCrudContract<M, PrimaryType>,
     BaseModelContract,
     CloneContract,
     GetNamesContract
@@ -26,7 +30,7 @@ export abstract class BasModel<M, S extends BaseCrudServiceContract<M>>
   updatedBy!: number;
   updatedOn!: string;
 
-  activate(id: number): Observable<M> {
+  activate(id: PrimaryType): Observable<M> {
     return this.$$getService$$<S>().activate(id);
   }
 
@@ -34,11 +38,11 @@ export abstract class BasModel<M, S extends BaseCrudServiceContract<M>>
     return this.$$getService$$<S>().createFull(model);
   }
 
-  deactivate(id: number): Observable<M> {
+  deactivate(id: PrimaryType): Observable<M> {
     return this.$$getService$$<S>().deactivate(id);
   }
 
-  delete(id: number): Observable<M> {
+  delete(id: PrimaryType): Observable<M> {
     return this.$$getService$$<S>().delete(id);
   }
 
