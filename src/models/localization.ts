@@ -1,13 +1,8 @@
-import { LangMixin } from '@mixins/lang-mixin';
-import { GetNamesContract } from '@contracts/get-names-contract';
-import { ClonerMixin } from '@mixins/cloner-mixin';
-import { CloneContract } from '@contracts/clone-contract';
+import { BasModel } from '@abstracts/bas-model';
+import { LocalizationService } from '@services/localization.service';
 
-export class Localization
-  extends ClonerMixin(LangMixin(class {}))
-  implements GetNamesContract, CloneContract
-{
-  id!: number;
+export class Localization extends BasModel<Localization, LocalizationService> {
+  $$__service_name__$$ = 'LocalizationService';
   localizationKey!: string;
   module!: number;
 }
