@@ -6,6 +6,7 @@ import { FormGroupControlsNonNullable } from '@app-types/form-group-controls';
 import { CredentialsContract } from '@contracts/credentials-contract';
 import { Subject, switchMap } from 'rxjs';
 import { LocalizationService } from '@services/localization.service';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-login',
@@ -36,9 +37,12 @@ export class LoginComponent implements OnInit {
 
   listenToLogin(): void {
     this.login$
-      .pipe(switchMap(() => this.authService.login(this.form.value)))
-      .subscribe((value) => {
-        console.log(value.internalUser.getNames());
+      .pipe(
+        switchMap(() =>
+          this.authService.login(this.form.value).pipe(ignoreErrors())
+        )
+      )
+      .subscribe(() => {
         this.localizationService.load().subscribe((v) => {
           console.log(v);
         });
