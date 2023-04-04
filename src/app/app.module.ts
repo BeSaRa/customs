@@ -24,6 +24,8 @@ import { NgOptimizedImage } from '@angular/common';
 import { CookieModule } from 'ngx-cookie';
 import { httpInterceptors } from '@http-interceptors/index';
 import { AuthService } from '@services/auth.service';
+import { CastResponseModule } from 'cast-response';
+import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -43,6 +45,7 @@ import { AuthService } from '@services/auth.service';
     ControlDirective,
     ButtonComponent,
     NgOptimizedImage,
+    CastResponseModule.forRoot([GeneralInterceptor]),
   ],
   providers: [
     {
