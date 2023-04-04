@@ -1,17 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { BaseServiceMixin } from '@mixins/base-service-mixin';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { ECookieService } from '@services/e-cookie.service';
 import { ConfigService } from '@services/config.service';
 import { HttpClient } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { CastResponse } from 'cast-response';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TokenService extends BaseServiceMixin(class {}) {
+export class TokenService extends RegisterServiceMixin(class {}) {
   private readonly eCookieService = inject(ECookieService);
   private readonly tokenStoreKey = inject(ConfigService).CONFIG.TOKEN_STORE_KEY;
   private readonly http = inject(HttpClient);
