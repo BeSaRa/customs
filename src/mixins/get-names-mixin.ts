@@ -7,10 +7,10 @@ import { NamesContract } from '@contracts/names-contract';
 type CanGetNames = Constructor<GetNamesContract> &
   AbstractConstructor<GetNamesContract>;
 
-export function LangMixin<T extends AbstractConstructor<object>>(
+export function GetNamesMixin<T extends AbstractConstructor<object>>(
   base: T
 ): CanGetNames & T;
-export function LangMixin<T extends Constructor<object>>(
+export function GetNamesMixin<T extends Constructor<object>>(
   base: T
 ): CanGetNames & T {
   return class CanGetNames extends base implements GetNamesContract {
