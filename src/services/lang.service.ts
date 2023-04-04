@@ -5,12 +5,12 @@ import { delay, distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
 import { LangCodes } from '@enums/lang-codes';
 import { DOCUMENT } from '@angular/common';
-import { BaseServiceMixin } from '@mixins/base-service-mixin';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LangService extends BaseServiceMixin(class {}) {
+export class LangService extends RegisterServiceMixin(class {}) {
   serviceName = 'LangService';
   private languages: LangContract[] = [
     {
