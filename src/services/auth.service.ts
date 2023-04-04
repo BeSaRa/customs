@@ -15,17 +15,18 @@ import {
 import { EmployeeService } from '@services/employee.service';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { CastResponse } from 'cast-response';
-import { BaseServiceMixin } from '@mixins/base-service-mixin';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { TokenService } from '@services/token.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends BaseServiceMixin(class {}) {
+export class AuthService extends RegisterServiceMixin(class {}) {
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private readonly employeeService = inject(EmployeeService);
   private readonly tokenService = inject(TokenService);
+  private authenticated = false;
 
   @CastResponse()
   private _login(
@@ -72,7 +73,7 @@ export class AuthService extends BaseServiceMixin(class {}) {
   }
 
   logout(): void {
-    console.log('logout');
+    this.authenticated = false;
   }
 
   private setDateAfterAuthenticate(): OperatorFunction<
@@ -82,8 +83,17 @@ export class AuthService extends BaseServiceMixin(class {}) {
     return (source) => {
       return source.pipe(
         map((data) => this.employeeService.setLoginData(data)),
-        tap((data) => this.tokenService.setToken(data.token))
+        tap((data) => this.tokenService.setToken(data.token)),
+        tap(() => (this.authenticated = true))
       );
     };
+  }
+
+  isAuthenticated(): boolean {
+    return this.authenticated;
+  }
+
+  isGuest(): boolean {
+    return !this.isAuthenticated();
   }
 }
