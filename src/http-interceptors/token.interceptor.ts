@@ -18,7 +18,6 @@ export class TokenInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    console.log('TOKEN INTERCEPTOR');
     const token = this.tokenService.getToken();
     if (this.tokenService.hasToken() && this.tokenService.isSameToken(token)) {
       request = request.clone({
@@ -27,7 +26,6 @@ export class TokenInterceptor implements HttpInterceptor {
         },
       });
     }
-
     return next.handle(request);
   }
 }
