@@ -19,8 +19,15 @@
             formControlName="userPassword"
             labelColor="text-white"
             placeholder="password"
-            type="password"
-            label="password" />
+            [type]="selectedPasswordOptions.inputType"
+            label="password">
+            <button
+              appInputSuffix
+              (click)="toggleEye()"
+              class="mx-2 outline-offset-4 outline-primary flex items-center justify-center">
+              <mat-icon [svgIcon]="selectedPasswordOptions.icon"></mat-icon>
+            </button>
+          </app-input>
           <app-button (click)="login$.next()" type="secondary" class="block mt-8">login</app-button>
         </form>
       </div>

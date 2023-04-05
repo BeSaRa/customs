@@ -18,6 +18,24 @@ export class LoginComponent implements OnInit {
   lang = inject(LangService);
   fb = inject(FormBuilder);
   localizationService = inject(LocalizationService);
+  eyeIcons: Record<
+    'eye' | 'eye-off',
+    {
+      icon: 'eye' | 'eye-off';
+      inputType: 'password' | 'text';
+    }
+  > = {
+    eye: {
+      icon: 'eye-off',
+      inputType: 'text',
+    },
+    'eye-off': {
+      icon: 'eye',
+      inputType: 'password',
+    },
+  };
+  selectedPasswordOptions = this.eyeIcons['eye-off'];
+
   form: FormGroupControlsNonNullable<CredentialsContract> =
     this.fb.nonNullable.group({
       lang: ['AR'],
@@ -47,5 +65,10 @@ export class LoginComponent implements OnInit {
           console.log(v);
         });
       });
+  }
+
+  toggleEye() {
+    this.selectedPasswordOptions =
+      this.eyeIcons[this.selectedPasswordOptions.icon];
   }
 }
