@@ -4,7 +4,7 @@ import {
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 import { ComponentType } from '@angular/cdk/overlay';
-import { ToastComponent } from '@standalone/toast/toast.component';
+import { ToastComponent } from '@standalone/components/toast/toast.component';
 import { EmbeddedViewRef, TemplateRef } from '@angular/core';
 
 export interface ToastContract {

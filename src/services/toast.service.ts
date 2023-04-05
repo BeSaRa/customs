@@ -6,7 +6,7 @@ import {
   TextOnlySnackBar,
 } from '@angular/material/snack-bar';
 import { ComponentType } from '@angular/cdk/overlay';
-import { ToastComponent } from '@standalone/toast/toast.component';
+import { ToastComponent } from '@standalone/components/toast/toast.component';
 import { ToastContract } from '@contracts/toast-contract';
 
 @Injectable({

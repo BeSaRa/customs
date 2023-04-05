@@ -1,7 +1,7 @@
 import { ComponentType } from '@angular/cdk/overlay';
 import { TemplateRef } from '@angular/core';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { DialogComponent } from '@standalone/dialog/dialog.component';
+import { DialogComponent } from '@standalone/components/dialog/dialog.component';
 import { UserClick } from '@enums/user-click';
 
 export interface DialogContract {

@@ -6,7 +6,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { DialogContract } from '@contracts/dialog-contract';
-import { DialogComponent } from '@standalone/dialog/dialog.component';
+import { DialogComponent } from '@standalone/components/dialog/dialog.component';
 import { DefaultDialogDataContract } from '@contracts/default-dialog-data-contract';
 import { DialogType } from '@enums/dialog-type';
 import { LangService } from '@services/lang.service';

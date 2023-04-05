@@ -9,26 +9,29 @@ import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
 import { InfoService } from '@services/info.service';
 import { LookupService } from '@services/lookup.service';
-import { InputComponent } from '@standalone/input/input.component';
+import { InputComponent } from '@standalone/components/input/input.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { ButtonComponent } from '@standalone/button/button.component';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 import { NgOptimizedImage } from '@angular/common';
 import { CookieModule } from 'ngx-cookie';
 import { httpInterceptors } from '@http-interceptors/index';
 import { AuthService } from '@services/auth.service';
 import { CastResponseModule } from 'cast-response';
 import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
+import { HomeComponent } from './components/home/home.component';
+import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent],
+  declarations: [AppComponent, LoginComponent, HomeComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -46,6 +49,9 @@ import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
     ButtonComponent,
     NgOptimizedImage,
     CastResponseModule.forRoot([GeneralInterceptor]),
+    SidebarComponent,
+    MatIconModule,
+    InputSuffixDirective,
   ],
   providers: [
     {
