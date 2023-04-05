@@ -20,7 +20,7 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
 } from '@angular/forms';
-import { ValidationErrorsComponent } from '@standalone/validation-errors/validation-errors.component';
+import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ControlDirective } from '@standalone/directives/control.directive';

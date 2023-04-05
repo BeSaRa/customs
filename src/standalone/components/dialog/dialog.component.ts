@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { DefaultDialogDataContract } from '@contracts/default-dialog-data-contract';
 import { DialogContract } from '@contracts/dialog-contract';
-import { ButtonComponent } from '@standalone/button/button.component';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ButtonTypeContract } from '@contracts/button-type-contract';
 import { UserClick } from '@enums/user-click';
 import { DialogType } from '@enums/dialog-type';

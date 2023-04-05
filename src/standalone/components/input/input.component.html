@@ -1,0 +1,21 @@
+<label [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }" class="group block relative mb-5">
+  <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
+  <ng-container *ngIf="!hasMask">
+    <div [ngClass]="size" class="input-form {{ inputColor }} flex items-center justify-center">
+      <ng-content select="[appInputPrefix]"></ng-content>
+      <input
+        class="flex-auto outline-none"
+        autocomplete="off"
+        [type]="type"
+        (blur)="inputTouch()"
+        [name]="name"
+        [placeholder]="placeholder"
+        [formControl]="control" />
+      <ng-content select="[appInputSuffix]"></ng-content>
+    </div>
+  </ng-container>
+  <ng-content select="[mask]"></ng-content>
+  <ng-container *ngIf="displayErrors">
+    <app-validation-errors [errors]="errors | async"></app-validation-errors>
+  </ng-container>
+</label>
