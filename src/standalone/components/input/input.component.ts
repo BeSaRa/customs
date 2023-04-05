@@ -25,6 +25,8 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { isNgModel } from '@utils/utils';
+import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @Component({
   selector: 'app-input',
@@ -78,9 +80,21 @@ export class InputComponent
   @Input()
   type = 'text';
   @Input()
+  marginBottom = 'mb-5';
+  @Input()
+  noMargin = false;
+  @Input()
   name = crypto.randomUUID();
+
   @ContentChild(ControlDirective)
   template?: ControlDirective;
+
+  @ContentChild(InputPrefixDirective)
+  inputPrefix?: InputPrefixDirective;
+
+  @ContentChild(InputSuffixDirective)
+  inputSuffix?: InputSuffixDirective;
+
   private injector = inject(Injector);
   private cdr = inject(ChangeDetectorRef);
 

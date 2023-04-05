@@ -1,10 +1,15 @@
-<label [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }" class="group block relative mb-5">
+<label
+  [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
+  class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
   <ng-container *ngIf="!hasMask">
-    <div [ngClass]="size" class="input-form {{ inputColor }} flex items-center justify-center">
+    <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-center">
       <ng-content select="[appInputPrefix]"></ng-content>
+      <span
+        [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
+        class="peer absolute hidden pointer-events-none"></span>
       <input
-        class="flex-auto outline-none"
+        class="flex-auto ltr:peer-[.suffix]:pr-0 rtl:peer-[.suffix]:pl-0 ltr:peer-[.prefix]:pl-0 rtl:peer-[.prefix]:pr-0 outline-none group-[.lg]/input-wrapper:text-lg group-[.md]/input-wrapper:text-base group-[.sm]/input-wrapper:text-sm group-[.sm]/input-wrapper:px-2 group-[.sm]/input-wrapper:py-1 group-[.md]/input-wrapper:px-3 group-[.md]/input-wrapper:py-2 group-[.lg]/input-wrapper:px-5 group-[.lg]/input-wrapper:py-3"
         autocomplete="off"
         [type]="type"
         (blur)="inputTouch()"
