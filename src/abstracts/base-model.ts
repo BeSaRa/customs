@@ -8,10 +8,15 @@ import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
 import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
+import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dialog-service-contract';
+import { MatDialogConfig } from '@angular/material/dialog';
 
-export abstract class BasModel<
+export abstract class BaseModel<
     M,
-    S extends BaseCrudServiceContract<M, PrimaryType>,
+    S extends
+      | BaseCrudServiceContract<M, PrimaryType>
+      | BaseCrudWithDialogServiceContract<C, M, PrimaryType>,
+    C = unknown,
     PrimaryType = number
   >
   extends HasServiceMixin(ClonerMixin(GetNamesMixin(class {})))
@@ -29,6 +34,21 @@ export abstract class BasModel<
   clientData!: string;
   updatedBy!: number;
   updatedOn!: string;
+
+  private getCrudService(): S {
+    return this.$$getService$$<S>();
+  }
+
+  private getCrudWithDialogService(): BaseCrudWithDialogServiceContract<C, M> {
+    const service =
+      this.$$getService$$<BaseCrudWithDialogServiceContract<C, M>>();
+    if (!service || !service.openCreateDialog) {
+      throw new Error(
+        'Please extends BaseCrudWithDialogService to use this method! in model service'
+      );
+    }
+    return service;
+  }
 
   activate(id: PrimaryType): Observable<M> {
     return this.$$getService$$<S>().activate(id);
@@ -54,5 +74,37 @@ export abstract class BasModel<
 
   update(model: M): Observable<M> {
     return this.$$getService$$<S>().updateFull(model);
+  }
+
+  openCreate(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
+    return this.getCrudWithDialogService().openCreateDialog(
+      this as unknown as M,
+      extras,
+      config
+    );
+  }
+
+  openEdit(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
+    return this.getCrudWithDialogService().openEditDialog(
+      this as unknown as M,
+      extras,
+      config
+    );
+  }
+
+  openEditComposite(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
+    return this.getCrudWithDialogService().openEditDialogWithComposite(
+      this as unknown as M,
+      extras,
+      config
+    );
+  }
+
+  openView(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
+    return this.getCrudWithDialogService().openViewDialog(
+      this as unknown as M,
+      extras,
+      config
+    );
   }
 }
