@@ -16,6 +16,14 @@ const routes: Routes = [
     component: LoginComponent,
     canMatch: [authGuard('GUEST', 'home')],
   },
+
+  {
+    path: 'administration',
+    loadChildren: () =>
+      import('../modules/administration/administration.module').then(
+        (m) => m.AdministrationModule
+      ),
+  },
   { path: '**', redirectTo: 'errors' },
 ];
 
