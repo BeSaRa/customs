@@ -9,11 +9,14 @@ import {
 import { debounceTime, filter, map, startWith, Subject } from 'rxjs';
 import { SizeContract } from '@contracts/size-contract';
 import { MediaQueriesContract } from '@contracts/media-queries-contract';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-screen-size',
+  standalone: true,
   templateUrl: './screen-size.component.html',
   styleUrls: ['./screen-size.component.scss'],
+  imports: [NgIf],
 })
 export class ScreenSizeComponent implements OnInit, MediaQueriesContract {
   @Output()
