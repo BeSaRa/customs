@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -61,12 +61,10 @@ export class DialogComponent {
       secondBtn: 'primary-outline',
     },
   };
+  private dialogRef = inject(MatDialogRef);
+  data: DefaultDialogDataContract<string> = inject(MAT_DIALOG_DATA);
   selectedClass: DialogSelectedClasses = this.dialogTypes[this.data.type];
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DefaultDialogDataContract<string>,
-    private dialogRef: MatDialogRef<unknown>
-  ) {}
+  // constructor() {} // @Inject(MAT_DIALOG_DATA) public data: DefaultDialogDataContract<string>
 
   close(): void {
     this.dialogRef.close();

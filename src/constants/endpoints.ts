@@ -4,6 +4,7 @@ export const EndPoints = {
   LOCALIZATION: '/entity/localization',
   AUTH: '/auth/internal/login',
   VALIDATE_TOKEN: '/auth/validate-token',
+  PERMISSION: '/entity/permission',
 };
 
 export type EndpointsType = typeof EndPoints;

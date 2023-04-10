@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonTypeContract } from '@contracts/button-type-contract';
+import { AppIcons } from '@enums/app-icons';
 
 @Component({
   selector: 'app-button',
@@ -12,6 +13,7 @@ import { ButtonTypeContract } from '@contracts/button-type-contract';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent {
+  protected readonly AppIcons = AppIcons;
   @Input()
   disabled = false;
   @Input()

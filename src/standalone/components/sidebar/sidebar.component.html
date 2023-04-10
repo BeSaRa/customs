@@ -1,4 +1,5 @@
-<div class="overflow-hidden bg-blue-400 w-[300px] flex flex-col h-full bg-gradient-to-br from-primary to-primary-dark">
+<div
+  class="overflow-hidden w-[300px] flex flex-col h-full bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
   <div class="flex-none p-4 pb-2">
     <img ngSrc="assets/images/logo.png" alt="logo" height="321" width="535" />
   </div>
@@ -7,5 +8,5 @@
       <mat-icon appInputPrefix class="mx-1" svgIcon="magnify"></mat-icon>
     </app-input>
   </div>
-  <div class="flex-auto"></div>
+  <app-sidebar-menu [level]="1" [items]="items" class="flex-auto p-4" />
 </div>

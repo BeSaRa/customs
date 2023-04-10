@@ -4,14 +4,14 @@ import { AuthService } from '@services/auth.service';
 
 export const authGuard: (
   type: 'AUTH' | 'GUEST',
-  redirectTo?: string
-) => CanMatchFn = (type, redirectTo) => () => {
+  whenFailRedirectTo?: string
+) => CanMatchFn = (type, whenFailRedirectTo) => () => {
   const auth = inject(AuthService);
   const router = inject(Router);
-  if (!redirectTo)
+  if (!whenFailRedirectTo)
     return type === 'AUTH' ? auth.isAuthenticated() : auth.isGuest();
 
-  const tree = router.parseUrl(redirectTo);
+  const tree = router.parseUrl(whenFailRedirectTo);
   return type === 'AUTH'
     ? (() => {
         return auth.isAuthenticated() ? true : tree;

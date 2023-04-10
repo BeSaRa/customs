@@ -3,13 +3,17 @@ import { LoginDataContract } from '@contracts/login-data-contract';
 import { InternalUser } from '@models/internal-user';
 import { Permission } from '@models/permission';
 import { LookupService } from '@services/lookup.service';
+import { AppPermissionsType } from '@constants/app-permissions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
   private loginData?: LoginDataContract;
-  private readonly permissionMap = new Map<string, Permission>();
+  private readonly permissionMap = new Map<
+    keyof AppPermissionsType,
+    Permission
+  >();
   private readonly lookupService = inject(LookupService);
 
   setLoginData(data: LoginDataContract): LoginDataContract {
@@ -32,6 +36,34 @@ export class EmployeeService {
     this.permissionMap.clear();
     permissionSet.forEach((permission) => {
       this.permissionMap.set(permission.permissionKey, permission);
+    });
+  }
+
+  /**
+   * @description has permission to do something
+   * @param permission the given permission to check
+   */
+  hasPermissionTo(permission: keyof AppPermissionsType): boolean {
+    return this.permissionMap.has(permission);
+  }
+
+  /**
+   * @description has Any permission to the given list means, at least one permission of the provided list to be exists to return true
+   * @param permissions
+   */
+  hasAnyPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
+    return permissions.some((permission) => {
+      return this.permissionMap.has(permission);
+    });
+  }
+
+  /**
+   * @description to check all permissions provided to the method if all exists will return true, else false
+   * @param permissions
+   */
+  hasAllPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
+    return !permissions.some((permission) => {
+      return !this.permissionMap.has(permission);
     });
   }
 }

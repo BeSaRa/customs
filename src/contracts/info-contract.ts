@@ -1,6 +1,7 @@
 import { LookupMapContract } from '@contracts/lookup-map-contract';
+import { Localization } from '@models/localization';
 
 export interface InfoContract {
-  localizationSet: [];
+  localizationSet: Localization[];
   lookupMap: LookupMapContract;
 }

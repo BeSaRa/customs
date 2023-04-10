@@ -7,14 +7,13 @@ import { UrlService } from '@services/url.service';
 import { CastResponse } from 'cast-response';
 import { inject } from '@angular/core';
 
-export abstract class BaseCrudService<M>
+export abstract class BaseCrudService<M, PrimaryType = number>
   extends RegisterServiceMixin(class {})
-  implements BaseCrudServiceContract<M>
+  implements BaseCrudServiceContract<M, PrimaryType>
 {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
-
-  abstract getUrlSegment(): string;
+  protected abstract getUrlSegment(): string;
 
   @CastResponse()
   create(model: M): Observable<M> {
@@ -49,17 +48,17 @@ export abstract class BaseCrudService<M>
   }
 
   @CastResponse()
-  loadById(id: number): Observable<M> {
+  loadById(id: PrimaryType): Observable<M> {
     return this.http.get<M>(this.getUrlSegment() + `/${id}`);
   }
 
   @CastResponse()
-  loadByIdComposite(id: number): Observable<M> {
+  loadByIdComposite(id: PrimaryType): Observable<M> {
     return this.http.get<M>(this.getUrlSegment() + `/${id}/composite`);
   }
 
   @CastResponse()
-  loadAsLookups(options: FetchOptionsContract): Observable<M[]> {
+  loadAsLookups(options?: FetchOptionsContract): Observable<M[]> {
     return this.http.get<M[]>(this.getUrlSegment() + '/active/lookup', {
       params: new HttpParams({
         fromObject: { ...options },
@@ -68,7 +67,7 @@ export abstract class BaseCrudService<M>
   }
 
   @CastResponse()
-  activate(id: number): Observable<M> {
+  activate(id: PrimaryType): Observable<M> {
     return this.http.put<M>(
       this.getUrlSegment() + `'/admin/${id}/activate`,
       {}
@@ -76,7 +75,7 @@ export abstract class BaseCrudService<M>
   }
 
   @CastResponse()
-  deactivate(id: number): Observable<M> {
+  deactivate(id: PrimaryType): Observable<M> {
     return this.http.put<M>(
       this.getUrlSegment() + `'/admin/${id}/de-activate`,
       {}
@@ -84,7 +83,7 @@ export abstract class BaseCrudService<M>
   }
 
   @CastResponse()
-  delete(id: number): Observable<M> {
+  delete(id: PrimaryType): Observable<M> {
     return this.http.delete<M>(this.getUrlSegment() + `'/admin/${id}`);
   }
 
@@ -94,29 +93,29 @@ export abstract class BaseCrudService<M>
   }
 
   @CastResponse()
-  deleteBulk(models: number[]): Observable<M> {
+  deleteBulk(modelsIds: PrimaryType[]): Observable<M> {
     return this.http.request<M>(
       'DELETE',
       this.getUrlSegment() + `'/admin/bulk`,
       {
-        body: models,
+        body: modelsIds,
       }
     );
   }
 
   @CastResponse()
-  activateBulk(models: number[]): Observable<M[]> {
+  activateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
     return this.http.put<M[]>(
       this.getUrlSegment() + `'/admin/bulk/activate`,
-      models
+      modelsIds
     );
   }
 
   @CastResponse()
-  deactivateBulk(models: number[]): Observable<M[]> {
+  deactivateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
     return this.http.put<M[]>(
       this.getUrlSegment() + `'/admin/bulk/activate`,
-      models
+      modelsIds
     );
   }
 

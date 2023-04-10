@@ -16,7 +16,6 @@ const routes: Routes = [
     component: LoginComponent,
     canMatch: [authGuard('GUEST', 'home')],
   },
-
   {
     path: 'administration',
     loadChildren: () =>

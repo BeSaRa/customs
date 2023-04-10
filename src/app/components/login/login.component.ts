@@ -14,6 +14,7 @@ import { ignoreErrors } from '@utils/utils';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  // dialog = inject(DialogService);
   authService = inject(AuthService);
   lang = inject(LangService);
   fb = inject(FormBuilder);

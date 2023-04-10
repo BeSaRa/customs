@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Localization } from '@models/localization';
-import { BaseCrudService } from '@abstracts/base-crud-service';
 import { CastResponseContainer } from 'cast-response';
+import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
+import { ComponentType } from '@angular/cdk/portal';
+import { LocalizationPopupComponent } from '@modules/administration/popups/localization-popup/localization-popup.component';
 
 @CastResponseContainer({
   $default: {
@@ -11,12 +13,19 @@ import { CastResponseContainer } from 'cast-response';
 @Injectable({
   providedIn: 'root',
 })
-export class LocalizationService extends BaseCrudService<Localization> {
-  constructor() {
-    super();
+export class LocalizationService extends BaseCrudWithDialogService<
+  LocalizationPopupComponent,
+  Localization
+> {
+  getDialogComponent(): ComponentType<LocalizationPopupComponent> {
+    return LocalizationPopupComponent;
   }
 
   getUrlSegment(): string {
     return this.urlService.URLS.LOCALIZATION;
+  }
+
+  getModelInstance(): Localization {
+    return new Localization();
   }
 }

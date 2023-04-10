@@ -35,10 +35,6 @@ export abstract class BaseModel<
   updatedBy!: number;
   updatedOn!: string;
 
-  private getCrudService(): S {
-    return this.$$getService$$<S>();
-  }
-
   private getCrudWithDialogService(): BaseCrudWithDialogServiceContract<C, M> {
     const service =
       this.$$getService$$<BaseCrudWithDialogServiceContract<C, M>>();

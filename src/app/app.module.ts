@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { forkJoin, Observable, switchMap, tap } from 'rxjs';
+import { forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
 import { InfoService } from '@services/info.service';
@@ -28,6 +28,7 @@ import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
 import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { MenuItemService } from '@services/menu-item.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -61,6 +62,7 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
         InfoService,
         LookupService,
         AuthService,
+        MenuItemService,
       ],
       multi: true,
     },
@@ -78,18 +80,21 @@ export class AppModule {
 
   static initialize(
     config: ConfigService,
-    urlService: UrlService,
+    url: UrlService,
     info: InfoService,
     lookup: LookupService,
-    auth: AuthService
+    auth: AuthService,
+    menuItem: MenuItemService
   ): () => Observable<unknown> {
     return () => {
       return forkJoin([config.load()])
-        .pipe(tap(() => urlService.setConfigService(config)))
-        .pipe(tap(() => urlService.prepareUrls()))
+        .pipe(tap(() => url.setConfigService(config)))
+        .pipe(tap(() => url.prepareUrls()))
         .pipe(switchMap(() => info.load()))
         .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
-        .pipe(switchMap(() => auth.validateToken()));
+        .pipe(switchMap(() => auth.validateToken()))
+        .pipe(tap(() => menuItem.filterStaticMenu()))
+        .pipe(map(() => menuItem.buildHierarchy()));
     };
   }
 }
