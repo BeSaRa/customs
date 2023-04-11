@@ -2,7 +2,8 @@
   a.link:not(.level-1) {
     padding-left: calc((var(--level) - 1) * 24px);
   }
-  .opened > a > div > .children-indicator {
+
+  .opened > a > div > .children-indicator, .filter > a > div > .children-indicator {
     transform: rotate(90deg);
   }
 
@@ -15,7 +16,8 @@
   a.link:not(.level-1) {
     padding-right: calc((var(--level) - 1) * 24px);
   }
-  .opened > a > div > .children-indicator {
+
+  .opened > a > div > .children-indicator, .filter > a > div > .children-indicator {
     transform: rotate(90deg);
   }
 

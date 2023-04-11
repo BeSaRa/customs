@@ -4,6 +4,7 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SidebarMenuItemComponent } from '@standalone/components/sidebar-menu-item/sidebar-menu-item.component';
+import { FilterSidebarMenuItemPipe } from '@standalone/pipes/filter-sidebar-menu-item.pipe';
 
 @Component({
   selector: 'app-sidebar-menu',
@@ -14,6 +15,7 @@ import { SidebarMenuItemComponent } from '@standalone/components/sidebar-menu-it
     RouterLinkActive,
     RouterLink,
     SidebarMenuItemComponent,
+    FilterSidebarMenuItemPipe,
   ],
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.scss'],
@@ -24,8 +26,6 @@ export class SidebarMenuComponent {
   items?: MenuItemContract[];
   @Input()
   level!: number;
-
-  trackByLangKey(index: number, item: MenuItemContract) {
-    return item.langKey;
-  }
+  @Input()
+  searchText!: string;
 }

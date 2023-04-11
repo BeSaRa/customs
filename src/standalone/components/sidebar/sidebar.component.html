@@ -4,9 +4,9 @@
     <img ngSrc="assets/images/logo.png" alt="logo" height="321" width="535" />
   </div>
   <div class="flex-none px-4 pb-0 pt-2">
-    <app-input [noMargin]="true" [displayErrors]="false" label="" placeholder="search here">
+    <app-input [formControl]="control" [noMargin]="true" [displayErrors]="false" label="" placeholder="search here">
       <mat-icon appInputPrefix class="mx-1" svgIcon="magnify"></mat-icon>
     </app-input>
   </div>
-  <app-sidebar-menu [level]="1" [items]="items" class="flex-auto p-4" />
+  <app-sidebar-menu [searchText]="control.value" [level]="1" [items]="items" class="flex-auto p-4" />
 </div>

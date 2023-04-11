@@ -17,7 +17,7 @@
     </div>
   </a>
   <div [@openClose]="menuStatus" class="children-wrapper" *ngIf="hasChildren">
-    <ng-container *ngFor="let childItem of item.children; trackBy: trackByLangKey">
+    <ng-container *ngFor="let childItem of item.children | filterSidebarMenuItem : searchText; trackBy: trackByLangKey">
       <app-sidebar-menu-item [item]="childItem" [level]="level + 1"></app-sidebar-menu-item>
     </ng-container>
   </div>

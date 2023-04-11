@@ -6,6 +6,7 @@ import { InputPrefixDirective } from '@standalone/directives/input-prefix.direct
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { SidebarMenuComponent } from '@standalone/components/sidebar-menu/sidebar-menu.component';
 import { MenuItemService } from '@services/menu-item.service';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,6 +19,7 @@ import { MenuItemService } from '@services/menu-item.service';
     InputSuffixDirective,
     NgOptimizedImage,
     SidebarMenuComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
@@ -25,4 +27,7 @@ import { MenuItemService } from '@services/menu-item.service';
 export class SidebarComponent {
   menuItemService = inject(MenuItemService);
   items = this.menuItemService.getMenu();
+  control = new FormControl('', {
+    nonNullable: true,
+  });
 }
