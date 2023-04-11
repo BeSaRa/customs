@@ -1,0 +1,24 @@
+<!--suppress CssUnknownProperty -->
+<div class="overflow-hidden" [ngClass]="menuStatus" [style.--level]="level">
+  <a
+    (click)="hasChildren && toggleMenu()"
+    [routerLink]="item.path"
+    routerLinkActive="active"
+    class="flex  hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 link mb-1 level-{{
+      level
+    }} items-center justify-start space-x-2 rtl:space-x-reverse">
+    <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
+    <div class="flex-auto flex items-center">
+      <span class="flex-auto">{{ item.langKey }}</span>
+      <mat-icon
+        *ngIf="hasChildren"
+        class="flex-none size-18 transition-transform children-indicator"
+        svgIcon="menu-right"></mat-icon>
+    </div>
+  </a>
+  <div [@openClose]="menuStatus" class="children-wrapper" *ngIf="hasChildren">
+    <ng-container *ngFor="let childItem of item.children; trackBy: trackByLangKey">
+      <app-sidebar-menu-item [item]="childItem" [level]="level + 1"></app-sidebar-menu-item>
+    </ng-container>
+  </div>
+</div>

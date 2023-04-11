@@ -1,23 +1,5 @@
-<!--suppress HtmlUnknownAttribute, CssUnknownProperty -->
-<ul
-  [attr.data-level]="level"
-  [style.--level]="level"
-  [ngClass]="'level_' + level"
-  class="text-white space-y-0.5 relative">
-  <li
-    class="before:absolute before:border relative before:w-0 before:h-full before:border-dashed"
-    *ngFor="let item of items; trackBy: trackByLangKey">
-    <a
-      [routerLink]="item.path"
-      routerLinkActive="active"
-      class="flex hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 link mb-1 level-{{
-        level
-      }} items-center justify-start space-x-2 rtl:space-x-reverse">
-      <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
-      <div class="flex-auto">
-        <span>{{ item.langKey }}</span>
-      </div>
-    </a>
-    <app-sidebar-menu [level]="level + 1" *ngIf="item.children" [items]="item.children"></app-sidebar-menu>
-  </li>
-</ul>
+<div class="text-white space-y-0.5 relative">
+  <ng-container *ngFor="let item of items; trackBy: trackByLangKey">
+    <app-sidebar-menu-item [level]="level" [item]="item" />
+  </ng-container>
+</div>

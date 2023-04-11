@@ -1,0 +1,27 @@
+:host-context(html[dir=ltr]) {
+  a.link:not(.level-1) {
+    padding-left: calc((var(--level) - 1) * 24px);
+  }
+  .opened > a > div > .children-indicator {
+    transform: rotate(90deg);
+  }
+
+  .closed > a > div > .children-indicator {
+    transform: rotate(0deg);
+  }
+}
+
+:host-context(html[dir=rtl]) {
+  a.link:not(.level-1) {
+    padding-right: calc((var(--level) - 1) * 24px);
+  }
+  .opened > a > div > .children-indicator {
+    transform: rotate(90deg);
+  }
+
+  .closed > a > div > .children-indicator {
+    transform: rotate(180deg);
+  }
+}
+
+

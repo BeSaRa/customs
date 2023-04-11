@@ -59,6 +59,9 @@
       "@app-types/*": [
         "./src/app-types/*"
       ],
+      "@animations/*": [
+        "./src/animations/*"
+      ]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",

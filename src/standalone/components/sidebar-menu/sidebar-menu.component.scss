@@ -1,11 +1,2 @@
-:host-context(html[dir=ltr]) {
-  a.link:not(.level-1) {
-    padding-left: calc((var(--level) - 1) * 24px);
-  }
-}
 
-:host-context(html[dir=rtl]) {
-  a.link:not(.level-1) {
-    padding-right: calc((var(--level) - 1) * 24px);
-  }
-}
+
