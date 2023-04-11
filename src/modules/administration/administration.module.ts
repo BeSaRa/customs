@@ -7,7 +7,11 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
 import { LocalizationComponent } from './components/localization/localization.component';
 
 @NgModule({
-  declarations: [AdministrationComponent, LocalizationPopupComponent, LocalizationComponent],
+  declarations: [
+    AdministrationComponent,
+    LocalizationPopupComponent,
+    LocalizationComponent,
+  ],
   imports: [CommonModule, AdministrationRoutingModule],
 })
 export class AdministrationModule {}

@@ -8,9 +8,8 @@ describe('LocalizationPopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LocalizationPopupComponent ]
-    })
-    .compileComponents();
+      declarations: [LocalizationPopupComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LocalizationPopupComponent);
     component = fixture.componentInstance;
