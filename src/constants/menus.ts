@@ -22,6 +22,13 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.WRENCH_CLOCK,
   },
   {
+    id: 5,
+    langKey: 'login',
+    permission: 'MANAGE_LOCALIZATION',
+    icon: AppIcons.WRENCH_CLOCK,
+    parent: 4,
+  },
+  {
     id: 4,
     langKey: 'login',
     permission: 'MANAGE_LOCALIZATION',

@@ -55,8 +55,14 @@ export class MenuItemService {
 
     this.parents.forEach((item) => {
       item.children = this.getItemChildren(item);
-      this.getSearchText(item);
+      const arabic: string[] = [];
+      const english: string[] = [];
+      this.getSearchText(item, '', '', arabic, english);
+      item.englishSearchText = english.join('');
+      item.arabicSearchText = arabic.join('');
     });
+
+    console.log(this.parents);
 
     this.translateMenuItems();
 
@@ -74,18 +80,26 @@ export class MenuItemService {
 
   private getSearchText(
     item: MenuItemContract,
-    arabic?: string,
-    english?: string
+    arabicSearchText: string,
+    englishSearchText: string,
+    arabicChildren: string[],
+    englishChildren: string[]
   ) {
     const { arName, enName } = this.lang.getLocalizationByKey(item.langKey);
-    item.enName = enName;
     item.arName = arName;
-    item.arabicSearchText = arabic ?? ''.toLowerCase() + item.arName;
-    item.englishSearchText = english ?? ''.toLowerCase() + item.enName;
-    item.children?.forEach((child) => {
-      this.getSearchText(child, item.arName, item.enName);
-      item.arabicSearchText += child.arabicSearchText || '';
-      item.englishSearchText += child.englishSearchText || '';
+    item.enName = enName;
+    arabicChildren.push(arName);
+    englishChildren.push(enName);
+    item.arabicSearchText = arabicSearchText + arName;
+    item.englishSearchText = englishSearchText + enName;
+    (item.children ?? []).forEach((child) => {
+      this.getSearchText(
+        child,
+        item.arabicSearchText || '',
+        item.englishSearchText || '',
+        arabicChildren,
+        englishChildren
+      );
     });
   }
 
