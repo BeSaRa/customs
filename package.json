@@ -10,7 +10,8 @@
     "lint:fix": "npm run lint --fix",
     "test": "jest",
     "test-watch": "jest --watch",
-    "test-coverage": "jest --coverage"
+    "test-coverage": "jest --coverage",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -69,10 +70,5 @@
     "src/**/*.ts": [
       "eslint --fix"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
