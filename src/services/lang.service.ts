@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LangContract } from '@contracts/lang-contract';
-import { delay, distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
+import { distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
 import { LangCodes } from '@enums/lang-codes';
 import { DOCUMENT } from '@angular/common';
@@ -40,6 +40,10 @@ export class LangService extends RegisterServiceMixin(class {}) {
     keyof LangKeysContract,
     string
   >;
+  private records: Record<keyof LangKeysContract, Localization> = {} as Record<
+    keyof LangKeysContract,
+    Localization
+  >;
 
   langChangeProcess$ = this.langChangerNotifier
     .asObservable()
@@ -51,7 +55,7 @@ export class LangService extends RegisterServiceMixin(class {}) {
   >;
 
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[1];
+  private current: LangContract = this.languages[0];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };
@@ -74,13 +78,12 @@ export class LangService extends RegisterServiceMixin(class {}) {
   setCurrent(lang: LangContract): void {
     of(LangChangeProcess.START)
       .pipe(tap(() => this.langChangerNotifier.next(LangChangeProcess.PREPARE)))
-      .pipe(map(() => lang))
+      .pipe(map(() => (this.current = lang)))
       .pipe(tap(() => this.setCurrentLanguageMap()))
-      .pipe(tap((lang) => this.setDirection(lang.direction)))
-      .pipe(delay(1000))
-      .subscribe((lang) => {
-        this.current = lang;
+      // .pipe(delay(1000))
+      .subscribe(() => {
         this.change.next(this.current);
+        this.setDirection(this.current.direction);
         this.langChangerNotifier.next(LangChangeProcess.END);
       });
   }
@@ -101,11 +104,34 @@ export class LangService extends RegisterServiceMixin(class {}) {
       const key = local.localizationKey as keyof LangKeysContract;
       this.arabic[key] = local.arName;
       this.english[key] = local.enName;
+      this.records[key] = local;
     });
     this.setCurrentLanguageMap();
   }
 
   setCurrentLanguageMap(): void {
     this.map = this.current.code === LangCodes.AR ? this.arabic : this.english;
+  }
+
+  getArabicTranslation(langKey: keyof LangKeysContract) {
+    return this.arabic[langKey] || `messing Lang Key ${langKey}`;
+  }
+
+  getEnglishTranslation(langKey: keyof LangKeysContract) {
+    return this.english[langKey] || `messing Lang Key ${langKey}`;
+  }
+
+  getTranslate(langKey: keyof LangKeysContract): string {
+    return this.map[langKey] || `messing Lang Key ${langKey}`;
+  }
+
+  getLocalizationByKey(langKey: keyof LangKeysContract): Localization {
+    return (
+      this.records[langKey] ||
+      new Localization().clone({
+        arName: `key not exists ${langKey}`,
+        enName: `key not exists ${langKey}`,
+      })
+    );
   }
 }

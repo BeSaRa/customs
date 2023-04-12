@@ -21,5 +21,12 @@ export const SidebarMenuAnimation = trigger('openClose', [
       opacity: 1,
     })
   ),
+  state(
+    'search',
+    style({
+      height: '*',
+      opacity: 1,
+    })
+  ),
   transition('opened <=> closed', animate('150ms ease-in-out')),
 ]);

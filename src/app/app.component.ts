@@ -22,4 +22,8 @@ export class AppComponent {
       return;
     }
   }
+  @HostListener('window:keydown.alt.control.l')
+  toggleLanguage(): void {
+    this.lang.toggleLang();
+  }
 }

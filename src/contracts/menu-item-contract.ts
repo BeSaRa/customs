@@ -14,6 +14,8 @@ export interface MenuItemContract {
   enName?: string;
   order?: number;
   children?: MenuItemContract[];
-  arHiddenLabel?: string;
-  enHiddenLabel?: string;
+  translate?: string;
+  arabicSearchText?: string;
+  englishSearchText?: string;
+  searchText?: string;
 }

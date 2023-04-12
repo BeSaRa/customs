@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Menus } from '@constants/menus';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,15 @@ export class MenuItemService {
   private parents: MenuItemContract[] = [];
   private children: Record<number, MenuItemContract[]> = {};
   private readonly employeeService = inject(EmployeeService);
+  private readonly lang = inject(LangService);
+
+  constructor() {
+    this.listenToChangeLanguage();
+  }
 
   clearMenu(): void {
     this.parents = [];
+    this.children = {};
   }
 
   getMenu(): MenuItemContract[] {
@@ -32,6 +39,7 @@ export class MenuItemService {
   }
 
   buildHierarchy() {
+    this.clearMenu();
     this.filteredStaticMenu.forEach((item) => {
       if (!item.parent) {
         this.parents.push(item);
@@ -45,10 +53,12 @@ export class MenuItemService {
       this.children[item.parent].push(item);
     });
 
-    this.parents.map((item) => {
+    this.parents.forEach((item) => {
       item.children = this.getItemChildren(item);
-      return item;
+      this.getSearchText(item);
     });
+
+    this.translateMenuItems();
 
     this.parents.sort((a, b) => {
       return (a.order ?? 0) - (b.order ?? 0);
@@ -59,6 +69,49 @@ export class MenuItemService {
     return (this.children[item.id] ?? []).map((item) => {
       item.children = this.getItemChildren(item);
       return item;
+    });
+  }
+
+  private getSearchText(
+    item: MenuItemContract,
+    arabic?: string,
+    english?: string
+  ) {
+    const { arName, enName } = this.lang.getLocalizationByKey(item.langKey);
+    item.enName = enName;
+    item.arName = arName;
+    item.arabicSearchText = arabic ?? ''.toLowerCase() + item.arName;
+    item.englishSearchText = english ?? ''.toLowerCase() + item.enName;
+    item.children?.forEach((child) => {
+      this.getSearchText(child, item.arName, item.enName);
+      item.arabicSearchText += child.arabicSearchText || '';
+      item.englishSearchText += child.englishSearchText || '';
+    });
+  }
+
+  private translateMenu(item: MenuItemContract): void {
+    const isArabic = () => {
+      return this.lang.getCurrent().code === 'ar';
+    };
+    item.translate = isArabic() ? item.arName : item.enName;
+    item.searchText = isArabic()
+      ? item.arabicSearchText
+      : item.englishSearchText;
+
+    item.children?.forEach((item) => {
+      this.translateMenu(item);
+    });
+  }
+
+  private translateMenuItems(): void {
+    this.parents.forEach((item) => {
+      this.translateMenu(item);
+    });
+  }
+
+  private listenToChangeLanguage() {
+    this.lang.change$.subscribe(() => {
+      this.translateMenuItems();
     });
   }
 }
