@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { forkJoin, map, Observable, switchMap, tap } from 'rxjs';
+import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
 import { InfoService } from '@services/info.service';
@@ -83,8 +83,7 @@ export class AppModule {
     url: UrlService,
     info: InfoService,
     lookup: LookupService,
-    auth: AuthService,
-    menuItem: MenuItemService
+    auth: AuthService
   ): () => Observable<unknown> {
     return () => {
       return forkJoin([config.load()])
@@ -92,9 +91,7 @@ export class AppModule {
         .pipe(tap(() => url.prepareUrls()))
         .pipe(switchMap(() => info.load()))
         .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
-        .pipe(switchMap(() => auth.validateToken()))
-        .pipe(tap(() => menuItem.filterStaticMenu()))
-        .pipe(map(() => menuItem.buildHierarchy()));
+        .pipe(switchMap(() => auth.validateToken()));
     };
   }
 }
