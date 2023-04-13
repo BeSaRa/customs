@@ -58,11 +58,9 @@ export class MenuItemService {
       const arabic: string[] = [];
       const english: string[] = [];
       this.getSearchText(item, '', '', arabic, english);
-      item.englishSearchText = english.join('');
-      item.arabicSearchText = arabic.join('');
+      item.englishSearchText = english.join('󰜈');
+      item.arabicSearchText = arabic.join('󰜈');
     });
-
-    console.log(this.parents);
 
     this.translateMenuItems();
 
@@ -90,8 +88,8 @@ export class MenuItemService {
     item.enName = enName;
     arabicChildren.push(arName);
     englishChildren.push(enName);
-    item.arabicSearchText = arabicSearchText + arName;
-    item.englishSearchText = englishSearchText + enName;
+    item.arabicSearchText = arabicSearchText + '󰜈' + arName;
+    item.englishSearchText = englishSearchText + '󰜈' + enName;
     (item.children ?? []).forEach((child) => {
       this.getSearchText(
         child,
