@@ -128,7 +128,7 @@ export class LangService extends RegisterServiceMixin(class {}) {
   getLocalizationByKey(langKey: keyof LangKeysContract): Localization {
     return (
       this.records[langKey] ||
-      new Localization().clone({
+      new Localization().clone<Localization>({
         arName: `key not exists ${langKey}`,
         enName: `key not exists ${langKey}`,
       })
