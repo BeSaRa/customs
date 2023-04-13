@@ -7,6 +7,7 @@ import { CredentialsContract } from '@contracts/credentials-contract';
 import { Subject, switchMap } from 'rxjs';
 import { LocalizationService } from '@services/localization.service';
 import { ignoreErrors } from '@utils/utils';
+import { Localization } from '@models/localization';
 
 @Component({
   selector: 'app-login',
@@ -62,9 +63,14 @@ export class LoginComponent implements OnInit {
         )
       )
       .subscribe(() => {
-        this.localizationService.load().subscribe((v) => {
-          console.log(v);
-        });
+        new Localization()
+          .clone<Localization>({
+            arName: 'إدارة النظام',
+            enName: 'Administration',
+            localizationKey: 'menu_administration',
+          })
+          .save()
+          .subscribe();
       });
   }
 
