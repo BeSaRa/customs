@@ -1,8 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdministrationComponent } from './administration.component';
+import { AppRoutes } from '@enums/app-routes';
+import { LocalizationComponent } from '@modules/administration/components/localization/localization.component';
 
-const routes: Routes = [{ path: '', component: AdministrationComponent }];
+const routes: Routes = [
+  { path: '', component: AdministrationComponent },
+  {
+    path: AppRoutes.LOCALIZATION,
+    component: LocalizationComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
