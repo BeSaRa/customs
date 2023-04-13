@@ -1,38 +1,20 @@
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { AppIcons } from '@enums/app-icons';
+import { MenuRoutes } from '@constants/menu-routes';
+import { MenuIdes } from '@enums/menu-ides';
 
 export const Menus: MenuItemContract[] = [
   {
-    id: 1,
-    langKey: 'arabic_name',
-    icon: AppIcons.DOMAIN,
-    path: '/home',
+    id: MenuIdes.ADMINISTRATION,
+    langKey: 'menu_administration',
+    icon: AppIcons.SETTINGS,
+    path: MenuRoutes.ADMINISTRATION,
   },
   {
-    id: 2,
-    langKey: 'login',
-    permission: 'MANAGE_LOCALIZATION',
-    icon: AppIcons.RELOAD,
-    parent: 1,
-  },
-  {
-    id: 3,
-    langKey: 'login',
-    permission: 'MANAGE_LOCALIZATION',
-    icon: AppIcons.WRENCH_CLOCK,
-  },
-  {
-    id: 5,
-    langKey: 'login',
-    permission: 'MANAGE_LOCALIZATION',
-    icon: AppIcons.WRENCH_CLOCK,
-    parent: 4,
-  },
-  {
-    id: 4,
-    langKey: 'login',
-    permission: 'MANAGE_LOCALIZATION',
-    icon: AppIcons.WRENCH_CLOCK,
-    parent: 2,
+    id: MenuIdes.LOCALIZATION,
+    langKey: 'menu_localization',
+    icon: AppIcons.TRANSLATE,
+    path: MenuRoutes.LOCALIZATION,
+    parent: MenuIdes.ADMINISTRATION,
   },
 ];
