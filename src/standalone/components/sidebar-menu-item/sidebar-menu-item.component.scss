@@ -1,9 +1,10 @@
-:host-context(html[dir=ltr]) {
-  a.link:not(.level-1) {
+:host-context(html[dir="ltr"]) {
+  a.menu-item-link:not(.level-1) {
     padding-left: calc((var(--level) - 1) * 24px);
   }
 
-  .opened > a > div > .children-indicator, .filter > a > div > .children-indicator {
+  .opened > a > div > .children-indicator,
+  .filter > a > div > .children-indicator {
     transform: rotate(90deg);
   }
 
@@ -12,12 +13,13 @@
   }
 }
 
-:host-context(html[dir=rtl]) {
-  a.link:not(.level-1) {
+:host-context(html[dir="rtl"]) {
+  a.menu-item-link:not(.level-1) {
     padding-right: calc((var(--level) - 1) * 24px);
   }
 
-  .opened > a > div > .children-indicator, .filter > a > div > .children-indicator {
+  .opened > a > div > .children-indicator,
+  .filter > a > div > .children-indicator {
     transform: rotate(90deg);
   }
 
@@ -25,5 +27,3 @@
     transform: rotate(180deg);
   }
 }
-
-
