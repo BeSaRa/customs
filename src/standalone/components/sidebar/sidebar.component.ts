@@ -30,4 +30,9 @@ export class SidebarComponent {
   control = new FormControl('', {
     nonNullable: true,
   });
+
+  moveFocus() {
+    const link = document.querySelector('.menu-item-link') as HTMLAnchorElement;
+    link && link.focus();
+  }
 }

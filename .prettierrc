@@ -3,7 +3,8 @@
     {
       "files": "*.ts",
       "options": {
-        "singleQuote": true
+        "singleQuote": true,
+        "endOfLine": "lf"
       }
     },
     {

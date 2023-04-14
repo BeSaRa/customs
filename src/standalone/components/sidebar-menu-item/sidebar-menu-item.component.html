@@ -1,12 +1,13 @@
 <!--suppress CssUnknownProperty -->
-<div class="overflow-hidden" [ngClass]="menuStatus" [style.--level]="level">
+<div [attr.aria-expanded]="menuStatus === 'opened'" [ngClass]="menuStatus" [style.--level]="level">
   <a
+    (keydown.space)="hasChildren && toggleMenu()"
     (click)="hasChildren && toggleMenu()"
     [routerLink]="item.path"
     routerLinkActive="active"
-    class="flex  hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 link mb-1 level-{{
+    class="flex hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
       level
-    }} items-center justify-start space-x-2 rtl:space-x-reverse">
+    }} items-center outline-none justify-start space-x-2 rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
     <div class="flex-auto flex items-center">
       <span class="flex-auto">{{ item.translate }}</span>
@@ -16,9 +17,19 @@
         svgIcon="menu-right"></mat-icon>
     </div>
   </a>
-  <div [@openClose]="menuStatus" class="children-wrapper" *ngIf="hasChildren">
+  <div
+    [@openClose]="menuStatus"
+    [attr.aria-expanded]="menuStatus === 'opened'"
+    [ngClass]="menuStatus"
+    tabindex="-1"
+    class="children-wrapper overflow-hidden [&.closed]:hidden"
+    *ngIf="hasChildren">
     <ng-container *ngFor="let childItem of item.children | filterSidebarMenuItem : searchText; trackBy: trackByLangKey">
-      <app-sidebar-menu-item [item]="childItem" [searchText]="searchText" [level]="level + 1"></app-sidebar-menu-item>
+      <app-sidebar-menu-item
+        tabindex="-1"
+        [item]="childItem"
+        [searchText]="searchText"
+        [level]="level + 1"></app-sidebar-menu-item>
     </ng-container>
   </div>
 </div>
