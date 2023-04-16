@@ -6,6 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
 import { CastResponse } from 'cast-response';
 import { inject } from '@angular/core';
+import { Constructor } from '@app-types/constructors';
 
 export abstract class BaseCrudService<M, PrimaryType = number>
   extends RegisterServiceMixin(class {})
@@ -13,7 +14,12 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
+
   protected abstract getUrlSegment(): string;
+
+  protected abstract getModelInstance(): M;
+
+  protected abstract getModelClass(): Constructor<M>;
 
   @CastResponse()
   create(model: M): Observable<M> {
@@ -138,11 +144,15 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   filter(
     criteria: Partial<M>,
     options: FetchOptionsContract = { offset: 0, limit: 50 }
-  ): Observable<M> {
-    return this.http.post<M>(this.getUrlSegment() + '/filter', criteria, {
+  ): Observable<M[]> {
+    return this.http.post<M[]>(this.getUrlSegment() + '/filter', criteria, {
       params: new HttpParams({
         fromObject: { ...options },
       }),
     });
+  }
+
+  isInstanceOf(model: unknown): model is M {
+    return model instanceof this.getModelClass();
   }
 }

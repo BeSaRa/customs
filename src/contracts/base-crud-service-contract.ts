@@ -36,5 +36,5 @@ export interface BaseCrudServiceContract<M, PrimaryType = number> {
 
   createFull(model: M): Observable<M>;
 
-  filter(criteria: Partial<M>, options: FetchOptionsContract): Observable<M>;
+  filter(criteria: Partial<M>, options: FetchOptionsContract): Observable<M[]>;
 }

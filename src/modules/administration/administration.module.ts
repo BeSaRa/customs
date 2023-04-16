@@ -5,6 +5,8 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
 import { LocalizationComponent } from './components/localization/localization.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -12,6 +14,11 @@ import { LocalizationComponent } from './components/localization/localization.co
     LocalizationPopupComponent,
     LocalizationComponent,
   ],
-  imports: [CommonModule, AdministrationRoutingModule],
+  imports: [
+    CommonModule,
+    AdministrationRoutingModule,
+    MatTableModule,
+    MatPaginatorModule,
+  ],
 })
 export class AdministrationModule {}

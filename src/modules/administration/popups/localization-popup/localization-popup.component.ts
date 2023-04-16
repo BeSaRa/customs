@@ -10,4 +10,8 @@ import { Localization } from '@models/localization';
 })
 export class LocalizationPopupComponent {
   private data: CrudDialogDataContract<Localization> = inject(MAT_DIALOG_DATA);
+
+  constructor() {
+    console.log(this.data.extras);
+  }
 }

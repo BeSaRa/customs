@@ -7,16 +7,19 @@ import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
+import { BaseModel } from '@abstracts/base-model';
 
-export abstract class BaseCrudWithDialogService<C, M, PrimaryType = number>
+export abstract class BaseCrudWithDialogService<
+    C,
+    M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>,
+    PrimaryType = number
+  >
   extends BaseCrudService<M, PrimaryType>
   implements BaseCrudWithDialogServiceContract<C, M, PrimaryType>
 {
   protected dialog = inject(DialogService);
 
   protected abstract getDialogComponent(): ComponentType<C>;
-
-  protected abstract getModelInstance(): M;
 
   openCreateDialog(
     model?: M | undefined,

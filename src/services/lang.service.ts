@@ -13,6 +13,10 @@ import { Localization } from '@models/localization';
   providedIn: 'root',
 })
 export class LangService extends RegisterServiceMixin(class {}) {
+  map: Record<keyof LangKeysContract, string> = {} as Record<
+    keyof LangKeysContract,
+    string
+  >;
   private languages: LangContract[] = [
     {
       id: 1,
@@ -49,13 +53,8 @@ export class LangService extends RegisterServiceMixin(class {}) {
     .asObservable()
     .pipe(distinctUntilChanged());
 
-  map: Record<keyof LangKeysContract, string> = {} as Record<
-    keyof LangKeysContract,
-    string
-  >;
-
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[0];
+  private current: LangContract = this.languages[1];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };
