@@ -15,5 +15,10 @@ export class LocalizationComponent extends AdminComponent<
   LocalizationService
 > {
   service = inject(LocalizationService);
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = [
+    'arName',
+    'enName',
+    'localizationKey',
+    'actions',
+  ];
 }

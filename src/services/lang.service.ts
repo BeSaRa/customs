@@ -17,6 +17,7 @@ export class LangService extends RegisterServiceMixin(class {}) {
     keyof LangKeysContract,
     string
   >;
+
   private languages: LangContract[] = [
     {
       id: 1,

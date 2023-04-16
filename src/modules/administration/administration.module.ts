@@ -7,6 +7,9 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
 import { LocalizationComponent } from './components/localization/localization.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     AdministrationRoutingModule,
     MatTableModule,
     MatPaginatorModule,
+    ButtonComponent,
+    MatIconModule,
+    MatButtonModule,
   ],
 })
 export class AdministrationModule {}

@@ -45,7 +45,7 @@ export abstract class AdminComponent<
   sort$: Observable<unknown> = new Subject();
 
   useFilter = true;
-  data$: Observable<M[]> = this.loadCorrectData().pipe(delay(5000));
+  data$: Observable<M[]> = this.loadCorrectData();
 
   create$ = new Subject<void>();
   view$ = new Subject<M>();
@@ -61,7 +61,7 @@ export abstract class AdminComponent<
 
   private loadCorrectData(): Observable<M[]> {
     return of(undefined)
-      .pipe(delay(0))
+      .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
         switchMap(() => {
           return iif(
@@ -82,7 +82,7 @@ export abstract class AdminComponent<
   }
 
   ngOnInit(): void {
-    this.filter$.next({});
+    this.filter$.next({ enName: 'login' } as M);
     this.reload$.next();
 
     this.listenToCreate();

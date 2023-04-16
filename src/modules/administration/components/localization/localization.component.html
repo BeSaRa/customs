@@ -1,30 +1,40 @@
-<h1 class="text-xl mb-4">{{ lang.map.menu_localization }}</h1>
+<div class="flex items-center justify-start pb-4">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+    {{ lang.map.menu_localization }}
+  </h1>
+  <button mat-icon-button>
+    <mat-icon svgIcon="reload"></mat-icon>
+  </button>
+  <button mat-icon-button>
+    <mat-icon svgIcon="plus"></mat-icon>
+  </button>
+</div>
 <div class="shadow">
   <table mat-table [dataSource]="dataSource">
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
     <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef>No.</th>
-      <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+    <ng-container matColumnDef="arName">
+      <th mat-header-cell *matHeaderCellDef>{{ lang.map.arabic_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
 
     <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    <ng-container matColumnDef="enName">
+      <th mat-header-cell *matHeaderCellDef>{{ lang.map.english_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
     </ng-container>
 
     <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
+    <ng-container matColumnDef="localizationKey">
       <th mat-header-cell *matHeaderCellDef>Weight</th>
-      <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.localizationKey }}</td>
     </ng-container>
 
     <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
+    <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>Symbol</th>
-      <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+      <td mat-cell *matCellDef="let element">{{ "actions" }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

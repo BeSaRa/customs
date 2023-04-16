@@ -29,6 +29,7 @@ import { HomeComponent } from './components/home/home.component';
 import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MenuItemService } from '@services/menu-item.service';
+import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -51,6 +52,7 @@ import { MenuItemService } from '@services/menu-item.service';
     SidebarComponent,
     MatIconModule,
     InputSuffixDirective,
+    NavbarComponent,
   ],
   providers: [
     {
