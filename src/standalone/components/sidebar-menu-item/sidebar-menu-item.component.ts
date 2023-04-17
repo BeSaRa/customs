@@ -17,6 +17,7 @@ import { takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ShrinkAnimation } from '@animations/shrink-animation';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -50,6 +51,8 @@ export class SidebarMenuItemComponent
   @Input()
   shrinkMode = false;
 
+  sidebar = inject(SidebarComponent);
+
   @Input()
   set searchText(value) {
     this._searchText = value || '';
@@ -69,6 +72,7 @@ export class SidebarMenuItemComponent
   }
 
   toggleMenu(): void {
+    if (this.sidebar.isClosed()) return;
     this.menuStatus = this.menuStatus === 'opened' ? 'closed' : 'opened';
   }
 

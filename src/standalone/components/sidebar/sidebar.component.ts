@@ -16,6 +16,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AnimationEvent } from '@angular/animations';
 import { SidebarAnimation } from '@animations/sidebar-animation';
 import { SearchAnimation } from '@animations/search-animation';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -29,6 +31,7 @@ import { SearchAnimation } from '@animations/search-animation';
     NgOptimizedImage,
     SidebarMenuComponent,
     ReactiveFormsModule,
+    NgScrollbarModule,
   ],
   animations: [SidebarAnimation, SearchAnimation],
   templateUrl: './sidebar.component.html',
@@ -41,6 +44,9 @@ export class SidebarComponent {
   control = new FormControl('', {
     nonNullable: true,
   });
+
+  lang = inject(LangService);
+
   @HostBinding('class')
   @HostBinding('@sidebar')
   status: 'opened' | 'closed' = 'opened';
@@ -79,5 +85,17 @@ export class SidebarComponent {
 
   isClosingOrClosed(): boolean {
     return this.closing || (this.closed && !this.opining);
+  }
+
+  get direction() {
+    return this.lang.getCurrent().direction;
+  }
+
+  isOpened(): boolean {
+    return this.status === 'opened';
+  }
+
+  isClosed(): boolean {
+    return !this.isOpened();
   }
 }
