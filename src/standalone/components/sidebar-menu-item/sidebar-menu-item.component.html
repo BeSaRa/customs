@@ -11,7 +11,7 @@
     }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
     <div [@shrink]="shrinkMode" class="flex-auto flex items-center">
-      <span [innerHTML]="item.translate! | highlight : searchText ?? ''" class="flex-auto item-label"></span>
+      <span [innerHTML]="item.translate! | highlight : searchText" class="flex-auto item-label"></span>
       <mat-icon
         *ngIf="hasChildren"
         class="flex-none size-18 transition-transform children-indicator"
