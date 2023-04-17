@@ -2,8 +2,8 @@ import {
   Component,
   ElementRef,
   HostBinding,
+  HostListener,
   inject,
-  OnInit,
 } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { InputComponent } from '@standalone/components/input/input.component';
@@ -15,13 +15,12 @@ import { MenuItemService } from '@services/menu-item.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   animate,
+  AnimationEvent,
   state,
   style,
   transition,
   trigger,
 } from '@angular/animations';
-import { LangService } from '@services/lang.service';
-import { LangContract } from '@contracts/lang-contract';
 
 @Component({
   selector: 'app-sidebar',
@@ -41,40 +40,75 @@ import { LangContract } from '@contracts/lang-contract';
       state(
         'opened',
         style({
-          marginLeft: 0,
-          marginRight: 0,
+          width: '*',
         })
       ),
       state(
-        'closedToLeft',
+        'closed',
         style({
-          marginLeft: '-300px',
+          width: '75px',
+        })
+      ),
+      transition('* <=> opened', [animate('150ms ease-in-out')]),
+    ]),
+    trigger('scaleInOut', [
+      state(
+        'true',
+        style({
+          transform: 'scale(1)',
+          opacity: 1,
         })
       ),
       state(
-        'closedToRight',
+        'false',
         style({
-          marginRight: '-300px',
+          transform: 'scale(0)',
+          opacity: 0,
         })
       ),
-      transition('* <=> opened', animate('150ms ease-in-out')),
-      transition('closedFromLeft <=> closedFromRight', animate(0)),
+      transition('true <=> false', animate('150ms ease-in-out')),
     ]),
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   element = inject(ElementRef);
   menuItemService = inject(MenuItemService);
-  lang = inject(LangService);
   items = this.menuItemService.getMenu();
   control = new FormControl('', {
     nonNullable: true,
   });
 
   @HostBinding('@sidebar')
-  status: 'opened' | 'closedToLeft' | 'closedToRight' = 'opened';
+  status: 'opened' | 'closed' = 'opened';
+
+  @HostBinding('class.opining')
+  opining = false;
+  @HostBinding('class.closing')
+  closing = false;
+
+  closed = false;
+
+  opened = false;
+
+  @HostBinding('class')
+  hostClass: 'opened' | 'closed' = 'opened';
+
+  @HostListener('@sidebar.start', ['$event'])
+  start($event: AnimationEvent): void {
+    this.closing = $event.toState === 'closed';
+    this.opining = $event.toState === 'opened';
+  }
+
+  @HostListener('@sidebar.done', ['$event'])
+  done($event: AnimationEvent): void {
+    this.hostClass = $event.toState === 'opened' ? 'opened' : 'closed';
+    this.opened = $event.toState === 'opened';
+    this.closed = !this.opened;
+    this.closing = false;
+    this.opining = false;
+  }
 
   moveFocus() {
     const link = document.querySelector('.menu-item-link') as HTMLAnchorElement;
@@ -82,23 +116,10 @@ export class SidebarComponent implements OnInit {
   }
 
   toggle(): void {
-    const lang = this.lang.getCurrent();
-    this.status =
-      this.status === 'opened'
-        ? lang.code === 'ar'
-          ? 'closedToRight'
-          : 'closedToLeft'
-        : 'opened';
+    this.status = this.status === 'opened' ? 'closed' : 'opened';
   }
 
-  ngOnInit(): void {
-    this.lang.change$.subscribe((current: LangContract) => {
-      this.status =
-        this.status !== 'opened'
-          ? current.code == 'ar'
-            ? 'closedToRight'
-            : 'closedToLeft'
-          : this.status;
-    });
+  isClosingOrClosed(): boolean {
+    return this.closing || (this.closed && !this.opining);
   }
 }

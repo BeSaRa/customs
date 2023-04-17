@@ -4,7 +4,6 @@ import {
   Component,
   inject,
   Input,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,7 +13,15 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { SidebarMenuAnimation } from '../../../animsations/sidebar-menu-animation';
 import { FilterSidebarMenuItemPipe } from '@standalone/pipes/filter-sidebar-menu-item.pipe';
 import { LangService } from '@services/lang.service';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -29,17 +36,19 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './sidebar-menu-item.component.html',
   styleUrls: ['./sidebar-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [SidebarMenuAnimation],
+  animations: [
+    SidebarMenuAnimation,
+    trigger('shrink', [
+      state('true', style({ height: 0, width: 0, opacity: 0 })),
+      state('false', style({ height: '*', width: '*', opacity: 1 })),
+      transition('true <=> false', animate('150ms ease-in-out')),
+    ]),
+  ],
 })
-export class SidebarMenuItemComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.destroy$.unsubscribe();
-  }
-
+export class SidebarMenuItemComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   private _searchText = '';
   @Input()
   level!: number;
@@ -49,6 +58,8 @@ export class SidebarMenuItemComponent implements OnInit, OnDestroy {
   menuStatus: 'opened' | 'closed' = 'closed';
   cd = inject(ChangeDetectorRef);
   lang = inject(LangService);
+  @Input()
+  shrinkMode = false;
 
   @Input()
   set searchText(value) {

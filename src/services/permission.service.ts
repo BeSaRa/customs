@@ -3,6 +3,7 @@ import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Permission } from '@models/permission';
 import { CastResponseContainer } from 'cast-response';
 import { map, Observable, tap } from 'rxjs';
+import { Constructor } from '@app-types/constructors';
 
 @CastResponseContainer({
   $default: {
@@ -39,5 +40,13 @@ export class PermissionService extends BaseCrudService<Permission> {
         printConstantContent && console.log(JSON.stringify(map, null, '  '));
       })
     );
+  }
+
+  protected getModelInstance(): Permission {
+    return new Permission();
+  }
+
+  protected getModelClass(): Constructor<Permission> {
+    return Permission;
   }
 }

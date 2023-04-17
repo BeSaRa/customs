@@ -28,4 +28,7 @@ export class SidebarMenuComponent {
   level!: number;
   @Input()
   searchText!: string;
+
+  @Input()
+  shrinkMode = false;
 }
