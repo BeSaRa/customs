@@ -1,6 +1,7 @@
 <div
   id="sidebar-wrapper"
-  class="overflow-hidden min-w-[75px] max-w-[300px] w-full flex flex-col h-full bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
+  [ngClass]="status"
+  class="overflow-hidden group min-w-[75px] max-w-[300px] w-full flex flex-col h-full bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
   <div class="flex-none flex px-4 py-2 items-center justify-start space-x-2 rtl:space-x-reverse">
     <div class="flex-none w-12">
       <img ngSrc="assets/images/main-logo.png" alt="logo" priority height="271" width="288" />

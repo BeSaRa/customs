@@ -41,7 +41,7 @@ export class SidebarComponent {
   control = new FormControl('', {
     nonNullable: true,
   });
-
+  @HostBinding('class')
   @HostBinding('@sidebar')
   status: 'opened' | 'closed' = 'opened';
 
@@ -54,9 +54,6 @@ export class SidebarComponent {
 
   opened = false;
 
-  @HostBinding('class')
-  hostClass: 'opened' | 'closed' = 'opened';
-
   @HostListener('@sidebar.start', ['$event'])
   start($event: AnimationEvent): void {
     this.closing = $event.toState === 'closed';
@@ -65,7 +62,6 @@ export class SidebarComponent {
 
   @HostListener('@sidebar.done', ['$event'])
   done($event: AnimationEvent): void {
-    this.hostClass = $event.toState === 'opened' ? 'opened' : 'closed';
     this.opened = $event.toState === 'opened';
     this.closed = !this.opened;
     this.closing = false;

@@ -16,6 +16,7 @@ import { LangService } from '@services/lang.service';
 import { takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ShrinkAnimation } from '@animations/shrink-animation';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -26,6 +27,7 @@ import { ShrinkAnimation } from '@animations/shrink-animation';
     RouterLinkActive,
     RouterLink,
     FilterSidebarMenuItemPipe,
+    HighlightPipe,
   ],
   templateUrl: './sidebar-menu-item.component.html',
   styleUrls: ['./sidebar-menu-item.component.scss'],

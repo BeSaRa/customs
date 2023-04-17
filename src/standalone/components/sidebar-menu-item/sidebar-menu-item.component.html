@@ -7,15 +7,19 @@
     routerLinkActive="active"
     class="flex hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
       level
-    }} items-center outline-none justify-start space-x-2 rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
+    }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
     <div [@shrink]="shrinkMode" class="flex-auto flex items-center">
-      <span class="flex-auto item-label">{{ item.translate }}</span>
+      <span [innerHTML]="item.translate! | highlight : searchText ?? ''" class="flex-auto item-label"></span>
       <mat-icon
         *ngIf="hasChildren"
         class="flex-none size-18 transition-transform children-indicator"
         svgIcon="menu-right"></mat-icon>
     </div>
+    <span
+      class="bg-slate-400 shadow py-1 px-2 rounded-full group-[.closed]:-top-2 rtl:group-[.closed]:-left-2 rtl:group-[.opened]:left-6 ltr:group-[.closed]:-right-2 ltr:group-[.opened]:right-6 text-sm absolute">
+      10
+    </span>
   </a>
   <div
     [@shrink]="shrinkMode"
@@ -23,7 +27,7 @@
     [attr.aria-expanded]="menuStatus === 'opened'"
     [ngClass]="menuStatus"
     tabindex="-1"
-    class="children-wrapper overflow-hidden [&.closed]:hidden"
+    class="children-wrapper [&.closed]:hidden"
     *ngIf="hasChildren">
     <ng-container *ngFor="let childItem of item.children | filterSidebarMenuItem : searchText; trackBy: trackByLangKey">
       <app-sidebar-menu-item
