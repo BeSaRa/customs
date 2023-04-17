@@ -10,18 +10,12 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItemContract } from '@contracts/menu-item-contract';
-import { SidebarMenuAnimation } from '../../../animsations/sidebar-menu-animation';
+import { SidebarMenuAnimation } from '@animations/sidebar-menu-animation';
 import { FilterSidebarMenuItemPipe } from '@standalone/pipes/filter-sidebar-menu-item.pipe';
 import { LangService } from '@services/lang.service';
 import { takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { ShrinkAnimation } from '@animations/shrink-animation';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -36,14 +30,7 @@ import {
   templateUrl: './sidebar-menu-item.component.html',
   styleUrls: ['./sidebar-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    SidebarMenuAnimation,
-    trigger('shrink', [
-      state('true', style({ height: 0, width: 0, opacity: 0 })),
-      state('false', style({ height: '*', width: '*', opacity: 1 })),
-      transition('true <=> false', animate('150ms ease-in-out')),
-    ]),
-  ],
+  animations: [SidebarMenuAnimation, ShrinkAnimation],
 })
 export class SidebarMenuItemComponent
   extends OnDestroyMixin(class {})

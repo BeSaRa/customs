@@ -13,14 +13,9 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
 import { SidebarMenuComponent } from '@standalone/components/sidebar-menu/sidebar-menu.component';
 import { MenuItemService } from '@services/menu-item.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  animate,
-  AnimationEvent,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { AnimationEvent } from '@angular/animations';
+import { SidebarAnimation } from '@animations/sidebar-animation';
+import { SearchAnimation } from '@animations/search-animation';
 
 @Component({
   selector: 'app-sidebar',
@@ -35,40 +30,7 @@ import {
     SidebarMenuComponent,
     ReactiveFormsModule,
   ],
-  animations: [
-    trigger('sidebar', [
-      state(
-        'opened',
-        style({
-          width: '*',
-        })
-      ),
-      state(
-        'closed',
-        style({
-          width: '75px',
-        })
-      ),
-      transition('* <=> opened', [animate('150ms ease-in-out')]),
-    ]),
-    trigger('scaleInOut', [
-      state(
-        'true',
-        style({
-          transform: 'scale(1)',
-          opacity: 1,
-        })
-      ),
-      state(
-        'false',
-        style({
-          transform: 'scale(0)',
-          opacity: 0,
-        })
-      ),
-      transition('true <=> false', animate('150ms ease-in-out')),
-    ]),
-  ],
+  animations: [SidebarAnimation, SearchAnimation],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
 })
