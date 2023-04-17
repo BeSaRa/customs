@@ -5,7 +5,8 @@
     (click)="hasChildren && toggleMenu()"
     [routerLink]="item.path"
     routerLinkActive="active"
-    class="flex hover:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
+    [ngClass]="{ 'has-children': hasChildren }"
+    class="flex hover:bg-secondary  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
       level
     }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
