@@ -1,16 +1,27 @@
 <!--suppress CssUnknownProperty -->
 <div [attr.aria-expanded]="menuStatus === 'opened'" [ngClass]="menuStatus" [style.--level]="level">
   <a
-    (keydown.space)="hasChildren && toggleMenu()"
-    (click)="hasChildren && toggleMenu()"
+    *ngIf="!hasChildren"
     [routerLink]="item.path"
     routerLinkActive="active"
-    [ngClass]="{ 'has-children': hasChildren }"
-    class="flex hover:bg-secondary  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
+    class="flex hover:bg-secondary [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
       level
     }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
+    <ng-container [ngTemplateOutlet]="itemContent"> </ng-container>
+  </a>
+  <button
+    *ngIf="hasChildren"
+    (keydown.space)="toggleMenu()"
+    (click)="toggleMenu()"
+    class="flex  hover:bg-secondary w-full has-children  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-full rtl:rounded-bl-full ltr:rounded-tr-full ltr:rounded-br-full p-2 menu-item-link mb-1 level-{{
+      level
+    }} items-center text-start outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
+    <a [routerLink]="item.path" class="hidden"></a>
+    <ng-container [ngTemplateOutlet]="itemContent"></ng-container>
+  </button>
+  <ng-template #itemContent>
     <mat-icon *ngIf="item.icon" class="flex-none" [svgIcon]="item.icon"></mat-icon>
-    <div [@shrink]="shrinkMode" class="flex-auto flex items-center">
+    <div [@shrink]="shrinkMode" class="flex-auto flex items-center justify-start">
       <span [innerHTML]="item.translate! | highlight : searchText" class="flex-auto item-label"></span>
       <mat-icon
         *ngIf="hasChildren"
@@ -21,7 +32,7 @@
       class="bg-slate-400 shadow py-1 px-2 rounded-full group-[.closed]:-top-2 rtl:group-[.closed]:left-0 rtl:group-[.opened]:left-6 ltr:group-[.closed]:right-0 ltr:group-[.opened]:right-6 text-sm absolute">
       10
     </span>
-  </a>
+  </ng-template>
   <div
     [@shrink]="shrinkMode"
     [@openClose]="menuStatus"
