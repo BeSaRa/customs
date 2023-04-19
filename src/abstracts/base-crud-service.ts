@@ -135,6 +135,14 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   }
 
   @CastResponse()
+  createBulkFull(models: M[]): Observable<M[]> {
+    return this.http.post<M[]>(
+      this.getUrlSegment() + '/admin/bulk/full',
+      models
+    );
+  }
+
+  @CastResponse()
   updateFull(model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment() + '/admin/full', model);
   }

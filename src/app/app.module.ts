@@ -31,6 +31,8 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
 import { MenuItemService } from '@services/menu-item.service';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { PaginatorLocal } from '@constants/paginator-local';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -69,6 +71,10 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
         MenuItemService,
       ],
       multi: true,
+    },
+    {
+      provide: MatPaginatorIntl,
+      useClass: PaginatorLocal,
     },
     httpInterceptors,
     provideNgxMask(),

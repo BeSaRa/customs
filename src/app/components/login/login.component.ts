@@ -5,7 +5,6 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { FormGroupControlsNonNullable } from '@app-types/form-group-controls';
 import { CredentialsContract } from '@contracts/credentials-contract';
 import { Subject, switchMap } from 'rxjs';
-import { LocalizationService } from '@services/localization.service';
 import { ignoreErrors } from '@utils/utils';
 
 @Component({
@@ -18,7 +17,7 @@ export class LoginComponent implements OnInit {
   authService = inject(AuthService);
   lang = inject(LangService);
   fb = inject(FormBuilder);
-  localizationService = inject(LocalizationService);
+  //localizationService = inject(LocalizationService);
   eyeIcons: Record<
     'eye' | 'eye-off',
     {
@@ -61,16 +60,7 @@ export class LoginComponent implements OnInit {
           this.authService.login(this.form.value).pipe(ignoreErrors())
         )
       )
-      .subscribe(() => {
-        // new Localization()
-        //   .clone<Localization>({
-        //     arName: 'إدارة النظام',
-        //     enName: 'Administration',
-        //     localizationKey: 'menu_administration',
-        //   })
-        //   .save()
-        //   .subscribe();
-      });
+      .subscribe();
   }
 
   toggleEye() {
