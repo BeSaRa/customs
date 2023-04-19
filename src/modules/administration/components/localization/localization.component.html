@@ -2,12 +2,8 @@
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_localization }}
   </h1>
-  <button mat-icon-button>
-    <mat-icon svgIcon="reload"></mat-icon>
-  </button>
-  <button mat-icon-button>
-    <mat-icon svgIcon="plus"></mat-icon>
-  </button>
+  <app-icon-button [matTooltip]="'reload'" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
+  <app-icon-button [matTooltip]="'add new'" (click)="create$.next()" icon="PLUS"></app-icon-button>
 </div>
 <div class="shadow">
   <table mat-table [dataSource]="dataSource">
@@ -48,7 +44,7 @@
     class="border-t border-gray-200"
     (page)="paginate($event)"
     [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="50"
+    [pageSize]="2"
     [showFirstLastButtons]="showFirstLastButtons"
     [length]="50"></mat-paginator>
 </div>

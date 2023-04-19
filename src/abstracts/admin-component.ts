@@ -36,7 +36,7 @@ export abstract class AdminComponent<
   abstract service: S;
   private paginate$ = new BehaviorSubject({
     offset: 0,
-    limit: 50,
+    limit: 2,
   });
   lang = inject(LangService);
   reload$ = new ReplaySubject<void>(1);
@@ -46,10 +46,10 @@ export abstract class AdminComponent<
   useFilter = true;
   data$: Observable<M[]> = this.load();
 
-  create$ = new Subject<void>();
-  view$ = new Subject<M>();
-  edit$ = new Subject<M>();
-  delete$ = new Subject<M>();
+  create$: Subject<void> = new Subject<void>();
+  view$: Subject<M> = new Subject<M>();
+  edit$: Subject<M> = new Subject<M>();
+  delete$: Subject<M> = new Subject<M>();
 
   abstract displayedColumns: string[];
 

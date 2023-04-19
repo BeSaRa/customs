@@ -28,7 +28,9 @@
               <mat-icon [svgIcon]="selectedPasswordOptions.icon"></mat-icon>
             </button>
           </app-input>
-          <app-button (click)="login$.next()" type="secondary" class="block mt-8">{{ lang.map.login }}</app-button>
+          <app-button (click)="login$.next()" type="secondary" class="block mt-8">
+            {{ lang.map.login }}
+          </app-button>
         </form>
       </div>
     </div>

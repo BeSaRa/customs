@@ -1,5 +1,5 @@
 import { MenuItemContract } from '@contracts/menu-item-contract';
-import { AppIcons } from '@enums/app-icons';
+import { AppIcons } from '@constants/app-icons';
 import { MenuRoutes } from '@constants/menu-routes';
 import { MenuIdes } from '@enums/menu-ides';
 

@@ -10,6 +10,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { MatButtonModule } from '@angular/material/button';
     ButtonComponent,
     MatIconModule,
     MatButtonModule,
+    IconButtonComponent,
+    MatTooltipModule,
   ],
 })
 export class AdministrationModule {}

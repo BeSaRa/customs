@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ButtonTypeContract } from '@contracts/button-type-contract';
-import { AppIcons } from '@enums/app-icons';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-button',
