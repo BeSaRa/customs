@@ -2,24 +2,26 @@
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
-  <ng-container *ngIf="!hasMask">
-    <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-start">
-      <ng-content select="[appInputPrefix]"></ng-content>
-      <span
-        [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
-        class="peer absolute hidden pointer-events-none"></span>
+  <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-start">
+    <ng-content select="[appInputPrefix]"></ng-content>
+    <span
+      [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
+      class="peer absolute hidden pointer-events-none"></span>
+    <ng-container *ngIf="!hasCustomControl">
       <input
-        class="flex-auto ltr:peer-[.suffix]:pr-0 rtl:peer-[.suffix]:pl-0 ltr:peer-[.prefix]:pl-0 rtl:peer-[.prefix]:pr-0 outline-none group-[.lg]/input-wrapper:text-lg group-[.md]/input-wrapper:text-base group-[.sm]/input-wrapper:text-sm group-[.sm]/input-wrapper:px-2 group-[.sm]/input-wrapper:py-1 group-[.md]/input-wrapper:px-3 group-[.md]/input-wrapper:py-2 group-[.lg]/input-wrapper:px-5 group-[.lg]/input-wrapper:py-3"
+        [ngClass]="tailwindClass"
         autocomplete="off"
         [type]="type"
         (blur)="inputTouch()"
         [name]="name"
         [placeholder]="placeholder"
         [formControl]="control" />
-      <ng-content select="[appInputSuffix]"></ng-content>
-    </div>
-  </ng-container>
-  <ng-content select="[mask]"></ng-content>
+    </ng-container>
+    <ng-container *ngIf="hasCustomControl">
+      <ng-content select="[appControl]"></ng-content>
+    </ng-container>
+    <ng-content select="[appInputSuffix]"></ng-content>
+  </div>
   <ng-container *ngIf="displayErrors">
     <app-validation-errors [errors]="errors | async"></app-validation-errors>
   </ng-container>

@@ -54,12 +54,17 @@ export class InputComponent
   implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit
 {
   ngAfterContentInit(): void {
-    this.hasMask = !!this.template;
-    if (this.template) {
-      this.setInputMaskMissingProperties(this.template.element.nativeElement);
-      this.ctrl = this.template.control;
-      !isNgModel(this.ctrl) && this.listenToCtrlValueChanges();
-    }
+    this.hasCustomControl = !!this.template;
+    Promise.resolve().then(() => {
+      if (this.template) {
+        const input =
+          this.template.element.nativeElement.querySelector('input') ??
+          this.template.element.nativeElement;
+        this.setInputMissingProperties(input);
+        this.ctrl = this.template.control;
+        !isNgModel(this.ctrl) && this.listenToCtrlValueChanges();
+      }
+    });
   }
 
   private destroy$ = new Subject<void>();
@@ -95,6 +100,9 @@ export class InputComponent
   @ContentChild(InputSuffixDirective)
   inputSuffix?: InputSuffixDirective;
 
+  tailwindClass =
+    'flex-auto ltr:peer-[.suffix]:pr-0 rtl:peer-[.suffix]:pl-0 ltr:peer-[.prefix]:pl-0 rtl:peer-[.prefix]:pr-0 outline-none group-[.lg]/input-wrapper:text-lg group-[.md]/input-wrapper:text-base group-[.sm]/input-wrapper:text-sm group-[.sm]/input-wrapper:px-2 group-[.sm]/input-wrapper:py-1 group-[.md]/input-wrapper:px-3 group-[.md]/input-wrapper:py-2 group-[.lg]/input-wrapper:px-5 group-[.lg]/input-wrapper:py-3';
+
   private injector = inject(Injector);
   private cdr = inject(ChangeDetectorRef);
 
@@ -111,7 +119,7 @@ export class InputComponent
   onTouch!: () => void;
 
   control = new FormControl('');
-  hasMask = false;
+  hasCustomControl = false;
   // noinspection JSUnusedLocalSymbols
   private values = this.control.valueChanges
     .pipe(takeUntil(this.destroy$))
@@ -153,8 +161,8 @@ export class InputComponent
     this.onTouch && this.onTouch();
   }
 
-  setInputMaskMissingProperties(element: HTMLElement): void {
-    element.classList.add(`input-form`, this.size, this.inputColor);
+  setInputMissingProperties(element: HTMLElement): void {
+    element.classList.add(...this.tailwindClass.split(' '));
   }
 
   private listenToCtrlValueChanges() {
