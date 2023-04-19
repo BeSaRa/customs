@@ -19,7 +19,8 @@
           "options": {
             "allowedCommonJsDependencies": [
               "crypto-js",
-              "bezier-easing"
+              "bezier-easing",
+              "ng2-flatpickr"
             ],
             "outputPath": "dist/customs",
             "index": "src/index.html",
@@ -40,7 +41,8 @@
               }
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",
+              "node_modules/flatpickr/dist/flatpickr.min.css"
             ],
             "scripts": []
           },

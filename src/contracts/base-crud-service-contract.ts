@@ -6,7 +6,7 @@ export interface BaseCrudServiceContract<M, PrimaryType = number> {
 
   update(model: M): Observable<M>;
 
-  load(options: FetchOptionsContract): Observable<M[]>;
+  load(options: FetchOptionsContract, criteria?: Partial<M>): Observable<M[]>;
 
   loadComposite(options: FetchOptionsContract): Observable<M[]>;
 

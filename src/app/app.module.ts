@@ -30,6 +30,7 @@ import { SidebarComponent } from '@standalone/components/sidebar/sidebar.compone
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MenuItemService } from '@services/menu-item.service';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
+import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -53,6 +54,7 @@ import { NavbarComponent } from '@standalone/components/navbar/navbar.component'
     MatIconModule,
     InputSuffixDirective,
     NavbarComponent,
+    Ng2FlatpickrModule,
   ],
   providers: [
     {

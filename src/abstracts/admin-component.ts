@@ -5,7 +5,6 @@ import {
   combineLatest,
   delay,
   filter,
-  iif,
   Observable,
   of,
   ReplaySubject,
@@ -45,7 +44,7 @@ export abstract class AdminComponent<
   sort$: Observable<unknown> = new Subject();
 
   useFilter = true;
-  data$: Observable<M[]> = this.loadCorrectData();
+  data$: Observable<M[]> = this.load();
 
   create$ = new Subject<void>();
   view$ = new Subject<M>();
@@ -59,30 +58,26 @@ export abstract class AdminComponent<
   pageSizeOptions: number[] = [50, 100, 150, 200];
   showFirstLastButtons = true;
 
-  private loadCorrectData(): Observable<M[]> {
+  private load(): Observable<M[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
         switchMap(() => {
-          return iif(
-            () => this.useFilter,
-            combineLatest([this.filter$, this.paginate$, this.reload$]).pipe(
-              switchMap(([filter, paginationOptions]) => {
-                return this.service.filter(filter, paginationOptions);
-              })
-            ),
-            combineLatest([this.paginate$, this.reload$]).pipe(
-              switchMap(([paginationOptions]) => {
-                return this.service.load(paginationOptions);
-              })
-            )
+          return combineLatest([
+            this.reload$,
+            this.paginate$,
+            this.filter$,
+          ]).pipe(
+            switchMap(([, paginationOptions, filter]) => {
+              return this.service.load(paginationOptions, filter);
+            })
           );
         })
       );
   }
 
   ngOnInit(): void {
-    this.filter$.next({ enName: 'login' } as M);
+    this.filter$.next({});
     this.reload$.next();
 
     this.listenToCreate();
@@ -92,7 +87,7 @@ export abstract class AdminComponent<
 
   paginate($event: PageEvent) {
     this.paginate$.next({
-      offset: $event.pageSize * ($event.pageIndex + 1),
+      offset: $event.pageSize * $event.pageIndex,
       limit: $event.pageSize,
     });
   }

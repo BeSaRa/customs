@@ -33,11 +33,15 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   @CastResponse()
   load(
-    options: FetchOptionsContract = { offset: 0, limit: 50 }
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+    criteria?: Partial<M>
   ): Observable<M[]> {
     return this.http.get<M[]>(this.getUrlSegment(), {
       params: new HttpParams({
-        fromObject: { ...options },
+        fromObject: { ...options, ...criteria },
       }),
     });
   }
@@ -145,9 +149,12 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     criteria: Partial<M>,
     options: FetchOptionsContract = { offset: 0, limit: 50 }
   ): Observable<M[]> {
-    return this.http.post<M[]>(this.getUrlSegment() + '/filter', criteria, {
+    return this.http.get<M[]>(this.getUrlSegment() + '/filter', {
       params: new HttpParams({
-        fromObject: { ...options },
+        fromObject: {
+          ...options,
+          ...criteria,
+        },
       }),
     });
   }
