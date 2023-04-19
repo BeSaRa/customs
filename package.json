@@ -28,6 +28,8 @@
     "@mdi/angular-material": "^7.1.96",
     "cast-response": "^1.0.7",
     "crypto-js": "^4.1.1",
+    "flatpickr": "^4.6.13",
+    "ng2-flatpickr": "^9.0.0",
     "ngx-cookie": "^6.0.1",
     "ngx-mask": "^15.1.0",
     "ngx-scrollbar": "^11.0.0",
