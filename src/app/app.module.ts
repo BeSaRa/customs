@@ -33,6 +33,7 @@ import { NavbarComponent } from '@standalone/components/navbar/navbar.component'
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
+import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -75,6 +76,13 @@ import { PaginatorLocal } from '@constants/paginator-local';
     {
       provide: MatPaginatorIntl,
       useClass: PaginatorLocal,
+    },
+    {
+      provide: MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 2000,
+        verticalPosition: 'top',
+      },
     },
     httpInterceptors,
     provideNgxMask(),

@@ -6,6 +6,9 @@ import { FormGroupControlsNonNullable } from '@app-types/form-group-controls';
 import { CredentialsContract } from '@contracts/credentials-contract';
 import { Subject, switchMap } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
+import { ToastService } from '@services/toast.service';
+import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +21,9 @@ export class LoginComponent implements OnInit {
   lang = inject(LangService);
   fb = inject(FormBuilder);
   //localizationService = inject(LocalizationService);
+  toast = inject(ToastService);
+  router = inject(Router);
+
   eyeIcons: Record<
     'eye' | 'eye-off',
     {
@@ -60,7 +66,10 @@ export class LoginComponent implements OnInit {
           this.authService.login(this.form.value).pipe(ignoreErrors())
         )
       )
-      .subscribe();
+      .subscribe(() => {
+        this.toast.success('logged in successfully!');
+        this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
+      });
   }
 
   toggleEye() {
