@@ -6,12 +6,12 @@
   <app-icon-button [matTooltip]="'add new'" (click)="create$.next()" icon="PLUS"></app-icon-button>
 </div>
 <div class="shadow">
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table matSort (matSortChange)="sort($event)" [dataSource]="dataSource">
     <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
-    <!-- Position Column -->
+    <!-- Position arName -->
     <ng-container matColumnDef="arName">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.arabic_name }}</th>
+      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.arabic_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
 
@@ -44,7 +44,7 @@
     class="border-t border-gray-200"
     (page)="paginate($event)"
     [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="2"
+    [pageSize]="limit"
     [showFirstLastButtons]="showFirstLastButtons"
-    [length]="50"></mat-paginator>
+    [length]="length"></mat-paginator>
 </div>

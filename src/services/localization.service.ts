@@ -5,8 +5,12 @@ import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-serv
 import { ComponentType } from '@angular/cdk/portal';
 import { LocalizationPopupComponent } from '@modules/administration/popups/localization-popup/localization-popup.component';
 import { Constructor } from '@app-types/constructors';
+import { Pagination } from '@models/pagination';
 
 @CastResponseContainer({
+  $pagination: {
+    model: () => Pagination,
+  },
   $default: {
     model: () => Localization,
   },

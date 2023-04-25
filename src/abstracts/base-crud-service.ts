@@ -7,6 +7,8 @@ import { UrlService } from '@services/url.service';
 import { CastResponse } from 'cast-response';
 import { inject } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
+import { SortOptionsContract } from '@contracts/sort-options-contract';
+import { Pagination } from '@models/pagination';
 
 export abstract class BaseCrudService<M, PrimaryType = number>
   extends RegisterServiceMixin(class {})
@@ -31,28 +33,40 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     return this.http.put<M>(this.getUrlSegment() + '/admin', model);
   }
 
-  @CastResponse()
+  @CastResponse(undefined, {
+    unwrap: '',
+    fallback: '$pagination',
+  })
   load(
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
     },
-    criteria?: Partial<M>
-  ): Observable<M[]> {
-    return this.http.get<M[]>(this.getUrlSegment(), {
+    criteria?: Partial<M>,
+    sortOptions?: SortOptionsContract
+  ): Observable<Pagination<M[]>> {
+    return this.http.get<Pagination<M[]>>(this.getUrlSegment(), {
       params: new HttpParams({
-        fromObject: { ...options, ...criteria },
+        fromObject: { ...options, ...criteria, ...sortOptions },
       }),
     });
   }
 
-  @CastResponse()
+  @CastResponse(undefined, {
+    unwrap: '',
+    fallback: '$pagination',
+  })
   loadComposite(
-    options: FetchOptionsContract = { offset: 0, limit: 50 }
-  ): Observable<M[]> {
-    return this.http.get<M[]>(this.getUrlSegment() + '/composite', {
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+    criteria?: Partial<M>,
+    sortOptions?: SortOptionsContract
+  ): Observable<Pagination<M[]>> {
+    return this.http.get<Pagination<M[]>>(this.getUrlSegment() + '/composite', {
       params: new HttpParams({
-        fromObject: { ...options },
+        fromObject: { ...options, ...criteria, ...sortOptions },
       }),
     });
   }
@@ -150,21 +164,6 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   @CastResponse()
   createFull(model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/admin/full', model);
-  }
-
-  @CastResponse()
-  filter(
-    criteria: Partial<M>,
-    options: FetchOptionsContract = { offset: 0, limit: 50 }
-  ): Observable<M[]> {
-    return this.http.get<M[]>(this.getUrlSegment() + '/filter', {
-      params: new HttpParams({
-        fromObject: {
-          ...options,
-          ...criteria,
-        },
-      }),
-    });
   }
 
   isInstanceOf(model: unknown): model is M {

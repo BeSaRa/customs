@@ -5,12 +5,14 @@ import {
   combineLatest,
   delay,
   filter,
+  map,
   Observable,
   of,
   ReplaySubject,
   Subject,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { AdminComponentContract } from '@contracts/admin-component-contract';
 import { EmployeeService } from '@services/employee.service';
@@ -20,6 +22,8 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { BaseModel } from '@abstracts/base-model';
 import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dialog-service-contract';
+import { SortOptionsContract } from '@contracts/sort-options-contract';
+import { Sort } from '@angular/material/sort';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -41,10 +45,13 @@ export abstract class AdminComponent<
   lang = inject(LangService);
   reload$ = new ReplaySubject<void>(1);
   filter$ = new ReplaySubject<Partial<M>>(1);
-  sort$: Observable<unknown> = new Subject();
+  sort$: ReplaySubject<SortOptionsContract | undefined> = new ReplaySubject<
+    SortOptionsContract | undefined
+  >(1);
 
-  useFilter = true;
   data$: Observable<M[]> = this.load();
+
+  length = 50;
 
   create$: Subject<void> = new Subject<void>();
   view$: Subject<M> = new Subject<M>();
@@ -58,6 +65,9 @@ export abstract class AdminComponent<
   pageSizeOptions: number[] = [50, 100, 150, 200];
   showFirstLastButtons = true;
 
+  get limit(): number {
+    return this.paginate$.value.limit;
+  }
   private load(): Observable<M[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
@@ -67,16 +77,24 @@ export abstract class AdminComponent<
             this.reload$,
             this.paginate$,
             this.filter$,
+            this.sort$,
           ]).pipe(
-            switchMap(([, paginationOptions, filter]) => {
-              return this.service.load(paginationOptions, filter);
-            })
+            switchMap(([, paginationOptions, filter, sort]) => {
+              return this.loadComposite
+                ? this.service.loadComposite(paginationOptions, filter, sort)
+                : this.service.load(paginationOptions, filter, sort);
+            }),
+            tap(({ count }) => {
+              this.length = count;
+            }),
+            map((response) => response.rs)
           );
         })
       );
   }
 
   ngOnInit(): void {
+    this.sort$.next(undefined);
     this.filter$.next({});
     this.reload$.next();
 
@@ -90,6 +108,13 @@ export abstract class AdminComponent<
       offset: $event.pageSize * $event.pageIndex,
       limit: $event.pageSize,
     });
+  }
+  sort($event: Sort): void {
+    this.sort$.next(
+      $event.direction
+        ? { sortBy: $event.active, sortOrder: $event.direction }
+        : undefined
+    );
   }
 
   private listenToCreate() {

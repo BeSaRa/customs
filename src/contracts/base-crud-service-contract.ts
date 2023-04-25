@@ -1,14 +1,18 @@
 import { Observable } from 'rxjs';
 import { FetchOptionsContract } from '@contracts/fetch-options-contract';
+import { Pagination } from '@models/pagination';
 
 export interface BaseCrudServiceContract<M, PrimaryType = number> {
   create(model: M): Observable<M>;
 
   update(model: M): Observable<M>;
 
-  load(options: FetchOptionsContract, criteria?: Partial<M>): Observable<M[]>;
+  load(
+    options: FetchOptionsContract,
+    criteria?: Partial<M>
+  ): Observable<Pagination<M[]>>;
 
-  loadComposite(options: FetchOptionsContract): Observable<M[]>;
+  loadComposite(options: FetchOptionsContract): Observable<Pagination<M[]>>;
 
   loadById(id: PrimaryType): Observable<M>;
 
@@ -35,6 +39,4 @@ export interface BaseCrudServiceContract<M, PrimaryType = number> {
   updateFull(model: M): Observable<M>;
 
   createFull(model: M): Observable<M>;
-
-  filter(criteria: Partial<M>, options: FetchOptionsContract): Observable<M[]>;
 }

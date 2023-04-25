@@ -2,7 +2,6 @@ import { LangService } from '@services/lang.service';
 import { Observable, Subject } from 'rxjs';
 
 export interface AdminComponentContract<M, S> {
-  useFilter: boolean;
   lang: LangService;
   service: S;
   filter$: Observable<unknown>;
