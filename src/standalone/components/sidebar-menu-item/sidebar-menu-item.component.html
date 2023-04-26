@@ -11,7 +11,6 @@
   </a>
   <button
     *ngIf="hasChildren"
-    (keydown.space)="toggleMenu()"
     (click)="toggleMenu()"
     class="flex  hover:bg-secondary w-full has-children  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] p-2 menu-item-link mb-1 level-{{
       level

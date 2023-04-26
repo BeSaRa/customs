@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatSortModule } from '@angular/material/sort';
     IconButtonComponent,
     MatTooltipModule,
     MatSortModule,
+    MatCheckboxModule,
   ],
 })
 export class AdministrationModule {}

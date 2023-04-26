@@ -1,4 +1,5 @@
 import {
+  BehaviorSubject,
   isObservable,
   Observable,
   ReplaySubject,
@@ -10,7 +11,7 @@ import {
 import { DataSource } from '@angular/cdk/collections';
 
 export class AppTableDataSource<M> extends DataSource<M> {
-  private _data = new ReplaySubject<M[]>();
+  private _data = new BehaviorSubject<M[]>([]);
   private _destroy$: Subject<void> = new Subject<void>();
 
   constructor(items: Observable<M[]> | M[]) {
@@ -20,6 +21,10 @@ export class AppTableDataSource<M> extends DataSource<M> {
     } else {
       this._data.next(items);
     }
+  }
+
+  get data() {
+    return this._data.value;
   }
 
   connect(): Observable<M[]> {
@@ -35,7 +40,6 @@ export class AppTableDataSource<M> extends DataSource<M> {
   private listenToDataChanges(items: Observable<M[]>) {
     items
       .pipe(takeUntil(this._destroy$))
-      .pipe(startWith([]))
       .pipe(tap((data) => this._data.next(data)))
       .subscribe({
         next: () => {

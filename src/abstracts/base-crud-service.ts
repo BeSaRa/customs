@@ -4,7 +4,7 @@ import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
-import { CastResponse } from 'cast-response';
+import { CastResponse, HasInterception, InterceptParam } from 'cast-response';
 import { inject } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
@@ -22,14 +22,14 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   protected abstract getModelInstance(): M;
 
   protected abstract getModelClass(): Constructor<M>;
-
+  @HasInterception
   @CastResponse()
-  create(model: M): Observable<M> {
+  create(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/admin', model);
   }
-
+  @HasInterception
   @CastResponse()
-  update(model: M): Observable<M> {
+  update(@InterceptParam() model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment() + '/admin', model);
   }
 
@@ -110,9 +110,9 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   delete(id: PrimaryType): Observable<M> {
     return this.http.delete<M>(this.getUrlSegment() + `'/admin/${id}`);
   }
-
+  @HasInterception
   @CastResponse()
-  updateBulk(models: M[]): Observable<M> {
+  updateBulk(@InterceptParam() models: M[]): Observable<M> {
     return this.http.put<M>(this.getUrlSegment() + `'/admin/bulk`, models);
   }
 
@@ -142,27 +142,27 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       modelsIds
     );
   }
-
+  @HasInterception
   @CastResponse()
-  createBulk(models: M[]): Observable<M[]> {
+  createBulk(@InterceptParam() models: M[]): Observable<M[]> {
     return this.http.post<M[]>(this.getUrlSegment() + '/admin/bulk', models);
   }
-
+  @HasInterception
   @CastResponse()
-  createBulkFull(models: M[]): Observable<M[]> {
+  createBulkFull(@InterceptParam() models: M[]): Observable<M[]> {
     return this.http.post<M[]>(
       this.getUrlSegment() + '/admin/bulk/full',
       models
     );
   }
-
+  @HasInterception
   @CastResponse()
-  updateFull(model: M): Observable<M> {
+  updateFull(@InterceptParam() model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment() + '/admin/full', model);
   }
-
+  @HasInterception
   @CastResponse()
-  createFull(model: M): Observable<M> {
+  createFull(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/admin/full', model);
   }
 

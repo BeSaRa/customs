@@ -24,6 +24,7 @@ import { BaseModel } from '@abstracts/base-model';
 import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dialog-service-contract';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { Sort } from '@angular/material/sort';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -35,6 +36,7 @@ export abstract class AdminComponent<
   extends OnDestroyMixin(class {})
   implements AdminComponentContract<M, S>, OnInit
 {
+  // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
   protected loadComposite = true;
   abstract service: S;
@@ -62,12 +64,19 @@ export abstract class AdminComponent<
 
   dataSource: AppTableDataSource<M> = new AppTableDataSource<M>(this.data$);
 
-  pageSizeOptions: number[] = [50, 100, 150, 200];
+  pageSizeOptions: number[] = [2, 50, 100, 150, 200];
   showFirstLastButtons = true;
+  allowMultiSelect = true;
+  initialSelection: M[] = [];
+  selection = new SelectionModel<M>(
+    this.allowMultiSelect,
+    this.initialSelection
+  );
 
   get limit(): number {
     return this.paginate$.value.limit;
   }
+
   private load(): Observable<M[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
@@ -109,6 +118,7 @@ export abstract class AdminComponent<
       limit: $event.pageSize,
     });
   }
+
   sort($event: Sort): void {
     this.sort$.next(
       $event.direction
@@ -197,5 +207,17 @@ export abstract class AdminComponent<
    */
   reloadWhenViewPopupClosed(): boolean {
     return false;
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    return this.selection.selected.length == this.dataSource.data.length;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 }

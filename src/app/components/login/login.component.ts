@@ -8,7 +8,6 @@ import { Subject, switchMap } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
-import { AppFullRoutes } from '@constants/app-full-routes';
 
 @Component({
   selector: 'app-login',
@@ -68,7 +67,15 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(() => {
         this.toast.success('logged in successfully!');
-        this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
+        // this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
+        // new Localization()
+        //   .clone<Localization>({
+        //     arName: 'الاسم الانجليزي',
+        //     enName: 'English name',
+        //     localizationKey: 'english_name',
+        //   })
+        //   .save()
+        //   .subscribe();
       });
   }
 
