@@ -12,8 +12,9 @@ export interface LangKeysContract {
   paginator_previous_page_label: string;
   paginator_of_label: string;
   localization_key: string;
-  arabic_translate: string;
-  english_translate: string;
+  arabic_translation: string;
+
+  english_translation: string;
   save: string;
   close: string;
   msg_save_x_success: string;
@@ -21,4 +22,7 @@ export interface LangKeysContract {
   msg_delete_x_confirm: string;
   msg_delete_x_success: string;
   actions: string;
+  view: string;
+  edit: string;
+  delete: string;
 }

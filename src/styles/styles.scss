@@ -38,6 +38,7 @@ html[dir="rtl"] body {
 .dialog-footer {
   @apply border border-t p-4 space-x-4 rtl:space-x-reverse flex;
 }
+
 .dialog-header {
   @apply p-4 bg-primary text-white flex justify-between items-center;
   h1 {
@@ -52,6 +53,10 @@ html[dir="rtl"] body {
 .dialog-container {
   @apply max-w-full min-w-[600px];
 }
+
 .close-btn {
   @apply absolute rtl:left-0 ltr:right-0;
+}
+.table-style {
+  @apply [&_td]:text-slate-700 [&_th]:text-slate-700;
 }
