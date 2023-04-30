@@ -1,7 +1,7 @@
 export interface LangKeysContract {
   login: string;
-  arabic_name: string;
-  english_name: string;
+  ar_name: string;
+  en_name: string;
   menu_administration: string;
   menu_localization: string;
   paginator_page_label: string;
@@ -11,4 +11,14 @@ export interface LangKeysContract {
   paginator_next_page_label: string;
   paginator_previous_page_label: string;
   paginator_of_label: string;
+  localization_key: string;
+  arabic_translate: string;
+  english_translate: string;
+  save: string;
+  close: string;
+  msg_save_x_success: string;
+  msg_make_sure_all_required_fields_are_filled: string;
+  msg_delete_x_confirm: string;
+  msg_delete_x_success: string;
+  actions: string;
 }

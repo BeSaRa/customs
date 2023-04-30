@@ -17,4 +17,7 @@
       <ng-content select="[appControl]"></ng-content>
     </ng-container>
   </div>
+  <ng-container *ngIf="displayErrors">
+    <app-validation-errors [errors]="errors | async"></app-validation-errors>
+  </ng-container>
 </label>

@@ -16,8 +16,9 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 export class IconButtonComponent {
   @Input()
   icon: keyof AppIconsType = 'RELOAD';
-
   _disabled = false;
+  @Input()
+  tabindex = '1';
 
   @Input()
   set disabled(value: boolean | unknown) {

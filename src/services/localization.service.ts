@@ -10,6 +10,9 @@ import { Pagination } from '@models/pagination';
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
+    shape: {
+      'rs.*': () => Localization,
+    },
   },
   $default: {
     model: () => Localization,

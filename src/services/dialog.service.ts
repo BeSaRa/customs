@@ -16,7 +16,9 @@ import { UserClick } from '@enums/user-click';
   providedIn: 'root',
 })
 export class DialogService implements DialogContract {
-  constructor(private dialog: MatDialog, private lang: LangService) {}
+  constructor(private dialog: MatDialog, private lang: LangService) {
+    this.listenToLanguageChanges();
+  }
 
   error<R = unknown>(
     content: string,
@@ -122,6 +124,17 @@ export class DialogService implements DialogContract {
     return this.dialog.open<T, D, R>(template, {
       ...config,
       direction: this.lang.getCurrent().direction,
+    });
+  }
+
+  private listenToLanguageChanges() {
+    this.lang.change$.subscribe((current) => {
+      const overlayWrapper = document.querySelectorAll<HTMLDivElement>(
+        '.cdk-global-overlay-wrapper'
+      );
+      overlayWrapper.forEach((item: HTMLDivElement) => {
+        item.dir = current.direction;
+      });
     });
   }
 }

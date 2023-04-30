@@ -60,7 +60,7 @@ $customs-accent-palette: (
   ),
 );
 $customs-primary: mat.define-palette($customs-primary-palette, 900);
-$customs-accent: mat.define-palette($customs-accent-palette, 800);
+$customs-accent: mat.define-palette($customs-primary-palette, 700);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".

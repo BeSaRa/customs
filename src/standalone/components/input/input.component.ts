@@ -1,7 +1,5 @@
 import {
   AfterContentInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ContentChild,
   inject,
@@ -21,10 +19,9 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { isNgModel } from '@utils/utils';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
@@ -45,9 +42,7 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
       multi: true,
       useExisting: InputComponent,
     },
-    provideNgxMask(),
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class InputComponent
@@ -62,7 +57,6 @@ export class InputComponent
           this.template.element.nativeElement;
         this.setInputMissingProperties(input);
         this.ctrl = this.template.control;
-        !isNgModel(this.ctrl) && this.listenToCtrlValueChanges();
       }
     });
   }
@@ -104,14 +98,15 @@ export class InputComponent
     'flex-auto ltr:peer-[.suffix]:pr-0 rtl:peer-[.suffix]:pl-0 ltr:peer-[.prefix]:pl-0 rtl:peer-[.prefix]:pr-0 outline-none group-[.lg]/input-wrapper:text-lg group-[.md]/input-wrapper:text-base group-[.sm]/input-wrapper:text-sm group-[.sm]/input-wrapper:px-2 group-[.sm]/input-wrapper:py-1 group-[.md]/input-wrapper:px-3 group-[.md]/input-wrapper:py-2 group-[.lg]/input-wrapper:px-5 group-[.lg]/input-wrapper:py-3';
 
   private injector = inject(Injector);
-  private cdr = inject(ChangeDetectorRef);
 
   private ctrl!: NgControl | null;
 
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() => this.ctrl?.errors)
+      map(() =>
+        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined
+      )
     );
   }
 
@@ -163,9 +158,5 @@ export class InputComponent
 
   setInputMissingProperties(element: HTMLElement): void {
     element.classList.add(...this.tailwindClass.split(' '));
-  }
-
-  private listenToCtrlValueChanges() {
-    this.ctrl?.valueChanges?.subscribe(() => this.cdr.markForCheck());
   }
 }

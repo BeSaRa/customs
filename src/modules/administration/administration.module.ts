@@ -14,6 +14,10 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatTooltipModule,
     MatSortModule,
     MatCheckboxModule,
+    InputComponent,
+    MatDialogModule,
+    TextareaComponent,
+    ReactiveFormsModule,
   ],
 })
 export class AdministrationModule {}

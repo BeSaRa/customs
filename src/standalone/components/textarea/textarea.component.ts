@@ -6,7 +6,6 @@ import {
   inject,
   Injector,
   Input,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +13,7 @@ import { debounceTime, map, Observable, of, takeUntil } from 'rxjs';
 import {
   ControlValueAccessor,
   FormControl,
+  NG_VALUE_ACCESSOR,
   NgControl,
   ReactiveFormsModule,
   ValidationErrors,
@@ -21,13 +21,21 @@ import {
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { isNgModel } from '@utils/utils';
+import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 
 @Component({
   selector: 'app-textarea',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ValidationErrorsComponent],
   templateUrl: './textarea.component.html',
   styleUrls: ['./textarea.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      multi: true,
+      useExisting: TextareaComponent,
+    },
+  ],
 })
 export class TextareaComponent
   extends OnDestroyMixin(class {})
@@ -82,7 +90,9 @@ export class TextareaComponent
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() => this.ctrl?.errors)
+      map(() =>
+        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined
+      )
     );
   }
 
@@ -105,6 +115,7 @@ export class TextareaComponent
 
   writeValue(value: string): void {
     this.control.setValue(value, { emitEvent: false });
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: (v: string | null) => void): void {

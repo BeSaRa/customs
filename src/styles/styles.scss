@@ -4,8 +4,8 @@
 @import "arabic_font";
 @import "tailwindcss";
 
-
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -14,8 +14,8 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html[dir='rtl'] body {
-  font-family: 'Tajawal', sans-serif;
+html[dir="rtl"] body {
+  font-family: "Tajawal", sans-serif;
 }
 
 .mat-icon {
@@ -35,9 +35,23 @@ html[dir='rtl'] body {
   }
 }
 
-
 .dialog-footer {
-  @apply border border-t p-3 space-x-4 rtl:space-x-reverse flex justify-center
+  @apply border border-t p-4 space-x-4 rtl:space-x-reverse flex;
+}
+.dialog-header {
+  @apply p-4 bg-primary text-white flex justify-between items-center;
+  h1 {
+    @apply text-xl;
+  }
 }
 
+.dialog-content {
+  @apply p-4;
+}
 
+.dialog-container {
+  @apply max-w-full min-w-[600px];
+}
+.close-btn {
+  @apply absolute rtl:left-0 ltr:right-0;
+}

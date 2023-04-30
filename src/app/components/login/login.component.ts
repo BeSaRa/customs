@@ -1,13 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { AuthService } from '@services/auth.service';
-import { FormBuilder, Validators } from '@angular/forms';
-import { FormGroupControlsNonNullable } from '@app-types/form-group-controls';
-import { CredentialsContract } from '@contracts/credentials-contract';
+import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Subject, switchMap } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
 
 @Component({
   selector: 'app-login',
@@ -41,12 +40,11 @@ export class LoginComponent implements OnInit {
   };
   selectedPasswordOptions = this.eyeIcons['eye-off'];
 
-  form: FormGroupControlsNonNullable<CredentialsContract> =
-    this.fb.nonNullable.group({
-      lang: ['AR'],
-      userName: ['cdiadmin', Validators.required],
-      userPassword: ['P@ssw0rd', Validators.required],
-    });
+  form: UntypedFormGroup = this.fb.nonNullable.group({
+    lang: ['AR'],
+    userName: ['cdiadmin', Validators.required],
+    userPassword: ['P@ssw0rd', Validators.required],
+  });
 
   login$: Subject<void> = new Subject<void>();
 
@@ -67,15 +65,7 @@ export class LoginComponent implements OnInit {
       )
       .subscribe(() => {
         this.toast.success('logged in successfully!');
-        // this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
-        // new Localization()
-        //   .clone<Localization>({
-        //     arName: 'الاسم الانجليزي',
-        //     enName: 'English name',
-        //     localizationKey: 'english_name',
-        //   })
-        //   .save()
-        //   .subscribe();
+        this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
       });
   }
 

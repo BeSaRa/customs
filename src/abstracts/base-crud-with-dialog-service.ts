@@ -87,7 +87,7 @@ export abstract class BaseCrudWithDialogService<
         data: {
           model,
           extras: { ...extras },
-          operation: OperationType.CREATE,
+          operation: OperationType.VIEW,
         },
       }
     );

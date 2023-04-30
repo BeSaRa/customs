@@ -58,8 +58,8 @@ export abstract class BaseModel<
     return this.$$getService$$<S>().deactivate(id);
   }
 
-  delete(id: PrimaryType): Observable<M> {
-    return this.$$getService$$<S>().delete(id);
+  delete(): Observable<M> {
+    return this.$$getService$$<S>().delete(this.id as PrimaryType);
   }
 
   save(): Observable<M> {

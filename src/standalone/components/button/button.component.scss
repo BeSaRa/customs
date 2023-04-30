@@ -1,63 +1,63 @@
 .btn {
-  @apply text-sm font-semibold flex gap-2 items-center disabled:text-white/70 px-4 py-2 rounded outline-0 focus:ring-2 ring-offset-1 text-white
+  @apply flex gap-2 items-center disabled:text-white/70 px-4 py-2 rounded outline-0 focus:ring-2 ring-offset-1 text-white;
 }
 
 .btn.md {
-  @apply text-base px-3 py-2
+  @apply text-base px-3 py-2;
 }
 
 .btn.sm {
-  @apply text-xs px-2 py-1 focus:ring-1
+  @apply text-xs px-2 py-1 focus:ring-1;
 }
 
 .btn.lg {
-  @apply text-lg px-5 py-3
+  @apply text-lg px-5 py-3;
 }
 
 .btn.primary {
-  @apply disabled:bg-primary/60 bg-primary/80 hover:bg-primary/90 active:bg-primary ring-primary/50
+  @apply disabled:bg-primary/60 bg-primary/80 hover:bg-primary/90 active:bg-primary ring-primary/50;
 }
 
 .btn.primary-outline {
-  @apply disabled:text-primary/30 disabled:bg-slate-100 disabled:border-primary/30 bg-white text-primary/70 hover:text-primary/80 active:text-primary border border-primary/50 focus:ring-primary/50
+  @apply disabled:text-primary/30 disabled:bg-slate-100 disabled:border-primary/30 bg-white text-primary/70 hover:text-primary/80 active:text-primary border border-primary/50 focus:ring-primary/50;
 }
 
 .btn.success {
-  @apply disabled:bg-green-500/60 bg-green-500/80 hover:bg-green-500/90 active:bg-green-500 ring-green-500/50
+  @apply disabled:bg-green-500/60 bg-green-500/80 hover:bg-green-500/90 active:bg-green-500 ring-green-500/50;
 }
 
 .btn.success-outline {
-  @apply disabled:text-green-500/30 disabled:bg-slate-100 disabled:border-green-500/30 bg-white text-green-500/70 hover:text-green-500/80 active:text-green-500 border border-green-500/50 focus:ring-green-500/50
+  @apply disabled:text-green-500/30 disabled:bg-slate-100 disabled:border-green-500/30 bg-white text-green-500/70 hover:text-green-500/80 active:text-green-500 border border-green-500/50 focus:ring-green-500/50;
 }
 
 .btn.error {
-  @apply disabled:bg-red-500/60 bg-red-500/80 hover:bg-red-500/90 active:bg-red-500 ring-red-500/50
+  @apply disabled:bg-red-500/60 bg-red-500/80 hover:bg-red-500/90 active:bg-red-500 ring-red-500/50;
 }
 
 .btn.error-outline {
-  @apply disabled:text-red-500/30 disabled:bg-slate-100 disabled:border-red-500/30 bg-white text-red-500/70 hover:text-red-500/80 active:text-red-500 border border-red-500/50 focus:ring-red-500/50
+  @apply disabled:text-red-500/30 disabled:bg-slate-100 disabled:border-red-500/30 bg-white text-red-500/70 hover:text-red-500/80 active:text-red-500 border border-red-500/50 focus:ring-red-500/50;
 }
 
 .btn.info {
-  @apply disabled:bg-sky-500/60 bg-sky-500/80 hover:bg-sky-500/90 active:bg-sky-500 ring-sky-500/50
+  @apply disabled:bg-sky-500/60 bg-sky-500/80 hover:bg-sky-500/90 active:bg-sky-500 ring-sky-500/50;
 }
 
 .btn.info-outline {
-  @apply disabled:text-sky-500/30 disabled:bg-slate-100 disabled:border-sky-500/30 bg-white text-sky-500/70 hover:text-sky-500/80 active:text-sky-500 border border-sky-500/50 focus:ring-sky-500/50
+  @apply disabled:text-sky-500/30 disabled:bg-slate-100 disabled:border-sky-500/30 bg-white text-sky-500/70 hover:text-sky-500/80 active:text-sky-500 border border-sky-500/50 focus:ring-sky-500/50;
 }
 
 .btn.warning {
-  @apply disabled:bg-yellow-500/60 bg-yellow-500/80 hover:bg-yellow-500/90 active:bg-yellow-500 ring-yellow-500/50
+  @apply disabled:bg-yellow-500/60 bg-yellow-500/80 hover:bg-yellow-500/90 active:bg-yellow-500 ring-yellow-500/50;
 }
 
 .btn.warning-outline {
-  @apply disabled:text-yellow-500/30 disabled:bg-slate-100 disabled:border-yellow-500/30 bg-white text-yellow-500/70 hover:text-yellow-500/80 active:text-yellow-500 border border-yellow-500/50 focus:ring-yellow-500/50
+  @apply disabled:text-yellow-500/30 disabled:bg-slate-100 disabled:border-yellow-500/30 bg-white text-yellow-500/70 hover:text-yellow-500/80 active:text-yellow-500 border border-yellow-500/50 focus:ring-yellow-500/50;
 }
 
 .btn.secondary {
-  @apply disabled:bg-secondary/60 bg-secondary/80 hover:bg-secondary/90 active:bg-secondary ring-secondary/50
+  @apply disabled:bg-secondary/60 bg-secondary/80 hover:bg-secondary/90 active:bg-secondary ring-secondary/50;
 }
 
 .btn.secondary-outline {
-  @apply disabled:text-secondary/30 disabled:bg-slate-100 disabled:border-secondary/30 bg-white text-secondary/70 hover:text-secondary/80 active:text-secondary border border-secondary/50 focus:ring-secondary/50
+  @apply disabled:text-secondary/30 disabled:bg-slate-100 disabled:border-secondary/30 bg-white text-secondary/70 hover:text-secondary/80 active:text-secondary border border-secondary/50 focus:ring-secondary/50;
 }

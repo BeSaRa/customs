@@ -4,6 +4,7 @@ import {
   BehaviorSubject,
   combineLatest,
   delay,
+  exhaustMap,
   filter,
   map,
   Observable,
@@ -25,6 +26,10 @@ import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dia
 import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { Sort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import { DialogService } from '@services/dialog.service';
+import { UserClick } from '@enums/user-click';
+import { ignoreErrors } from '@utils/utils';
+import { ToastService } from '@services/toast.service';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -59,6 +64,8 @@ export abstract class AdminComponent<
   view$: Subject<M> = new Subject<M>();
   edit$: Subject<M> = new Subject<M>();
   delete$: Subject<M> = new Subject<M>();
+  dialog = inject(DialogService);
+  toast = inject(ToastService);
 
   abstract displayedColumns: string[];
 
@@ -77,7 +84,7 @@ export abstract class AdminComponent<
     return this.paginate$.value.limit;
   }
 
-  private load(): Observable<M[]> {
+  protected load(): Observable<M[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
@@ -90,8 +97,12 @@ export abstract class AdminComponent<
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
               return this.loadComposite
-                ? this.service.loadComposite(paginationOptions, filter, sort)
-                : this.service.load(paginationOptions, filter, sort);
+                ? this.service
+                    .loadComposite(paginationOptions, filter, sort)
+                    .pipe(ignoreErrors())
+                : this.service
+                    .load(paginationOptions, filter, sort)
+                    .pipe(ignoreErrors());
             }),
             tap(({ count }) => {
               this.length = count;
@@ -110,6 +121,7 @@ export abstract class AdminComponent<
     this.listenToCreate();
     this.listenToEdit();
     this.listenToView();
+    this.listenToDelete();
   }
 
   paginate($event: PageEvent) {
@@ -127,7 +139,7 @@ export abstract class AdminComponent<
     );
   }
 
-  private listenToCreate() {
+  protected listenToCreate() {
     this.create$
       .pipe(takeUntil(this.destroy$))
       .pipe(
@@ -147,7 +159,7 @@ export abstract class AdminComponent<
       });
   }
 
-  private listenToEdit() {
+  protected listenToEdit() {
     this.edit$
       .pipe(takeUntil(this.destroy$))
       .pipe(
@@ -167,7 +179,7 @@ export abstract class AdminComponent<
       });
   }
 
-  private listenToView() {
+  protected listenToView() {
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
@@ -179,6 +191,32 @@ export abstract class AdminComponent<
         })
       )
       .subscribe(() => this.reload$.next());
+  }
+
+  protected listenToDelete() {
+    this.delete$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        exhaustMap((model) =>
+          this.dialog
+            .confirm(
+              this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() })
+            )
+            .afterClosed()
+            .pipe(filter((value) => value === UserClick.YES))
+            .pipe(
+              switchMap(() => {
+                return model.delete().pipe(ignoreErrors());
+              })
+            )
+        )
+      )
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_delete_x_success.change({ x: model.getNames() })
+        );
+        this.reload$.next();
+      });
   }
 
   /**
