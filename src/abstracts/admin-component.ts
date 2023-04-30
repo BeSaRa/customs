@@ -56,7 +56,7 @@ export abstract class AdminComponent<
     SortOptionsContract | undefined
   >(1);
 
-  data$: Observable<M[]> = this.load();
+  data$: Observable<M[]> = this._load();
 
   length = 50;
 
@@ -84,7 +84,7 @@ export abstract class AdminComponent<
     return this.paginate$.value.limit;
   }
 
-  protected load(): Observable<M[]> {
+  protected _load(): Observable<M[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
@@ -118,10 +118,10 @@ export abstract class AdminComponent<
     this.filter$.next({});
     this.reload$.next();
 
-    this.listenToCreate();
-    this.listenToEdit();
-    this.listenToView();
-    this.listenToDelete();
+    this._listenToCreate();
+    this._listenToEdit();
+    this._listenToView();
+    this._listenToDelete();
   }
 
   paginate($event: PageEvent) {
@@ -139,13 +139,17 @@ export abstract class AdminComponent<
     );
   }
 
-  protected listenToCreate() {
+  /**
+   * listen to create event
+   * @protected
+   */
+  protected _listenToCreate() {
     this.create$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(() => {
           return this.service
-            .openCreateDialog(undefined, this.getCreateExtras() as object)
+            .openCreateDialog(undefined, this._getCreateExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
@@ -159,13 +163,17 @@ export abstract class AdminComponent<
       });
   }
 
-  protected listenToEdit() {
+  /**
+   * listen to edit event
+   * @protected
+   */
+  protected _listenToEdit() {
     this.edit$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap((model) => {
           return this.service
-            .openCreateDialog(model, this.getEditExtras() as object)
+            .openCreateDialog(model, this._getEditExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
@@ -179,21 +187,29 @@ export abstract class AdminComponent<
       });
   }
 
-  protected listenToView() {
+  /**
+   * listen to view event
+   * @protected
+   */
+  protected _listenToView() {
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap((model) => {
           return this.service
-            .openViewDialog(model, this.getViewExtras() as object)
+            .openViewDialog(model, this._getViewExtras() as object)
             .afterClosed()
-            .pipe(filter(() => this.reloadWhenViewPopupClosed()));
+            .pipe(filter(() => this._reloadWhenViewPopupClosed()));
         })
       )
       .subscribe(() => this.reload$.next());
   }
 
-  protected listenToDelete() {
+  /**
+   * listen to delete event
+   * @protected
+   */
+  protected _listenToDelete() {
     this.delete$
       .pipe(takeUntil(this.destroy$))
       .pipe(
@@ -222,28 +238,28 @@ export abstract class AdminComponent<
   /**
    * @description this method you can implement it, in child class if you need to add extra props to the create dialog
    */
-  getCreateExtras(): unknown {
+  _getCreateExtras(): unknown {
     return undefined;
   }
 
   /**
    * @description this method you can implement it, in child class if you need to add extra props to the create dialog
    */
-  getViewExtras(): unknown {
+  _getViewExtras(): unknown {
     return undefined;
   }
 
   /**
    * @description this method you can implement it, in child class if you need to add extra props to the edit dialog
    */
-  getEditExtras(): unknown {
+  _getEditExtras(): unknown {
     return undefined;
   }
 
   /**
    * @description return true to reload after closing the viewPopup
    */
-  reloadWhenViewPopupClosed(): boolean {
+  _reloadWhenViewPopupClosed(): boolean {
     return false;
   }
 

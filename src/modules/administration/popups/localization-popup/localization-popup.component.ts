@@ -16,23 +16,23 @@ export class LocalizationPopupComponent extends AdminDialogComponent<Localizatio
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Localization> = inject(MAT_DIALOG_DATA);
 
-  buildForm(): void {
+  _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
 
-  protected beforeSave(): boolean | Observable<boolean> {
+  protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
 
-  protected prepareModel(): Localization | Observable<Localization> {
+  protected _prepareModel(): Localization | Observable<Localization> {
     return new Localization().clone<Localization>({
       ...this.model,
       ...this.form.value,
     });
   }
 
-  protected afterSave(model: Localization): void {
+  protected _afterSave(model: Localization): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(
