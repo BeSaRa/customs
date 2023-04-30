@@ -24,27 +24,25 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-    <!-- Position arName -->
+    <!-- arName arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
 
-    <!-- Name Column -->
+    <!-- enName Column -->
     <ng-container matColumnDef="enName">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
     </ng-container>
 
-    <!-- Weight Column -->
+    <!-- localizationKey Column -->
     <ng-container matColumnDef="localizationKey">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.localization_key }}</th>
+      <th mat-header-cell mat-sort-header="localizationKey" *matHeaderCellDef>{{ lang.map.localization_key }}</th>
       <td mat-cell *matCellDef="let element">{{ element.localizationKey }}</td>
     </ng-container>
 
-    <!-- Symbol Column -->
+    <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
@@ -63,7 +61,7 @@
     <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
-      <td class="p-4" colspan="100">No Data to Display</td>
+      <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
   <mat-paginator
@@ -72,5 +70,6 @@
     [pageSizeOptions]="pageSizeOptions"
     [pageSize]="limit"
     [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length"></mat-paginator>
+    [length]="length">
+  </mat-paginator>
 </div>

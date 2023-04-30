@@ -25,4 +25,5 @@ export interface LangKeysContract {
   view: string;
   edit: string;
   delete: string;
+  no_records_to_display: string;
 }
