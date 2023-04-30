@@ -32,6 +32,7 @@
     "ng2-flatpickr": "^9.0.0",
     "ngx-cookie": "^6.0.1",
     "ngx-mask": "^15.1.0",
+    "ngx-progressbar": "^9.0.0",
     "ngx-scrollbar": "^11.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
