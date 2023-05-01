@@ -51,7 +51,7 @@ export abstract class BaseCrudWithDialogService<
         data: {
           model,
           extras: { ...extras },
-          operation: OperationType.CREATE,
+          operation: OperationType.UPDATE,
         },
       }
     );
@@ -69,7 +69,7 @@ export abstract class BaseCrudWithDialogService<
         data: {
           model,
           extras: { ...extras },
-          operation: OperationType.CREATE,
+          operation: OperationType.UPDATE,
         },
       }
     );
