@@ -13,7 +13,6 @@ export interface LangKeysContract {
   paginator_of_label: string;
   localization_key: string;
   arabic_translation: string;
-
   english_translation: string;
   save: string;
   close: string;

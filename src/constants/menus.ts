@@ -1,7 +1,7 @@
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { AppIcons } from '@constants/app-icons';
 import { AppFullRoutes } from '@constants/app-full-routes';
-import { MenuIdes } from '@enums/menu-ides';
+import { MenuIdes } from '@constants/menu-ides';
 
 export const Menus: MenuItemContract[] = [
   {

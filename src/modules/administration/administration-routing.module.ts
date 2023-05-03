@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdministrationComponent } from './administration.component';
-import { AppRoutes } from '@enums/app-routes';
+import { AppRoutes } from '@constants/app-routes';
 import { LocalizationComponent } from '@modules/administration/components/localization/localization.component';
 
 const routes: Routes = [
