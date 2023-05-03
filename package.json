@@ -72,7 +72,7 @@
       "prettier --write"
     ],
     "src/**/*.ts": [
-      "ng lint --fix"
+      "eslint --fix"
     ]
   }
 }
