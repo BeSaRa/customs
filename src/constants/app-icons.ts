@@ -8,6 +8,7 @@ export const AppIcons = {
   EDIT: 'pencil',
   VIEW: 'eye',
   DELETE: 'delete',
+  FILTER: 'filter',
 };
 
 export type AppIconsType = typeof AppIcons;
