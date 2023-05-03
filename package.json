@@ -28,7 +28,7 @@
     "@mdi/angular-material": "^7.1.96",
     "cast-response": "^1.0.7",
     "crypto-js": "^4.1.1",
-    "customs-schematics": "^0.0.8",
+    "customs-schematics": "^0.0.9",
     "flatpickr": "^4.6.13",
     "ng2-flatpickr": "^9.0.0",
     "ngx-cookie": "^6.0.1",
