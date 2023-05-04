@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_job_title: string;
   login: string;
   ar_name: string;
   en_name: string;
@@ -20,6 +21,7 @@ export interface LangKeysContract {
   msg_make_sure_all_required_fields_are_filled: string;
   msg_delete_x_confirm: string;
   msg_delete_x_success: string;
+  msg_status_x_changed_success: string;
   actions: string;
   view: string;
   edit: string;
@@ -28,4 +30,5 @@ export interface LangKeysContract {
   reload: string;
   add: string;
   filter: string;
+  change_status: string;
 }
