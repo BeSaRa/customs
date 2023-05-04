@@ -37,6 +37,8 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -61,8 +63,10 @@ import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
     InputSuffixDirective,
     NavbarComponent,
     Ng2FlatpickrModule,
+    ScrollingModule,
   ],
   providers: [
+    MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
@@ -93,6 +97,7 @@ import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
         position: 'above',
       },
     },
+
     httpInterceptors,
     provideNgxMask(),
   ],

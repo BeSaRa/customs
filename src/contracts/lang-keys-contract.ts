@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_violation_classification: string;
   menu_job_title: string;
   login: string;
   ar_name: string;
@@ -31,4 +32,5 @@ export interface LangKeysContract {
   add: string;
   filter: string;
   change_status: string;
+  penalty_type: string;
 }

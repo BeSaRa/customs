@@ -9,6 +9,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSelectModule } from '@angular/material/select';
+
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
@@ -17,12 +20,16 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    ViolationClassificationComponent,
+    ViolationClassificationPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +38,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatPaginatorModule,
     ButtonComponent,
     MatIconModule,
+    MatSlideToggleModule,
+    MatSelectModule,
     MatButtonModule,
     IconButtonComponent,
     MatTooltipModule,

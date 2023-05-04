@@ -3,4 +3,5 @@ export const AppRoutes = {
   HOME: 'home',
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
+  VIOLATION_CLASSIFICATION: 'violation-classification',
 };
