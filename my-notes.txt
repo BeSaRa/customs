@@ -1,0 +1,3 @@
+admin:
+	- admin abstract component doesn't have a save functionality, 
+	  but status need to be edited at admin component level (toggle in table)

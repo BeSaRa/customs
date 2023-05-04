@@ -17,12 +17,17 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TeamComponent } from '@modules/administration/components/team/team.component';
+import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    TeamComponent,
+    TeamPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    MatSlideToggleModule,
   ],
 })
 export class AdministrationModule {}

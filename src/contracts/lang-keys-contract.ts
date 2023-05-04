@@ -4,6 +4,7 @@ export interface LangKeysContract {
   en_name: string;
   menu_administration: string;
   menu_localization: string;
+  menu_team: string;
   paginator_page_label: string;
   paginator_first_page_label: string;
   paginator_items_per_page_label: string;
@@ -24,6 +25,9 @@ export interface LangKeysContract {
   view: string;
   edit: string;
   delete: string;
+  status: string;
+  active: string;
+  in_active: string;
   no_records_to_display: string;
   reload: string;
   add: string;

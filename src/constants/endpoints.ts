@@ -5,6 +5,7 @@ export const EndPoints = {
   AUTH: '/auth/internal/login',
   VALIDATE_TOKEN: '/auth/validate-token',
   PERMISSION: '/entity/permission',
+  TEAM: '/entity/baw/team',
 };
 
 export type EndpointsType = typeof EndPoints;

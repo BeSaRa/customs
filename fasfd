@@ -1,0 +1,279 @@
+[33mcommit 1e7f5dc84f9a4e077b3bfd0620da75df0290a7ca[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 15:40:23 2023 +0300
+
+    update some localization keys and add a new icon
+
+[33mcommit 85f298a94306933447353a3a9be7846bbd910fd0[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 14:24:20 2023 +0300
+
+    update customs-schematics
+
+[33mcommit 118c4c3f20f12bce363ebdcaa5ca2144a3569493[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 06:22:08 2023 +0300
+
+    update customs-schematics
+
+[33mcommit 96d88bad1bcdfbe3cd5230ea644b360082b9084c[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 06:09:41 2023 +0300
+
+    update customs-schematics
+
+[33mcommit c4da3fd5ebda71e9019584d6d60fe4e28614569a[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 06:00:21 2023 +0300
+
+    install customs-schematics
+
+[33mcommit b7af1fd98da37f3a066de7fdfbe352e085314593[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 05:38:46 2023 +0300
+
+    update localization
+
+[33mcommit 74c023ae4022c3aba307a72222d2c00330b427ec[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 04:07:06 2023 +0300
+
+    linting
+
+[33mcommit 9f43778f9823fb6429192dc9084182581df6cc0c[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 04:07:06 2023 +0300
+
+    linting
+
+[33mcommit 934a7007a40ce35bd8d20f4cf10778e5c99516ad[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed May 3 03:16:49 2023 +0300
+
+    latest update before schematics
+
+[33mcommit 7eb058c8b5fcd416719123584588599f79b8799d[m[33m ([m[1;32mbackdrop[m[33m)[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Mon May 1 10:49:00 2023 +0300
+
+    update the BaseCrudService
+
+[33mcommit 2c95b93085281eeb3715059455eace48e316ae90[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 30 12:14:58 2023 +0300
+
+    update live templates
+
+[33mcommit 0827e1cb20247a1f74ce961957e9f2c4eee8faad[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 30 11:45:20 2023 +0300
+
+    install ngx-progressbar
+
+[33mcommit 8a35c5087e52395c7bf2e11f7b51df58f231e390[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 30 10:08:56 2023 +0300
+
+    update localizations
+
+[33mcommit ecf25296bb8f7d4413364161f32b68302a2f9a1b[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 30 09:54:03 2023 +0300
+
+    change some method names to start with _ because we don't want auto complete from Ide
+
+[33mcommit 32b4b92d787075176cb391daf16c4cd2f14db998[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 30 09:43:38 2023 +0300
+
+    finish localization structure
+
+[33mcommit ddc845a3768ca6ff7185a4ac0ee16fc99a24a41f[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sat Apr 29 21:24:11 2023 +0300
+
+    create text area component
+
+[33mcommit 1ada9840b3083f403658b911a136018188736e5b[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 26 17:09:58 2023 +0300
+
+    make material colors matching the primary/secondary colors for the project
+
+[33mcommit 77248c908a5b9e9dbb5d84046ae47a58cf63ff57[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 25 21:54:15 2023 +0300
+
+    finish crud service skeleton
+
+[33mcommit 8d80a9ea5dcb07a8d61697c08b782af63e58a7c8[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Thu Apr 20 12:03:18 2023 +0300
+
+    navigate after login to the administration page
+
+[33mcommit f381401dec7fac18ef2777dd869b4309ada5b1bc[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 16:49:58 2023 +0300
+
+    create app-icon-button
+
+[33mcommit 2ad37793e34a962cb44d830ee7ff7a2cb6a8d81e[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 14:10:31 2023 +0300
+
+    create paginator localizations
+
+[33mcommit 3656d6106bb92aea2e6e06fd045c897da2390a77[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 13:30:13 2023 +0300
+
+    fix: menu items indentations
+
+[33mcommit be48fa0db22c79c13b4165d710d672d97f68df7e[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 11:04:36 2023 +0300
+
+    fix: load method for admin component
+
+[33mcommit ee9e3f71780279d721c28f083f57deb0757a002c[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 10:48:48 2023 +0300
+
+    add datePicker =>  flatpickr
+
+[33mcommit 3e1a5133a792bbf4693774ee3a969ebefc5ade2e[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Wed Apr 19 10:47:48 2023 +0300
+
+    update the input control
+
+[33mcommit 9b25d84376ada5a61269c6154f8ccb82edae34ab[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 12:49:52 2023 +0300
+
+    fix: sidebar menu item template
+
+[33mcommit 9bf6682c540d76a4d38e743c0237e2474118d962[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 12:12:40 2023 +0300
+
+    add bezier-easing to the allowedCommonJsDependencies
+
+[33mcommit 6c22f367d6b0edb0c181cea28aa32ea106c55394[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 02:37:22 2023 +0300
+
+    add: ngx-scrollbar to the
+
+[33mcommit f187c09374532dec81a08f78fa2ed6c6dacf8907[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 01:57:39 2023 +0300
+
+    add input to the top-navbar
+
+[33mcommit 5caa3e61bf3f7dd11d7f20d6bd1495f0e9351a75[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 01:57:15 2023 +0300
+
+    remove ?? from the html
+
+[33mcommit 1e644ed286446e19e6cf7989faad28bd463d2376[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 01:40:30 2023 +0300
+
+    add active class to active link on sidebar menu items
+
+[33mcommit 9a1381a5b9fab388ab3dfcb82edf4cd7a09dfd90[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Tue Apr 18 01:02:28 2023 +0300
+
+    feat: highlight text in sidebar menu items while searching
+
+[33mcommit 6162bb8d88bffbde082f8ca08af2fe209803cc1b[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Mon Apr 17 23:51:54 2023 +0300
+
+    fix: rename animations path to fix the imports
+
+[33mcommit ce26bb4e0298492be2eb40693783d8cd203e8a84[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Mon Apr 17 17:18:00 2023 +0300
+
+    finish the animation on sidebar
+
+[33mcommit 2b9367e861db7a570f0775c47df8bf148c2a4261[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Sun Apr 16 16:55:42 2023 +0300
+
+    finish basic sidebar animation
+
+[33mcommit fc1c8d5d2c65cf858f4177abdd435de4e07c5b9e[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Sun Apr 16 06:30:00 2023 +0300
+
+    finish basic localization
+
+[33mcommit 19aac4e8b8effb9b8f65ce2be912e22cf9c743aa[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Fri Apr 14 12:54:59 2023 +0300
+
+    fix: sidebar tab to focus
+    
+    it has a problem if the main div has overflow hidden it cause a strange behavior
+
+[33mcommit 29aaf841848b0fef18fb1d02719f77706b09c66f[m
+Author: BeSaRa <ahmedbesara@gmailcom>
+Date:   Fri Apr 14 12:51:42 2023 +0300
+
+    chore: change the class name from link to menu-item-link
+
+[33mcommit 475238a85f045023ae68fe2c72bb1e970eecadc0[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:33:51 2023 +0300
+
+    add route-outlet directive to the home component
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 7792c672ee5619e7427735c02e505c58c3b5b140[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:33:17 2023 +0300
+
+    create Localization route
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 3d5a029bf234993edaed7bf129bcbe5764d7bd1f[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:32:59 2023 +0300
+
+    update langService
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 0d76410d9ad01b684257820b3ff64c5f0ea020ca[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:32:38 2023 +0300
+
+    update lang keys
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 95c596a160b9f4b7bed8f433f8d7149835bad6a2[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:32:24 2023 +0300
+
+    update menus
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 7337ed66890e58e80e3611171cc255022dcd777f[m
+Author: BeSaRa <besara@windowslive.com>
+Date:   Thu Apr 13 12:32:09 2023 +0300
+
+    fix: add separator between the lang keys to avoid wrong search result
+    
+    Signed-off-by: BeSaRa <besara@windowslive.com>
+
+[33mcommit 72a69b

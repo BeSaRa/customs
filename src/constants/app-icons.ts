@@ -9,6 +9,7 @@ export const AppIcons = {
   VIEW: 'eye',
   DELETE: 'delete',
   FILTER: 'filter',
+  TEAM: 'account-group',
 };
 
 export type AppIconsType = typeof AppIcons;
