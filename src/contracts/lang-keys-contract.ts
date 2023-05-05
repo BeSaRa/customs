@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_penalty: string;
   login: string;
   ar_name: string;
   en_name: string;
@@ -28,4 +29,7 @@ export interface LangKeysContract {
   reload: string;
   add: string;
   filter: string;
+  status: string;
+  in_active: string;
+  active: string;
 }

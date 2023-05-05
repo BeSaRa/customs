@@ -100,6 +100,8 @@ export class LangService extends RegisterServiceMixin(class {}) {
   }
 
   prepareLanguages(localizations: Localization[]): void {
+    console.log('localizations: ', localizations);
+
     localizations.forEach((local) => {
       const key = local.localizationKey as keyof LangKeysContract;
       this.arabic[key] = local.arName;

@@ -17,12 +17,16 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
+import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    PenaltyComponent,
+    PenaltyPopupComponent,
   ],
   imports: [
     CommonModule,

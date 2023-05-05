@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
@@ -34,6 +36,7 @@ import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
+import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -58,8 +61,11 @@ import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-s
     InputSuffixDirective,
     NavbarComponent,
     Ng2FlatpickrModule,
+    MatSelectModule,
+    MatFormFieldModule,
   ],
   providers: [
+    MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
