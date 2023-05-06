@@ -33,4 +33,6 @@ export interface LangKeysContract {
   in_active: string;
   active: string;
   penalty_type: string;
+  change_status: string;
+  msg_status_x_changed_success: string;
 }

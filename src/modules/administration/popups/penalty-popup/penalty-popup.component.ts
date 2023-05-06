@@ -9,6 +9,7 @@ import { OperationType } from '@enums/operation-type';
 import { LangCodes } from '@enums/lang-codes';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-penalty-popup',
@@ -37,6 +38,9 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return new Penalty().clone<Penalty>({
       ...this.model,
       ...this.form.value,
+      status: this.form.value.status
+        ? StatusTypes.ACTIVE
+        : StatusTypes.INACTIVE,
     });
   }
 

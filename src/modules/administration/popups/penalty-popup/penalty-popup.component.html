@@ -9,18 +9,27 @@
         <app-input formControlName="arName" [label]="lang.map.arabic_translation"></app-input>
         <app-input formControlName="enName" [label]="lang.map.english_translation"></app-input>
 
-        <mat-form-field appearance="fill">
-          <mat-label>{{ lang.map.penalty_type }}</mat-label>
-          <mat-select formControlName="penaltyType">
-            <mat-option *ngFor="let penaltyType of penaltyTypes" [value]="penaltyType.lookupKey">
-              {{ penaltyType.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="w-100 h-100 flex justify-center">
+          <mat-form-field class="self-center w-100" appearance="fill">
+            <mat-label>{{ lang.map.penalty_type }}</mat-label>
+            <mat-select formControlName="penaltyType">
+              <mat-option *ngFor="let penaltyType of penaltyTypes" [value]="penaltyType.lookupKey">
+                {{ penaltyType.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field>
-          <mat-slide-toggle [checked]="model."></mat-slide-toggle>
-        </mat-form-field>
+        <div class="w-100 h-100 flex text-center justify-center">
+          <mat-slide-toggle
+            class="self-center"
+            formControlName="status"
+            labelPosition="before"
+            [name]="lang.map.change_status"
+            [checked]="model ? model.isActive() : false"
+            >{{ lang.map.change_status }}</mat-slide-toggle
+          >
+        </div>
       </ng-container>
     </div>
   </div>

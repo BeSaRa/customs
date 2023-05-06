@@ -53,6 +53,12 @@
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"
             icon="DELETE"></app-icon-button>
+          <mat-slide-toggle
+            color="black"
+            class="self-center"
+            [matTooltip]="lang.map.change_status"
+            (click)="status$.next(element)"
+            [checked]="element.isActive()"></mat-slide-toggle>
         </div>
       </td>
     </ng-container>
