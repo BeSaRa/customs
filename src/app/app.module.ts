@@ -6,7 +6,10 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,6 +40,7 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -82,10 +86,16 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
       useClass: PaginatorLocal,
     },
     {
-      provide: MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS,
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
       useValue: {
         duration: 2000,
         verticalPosition: 'top',
+      },
+    },
+    {
+      provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+      useValue: {
+        position: 'above',
       },
     },
     httpInterceptors,

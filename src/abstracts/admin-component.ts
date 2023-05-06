@@ -127,6 +127,7 @@ export abstract class AdminComponent<
     this._listenToEdit();
     this._listenToView();
     this._listenToDelete();
+    this._listenToChangeStatus();
   }
 
   paginate($event: PageEvent) {
@@ -227,7 +228,10 @@ export abstract class AdminComponent<
             .pipe(filter((value) => value === UserClick.YES))
             .pipe(
               switchMap(() => {
-                return model.delete().pipe(ignoreErrors());
+                return model
+                  .delete()
+                  .pipe(ignoreErrors())
+                  .pipe(map(() => model));
               })
             )
         )
