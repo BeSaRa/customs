@@ -32,4 +32,5 @@ export interface LangKeysContract {
   status: string;
   in_active: string;
   active: string;
+  penalty_type: string;
 }

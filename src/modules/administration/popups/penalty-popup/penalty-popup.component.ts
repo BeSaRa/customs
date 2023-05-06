@@ -6,6 +6,9 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { LangCodes } from '@enums/lang-codes';
+import { LookupService } from '@services/lookup.service';
+import { Lookup } from '@models/lookup';
 
 @Component({
   selector: 'app-penalty-popup',
@@ -13,8 +16,13 @@ import { OperationType } from '@enums/operation-type';
   styleUrls: ['./penalty-popup.component.scss'],
 })
 export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
+  lookupService = inject(LookupService);
+
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Penalty> = inject(MAT_DIALOG_DATA);
+
+  penaltyTypes: { name: string; lookupKey: number }[] =
+    this.getTodisplayPenaltyTypes();
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -40,5 +48,18 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     );
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
+  }
+
+  getTodisplayPenaltyTypes(): { name: string; lookupKey: number }[] {
+    const penaltyTypes: Lookup[] = this.lookupService.lookups.penaltyType;
+    return penaltyTypes
+      .filter((t) => t.status)
+      .map((t) => {
+        return {
+          name:
+            this.lang.getCurrent().code === LangCodes.AR ? t.arName : t.enName,
+          lookupKey: t.lookupKey,
+        };
+      });
   }
 }

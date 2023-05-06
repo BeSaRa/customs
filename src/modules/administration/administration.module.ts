@@ -19,6 +19,9 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 import { ReactiveFormsModule } from '@angular/forms';
 import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
 import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-po
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatSlideToggleModule,
   ],
 })
 export class AdministrationModule {}

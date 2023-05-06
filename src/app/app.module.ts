@@ -61,8 +61,6 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     InputSuffixDirective,
     NavbarComponent,
     Ng2FlatpickrModule,
-    MatSelectModule,
-    MatFormFieldModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
