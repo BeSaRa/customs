@@ -24,4 +24,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.VIOLATION_CLASSIFICATION,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.VIOLATION_TYPE,
+    langKey: 'menu_violation_type',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.VIOLATION_TYPE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

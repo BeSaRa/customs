@@ -22,6 +22,8 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 import { ReactiveFormsModule } from '@angular/forms';
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
 import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
+import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { ViolationClassificationPopupComponent } from '@modules/administration/p
     LocalizationComponent,
     ViolationClassificationComponent,
     ViolationClassificationPopupComponent,
+    ViolationTypeComponent,
+    ViolationTypePopupComponent,
   ],
   imports: [
     CommonModule,

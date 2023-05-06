@@ -1,4 +1,7 @@
 export interface LangKeysContract {
+  penalty_grace_period: string;
+  violation_classification: string;
+  menu_violation_type: string;
   menu_violation_classification: string;
   menu_job_title: string;
   login: string;

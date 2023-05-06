@@ -4,6 +4,7 @@ import { AdministrationComponent } from './administration.component';
 import { AppRoutes } from '@constants/app-routes';
 import { LocalizationComponent } from '@modules/administration/components/localization/localization.component';
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -14,6 +15,10 @@ const routes: Routes = [
   {
     path: AppRoutes.VIOLATION_CLASSIFICATION,
     component: ViolationClassificationComponent,
+  },
+  {
+    path: AppRoutes.VIOLATION_TYPE,
+    component: ViolationTypeComponent,
   },
 ];
 

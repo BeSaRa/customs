@@ -1,6 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.menu_violation_classification }}</h1>
+    <h1>{{ lang.map.menu_violation_type }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
@@ -8,18 +8,6 @@
       <ng-container [formGroup]="form">
         <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
         <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
-        <!-- <select formControlName="penaltyType">
-          <option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey">
-            {{ penaltyType.lookupStrKey }}
-          </option>
-        </select> -->
-        <!-- <mat-select formControlName="penaltyType">
-          <mat-option>{{ lang.map.penalty_type }}</mat-option>
-
-          <mat-option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey"
-            >{{ isArabic ? penaltyType.arName : penaltyType.enName }}
-          </mat-option>
-        </mat-select> -->
         <mat-form-field appearance="fill">
           <mat-label>{{ lang.map.penalty_type }}</mat-label>
           <mat-select formControlName="penaltyType">
@@ -29,6 +17,22 @@
           </mat-select>
           <mat-error *ngIf="form.get('penaltyType')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ lang.map.violation_classification }}</mat-label>
+          <mat-select formControlName="violationClassificationId">
+            <mat-option *ngFor="let classification of classifications" [value]="classification.id"
+              >{{ isArabic ? classification.arName : classification.enName }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="form.get('violationClassificationId')?.errors?.['required']">required_field </mat-error>
+        </mat-form-field>
+
+        <app-input
+          formControlName="penaltyGracePeriod"
+          type="number"
+          [label]="lang.map.penalty_grace_period"
+          min="1"></app-input>
       </ng-container>
     </div>
   </div>
