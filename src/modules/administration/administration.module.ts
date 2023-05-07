@@ -17,12 +17,18 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    JobTitleComponent,
+    JobTitlePopupComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +46,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatSlideToggleModule
   ],
 })
 export class AdministrationModule {}

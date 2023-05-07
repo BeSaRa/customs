@@ -1,0 +1,42 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_job_title }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <ng-container [formGroup]="form">
+        <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
+        <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ lang.map.job_type }}</mat-label>
+          <mat-select formControlName="jobType">
+            <mat-option *ngFor="let jobType of jobTypes" [value]="jobType.lookupKey">{{ isArabic ? jobType.arName :
+              jobType.enName }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ lang.map.status }}</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of jobStatus" [value]="status.lookupKey">{{ isArabic ? status.arName :
+              status.enName }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
+        </mat-form-field>
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>{{ lang.map.status }}</mat-label>
+          <mat-slide-toggle formControlName="status" (change)="toggleStatus($event)" [checked]="isActive()">
+          </mat-slide-toggle>
+        </mat-form-field> -->
+      </ng-container>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>

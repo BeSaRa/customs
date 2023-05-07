@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_job_title: string;
+  menu_job_title : string;
   login: string;
   ar_name: string;
   en_name: string;
@@ -30,5 +30,10 @@ export interface LangKeysContract {
   reload: string;
   add: string;
   filter: string;
-  change_status: string;
+
+  // Job Title
+  job_type: string;
+  status: string;
+  activate: string;
+  deactivate: string;
 }
