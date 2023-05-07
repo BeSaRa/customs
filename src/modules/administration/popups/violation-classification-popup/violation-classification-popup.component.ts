@@ -7,8 +7,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
-import { Lookup } from '@models/lookup';
-import { Localization } from '@models/localization';
 import { LangService } from '@services/lang.service';
 import { LangCodes } from '@enums/lang-codes';
 

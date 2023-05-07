@@ -22,6 +22,7 @@ export class ViolationType extends BaseModel<
       penaltyType,
       violationClassificationId,
       penaltyGracePeriod,
+      status,
     } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
@@ -35,6 +36,7 @@ export class ViolationType extends BaseModel<
       penaltyGracePeriod: controls
         ? [penaltyGracePeriod, CustomValidators.required]
         : penaltyGracePeriod,
+      status: status,
     };
   }
 }

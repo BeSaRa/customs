@@ -1,4 +1,6 @@
 export interface LangKeysContract {
+  active: string;
+  in_active: string;
   penalty_grace_period: string;
   violation_classification: string;
   menu_violation_type: string;

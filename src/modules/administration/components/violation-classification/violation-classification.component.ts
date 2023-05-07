@@ -30,12 +30,4 @@ export class ViolationClassificationComponent extends AdminComponent<
   langCode = this.lang.getCurrent().code;
   isArabic = this.langCode === LangCodes.AR;
   types = inject(LookupService).lookups.penaltyType;
-  // typesName = this.types.map((type) => {
-  //   return { ...type, name: this.isArabic ? type.arName : type.enName };
-  // });
-  getPenaltyTypeName(penaltyTypeId: number) {
-    return this.isArabic
-      ? this.types.find((type) => type.lookupKey === penaltyTypeId)?.arName
-      : this.types.find((type) => type.lookupKey === penaltyTypeId)?.enName;
-  }
 }

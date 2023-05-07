@@ -38,19 +38,4 @@ export class ViolationTypeComponent extends AdminComponent<
       this.classifications = data;
     });
   }
-  getPenaltyTypeName(penaltyTypeId: number) {
-    return this.isArabic
-      ? this.types.find((type) => type.lookupKey === penaltyTypeId)?.arName
-      : this.types.find((type) => type.lookupKey === penaltyTypeId)?.enName;
-  }
-  getViolationClassificationName(violationClassificationId: number) {
-    if (!this.classifications) return '';
-    return this.isArabic
-      ? this.classifications.find(
-          (classification) => classification.id === violationClassificationId
-        )?.arName
-      : this.classifications.find(
-          (classification) => classification.id === violationClassificationId
-        )?.enName;
-  }
 }

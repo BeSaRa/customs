@@ -20,7 +20,7 @@
             >{{ isArabic ? penaltyType.arName : penaltyType.enName }}
           </mat-option>
         </mat-select> -->
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>{{ lang.map.penalty_type }}</mat-label>
           <mat-select formControlName="penaltyType">
             <mat-option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey"
@@ -29,6 +29,16 @@
           </mat-select>
           <mat-error *ngIf="form.get('penaltyType')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
+        <div class="flex items-center justify-items-center">
+          <mat-label>{{ lang.map.change_status }}:&nbsp;&nbsp;</mat-label>
+
+          <span matTextSuffix>{{ lang.map.in_active }}&nbsp;</span>
+          <mat-slide-toggle
+            formControlName="status"
+            [name]="lang.map.change_status"
+            [checked]="model ? model.isActive() : false"></mat-slide-toggle
+          ><span matTextPrefix>{{ lang.map.active }}&nbsp;</span>
+        </div>
       </ng-container>
     </div>
   </div>

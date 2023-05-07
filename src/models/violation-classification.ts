@@ -23,6 +23,7 @@ export class ViolationClassification extends BaseModel<
       penaltyType: controls
         ? [penaltyType, CustomValidators.required]
         : penaltyType,
+      status: status,
     };
   }
 }

@@ -33,11 +33,10 @@ import { SidebarComponent } from '@standalone/components/sidebar/sidebar.compone
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MenuItemService } from '@services/menu-item.service';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
-import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
-import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
@@ -62,8 +61,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     MatIconModule,
     InputSuffixDirective,
     NavbarComponent,
-    Ng2FlatpickrModule,
-    ScrollingModule,
+    NgScrollbarModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,

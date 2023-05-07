@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
 
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -45,6 +46,7 @@ import { ViolationTypePopupComponent } from '@modules/administration/popups/viol
     MatSlideToggleModule,
     MatSelectModule,
     MatButtonModule,
+    MatInputModule,
     IconButtonComponent,
     MatTooltipModule,
     MatSortModule,

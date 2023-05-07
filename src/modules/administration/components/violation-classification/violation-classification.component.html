@@ -38,7 +38,7 @@
     <!-- penaltyType -->
     <ng-container matColumnDef="penaltyType">
       <th mat-header-cell mat-sort-header="penaltyType" *matHeaderCellDef>{{ lang.map.penalty_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ getPenaltyTypeName(element.penaltyType) }}</td>
+      <td mat-cell *matCellDef="let element">{{ isArabic ? element.typeInfo.arName : element.typeInfo.enName }}</td>
     </ng-container>
 
     <!-- actions Column -->

@@ -6,18 +6,18 @@
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
       <ng-container [formGroup]="form">
-        <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
-        <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
-        <mat-form-field appearance="fill">
+        <app-textarea formControlName="arName" [rows]="1" [label]="lang.map.arabic_translation"></app-textarea>
+        <app-textarea formControlName="enName" [rows]="1" [label]="lang.map.english_translation"></app-textarea>
+        <mat-form-field appearance="outline">
           <mat-label>{{ lang.map.penalty_type }}</mat-label>
-          <mat-select formControlName="penaltyType">
+          <mat-select formControlName="penaltyType" (selectionChange)="onPenaltyTypeChange($event)">
             <mat-option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey"
               >{{ isArabic ? penaltyType.arName : penaltyType.enName }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="form.get('penaltyType')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>{{ lang.map.violation_classification }}</mat-label>
           <mat-select formControlName="violationClassificationId">
             <mat-option *ngFor="let classification of classifications" [value]="classification.id"
@@ -27,12 +27,24 @@
 
           <mat-error *ngIf="form.get('violationClassificationId')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ lang.map.penalty_grace_period }}</mat-label>
+          <input matInput formControlName="penaltyGracePeriod" type="number" min="1" />
+          <span matTextSuffix>{{ isArabic ? "أيام" : "Days" }}&nbsp;</span>
 
-        <app-input
-          formControlName="penaltyGracePeriod"
-          type="number"
-          [label]="lang.map.penalty_grace_period"
-          min="1"></app-input>
+          <mat-error *ngIf="form.get('penaltyGracePeriod')?.errors?.['required']">required_field </mat-error>
+        </mat-form-field>
+
+        <div class="flex items-center justify-items-center">
+          <mat-label>{{ lang.map.change_status }}:&nbsp;&nbsp;</mat-label>
+
+          <span matTextSuffix>{{ lang.map.in_active }}&nbsp;</span>
+          <mat-slide-toggle
+            formControlName="status"
+            [name]="lang.map.change_status"
+            [checked]="model ? model.isActive() : false"></mat-slide-toggle
+          ><span matTextPrefix>{{ lang.map.active }}&nbsp;</span>
+        </div>
       </ng-container>
     </div>
   </div>

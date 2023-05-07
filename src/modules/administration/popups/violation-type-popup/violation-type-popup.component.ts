@@ -10,6 +10,7 @@ import { LookupService } from '@services/lookup.service';
 import { LangService } from '@services/lang.service';
 import { LangCodes } from '@enums/lang-codes';
 import { ViolationClassificationService } from '@services/violation-classification.service';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-violation-type-popup',
@@ -23,9 +24,11 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
   violationClassificationService = inject(ViolationClassificationService);
   classifications!: any[];
+  allclassifications!: any[];
   _buildForm(): void {
     this.violationClassificationService.loadAsLookups().subscribe((data) => {
       console.log(data);
+      this.allclassifications = data;
       this.classifications = data.filter((classification) => {
         return !this.model.penaltyType
           ? true
@@ -56,5 +59,10 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
+  }
+  onPenaltyTypeChange(PenaltyType: MatSelectChange) {
+    this.classifications = this.allclassifications.filter((classification) => {
+      return classification.penaltyType === PenaltyType.value;
+    });
   }
 }
