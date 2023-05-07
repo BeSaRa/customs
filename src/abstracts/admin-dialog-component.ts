@@ -93,6 +93,7 @@ export abstract class AdminDialogComponent<
       });
   }
 
+
   protected abstract _beforeSave(): Observable<boolean> | boolean;
 
   protected abstract _prepareModel(): Observable<M> | M;

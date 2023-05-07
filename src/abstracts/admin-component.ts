@@ -66,7 +66,6 @@ export abstract class AdminComponent<
   view$: Subject<M> = new Subject<M>();
   edit$: Subject<M> = new Subject<M>();
   delete$: Subject<M> = new Subject<M>();
-  status$: Subject<M> = new Subject<M>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
   abstract actions: ContextMenuActionContract<M>[];
@@ -124,7 +123,6 @@ export abstract class AdminComponent<
     this._listenToEdit();
     this._listenToView();
     this._listenToDelete();
-    this._listenToChangeStatus();
   }
 
   paginate($event: PageEvent) {
@@ -225,10 +223,7 @@ export abstract class AdminComponent<
             .pipe(filter((value) => value === UserClick.YES))
             .pipe(
               switchMap(() => {
-                return model
-                  .delete()
-                  .pipe(ignoreErrors())
-                  .pipe(map(() => model));
+                return model.delete().pipe(ignoreErrors());
               })
             )
         )
@@ -238,19 +233,6 @@ export abstract class AdminComponent<
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() })
         );
         this.reload$.next();
-      });
-  }
-
-  protected _listenToChangeStatus() {
-    this.status$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(exhaustMap((model) => model.toggleStatus()))
-      .subscribe((model) => {
-        this.toast.success(
-          this.lang.map.msg_status_x_changed_success.change({
-            x: model.getNames(),
-          })
-        );
       });
   }
 
