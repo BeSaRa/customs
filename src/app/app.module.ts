@@ -58,8 +58,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     MatIconModule,
     InputSuffixDirective,
     NavbarComponent,
-    Ng2FlatpickrModule
-
+    Ng2FlatpickrModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
@@ -89,7 +88,6 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     },
     httpInterceptors,
     provideNgxMask(),
-    
   ],
   bootstrap: [AppComponent],
 })

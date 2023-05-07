@@ -11,13 +11,13 @@
         <mat-form-field appearance="fill">
           <mat-label>{{ lang.map.job_type }}</mat-label>
           <mat-select formControlName="jobType">
-            <mat-option *ngFor="let jobType of jobTypes" [value]="jobType.lookupKey">{{ isArabic ? jobType.arName :
-              jobType.enName }}
+            <mat-option *ngFor="let jobType of jobTypes" [value]="jobType.lookupKey"
+              >{{ isArabic ? jobType.arName : jobType.enName }}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <!-- <mat-form-field appearance="fill">
           <mat-label>{{ lang.map.status }}</mat-label>
           <mat-select formControlName="status">
             <mat-option *ngFor="let status of jobStatus" [value]="status.lookupKey">{{ isArabic ? status.arName :
@@ -25,12 +25,29 @@
             </mat-option>
           </mat-select>
           <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
-        </mat-form-field>
-        <!-- <mat-form-field appearance="fill">
-          <mat-label>{{ lang.map.status }}</mat-label>
-          <mat-slide-toggle formControlName="status" (change)="toggleStatus($event)" [checked]="isActive()">
-          </mat-slide-toggle>
         </mat-form-field> -->
+        <div class="row">
+          <div class="column right" style="text-align: right">
+            <mat-label [ngClass]="getJobTitleStatus(currStatus).class">{{
+              getJobTitleStatus(currStatus).status
+            }}</mat-label>
+          </div>
+
+          <div class="column left">
+            <mat-slide-toggle
+              class="slider"
+              [ngClass]="getJobTitleStatus(currStatus).class"
+              flex
+              formControlName="status"
+              [(ngModel)]="currStatus"
+              (change)="toggleStatus($event)"
+              [checked]="isActive()">
+            </mat-slide-toggle>
+          </div>
+          <div class="column middle">
+            <mat-label>{{ lang.map.status }}</mat-label>
+          </div>
+        </div>
       </ng-container>
     </div>
   </div>

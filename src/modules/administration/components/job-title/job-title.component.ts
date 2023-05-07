@@ -7,7 +7,6 @@ import { LookupService } from '@services/lookup.service';
 import { LangCodes } from '@enums/lang-codes';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-job-title',
@@ -28,41 +27,50 @@ export class JobTitleComponent extends AdminComponent<
     'enName',
     'status',
     'jobType',
-    'actions'
+    'actions',
   ];
 
   getJobTypeName(jobType: number): string {
     switch (this.lang.getCurrent().code) {
       case LangCodes.AR:
-        return this.jobTypes.find((type) => type.lookupKey === jobType)?.arName!;
+        return (
+          this.jobTypes.find((type) => type.lookupKey === jobType)?.arName || ''
+        );
       case LangCodes.EN:
-        return this.jobTypes.find((type) => type.lookupKey === jobType)?.enName!;
+        return (
+          this.jobTypes.find((type) => type.lookupKey === jobType)?.enName || ''
+        );
       default:
-        return this.jobTypes.find((type) => type.lookupKey === jobType)?.arName!;
+        return (
+          this.jobTypes.find((type) => type.lookupKey === jobType)?.arName || ''
+        );
     }
   }
 
-
   showEditAndDeleteAction(jobTitleStatus: number) {
-    return jobTitleStatus !== StatusTypes.DELETED
+    return jobTitleStatus !== StatusTypes.DELETED;
   }
-  getJobTitleStatus(jobTitleStatus: number): { status: string, class: string } {
-    let className: string = this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)?.enName!;
+  getJobTitleStatus(jobTitleStatus: number): { status: string; class: string } {
+    const className: string =
+      this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
+        ?.enName || '';
     switch (this.lang.getCurrent().code) {
       case LangCodes.AR:
         return {
-          status: this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)?.arName!,
-          class: className
+          status:
+            this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
+              ?.arName || '',
+          class: className,
         };
       case LangCodes.EN:
         return {
           status: className,
-          class: className
+          class: className,
         };
       default:
         return {
           status: className,
-          class: className
+          class: className,
         };
     }
   }

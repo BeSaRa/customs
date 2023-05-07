@@ -47,7 +47,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     TextareaComponent,
     ReactiveFormsModule,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
 })
 export class AdministrationModule {}
