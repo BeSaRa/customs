@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_job_title: string;
+  menu_job_title : string;
   login: string;
   ar_name: string;
   en_name: string;
@@ -37,4 +37,10 @@ export interface LangKeysContract {
   delete_bulk: string;
   clear_filter: string;
   clear_all_filters: string;
+
+  // Job Title
+  job_type: string;
+  status: string;
+  activate: string;
+  deactivate: string;
 }

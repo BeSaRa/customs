@@ -24,12 +24,18 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { MatOptionModule } from '@angular/material/core';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    JobTitleComponent,
+    JobTitlePopupComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +60,8 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     MatOptionModule,
     OptionTemplateDirective,
     HighlightPipe,
+    MatSelectModule,
+    MatSlideToggleModule
   ],
 })
 export class AdministrationModule {}
