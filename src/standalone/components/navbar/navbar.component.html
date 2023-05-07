@@ -10,7 +10,7 @@
     <div>
       <span>{{ employee && employee.getNames() }}</span>
       <mat-menu #userMenu="matMenu">
-        <button (click)="logout()" mat-menu-item>
+        <button class="text-slate-700" (click)="logout()" mat-menu-item>
           <mat-icon [svgIcon]="AppIcons.LOGOUT"></mat-icon>
           <span>{{ lang.map.logout }}</span>
         </button>
