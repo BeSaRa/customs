@@ -15,7 +15,7 @@ import { OperationType } from '@enums/operation-type';
 export class LocalizationPopupComponent extends AdminDialogComponent<Localization> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Localization> = inject(MAT_DIALOG_DATA);
-  
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }

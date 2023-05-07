@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -22,10 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class JobTitleService extends BaseCrudWithDialogService<
-JobTitlePopupComponent,
-JobTitle> {
-
- 
+  JobTitlePopupComponent,
+  JobTitle
+> {
   protected getModelClass(): Constructor<JobTitle> {
     return JobTitle;
   }

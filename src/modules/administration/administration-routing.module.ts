@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: AppRoutes.JOB_TITLE,
     component: JobTitleComponent,
-  }
+  },
 ];
 
 @NgModule({

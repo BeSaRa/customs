@@ -61,7 +61,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     OptionTemplateDirective,
     HighlightPipe,
     MatSelectModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
   ],
 })
 export class AdministrationModule {}
