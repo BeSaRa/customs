@@ -10,21 +10,16 @@ const { send, receive } = new JobTitleInterceptor();
 export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
   $$__service_name__$$ = 'JobTitleService';
   jobType!: number;
-  status! : number;
+  status!: number;
   isSystem!: boolean;
-
 
   buildForm(controls = false): object {
     const { arName, enName, status, jobType } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      status: controls
-        ? [status, CustomValidators.required]
-        : status,
-      jobType: controls
-        ? [jobType, CustomValidators.required]
-        : jobType,
+      status: controls ? [status, CustomValidators.required] : status,
+      jobType: controls ? [jobType, CustomValidators.required] : jobType,
     };
   }
 }

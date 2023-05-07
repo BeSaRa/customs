@@ -89,7 +89,6 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     },
     httpInterceptors,
     provideNgxMask(),
-    
   ],
   bootstrap: [AppComponent],
 })
