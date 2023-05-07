@@ -35,4 +35,5 @@ export interface LangKeysContract {
   add: string;
   filter: string;
   change_status: string;
+  ldap_group_name: string;
 }

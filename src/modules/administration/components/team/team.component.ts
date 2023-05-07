@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
+import { Component, inject } from '@angular/core';
+import { NamesContract } from '@contracts/names-contract';
 import { Team } from '@models/team';
-import { TeamService } from '@services/team.service';
 import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
+import { TeamService } from '@services/team.service';
 
 @Component({
   selector: 'app-team',
@@ -22,4 +23,10 @@ export class TeamComponent extends AdminComponent<
     'status',
     'actions',
   ];
+
+  filterValue: Partial<NamesContract> = {};
+  onFilterChange(names: Partial<NamesContract>) {
+    this.filterValue = names;
+    this.filter$.next(names);
+  }
 }

@@ -9,6 +9,7 @@ export const AppIcons = {
   VIEW: 'eye',
   DELETE: 'delete',
   FILTER: 'filter',
+  FILTER_OUTLINE: 'filter-outline',
   TEAM: 'account-group',
 };
 

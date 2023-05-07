@@ -20,6 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TeamComponent } from '@modules/administration/components/team/team.component';
 import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NameFilterComponent } from '@standalone/components/name-filter/name-filter.component';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     TextareaComponent,
     ReactiveFormsModule,
     MatSlideToggleModule,
+    NameFilterComponent,
+    HighlightPipe,
   ],
 })
 export class AdministrationModule {}
