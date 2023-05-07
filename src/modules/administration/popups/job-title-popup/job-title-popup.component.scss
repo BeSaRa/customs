@@ -1,0 +1,36 @@
+.column {
+  float: left;
+  padding: 10px;
+}
+.left {
+  width: 15%;
+}
+.middle {
+  width: 25%;
+}
+.right {
+  width: 60%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.Retired {
+  color: #d9534f;
+  font-weight: bold;
+}
+
+.Activated {
+  color: #5cb85c;
+  font-weight: bold;
+}
+
+.Deactivated {
+  color: #f0ad4e;
+  font-weight: bold;
+}
+.slider {
+  transform: scale(1.3);
+}
