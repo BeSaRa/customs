@@ -76,6 +76,8 @@ export class AuthService extends RegisterServiceMixin(class {}) {
 
   logout(): void {
     this.authenticated = false;
+    this.tokenService.clearToken();
+    this.employeeService.clearEmployee();
   }
 
   private setDateAfterAuthenticate(): OperatorFunction<

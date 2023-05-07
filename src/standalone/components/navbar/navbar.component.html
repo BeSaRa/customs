@@ -3,4 +3,19 @@
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
   <app-input label="" placeholder="search" [noMargin]="true" class="flex-auto [&_.input-form]:bg-read-500"></app-input>
+  <button class="space-x-4 rtl:space-x-reverse flex items-center" [matMenuTriggerFor]="userMenu">
+    <div class="rounded-full w-10">
+      <img ngSrc="assets/images/user.png" alt="avatar" height="512" width="512" />
+    </div>
+    <div>
+      <span>{{ employee && employee.getNames() }}</span>
+      <mat-menu #userMenu="matMenu">
+        <button class="text-slate-700" (click)="logout()" mat-menu-item>
+          <mat-icon [svgIcon]="AppIcons.LOGOUT"></mat-icon>
+          <span>{{ lang.map.logout }}</span>
+        </button>
+      </mat-menu>
+    </div>
+  </button>
+  <app-icon-button (click)="logout()" [matTooltip]="lang.map.logout" icon="LOGOUT"></app-icon-button>
 </div>

@@ -66,4 +66,12 @@ export class EmployeeService {
       return !this.permissionMap.has(permission);
     });
   }
+
+  getEmployee(): InternalUser | undefined {
+    return this.loginData?.internalUser;
+  }
+
+  clearEmployee() {
+    this.loginData = undefined;
+  }
 }
