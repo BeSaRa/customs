@@ -36,4 +36,7 @@ export interface LangKeysContract {
   active: string;
   penalty_type: string;
   change_status: string;
+  logout: string;
+  are_you_sure_you_want_to_logout: string;
+  logged_out_successfully: string;
 }

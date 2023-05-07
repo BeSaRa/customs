@@ -41,8 +41,7 @@
               }
             ],
             "styles": [
-              "src/styles/styles.scss",
-              "node_modules/flatpickr/dist/flatpickr.min.css"
+              "src/styles/styles.scss"
             ],
             "scripts": []
           },
