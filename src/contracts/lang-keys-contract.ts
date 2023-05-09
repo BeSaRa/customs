@@ -34,6 +34,10 @@ export interface LangKeysContract {
   // Job Title
   job_type: string;
   status: string;
+  logout: string;
+  are_you_sure_you_want_to_logout: string;
+  logged_out_successfully: string;
+  delete_bulk: string;
   activate: string;
   deactivate: string;
 }

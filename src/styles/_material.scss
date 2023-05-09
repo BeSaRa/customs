@@ -87,3 +87,10 @@ $customs-theme: mat.define-light-theme(
 .mat-mdc-checkbox.mat-accent {
   --mdc-checkbox-selected-checkmark-color: #fff;
 }
+:root {
+  // text color for primary theme
+  --mdc-theme-text-primary-on-background: theme("textColor.slate.700");
+}
+.mat-mdc-paginator {
+  color: var(--mdc-theme-text-primary-on-background);
+}

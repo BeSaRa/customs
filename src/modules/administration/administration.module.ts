@@ -17,6 +17,8 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { MatSelectModule } from '@angular/material/select';
@@ -46,6 +48,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    ContextMenuComponent,
+    MatMenuModule,
     MatSelectModule,
     MatSlideToggleModule,
   ],
