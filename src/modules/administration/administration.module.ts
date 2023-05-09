@@ -17,6 +17,8 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    ContextMenuComponent,
+    MatMenuModule,
   ],
 })
 export class AdministrationModule {}
