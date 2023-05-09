@@ -14,6 +14,7 @@ export class PenaltyComponent extends AdminComponent<
   Penalty,
   PenaltyService
 > {
+  filter_Value!: string;
   service = inject(PenaltyService);
   displayedColumns: string[] = [
     'select',
@@ -22,4 +23,12 @@ export class PenaltyComponent extends AdminComponent<
     'status',
     'actions',
   ];
+
+  filterValue(event: any) {
+    //console.log(typeof (event));
+    console.log('event: ', event);
+    console.log('event.target.value');
+    this.filter_Value = event.target.value;
+    this.filter$.next({ enName: this.filter_Value });
+  }
 }

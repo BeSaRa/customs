@@ -78,4 +78,11 @@
     [showFirstLastButtons]="showFirstLastButtons"
     [length]="length">
   </mat-paginator>
+
+  <div>
+    <input type="text" (change)="filterValue($event)" />
+  </div>
+  <div>
+    {{ filter_Value }}
+  </div>
 </div>
