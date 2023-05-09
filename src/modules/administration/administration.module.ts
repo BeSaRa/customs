@@ -17,6 +17,8 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 import { TeamComponent } from '@modules/administration/components/team/team.component';
 import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -47,6 +49,8 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    ContextMenuComponent,
+    MatMenuModule,
     MatSlideToggleModule,
     NameFilterComponent,
     HighlightPipe,
