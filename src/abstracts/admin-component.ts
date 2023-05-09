@@ -173,7 +173,7 @@ export abstract class AdminComponent<
       .pipe(
         switchMap((model) => {
           return this.service
-            .openEditDialog(model, this._getEditExtras() as object)
+            .openCreateDialog(model, this._getEditExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
