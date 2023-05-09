@@ -22,6 +22,8 @@ import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-po
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSelectModule,
     MatFormFieldModule,
     MatSlideToggleModule,
+    ContextMenuComponent,
+    MatMenuModule,
   ],
 })
 export class AdministrationModule {}
