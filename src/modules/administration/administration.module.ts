@@ -25,6 +25,8 @@ import { ViolationClassificationComponent } from '@modules/administration/compon
 import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { ViolationTypePopupComponent } from '@modules/administration/popups/viol
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    ContextMenuComponent,
+    MatMenuModule,
   ],
 })
 export class AdministrationModule {}
