@@ -72,13 +72,13 @@ export class JobTitlePopupComponent
   getJobTitleStatus(jobTitleStatus: number): { status: string; class: string } {
     const className: string =
       this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-        ?.enName || 'Activated';
+        ?.enName || 'Deactivated';
     switch (this.lang.getCurrent().code) {
       case LangCodes.AR:
         return {
           status:
             this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-              ?.arName || 'فعالة',
+              ?.arName || 'غير فعالة',
           class: className,
         };
       case LangCodes.EN:
