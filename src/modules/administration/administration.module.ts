@@ -27,6 +27,8 @@ import { ViolationTypeComponent } from '@modules/administration/components/viola
 import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { SelectComponent } from '@standalone/components/select/select.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -54,11 +56,13 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSortModule,
     MatCheckboxModule,
     InputComponent,
+    SelectComponent,
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
     ContextMenuComponent,
     MatMenuModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class AdministrationModule {}

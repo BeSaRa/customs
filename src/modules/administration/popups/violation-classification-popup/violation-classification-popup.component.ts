@@ -19,7 +19,10 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationClassification> =
     inject(MAT_DIALOG_DATA);
-  types: any[] = inject(LookupService).lookups.penaltyType;
+  types: any[] = inject(LookupService).lookups.penaltyType.map((type) => {
+    return { id: type.lookupKey, arName: type.arName, enName: type.enName };
+  });
+  penaltyTypes!: any[];
   isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
 
   _buildForm(): void {

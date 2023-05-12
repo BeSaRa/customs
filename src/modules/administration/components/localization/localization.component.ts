@@ -12,17 +12,11 @@ import { MatMenuTrigger } from '@angular/material/menu';
   templateUrl: './localization.component.html',
   styleUrls: ['./localization.component.scss'],
 })
-export class LocalizationComponent
-  extends AdminComponent<
-    LocalizationPopupComponent,
-    Localization,
-    LocalizationService
-  >
-  implements AfterViewInit
-{
-  ngAfterViewInit(): void {
-    console.log(this.trigger);
-  }
+export class LocalizationComponent extends AdminComponent<
+  LocalizationPopupComponent,
+  Localization,
+  LocalizationService
+> {
   service = inject(LocalizationService);
   displayedColumns: string[] = [
     'select',
@@ -60,7 +54,4 @@ export class LocalizationComponent
       },
     },
   ];
-
-  @ViewChild('subTrigger', { read: MatMenuTrigger })
-  trigger!: MatMenuTrigger;
 }

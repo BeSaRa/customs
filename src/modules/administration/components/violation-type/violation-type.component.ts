@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ViolationType } from '@models/violation-type';
 import { ViolationTypeService } from '@services/violation-type.service';
@@ -6,6 +6,9 @@ import { ViolationTypePopupComponent } from '@modules/administration/popups/viol
 import { LangCodes } from '@enums/lang-codes';
 import { LookupService } from '@services/lookup.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
+import { AppIcons } from '@constants/app-icons';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 
 @Component({
   selector: 'app-violation-type',
@@ -26,6 +29,13 @@ export class ViolationTypeComponent extends AdminComponent<
     'violationClassificationId',
     'actions',
   ];
+  filterColumns: string[] = [
+    'filterArName',
+    'filterEnName',
+    'filterPenaltyType',
+    'filterClassification',
+  ];
+
   langCode = this.lang.getCurrent().code;
   isArabic = this.langCode === LangCodes.AR;
   types = inject(LookupService).lookups.penaltyType;
@@ -34,8 +44,36 @@ export class ViolationTypeComponent extends AdminComponent<
   override ngOnInit(): void {
     super.ngOnInit();
     this.violationClassificationService.loadAsLookups().subscribe((data) => {
-      console.log(data);
       this.classifications = data;
     });
   }
+  actions: ContextMenuActionContract<ViolationType>[] = [
+    {
+      name: 'view',
+      type: 'action',
+      label: 'view',
+      icon: AppIcons.VIEW,
+      callback: (item) => {
+        this.view$.next(item);
+      },
+    },
+    {
+      name: 'edit',
+      type: 'action',
+      label: 'edit',
+      icon: AppIcons.EDIT,
+      callback: (item) => {
+        this.edit$.next(item);
+      },
+    },
+    {
+      name: 'delete',
+      type: 'action',
+      label: 'delete',
+      icon: AppIcons.DELETE,
+      callback: (item) => {
+        this.delete$.next(item);
+      },
+    },
+  ];
 }

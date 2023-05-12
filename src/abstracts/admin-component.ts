@@ -1,4 +1,4 @@
-import { Directive, inject, OnInit } from '@angular/core';
+import { Directive, inject, OnInit, signal } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import {
   BehaviorSubject,
@@ -175,7 +175,7 @@ export abstract class AdminComponent<
       .pipe(
         switchMap((model) => {
           return this.service
-            .openCreateDialog(model, this._getEditExtras() as object)
+            .openEditDialog(model, this._getEditExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
