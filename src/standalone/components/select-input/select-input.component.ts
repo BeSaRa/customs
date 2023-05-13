@@ -25,7 +25,7 @@ import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
-import { hasOwnProperty } from '@utils/utils';
+import { objectHasOwnProperty } from '@utils/utils';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
@@ -85,7 +85,7 @@ export class SelectInputComponent
   @Input()
   name = crypto.randomUUID();
   @Input()
-  options: unknown[] = [];
+  options?: unknown[] = [];
   @Input()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bindValue?: string | ((item: any) => any);
@@ -175,7 +175,7 @@ export class SelectInputComponent
 
   getBindValue(option: unknown): unknown {
     return this.bindValue && typeof this.bindValue === 'string'
-      ? hasOwnProperty(option, this.bindValue)
+      ? objectHasOwnProperty(option, this.bindValue)
         ? option[this.bindValue]
         : option
       : this.bindValue && typeof this.bindValue === 'function'
@@ -185,7 +185,7 @@ export class SelectInputComponent
 
   getBindLabel(option: unknown): unknown {
     return this.bindLabel && typeof this.bindLabel === 'string'
-      ? hasOwnProperty(option, this.bindLabel)
+      ? objectHasOwnProperty(option, this.bindLabel)
         ? option[this.bindLabel]
         : option
       : this.bindLabel && typeof this.bindLabel === 'function'

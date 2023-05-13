@@ -10,6 +10,8 @@ export const AppIcons = {
   DELETE: 'delete',
   FILTER: 'filter',
   LOGOUT: 'logout',
+  FILTER_OUTLINE: 'filter-outline',
+  FILTER_REMOVE: 'filter-remove',
 };
 
 export type AppIconsType = typeof AppIcons;

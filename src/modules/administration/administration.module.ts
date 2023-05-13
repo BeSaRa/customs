@@ -19,6 +19,11 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 import { ReactiveFormsModule } from '@angular/forms';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { MatOptionModule } from '@angular/material/core';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -44,6 +49,11 @@ import { MatMenuModule } from '@angular/material/menu';
     ReactiveFormsModule,
     ContextMenuComponent,
     MatMenuModule,
+    FilterColumnComponent,
+    SelectInputComponent,
+    MatOptionModule,
+    OptionTemplateDirective,
+    HighlightPipe,
   ],
 })
 export class AdministrationModule {}
