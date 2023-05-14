@@ -1,0 +1,6 @@
+<ng-container *ngIf="!hasCustomControl">
+  <mat-slide-toggle [formControl]="control">{{ label }}</mat-slide-toggle>
+</ng-container>
+<ng-container *ngIf="hasCustomControl">
+  <ng-content select="[appControl]"></ng-content>
+</ng-container>
