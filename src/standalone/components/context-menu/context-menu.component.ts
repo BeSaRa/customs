@@ -67,7 +67,7 @@ export class ContextMenuComponent {
     const parent = target.parentElement;
     const isTR = () => parent?.nodeName === 'TR';
 
-    this.trigger.menuOpened.pipe(take(1)).subscribe(() => {
+    this.trigger.menuOpened.pipe(take(2)).subscribe(() => {
       parent && isTR() ? parent.classList.add('highlight') : null;
     });
 

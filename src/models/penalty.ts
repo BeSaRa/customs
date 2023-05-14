@@ -13,6 +13,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   override arName!: string;
   override enName!: string;
   penaltyType!: number;
+  isSystem = true;
 
   buildForm(controls = false): object {
     const { arName, enName, penaltyType, status } = this;

@@ -6,6 +6,7 @@ import {
   delay,
   exhaustMap,
   filter,
+  finalize,
   map,
   Observable,
   of,
@@ -30,6 +31,7 @@ import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
+import { Penalty } from '@models/penalty';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -57,8 +59,11 @@ export abstract class AdminComponent<
   >(1);
 
   data$: Observable<M[]> = this._load();
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
 
   length = 50;
+  //isLoading: boolean = true;
 
   create$: Subject<void> = new Subject<void>();
   view$: Subject<M> = new Subject<M>();
@@ -97,6 +102,7 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
+              this.loadingSubject.next(true);
               return this.loadComposite
                 ? this.service
                     .loadComposite(paginationOptions, filter, sort)
@@ -107,8 +113,13 @@ export abstract class AdminComponent<
             }),
             tap(({ count }) => {
               this.length = count;
+              this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map((response) => response.rs)
+            map((response) =>
+              response.rs.map((element) =>
+                element.clone<M>({ isSystem: true } as any as Partial<M>)
+              )
+            )
           );
         })
       );

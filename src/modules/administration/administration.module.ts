@@ -24,6 +24,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSlideToggleModule,
     ContextMenuComponent,
     MatMenuModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class AdministrationModule {}
