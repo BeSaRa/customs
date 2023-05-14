@@ -115,7 +115,7 @@ export class SwitchComponent
       : this.control.enable({ emitEvent: false });
   }
 
-  inputTouch() {
+  switchTouch() {
     this.onTouch && this.onTouch();
   }
 }
