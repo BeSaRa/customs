@@ -3,6 +3,7 @@ import { JobTitleService } from '@services/job-title.service';
 import { JobTitleInterceptor } from '@model-interceptors/job-title-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new JobTitleInterceptor();
 
@@ -21,5 +22,9 @@ export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
       status: controls ? [status, CustomValidators.required] : status,
       jobType: controls ? [jobType, CustomValidators.required] : jobType,
     };
+  }
+
+  isEditable(): boolean {
+    return this.status !== StatusTypes.DELETED && !this.isSystem;
   }
 }
