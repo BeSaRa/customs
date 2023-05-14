@@ -171,3 +171,10 @@ export function isValidAdminResult(model: object): model is AdminResult {
     (<AdminResult>model).id > 0
   );
 }
+
+export function objectHasOwnProperty<O, P extends PropertyKey>(
+  object: O,
+  property: P
+): object is O & Record<P, unknown> {
+  return Object.prototype.hasOwnProperty.call(object, property);
+}

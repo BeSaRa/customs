@@ -29,9 +29,10 @@ import { Sort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
-import { ignoreErrors } from '@utils/utils';
+import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { Penalty } from '@models/penalty';
+import { ColumnsWrapper } from '@models/columns-wrapper';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -49,11 +50,11 @@ export abstract class AdminComponent<
   abstract service: S;
   private paginate$ = new BehaviorSubject({
     offset: 0,
-    limit: 2,
+    limit: 50,
   });
   lang = inject(LangService);
   reload$ = new ReplaySubject<void>(1);
-  filter$ = new ReplaySubject<Partial<M>>(1);
+  filter$ = new BehaviorSubject<Partial<M>>({});
   sort$: ReplaySubject<SortOptionsContract | undefined> = new ReplaySubject<
     SortOptionsContract | undefined
   >(1);
@@ -72,12 +73,11 @@ export abstract class AdminComponent<
   status$: Subject<M> = new Subject<M>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
-
-  abstract displayedColumns: string[];
-
+  // as of now we have implemented 3 types of columns [TextFilterColumn, SelectFilterColumn, NoneFilterColumn]
+  // and soon we will implement [DateFilterColumn]
+  abstract columnsWrapper: ColumnsWrapper<M>;
   dataSource: AppTableDataSource<M> = new AppTableDataSource<M>(this.data$);
-
-  pageSizeOptions: number[] = [2, 50, 100, 150, 200];
+  pageSizeOptions: number[] = [50, 100, 150, 200];
   showFirstLastButtons = true;
   allowMultiSelect = true;
   initialSelection: M[] = [];
@@ -130,7 +130,6 @@ export abstract class AdminComponent<
       console.log('data: ', data);
     });
     this.sort$.next(undefined);
-    this.filter$.next({});
     this.reload$.next();
 
     this._listenToChangeStatus();
@@ -190,7 +189,7 @@ export abstract class AdminComponent<
       .pipe(
         switchMap((model) => {
           return this.service
-            .openCreateDialog(model, this._getEditExtras() as object)
+            .openEditDialog(model, this._getEditExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
@@ -306,5 +305,23 @@ export abstract class AdminComponent<
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  filterChange($event: { key: string; value: string | null }) {
+    if (!$event.value) {
+      delete this.filter$.value[$event.key as keyof M];
+      this.filter$.next({ ...this.filter$.value });
+      return;
+    }
+    this.filter$.next({
+      ...this.filter$.value,
+      [$event.key]: $event.value,
+    });
+  }
+
+  getFilterStringColumn(column: string): string {
+    return objectHasOwnProperty(this.filter$.value, column)
+      ? (this.filter$.value[column] as string)
+      : '';
   }
 }
