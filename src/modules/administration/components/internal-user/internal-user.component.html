@@ -27,55 +27,65 @@
     <!-- domainName -->
     <ng-container matColumnDef="domainName">
       <th mat-header-cell mat-sort-header="domainName" *matHeaderCellDef>{{ lang.map.domain_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.domainName }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.domainName | highlight : getFilterStringColumn('domainName')"></span>
+      </td>
     </ng-container>
 
     <!-- arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.arName | highlight : getFilterStringColumn('arName')"></span>
+      </td>
     </ng-container>
     
     <!-- enName -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
+      </td>
     </ng-container>
     
     <!-- empNum -->
     <ng-container matColumnDef="empNum">
       <th mat-header-cell mat-sort-header="empNum" *matHeaderCellDef>{{ lang.map.employee_number }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.empNum }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.empNum | highlight : getFilterStringColumn('empNum')"></span>
+      </td>
     </ng-container>
 
     <!-- email -->
     <ng-container matColumnDef="email">
       <th mat-header-cell mat-sort-header="email" *matHeaderCellDef>{{ lang.map.email }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.email | highlight : getFilterStringColumn('email')"></span>
+      </td>
     </ng-container>
 
     <!-- phoneNumber -->
-    <ng-container matColumnDef="phoneNumber">
+    <!-- <ng-container matColumnDef="phoneNumber">
       <th mat-header-cell mat-sort-header="phoneNumber" *matHeaderCellDef>{{ lang.map.phone_number }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.phoneNumber }}</td>
-    </ng-container>
-
-    <!-- signature -->
-    <!-- <ng-container matColumnDef="signature">
-      <th mat-header-cell mat-sort-header="signature" *matHeaderCellDef>{{ lang.map.signature }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.signature }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.phoneNumber | highlight : getFilterStringColumn('phoneNumber')"></span>
+      </td>
     </ng-container> -->
 
     <!-- role -->
     <!-- <ng-container matColumnDef="role">
       <th mat-header-cell mat-sort-header="role" *matHeaderCellDef>{{ lang.map.role }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+      <td mat-cell *matCellDef="let element">{
+        <span [innerHTML]="element.role | highlight : getFilterStringColumn('role')"></span>
+      </td>
     </ng-container> -->
 
     <!-- limited circulation -->
     <!-- <ng-container matColumnDef="limitedCirculation">
       <th mat-header-cell mat-sort-header="limitedCirculation" *matHeaderCellDef>{{ lang.map.limited_circulation }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.limitedCirculation }}</td>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.limitedCirculation | highlight : getFilterStringColumn('limitedCirculation')"></span>
+      </td>
     </ng-container> -->
 
     <!-- Private User -->
@@ -126,8 +136,18 @@
         </div>
       </td>
     </ng-container>
-
+    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
+      <!-- localizationKey Column -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+        </th>
+      </ng-container>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"

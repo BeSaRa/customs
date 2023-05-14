@@ -6,6 +6,9 @@ import { InternalUserPopupComponent } from '@modules/administration/popups/inter
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
 import { UserPreferencesService } from '@services/user-preferences.service';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
 
 
 @Component({
@@ -18,6 +21,7 @@ export class InternalUserComponent extends AdminComponent<
   InternalUser,
   InternalUserService
 > {
+
   service = inject(InternalUserService);
 
   userPreferencesService = inject(UserPreferencesService);
@@ -29,7 +33,6 @@ export class InternalUserComponent extends AdminComponent<
     'enName',
     'empNum',
     'email',
-    'phoneNumber',
     'actions'
   ];
 
@@ -72,6 +75,16 @@ export class InternalUserComponent extends AdminComponent<
     // }
   ];
 
+  override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('domainName'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new TextFilterColumn('empNum'),
+    new TextFilterColumn('email'),
+    new NoneFilterColumn('actions')
+  ).attacheFilter(this.filter$);
+  
   // openUserPreferences(item: UserPreferences, user: InternalUser) {
   //   this.userPreferencesService.openEditDialog(item, {user})
   // }
