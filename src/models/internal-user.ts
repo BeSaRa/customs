@@ -43,31 +43,32 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
 
     return {
       domainName: controls ? [domainName, 
-        CustomValidators.required,
-        // CustomValidators.maxLength(50),
-        // CustomValidators.pattern('ENG_NUM_ONLY')
+        [CustomValidators.required,
+        CustomValidators.maxLength(50),
+        CustomValidators.pattern('ENG_NUM_ONLY')] 
       ] : domainName,
       arName: controls ? [arName, 
-        CustomValidators.required,
-        // CustomValidators.maxLength(50),
-        // CustomValidators.pattern('AR_NUM')
+        [CustomValidators.required,
+        CustomValidators.maxLength(50),
+        CustomValidators.pattern('AR_NUM')]
       ] : arName,
       enName: controls ? [enName, 
-        CustomValidators.required,
-        // CustomValidators.maxLength(50),
-        // CustomValidators.pattern('ENG_NUM')
+        [CustomValidators.required,
+        CustomValidators.maxLength(50),
+        CustomValidators.pattern('ENG_NUM')]
       ] : enName,
       empNum: controls ? [empNum, 
-        CustomValidators.required,
-        // CustomValidators.number,
-        // CustomValidators.maxLength(10)
+        [CustomValidators.required,
+        CustomValidators.number,
+        CustomValidators.maxLength(10),
+        CustomValidators.pattern('ENG_NUM_ONLY')]
       ] : empNum,
       email: controls ? [email, 
-        // CustomValidators.required,
-        // CustomValidators.pattern('EMAIL')
+        [CustomValidators.required,
+        CustomValidators.pattern('EMAIL')]
       ] : email,
       phoneNumber: controls ? [phoneNumber,
-      // CustomValidators.pattern('PHONE_NUMBER')
+      CustomValidators.pattern('PHONE_NUMBER')
       ] : phoneNumber,
       status: controls ? [status, CustomValidators.required] : status,
     };

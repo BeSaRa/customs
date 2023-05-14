@@ -9,6 +9,7 @@ import { UserPreferencesService } from '@services/user-preferences.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
+import { StatusTypes } from '@enums/status-types';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class InternalUserComponent extends AdminComponent<
     'arName',
     'enName',
     'empNum',
+    'status',
     'email',
     'actions'
   ];
@@ -81,10 +83,14 @@ export class InternalUserComponent extends AdminComponent<
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('empNum'),
+    new TextFilterColumn('status'),
     new TextFilterColumn('email'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
   
+  getStatusString(status:number){
+    return status === StatusTypes.ACTIVE? 'Active' : 'Disable'
+  }
   // openUserPreferences(item: UserPreferences, user: InternalUser) {
   //   this.userPreferencesService.openEditDialog(item, {user})
   // }
