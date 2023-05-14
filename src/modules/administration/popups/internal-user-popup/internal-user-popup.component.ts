@@ -4,7 +4,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUser } from '@models/internal-user';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, of, takeUntil, withLatestFrom } from 'rxjs';
+import { Observable, catchError, filter, of, takeUntil, withLatestFrom } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -22,6 +22,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   data: CrudDialogDataContract<InternalUser> = inject(MAT_DIALOG_DATA);
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
+
   statusList!:Lookup[]
   permissions!:Permission[]
 
@@ -55,6 +56,12 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
     );
+    this.permissionService.savePermissions(model.id, this.userPermissions?.value)
+    .pipe(
+      catchError(() => of(null)),
+      filter((response) => response !== null)
+    )
+    .subscribe();
     // you can close the dialog after save here 
     this.dialogRef.close(this.model);
   }

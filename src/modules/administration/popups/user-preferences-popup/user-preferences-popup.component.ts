@@ -16,7 +16,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   user!:InternalUser
   
   override _buildForm(): void {    
-    this.form = this.fb.group(this.model.buildForm(true));
+    // this.form = this.fb.group(this.model.buildForm(true));
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();

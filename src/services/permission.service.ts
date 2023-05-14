@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Permission } from '@models/permission';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { map, Observable, tap } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
 
@@ -18,6 +18,24 @@ export class PermissionService extends BaseCrudService<Permission> {
 
   protected getUrlSegment(): string {
     return this.urlService.URLS.PERMISSION;
+  }
+
+
+  @CastResponse(() => Permission)
+  private _loadPermissions(userId: number): Observable<Permission[]> {
+    return this.http.get<Permission[]>(this.getUrlSegment() + '/internal/' + userId)
+  }
+
+  private _savePermissions(userId: number, permissions: number[]): Observable<any> {
+    return this.http.post(this.getUrlSegment() + '/' + userId + '/bulk', permissions);
+  }
+
+  savePermissions(userId: number, permissions: number[]): Observable<any> {
+    return this._savePermissions(userId, permissions);
+  }
+
+  loadPermissions(userId: number): Observable<Permission[]> {
+    return this._loadPermissions(userId);
   }
 
   /**

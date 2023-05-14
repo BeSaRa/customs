@@ -56,6 +56,17 @@
                 <label class="ml-2 block font-medium"
                         for="isPrivateUser">{{lang.map.private_user}}</label>
               </div>
+              
+              <!-- limited circulation -->
+              <div class="flex items-center mr-4">
+                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="limitedCirculation"
+                        formControlName="limitedCirculation">
+                <label class="ml-2 block font-medium"
+                        for="limitedCirculation">{{lang.map.limited_circulation}}</label>
+              </div>
+
+              <app-input formControlName="defaultLang" type="number" [label]="lang.map.default_lang"></app-input>
+
             </ng-container>
           </div>
         </div>

@@ -12,23 +12,25 @@ export class UserPreferences extends BaseModel<UserPreferences, UserPreferencesS
   isMailNotificationEnabled!: boolean;
   isSMSNotificationEnabled!: boolean;
   isPrivateUser!: boolean;
+  limitedCirculation!: boolean;
   defaultLang!: number;
+
 
   // extra
   alternateEmailListParsed: string[] = []; 
 
-  buildForm(controls?: boolean): any {
-    const {
-      isMailNotificationEnabled,
-      isSMSNotificationEnabled,
-      isPrivateUser,
-    } = this;
-    return {
-      isMailNotificationEnabled: controls ? [isMailNotificationEnabled] : isMailNotificationEnabled,
-      isSMSNotificationEnabled: controls ? [isSMSNotificationEnabled] : isSMSNotificationEnabled,
-      isPrivateUser: controls ? [isPrivateUser] : isPrivateUser,
-    }
-  }
+  // buildForm(controls?: boolean): any {
+  //   const {
+  //     isMailNotificationEnabled,
+  //     isSMSNotificationEnabled,
+  //     isPrivateUser,
+  //   } = this;
+  //   return {
+  //     isMailNotificationEnabled: controls ? [isMailNotificationEnabled] : isMailNotificationEnabled,
+  //     isSMSNotificationEnabled: controls ? [isSMSNotificationEnabled] : isSMSNotificationEnabled,
+  //     isPrivateUser: controls ? [isPrivateUser] : isPrivateUser,
+  //   }
+  // }
 
   // updateUserPreferences(generalUserId: number): Observable<UserPreferences> {
   //   return this.$$getService$$<UserPreferencesService>().updateUserPreferences(generalUserId, this);
