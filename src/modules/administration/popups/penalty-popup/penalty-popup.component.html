@@ -8,34 +8,22 @@
       <ng-container [formGroup]="form">
         <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
         <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-
-        <!-- <div class="w-100 h-100 flex justify-center"> -->
-        <!-- <mat-form-field class="self-center w-full" appearance="fill">
-            <mat-label>{{ lang.map.penalty_type }}</mat-label>
-            <mat-select formControlName="penaltyType">
-              <mat-option *ngFor="let penaltyType of penaltyTypes" [value]="penaltyType.lookupKey">
-                {{ penaltyType.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field> -->
-
         <app-select-input
           [label]="lang.map.penalty_type"
           formControlName="penaltyType"
           [options]="penaltyTypes"
           bindLabel="name"
           bindValue="lookupKey"></app-select-input>
-        <!-- </div> -->
-
-        <div class="w-100 h-100 flex text-center justify-start">
-          <mat-slide-toggle
-            formControlName="status"
-            labelPosition="before"
-            [name]="lang.map.change_status"
-            [checked]="model ? model.isActive() : false"
-            >{{ lang.map.change_status }}</mat-slide-toggle
-          >
-        </div>
+        <app-switch
+          formControlName="status"
+          [trueValue]="1"
+          [falseValue]="0"
+          [label]="lang.map.change_status"
+          [matTooltip]="statusTooltipText"></app-switch>
+        <!-- <div class="w-100 h-100 flex text-center justify-start">
+          <mat-slide-toggle formControlName="status" labelPosition="before" [name]="lang.map.change_status"
+            [checked]="model ? model.isActive() : false">{{ lang.map.change_status }}</mat-slide-toggle>
+        </div> -->
       </ng-container>
     </div>
   </div>

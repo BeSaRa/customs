@@ -25,8 +25,18 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   penaltyTypes: { name: string; lookupKey: number }[] =
     this.getTodisplayPenaltyTypes();
 
+  statusTooltipText =
+    this.model?.status === StatusTypes.ACTIVE
+      ? this.lang.map.active
+      : this.lang.map.in_active;
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+  }
+
+  protected override _afterBuildForm(): void {
+    super._afterBuildForm();
+    this.listenToStatusChange();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -38,9 +48,6 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return new Penalty().clone<Penalty>({
       ...this.model,
       ...this.form.value,
-      status: this.form.value.status
-        ? StatusTypes.ACTIVE
-        : StatusTypes.INACTIVE,
     });
   }
 
@@ -65,5 +72,17 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
           lookupKey: t.lookupKey,
         };
       });
+  }
+
+  protected listenToStatusChange() {
+    this.status?.valueChanges.subscribe((value) => {
+      this.statusTooltipText = value
+        ? this.lang.map.active
+        : this.lang.map.in_active;
+    });
+  }
+
+  get status() {
+    return this.form.get('status');
   }
 }
