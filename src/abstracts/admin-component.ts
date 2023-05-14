@@ -6,6 +6,7 @@ import {
   delay,
   exhaustMap,
   filter,
+  finalize,
   map,
   Observable,
   of,
@@ -46,6 +47,9 @@ export abstract class AdminComponent<
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
   protected loadComposite = true;
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
+
   abstract service: S;
   private paginate$ = new BehaviorSubject({
     offset: 0,
@@ -66,6 +70,7 @@ export abstract class AdminComponent<
   view$: Subject<M> = new Subject<M>();
   edit$: Subject<M> = new Subject<M>();
   delete$: Subject<M> = new Subject<M>();
+  status$: Subject<M> = new Subject<M>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
   abstract actions: ContextMenuActionContract<M>[];
@@ -98,13 +103,18 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
+              this.loadingSubject.next(true);
               return this.loadComposite
                 ? this.service
                     .loadComposite(paginationOptions, filter, sort)
-                    .pipe(ignoreErrors())
-                : this.service
-                    .load(paginationOptions, filter, sort)
-                    .pipe(ignoreErrors());
+                    .pipe(
+                      ignoreErrors(),
+                      finalize(() => this.loadingSubject.next(false))
+                    )
+                : this.service.load(paginationOptions, filter, sort).pipe(
+                    ignoreErrors(),
+                    finalize(() => this.loadingSubject.next(false))
+                  );
             }),
             tap(({ count }) => {
               this.length = count;
@@ -123,6 +133,7 @@ export abstract class AdminComponent<
     this._listenToEdit();
     this._listenToView();
     this._listenToDelete();
+    this._listenToChangeStatus();
   }
 
   paginate($event: PageEvent) {
@@ -235,7 +246,18 @@ export abstract class AdminComponent<
         this.reload$.next();
       });
   }
-
+  protected _listenToChangeStatus() {
+    this.status$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(exhaustMap((model) => model.toggleStatus()))
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_status_x_changed_success.change({
+            x: model.getNames(),
+          })
+        );
+      });
+  }
   /**
    * @description this method you can implement it, in child class if you need to add extra props to the create dialog
    */

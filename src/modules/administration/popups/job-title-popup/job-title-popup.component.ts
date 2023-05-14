@@ -24,27 +24,29 @@ export class JobTitlePopupComponent
 {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<JobTitle> = inject(MAT_DIALOG_DATA);
-
-  jobTypes: Lookup[] = inject(LookupService).lookups.userType;
+  jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
+    (usertype) => usertype.lookupKey !== 3
+  );
   jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     (x) => x.lookupKey != StatusTypes.DELETED
   );
   isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
-  currStatus: number = this.data.model.status;
-
-  isActive(): boolean {
-    return this.model.status === StatusTypes.ACTIVE;
-  }
+  currStatus: number = this.data.model.status || 0;
 
   toggleStatus(value: MatSlideToggleChange) {
-    const { checked } = value;
-    this.currStatus = checked ? 1 : 0;
+    this.form.get('status')?.setValue(value.checked ? 1 : 0);
   }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
 
+  protected override _afterBuildForm(): void {
+    super._afterBuildForm();
+    this.form.get('status')?.valueChanges.subscribe((value) => {
+      console.log('Value', value);
+    });
+  }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -54,7 +56,6 @@ export class JobTitlePopupComponent
     this.model.status = this.currStatus;
     return new JobTitle().clone<JobTitle>({
       ...this.model,
-
       ...this.form.value,
     });
   }
@@ -69,28 +70,11 @@ export class JobTitlePopupComponent
     this.dialogRef.close(this.model);
   }
 
-  getJobTitleStatus(jobTitleStatus: number): { status: string; class: string } {
-    const className: string =
-      this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-        ?.enName || 'Deactivated';
-    switch (this.lang.getCurrent().code) {
-      case LangCodes.AR:
-        return {
-          status:
-            this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-              ?.arName || 'غير فعالة',
-          class: className,
-        };
-      case LangCodes.EN:
-        return {
-          status: className,
-          class: className,
-        };
-      default:
-        return {
-          status: className,
-          class: className,
-        };
-    }
+  getJobTitleStatus(jobTitleStatus: number) {
+    return this.lang.getCurrent().code === LangCodes.AR
+      ? this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
+          ?.arName
+      : this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
+          ?.enName;
   }
 }
