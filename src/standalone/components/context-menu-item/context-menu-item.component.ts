@@ -30,7 +30,7 @@ export class ContextMenuItemComponent {
   @Input()
   item: unknown;
 
-  @ViewChild('menu')
+  @ViewChild('menu', { read: MatMenu, static: true })
   public childMenu!: MatMenu;
   @ViewChild(MatMenuTrigger)
   private trigger?: MatMenuTrigger;

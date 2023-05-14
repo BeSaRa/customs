@@ -42,4 +42,6 @@ export interface LangKeysContract {
   are_you_sure_you_want_to_logout: string;
   logged_out_successfully: string;
   delete_bulk: string;
+  clear_filter: string;
+  clear_all_filters: string;
 }

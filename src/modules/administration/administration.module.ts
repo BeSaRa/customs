@@ -25,6 +25,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { MatOptionModule } from '@angular/material/core';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -56,6 +61,11 @@ import { MatCardModule } from '@angular/material/card';
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    FilterColumnComponent,
+    SelectInputComponent,
+    MatOptionModule,
+    OptionTemplateDirective,
+    HighlightPipe,
   ],
 })
 export class AdministrationModule {}
