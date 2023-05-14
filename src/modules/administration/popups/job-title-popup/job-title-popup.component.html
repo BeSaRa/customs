@@ -13,16 +13,8 @@
           <mat-option *appOptionTemplate="let option" [value]="option.lookupKey">{{ option.getNames() }}</mat-option>
         </app-select-input>
 
-        <div class="flex flex-row pl-1 items-center justify-start space-x-6 rtl:space-x-reverse">
-          <!-- <mat-label> {{lang.map.status}}</mat-label> -->
-          <span class="text-slate-700 block font-medium">{{ lang.map.status }}</span>
-          <mat-slide-toggle
-            formControlName="status"
-            [name]="lang.map.status"
-            (change)="_ListenToStatusChange($event)"
-            [checked]="model.isActive()">
-            {{ getJobTitleStatus(currStatus) }}
-          </mat-slide-toggle>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch trueValue="1" falseValue="0" formControlName="status" [label]="lang.map.status"></app-switch>
         </div>
       </div>
     </ng-container>

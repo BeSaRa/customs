@@ -249,8 +249,14 @@ export abstract class AdminComponent<
   protected _listenToChangeStatus() {
     this.status$
       .pipe(takeUntil(this.destroy$))
-      .pipe(exhaustMap((model) => model.toggleStatus()))
+      .pipe(
+        exhaustMap((model) => {
+          this.loadingSubject.next(true);
+          return model.toggleStatus();
+        })
+      )
       .subscribe((model) => {
+        this.loadingSubject.next(false);
         this.toast.success(
           this.lang.map.msg_status_x_changed_success.change({
             x: model.getNames(),

@@ -25,11 +25,12 @@ export class JobTitlePopupComponent
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<JobTitle> = inject(MAT_DIALOG_DATA);
   jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
-    // exclude 'All' entry from lookupMaps that backend returns waiting for Ebrahim to fix that
+    // exclude 'All' entry from lookupMaps that backend returns, waiting for Ebrahim to fix that
     (usertype) => usertype.lookupKey !== 3
   );
   jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
-    (x) => x.lookupKey != StatusTypes.DELETED
+    // waiting for Ebrahim to filter deleted status
+    (x) => x.lookupKey !== StatusTypes.DELETED
   );
 
   // getter and setter for form status control
@@ -39,14 +40,6 @@ export class JobTitlePopupComponent
 
   set status(val: number) {
     this.form.get('status')?.setValue(val);
-  }
-
-  isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
-  currStatus: number = this.data.model.status || 0;
-
-  _ListenToStatusChange(value: MatSlideToggleChange) {
-    this.currStatus = value.checked ? 1 : 0;
-    this.status = value.checked ? 1 : 0;
   }
 
   _buildForm(): void {
