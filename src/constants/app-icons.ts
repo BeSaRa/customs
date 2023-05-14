@@ -12,6 +12,8 @@ export const AppIcons = {
   FILTER_OUTLINE: 'filter-outline',
   TEAM: 'account-group',
   LOGOUT: 'logout',
+  FILTER_OUTLINE: 'filter-outline',
+  FILTER_REMOVE: 'filter-remove',
 };
 
 export type AppIconsType = typeof AppIcons;

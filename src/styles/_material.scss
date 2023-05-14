@@ -94,3 +94,20 @@ $customs-theme: mat.define-light-theme(
 .mat-mdc-paginator {
   color: var(--mdc-theme-text-primary-on-background);
 }
+
+.cdk-column-select {
+  width: 40px;
+}
+
+html[dir="ltr"] {
+  .cdk-column-select {
+    padding-right: 0 !important;
+    width: 40px;
+  }
+}
+
+html[dir="rtl"] {
+  .cdk-column-select {
+    padding-left: 0 !important;
+  }
+}

@@ -23,6 +23,10 @@ import { TeamComponent } from '@modules/administration/components/team/team.comp
 import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NameFilterComponent } from '@standalone/components/name-filter/name-filter.component';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { MatOptionModule } from '@angular/material/core';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
@@ -53,6 +57,10 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     MatMenuModule,
     MatSlideToggleModule,
     NameFilterComponent,
+    FilterColumnComponent,
+    SelectInputComponent,
+    MatOptionModule,
+    OptionTemplateDirective,
     HighlightPipe,
   ],
 })
