@@ -14,7 +14,7 @@
           [options]="penaltyTypes"
           [label]="lang.map.penalty_type"
           bindValue="lookupKey"
-          bindLabel="{{ getDisplayName() }}"></app-select-input>
+          [bindLabel]="getDisplayName()"></app-select-input>
 
         <app-select-input
           formControlName="violationClassificationId"
@@ -23,14 +23,12 @@
           bindValue="id"
           bindLabel="{{ getDisplayName() }}"></app-select-input>
         <app-input [label]="lang.map.penalty_grace_period" formControlName="penaltyGracePeriod" type="number" />
-        <mat-slide-toggle
+        <app-switch
           formControlName="status"
-          [matTooltip]="model.isActive() ? lang.map.active : lang.map.in_active"
-          [name]="lang.map.change_status"
-          [checked]="model.isActive()"
-          (change)="_listenToStatusChange($event)"
-          >{{ lang.map.change_status }}</mat-slide-toggle
-        >
+          [trueValue]="1"
+          [falseValue]="0"
+          [label]="lang.map.change_status"
+          [matTooltip]="statusTooltip"></app-switch>
       </div>
     </ng-container>
   </div>

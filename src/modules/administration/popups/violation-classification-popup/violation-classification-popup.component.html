@@ -12,16 +12,14 @@
           formControlName="penaltyType"
           [options]="penaltyTypes"
           [label]="lang.map.penalty_type"
-          [bindValue]="'id'"
+          bindValue="lookupKey"
           [bindLabel]="getDisplayName()"></app-select-input>
-        <mat-slide-toggle
+        <app-switch
           formControlName="status"
-          [name]="lang.map.change_status"
-          [matTooltip]="model.isActive() ? lang.map.active : lang.map.in_active"
-          [checked]="model.isActive()"
-          (change)="_listenToStatusChange($event)"
-          >{{ lang.map.change_status }}</mat-slide-toggle
-        >
+          [trueValue]="1"
+          [falseValue]="0"
+          [label]="lang.map.change_status"
+          [matTooltip]="statusTooltip"></app-switch>
       </ng-container>
     </div>
   </div>

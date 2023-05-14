@@ -26,18 +26,17 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   violationClassificationService = inject(ViolationClassificationService);
   classifications!: any[];
   allclassifications!: any[];
-  cuurrentStatus!: boolean;
-
+  statusTooltip = this.lang.map.in_active;
   _buildForm(): void {
-    this._getViolationClassifications();
+    this.getViolationClassifications();
     this.form = this.fb.group(this.model.buildForm(true));
   }
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
 
-    this._listenToPenaltyTypeChange();
-    //this._listenToStatusChange();
+    this.listenToPenaltyTypeChange();
+    this.listenToStatusChange();
   }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
@@ -60,7 +59,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
-  private _listenToPenaltyTypeChange() {
+  protected listenToPenaltyTypeChange() {
     this.penaltyType?.valueChanges.subscribe((penaltyTypeValue) => {
       this.classifications = this.allclassifications.filter(
         (classification) => {
@@ -69,7 +68,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       );
     });
   }
-  protected _getViolationClassifications() {
+  protected getViolationClassifications() {
     this.violationClassificationService.loadAsLookups().subscribe((data) => {
       this.allclassifications = data;
       this.classifications =
@@ -82,8 +81,12 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
             });
     });
   }
-  _listenToStatusChange(status: MatSlideToggleChange) {
-    this.status?.setValue(status.checked ? 1 : 0);
+  protected listenToStatusChange() {
+    this.status?.valueChanges.subscribe(() => {
+      this.statusTooltip = this.status?.value
+        ? this.lang.map.active
+        : this.lang.map.in_active;
+    });
   }
   get penaltyType() {
     return this.form.get('penaltyType');

@@ -32,6 +32,7 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { MatOptionModule } from '@angular/material/core';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     MatOptionModule,
     OptionTemplateDirective,
     HighlightPipe,
+    SwitchComponent,
   ],
 })
 export class AdministrationModule {}
