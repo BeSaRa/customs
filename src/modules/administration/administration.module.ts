@@ -30,6 +30,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { MatCardModule } from '@angular/material/card';
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    SwitchComponent,
   ],
 })
 export class AdministrationModule {}
