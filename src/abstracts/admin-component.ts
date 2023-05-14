@@ -115,10 +115,11 @@ export abstract class AdminComponent<
               this.length = count;
               this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map((response) =>
-              response.rs.map((element) =>
-                element.clone<M>({ isSystem: true } as any as Partial<M>)
-              )
+            map(
+              (response) => response.rs
+              // response.rs.map((element) =>
+              //   element.clone<M>({ isSystem: true } as any as Partial<M>)
+              // )
             )
           );
         })

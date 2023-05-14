@@ -5,6 +5,9 @@ import { PenaltyService } from '@services/penalty.service';
 import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
 
 @Component({
   selector: 'app-penalty',
@@ -63,4 +66,12 @@ export class PenaltyComponent extends AdminComponent<
       },
     },
   ];
+  // here we have a new implementation for displayed/filter Columns for the table
+  columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new NoneFilterColumn('status'),
+    new NoneFilterColumn('actions')
+  ).attacheFilter(this.filter$);
 }

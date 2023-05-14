@@ -27,13 +27,19 @@
     <!-- arName arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
+      <td mat-cell *matCellDef="let element">
+        <!-- {{ element.arName }} -->
+        <span [innerHTML]="element.arName | highlight : getFilterStringColumn('arName')"></span>
+      </td>
     </ng-container>
 
     <!-- enName enName -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+      <td mat-cell *matCellDef="let element">
+        <!-- {{ element.enName }} -->
+        <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
+      </td>
     </ng-container>
 
     <!-- status -->
@@ -72,7 +78,19 @@
       </td>
     </ng-container>
 
+    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
+      <!-- localizationKey Column -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+        </th>
+      </ng-container>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
     <!--          (contextmenu)="contextMenu.open($event, element)"-->
     <tr
       mat-row
