@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { JobTitle } from '@models/job-title';
 import { JobTitleService } from '@services/job-title.service';
@@ -7,6 +7,9 @@ import { LookupService } from '@services/lookup.service';
 import { LangCodes } from '@enums/lang-codes';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { AppIcons } from '@constants/app-icons';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 
 @Component({
   selector: 'app-job-title',
@@ -29,6 +32,38 @@ export class JobTitleComponent extends AdminComponent<
     'jobType',
     'actions',
   ];
+  actions: ContextMenuActionContract<JobTitle>[] = [
+    {
+      name: 'view',
+      type: 'action',
+      label: 'view',
+      icon: AppIcons.VIEW,
+      callback: (item) => {
+        this.view$.next(item);
+      },
+    },
+    {
+      name: 'edit',
+      type: 'action',
+      label: 'edit',
+      icon: AppIcons.EDIT,
+      callback: (item) => {
+        this.edit$.next(item);
+      },
+    },
+    {
+      name: 'delete',
+      type: 'action',
+      label: 'delete',
+      icon: AppIcons.DELETE,
+      callback: (item) => {
+        this.delete$.next(item);
+      },
+    },
+  ];
+
+  @ViewChild('subTrigger', { read: MatMenuTrigger })
+  trigger!: MatMenuTrigger;
 
   getJobTypeName(jobType: number): string {
     switch (this.lang.getCurrent().code) {

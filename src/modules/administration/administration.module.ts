@@ -23,6 +23,8 @@ import { JobTitleComponent } from '@modules/administration/components/job-title/
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatMenuModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
   ],
 })
 export class AdministrationModule {}

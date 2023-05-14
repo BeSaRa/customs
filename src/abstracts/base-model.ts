@@ -10,7 +10,8 @@ import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
 import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dialog-service-contract';
 import { MatDialogConfig } from '@angular/material/dialog';
-
+import { StatusTypes } from '@enums/status-types';
+import { map } from 'rxjs/operators';
 export abstract class BaseModel<
     M,
     S extends
@@ -31,6 +32,7 @@ export abstract class BaseModel<
   id!: number;
   override arName!: string;
   override enName!: string;
+  status!: number;
   clientData!: string;
   updatedBy!: number;
   updatedOn!: string;
@@ -46,20 +48,40 @@ export abstract class BaseModel<
     return service;
   }
 
-  activate(id: PrimaryType): Observable<M> {
-    return this.$$getService$$<S>().activate(id);
+  activate(id: PrimaryType): Observable<StatusTypes> {
+    return this.$$getService$$<S>()
+      .activate(id)
+      .pipe(map(() => StatusTypes.ACTIVE));
   }
 
   create(model: M): Observable<M> {
     return this.$$getService$$<S>().createFull(model);
   }
 
-  deactivate(id: PrimaryType): Observable<M> {
-    return this.$$getService$$<S>().deactivate(id);
+  deactivate(id: PrimaryType): Observable<StatusTypes> {
+    return this.$$getService$$<S>()
+      .deactivate(id)
+      .pipe(map(() => StatusTypes.INACTIVE));
   }
 
   delete(): Observable<M> {
     return this.$$getService$$<S>().delete(this.id as PrimaryType);
+  }
+  isActive(): boolean {
+    return this.status === StatusTypes.ACTIVE;
+  }
+
+  toggleStatus(): Observable<M> {
+    return (
+      this.isActive()
+        ? this.deactivate(this.id as PrimaryType)
+        : this.activate(this.id as PrimaryType)
+    ).pipe(
+      map((status) => {
+        this.status = status;
+        return this as unknown as M;
+      })
+    );
   }
 
   save(): Observable<M> {
