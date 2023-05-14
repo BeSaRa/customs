@@ -1,0 +1,8 @@
+<ng-container *ngIf="!hasCustomControl">
+  <mat-slide-toggle [ngClass]="{ 'cursor-no-drop': disabled }" (click)="switchTouch()" [formControl]="control"
+    ><span [ngClass]="{ 'cursor-no-drop': disabled, 'cursor-pointer': !disabled }"> {{ label }}</span></mat-slide-toggle
+  >
+</ng-container>
+<ng-container *ngIf="hasCustomControl">
+  <ng-content select="[appControl]"></ng-content>
+</ng-container>
