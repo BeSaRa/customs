@@ -1,4 +1,4 @@
-import { NoneFilterColumn } from './none-filter-column';
+//import { NoneFilterColumn } from './none-filter-column';
 
 describe('NoneFilterColumn', () => {
   it('should create an instance', () => {
