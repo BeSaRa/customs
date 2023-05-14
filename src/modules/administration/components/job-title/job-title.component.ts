@@ -10,6 +10,10 @@ import { StatusTypes } from '@enums/status-types';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
 
 @Component({
   selector: 'app-job-title',
@@ -22,16 +26,32 @@ export class JobTitleComponent extends AdminComponent<
   JobTitleService
 > {
   service = inject(JobTitleService);
-  jobTypes: Lookup[] = inject(LookupService).lookups.userType;
+  jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
+    (x) => x.lookupKey !== 3
+  ); // exclude 'All' entry from lookupMaps that backend returns
+  // waiting for Ebrahim to fix that
   jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus;
-  displayedColumns: string[] = [
-    'select',
-    'arName',
-    'enName',
-    'status',
-    'jobType',
-    'actions',
-  ];
+  isArabic: boolean = this.lang.getCurrent().code === LangCodes.AR;
+
+  // here we have a new implementation for displayed/filter Columns for the table
+  columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new SelectFilterColumn(
+      'status',
+      this.jobStatus,
+      'lookupKey',
+      this.isArabic ? 'arName' : 'enName'
+    ),
+    new SelectFilterColumn(
+      'jobType',
+      this.jobTypes,
+      'lookupKey',
+      this.isArabic ? 'arName' : 'enName'
+    ),
+    new NoneFilterColumn('actions')
+  ).attacheFilter(this.filter$);
   actions: ContextMenuActionContract<JobTitle>[] = [
     {
       name: 'view',
@@ -65,48 +85,12 @@ export class JobTitleComponent extends AdminComponent<
   @ViewChild('subTrigger', { read: MatMenuTrigger })
   trigger!: MatMenuTrigger;
 
-  getJobTypeName(jobType: number): string {
-    switch (this.lang.getCurrent().code) {
-      case LangCodes.AR:
-        return (
-          this.jobTypes.find((type) => type.lookupKey === jobType)?.arName || ''
-        );
-      case LangCodes.EN:
-        return (
-          this.jobTypes.find((type) => type.lookupKey === jobType)?.enName || ''
-        );
-      default:
-        return (
-          this.jobTypes.find((type) => type.lookupKey === jobType)?.arName || ''
-        );
-    }
+  getJobTypeName(jobType: number) {
+    return this.jobTypes.find((type) => type.lookupKey === jobType)?.getNames();
   }
-
-  showEditAndDeleteAction(jobTitleStatus: number) {
-    return jobTitleStatus !== StatusTypes.DELETED;
-  }
-  getJobTitleStatus(jobTitleStatus: number): { status: string; class: string } {
-    const className: string =
-      this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-        ?.enName || '';
-    switch (this.lang.getCurrent().code) {
-      case LangCodes.AR:
-        return {
-          status:
-            this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-              ?.arName || '',
-          class: className,
-        };
-      case LangCodes.EN:
-        return {
-          status: className,
-          class: className,
-        };
-      default:
-        return {
-          status: className,
-          class: className,
-        };
-    }
+  getJobTitleStatus(jobTitleStatus: number) {
+    return this.jobStatus
+      .find((status) => status.lookupKey === jobTitleStatus)
+      ?.getNames();
   }
 }

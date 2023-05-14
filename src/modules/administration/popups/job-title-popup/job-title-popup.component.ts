@@ -25,16 +25,28 @@ export class JobTitlePopupComponent
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<JobTitle> = inject(MAT_DIALOG_DATA);
   jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
+    // exclude 'All' entry from lookupMaps that backend returns waiting for Ebrahim to fix that
     (usertype) => usertype.lookupKey !== 3
   );
   jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     (x) => x.lookupKey != StatusTypes.DELETED
   );
+
+  // getter and setter for form status control
+  get status(): number {
+    return this.form.get('status')?.value;
+  }
+
+  set status(val: number) {
+    this.form.get('status')?.setValue(val);
+  }
+
   isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
   currStatus: number = this.data.model.status || 0;
 
-  toggleStatus(value: MatSlideToggleChange) {
-    this.form.get('status')?.setValue(value.checked ? 1 : 0);
+  _ListenToStatusChange(value: MatSlideToggleChange) {
+    this.currStatus = value.checked ? 1 : 0;
+    this.status = value.checked ? 1 : 0;
   }
 
   _buildForm(): void {
@@ -43,9 +55,7 @@ export class JobTitlePopupComponent
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
-    this.form.get('status')?.valueChanges.subscribe((value) => {
-      console.log('Value', value);
-    });
+    if (!this.status) this.status = 0; // since an undefined is passed to the OpenCreateDialog, we assume that the default status when creation is "inactive"
   }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
@@ -53,7 +63,6 @@ export class JobTitlePopupComponent
   }
 
   protected _prepareModel(): JobTitle | Observable<JobTitle> {
-    this.model.status = this.currStatus;
     return new JobTitle().clone<JobTitle>({
       ...this.model,
       ...this.form.value,
@@ -71,10 +80,8 @@ export class JobTitlePopupComponent
   }
 
   getJobTitleStatus(jobTitleStatus: number) {
-    return this.lang.getCurrent().code === LangCodes.AR
-      ? this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-          ?.arName
-      : this.jobStatus.find((status) => status.lookupKey === jobTitleStatus)
-          ?.enName;
+    return this.jobStatus
+      .find((status) => status.lookupKey === jobTitleStatus)
+      ?.getNames();
   }
 }
