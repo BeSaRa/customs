@@ -5,4 +5,6 @@ export interface GetNamesContract extends NamesContract {
   getNames(): string;
 
   getLangService(): LangService;
+
+  getDisplayName(): string;
 }

@@ -11,6 +11,10 @@ import { Lookup } from '@models/lookup';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
 
 @Component({
   selector: 'app-violation-classification',
@@ -23,16 +27,9 @@ export class ViolationClassificationComponent extends AdminComponent<
   ViolationClassificationService
 > {
   service = inject(ViolationClassificationService);
-  displayedColumns: string[] = [
-    'select',
-    'arName',
-    'enName',
-    'penaltyType',
-    'actions',
-  ];
+
   langCode = this.lang.getCurrent().code;
-  isArabic = this.langCode === LangCodes.AR;
-  types = inject(LookupService).lookups.penaltyType;
+  penaltyTypes = inject(LookupService).lookups.penaltyType;
   actions: ContextMenuActionContract<ViolationClassification>[] = [
     {
       name: 'view',
@@ -62,4 +59,17 @@ export class ViolationClassificationComponent extends AdminComponent<
       },
     },
   ];
+  // here we have a new implementation for displayed/filter Columns for the table
+  columnsWrapper: ColumnsWrapper<ViolationClassification> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new SelectFilterColumn(
+      'penaltyType',
+      this.penaltyTypes,
+      'lookupKey',
+      this.getDisplayName()
+    ),
+    new NoneFilterColumn('actions')
+  ).attacheFilter(this.filter$);
 }

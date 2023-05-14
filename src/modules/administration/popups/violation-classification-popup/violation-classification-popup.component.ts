@@ -9,6 +9,7 @@ import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
 import { LangService } from '@services/lang.service';
 import { LangCodes } from '@enums/lang-codes';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-violation-classification-popup',
@@ -19,16 +20,21 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationClassification> =
     inject(MAT_DIALOG_DATA);
-  types: any[] = inject(LookupService).lookups.penaltyType.map((type) => {
-    return { id: type.lookupKey, arName: type.arName, enName: type.enName };
-  });
+  types: any[] = inject(LookupService).lookups.penaltyType;
   penaltyTypes!: any[];
-  isArabic = inject(LangService).getCurrent().code === LangCodes.AR;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
+  protected override _afterBuildForm(): void {
+    super._afterBuildForm();
 
+    this.penaltyTypes = this.types.map((type) => {
+      return { id: type.lookupKey, arName: type.arName, enName: type.enName };
+    });
+
+    //this._listenToStatusChange();
+  }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -51,5 +57,11 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
     );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
+  }
+  _listenToStatusChange(status: MatSlideToggleChange) {
+    this.status?.setValue(status.checked ? 1 : 0);
+  }
+  get status() {
+    return this.form.get('status');
   }
 }

@@ -9,6 +9,10 @@ import { ViolationClassificationService } from '@services/violation-classificati
 import { AppIcons } from '@constants/app-icons';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
 
 @Component({
   selector: 'app-violation-type',
@@ -21,31 +25,17 @@ export class ViolationTypeComponent extends AdminComponent<
   ViolationTypeService
 > {
   service = inject(ViolationTypeService);
-  displayedColumns: string[] = [
-    'select',
-    'arName',
-    'enName',
-    'penaltyType',
-    'violationClassificationId',
-    'actions',
-  ];
-  filterColumns: string[] = [
-    'filterArName',
-    'filterEnName',
-    'filterPenaltyType',
-    'filterClassification',
-  ];
 
   langCode = this.lang.getCurrent().code;
-  isArabic = this.langCode === LangCodes.AR;
   types = inject(LookupService).lookups.penaltyType;
   violationClassificationService = inject(ViolationClassificationService);
+  columnsWrapper: ColumnsWrapper<ViolationType> = new ColumnsWrapper(
+    new NoneFilterColumn('select')
+  ).attacheFilter(this.filter$);
   classifications!: any[];
   override ngOnInit(): void {
     super.ngOnInit();
-    this.violationClassificationService.loadAsLookups().subscribe((data) => {
-      this.classifications = data;
-    });
+    this._getViolationClassifications();
   }
   actions: ContextMenuActionContract<ViolationType>[] = [
     {
@@ -76,4 +66,28 @@ export class ViolationTypeComponent extends AdminComponent<
       },
     },
   ];
+  // here we have a new implementation for displayed/filter Columns for the table
+  protected _getViolationClassifications() {
+    this.violationClassificationService.loadAsLookups().subscribe((data) => {
+      this.classifications = data;
+      this.columnsWrapper = new ColumnsWrapper(
+        new NoneFilterColumn('select'),
+        new TextFilterColumn('arName'),
+        new TextFilterColumn('enName'),
+        new SelectFilterColumn(
+          'penaltyType',
+          this.types,
+          'lookupKey',
+          this.getDisplayName()
+        ),
+        new SelectFilterColumn(
+          'violationClassificationId',
+          this.classifications,
+          'id',
+          this.getDisplayName()
+        ),
+        new NoneFilterColumn('actions')
+      ).attacheFilter(this.filter$);
+    });
+  }
 }

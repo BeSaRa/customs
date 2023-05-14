@@ -4,46 +4,24 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+    <div class="grid grid-cols-2 gap-4">
       <ng-container [formGroup]="form">
-        <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
-        <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
-        <!-- <select formControlName="penaltyType">
-          <option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey">
-            {{ penaltyType.lookupStrKey }}
-          </option>
-        </select> -->
-        <!-- <mat-select formControlName="penaltyType">
-          <mat-option>{{ lang.map.penalty_type }}</mat-option>
-
-          <mat-option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey"
-            >{{ isArabic ? penaltyType.arName : penaltyType.enName }}
-          </mat-option>
-        </mat-select> -->
-        <!-- <mat-form-field appearance="outline">
-          <mat-label>{{ lang.map.penalty_type }}</mat-label>
-          <mat-select formControlName="penaltyType">
-            <mat-option *ngFor="let penaltyType of types" [value]="penaltyType.lookupKey"
-              >{{ isArabic ? penaltyType.arName : penaltyType.enName }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get('penaltyType')?.errors?.['required']">required_field </mat-error>
-        </mat-form-field> -->
-        <app-select
+        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-select-input
           formControlName="penaltyType"
-          [options]="types"
+          [options]="penaltyTypes"
           [label]="lang.map.penalty_type"
-          [isArabic]="isArabic"></app-select>
-        <div class="flex items-center justify-items-center">
-          <mat-label>{{ lang.map.change_status }}:&nbsp;&nbsp;</mat-label>
-
-          <span matTextSuffix>{{ lang.map.in_active }}&nbsp;</span>
-          <mat-slide-toggle
-            formControlName="status"
-            [name]="lang.map.change_status"
-            [checked]="model ? model.isActive() : false"></mat-slide-toggle
-          ><span matTextPrefix>{{ lang.map.active }}&nbsp;</span>
-        </div>
+          [bindValue]="'id'"
+          [bindLabel]="getDisplayName()"></app-select-input>
+        <mat-slide-toggle
+          formControlName="status"
+          [name]="lang.map.change_status"
+          [matTooltip]="model.isActive() ? lang.map.active : lang.map.in_active"
+          [checked]="model.isActive()"
+          (change)="_listenToStatusChange($event)"
+          >{{ lang.map.change_status }}</mat-slide-toggle
+        >
       </ng-container>
     </div>
   </div>
