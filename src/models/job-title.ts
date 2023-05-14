@@ -9,8 +9,8 @@ const { send, receive } = new JobTitleInterceptor();
 @InterceptModel({ send, receive })
 export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
   $$__service_name__$$ = 'JobTitleService';
+
   jobType!: number;
-  status!: number;
   isSystem!: boolean;
 
   buildForm(controls = false): object {

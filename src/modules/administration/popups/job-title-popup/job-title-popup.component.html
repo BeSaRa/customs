@@ -4,10 +4,10 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
-      <ng-container [formGroup]="form">
-        <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
-        <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-2 gap-4">
+        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
         <mat-form-field appearance="fill">
           <mat-label>{{ lang.map.job_type }}</mat-label>
           <mat-select formControlName="jobType">
@@ -17,39 +17,16 @@
           </mat-select>
           <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
         </mat-form-field>
-        <!-- <mat-form-field appearance="fill">
-          <mat-label>{{ lang.map.status }}</mat-label>
-          <mat-select formControlName="status">
-            <mat-option *ngFor="let status of jobStatus" [value]="status.lookupKey">{{ isArabic ? status.arName :
-              status.enName }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="form.get('jobType')?.errors?.['required']">required_field </mat-error>
-        </mat-form-field> -->
-        <div class="row">
-          <div class="column right" style="text-align: right">
-            <mat-label [ngClass]="getJobTitleStatus(currStatus).class">{{
-              getJobTitleStatus(currStatus).status
-            }}</mat-label>
-          </div>
-
-          <div class="column left">
-            <mat-slide-toggle
-              class="slider"
-              [ngClass]="getJobTitleStatus(currStatus).class"
-              flex
-              formControlName="status"
-              [(ngModel)]="currStatus"
-              (change)="toggleStatus($event)"
-              [checked]="isActive()">
-            </mat-slide-toggle>
-          </div>
-          <div class="column middle">
-            <mat-label>{{ lang.map.status }}</mat-label>
-          </div>
-        </div>
-      </ng-container>
-    </div>
+        <mat-slide-toggle
+          class="text-center grid items-center justify-center"
+          formControlName="status"
+          [name]="lang.map.status"
+          (change)="toggleStatus($event)"
+          [checked]="model.isActive()">
+          {{ getJobTitleStatus(model.status) }}
+        </mat-slide-toggle>
+      </div>
+    </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
