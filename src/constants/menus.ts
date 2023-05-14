@@ -17,4 +17,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.LOCALIZATION,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.INTERNAL_USER,
+    langKey: 'menu_internal_user',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.INTERNAL_USER,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

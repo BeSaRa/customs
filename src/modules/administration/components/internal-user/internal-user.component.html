@@ -1,0 +1,149 @@
+<div
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+    {{ lang.map.menu_internal_user }}
+  </h1>
+  <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
+  <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
+</div>
+<div class="shadow">
+  <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          (change)="$event ? toggleAllRows() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(element) : null"
+          [checked]="selection.isSelected(element)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <!-- domainName -->
+    <ng-container matColumnDef="domainName">
+      <th mat-header-cell mat-sort-header="domainName" *matHeaderCellDef>{{ lang.map.domain_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.domainName }}</td>
+    </ng-container>
+
+    <!-- arName -->
+    <ng-container matColumnDef="arName">
+      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
+    </ng-container>
+    
+    <!-- enName -->
+    <ng-container matColumnDef="enName">
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+    </ng-container>
+    
+    <!-- empNum -->
+    <ng-container matColumnDef="empNum">
+      <th mat-header-cell mat-sort-header="empNum" *matHeaderCellDef>{{ lang.map.employee_number }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.empNum }}</td>
+    </ng-container>
+
+    <!-- email -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell mat-sort-header="email" *matHeaderCellDef>{{ lang.map.email }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+    </ng-container>
+
+    <!-- phoneNumber -->
+    <ng-container matColumnDef="phoneNumber">
+      <th mat-header-cell mat-sort-header="phoneNumber" *matHeaderCellDef>{{ lang.map.phone_number }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.phoneNumber }}</td>
+    </ng-container>
+
+    <!-- signature -->
+    <!-- <ng-container matColumnDef="signature">
+      <th mat-header-cell mat-sort-header="signature" *matHeaderCellDef>{{ lang.map.signature }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.signature }}</td>
+    </ng-container> -->
+
+    <!-- role -->
+    <!-- <ng-container matColumnDef="role">
+      <th mat-header-cell mat-sort-header="role" *matHeaderCellDef>{{ lang.map.role }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.role }}</td>
+    </ng-container> -->
+
+    <!-- limited circulation -->
+    <!-- <ng-container matColumnDef="limitedCirculation">
+      <th mat-header-cell mat-sort-header="limitedCirculation" *matHeaderCellDef>{{ lang.map.limited_circulation }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.limitedCirculation }}</td>
+    </ng-container> -->
+
+    <!-- Private User -->
+    <!-- <ng-container matColumnDef="privateUser">
+      <th mat-header-cell mat-sort-header="privateUser" *matHeaderCellDef>{{ lang.map.private_user }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.privateUser }}</td>
+    </ng-container> -->
+
+    <!-- Email Notification -->
+    <!-- <ng-container matColumnDef="emailNotification">
+      <th mat-header-cell mat-sort-header="emailNotification" *matHeaderCellDef>{{ lang.map.email_notification }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.emailNotification }}</td>
+    </ng-container> -->
+
+    <!-- SMS notifications -->
+    <!-- <ng-container matColumnDef="SMSNotifications">
+      <th mat-header-cell mat-sort-header="SMSNotifications" *matHeaderCellDef>{{ lang.map.SMS_notifications }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.SMSNotifications }}</td>
+    </ng-container> -->
+
+    <!-- permissions -->
+    <!-- <ng-container matColumnDef="permissions">
+      <th mat-header-cell mat-sort-header="permissions" *matHeaderCellDef>{{ lang.map.permissions }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.permissions }}</td>
+    </ng-container> -->
+
+    <!-- actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
+      <td mat-cell *matCellDef="let element">
+        <div class="flex">
+          <app-icon-button 
+            [matTooltip]="lang.map.view" 
+            (click)="view$.next(element)" 
+            icon="VIEW"></app-icon-button>
+          <app-icon-button 
+            [matTooltip]="lang.map.edit" 
+            (click)="edit$.next(element)" 
+            icon="EDIT"></app-icon-button>
+          <app-icon-button
+            [matTooltip]="lang.map.delete"
+            (click)="delete$.next(element)"
+            icon="DELETE"></app-icon-button>
+          <!-- <app-icon-button
+            [matTooltip]="lang.map.user_preferences"
+            (click)="openUserPreferences(element.userPreferences, element)"
+            icon="ACCOUNT_EDIT"></app-icon-button> -->
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      (contextmenu)="contextMenu.open($event, element)"
+      *matRowDef="let element; columns: displayedColumns"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+    </tr>
+  </table>
+  <mat-paginator
+    class="border-t border-gray-200"
+    (page)="paginate($event)"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageSize]="limit"
+    [showFirstLastButtons]="showFirstLastButtons"
+    [length]="length">
+  </mat-paginator>
+  <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+</div>
+

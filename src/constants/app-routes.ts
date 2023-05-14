@@ -3,4 +3,5 @@ export const AppRoutes = {
   HOME: 'home',
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
+  INTERNAL_USER: 'internal-user'
 };

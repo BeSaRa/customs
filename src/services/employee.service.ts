@@ -22,7 +22,7 @@ export class EmployeeService {
   }
 
   private intercept(data: LoginDataContract): LoginDataContract {
-    data.internalUser = new InternalUser().clone({
+    data.internalUser = new InternalUser().clone<InternalUser>({
       ...data.internalUser,
     });
     // set the lookup after login
@@ -65,5 +65,13 @@ export class EmployeeService {
     return !permissions.some((permission) => {
       return !this.permissionMap.has(permission);
     });
+  }
+
+  getEmployee(): InternalUser | undefined {
+    return this.loginData?.internalUser;
+  }
+
+  clearEmployee() {
+    this.loginData = undefined;
   }
 }

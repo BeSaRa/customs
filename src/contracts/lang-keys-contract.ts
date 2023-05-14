@@ -31,4 +31,25 @@ export interface LangKeysContract {
   add: string;
   filter: string;
   change_status: string;
+  menu_internal_user : string;
+  domain_name: string;
+  employee_number: string;
+  email: string;
+  phone_number: string;
+  signature: string;
+  role: string;
+  limited_circulation: string;
+  private_user: string;
+  sms_notifications: string;
+  logout: string;
+  are_you_sure_you_want_to_logout: string;
+  logged_out_successfully: string;
+  delete_bulk: string;
+  mail_notifications: string;
+  qid:string
+  lbl_basic_info:string
+  lbl_user_preferences:string
+  lbl_permissions:string
+  lbl_status:string
+  lbl_custom_role:string
 }

@@ -1,0 +1,88 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_internal_user }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <mat-tab-group>
+      <mat-tab [label]="lang.map.lbl_basic_info"> 
+        <div  class="grid grid-cols-4 gap-4 [&>*]:col-span-2 mt-4">
+          <ng-container [formGroup]="form">
+            <app-input formControlName="domainName" [label]="lang.map.domain_name"></app-input>
+            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+            <app-input formControlName="empNum" type="number" [label]="lang.map.employee_number"></app-input>
+            <app-input formControlName="email" [label]="lang.map.email"></app-input>
+            <app-input formControlName="phoneNumber" type="number" [label]="lang.map.phone_number"></app-input>
+  
+            <div>
+              <span class="block font-medium">{{ lang.map.lbl_status }}</span>
+              <mat-form-field class='select_buttons'>
+                <mat-select name="status" formControlName="status">
+                  <mat-option *ngFor="let option of statusList" [value]="option.lookupKey">
+                    {{option.getName()}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+  
+          </ng-container>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="lang.map.lbl_user_preferences">
+        <div class="grid grid-cols-4 gap-4 [&>*]:col-span-2  mt-4">
+          <div [formGroup]="form">
+            <ng-container formGroupName="userPreferences">
+              <!-- mail notifications -->
+              <div class="flex items-center mr-4">
+                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isMailNotificationEnabled"
+                        formControlName="isMailNotificationEnabled">
+                <label class="ml-2 block font-medium"
+                        for="isMailNotificationEnabled">{{lang.map.mail_notifications}}</label>
+              </div>
+      
+              <!-- sms notifications -->
+              <div class="flex items-center mr-4">
+                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isSMSNotificationEnabled"
+                        formControlName="isSMSNotificationEnabled">
+                <label class="ml-2 block font-medium"
+                        for="isSMSNotificationEnabled">{{lang.map.sms_notifications}}</label>
+              </div>
+              
+              <!-- is private user -->
+              <div class="flex items-center mr-4">
+                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isPrivateUser"
+                        formControlName="isPrivateUser">
+                <label class="ml-2 block font-medium"
+                        for="isPrivateUser">{{lang.map.private_user}}</label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="lang.map.lbl_permissions"> 
+        <div class="mt-4">
+          <ng-container [formGroup]="form">
+            <div formGroupName="userPermissions">
+              <span class="block font-medium">{{ lang.map.lbl_permissions }}</span>
+              <mat-form-field class='select_buttons'>
+                <mat-select name="permissions" formControlName="permissions" multiple>
+                  <mat-option *ngFor="let permission of permissions" [value]="permission.id">
+                    {{permission.enName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ng-container>  
+        </div>  
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>
+
+

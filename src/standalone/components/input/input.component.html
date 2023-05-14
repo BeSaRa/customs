@@ -9,6 +9,7 @@
       class="peer absolute hidden pointer-events-none"></span>
     <ng-container *ngIf="!hasCustomControl">
       <input
+        [readonly]="disabled"
         [ngClass]="tailwindClass"
         autocomplete="off"
         [type]="type"

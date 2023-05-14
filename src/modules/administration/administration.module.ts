@@ -17,12 +17,23 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InternalUserComponent } from '@modules/administration/components/internal-user/internal-user.component';
+import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    InternalUserComponent,
+    InternalUserPopupComponent,
+    UserPreferencesPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +51,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    ContextMenuComponent,
+    MatMenuModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatTabsModule
   ],
 })
 export class AdministrationModule {}
