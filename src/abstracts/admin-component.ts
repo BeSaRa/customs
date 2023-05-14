@@ -35,6 +35,7 @@ import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
 import { GetNamesContract } from '@contracts/get-names-contract';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -76,6 +77,7 @@ export abstract class AdminComponent<
   status$: Subject<M> = new Subject<M>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  abstract actions: ContextMenuActionContract<M>[];
   // as of now we have implemented 3 types of columns [TextFilterColumn, SelectFilterColumn, NoneFilterColumn]
   // and soon we will implement [DateFilterColumn]
   abstract columnsWrapper: ColumnsWrapper<M>;
