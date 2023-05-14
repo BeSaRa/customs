@@ -25,6 +25,10 @@ import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/u
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatTabsModule } from '@angular/material/tabs';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -55,7 +59,12 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatMenuModule,
     MatSelectModule,
     MatOptionModule,
-    MatTabsModule
+    MatTabsModule,
+    FilterColumnComponent,
+    SelectInputComponent,
+    MatOptionModule,
+    OptionTemplateDirective,
+    HighlightPipe,
   ],
 })
 export class AdministrationModule {}

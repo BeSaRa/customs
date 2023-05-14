@@ -52,4 +52,6 @@ export interface LangKeysContract {
   lbl_permissions:string
   lbl_status:string
   lbl_custom_role:string
+  clear_filter: string;
+  clear_all_filters: string;
 }
