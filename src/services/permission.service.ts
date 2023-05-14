@@ -19,15 +19,17 @@ export class PermissionService extends BaseCrudService<Permission> {
   protected getUrlSegment(): string {
     return this.urlService.URLS.PERMISSION;
   }
-
+  getUrlSegmentUserPreferences(): string {
+    return this.urlService.URLS.USER_PREFERENCES;
+  }
 
   @CastResponse(() => Permission)
   private _loadPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.getUrlSegment() + '/internal/' + userId)
+    return this.http.get<Permission[]>(this.getUrlSegmentUserPreferences() + '/internal/' + userId)
   }
 
   private _savePermissions(userId: number, permissions: number[]): Observable<any> {
-    return this.http.post(this.getUrlSegment() + '/' + userId + '/bulk', permissions);
+    return this.http.post(this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk', permissions);
   }
 
   savePermissions(userId: number, permissions: number[]): Observable<any> {
@@ -53,9 +55,6 @@ export class PermissionService extends BaseCrudService<Permission> {
             [permission.permissionKey]: permission.permissionKey,
           };
         }, {} as Record<string, string>);
-      }),
-      tap((map) => {
-        printConstantContent && console.log(JSON.stringify(map, null, '  '));
       })
     );
   }

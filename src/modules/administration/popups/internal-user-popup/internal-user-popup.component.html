@@ -78,8 +78,8 @@
               <span class="block font-medium">{{ lang.map.lbl_permissions }}</span>
               <mat-form-field class='select_buttons'>
                 <mat-select name="permissions" formControlName="permissions" multiple>
-                  <mat-option *ngFor="let permission of permissions" [value]="permission.id">
-                    {{permission.enName}}
+                  <mat-option *ngFor="let permission of allPermissions" [value]="permission.id">
+                    {{permission.getNames()}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

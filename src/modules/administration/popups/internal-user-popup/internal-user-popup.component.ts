@@ -24,7 +24,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private readonly permissionService = inject(PermissionService);
 
   statusList!:Lookup[]
-  permissions!:Permission[]
+  allPermissions!:Permission[]
 
 
   _buildForm(): void {
@@ -32,10 +32,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       ...this.model.buildForm(true), 
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
       userPermissions: this.fb.group({
-        permissions: [false],
+        permissions: [],
         customRoleId: [this.model?.customRoleId]
       })
     });
+    if(this.data.operation === OperationType.UPDATE){
+      this.loadUserPermissions(this.model)
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -157,13 +160,23 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     return this.form.get('customRoleId')
   }
 
+  private loadUserPermissions(model:InternalUser) {
+    this.permissionService.loadPermissions(model?.id).subscribe(val=>{
+      let ids : number[] = []
+      val.forEach(permission=>{
+        ids.push(permission.id)
+      })
+      this.userPermissions?.patchValue(ids);
+    })
+  }
+
   private loadPermissions() {
     this.permissionService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
       .pipe(withLatestFrom(of(this.lookupService.lookups.permissionCategory)))
       .subscribe((userPermissions) => {        
-        this.permissions = userPermissions[0]
+        this.allPermissions = userPermissions[0]
       });
 
   }
