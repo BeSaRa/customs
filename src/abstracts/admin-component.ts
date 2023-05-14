@@ -31,6 +31,7 @@ import { UserClick } from '@enums/user-click';
 import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -68,6 +69,7 @@ export abstract class AdminComponent<
   status$: Subject<M> = new Subject<M>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  abstract actions: ContextMenuActionContract<M>[];
   // as of now we have implemented 3 types of columns [TextFilterColumn, SelectFilterColumn, NoneFilterColumn]
   // and soon we will implement [DateFilterColumn]
   abstract columnsWrapper: ColumnsWrapper<M>;
