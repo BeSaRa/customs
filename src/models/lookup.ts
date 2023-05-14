@@ -16,10 +16,5 @@ export class Lookup
   lookupStrKey?: string;
   parent?: number;
   status!: boolean;
-  
-  getName() {
-    let lanName = this.getLangService().getCurrent().code + 'Name'
-    return this[lanName as keyof INames];
-  }
 
 }

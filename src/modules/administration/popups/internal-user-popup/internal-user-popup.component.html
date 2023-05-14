@@ -20,7 +20,7 @@
               <mat-form-field class='select_buttons'>
                 <mat-select name="status" formControlName="status">
                   <mat-option *ngFor="let option of statusList" [value]="option.lookupKey">
-                    {{option.getName()}}
+                    {{option.getNames()}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
