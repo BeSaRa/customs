@@ -1,3 +1,4 @@
+import '@utils/protoypes/custom-prototypes';
 import { NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
