@@ -5,11 +5,7 @@
   </div>
   <div class="dialog-content">
     <mat-tab-group>
-      <mat-tab> 
-        <ng-template mat-tab-label>
-          <mat-icon [svgIcon]="getIcon(form.valid)"></mat-icon>
-          {{lang.map.lbl_basic_info}}
-        </ng-template>
+      <mat-tab [label]="lang.map.lbl_basic_info"> 
         <ng-container [formGroup]="form">
           <div  class="grid grid-cols-2 gap-4 mt-4">
             <app-input formControlName="domainName" [label]="lang.map.domain_name"></app-input>

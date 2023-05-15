@@ -197,7 +197,4 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   //   this.languages = [arabicLang, englishLang]
   // }
 
-  getIcon(valid:boolean) {
-    return valid? AppIcons.VALID_FORM: AppIcons.INVALID_FORM;
-  }
 }
