@@ -32,18 +32,13 @@ export interface LangKeysContract {
   filter: string;
   change_status: string;
   logout: string;
-  active: string;
-  in_active: string;
-
   are_you_sure_you_want_to_logout: string;
   logged_out_successfully: string;
   delete_bulk: string;
   clear_filter: string;
   clear_all_filters: string;
-
-  // Job Title
+  active: string;
+  in_active: string;
   job_type: string;
   status: string;
-  activate: string;
-  deactivate: string;
 }

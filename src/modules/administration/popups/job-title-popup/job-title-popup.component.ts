@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { JobTitle } from '@models/job-title';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
@@ -33,13 +33,8 @@ export class JobTitlePopupComponent
     (x) => x.lookupKey !== StatusTypes.DELETED
   );
 
-  // getter and setter for form status control
-  get status(): number {
-    return this.form.get('status')?.value;
-  }
-
-  set status(val: number) {
-    this.form.get('status')?.setValue(val);
+  get status(): AbstractControl {
+    return this.form.get('status')!;
   }
 
   _buildForm(): void {
@@ -48,7 +43,7 @@ export class JobTitlePopupComponent
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
-    if (!this.status) this.status = 0; // since an undefined is passed to the OpenCreateDialog, we assume that the default status when creation is "inactive"
+    if (!this.status?.value) this.status?.setValue(0); // since an undefined is passed to the OpenCreateDialog, we assume that the default status when creation is "inactive"
   }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();

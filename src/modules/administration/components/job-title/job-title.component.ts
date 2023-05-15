@@ -82,9 +82,6 @@ export class JobTitleComponent extends AdminComponent<
     },
   ];
 
-  @ViewChild('subTrigger', { read: MatMenuTrigger })
-  trigger!: MatMenuTrigger;
-
   getJobTypeName(jobType: number) {
     return this.jobTypes.find((type) => type.lookupKey === jobType)?.getNames();
   }

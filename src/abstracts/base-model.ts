@@ -23,7 +23,7 @@ export abstract class BaseModel<
   extends HasServiceMixin(ClonerMixin(GetNamesMixin(class {})))
   implements
     HasServiceNameContract,
-    ModelCrudContract<M, PrimaryType>,
+    ModelCrudContract<M>,
     BaseModelContract,
     CloneContract,
     GetNamesContract
@@ -48,50 +48,53 @@ export abstract class BaseModel<
     return service;
   }
 
-  activate(id: PrimaryType): Observable<StatusTypes> {
+  activate(): Observable<StatusTypes> {
     return this.$$getService$$<S>()
-      .activate(id)
+      .activate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.ACTIVE));
   }
 
-  create(model: M): Observable<M> {
-    return this.$$getService$$<S>().createFull(model);
+  create(): Observable<M> {
+    return this.$$getService$$<S>().createFull(this as unknown as M);
   }
 
-  deactivate(id: PrimaryType): Observable<StatusTypes> {
+  deactivate(): Observable<StatusTypes> {
     return this.$$getService$$<S>()
-      .deactivate(id)
+      .deactivate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.INACTIVE));
   }
 
   delete(): Observable<M> {
     return this.$$getService$$<S>().delete(this.id as PrimaryType);
   }
-  isActive(): boolean {
-    return this.status === StatusTypes.ACTIVE;
+
+  save(): Observable<M> {
+    return this.id ? this.update() : this.create();
+  }
+
+  update(): Observable<M> {
+    return this.$$getService$$<S>().updateFull(this as unknown as M);
   }
 
   toggleStatus(): Observable<M> {
-    return (
-      this.isActive()
-        ? this.deactivate(this.id as PrimaryType)
-        : this.activate(this.id as PrimaryType)
-    ).pipe(
-      map((status) => {
-        this.status = status;
+    return (this.isActive() ? this.deactivate() : this.activate()).pipe(
+      map((statue) => {
+        this.status = statue;
         return this as unknown as M;
       })
     );
   }
 
-  save(): Observable<M> {
-    return this.id
-      ? this.update(this as unknown as M)
-      : this.create(this as unknown as M);
+  isActive(): boolean {
+    return this.status === StatusTypes.ACTIVE;
   }
 
-  update(model: M): Observable<M> {
-    return this.$$getService$$<S>().updateFull(model);
+  isInActive(): boolean {
+    return this.status === StatusTypes.INACTIVE;
+  }
+
+  isDeleted(): boolean {
+    return this.status === StatusTypes.DELETED;
   }
 
   openCreate(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
