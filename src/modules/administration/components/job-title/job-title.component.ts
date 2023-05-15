@@ -1,19 +1,17 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { JobTitle } from '@models/job-title';
 import { JobTitleService } from '@services/job-title.service';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { LookupService } from '@services/lookup.service';
-import { LangCodes } from '@enums/lang-codes';
-import { Lookup } from '@models/lookup';
-import { StatusTypes } from '@enums/status-types';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
+import { StatusTypes } from '@enums/status-types';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-job-title',
@@ -26,25 +24,6 @@ export class JobTitleComponent extends AdminComponent<
   JobTitleService
 > {
   service = inject(JobTitleService);
-  jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
-    (x) => x.lookupKey !== 3
-  ); // exclude 'All' entry from lookupMaps that backend returns
-  // waiting for Ebrahim to fix that
-  jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus;
-
-  // here we have a new implementation for displayed/filter Columns for the table
-  columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
-    new NoneFilterColumn('select'),
-    new TextFilterColumn('arName'),
-    new TextFilterColumn('enName'),
-    new SelectFilterColumn('status', this.jobStatus, 'lookupKey', (item) =>
-      item.getNames()
-    ),
-    new SelectFilterColumn('jobType', this.jobTypes, 'lookupKey', (item) =>
-      item.getNames()
-    ),
-    new NoneFilterColumn('actions')
-  ).attacheFilter(this.filter$);
   actions: ContextMenuActionContract<JobTitle>[] = [
     {
       name: 'view',
@@ -74,13 +53,27 @@ export class JobTitleComponent extends AdminComponent<
       },
     },
   ];
-
-  getJobTypeName(jobType: number) {
-    return this.jobTypes.find((type) => type.lookupKey === jobType)?.getNames();
-  }
-  getJobTitleStatus(jobTitleStatus: number) {
-    return this.jobStatus
-      .find((status) => status.lookupKey === jobTitleStatus)
-      ?.getNames();
-  }
+  // here we have a new implementation for displayed/filter Columns for the table
+  columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new SelectFilterColumn(
+      'status',
+      this.lookupService.lookups.commonStatus.filter(
+        (item) => item.lookupKey !== StatusTypes.DELETED
+      ),
+      'lookupKey',
+      'getNames'
+    ),
+    new SelectFilterColumn(
+      'jobType',
+      this.lookupService.lookups.userType.filter(
+        (i) => i.lookupKey !== UserTypes.ALL
+      ),
+      'lookupKey',
+      'getNames'
+    ),
+    new NoneFilterColumn('actions')
+  ).attacheFilter(this.filter$);
 }

@@ -1,17 +1,14 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { JobTitle } from '@models/job-title';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { AbstractControl, FormControl, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
-import { LangService } from '@services/lang.service';
-import { LangCodes } from '@enums/lang-codes';
-import { StatusTypes } from '@enums/status-types';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { Lookup } from '@models/lookup';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-job-title-popup',
@@ -24,13 +21,12 @@ export class JobTitlePopupComponent
 {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<JobTitle> = inject(MAT_DIALOG_DATA);
-  jobTypes: Lookup[] = inject(LookupService).lookups.userType.filter(
+
+  lookupService = inject(LookupService);
+
+  jobTypes: Lookup[] = this.lookupService.lookups.userType.filter(
     // exclude 'All' entry from lookupMaps that backend returns, waiting for Ebrahim to fix that
-    (usertype) => usertype.lookupKey !== 3
-  );
-  jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
-    // waiting for Ebrahim to filter deleted status
-    (x) => x.lookupKey !== StatusTypes.DELETED
+    (usertype) => usertype.lookupKey !== UserTypes.ALL
   );
 
   get status(): AbstractControl {
@@ -41,10 +37,6 @@ export class JobTitlePopupComponent
     this.form = this.fb.group(this.model.buildForm(true));
   }
 
-  protected override _afterBuildForm(): void {
-    super._afterBuildForm();
-    if (!this.status?.value) this.status?.setValue(0); // since an undefined is passed to the OpenCreateDialog, we assume that the default status when creation is "inactive"
-  }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -65,11 +57,5 @@ export class JobTitlePopupComponent
     );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
-  }
-
-  getJobTitleStatus(jobTitleStatus: number) {
-    return this.jobStatus
-      .find((status) => status.lookupKey === jobTitleStatus)
-      ?.getNames();
   }
 }

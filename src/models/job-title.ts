@@ -4,6 +4,7 @@ import { JobTitleInterceptor } from '@model-interceptors/job-title-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
+import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new JobTitleInterceptor();
 
@@ -13,6 +14,11 @@ export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
 
   jobType!: number;
   isSystem!: boolean;
+
+  // statusInfo!: AdminResult;
+  typeInfo!: AdminResult;
+
+  override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {
     const { arName, enName, status, jobType } = this;
