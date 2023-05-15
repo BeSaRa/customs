@@ -10,6 +10,7 @@ export class AdminResult
   id!: number;
   fnId!: string;
   parent!: number;
+  lookupKey!: number;
   
   static createInstance(model: Partial<AdminResult>): AdminResult {
     return Object.assign(new AdminResult, model);

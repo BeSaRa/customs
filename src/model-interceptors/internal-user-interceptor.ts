@@ -11,14 +11,12 @@ export class InternalUserInterceptor implements ModelInterceptorContract<Interna
     model.userPreferences && (model.userPreferences = userPreferencesInterceptor.send(model.userPreferences) as UserPreferences);
     delete model.defaultDepartmentInfo;
     delete model.jobTitleInfo;
-    delete model.statusInfo;
     return model;
   }
 
   receive(model: InternalUser): InternalUser {
     model.defaultDepartmentInfo = AdminResult.createInstance(model.defaultDepartmentInfo);
     model.jobTitleInfo = AdminResult.createInstance(model.jobTitleInfo);
-    model.statusInfo = AdminResult.createInstance(model.statusInfo);
     model.userPreferences && (model.userPreferences = userPreferencesInterceptor.receive(new UserPreferences().clone<UserPreferences>(model.userPreferences)));
     return model;
   }

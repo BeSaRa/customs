@@ -26,7 +26,6 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   phoneExtension!: string;
   phoneNumber!: string;
   qid!: string;
-  statusInfo!: AdminResult;
 
   userPreferences!: UserPreferences;
 

@@ -11,6 +11,7 @@ import { LookupService } from '@services/lookup.service';
 import { PermissionService } from '@services/permission.service';
 import { Permission } from '@models/permission';
 import { TabMap } from '@constants/tab-map-type';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -195,4 +196,8 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     
   //   this.languages = [arabicLang, englishLang]
   // }
+
+  getIcon(valid:boolean) {
+    return valid? AppIcons.VALID_FORM: AppIcons.INVALID_FORM;
+  }
 }

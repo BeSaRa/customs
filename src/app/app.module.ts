@@ -7,8 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -39,6 +39,7 @@ import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -67,6 +68,7 @@ import { MatOptionModule } from '@angular/material/core';
     MatOptionModule,
   ],
   providers: [
+    MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
@@ -94,7 +96,8 @@ import { MatOptionModule } from '@angular/material/core';
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: {
-        position: 'above',
+        duration: 2000,
+        verticalPosition: 'top',
       },
     },
     httpInterceptors,

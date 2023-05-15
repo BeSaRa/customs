@@ -29,6 +29,11 @@ import { FilterColumnComponent } from '@standalone/components/filter-column/filt
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
@@ -39,6 +44,8 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     InternalUserComponent,
     InternalUserPopupComponent,
     UserPreferencesPopupComponent,
+    JobTitleComponent,
+    JobTitlePopupComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +74,11 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatOptionModule,
     OptionTemplateDirective,
     HighlightPipe,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    SwitchComponent,
   ],
 })
 export class AdministrationModule {}

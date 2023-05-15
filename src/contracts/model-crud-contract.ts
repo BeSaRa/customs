@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
 import { StatusTypes } from '@enums/status-types';
+import { Observable } from 'rxjs';
 
 export interface ModelCrudContract<M> {
   create(model: M): Observable<M>;
@@ -10,7 +10,7 @@ export interface ModelCrudContract<M> {
 
   save(): Observable<M>;
 
-  activate(status: StatusTypes): Observable<StatusTypes>;
+  activate(status: StatusTypes): Observable<M>;
 
-  deactivate(status: StatusTypes): Observable<StatusTypes>;
+  deactivate(status: StatusTypes): Observable<M>;
 }

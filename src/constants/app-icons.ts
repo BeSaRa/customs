@@ -13,6 +13,8 @@ export const AppIcons = {
   ACCOUNT_EDIT:'account-edit',
   FILTER_OUTLINE: 'filter-outline',
   FILTER_REMOVE: 'filter-remove',
+  VALID_FORM: 'check',
+  INVALID_FORM: 'alert-circle-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
