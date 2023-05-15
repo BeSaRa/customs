@@ -31,7 +31,6 @@ export class JobTitleComponent extends AdminComponent<
   ); // exclude 'All' entry from lookupMaps that backend returns
   // waiting for Ebrahim to fix that
   jobStatus: Lookup[] = inject(LookupService).lookups.commonStatus;
-  isArabic: boolean = this.lang.getCurrent().code === LangCodes.AR;
 
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
