@@ -36,6 +36,7 @@ export interface LangKeysContract {
   filter: string;
   change_status: string;
   ldap_group_name: string;
+  auto_claim: string;
   logout: string;
   are_you_sure_you_want_to_logout: string;
   logged_out_successfully: string;

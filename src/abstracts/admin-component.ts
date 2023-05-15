@@ -295,7 +295,11 @@ export abstract class AdminComponent<
   }
 
   filterChange($event: { key: string; value: string | null }) {
-    if (!$event.value) {
+    if (
+      $event.value === null ||
+      $event.value === undefined ||
+      $event.value === ''
+    ) {
       delete this.filter$.value[$event.key as keyof M];
       this.filter$.next({ ...this.filter$.value });
       return;

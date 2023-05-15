@@ -48,7 +48,7 @@
           class="cursor-not-allowed"
           [matTooltip]="getStatusNames(element.status)"
           color="primary"
-          [checked]="element.status"
+          [checked]="element.isActive()"
           disabled="true"></mat-slide-toggle>
       </td>
     </ng-container>

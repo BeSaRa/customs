@@ -27,6 +27,7 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
 import { LocalizationComponent } from './components/localization/localization.component';
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatSortModule,
     MatCheckboxModule,
     InputComponent,
+    SwitchComponent,
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,

@@ -18,6 +18,7 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    this.form.controls['ldapGroupName'].disable();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
