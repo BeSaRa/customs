@@ -27,8 +27,13 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   classifications!: any[];
   allclassifications!: any[];
   statusTooltip = this.lang.map.in_active;
-  _buildForm(): void {
+
+  protected override _initPopup(): void {
+    super._initPopup();
     this.getViolationClassifications();
+  }
+
+  _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
 

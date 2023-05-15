@@ -14,8 +14,7 @@
         <mat-checkbox
           (change)="$event ? toggleAllRows() : null"
           [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"
-          #c>
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let element">
