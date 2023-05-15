@@ -13,7 +13,7 @@ export class UserPreferences extends BaseModel<UserPreferences, UserPreferencesS
   isSMSNotificationEnabled!: boolean;
   isPrivateUser!: boolean;
   limitedCirculation!: boolean;
-  defaultLang!: number;
+  defaultLang: number = 1;
 
 
   // extra

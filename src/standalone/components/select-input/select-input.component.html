@@ -15,7 +15,9 @@
       [formControl]="control"
       (blur)="inputTouch()"
       [id]="name"
-      [ngClass]="tailwindClass">
+      [ngClass]="tailwindClass"
+      [multiple]="isMultiple"
+      >
       <ng-container
         *ngFor="let option of options"
         [ngTemplateOutlet]="optionTemplate?.templateRef || defaultTemplate"

@@ -29,6 +29,7 @@ import { FilterColumnComponent } from '@standalone/components/filter-column/filt
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     MatSortModule,
     MatCheckboxModule,
     InputComponent,
+    SwitchComponent,
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,

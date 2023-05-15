@@ -40,7 +40,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       phoneNumber, 
       status,
     } = this;
-
+    
     return {
       domainName: controls ? [domainName, 
         [CustomValidators.required,
@@ -70,7 +70,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       phoneNumber: controls ? [phoneNumber,
       CustomValidators.pattern('PHONE_NUMBER')
       ] : phoneNumber,
-      status: controls ? [status, CustomValidators.required] : status,
+      status: controls ? [status? status : 1, CustomValidators.required] : status? status : 1,
     };
   }
 

@@ -14,25 +14,12 @@
             <app-input formControlName="empNum" type="number" [label]="lang.map.employee_number"></app-input>
             <app-input formControlName="email" [label]="lang.map.email"></app-input>
             <app-input formControlName="phoneNumber" type="number" [label]="lang.map.phone_number"></app-input>
-  
-            <app-select-input 
-              bindValue="lookupKey" 
-              bindLabel="enName" 
-              [label]="lang.map.lbl_status" 
+            <app-switch
               formControlName="status"
-              [options]="statusList"  
-            ></app-select-input>
-            <!-- <div>
-              <span class="block font-medium">{{ lang.map.lbl_status }}</span>
-              <mat-form-field class='select_buttons'>
-                <mat-select name="status" formControlName="status">
-                  <mat-option *ngFor="let option of statusList" [value]="option.lookupKey">
-                    {{option.getNames()}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div> -->
-  
+              [label]="lang.map.lbl_status"
+              trueValue="1"
+              falseValue="0"
+            ></app-switch>
           </div>
         </ng-container>
       </mat-tab>
@@ -41,39 +28,37 @@
           <ng-container formGroupName="userPreferences">
             <div class="grid grid-cols-4 gap-4 [&>*]:col-span-2  mt-4">
               <!-- mail notifications -->
-              <div class="flex items-center mr-4">
-                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isMailNotificationEnabled"
-                        formControlName="isMailNotificationEnabled">
-                <label class="ml-2 block font-medium"
-                        for="isMailNotificationEnabled">{{lang.map.mail_notifications}}</label>
-              </div>
+              <app-switch
+                formControlName="isMailNotificationEnabled"
+                [label]="lang.map.mail_notifications"
+              ></app-switch>
       
               <!-- sms notifications -->
-              <div class="flex items-center mr-4">
-                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isSMSNotificationEnabled"
-                        formControlName="isSMSNotificationEnabled">
-                <label class="ml-2 block font-medium"
-                        for="isSMSNotificationEnabled">{{lang.map.sms_notifications}}</label>
-              </div>
+              <app-switch
+                formControlName="isSMSNotificationEnabled"
+                [label]="lang.map.sms_notifications"
+              ></app-switch>
               
               <!-- is private user -->
-              <div class="flex items-center mr-4">
-                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isPrivateUser"
-                        formControlName="isPrivateUser">
-                <label class="ml-2 block font-medium"
-                        for="isPrivateUser">{{lang.map.private_user}}</label>
-              </div>
+              <app-switch
+                formControlName="isPrivateUser"
+                [label]="lang.map.private_user"
+              ></app-switch>
               
               <!-- limited circulation -->
-              <div class="flex items-center mr-4">
-                <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="limitedCirculation"
-                        formControlName="limitedCirculation">
-                <label class="ml-2 block font-medium"
-                        for="limitedCirculation">{{lang.map.limited_circulation}}</label>
-              </div>
+              <app-switch
+                formControlName="limitedCirculation"
+                [label]="lang.map.limited_circulation"
+              ></app-switch>
 
-              <app-input formControlName="defaultLang" type="number" [label]="lang.map.default_lang"></app-input>
-
+              <!-- default language -->
+              <!-- <app-select-input 
+                [options]="languages" 
+                bindValue="lookupKey" 
+                bindLabel="enName" 
+                [label]="lang.map.default_lang"
+                formControlName="defaultLang"
+              ></app-select-input> -->
             </div>
           </ng-container>
         </div>
@@ -82,14 +67,15 @@
         <ng-container [formGroup]="form">
           <div class="mt-4">
             <div formGroupName="userPermissions">
-              <span class="block font-medium">{{ lang.map.lbl_permissions }}</span>
-              <mat-form-field class='select_buttons'>
-                <mat-select name="permissions" formControlName="permissions" multiple>
-                  <mat-option *ngFor="let permission of allPermissions" [value]="permission.id">
-                    {{permission.getNames()}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+              <!-- user permissions -->
+              <app-select-input 
+                [options]="allPermissions" 
+                bindValue="id" 
+                bindLabel="enName" 
+                [label]="lang.map.lbl_permissions"
+                formControlName="permissions"
+                [isMultiple]="true"
+              ></app-select-input>
             </div>
           </div>  
         </ng-container>  
