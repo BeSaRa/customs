@@ -10,7 +10,7 @@ export interface ModelCrudContract<M> {
 
   save(): Observable<M>;
 
-  activate(status: StatusTypes): Observable<StatusTypes>;
+  activate(status: StatusTypes): Observable<M>;
 
-  deactivate(status: StatusTypes): Observable<StatusTypes>;
+  deactivate(status: StatusTypes): Observable<M>;
 }

@@ -30,6 +30,9 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { MatOptionModule } from '@angular/material/core';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @NgModule({
@@ -39,6 +42,8 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     LocalizationComponent,
     PenaltyComponent,
     PenaltyPopupComponent,
+    JobTitleComponent,
+    JobTitlePopupComponent,
   ],
   imports: [
     CommonModule,
@@ -67,6 +72,10 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatOptionModule,
     OptionTemplateDirective,
     HighlightPipe,
+    MatSelectModule,
+    MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
     SwitchComponent,
   ],
 })

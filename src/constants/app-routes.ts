@@ -4,4 +4,5 @@ export const AppRoutes = {
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
   PENALTY: 'penalty',
+  JOB_TITLE: 'job-title',
 };
