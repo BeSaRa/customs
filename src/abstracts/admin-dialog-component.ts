@@ -30,8 +30,8 @@ import { CloneContract } from '@contracts/clone-contract';
 export abstract class AdminDialogComponent<
     M extends BaseModel<M, BaseCrudServiceContract<M>>
   >
-  extends OnDestroyMixin(ClonerMixin(GetNamesMixin(class {})))
-  implements OnInit, CloneContract, GetNamesContract
+  extends OnDestroyMixin(class {})
+  implements OnInit
 {
   abstract data: CrudDialogDataContract<M>;
   model!: M;

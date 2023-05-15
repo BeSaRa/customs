@@ -1,20 +1,31 @@
 import { Injectable } from '@angular/core';
 import { LookupMapContract } from '@contracts/lookup-map-contract';
 import { Lookup } from '@models/lookup';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { AdminResult } from '@models/admin-result';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LookupService {
+export class LookupService extends RegisterServiceMixin(class {}) {
   lookups: LookupMapContract = {} as LookupMapContract;
+  statusMap: Map<number, AdminResult> = new Map<number, AdminResult>();
 
   setLookups(lookups: LookupMapContract) {
+    this.statusMap.clear();
     const keys = Object.keys(lookups);
     keys.forEach((key) => {
       const realKey = key as keyof LookupMapContract;
-      this.lookups[realKey] = lookups[realKey].map((item) =>
-        new Lookup().clone(item)
-      );
+      this.lookups[realKey] = lookups[realKey].map((item) => {
+        const lookup = new Lookup().clone(item);
+        if (realKey === 'commonStatus') {
+          this.statusMap.set(
+            item.lookupKey,
+            new AdminResult().clone<AdminResult>({ ...item })
+          );
+        }
+        return lookup;
+      });
     });
     return this.lookups;
   }

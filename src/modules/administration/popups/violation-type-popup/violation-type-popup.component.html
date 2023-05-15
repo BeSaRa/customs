@@ -6,29 +6,24 @@
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4">
-        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input formControlName="arName" [label]="lang.map.ar_name" />
+        <app-input formControlName="enName" [label]="lang.map.en_name" />
 
         <app-select-input
           formControlName="penaltyType"
           [options]="penaltyTypes"
           [label]="lang.map.penalty_type"
           bindValue="lookupKey"
-          [bindLabel]="getDisplayName()"></app-select-input>
+          bindLabel="getNames" />
 
         <app-select-input
           formControlName="violationClassificationId"
           [options]="classifications"
           [label]="lang.map.violation_classification"
           bindValue="id"
-          bindLabel="{{ getDisplayName() }}"></app-select-input>
+          bindLabel="getNames" />
         <app-input [label]="lang.map.penalty_grace_period" formControlName="penaltyGracePeriod" type="number" />
-        <app-switch
-          formControlName="status"
-          [trueValue]="1"
-          [falseValue]="0"
-          [label]="lang.map.change_status"
-          [matTooltip]="statusTooltip"></app-switch>
+        <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
       </div>
     </ng-container>
   </div>

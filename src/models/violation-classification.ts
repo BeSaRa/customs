@@ -3,6 +3,8 @@ import { ViolationClassificationService } from '@services/violation-classificati
 import { ViolationClassificationInterceptor } from '@model-interceptors/violation-classification-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
+import { AdminResult } from './admin-result';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new ViolationClassificationInterceptor();
 
@@ -13,7 +15,9 @@ export class ViolationClassification extends BaseModel<
 > {
   $$__service_name__$$ = 'ViolationClassificationService';
   penaltyType!: number;
+  typeInfo!: AdminResult;
 
+  override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
     const { arName, enName, penaltyType, status } = this;
 

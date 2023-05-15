@@ -3,6 +3,8 @@ import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationTypeInterceptor } from '@model-interceptors/violation-type-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
+import { AdminResult } from './admin-result';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new ViolationTypeInterceptor();
 
@@ -15,6 +17,10 @@ export class ViolationType extends BaseModel<
   penaltyType!: number;
   violationClassificationId!: number;
   penaltyGracePeriod!: number;
+  typeInfo!: AdminResult;
+  classificationInfo!: AdminResult;
+
+  override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
     const {
       arName,

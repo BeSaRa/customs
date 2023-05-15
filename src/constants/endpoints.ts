@@ -7,6 +7,7 @@ export const EndPoints = {
   PERMISSION: '/entity/permission',
   VIOLATION_CLASSIFICATION: '/entity/violation-classification',
   VIOLATION_TYPE: '/entity/violation-type',
+  JOB_TITLE: '/entity/job-title',
 };
 
 export type EndpointsType = typeof EndPoints;

@@ -10,4 +10,5 @@ export class AdminResult
   id!: number;
   fnId!: string;
   parent!: number;
+  lookupKey!: number;
 }

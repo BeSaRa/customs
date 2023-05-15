@@ -1,25 +1,20 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_violation_classification }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE" />
   </div>
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4">
       <ng-container [formGroup]="form">
-        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input formControlName="arName" [label]="lang.map.ar_name" />
+        <app-input formControlName="enName" [label]="lang.map.en_name" />
         <app-select-input
           formControlName="penaltyType"
           [options]="penaltyTypes"
           [label]="lang.map.penalty_type"
           bindValue="lookupKey"
-          [bindLabel]="getDisplayName()"></app-select-input>
-        <app-switch
-          formControlName="status"
-          [trueValue]="1"
-          [falseValue]="0"
-          [label]="lang.map.change_status"
-          [matTooltip]="statusTooltip"></app-switch>
+          bindLabel="getNames" />
+        <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
       </ng-container>
     </div>
   </div>

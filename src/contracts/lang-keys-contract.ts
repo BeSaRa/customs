@@ -1,6 +1,4 @@
 export interface LangKeysContract {
-  active: string;
-  in_active: string;
   penalty_grace_period: string;
   violation_classification: string;
   menu_violation_type: string;
@@ -44,4 +42,8 @@ export interface LangKeysContract {
   delete_bulk: string;
   clear_filter: string;
   clear_all_filters: string;
+  active: string;
+  in_active: string;
+  job_type: string;
+  status: string;
 }

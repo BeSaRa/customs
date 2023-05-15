@@ -6,6 +6,7 @@ import {
   delay,
   exhaustMap,
   filter,
+  finalize,
   map,
   Observable,
   of,
@@ -36,6 +37,8 @@ import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
 import { GetNamesContract } from '@contracts/get-names-contract';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { AdminResult } from '@models/admin-result';
+import { LookupService } from '@services/lookup.service';
 
 @Directive({})
 export abstract class AdminComponent<
@@ -54,6 +57,9 @@ export abstract class AdminComponent<
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
   protected loadComposite = true;
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
+
   abstract service: S;
   private paginate$ = new BehaviorSubject({
     offset: 0,
@@ -91,6 +97,10 @@ export abstract class AdminComponent<
     this.initialSelection
   );
 
+  lookupService = inject(LookupService);
+
+  private statuses = this.lookupService.lookups.commonStatus;
+
   get limit(): number {
     return this.paginate$.value.limit;
   }
@@ -107,13 +117,15 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
-              return this.loadComposite
-                ? this.service
-                    .loadComposite(paginationOptions, filter, sort)
-                    .pipe(ignoreErrors())
-                : this.service
-                    .load(paginationOptions, filter, sort)
-                    .pipe(ignoreErrors());
+              this.loadingSubject.next(true);
+              return (
+                this.loadComposite
+                  ? this.service.loadComposite(paginationOptions, filter, sort)
+                  : this.service.load(paginationOptions, filter, sort)
+              ).pipe(
+                finalize(() => this.loadingSubject.next(false)),
+                ignoreErrors()
+              );
             }),
             tap(({ count }) => {
               this.length = count;
@@ -233,9 +245,13 @@ export abstract class AdminComponent<
             .pipe(filter((value) => value === UserClick.YES))
             .pipe(
               switchMap(() => {
+                this.loadingSubject.next(true);
                 return model
                   .delete()
-                  .pipe(ignoreErrors())
+                  .pipe(
+                    finalize(() => this.loadingSubject.next(false)),
+                    ignoreErrors()
+                  )
                   .pipe(map(() => model));
               })
             )
@@ -252,7 +268,22 @@ export abstract class AdminComponent<
   protected _listenToChangeStatus() {
     this.status$
       .pipe(takeUntil(this.destroy$))
-      .pipe(exhaustMap((model) => model.toggleStatus()))
+      .pipe(
+        exhaustMap((model) => {
+          this.loadingSubject.next(true);
+          return model.toggleStatus().pipe(
+            tap((newModel: M) => {
+              const updatedModel = model as M & { statusInfo: AdminResult };
+              updatedModel.status = newModel.status;
+              updatedModel.statusInfo = (
+                newModel as M & { statusInfo: AdminResult }
+              ).statusInfo;
+            }),
+            finalize(() => this.loadingSubject.next(false)),
+            ignoreErrors()
+          );
+        })
+      )
       .subscribe((model) => {
         this.toast.success(
           this.lang.map.msg_status_x_changed_success.change({
@@ -303,7 +334,7 @@ export abstract class AdminComponent<
   }
 
   filterChange($event: { key: string; value: string | null }) {
-    if (!$event.value) {
+    if ($event.value == null) {
       delete this.filter$.value[$event.key as keyof M];
       this.filter$.next({ ...this.filter$.value });
       return;
@@ -316,7 +347,7 @@ export abstract class AdminComponent<
 
   getFilterStringColumn(column: string): string {
     return objectHasOwnProperty(this.filter$.value, column)
-      ? (this.filter$.value[column] as string)
+      ? (this.filter$.value[column as keyof M] as string)
       : '';
   }
 }

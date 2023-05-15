@@ -7,8 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -98,7 +98,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: {
-        position: 'above',
+        duration: 2000,
+        verticalPosition: 'top',
       },
     },
 

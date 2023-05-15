@@ -1,5 +1,6 @@
 import { ModelInterceptorContract } from 'cast-response';
 import { ViolationClassification } from '@models/violation-classification';
+import { AdminResult } from '@models/admin-result';
 
 export class ViolationClassificationInterceptor
   implements ModelInterceptorContract<ViolationClassification>
@@ -11,6 +12,8 @@ export class ViolationClassificationInterceptor
   }
 
   receive(model: ViolationClassification): ViolationClassification {
+    model.statusInfo = new AdminResult().clone(model.statusInfo);
+    model.typeInfo = new AdminResult().clone(model.typeInfo);
     return model;
   }
 }
