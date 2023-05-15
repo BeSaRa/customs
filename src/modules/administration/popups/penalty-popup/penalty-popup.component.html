@@ -13,17 +13,15 @@
           formControlName="penaltyType"
           [options]="penaltyTypes"
           bindLabel="name"
-          bindValue="lookupKey"></app-select-input>
+          bindValue="lookupKey">
+          <mat-option [value]="option.lookupKey" *appOptionTemplate="let option">{{ option.getNames() }}</mat-option>
+        </app-select-input>
         <app-switch
           formControlName="status"
           [trueValue]="1"
           [falseValue]="0"
           [label]="lang.map.change_status"
           [matTooltip]="statusTooltipText"></app-switch>
-        <!-- <div class="w-100 h-100 flex text-center justify-start">
-          <mat-slide-toggle formControlName="status" labelPosition="before" [name]="lang.map.change_status"
-            [checked]="model ? model.isActive() : false">{{ lang.map.change_status }}</mat-slide-toggle>
-        </div> -->
       </ng-container>
     </div>
   </div>

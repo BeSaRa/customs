@@ -22,8 +22,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Penalty> = inject(MAT_DIALOG_DATA);
 
-  penaltyTypes: { name: string; lookupKey: number }[] =
-    this.getTodisplayPenaltyTypes();
+  penaltyTypes: Lookup[] = this.lookupService.lookups.penaltyType;
 
   statusTooltipText =
     this.model?.status === StatusTypes.ACTIVE
@@ -59,19 +58,6 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     );
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
-  }
-
-  getTodisplayPenaltyTypes(): { name: string; lookupKey: number }[] {
-    const penaltyTypes: Lookup[] = this.lookupService.lookups.penaltyType;
-    return penaltyTypes
-      .filter((t) => t.status)
-      .map((t) => {
-        return {
-          name:
-            this.lang.getCurrent().code === LangCodes.AR ? t.arName : t.enName,
-          lookupKey: t.lookupKey,
-        };
-      });
   }
 
   protected listenToStatusChange() {

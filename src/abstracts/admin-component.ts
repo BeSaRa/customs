@@ -129,9 +129,6 @@ export abstract class AdminComponent<
   }
 
   ngOnInit(): void {
-    this.data$.subscribe((data) => {
-      console.log('data: ', data);
-    });
     this.sort$.next(undefined);
     this.reload$.next();
 

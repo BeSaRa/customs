@@ -37,7 +37,6 @@ import { MenuItemService } from '@services/menu-item.service';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
-import { MAT_LEGACY_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/legacy-snack-bar';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';

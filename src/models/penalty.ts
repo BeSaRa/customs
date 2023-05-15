@@ -4,6 +4,7 @@ import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
 import { InterceptModel } from 'cast-response';
 import { OnInit } from '@angular/core';
 import { CustomValidators } from '@validators/custom-validators';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new PenaltyInterceptor();
 
@@ -14,6 +15,8 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   override enName!: string;
   penaltyType!: number;
   isSystem = true;
+
+  override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {
     const { arName, enName, penaltyType, status } = this;

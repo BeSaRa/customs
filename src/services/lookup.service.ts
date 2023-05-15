@@ -9,8 +9,6 @@ export class LookupService {
   lookups: LookupMapContract = {} as LookupMapContract;
 
   setLookups(lookups: LookupMapContract) {
-    console.log('lookups: ', lookups);
-
     const keys = Object.keys(lookups);
     keys.forEach((key) => {
       const realKey = key as keyof LookupMapContract;

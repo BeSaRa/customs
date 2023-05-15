@@ -8,6 +8,9 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
+import { LookupService } from '@services/lookup.service';
 
 @Component({
   selector: 'app-penalty',
@@ -19,23 +22,8 @@ export class PenaltyComponent extends AdminComponent<
   Penalty,
   PenaltyService
 > {
-  filter_Value!: string;
   service = inject(PenaltyService);
-  displayedColumns: string[] = [
-    'select',
-    'arName',
-    'enName',
-    'status',
-    'actions',
-  ];
-
-  filterValue(event: any) {
-    //console.log(typeof (event));
-    console.log('event: ', event);
-    console.log('event.target.value');
-    this.filter_Value = event.target.value;
-    this.filter$.next({ enName: this.filter_Value });
-  }
+  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus;
 
   actions: ContextMenuActionContract<Penalty>[] = [
     {
@@ -71,7 +59,12 @@ export class PenaltyComponent extends AdminComponent<
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new NoneFilterColumn('status'),
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      this.lang.getCurrent().code + 'Name'
+    ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

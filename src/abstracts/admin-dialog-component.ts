@@ -79,8 +79,6 @@ export abstract class AdminDialogComponent<
       )
       .pipe(
         exhaustMap((model) => {
-          console.log('to save model: ', model);
-
           return model.save().pipe(
             catchError((error) => {
               this._saveFail(error);
