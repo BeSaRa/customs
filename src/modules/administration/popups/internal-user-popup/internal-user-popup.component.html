@@ -15,7 +15,14 @@
             <app-input formControlName="email" [label]="lang.map.email"></app-input>
             <app-input formControlName="phoneNumber" type="number" [label]="lang.map.phone_number"></app-input>
   
-            <div>
+            <app-select-input 
+              bindValue="lookupKey" 
+              bindLabel="enName" 
+              [label]="lang.map.lbl_status" 
+              formControlName="status"
+              [options]="statusList"  
+            ></app-select-input>
+            <!-- <div>
               <span class="block font-medium">{{ lang.map.lbl_status }}</span>
               <mat-form-field class='select_buttons'>
                 <mat-select name="status" formControlName="status">
@@ -24,7 +31,7 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
+            </div> -->
   
           </div>
         </ng-container>
