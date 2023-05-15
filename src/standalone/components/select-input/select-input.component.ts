@@ -175,7 +175,9 @@ export class SelectInputComponent
 
   getBindValue(option: unknown): unknown {
     return this.bindValue && typeof this.bindValue === 'string'
-      ? objectHasOwnProperty(option, this.bindValue)
+      ? typeof (option as never)[this.bindValue] === 'function'
+        ? ((option as never)[this.bindValue] as () => unknown)()
+        : objectHasOwnProperty(option, this.bindValue)
         ? option[this.bindValue]
         : option
       : this.bindValue && typeof this.bindValue === 'function'
@@ -185,7 +187,9 @@ export class SelectInputComponent
 
   getBindLabel(option: unknown): unknown {
     return this.bindLabel && typeof this.bindLabel === 'string'
-      ? objectHasOwnProperty(option, this.bindLabel)
+      ? typeof (option as never)[this.bindLabel] === 'function'
+        ? ((option as never)[this.bindLabel] as () => unknown)()
+        : objectHasOwnProperty(option, this.bindLabel)
         ? option[this.bindLabel]
         : option
       : this.bindLabel && typeof this.bindLabel === 'function'
