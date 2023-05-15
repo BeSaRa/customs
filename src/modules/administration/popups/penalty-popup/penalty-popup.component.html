@@ -12,10 +12,8 @@
           [label]="lang.map.penalty_type"
           formControlName="penaltyType"
           [options]="penaltyTypes"
-          bindLabel="name"
-          bindValue="lookupKey">
-          <mat-option [value]="option.lookupKey" *appOptionTemplate="let option">{{ option.getNames() }}</mat-option>
-        </app-select-input>
+          bindLabel="getNames"
+          bindValue="lookupKey" />
         <app-switch
           formControlName="status"
           [trueValue]="1"

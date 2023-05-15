@@ -40,7 +40,6 @@ import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],

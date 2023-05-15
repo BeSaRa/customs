@@ -2,9 +2,9 @@ import { BaseModel } from '@abstracts/base-model';
 import { PenaltyService } from '@services/penalty.service';
 import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
 import { InterceptModel } from 'cast-response';
-import { OnInit } from '@angular/core';
 import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
+import { AdminResult } from './admin-result';
 
 const { send, receive } = new PenaltyInterceptor();
 
