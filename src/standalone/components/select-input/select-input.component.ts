@@ -29,7 +29,6 @@ import { objectHasOwnProperty } from '@utils/utils';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
-import { optionsConfig } from 'ngx-mask';
 
 @Component({
   selector: 'app-select-input',

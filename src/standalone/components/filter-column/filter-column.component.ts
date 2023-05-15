@@ -12,7 +12,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MatRippleModule } from '@angular/material/core';
-import { debounceTime, takeUntil } from 'rxjs';
+import { debounceTime, of, takeUntil } from 'rxjs';
 import { AppIcons } from '@constants/app-icons';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -56,7 +56,6 @@ export class FilterColumnComponent
   lang = inject(LangService);
 
   protected readonly AppIcons = AppIcons;
-  options: string[] = ['Ahmed Mostafa', 'Mostafa'];
 
   ngOnInit(): void {
     this.listenToControl();
@@ -84,6 +83,7 @@ export class FilterColumnComponent
       this.control.reset(null, { emitEvent: false });
     });
   }
+
   private isType(
     type: 'text' | 'select' | 'date' | 'none',
     hasFilter = true
@@ -119,6 +119,13 @@ export class FilterColumnComponent
   noFilteredColumns() {
     return (
       this.column?.filter().value && isEmptyObject(this.column?.filter().value)
+    );
+  }
+
+  get options() {
+    return (
+      (this.column && this.column.config && this.column.config.options) ||
+      of([])
     );
   }
 }
