@@ -108,12 +108,12 @@ export abstract class AdminComponent<
                 ? this.service
                     .loadComposite(paginationOptions, filter, sort)
                     .pipe(
-                      ignoreErrors(),
-                      finalize(() => this.loadingSubject.next(false))
+                      finalize(() => this.loadingSubject.next(false)),
+                      ignoreErrors()
                     )
                 : this.service.load(paginationOptions, filter, sort).pipe(
-                    ignoreErrors(),
-                    finalize(() => this.loadingSubject.next(false))
+                    finalize(() => this.loadingSubject.next(false)),
+                    ignoreErrors()
                   );
             }),
             tap(({ count }) => {
@@ -185,7 +185,7 @@ export abstract class AdminComponent<
       .pipe(
         switchMap((model) => {
           return this.service
-            .openCreateDialog(model, this._getEditExtras() as object)
+            .openEditDialog(model, this._getEditExtras() as object)
             .afterClosed()
             .pipe(
               filter((model): model is M => {
@@ -234,7 +234,10 @@ export abstract class AdminComponent<
             .pipe(filter((value) => value === UserClick.YES))
             .pipe(
               switchMap(() => {
-                return model.delete().pipe(ignoreErrors());
+                return model
+                  .delete()
+                  .pipe(ignoreErrors())
+                  .pipe(map(() => model));
               })
             )
         )
