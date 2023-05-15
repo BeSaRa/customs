@@ -1,7 +1,7 @@
 import { StatusTypes } from '@enums/status-types';
 import { Observable } from 'rxjs';
 
-export interface ModelCrudContract<M, PrimaryType = number> {
+export interface ModelCrudContract<M> {
   create(model: M): Observable<M>;
 
   delete(): Observable<M>;

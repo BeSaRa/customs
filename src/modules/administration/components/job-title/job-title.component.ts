@@ -38,17 +38,11 @@ export class JobTitleComponent extends AdminComponent<
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn(
-      'status',
-      this.jobStatus,
-      'lookupKey',
-      this.isArabic ? 'arName' : 'enName'
+    new SelectFilterColumn('status', this.jobStatus, 'lookupKey', (item) =>
+      item.getNames()
     ),
-    new SelectFilterColumn(
-      'jobType',
-      this.jobTypes,
-      'lookupKey',
-      this.isArabic ? 'arName' : 'enName'
+    new SelectFilterColumn('jobType', this.jobTypes, 'lookupKey', (item) =>
+      item.getNames()
     ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
