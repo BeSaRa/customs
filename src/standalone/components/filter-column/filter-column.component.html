@@ -21,7 +21,7 @@
 
 <app-select-input
   *ngIf="isSelect()"
-  [options]="column!.config!.options!"
+  [options]="(options | async)!"
   [bindLabel]="column!.config.bindSelectLabel!"
   [bindValue]="column!.config.bindSelectValue!"
   size="sm"
