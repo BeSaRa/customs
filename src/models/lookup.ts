@@ -2,7 +2,6 @@ import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
 import { GetNamesMixin } from '@mixins/get-names-mixin';
 import { GetNamesContract } from '@contracts/get-names-contract';
-import { INames } from '@constants/app-names';
 
 export class Lookup
   extends GetNamesMixin(ClonerMixin(class {}))
