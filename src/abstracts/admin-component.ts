@@ -264,13 +264,7 @@ export abstract class AdminComponent<
         exhaustMap((model) => {
           this.loadingSubject.next(true);
           return model.toggleStatus().pipe(
-            tap((newModel: M) => {
-              const updatedModel = model as M & { statusInfo: AdminResult };
-              updatedModel.status = newModel.status;
-              updatedModel.statusInfo = (
-                newModel as M & { statusInfo: AdminResult }
-              ).statusInfo;
-            }),
+            // Updating statusInfo is done in baseModel and no need for it here
             finalize(() => this.loadingSubject.next(false)),
             ignoreErrors()
           );
@@ -327,6 +321,7 @@ export abstract class AdminComponent<
 
   filterChange($event: { key: string; value: string | null }) {
     if (
+      // Comparing value with null only makes a problem when value is 0 (falsy)
       $event.value === null ||
       $event.value === undefined ||
       $event.value === ''

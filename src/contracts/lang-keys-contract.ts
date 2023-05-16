@@ -43,8 +43,5 @@ export interface LangKeysContract {
   delete_bulk: string;
   clear_filter: string;
   clear_all_filters: string;
-  active: string;
-  in_active: string;
   job_type: string;
-  status: string;
 }
