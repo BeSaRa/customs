@@ -38,6 +38,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       email, 
       phoneNumber, 
       status,
+      qid
     } = this;
     
     return {
@@ -53,9 +54,12 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       ] : arName,
       enName: controls ? [enName, 
         [CustomValidators.required,
-        CustomValidators.maxLength(50),
-        CustomValidators.pattern('ENG_NUM')]
-      ] : enName,
+          CustomValidators.maxLength(50),
+          CustomValidators.pattern('ENG_NUM')]
+        ] : enName,
+        qid: controls ? [qid,
+          [CustomValidators.required]
+        ] : qid,
       empNum: controls ? [empNum, 
         [CustomValidators.required,
         CustomValidators.number,
