@@ -167,9 +167,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.permissionService.loadPermissions(model?.id).subscribe(val=>{
       let ids : number[] = []
       val.forEach(permission=>{
-        ids.push(permission.id)
+        ids.push(permission.permissionId)
       })
       this.userPermissions?.patchValue(ids);
+      debugger
     })
   }
 
