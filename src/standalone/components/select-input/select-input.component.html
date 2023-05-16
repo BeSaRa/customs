@@ -16,6 +16,16 @@
       (blur)="inputTouch()"
       [id]="name"
       [ngClass]="tailwindClass">
+      <div class="px-2">
+        <app-input
+          [formControl]="filterControl"
+          label=""
+          [displayErrors]="false"
+          [noMargin]="true"
+          [placeholder]="lang.map.filter"
+          ><mat-icon appInputSuffix class="mx-1 !h-10" svgIcon="magnify"></mat-icon
+        ></app-input>
+      </div>
       <ng-container
         *ngFor="let option of options"
         [ngTemplateOutlet]="optionTemplate?.templateRef || defaultTemplate"
