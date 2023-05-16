@@ -17,6 +17,7 @@ export class InternalUserInterceptor implements ModelInterceptorContract<Interna
   receive(model: InternalUser): InternalUser {
     model.defaultDepartmentInfo = AdminResult.createInstance(model.defaultDepartmentInfo);
     model.jobTitleInfo = AdminResult.createInstance(model.jobTitleInfo);
+    model.statusInfo = new AdminResult().clone(model.statusInfo);
     model.userPreferences && (model.userPreferences = userPreferencesInterceptor.receive(new UserPreferences().clone<UserPreferences>(model.userPreferences)));
     return model;
   }
