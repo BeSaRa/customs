@@ -10,26 +10,26 @@ const { send, receive } = new TeamInterceptor();
 export class Team extends BaseModel<Team, TeamService> {
   $$__service_name__$$ = 'TeamService';
   ldapGroupName!: string;
+  teamEmail!: string;
   autoClaim!: boolean;
 
   buildForm(controls = false): object {
-    const { ldapGroupName, arName, enName, autoClaim } = this;
+    const { ldapGroupName, arName, enName, teamEmail, autoClaim } = this;
     return {
       ldapGroupName: ldapGroupName,
       arName: controls
         ? [
             arName,
-            CustomValidators.required,
-            // CustomValidators.pattern('AR_ONLY'),
+            [CustomValidators.required, CustomValidators.pattern('AR_NUM')],
           ]
         : arName,
       enName: controls
         ? [
             enName,
-            CustomValidators.required,
-            // CustomValidators.pattern('ENG_ONLY'),
+            [CustomValidators.required, CustomValidators.pattern('ENG_NUM')],
           ]
         : enName,
+      teamEmail: [teamEmail, [CustomValidators.pattern('EMAIL')]],
       autoClaim: controls ? [autoClaim, CustomValidators.required] : autoClaim,
     };
   }
