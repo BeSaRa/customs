@@ -1,7 +1,9 @@
 <ng-container *ngIf="!hasCustomControl">
-  <mat-slide-toggle [ngClass]="{ 'cursor-no-drop': disabled }" (click)="switchTouch()" [formControl]="control"
-    ><span [ngClass]="{ 'cursor-no-drop': disabled, 'cursor-pointer': !disabled }"> {{ label }}</span></mat-slide-toggle
-  >
+  <div  class="flex items-center h-full mx-4">
+    <mat-slide-toggle [ngClass]="{ 'cursor-no-drop': disabled }" (click)="switchTouch()" [formControl]="control">
+    <span [ngClass]="{ 'cursor-no-drop': disabled, 'cursor-pointer': !disabled }"> {{ label }}</span>
+    </mat-slide-toggle>
+  </div>
 </ng-container>
 <ng-container *ngIf="hasCustomControl">
   <ng-content select="[appControl]"></ng-content>
