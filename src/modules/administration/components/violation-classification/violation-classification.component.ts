@@ -61,7 +61,7 @@ export class ViolationClassificationComponent extends AdminComponent<
       'penaltyType',
       this.lookupService.lookups.penaltyType,
       'lookupKey',
-      '.getNames'
+      'getNames'
     ),
     new SelectFilterColumn(
       'status',
