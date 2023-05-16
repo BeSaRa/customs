@@ -7,6 +7,9 @@
   <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
 </div>
 <div class="shadow">
+  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
+    <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
+  </div>
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
