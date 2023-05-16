@@ -117,6 +117,7 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
+              this.selection.clear();
               this.loadingSubject.next(true);
               return (
                 this.loadComposite

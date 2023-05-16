@@ -36,6 +36,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatProgressSpinnerModule,
     MatCardModule,
     SwitchComponent,
+    MatProgressBarModule,
   ],
 })
 export class AdministrationModule {}
