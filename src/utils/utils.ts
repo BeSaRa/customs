@@ -1,5 +1,12 @@
 import { FormControlDirective, FormControlName, NgModel } from '@angular/forms';
-import { catchError, MonoTypeOperatorFunction, NEVER, Observable } from 'rxjs';
+import {
+  catchError,
+  filter,
+  MonoTypeOperatorFunction,
+  NEVER,
+  Observable,
+  of,
+} from 'rxjs';
 import { AdminResult } from '@models/admin-result';
 
 /**
@@ -36,12 +43,14 @@ export function isFormControlName(
  */
 export function ignoreErrors<T>(debug = false): MonoTypeOperatorFunction<T> {
   return (source: Observable<T>) => {
-    return source.pipe(
-      catchError((error) => {
-        debug && console.log(error);
-        return NEVER;
-      })
-    );
+    return source
+      .pipe(
+        catchError((error) => {
+          debug && console.log(error);
+          return of('CUSTOM_ERROR' as T);
+        })
+      )
+      .pipe(filter((value) => value !== 'CUSTOM_ERROR'));
   };
 }
 

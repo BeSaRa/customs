@@ -2,7 +2,7 @@ import { HasServiceMixin } from '@mixins/has-service-mixin';
 import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 import { ModelCrudContract } from '@contracts/model-crud-contract';
 import { BaseModelContract } from '@contracts/base-model-contract';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BaseCrudServiceContract } from '@contracts/base-crud-service-contract';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
@@ -11,6 +11,10 @@ import { GetNamesContract } from '@contracts/get-names-contract';
 import { BaseCrudWithDialogServiceContract } from '@contracts/base-crud-with-dialog-service-contract';
 import { MatDialogConfig } from '@angular/material/dialog';
 import { StatusTypes } from '@enums/status-types';
+import { map } from 'rxjs/operators';
+import { AdminResult } from '@models/admin-result';
+import { GetLookupServiceMixin } from '@mixins/has-lookup-service-mixin';
+import { GetLookupServiceContract } from '@contracts/get-lookup-service-contract';
 
 export abstract class BaseModel<
     M,
@@ -20,19 +24,23 @@ export abstract class BaseModel<
     C = unknown,
     PrimaryType = number
   >
-  extends HasServiceMixin(ClonerMixin(GetNamesMixin(class {})))
+  extends HasServiceMixin(
+    ClonerMixin(GetNamesMixin(GetLookupServiceMixin(class {})))
+  )
   implements
     HasServiceNameContract,
     ModelCrudContract<M>,
     BaseModelContract,
     CloneContract,
-    GetNamesContract
+    GetNamesContract,
+    GetLookupServiceContract
 {
   abstract override $$__service_name__$$: string;
   id!: number;
   override arName!: string;
   override enName!: string;
   status!: number;
+  statusInfo!: AdminResult;
   clientData!: string;
   updatedBy!: number;
   updatedOn!: string;
@@ -48,20 +56,36 @@ export abstract class BaseModel<
     return service;
   }
 
-  activate(): Observable<StatusTypes> {
+  activate(): Observable<M> {
     return this.$$getService$$<S>()
       .activate(this.id as PrimaryType)
-      .pipe(map(() => StatusTypes.ACTIVE));
+      .pipe(map(() => StatusTypes.ACTIVE))
+      .pipe(
+        map((status) => {
+          this.status = status;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;
+          return this as unknown as M;
+        })
+      );
   }
 
   create(): Observable<M> {
     return this.$$getService$$<S>().createFull(this as unknown as M);
   }
 
-  deactivate(): Observable<StatusTypes> {
+  deactivate(): Observable<M> {
     return this.$$getService$$<S>()
       .deactivate(this.id as PrimaryType)
-      .pipe(map(() => StatusTypes.INACTIVE));
+      .pipe(map(() => StatusTypes.INACTIVE))
+      .pipe(
+        map((status) => {
+          this.status = status;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;
+          return this as unknown as M;
+        })
+      );
   }
 
   delete(): Observable<M> {
@@ -77,12 +101,7 @@ export abstract class BaseModel<
   }
 
   toggleStatus(): Observable<M> {
-    return (this.isActive() ? this.deactivate() : this.activate()).pipe(
-      map((statue) => {
-        this.status = statue;
-        return this as unknown as M;
-      })
-    );
+    return this.isActive() ? this.deactivate() : this.activate();
   }
 
   isActive(): boolean {

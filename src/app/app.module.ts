@@ -6,8 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
 } from '@angular/material/snack-bar';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,6 +37,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { Observable, forkJoin, switchMap, tap } from 'rxjs';
+import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -63,6 +64,7 @@ import { Observable, forkJoin, switchMap, tap } from 'rxjs';
     NgScrollbarModule,
   ],
   providers: [
+    MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
@@ -90,7 +92,8 @@ import { Observable, forkJoin, switchMap, tap } from 'rxjs';
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: {
-        position: 'above',
+        duration: 2000,
+        verticalPosition: 'top',
       },
     },
     httpInterceptors,
