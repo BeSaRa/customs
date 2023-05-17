@@ -10,6 +10,8 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { StatusTypes } from '@enums/status-types';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
 
 
 @Component({
@@ -24,7 +26,8 @@ export class InternalUserComponent extends AdminComponent<
 > {
 
   service = inject(InternalUserService);
-
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter((s) => s.lookupKey != StatusTypes.DELETED);
+  
   userPreferencesService = inject(UserPreferencesService);
     
   displayedColumns: string[] = [
@@ -85,7 +88,12 @@ export class InternalUserComponent extends AdminComponent<
     new TextFilterColumn('enName'),
     new TextFilterColumn('qid'),
     new TextFilterColumn('empNum'),
-    new TextFilterColumn('status'),
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames'
+    ),
     new TextFilterColumn('email'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
