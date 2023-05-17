@@ -21,10 +21,6 @@ import { BaseCrudServiceContract } from '@contracts/base-crud-service-contract';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ClonerMixin } from '@mixins/cloner-mixin';
-import { GetNamesMixin } from '@mixins/get-names-mixin';
-import { GetNamesContract } from '@contracts/get-names-contract';
-import { CloneContract } from '@contracts/clone-contract';
 
 @Directive()
 export abstract class AdminDialogComponent<

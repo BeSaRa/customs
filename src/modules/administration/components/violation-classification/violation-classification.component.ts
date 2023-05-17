@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ViolationClassification } from '@models/violation-classification';
 import { ViolationClassificationService } from '@services/violation-classification.service';

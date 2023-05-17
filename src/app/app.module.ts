@@ -38,9 +38,9 @@ import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
-import { SelectComponent } from '@standalone/components/select/select.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { SelectComponent } from '@standalone/components/select/select.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],

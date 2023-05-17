@@ -1,4 +1,4 @@
-import { Directive, inject, OnInit, signal } from '@angular/core';
+import { Directive, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import {
   BehaviorSubject,

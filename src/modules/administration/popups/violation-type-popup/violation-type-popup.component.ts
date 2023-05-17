@@ -4,7 +4,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ViolationType } from '@models/violation-type';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, take } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
