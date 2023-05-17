@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { Localization } from '@models/localization';
 import { LocalizationService } from '@services/localization.service';
@@ -20,10 +20,7 @@ export class LocalizationComponent
     Localization,
     LocalizationService
   >
-  implements AfterViewInit
 {
-  ngAfterViewInit(): void {
-  }
   service = inject(LocalizationService);
   actions: ContextMenuActionContract<Localization>[] = [
     {
