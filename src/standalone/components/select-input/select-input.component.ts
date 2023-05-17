@@ -29,7 +29,6 @@ import { generateUUID, objectHasOwnProperty } from '@utils/utils';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
-import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-select-input',
@@ -64,8 +63,6 @@ export class SelectInputComponent
   }
 
   private destroy$ = new Subject<void>();
-
-  _lang = inject(LangService);
 
   elementRef = inject(ElementRef);
   @Input()
