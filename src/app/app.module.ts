@@ -41,6 +41,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SelectComponent } from '@standalone/components/select/select.component';
+import { LangService } from '@services/lang.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -75,6 +76,7 @@ import { SelectComponent } from '@standalone/components/select/select.component'
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
       deps: [
+        LangService,
         ConfigService,
         UrlService,
         InfoService,
@@ -116,6 +118,7 @@ export class AppModule {
   }
 
   static initialize(
+    _lang: LangService,
     config: ConfigService,
     url: UrlService,
     info: InfoService,

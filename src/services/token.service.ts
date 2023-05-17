@@ -7,11 +7,16 @@ import { UrlService } from '@services/url.service';
 import { Observable } from 'rxjs';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { CastResponse } from 'cast-response';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TokenService extends RegisterServiceMixin(class {}) {
+export class TokenService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
+  serviceName = 'TokenService';
   private readonly eCookieService = inject(ECookieService);
   private readonly tokenStoreKey = inject(ConfigService).CONFIG.TOKEN_STORE_KEY;
   private readonly http = inject(HttpClient);

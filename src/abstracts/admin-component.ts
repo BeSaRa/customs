@@ -32,10 +32,6 @@ import { UserClick } from '@enums/user-click';
 import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
-import { GetNamesMixin } from '@mixins/get-names-mixin';
-import { ClonerMixin } from '@mixins/cloner-mixin';
-import { CloneContract } from '@contracts/clone-contract';
-import { GetNamesContract } from '@contracts/get-names-contract';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AdminResult } from '@models/admin-result';
 import { LookupService } from '@services/lookup.service';
@@ -47,12 +43,8 @@ export abstract class AdminComponent<
     S extends BaseCrudWithDialogService<C, M, PrimaryType>,
     PrimaryType = number
   >
-  extends OnDestroyMixin(ClonerMixin(GetNamesMixin(class {})))
-  implements
-    AdminComponentContract<M, S>,
-    OnInit,
-    CloneContract,
-    GetNamesContract
+  extends OnDestroyMixin(class {})
+  implements AdminComponentContract<M, S>, OnInit
 {
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);

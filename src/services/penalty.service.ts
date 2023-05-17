@@ -25,6 +25,8 @@ export class PenaltyService extends BaseCrudWithDialogService<
   PenaltyPopupComponent,
   Penalty
 > {
+  serviceName = 'PenaltyService';
+
   protected getModelClass(): Constructor<Penalty> {
     return Penalty;
   }

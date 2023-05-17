@@ -27,15 +27,14 @@ export function GetNamesMixin<T extends Constructor<object>>(
     }
 
     getNames(): string {
-      return this[
-        (this.getLangService().getCurrent().code +
-          'Name') as keyof NamesContract
-      ];
-    }
-
-    getDisplayName(): string {
-      return (this.getLangService().getCurrent().code +
-        'Name') as keyof NamesContract;
+      try {
+        return this[
+          (this.getLangService().getCurrent().code +
+            'Name') as keyof NamesContract
+        ];
+      } catch (e) {
+        return 'lang service not ready yet';
+      }
     }
   };
 }

@@ -25,6 +25,7 @@ export class ViolationClassificationService extends BaseCrudWithDialogService<
   ViolationClassificationPopupComponent,
   ViolationClassification
 > {
+  serviceName = 'ViolationClassificationService';
   protected getModelClass(): Constructor<ViolationClassification> {
     return ViolationClassification;
   }
