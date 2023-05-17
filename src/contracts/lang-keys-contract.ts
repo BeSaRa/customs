@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  menu_penalty: string;
+  penalty_grace_period: string;
+  violation_classification: string;
+  menu_violation_type: string;
+  menu_violation_classification: string;
   menu_job_title: string;
   login: string;
   ar_name: string;
@@ -34,6 +39,10 @@ export interface LangKeysContract {
   reload: string;
   add: string;
   filter: string;
+  status: string;
+  in_active: string;
+  active: string;
+  penalty_type: string;
   change_status: string;
   ldap_group_name: string;
   team_email: string;

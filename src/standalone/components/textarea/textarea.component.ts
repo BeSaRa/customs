@@ -20,7 +20,7 @@ import {
 } from '@angular/forms';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { isNgModel } from '@utils/utils';
+import { generateUUID, isNgModel } from '@utils/utils';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 
 @Component({
@@ -62,7 +62,7 @@ export class TextareaComponent
   @Input()
   displayErrors = true;
   @Input()
-  name = crypto.randomUUID();
+  name = generateUUID();
   @ContentChild(ControlDirective)
   template?: ControlDirective;
   @Input()

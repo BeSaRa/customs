@@ -14,6 +14,7 @@ import { Constructor } from '@app-types/constructors';
   providedIn: 'root',
 })
 export class PermissionService extends BaseCrudService<Permission> {
+  serviceName = 'PermissionService';
   models: Permission[] = [];
 
   protected getUrlSegment(): string {

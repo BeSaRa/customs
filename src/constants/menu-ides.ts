@@ -1,6 +1,9 @@
 export const MenuIdes = {
   ADMINISTRATION: 1,
   LOCALIZATION: 2,
+  VIOLATION_CLASSIFICATION: 5,
+  VIOLATION_TYPE: 4,
   JOB_TITLE: 3,
-  TEAM: 4,
+  PENALTY: 6,
+  TEAM: 7,
 };

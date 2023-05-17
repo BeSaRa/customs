@@ -49,8 +49,6 @@ export abstract class AdminComponent<
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
   protected loadComposite = true;
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading$ = this.loadingSubject.asObservable();
 
   abstract service: S;
   private paginate$ = new BehaviorSubject({
@@ -65,6 +63,8 @@ export abstract class AdminComponent<
   >(1);
 
   data$: Observable<M[]> = this._load();
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
 
   length = 50;
 
@@ -91,8 +91,6 @@ export abstract class AdminComponent<
 
   lookupService = inject(LookupService);
 
-  private statuses = this.lookupService.lookups.commonStatus;
-
   get limit(): number {
     return this.paginate$.value.limit;
   }
@@ -109,6 +107,7 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
+              this.selection.clear();
               this.loadingSubject.next(true);
               return (
                 this.loadComposite
@@ -121,6 +120,7 @@ export abstract class AdminComponent<
             }),
             tap(({ count }) => {
               this.length = count;
+              this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
             map((response) => response.rs)
           );
@@ -338,7 +338,7 @@ export abstract class AdminComponent<
 
   getFilterStringColumn(column: string): string {
     return objectHasOwnProperty(this.filter$.value, column)
-      ? (this.filter$.value[column] as string)
+      ? (this.filter$.value[column as keyof M] as string)
       : '';
   }
 }
