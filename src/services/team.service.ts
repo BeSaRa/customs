@@ -25,6 +25,7 @@ export class TeamService extends BaseCrudWithDialogService<
   TeamPopupComponent,
   Team
 > {
+  serviceName = 'TeamService';
   protected getModelClass(): Constructor<Team> {
     return Team;
   }

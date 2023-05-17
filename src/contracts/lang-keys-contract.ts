@@ -32,9 +32,6 @@ export interface LangKeysContract {
   view: string;
   edit: string;
   delete: string;
-  status: string;
-  active: string;
-  in_active: string;
   no_records_to_display: string;
   reload: string;
   add: string;
