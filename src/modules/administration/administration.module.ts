@@ -9,6 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
@@ -22,6 +23,10 @@ import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-po
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
+import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -34,6 +39,7 @@ import { JobTitleComponent } from '@modules/administration/components/job-title/
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -42,6 +48,10 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     LocalizationComponent,
     PenaltyComponent,
     PenaltyPopupComponent,
+    ViolationClassificationComponent,
+    ViolationClassificationPopupComponent,
+    ViolationTypeComponent,
+    ViolationTypePopupComponent,
     JobTitleComponent,
     JobTitlePopupComponent,
   ],
@@ -52,7 +62,10 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatPaginatorModule,
     ButtonComponent,
     MatIconModule,
+    MatSlideToggleModule,
+    MatSelectModule,
     MatButtonModule,
+    MatInputModule,
     IconButtonComponent,
     MatTooltipModule,
     MatSortModule,
@@ -77,6 +90,7 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatProgressSpinnerModule,
     MatCardModule,
     SwitchComponent,
+    MatProgressBarModule,
   ],
 })
 export class AdministrationModule {}

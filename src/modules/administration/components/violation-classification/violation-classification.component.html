@@ -1,32 +1,34 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light px-3 text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
-  <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
-    {{ lang.map.menu_localization }}
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+    {{ lang.map.menu_violation_classification }}
   </h1>
   <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
   <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
   <div class="flex-auto"></div>
+  <div>
+    <app-icon-button icon="DELETE" [matTooltip]="lang.map.delete_bulk"></app-icon-button>
+  </div>
 </div>
 <div class="shadow relative">
-  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center items-center">
-    <mat-spinner [diameter]="75"></mat-spinner>
-  </div>
+  <mat-progress-bar *ngIf="loading$ | async" color="accent" mode="query"> </mat-progress-bar>
+
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
+          [disabled]="(loading$ | async)!"
           (change)="$event ? toggleAllRows() : null"
           [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()"
-          [disabled]="(loading$ | async)!">
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let element">
         <mat-checkbox
+          [disabled]="(loading$ | async)!"
           (click)="$event.stopPropagation()"
           (change)="$event ? selection.toggle(element) : null"
-          [checked]="selection.isSelected(element)"
-          [disabled]="(loading$ | async)!">
+          [checked]="selection.isSelected(element)">
         </mat-checkbox>
       </td>
     </ng-container>
@@ -38,50 +40,58 @@
       </td>
     </ng-container>
 
-    <!-- enName Column -->
+    <!-- enName -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
       <td mat-cell *matCellDef="let element">
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
+    <!-- penaltyType -->
+    <ng-container matColumnDef="penaltyType">
+      <th mat-header-cell mat-sort-header="penaltyType" *matHeaderCellDef>{{ lang.map.penalty_type }}</th>
 
-    <!-- localizationKey Column -->
-    <ng-container matColumnDef="localizationKey">
-      <th mat-header-cell mat-sort-header="localizationKey" *matHeaderCellDef>{{ lang.map.localization_key }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.typeInfo.getNames() }}</td>
+    </ng-container>
+    <!-- status status -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>{{ lang.map.status }}</th>
       <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.localizationKey | highlight : getFilterStringColumn('localizationKey')"></span>
+        <mat-slide-toggle
+          [disabled]="(loading$ | async)!"
+          class="cursor-not-allowed"
+          [matTooltip]="lang.map.change_status"
+          color="primary"
+          (click)="status$.next(element)"
+          [checked]="element.isActive()">
+          <span>{{ element.statusInfo.getNames() }}</span>
+        </mat-slide-toggle>
       </td>
     </ng-container>
-
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
-        <div class="flex">
+        <div class="flex items-center">
           <app-icon-button
-            [matTooltip]="lang.map.view"
             [disabled]="loading$ | async"
+            [matTooltip]="lang.map.view"
             (click)="view$.next(element)"
             icon="VIEW"></app-icon-button>
-
           <app-icon-button
-            [matTooltip]="lang.map.edit"
             [disabled]="loading$ | async"
+            [matTooltip]="lang.map.edit"
             (click)="edit$.next(element)"
             icon="EDIT"></app-icon-button>
-
           <app-icon-button
+            [disabled]="loading$ | async"
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"
-            [disabled]="loading$ | async"
             icon="DELETE"></app-icon-button>
         </div>
       </td>
     </ng-container>
-
     <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
-      <!-- localizationKey Column -->
       <ng-container [matColumnDef]="filter">
         <th mat-header-cell *matHeaderCellDef>
           <app-filter-column
@@ -92,24 +102,23 @@
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
+
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"
       *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
-      <td *ngIf="(loading$ | async)!" class="p-4" colspan="100">
-        {{ lang.map.no_records_to_display }}
-      </td>
+      <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
   <mat-paginator
-    class="border-t"
+    class="border-t border-gray-200"
     (page)="paginate($event)"
     [pageSizeOptions]="pageSizeOptions"
     [pageSize]="limit"
     [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length" />
-
-  <app-context-menu #contextMenu [actions]="actions" />
+    [length]="length">
+  </mat-paginator>
+  <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>

@@ -4,10 +4,16 @@ import { AdministrationComponent } from './administration.component';
 import { AppRoutes } from '@constants/app-routes';
 import { LocalizationComponent } from '@modules/administration/components/localization/localization.component';
 import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
+import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
+  {
+    path: AppRoutes.JOB_TITLE,
+    component: JobTitleComponent,
+  },
   {
     path: AppRoutes.LOCALIZATION,
     component: LocalizationComponent,
@@ -19,6 +25,14 @@ const routes: Routes = [
   {
     path: AppRoutes.JOB_TITLE,
     component: JobTitleComponent,
+  },
+  {
+    path: AppRoutes.VIOLATION_CLASSIFICATION,
+    component: ViolationClassificationComponent,
+  },
+  {
+    path: AppRoutes.VIOLATION_TYPE,
+    component: ViolationTypeComponent,
   },
 ];
 
