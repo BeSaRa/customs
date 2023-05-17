@@ -6,12 +6,11 @@
   <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD" />
   <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS" />
   <div class="flex-auto"></div>
-  <div>
-    <app-icon-button icon="DELETE" [matTooltip]="lang.map.delete_bulk" />
-  </div>
 </div>
 <div class="shadow relative">
-  <mat-progress-bar *ngIf="loading$ | async" color="accent" mode="query"> </mat-progress-bar>
+  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
+    <mat-spinner style="margin-top: 120px" [diameter]="75"></mat-spinner>
+  </div>
 
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">

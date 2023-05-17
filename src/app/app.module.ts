@@ -12,7 +12,6 @@ import {
 } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { ConfigService } from '@services/config.service';
 import { UrlService } from '@services/url.service';
