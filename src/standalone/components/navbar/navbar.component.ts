@@ -36,8 +36,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class NavbarComponent {
   @Output()
   menuClick = new EventEmitter<MouseEvent | undefined>();
-  employee = inject(EmployeeService).getEmployee();
   lang = inject(LangService);
+  employee = inject(EmployeeService).getEmployee();
   dialog = inject(DialogService);
   toast = inject(ToastService);
   authService = inject(AuthService);
