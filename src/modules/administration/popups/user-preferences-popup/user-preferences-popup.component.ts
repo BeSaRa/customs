@@ -41,20 +41,4 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   }
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<UserPreferences> = inject(MAT_DIALOG_DATA);
-
-
-  // saveUserPreferences() {
-  //   if (!this.form || this.form.invalid) {
-  //     return;
-  //   }
-
-  //   let updatedModel = new UserPreferences().clone<UserPreferences>({
-  //     ...this.model,
-  //     ...this.form.value,
-  //   });
-  //   updatedModel.updateUserPreferences(this.user.id).subscribe(_ => {
-  //     this.dialogRef.close(true);
-  //   });
-  // }
-
 }
