@@ -169,7 +169,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         ids.push(permission.permissionId)
       })
       this.userPermissions?.patchValue(ids);
-      debugger
     })
   }
 
