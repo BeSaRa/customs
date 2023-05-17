@@ -99,8 +99,6 @@ export abstract class AdminComponent<
 
   lookupService = inject(LookupService);
 
-  private statuses = this.lookupService.lookups.commonStatus;
-
   get limit(): number {
     return this.paginate$.value.limit;
   }
