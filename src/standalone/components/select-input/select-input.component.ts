@@ -32,6 +32,7 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
 import { InputComponent } from '../input/input.component';
 import { LangService } from '@services/lang.service';
 import { MatIconModule } from '@angular/material/icon';
+import { FilterSelectInputPipe } from '@standalone/pipes/filter-select-input.pipe';
 
 @Component({
   selector: 'app-select-input',
@@ -44,6 +45,7 @@ import { MatIconModule } from '@angular/material/icon';
     ValidationErrorsComponent,
     ReactiveFormsModule,
     InputComponent,
+    FilterSelectInputPipe,
   ],
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
@@ -65,7 +67,6 @@ export class SelectInputComponent
       this.selectInput?.options.reset(options);
       this.selectInput?.options.notifyOnChanges();
     });
-    this._listenToFilterControl();
   }
 
   private destroy$ = new Subject<void>();
@@ -99,7 +100,10 @@ export class SelectInputComponent
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bindLabel?: string | ((item: any) => any);
   @Input()
-  enableFilter = true;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  bindFilter?: string | ((item: any) => any);
+  @Input()
+  enableFilter = false;
   @ContentChild(OptionTemplateDirective)
   optionTemplate?: OptionTemplateDirective;
 
@@ -124,23 +128,8 @@ export class SelectInputComponent
 
   lang = inject(LangService);
   filterControl = new FormControl('');
-  _filteredSelectOptions = this._selectOptions;
-  _listenToFilterControl() {
-    console.log('hello');
-    if (this.enableFilter) {
-      this.filterControl.valueChanges
-        .pipe(takeUntil(this.destroy$), debounceTime(250))
-        .subscribe((filterText) => {
-          const filteredOptions = this._selectOptions;
-          if (filterText) {
-            (filteredOptions?.toArray() ?? []).filter((option) =>
-              option.viewValue.toLowerCase().includes(filterText.toLowerCase())
-            );
-          }
-          this.selectInput?.options.reset(filteredOptions?.toArray() ?? []);
-          this.selectInput?.options.notifyOnChanges();
-        });
-    }
+  get filterTxt$() {
+    return this.filterControl.valueChanges;
   }
 
   get errors(): Observable<ValidationErrors | null | undefined> {
