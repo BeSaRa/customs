@@ -25,7 +25,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
 
   statusList!:Lookup[]
   allPermissions!:Permission[]
-  // languages: Lookup[] = [];
 
 
   _buildForm(): void {
@@ -74,7 +73,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       name: 'basic',
       langKey: 'lbl_basic_info',
       index: 0,
-      // checkTouchedDirty: true,
       validStatus: () => {
         if (!this.form || !this.inViewMode) {
           return true;
@@ -127,7 +125,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   protected override _init(): void {
     this.statusList = this.lookupService.lookups.commonStatus   
     this.loadPermissions() 
-    // this.loadLanguages()
   }
   
   getTabInvalidStatus(tabName: string): boolean {
@@ -182,18 +179,4 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       });
 
   }
-  // private loadLanguages():void{
-  //   let arabicLang = new Lookup();
-  //   arabicLang.lookupKey = 1;
-  //   arabicLang.arName = 'العربية';
-  //   arabicLang.enName = 'Arabic';
-
-  //   let englishLang = new Lookup();
-  //   englishLang.lookupKey = 2;
-  //   englishLang.arName = 'الإنجليزية';
-  //   englishLang.enName = 'English';
-    
-  //   this.languages = [arabicLang, englishLang]
-  // }
-
 }
