@@ -11,7 +11,6 @@ import { LookupService } from '@services/lookup.service';
 import { PermissionService } from '@services/permission.service';
 import { Permission } from '@models/permission';
 import { TabMap } from '@constants/tab-map-type';
-import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-internal-user-popup',

@@ -27,14 +27,7 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    <!-- domainName -->
-    <ng-container matColumnDef="domainName">
-      <th mat-header-cell mat-sort-header="domainName" *matHeaderCellDef>{{ lang.map.domain_name }}</th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.domainName | highlight : getFilterStringColumn('domainName')"></span>
-      </td>
-    </ng-container>
-
+    
     <!-- arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
@@ -50,7 +43,15 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
-
+    
+    <!-- domainName -->
+    <ng-container matColumnDef="domainName">
+      <th mat-header-cell mat-sort-header="domainName" *matHeaderCellDef>{{ lang.map.domain_name }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.domainName | highlight : getFilterStringColumn('domainName')"></span>
+      </td>
+    </ng-container>
+    
     <!-- qid -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>{{ lang.map.qid }}</th>

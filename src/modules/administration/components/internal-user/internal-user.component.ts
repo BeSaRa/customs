@@ -32,9 +32,9 @@ export class InternalUserComponent extends AdminComponent<
     
   displayedColumns: string[] = [
     'select',
-    'domainName',
     'arName',
     'enName',
+    'domainName',
     'qid',
     'empNum',
     'status',
@@ -83,9 +83,9 @@ export class InternalUserComponent extends AdminComponent<
 
   override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('domainName'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new TextFilterColumn('domainName'),
     new TextFilterColumn('qid'),
     new TextFilterColumn('empNum'),
     new SelectFilterColumn(
