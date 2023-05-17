@@ -10,7 +10,6 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { PermissionService } from '@services/permission.service';
 import { Permission } from '@models/permission';
-import { TabMap } from '@constants/tab-map-type';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -68,75 +67,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     // you can close the dialog after save here 
     this.dialogRef.close(this.model);
   }
-  tabsData:TabMap = {
-    basic: {
-      name: 'basic',
-      langKey: 'lbl_basic_info',
-      index: 0,
-      validStatus: () => {
-        if (!this.form || !this.inViewMode) {
-          return true;
-        }
-        return this.form.valid;
-      },
-      isTouchedOrDirty: () => {
-        if (!this.form) {
-          return true;
-        }
-        return this.form!.touched || this.form!.dirty;
-      }
-    },
-    userPreferences: {
-      name: 'userPreferences',
-      langKey: 'lbl_user_preferences',
-      index: 1,
-      validStatus: () => {
-        if (!this.userPreferences || !this.inViewMode) {
-          return true;
-        }
-        return this.userPreferences.valid;
-      },
-      isTouchedOrDirty: () => {
-        if (!this.userPreferences) {
-          return true;
-        }
-        return this.userPreferences!.touched || this.userPreferences!.dirty;
-      }
-    },
-    permissions: {
-      name: 'permissions',
-      langKey: 'lbl_permissions',
-      index: 1,
-      validStatus: () => {
-        if (!this.permissionsFormTab || !this.inViewMode) {
-          return true;
-        }
-        return this.permissionsFormTab.valid;
-      },
-      isTouchedOrDirty: () => {
-        if (!this.permissionsFormTab) {
-          return true;
-        }
-        return this.permissionsFormTab.touched || this.permissionsFormTab.dirty;
-      }
-    },
-  };
   
   protected override _init(): void {
     this.statusList = this.lookupService.lookups.commonStatus   
     this.loadPermissions() 
-  }
-  
-  getTabInvalidStatus(tabName: string): boolean {
-    let tab = this.tabsData[tabName];
-    if (!tab) {
-      console.info('tab not found: %s', tabName);
-      return true; // if tab not found, consider it invalid
-    }
-    if (!tab.checkTouchedDirty) {
-      return !tab.validStatus();
-    }
-    return !tab.validStatus() && tab.isTouchedOrDirty();
   }
 
   get permissionsFormTab() {
