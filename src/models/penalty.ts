@@ -4,15 +4,12 @@ import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
-import { AdminResult } from './admin-result';
 
 const { send, receive } = new PenaltyInterceptor();
 
 @InterceptModel({ send, receive })
 export class Penalty extends BaseModel<Penalty, PenaltyService> {
   $$__service_name__$$ = 'PenaltyService';
-  override arName!: string;
-  override enName!: string;
   penaltyType!: number;
   isSystem = true;
 

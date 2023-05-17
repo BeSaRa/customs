@@ -3,7 +3,6 @@ import {
   catchError,
   filter,
   MonoTypeOperatorFunction,
-  NEVER,
   Observable,
   of,
 } from 'rxjs';

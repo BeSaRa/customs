@@ -3,7 +3,6 @@ import { AdminComponent } from '@abstracts/admin-component';
 import { JobTitle } from '@models/job-title';
 import { JobTitleService } from '@services/job-title.service';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
-import { LookupService } from '@services/lookup.service';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { ColumnsWrapper } from '@models/columns-wrapper';

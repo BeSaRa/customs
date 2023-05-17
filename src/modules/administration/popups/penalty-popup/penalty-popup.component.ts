@@ -6,7 +6,6 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
-import { LangCodes } from '@enums/lang-codes';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';

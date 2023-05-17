@@ -31,7 +31,6 @@ import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
-import { Penalty } from '@models/penalty';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AdminResult } from '@models/admin-result';
@@ -68,7 +67,6 @@ export abstract class AdminComponent<
   public loading$ = this.loadingSubject.asObservable();
 
   length = 50;
-  //isLoading: boolean = true;
 
   create$: Subject<void> = new Subject<void>();
   view$: Subject<M> = new Subject<M>();
@@ -92,8 +90,6 @@ export abstract class AdminComponent<
   );
 
   lookupService = inject(LookupService);
-
-  private statuses = this.lookupService.lookups.commonStatus;
 
   get limit(): number {
     return this.paginate$.value.limit;
@@ -135,7 +131,6 @@ export abstract class AdminComponent<
     this.sort$.next(undefined);
     this.reload$.next();
 
-    this._listenToChangeStatus();
     this._listenToCreate();
     this._listenToEdit();
     this._listenToView();

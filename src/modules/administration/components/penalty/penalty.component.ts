@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { Penalty } from '@models/penalty';
 import { PenaltyService } from '@services/penalty.service';
@@ -10,7 +10,6 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
 import { StatusTypes } from '@enums/status-types';
 
 @Component({
@@ -67,7 +66,6 @@ export class PenaltyComponent extends AdminComponent<
       this.commonStatus,
       'lookupKey',
       'getNames'
-      //this.lang.getCurrent().code + 'Name'
     ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
