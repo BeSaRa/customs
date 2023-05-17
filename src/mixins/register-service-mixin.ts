@@ -8,6 +8,7 @@ export function RegisterServiceMixin<T extends Constructor<object>>(
   base: T
 ): T {
   return class BaseServiceMixin extends base {
+    serviceName!: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(...args: any[]) {
       super(args);
@@ -16,7 +17,7 @@ export function RegisterServiceMixin<T extends Constructor<object>>(
 
     private $__init__$() {
       Promise.resolve().then(() => {
-        ServiceRegistry.set(this.constructor.name, this);
+        ServiceRegistry.set(this.serviceName, this);
       });
     }
   };

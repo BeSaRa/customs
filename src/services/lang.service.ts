@@ -8,11 +8,16 @@ import { DOCUMENT } from '@angular/common';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Localization } from '@models/localization';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LangService extends RegisterServiceMixin(class {}) {
+export class LangService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
+  serviceName = 'LangService';
   map: Record<keyof LangKeysContract, string> = {} as Record<
     keyof LangKeysContract,
     string
@@ -55,7 +60,7 @@ export class LangService extends RegisterServiceMixin(class {}) {
     .pipe(distinctUntilChanged());
 
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[1];
+  private current: LangContract = this.languages[0];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };

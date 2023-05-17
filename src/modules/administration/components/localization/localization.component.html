@@ -16,7 +16,7 @@
           (change)="$event ? toggleAllRows() : null"
           [checked]="selection.hasValue() && isAllSelected()"
           [indeterminate]="selection.hasValue() && !isAllSelected()"
-          [disabled]="loading$ | async">
+          [disabled]="(loading$ | async)!">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let element">
@@ -24,7 +24,7 @@
           (click)="$event.stopPropagation()"
           (change)="$event ? selection.toggle(element) : null"
           [checked]="selection.isSelected(element)"
-          [disabled]="loading$ | async">
+          [disabled]="(loading$ | async)!">
         </mat-checkbox>
       </td>
     </ng-container>
@@ -108,7 +108,7 @@
     [pageSizeOptions]="pageSizeOptions"
     [pageSize]="limit"
     [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>
-  <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+    [length]="length" />
+
+  <app-context-menu #contextMenu [actions]="actions" />
 </div>

@@ -7,8 +7,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/login/login.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatSnackBarModule,
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
 } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -38,6 +38,10 @@ import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { SelectComponent } from '@standalone/components/select/select.component';
+import { LangService } from '@services/lang.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -50,6 +54,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     MatSnackBarModule,
     MatDialogModule,
     InputComponent,
+    SelectComponent,
     FormsModule,
     ReactiveFormsModule,
     NgxMaskDirective,
@@ -62,6 +67,8 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
     InputSuffixDirective,
     NavbarComponent,
     NgScrollbarModule,
+    MatProgressSpinnerModule,
+    MatProgressBarModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
@@ -69,6 +76,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
       deps: [
+        LangService,
         ConfigService,
         UrlService,
         InfoService,
@@ -96,6 +104,7 @@ import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
         verticalPosition: 'top',
       },
     },
+
     httpInterceptors,
     provideNgxMask(),
   ],
@@ -109,6 +118,7 @@ export class AppModule {
   }
 
   static initialize(
+    _lang: LangService,
     config: ConfigService,
     url: UrlService,
     info: InfoService,

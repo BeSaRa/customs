@@ -25,10 +25,11 @@ import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
-import { objectHasOwnProperty } from '@utils/utils';
+import { generateUUID, objectHasOwnProperty } from '@utils/utils';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-select-input',
@@ -63,6 +64,9 @@ export class SelectInputComponent
   }
 
   private destroy$ = new Subject<void>();
+
+  _lang = inject(LangService);
+
   elementRef = inject(ElementRef);
   @Input()
   disabled = false;
@@ -83,7 +87,7 @@ export class SelectInputComponent
   @Input()
   noMargin = false;
   @Input()
-  name = crypto.randomUUID();
+  name = generateUUID();
   @Input()
   options?: unknown[] = [];
   @Input()

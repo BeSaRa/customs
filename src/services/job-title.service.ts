@@ -25,6 +25,7 @@ export class JobTitleService extends BaseCrudWithDialogService<
   JobTitlePopupComponent,
   JobTitle
 > {
+  serviceName = 'JobTitleService';
   protected getModelClass(): Constructor<JobTitle> {
     return JobTitle;
   }

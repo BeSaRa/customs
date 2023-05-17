@@ -18,11 +18,16 @@ import { CastResponse } from 'cast-response';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { TokenService } from '@services/token.service';
 import { MenuItemService } from '@services/menu-item.service';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService extends RegisterServiceMixin(class {}) {
+export class AuthService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
+  serviceName = 'AuthService';
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private readonly employeeService = inject(EmployeeService);

@@ -6,7 +6,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -17,7 +19,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
+import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
+import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
+import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
@@ -38,6 +46,12 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    PenaltyComponent,
+    PenaltyPopupComponent,
+    ViolationClassificationComponent,
+    ViolationClassificationPopupComponent,
+    ViolationTypeComponent,
+    ViolationTypePopupComponent,
     JobTitleComponent,
     JobTitlePopupComponent,
   ],
@@ -48,7 +62,10 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatPaginatorModule,
     ButtonComponent,
     MatIconModule,
+    MatSlideToggleModule,
+    MatSelectModule,
     MatButtonModule,
+    MatInputModule,
     IconButtonComponent,
     MatTooltipModule,
     MatSortModule,
@@ -57,8 +74,12 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatSlideToggleModule,
     ContextMenuComponent,
     MatMenuModule,
+    MatProgressSpinnerModule,
     FilterColumnComponent,
     SelectInputComponent,
     MatOptionModule,
@@ -70,6 +91,7 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatCardModule,
     MatProgressBarModule,
     SwitchComponent,
+    MatProgressBarModule,
   ],
 })
 export class AdministrationModule {}
