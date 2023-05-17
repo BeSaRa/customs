@@ -29,6 +29,10 @@ import { generateUUID, objectHasOwnProperty } from '@utils/utils';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { InputComponent } from '../input/input.component';
+import { MatIconModule } from '@angular/material/icon';
+import { FilterSelectInputPipe } from '@standalone/pipes/filter-select-input.pipe';
+import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-select-input',
@@ -37,8 +41,11 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
     CommonModule,
     MatOptionModule,
     MatSelectModule,
+    MatIconModule,
     ValidationErrorsComponent,
     ReactiveFormsModule,
+    InputComponent,
+    FilterSelectInputPipe,
   ],
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
@@ -95,6 +102,11 @@ export class SelectInputComponent
   @Input()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bindLabel?: string | ((item: any) => any);
+  @Input()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  bindFilter?: string | ((item: any) => any);
+  @Input()
+  enableFilter = false;
   @ContentChild(OptionTemplateDirective)
   optionTemplate?: OptionTemplateDirective;
 
@@ -116,6 +128,12 @@ export class SelectInputComponent
   private injector = inject(Injector);
 
   private ctrl!: NgControl | null;
+
+  lang = inject(LangService);
+  filterControl = new FormControl('');
+  get filterTxt$() {
+    return this.filterControl.valueChanges;
+  }
 
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
