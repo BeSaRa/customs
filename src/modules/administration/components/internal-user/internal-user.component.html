@@ -78,7 +78,6 @@
           color="primary"
           (click)="status$.next(element)"
           [checked]="element.isActive()">
-          <span>{{ element.statusInfo.getNames() }}</span>
         </mat-slide-toggle>
       </td>
     </ng-container>
