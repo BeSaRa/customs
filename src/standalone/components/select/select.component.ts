@@ -26,6 +26,7 @@ import { InputPrefixDirective } from '@standalone/directives/input-prefix.direct
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { BaseModelContract } from '@contracts/base-model-contract';
+import { generateUUID } from '@utils/utils';
 
 @Component({
   selector: 'app-select',
@@ -86,7 +87,7 @@ export class SelectComponent
   @Input()
   noMargin = false;
   @Input()
-  name = crypto.randomUUID();
+  name = generateUUID();
 
   @ContentChild(ControlDirective)
   template?: ControlDirective;
