@@ -32,6 +32,10 @@ import { UserClick } from '@enums/user-click';
 import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
+import { GetNamesMixin } from '@mixins/get-names-mixin';
+import { ClonerMixin } from '@mixins/cloner-mixin';
+import { CloneContract } from '@contracts/clone-contract';
+import { GetNamesContract } from '@contracts/get-names-contract';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AdminResult } from '@models/admin-result';
 import { LookupService } from '@services/lookup.service';
@@ -43,8 +47,12 @@ export abstract class AdminComponent<
     S extends BaseCrudWithDialogService<C, M, PrimaryType>,
     PrimaryType = number
   >
-  extends OnDestroyMixin(class {})
-  implements AdminComponentContract<M, S>, OnInit
+  extends OnDestroyMixin(ClonerMixin(GetNamesMixin(class {})))
+  implements
+    AdminComponentContract<M, S>,
+    OnInit,
+    CloneContract,
+    GetNamesContract
 {
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
@@ -91,8 +99,6 @@ export abstract class AdminComponent<
 
   lookupService = inject(LookupService);
 
-  private statuses = this.lookupService.lookups.commonStatus;
-
   get limit(): number {
     return this.paginate$.value.limit;
   }
@@ -109,6 +115,7 @@ export abstract class AdminComponent<
             this.sort$,
           ]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
+              this.selection.clear();
               this.loadingSubject.next(true);
               return (
                 this.loadComposite
@@ -339,7 +346,7 @@ export abstract class AdminComponent<
 
   getFilterStringColumn(column: string): string {
     return objectHasOwnProperty(this.filter$.value, column)
-      ? (this.filter$.value[column] as string)
+      ? (this.filter$.value[column as keyof M] as string)
       : '';
   }
 }

@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
-import { JobTitle } from '@models/job-title';
-import { JobTitleService } from '@services/job-title.service';
-import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { ViolationClassification } from '@models/violation-classification';
+import { ViolationClassificationService } from '@services/violation-classification.service';
+import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { ColumnsWrapper } from '@models/columns-wrapper';
@@ -10,20 +10,20 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-import { UserTypes } from '@enums/user-types';
 
 @Component({
-  selector: 'app-job-title',
-  templateUrl: './job-title.component.html',
-  styleUrls: ['./job-title.component.scss'],
+  selector: 'app-violation-classification',
+  templateUrl: './violation-classification.component.html',
+  styleUrls: ['./violation-classification.component.scss'],
 })
-export class JobTitleComponent extends AdminComponent<
-  JobTitlePopupComponent,
-  JobTitle,
-  JobTitleService
+export class ViolationClassificationComponent extends AdminComponent<
+  ViolationClassificationPopupComponent,
+  ViolationClassification,
+  ViolationClassificationService
 > {
-  service = inject(JobTitleService);
-  actions: ContextMenuActionContract<JobTitle>[] = [
+  service = inject(ViolationClassificationService);
+
+  actions: ContextMenuActionContract<ViolationClassification>[] = [
     {
       name: 'view',
       type: 'action',
@@ -53,22 +53,20 @@ export class JobTitleComponent extends AdminComponent<
     },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
-  columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
+  columnsWrapper: ColumnsWrapper<ViolationClassification> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new SelectFilterColumn(
-      'status',
-      this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED
-      ),
+      'penaltyType',
+      this.lookupService.lookups.penaltyType,
       'lookupKey',
       'getNames'
     ),
     new SelectFilterColumn(
-      'jobType',
-      this.lookupService.lookups.userType.filter(
-        (i) => i.lookupKey !== UserTypes.ALL
+      'status',
+      this.lookupService.lookups.commonStatus.filter(
+        (item) => item.lookupKey !== StatusTypes.DELETED
       ),
       'lookupKey',
       'getNames'

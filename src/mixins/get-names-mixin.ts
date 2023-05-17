@@ -32,5 +32,10 @@ export function GetNamesMixin<T extends Constructor<object>>(
           'Name') as keyof NamesContract
       ];
     }
+
+    getDisplayName(): string {
+      return (this.getLangService().getCurrent().code +
+        'Name') as keyof NamesContract;
+    }
   };
 }

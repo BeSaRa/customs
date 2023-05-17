@@ -7,7 +7,7 @@ String.prototype.change = function (
   }
   return Object.keys(param).reduce((value, key) => {
     return value
-      .replaceAll(':' + key, param[key] as string)
+      .replaceAll(':' + key, ('(' + param[key] + ')') as string)
       .replaceAll(`{{${key}}}`, param[key] as string)
       .replaceAll(`{${key}}`, param[key] as string);
   }, this);

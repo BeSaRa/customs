@@ -1,4 +1,8 @@
 export interface LangKeysContract {
+  penalty_grace_period: string;
+  violation_classification: string;
+  menu_violation_type: string;
+  menu_violation_classification: string;
   menu_job_title: string;
   login: string;
   ar_name: string;
@@ -31,6 +35,7 @@ export interface LangKeysContract {
   add: string;
   filter: string;
   change_status: string;
+  penalty_type: string;
   logout: string;
   are_you_sure_you_want_to_logout: string;
   logged_out_successfully: string;

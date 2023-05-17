@@ -9,6 +9,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSortModule } from '@angular/material/sort';
@@ -17,6 +18,10 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
+import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
+import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
+import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
@@ -31,12 +36,17 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    ViolationClassificationComponent,
+    ViolationClassificationPopupComponent,
+    ViolationTypeComponent,
+    ViolationTypePopupComponent,
     JobTitleComponent,
     JobTitlePopupComponent,
   ],
@@ -47,7 +57,10 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatPaginatorModule,
     ButtonComponent,
     MatIconModule,
+    MatSlideToggleModule,
+    MatSelectModule,
     MatButtonModule,
+    MatInputModule,
     IconButtonComponent,
     MatTooltipModule,
     MatSortModule,
@@ -68,6 +81,7 @@ import { SwitchComponent } from '@standalone/components/switch/switch.component'
     MatProgressSpinnerModule,
     MatCardModule,
     SwitchComponent,
+    MatProgressBarModule,
   ],
 })
 export class AdministrationModule {}
