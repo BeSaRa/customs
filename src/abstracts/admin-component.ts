@@ -57,8 +57,6 @@ export abstract class AdminComponent<
   // noinspection JSUnusedGlobalSymbols
   protected employeeService = inject(EmployeeService);
   protected loadComposite = true;
-  private loadingSubject = new BehaviorSubject<boolean>(false);
-  public loading$ = this.loadingSubject.asObservable();
 
   abstract service: S;
   private paginate$ = new BehaviorSubject({
@@ -73,6 +71,8 @@ export abstract class AdminComponent<
   >(1);
 
   data$: Observable<M[]> = this._load();
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
 
   length = 50;
 
@@ -128,6 +128,7 @@ export abstract class AdminComponent<
             }),
             tap(({ count }) => {
               this.length = count;
+              this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
             map((response) => response.rs)
           );

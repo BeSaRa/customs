@@ -4,4 +4,5 @@ export const MenuIdes = {
   VIOLATION_CLASSIFICATION: 5,
   VIOLATION_TYPE: 4,
   JOB_TITLE: 3,
+  PENALTY: 4,
 };
