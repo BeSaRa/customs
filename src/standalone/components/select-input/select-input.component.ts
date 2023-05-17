@@ -30,9 +30,9 @@ import { OptionTemplateDirective } from '@standalone/directives/option-template.
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { InputComponent } from '../input/input.component';
-import { LangService } from '@services/lang.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FilterSelectInputPipe } from '@standalone/pipes/filter-select-input.pipe';
+import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-select-input',
@@ -70,8 +70,6 @@ export class SelectInputComponent
   }
 
   private destroy$ = new Subject<void>();
-
-  _lang = inject(LangService);
 
   elementRef = inject(ElementRef);
   @Input()
