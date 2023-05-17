@@ -18,25 +18,29 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { InternalUserComponent } from '@modules/administration/components/internal-user/internal-user.component';
+import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
+import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatTabsModule } from '@angular/material/tabs';
 import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
 import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
 import { ViolationClassificationPopupComponent } from '@modules/administration/popups/violation-classification-popup/violation-classification-popup.component';
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { ViolationTypePopupComponent } from '@modules/administration/popups/violation-type-popup/violation-type-popup.component';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { MatOptionModule } from '@angular/material/core';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -46,6 +50,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    InternalUserComponent,
+    InternalUserPopupComponent,
+    UserPreferencesPopupComponent,
     PenaltyComponent,
     PenaltyPopupComponent,
     ViolationClassificationComponent,
@@ -71,6 +78,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSortModule,
     MatCheckboxModule,
     InputComponent,
+    SwitchComponent,
     MatDialogModule,
     TextareaComponent,
     ReactiveFormsModule,
@@ -79,6 +87,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSlideToggleModule,
     ContextMenuComponent,
     MatMenuModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatTabsModule,
     MatProgressSpinnerModule,
     FilterColumnComponent,
     SelectInputComponent,

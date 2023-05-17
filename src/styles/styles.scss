@@ -55,7 +55,7 @@ html[dir="rtl"] body {
 }
 
 .close-btn {
-  @apply absolute rtl:left-0 ltr:right-0;
+  @apply absolute rtl:left-0 ltr:right-0 mx-2;
 }
 .table-style {
   @apply [&_td]:text-slate-700 [&_th]:text-slate-700;

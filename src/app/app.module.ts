@@ -37,6 +37,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -67,6 +69,8 @@ import { LangService } from '@services/lang.service';
     InputSuffixDirective,
     NavbarComponent,
     NgScrollbarModule,
+    MatSelectModule,
+    MatOptionModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
   ],

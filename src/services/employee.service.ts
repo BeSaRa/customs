@@ -22,7 +22,7 @@ export class EmployeeService {
   }
 
   private intercept(data: LoginDataContract): LoginDataContract {
-    data.internalUser = new InternalUser().clone({
+    data.internalUser = new InternalUser().clone<InternalUser>({
       ...data.internalUser,
     });
     // set the lookup after login

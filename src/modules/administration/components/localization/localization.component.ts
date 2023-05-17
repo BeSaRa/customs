@@ -14,11 +14,13 @@ import { NoneFilterColumn } from '@models/none-filter-column';
   templateUrl: './localization.component.html',
   styleUrls: ['./localization.component.scss'],
 })
-export class LocalizationComponent extends AdminComponent<
-  LocalizationPopupComponent,
-  Localization,
-  LocalizationService
-> {
+export class LocalizationComponent
+  extends AdminComponent<
+    LocalizationPopupComponent,
+    Localization,
+    LocalizationService
+  >
+{
   service = inject(LocalizationService);
   actions: ContextMenuActionContract<Localization>[] = [
     {

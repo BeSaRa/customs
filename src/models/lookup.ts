@@ -7,6 +7,7 @@ export class Lookup
   extends GetNamesMixin(ClonerMixin(class {}))
   implements CloneContract, GetNamesContract
 {
+  
   id!: number;
   category!: number;
   itemOrder!: null;
@@ -14,4 +15,5 @@ export class Lookup
   lookupStrKey?: string;
   parent?: number;
   status!: boolean;
+
 }

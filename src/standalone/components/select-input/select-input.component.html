@@ -15,7 +15,9 @@
       [formControl]="control"
       (blur)="inputTouch()"
       [id]="name"
-      [ngClass]="tailwindClass">
+      [ngClass]="tailwindClass"
+      [multiple]="isMultiple"
+      >
       <div class="px-2 pb-2" *ngIf="enableFilter">
         <app-input
           [formControl]="filterControl"
