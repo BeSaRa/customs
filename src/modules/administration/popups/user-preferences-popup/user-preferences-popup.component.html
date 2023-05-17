@@ -6,41 +6,77 @@
   <div class="dialog-content">
     <!-- user info -->
     <div class="grid gap-6 mb-6 md:grid-cols-2">
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.domain_name" [placeholder]="user.domainName"></app-input>
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.ar_name" [placeholder]="user.arName"></app-input>
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.en_name" [placeholder]="user.enName"></app-input>
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.employee_number" [placeholder]="user.empNum"></app-input>
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.phone_number" [placeholder]="user.phoneNumber"></app-input>
-      <app-input [disabled]="true" [displayErrors]="false" size="md" [label]="lang.map.email" [placeholder]="user.email"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.domain_name"
+        [placeholder]="user.domainName"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.ar_name"
+        [placeholder]="user.arName"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.en_name"
+        [placeholder]="user.enName"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.employee_number"
+        [placeholder]="user.empNum"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.phone_number"
+        [placeholder]="user.phoneNumber"></app-input>
+      <app-input
+        [disabled]="true"
+        [displayErrors]="false"
+        size="md"
+        [label]="lang.map.email"
+        [placeholder]="user.email"></app-input>
     </div>
 
     <div class="grid grid-cols-4 gap-4 [&>*]:col-span-2">
       <ng-container [formGroup]="form">
-
         <!-- mail notifications -->
         <div class="flex items-center mr-4">
-          <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isMailNotificationEnabled"
-                  formControlName="isMailNotificationEnabled">
-          <label class="ml-2 block font-medium"
-                  for="isMailNotificationEnabled">{{lang.map.mail_notifications}}</label>
+          <input
+            class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500"
+            type="checkbox"
+            id="isMailNotificationEnabled"
+            formControlName="isMailNotificationEnabled" />
+          <label class="ml-2 block font-medium" for="isMailNotificationEnabled">{{
+            lang.map.mail_notifications
+          }}</label>
         </div>
 
         <!-- sms notifications -->
         <div class="flex items-center mr-4">
-          <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isSMSNotificationEnabled"
-                  formControlName="isSMSNotificationEnabled">
-          <label class="ml-2 block font-medium"
-                  for="isSMSNotificationEnabled">{{lang.map.sms_notifications}}</label>
-        </div>
-        
-        <!-- is private user -->
-        <div class="flex items-center mr-4">
-          <input class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500" type="checkbox" id="isPrivateUser"
-                  formControlName="isPrivateUser">
-          <label class="ml-2 block font-medium"
-                  for="isPrivateUser">{{lang.map.private_user}}</label>
+          <input
+            class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500"
+            type="checkbox"
+            id="isSMSNotificationEnabled"
+            formControlName="isSMSNotificationEnabled" />
+          <label class="ml-2 block font-medium" for="isSMSNotificationEnabled">{{ lang.map.sms_notifications }}</label>
         </div>
 
+        <!-- is private user -->
+        <div class="flex items-center mr-4">
+          <input
+            class="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500"
+            type="checkbox"
+            id="isPrivateUser"
+            formControlName="isPrivateUser" />
+          <label class="ml-2 block font-medium" for="isPrivateUser">{{ lang.map.private_user }}</label>
+        </div>
       </ng-container>
     </div>
   </div>

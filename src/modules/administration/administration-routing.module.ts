@@ -4,6 +4,7 @@ import { AdministrationComponent } from './administration.component';
 import { AppRoutes } from '@constants/app-routes';
 import { LocalizationComponent } from '@modules/administration/components/localization/localization.component';
 import { InternalUserComponent } from '@modules/administration/components/internal-user/internal-user.component';
+import { TeamComponent } from '@modules/administration/components/team/team.component';
 import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
@@ -23,13 +24,19 @@ const routes: Routes = [
     path: AppRoutes.INTERNAL_USER,
     component: InternalUserComponent,
   },
+  { path: AppRoutes.JOB_TITLE, component: JobTitleComponent },
+
+  {
+    path: AppRoutes.TEAM,
+    component: TeamComponent,
+  },
   {
     path: AppRoutes.PENALTY,
     component: PenaltyComponent,
   },
   {
-    path: AppRoutes.JOB_TITLE,
-    component: JobTitleComponent,
+    path: AppRoutes.TEAM,
+    component: TeamComponent,
   },
   {
     path: AppRoutes.VIOLATION_CLASSIFICATION,

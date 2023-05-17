@@ -26,11 +26,19 @@ export class PermissionService extends BaseCrudService<Permission> {
 
   @CastResponse(() => Permission)
   private _loadPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.getUrlSegmentUserPreferences() + '/internal/' + userId)
+    return this.http.get<Permission[]>(
+      this.getUrlSegmentUserPreferences() + '/internal/' + userId
+    );
   }
 
-  private _savePermissions(userId: number, permissions: number[]): Observable<any> {
-    return this.http.post(this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk', permissions);
+  private _savePermissions(
+    userId: number,
+    permissions: number[]
+  ): Observable<any> {
+    return this.http.post(
+      this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk',
+      permissions
+    );
   }
 
   savePermissions(userId: number, permissions: number[]): Observable<any> {

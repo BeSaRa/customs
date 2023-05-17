@@ -5,9 +5,9 @@
   </div>
   <div class="dialog-content">
     <mat-tab-group dynamicHeight>
-      <mat-tab [label]="lang.map.lbl_basic_info"> 
+      <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div  class="grid grid-cols-2 gap-4 mt-4">
+          <div class="grid grid-cols-2 gap-4 mt-4">
             <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
             <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
             <app-input formControlName="domainName" [label]="lang.map.domain_name"></app-input>
@@ -19,8 +19,7 @@
               formControlName="status"
               [label]="lang.map.lbl_status"
               trueValue="1"
-              falseValue="0"
-            ></app-switch>
+              falseValue="0"></app-switch>
           </div>
         </ng-container>
       </mat-tab>
@@ -31,26 +30,16 @@
               <!-- mail notifications -->
               <app-switch
                 formControlName="isMailNotificationEnabled"
-                [label]="lang.map.mail_notifications"
-              ></app-switch>
-      
+                [label]="lang.map.mail_notifications"></app-switch>
+
               <!-- sms notifications -->
-              <app-switch
-                formControlName="isSMSNotificationEnabled"
-                [label]="lang.map.sms_notifications"
-              ></app-switch>
-              
+              <app-switch formControlName="isSMSNotificationEnabled" [label]="lang.map.sms_notifications"></app-switch>
+
               <!-- is private user -->
-              <app-switch
-                formControlName="isPrivateUser"
-                [label]="lang.map.private_user"
-              ></app-switch>
-              
+              <app-switch formControlName="isPrivateUser" [label]="lang.map.private_user"></app-switch>
+
               <!-- limited circulation -->
-              <app-switch
-                formControlName="limitedCirculation"
-                [label]="lang.map.limited_circulation"
-              ></app-switch>
+              <app-switch formControlName="limitedCirculation" [label]="lang.map.limited_circulation"></app-switch>
 
               <!-- default language -->
               <!-- <app-select-input 
@@ -64,22 +53,21 @@
           </ng-container>
         </div>
       </mat-tab>
-      <mat-tab [label]="lang.map.lbl_permissions"> 
+      <mat-tab [label]="lang.map.lbl_permissions">
         <ng-container [formGroup]="form">
           <div class="mt-4">
             <div formGroupName="userPermissions">
               <!-- user permissions -->
-              <app-select-input 
-                [options]="allPermissions" 
-                bindValue="id" 
-                bindLabel="getNames" 
+              <app-select-input
+                [options]="allPermissions"
+                bindValue="id"
+                bindLabel="getNames"
                 [label]="lang.map.lbl_permissions"
                 formControlName="permissions"
-                [isMultiple]="true"
-              ></app-select-input>
+                [isMultiple]="true"></app-select-input>
             </div>
-          </div>  
-        </ng-container>  
+          </div>
+        </ng-container>
       </mat-tab>
     </mat-tab-group>
   </div>
@@ -89,5 +77,3 @@
     <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>
-
-

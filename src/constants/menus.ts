@@ -25,6 +25,13 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
   },
   {
+    id: MenuIdes.TEAM,
+    langKey: 'menu_team',
+    icon: AppIcons.TEAM,
+    path: AppFullRoutes.TEAM,
+    parent: MenuIdes.ADMINISTRATION,
+  },
+  {
     id: MenuIdes.PENALTY,
     langKey: 'menu_penalty',
     icon: AppIcons.SETTINGS,

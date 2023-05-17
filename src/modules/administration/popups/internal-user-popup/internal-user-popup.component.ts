@@ -4,7 +4,14 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUser } from '@models/internal-user';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, catchError, filter, of, takeUntil, withLatestFrom } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  filter,
+  of,
+  takeUntil,
+  withLatestFrom,
+} from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -22,21 +29,20 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
 
-  statusList!:Lookup[]
-  allPermissions!:Permission[]
-
+  statusList!: Lookup[];
+  allPermissions!: Permission[];
 
   _buildForm(): void {
     this.form = this.fb.group({
-      ...this.model.buildForm(true), 
+      ...this.model.buildForm(true),
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
       userPermissions: this.fb.group({
         permissions: [],
-        customRoleId: [this.model?.customRoleId]
-      })
+        customRoleId: [this.model?.customRoleId],
+      }),
     });
-    if(this.data.operation === OperationType.UPDATE){
-      this.loadUserPermissions(this.model)
+    if (this.data.operation === OperationType.UPDATE) {
+      this.loadUserPermissions(this.model);
     }
   }
 
@@ -58,19 +64,20 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
     );
-    this.permissionService.savePermissions(model.id, this.userPermissions?.value)
-    .pipe(
-      catchError(() => of(null)),
-      filter((response) => response !== null)
-    )
-    .subscribe();
-    // you can close the dialog after save here 
+    this.permissionService
+      .savePermissions(model.id, this.userPermissions?.value)
+      .pipe(
+        catchError(() => of(null)),
+        filter((response) => response !== null)
+      )
+      .subscribe();
+    // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
-  
+
   protected override _init(): void {
-    this.statusList = this.lookupService.lookups.commonStatus   
-    this.loadPermissions() 
+    this.statusList = this.lookupService.lookups.commonStatus;
+    this.loadPermissions();
   }
 
   get permissionsFormTab() {
@@ -85,22 +92,22 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     return this.permissionsFormTab?.get('permissions');
   }
 
-  get userPreferences(){
-    return this.form.get('userPreferences')
+  get userPreferences() {
+    return this.form.get('userPreferences');
   }
 
-  get customRoleIdField(){
-    return this.form.get('customRoleId')
+  get customRoleIdField() {
+    return this.form.get('customRoleId');
   }
 
-  private loadUserPermissions(model:InternalUser) {
-    this.permissionService.loadPermissions(model?.id).subscribe(val=>{
-      let ids : number[] = []
-      val.forEach(permission=>{
-        ids.push(permission.permissionId)
-      })
+  private loadUserPermissions(model: InternalUser) {
+    this.permissionService.loadPermissions(model?.id).subscribe((val) => {
+      const ids: number[] = [];
+      val.forEach((permission) => {
+        ids.push(permission.permissionId);
+      });
       this.userPermissions?.patchValue(ids);
-    })
+    });
   }
 
   private loadPermissions() {
@@ -108,9 +115,8 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
       .pipe(withLatestFrom(of(this.lookupService.lookups.permissionCategory)))
-      .subscribe((userPermissions) => {        
-        this.allPermissions = userPermissions[0]
+      .subscribe((userPermissions) => {
+        this.allPermissions = userPermissions[0];
       });
-
   }
 }

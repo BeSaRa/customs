@@ -7,7 +7,7 @@ import { InternalUserPopupComponent } from '@modules/administration/popups/inter
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { DomSanitizer } from '@angular/platform-browser';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -23,9 +23,10 @@ import { DomSanitizer } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class InternalUserService extends BaseCrudWithDialogService<
-InternalUserPopupComponent,
-InternalUser> {
-  override serviceName: string = 'InternalUserService';
+  InternalUserPopupComponent,
+  InternalUser
+> {
+  override serviceName = 'InternalUserService';
   protected getModelClass(): Constructor<InternalUser> {
     return InternalUser;
   }
@@ -42,7 +43,7 @@ InternalUser> {
     return this.urlService.URLS.INTERNAL_USER;
   }
 
-  constructor(private domSanitizer: DomSanitizer){
+  constructor(private domSanitizer: DomSanitizer) {
     super();
   }
 }

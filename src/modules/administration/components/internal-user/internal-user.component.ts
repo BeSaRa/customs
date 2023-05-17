@@ -13,7 +13,6 @@ import { StatusTypes } from '@enums/status-types';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 
-
 @Component({
   selector: 'app-internal-user',
   templateUrl: './internal-user.component.html',
@@ -24,12 +23,13 @@ export class InternalUserComponent extends AdminComponent<
   InternalUser,
   InternalUserService
 > {
-
   service = inject(InternalUserService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter((s) => s.lookupKey != StatusTypes.DELETED);
-  
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED
+  );
+
   userPreferencesService = inject(UserPreferencesService);
-    
+
   displayedColumns: string[] = [
     'select',
     'arName',
@@ -39,7 +39,7 @@ export class InternalUserComponent extends AdminComponent<
     'empNum',
     'status',
     'email',
-    'actions'
+    'actions',
   ];
 
   actions: ContextMenuActionContract<InternalUser>[] = [
@@ -97,9 +97,9 @@ export class InternalUserComponent extends AdminComponent<
     new TextFilterColumn('email'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
-  
-  getStatusString(status:number){
-    return status === StatusTypes.ACTIVE? 'Active' : 'Disable'
+
+  getStatusString(status: number) {
+    return status === StatusTypes.ACTIVE ? 'Active' : 'Disable';
   }
   // openUserPreferences(item: UserPreferences, user: InternalUser) {
   //   this.userPreferencesService.openEditDialog(item, {user})

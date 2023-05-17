@@ -1,42 +1,42 @@
 import '@utils/protoypes/custom-prototypes';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { NgOptimizedImage } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { LoginComponent } from './components/login/login.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {
   MAT_SNACK_BAR_DEFAULT_OPTIONS,
   MatSnackBarModule,
 } from '@angular/material/snack-bar';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import { forkJoin, Observable, switchMap, tap } from 'rxjs';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { httpInterceptors } from '@http-interceptors/index';
+import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
+import { AuthService } from '@services/auth.service';
 import { ConfigService } from '@services/config.service';
-import { UrlService } from '@services/url.service';
 import { InfoService } from '@services/info.service';
 import { LookupService } from '@services/lookup.service';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { ControlDirective } from '@standalone/directives/control.directive';
+import { UrlService } from '@services/url.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { NgOptimizedImage } from '@angular/common';
-import { CookieModule } from 'ngx-cookie';
-import { httpInterceptors } from '@http-interceptors/index';
-import { AuthService } from '@services/auth.service';
-import { CastResponseModule } from 'cast-response';
-import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
-import { HomeComponent } from './components/home/home.component';
+import { InputComponent } from '@standalone/components/input/input.component';
 import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
+import { ControlDirective } from '@standalone/directives/control.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { MenuItemService } from '@services/menu-item.service';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { PaginatorLocal } from '@constants/paginator-local';
 import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { AppRoutingModule } from './app-routing.module';
+import { CookieModule } from 'ngx-cookie';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { CastResponseModule } from 'cast-response';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { Observable, forkJoin, switchMap, tap } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
@@ -129,13 +129,12 @@ export class AppModule {
     lookup: LookupService,
     auth: AuthService
   ): () => Observable<unknown> {
-    return () => {
-      return forkJoin([config.load()])
+    return () =>
+      forkJoin([config.load()])
         .pipe(tap(() => url.setConfigService(config)))
         .pipe(tap(() => url.prepareUrls()))
         .pipe(switchMap(() => info.load()))
         .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
         .pipe(switchMap(() => auth.validateToken()));
-    };
   }
 }

@@ -10,6 +10,7 @@ export interface LangKeysContract {
   en_name: string;
   menu_administration: string;
   menu_localization: string;
+  menu_team: string;
   paginator_page_label: string;
   paginator_first_page_label: string;
   paginator_items_per_page_label: string;
@@ -40,7 +41,7 @@ export interface LangKeysContract {
   active: string;
   penalty_type: string;
   change_status: string;
-  menu_internal_user : string;
+  menu_internal_user: string;
   domain_name: string;
   employee_number: string;
   email: string;
@@ -50,17 +51,20 @@ export interface LangKeysContract {
   limited_circulation: string;
   private_user: string;
   sms_notifications: string;
+  ldap_group_name: string;
+  team_email: string;
+  auto_claim: string;
   logout: string;
   are_you_sure_you_want_to_logout: string;
   logged_out_successfully: string;
   delete_bulk: string;
   mail_notifications: string;
-  qid:string
-  lbl_basic_info:string
-  lbl_user_preferences:string
-  lbl_permissions:string
-  lbl_status:string
-  lbl_custom_role:string
+  qid: string;
+  lbl_basic_info: string;
+  lbl_user_preferences: string;
+  lbl_permissions: string;
+  lbl_status: string;
+  lbl_custom_role: string;
   clear_filter: string;
   clear_all_filters: string;
   default_lang: string;

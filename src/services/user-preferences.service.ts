@@ -21,18 +21,21 @@ import { CastResponseContainer } from 'cast-response';
 @Injectable({
   providedIn: 'root',
 })
-export class UserPreferencesService extends  BaseCrudWithDialogService<UserPreferencesPopupComponent, UserPreferences>{
-  override serviceName: string ='UserPreferencesService';
+export class UserPreferencesService extends BaseCrudWithDialogService<
+  UserPreferencesPopupComponent,
+  UserPreferences
+> {
+  override serviceName = 'UserPreferencesService';
   protected override getDialogComponent(): ComponentType<UserPreferencesPopupComponent> {
-    return UserPreferencesPopupComponent
+    return UserPreferencesPopupComponent;
   }
   protected override getUrlSegment(): string {
     return this.urlService.URLS.USER_PREFERENCES;
   }
   protected override getModelInstance(): UserPreferences {
-    return new UserPreferences()
+    return new UserPreferences();
   }
   protected override getModelClass(): Constructor<UserPreferences> {
-    return UserPreferences
+    return UserPreferences;
   }
 }

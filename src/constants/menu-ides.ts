@@ -6,4 +6,5 @@ export const MenuIdes = {
   VIOLATION_CLASSIFICATION: 5,
   VIOLATION_TYPE: 6,
   PENALTY: 7,
+  TEAM: 8,
 };

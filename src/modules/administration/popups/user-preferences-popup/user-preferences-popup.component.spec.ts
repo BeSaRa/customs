@@ -8,7 +8,7 @@ describe('UserPreferencesPopupComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UserPreferencesPopupComponent]
+      declarations: [UserPreferencesPopupComponent],
     });
     fixture = TestBed.createComponent(UserPreferencesPopupComponent);
     component = fixture.componentInstance;

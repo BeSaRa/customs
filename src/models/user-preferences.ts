@@ -1,7 +1,10 @@
 import { BaseModel } from '@abstracts/base-model';
 import { UserPreferencesService } from '@services/user-preferences.service';
 
-export class UserPreferences extends BaseModel<UserPreferences, UserPreferencesService> {
+export class UserPreferences extends BaseModel<
+  UserPreferences,
+  UserPreferencesService
+> {
   $$__service_name__$$ = 'UserPreferencesService';
 
   alternateEmailList!: string;
@@ -13,11 +16,10 @@ export class UserPreferences extends BaseModel<UserPreferences, UserPreferencesS
   isSMSNotificationEnabled!: boolean;
   isPrivateUser!: boolean;
   limitedCirculation!: boolean;
-  defaultLang: number = 1;
-
+  defaultLang = 1;
 
   // extra
-  alternateEmailListParsed: string[] = []; 
+  alternateEmailListParsed: string[] = [];
 
   buildForm(controls?: boolean): any {
     const {
@@ -26,10 +28,13 @@ export class UserPreferences extends BaseModel<UserPreferences, UserPreferencesS
       isPrivateUser,
     } = this;
     return {
-      isMailNotificationEnabled: controls ? [isMailNotificationEnabled] : isMailNotificationEnabled,
-      isSMSNotificationEnabled: controls ? [isSMSNotificationEnabled] : isSMSNotificationEnabled,
+      isMailNotificationEnabled: controls
+        ? [isMailNotificationEnabled]
+        : isMailNotificationEnabled,
+      isSMSNotificationEnabled: controls
+        ? [isSMSNotificationEnabled]
+        : isSMSNotificationEnabled,
       isPrivateUser: controls ? [isPrivateUser] : isPrivateUser,
-    }
+    };
   }
-
 }

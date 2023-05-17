@@ -10,27 +10,29 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-user-preferences-popup',
   templateUrl: './user-preferences-popup.component.html',
-  styleUrls: ['./user-preferences-popup.component.scss']
+  styleUrls: ['./user-preferences-popup.component.scss'],
 })
 export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPreferences> {
-  user!:InternalUser
-  
-  override _buildForm(): void {    
+  user!: InternalUser;
+
+  override _buildForm(): void {
     // this.form = this.fb.group(this.model.buildForm(true));
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
-  protected override _prepareModel(): UserPreferences | Observable<UserPreferences> {
+  protected override _prepareModel():
+    | UserPreferences
+    | Observable<UserPreferences> {
     return new UserPreferences().clone<UserPreferences>({
       ...this.model,
       ...this.form.value,
     });
   }
-  
+
   protected override _init(): void {
-    this.user = this.data.extras?.['user'] as InternalUser
+    this.user = this.data.extras?.['user'] as InternalUser;
   }
 
   protected override _afterSave(model: UserPreferences): void {

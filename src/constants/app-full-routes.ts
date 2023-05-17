@@ -5,5 +5,6 @@ export const AppFullRoutes = {
   PENALTY: '/home/administration/penalty',
   VIOLATION_CLASSIFICATION: '/home/administration/violation-classification',
   VIOLATION_TYPE: '/home/administration/violation-type',
+  TEAM: '/home/administration/team',
   JOB_TITLE: '/home/administration/job-title',
 };
