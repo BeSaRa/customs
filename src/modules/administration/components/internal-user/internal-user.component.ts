@@ -28,20 +28,6 @@ export class InternalUserComponent extends AdminComponent<
     (s) => s.lookupKey != StatusTypes.DELETED
   );
 
-  userPreferencesService = inject(UserPreferencesService);
-
-  displayedColumns: string[] = [
-    'select',
-    'arName',
-    'enName',
-    'domainName',
-    'qid',
-    'empNum',
-    'status',
-    'email',
-    'actions',
-  ];
-
   actions: ContextMenuActionContract<InternalUser>[] = [
     {
       name: 'view',
@@ -69,16 +55,7 @@ export class InternalUserComponent extends AdminComponent<
       callback: (item) => {
         this.delete$.next(item);
       },
-    },
-    // {
-    //   name:'user preferences',
-    //   type: 'action',
-    //   icon: AppIcons.ACCOUNT_EDIT,
-    //   label: 'user_preferences',
-    //   callback: (item) => {
-    //     this.openUserPreferences(item.userPreferences, item)
-    //   }
-    // }
+    }
   ];
 
   override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(
@@ -101,7 +78,4 @@ export class InternalUserComponent extends AdminComponent<
   getStatusString(status: number) {
     return status === StatusTypes.ACTIVE ? 'Active' : 'Disable';
   }
-  // openUserPreferences(item: UserPreferences, user: InternalUser) {
-  //   this.userPreferencesService.openEditDialog(item, {user})
-  // }
 }
