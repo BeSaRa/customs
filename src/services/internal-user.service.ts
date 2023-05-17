@@ -45,21 +45,4 @@ InternalUser> {
   constructor(private domSanitizer: DomSanitizer){
     super();
   }
-
-  // loadSignatureByGeneralUserId(generalUserId: number) {
-  //   return this.http.get(this.getUrlSegment() + '/signature/content?generalUserId=' + generalUserId, {
-  //     responseType: 'blob',
-  //     observe: 'body'
-  //   }).pipe(
-  //     map(blob => new BlobModel(blob, this.domSanitizer),
-  //       catchError(_ => {
-  //         return of(new BlobModel(new Blob([], { type: 'error' }), this.domSanitizer));
-  //       })));
-  // }
-
-  // saveSignature(generalUserId: number, file: File): Observable<boolean> {
-  //   let form = new FormData();
-  //   form.append('content', file);
-  //   return this.http.post<boolean>(this.getUrlSegment() + '/signature?generalUserId=' + generalUserId, form);
-  // }
 }
