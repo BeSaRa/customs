@@ -2,7 +2,7 @@ import { AdminComponent } from '@abstracts/admin-component';
 import { Component, inject } from '@angular/core';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
-import { LangCodes } from '@enums/lang-codes';
+import { StatusTypes } from '@enums/status-types';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Lookup } from '@models/lookup';
 import { NoneFilterColumn } from '@models/none-filter-column';
@@ -24,8 +24,9 @@ export class TeamComponent extends AdminComponent<
   TeamService
 > {
   service = inject(TeamService);
-  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus;
-  currentLang = this.lang.getCurrent().code;
+  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
+    (lookupItem) => lookupItem.lookupKey !== StatusTypes.DELETED
+  );
 
   actions: ContextMenuActionContract<Team>[] = [
     {
@@ -56,16 +57,8 @@ export class TeamComponent extends AdminComponent<
       'status',
       this.commonStatus,
       'lookupKey',
-      this.currentLang == LangCodes.AR ? 'arName' : 'enName'
+      'getNames'
     ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
-
-  getStatusNames(teamStatus: number) {
-    return (
-      this.commonStatus
-        .find((status) => status.lookupKey === teamStatus)
-        ?.getNames() ?? ''
-    );
-  }
 }

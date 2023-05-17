@@ -52,7 +52,7 @@
       <td mat-cell *matCellDef="let element">
         <mat-slide-toggle
           class="cursor-not-allowed"
-          [matTooltip]="getStatusNames(element.status)"
+          [matTooltip]="element.statusInfo.getNames()"
           color="primary"
           [checked]="element.isActive()"
           disabled="true"></mat-slide-toggle>
