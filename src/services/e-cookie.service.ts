@@ -3,14 +3,16 @@ import { CookieOptions, CookieService, ICookieService } from 'ngx-cookie';
 
 import { EncryptionService } from './encryption.service';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ECookieService
   extends RegisterServiceMixin(class {})
-  implements ICookieService
+  implements ICookieService, ServiceContract
 {
+  serviceName = 'ECookieService';
   readonly encryptedKeyPrefix = '$$';
   private readonly service = inject(CookieService);
   private readonly encryptionService = inject(EncryptionService);

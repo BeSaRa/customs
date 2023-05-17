@@ -1,0 +1,35 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_violation_type }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-2 gap-4">
+        <app-input formControlName="arName" [label]="lang.map.ar_name" />
+        <app-input formControlName="enName" [label]="lang.map.en_name" />
+
+        <app-select-input
+          formControlName="penaltyType"
+          [options]="penaltyTypes"
+          [label]="lang.map.penalty_type"
+          bindValue="lookupKey"
+          bindLabel="getNames" />
+
+        <app-select-input
+          formControlName="violationClassificationId"
+          [options]="classifications"
+          [label]="lang.map.violation_classification"
+          bindValue="id"
+          bindLabel="getNames" />
+        <app-input [label]="lang.map.penalty_grace_period" formControlName="penaltyGracePeriod" type="number" />
+        <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
+      </div>
+    </ng-container>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>

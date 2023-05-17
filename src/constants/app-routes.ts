@@ -4,5 +4,8 @@ export const AppRoutes = {
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
   INTERNAL_USER: 'internal-user',
+  PENALTY: 'penalty',
+  VIOLATION_CLASSIFICATION: 'violation-classification',
+  VIOLATION_TYPE: 'violation-type',
   JOB_TITLE: 'job-title',
 };

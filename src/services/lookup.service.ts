@@ -3,11 +3,16 @@ import { LookupMapContract } from '@contracts/lookup-map-contract';
 import { Lookup } from '@models/lookup';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { AdminResult } from '@models/admin-result';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LookupService extends RegisterServiceMixin(class {}) {
+export class LookupService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
+  serviceName = 'LookupService';
   lookups: LookupMapContract = {} as LookupMapContract;
   statusMap: Map<number, AdminResult> = new Map<number, AdminResult>();
 

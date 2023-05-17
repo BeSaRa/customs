@@ -9,11 +9,13 @@ import { inject } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { Pagination } from '@models/pagination';
+import { ServiceContract } from '@contracts/service-contract';
 
 export abstract class BaseCrudService<M, PrimaryType = number>
   extends RegisterServiceMixin(class {})
-  implements BaseCrudServiceContract<M, PrimaryType>
+  implements BaseCrudServiceContract<M, PrimaryType>, ServiceContract
 {
+  abstract serviceName: string;
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
 
@@ -22,11 +24,13 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   protected abstract getModelInstance(): M;
 
   protected abstract getModelClass(): Constructor<M>;
+
   @HasInterception
   @CastResponse()
   create(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/admin', model);
   }
+
   @HasInterception
   @CastResponse()
   update(@InterceptParam() model: M): Observable<M> {
@@ -107,6 +111,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   delete(id: PrimaryType): Observable<M> {
     return this.http.delete<M>(this.getUrlSegment() + `/admin/${id}`);
   }
+
   @HasInterception
   @CastResponse()
   updateBulk(@InterceptParam() models: M[]): Observable<M> {
@@ -139,11 +144,13 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       modelsIds
     );
   }
+
   @HasInterception
   @CastResponse()
   createBulk(@InterceptParam() models: M[]): Observable<M[]> {
     return this.http.post<M[]>(this.getUrlSegment() + '/admin/bulk', models);
   }
+
   @HasInterception
   @CastResponse()
   createBulkFull(@InterceptParam() models: M[]): Observable<M[]> {
@@ -152,11 +159,13 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       models
     );
   }
+
   @HasInterception
   @CastResponse()
   updateFull(@InterceptParam() model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment() + '/admin/full', model);
   }
+
   @HasInterception
   @CastResponse()
   createFull(@InterceptParam() model: M): Observable<M> {

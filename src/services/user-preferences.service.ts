@@ -23,6 +23,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserPreferencesService extends  BaseCrudWithDialogService<UserPreferencesPopupComponent, UserPreferences>{
+  override serviceName!: string;
   protected override getDialogComponent(): ComponentType<UserPreferencesPopupComponent> {
     return UserPreferencesPopupComponent
   }

@@ -25,6 +25,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class InternalUserService extends BaseCrudWithDialogService<
 InternalUserPopupComponent,
 InternalUser> {
+  override serviceName: string = 'InternalUserService';
   protected getModelClass(): Constructor<InternalUser> {
     return InternalUser;
   }
