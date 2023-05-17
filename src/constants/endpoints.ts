@@ -5,6 +5,8 @@ export const EndPoints = {
   AUTH: '/auth/internal/login',
   VALIDATE_TOKEN: '/auth/validate-token',
   PERMISSION: '/entity/permission',
+  INTERNAL_USER: '/entity/internal/user',
+  USER_PREFERENCES: '/entity/internal-user-permission',
   TEAM: '/entity/baw/team',
   PENALTY: '/entity/penalty',
   VIOLATION_CLASSIFICATION: '/entity/violation-classification',

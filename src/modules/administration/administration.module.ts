@@ -17,12 +17,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { InternalUserComponent } from '@modules/administration/components/internal-user/internal-user.component';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { PenaltyComponent } from '@modules/administration/components/penalty/penalty.component';
 import { TeamComponent } from '@modules/administration/components/team/team.component';
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
+import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
 import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
 import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
 import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
@@ -40,6 +43,8 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
+import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
+
 import { LocalizationComponent } from './components/localization/localization.component';
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
 
@@ -48,6 +53,9 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     AdministrationComponent,
     LocalizationPopupComponent,
     LocalizationComponent,
+    InternalUserComponent,
+    InternalUserPopupComponent,
+    UserPreferencesPopupComponent,
     PenaltyComponent,
     PenaltyPopupComponent,
     ViolationClassificationComponent,
@@ -84,6 +92,9 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatSlideToggleModule,
     ContextMenuComponent,
     MatMenuModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatTabsModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
     FilterColumnComponent,

@@ -91,6 +91,8 @@ export class SelectInputComponent
   @Input()
   noMargin = false;
   @Input()
+  isMultiple = false;
+  @Input()
   name = generateUUID();
   @Input()
   options?: unknown[] = [];

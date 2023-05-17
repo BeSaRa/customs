@@ -9,6 +9,7 @@ export class Permission
   implements GetNamesContract, CloneContract
 {
   id!: number;
+  permissionId!: number;
   override arName!: string;
   override enName!: string;
   permissionKey!: keyof AppPermissionsType;
