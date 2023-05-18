@@ -8,7 +8,6 @@ import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
-import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-job-title-popup',

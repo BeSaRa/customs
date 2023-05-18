@@ -10,7 +10,6 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-job-title',
