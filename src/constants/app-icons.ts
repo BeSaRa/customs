@@ -18,6 +18,7 @@ export const AppIcons = {
   INVALID_FORM: 'alert-circle-outline',
   INTERNAL_USER: 'account',
   MORE_DETAILS: 'information-outline',
+  JOB_TITLE: 'badge-account-horizontal',
 };
 
 export type AppIconsType = typeof AppIcons;

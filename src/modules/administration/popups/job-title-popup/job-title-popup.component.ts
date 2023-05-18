@@ -24,10 +24,7 @@ export class JobTitlePopupComponent
 
   lookupService = inject(LookupService);
 
-  jobTypes: Lookup[] = this.lookupService.lookups.userType.filter(
-    // exclude 'All' entry from lookupMaps that backend returns, waiting for Ebrahim to fix that
-    (usertype) => usertype.lookupKey !== UserTypes.ALL
-  );
+  jobTypes: Lookup[] = this.lookupService.lookups.userType;
 
   get status(): AbstractControl {
     return this.form.get('status')!;
