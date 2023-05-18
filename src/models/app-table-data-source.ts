@@ -41,14 +41,13 @@ export class AppTableDataSource<M> extends DataSource<M> {
       .pipe(tap((data) => this._data.next(data)))
       .subscribe({
         next: () => {
-          console.log('NEXT');
+          //
         },
         error: (e) => {
           console.log(e);
-          console.log('ERROR');
         },
         complete: () => {
-          console.log('COMPLETE');
+          //
         },
       });
   }

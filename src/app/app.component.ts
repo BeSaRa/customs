@@ -1,16 +1,7 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
-import { LocalizationService } from '@services/localization.service';
 import { AuthService } from '@services/auth.service';
-import {
-  Event,
-  NavigationCancel,
-  NavigationEnd,
-  NavigationError,
-  NavigationStart,
-  Router,
-} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +11,15 @@ import {
 export class AppComponent {
   dialog = inject(DialogService);
   lang = inject(LangService);
-  localizationService = inject(LocalizationService);
   authService = inject(AuthService);
+
+  get spinnerPosition(): 'right' | 'left' {
+    return this.lang.getCurrent().direction === 'rtl' ? 'left' : 'right';
+  }
+
+  get progressDirection(): 'rtl+' | 'ltr+' {
+    return this.lang.getCurrent().direction === 'rtl' ? 'rtl+' : 'ltr+';
+  }
 
   @HostListener('window:keydown.alt.control.a')
   openAddLanguage(): void {
@@ -30,29 +28,9 @@ export class AppComponent {
       return;
     }
   }
+
   @HostListener('window:keydown.alt.control.l')
   toggleLanguage(): void {
     this.lang.toggleLang();
-  }
-  isLodingRoute = false;
-  constructor(private router: Router) {
-    this.router.events.subscribe((event: Event) => {
-      switch (true) {
-        case event instanceof NavigationStart: {
-          this.isLodingRoute = true;
-          break;
-        }
-
-        case event instanceof NavigationEnd:
-        case event instanceof NavigationCancel:
-        case event instanceof NavigationError: {
-          this.isLodingRoute = false;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-    });
   }
 }

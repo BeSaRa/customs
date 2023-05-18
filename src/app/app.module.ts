@@ -44,6 +44,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SelectComponent } from '@standalone/components/select/select.component';
 import { LangService } from '@services/lang.service';
+import { NgProgressModule } from 'ngx-progressbar';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -73,6 +74,7 @@ import { LangService } from '@services/lang.service';
     MatOptionModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    NgProgressModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
