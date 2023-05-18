@@ -95,7 +95,6 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     MatSelectModule,
     MatOptionModule,
     MatTabsModule,
-    MatProgressSpinnerModule,
     MatSlideToggleModule,
     FilterColumnComponent,
     SelectInputComponent,
