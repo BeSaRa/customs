@@ -13,6 +13,7 @@ export class PermissionRole extends BaseModel<
   $$__service_name__$$ = 'PermissionRoleService';
 
   buildForm(controls = false): object {
+    console.log('check');
     return {};
   }
 }
