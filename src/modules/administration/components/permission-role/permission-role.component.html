@@ -35,6 +35,18 @@
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
 
+    <!-- enName -->
+    <ng-container matColumnDef="enName">
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+    </ng-container>
+
+    <!-- status -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>{{ lang.map.status }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+    </ng-container>
+
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
@@ -58,7 +70,16 @@
         </div>
       </td>
     </ng-container>
-
+    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
+      <!-- filtered Columns -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+        </th>
+      </ng-container>
+    </ng-container>
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
     <tr

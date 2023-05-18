@@ -8,6 +8,8 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-permission-role',
@@ -53,6 +55,15 @@ export class PermissionRoleComponent extends AdminComponent<
   columnsWrapper: ColumnsWrapper<PermissionRole> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new SelectFilterColumn(
+      'status',
+      this.lookupService.lookups.commonStatus.filter(
+        (i) => i.lookupKey !== StatusTypes.DELETED
+      ),
+      'lookupKey',
+      'getNames'
+    ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

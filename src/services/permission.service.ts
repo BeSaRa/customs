@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Permission } from '@models/permission';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
 
 @CastResponseContainer({
@@ -51,11 +51,8 @@ export class PermissionService extends BaseCrudService<Permission> {
 
   /**
    * @description to dev environment to print the content to AppPermissions Constant
-   * @param printConstantContent
    */
-  generateAppPermission(
-    printConstantContent = true
-  ): Observable<Record<string, string>> {
+  generateAppPermission(): Observable<Record<string, string>> {
     return this.loadAsLookups().pipe(
       map((items) => {
         return items.reduce((acc, permission) => {
@@ -64,6 +61,13 @@ export class PermissionService extends BaseCrudService<Permission> {
             [permission.permissionKey]: permission.permissionKey,
           };
         }, {} as Record<string, string>);
+      }),
+      tap((values) => {
+        let content = '';
+        Object.keys(values).forEach((item) => {
+          content += `\n${item}:'${item}',`;
+        });
+        console.log(content);
       })
     );
   }
