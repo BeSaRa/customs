@@ -48,14 +48,14 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.VIOLATION_CLASSIFICATION,
     langKey: 'menu_violation_classification',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.BOOK_CANCEL,
     path: AppFullRoutes.VIOLATION_CLASSIFICATION,
     parent: MenuIdes.ADMINISTRATION,
   },
   {
     id: MenuIdes.VIOLATION_TYPE,
     langKey: 'menu_violation_type',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.BOOK_CANCEL_OUTLINE,
     path: AppFullRoutes.VIOLATION_TYPE,
     parent: MenuIdes.ADMINISTRATION,
   },
