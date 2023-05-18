@@ -47,6 +47,8 @@ import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/u
 
 import { LocalizationComponent } from './components/localization/localization.component';
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
+import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
+import { PermissionRolePopupComponent } from '@modules/administration/popups/permission-role-popup/permission-role-popup.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +68,8 @@ import { LocalizationPopupComponent } from './popups/localization-popup/localiza
     TeamPopupComponent,
     JobTitleComponent,
     JobTitlePopupComponent,
+    PermissionRoleComponent,
+    PermissionRolePopupComponent,
   ],
   imports: [
     CommonModule,

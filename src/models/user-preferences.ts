@@ -21,12 +21,13 @@ export class UserPreferences extends BaseModel<
   // extra
   alternateEmailListParsed: string[] = [];
 
-  buildForm(controls?: boolean): any {
+  buildForm(controls?: boolean): object {
     const {
       isMailNotificationEnabled,
       isSMSNotificationEnabled,
       isPrivateUser,
     } = this;
+
     return {
       isMailNotificationEnabled: controls
         ? [isMailNotificationEnabled]

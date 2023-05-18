@@ -7,4 +7,5 @@ export const AppFullRoutes = {
   VIOLATION_TYPE: '/home/administration/violation-type',
   TEAM: '/home/administration/team',
   JOB_TITLE: '/home/administration/job-title',
+  PERMISSION_ROLE: '/home/administration/permission-role',
 };

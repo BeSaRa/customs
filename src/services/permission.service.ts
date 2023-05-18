@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Permission } from '@models/permission';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
 
 @CastResponseContainer({

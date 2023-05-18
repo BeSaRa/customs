@@ -7,4 +7,5 @@ export const MenuIdes = {
   VIOLATION_TYPE: 6,
   PENALTY: 7,
   TEAM: 8,
+  PERMISSION_ROLE: 9,
 };

@@ -48,7 +48,9 @@ export abstract class AdminDialogComponent<
     this._listenToSave();
   }
 
-  protected _init(): void {}
+  protected _init(): void {
+    //
+  }
 
   protected _initPopup(): void {
     this.model = this.data.model;

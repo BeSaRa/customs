@@ -59,26 +59,27 @@ export class InternalUserComponent extends AdminComponent<
       name: 'more-details',
       type: 'info',
       label: 'more_details',
-      icon:AppIcons.MORE_DETAILS,
+      icon: AppIcons.MORE_DETAILS,
     },
     {
-      name:'email',
-      type:'info',
-      label:(item)=> `${this.lang.map.email} : ${item.email}`,
-      parent:'more-details'
+      name: 'email',
+      type: 'info',
+      label: (item) => `${this.lang.map.email} : ${item.email}`,
+      parent: 'more-details',
     },
     {
-      name:'job-title-info',
-      type:'info',
-      label:(item)=> `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
-      parent:'more-details'
+      name: 'job-title-info',
+      type: 'info',
+      label: (item) =>
+        `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
+      parent: 'more-details',
     },
     {
-      name:'phone-number',
-      type:'info',
-      label:(item)=> `${this.lang.map.phone_number} : ${item.phoneNumber}`,
-      parent:'more-details'
-    }
+      name: 'phone-number',
+      type: 'info',
+      label: (item) => `${this.lang.map.phone_number} : ${item.phoneNumber}`,
+      parent: 'more-details',
+    },
   ];
 
   override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(

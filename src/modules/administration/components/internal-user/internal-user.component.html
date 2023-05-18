@@ -28,7 +28,7 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    
+
     <!-- arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
@@ -36,7 +36,7 @@
         <span [innerHTML]="element.arName | highlight : getFilterStringColumn('arName')"></span>
       </td>
     </ng-container>
-    
+
     <!-- enName -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
@@ -44,7 +44,7 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
-    
+
     <!-- domainName -->
     <ng-container matColumnDef="domainName">
       <th mat-header-cell mat-sort-header="domainName" *matHeaderCellDef>{{ lang.map.domain_name }}</th>
@@ -52,7 +52,7 @@
         <span [innerHTML]="element.domainName | highlight : getFilterStringColumn('domainName')"></span>
       </td>
     </ng-container>
-    
+
     <!-- qid -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>{{ lang.map.qid }}</th>
@@ -60,7 +60,7 @@
         <span [innerHTML]="element.qid | highlight : getFilterStringColumn('qid')"></span>
       </td>
     </ng-container>
-    
+
     <!-- empNum -->
     <ng-container matColumnDef="empNum">
       <th mat-header-cell mat-sort-header="empNum" *matHeaderCellDef>{{ lang.map.employee_number }}</th>
@@ -68,7 +68,7 @@
         <span [innerHTML]="element.empNum | highlight : getFilterStringColumn('empNum')"></span>
       </td>
     </ng-container>
-    
+
     <!-- status -->
     <ng-container matColumnDef="status">
       <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
@@ -89,14 +89,8 @@
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex">
-          <app-icon-button 
-            [matTooltip]="lang.map.view" 
-            (click)="view$.next(element)" 
-            icon="VIEW"></app-icon-button>
-          <app-icon-button 
-            [matTooltip]="lang.map.edit" 
-            (click)="edit$.next(element)" 
-            icon="EDIT"></app-icon-button>
+          <app-icon-button [matTooltip]="lang.map.view" (click)="view$.next(element)" icon="VIEW"></app-icon-button>
+          <app-icon-button [matTooltip]="lang.map.edit" (click)="edit$.next(element)" icon="EDIT"></app-icon-button>
           <app-icon-button
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"

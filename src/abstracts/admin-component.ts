@@ -33,7 +33,6 @@ import { ignoreErrors, objectHasOwnProperty } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
-import { AdminResult } from '@models/admin-result';
 import { LookupService } from '@services/lookup.service';
 
 @Directive({})

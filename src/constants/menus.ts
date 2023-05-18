@@ -59,4 +59,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.VIOLATION_TYPE,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.PERMISSION_ROLE,
+    langKey: 'menu_permission_role',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.PERMISSION_ROLE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

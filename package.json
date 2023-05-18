@@ -28,7 +28,7 @@
     "@mdi/angular-material": "^7.1.96",
     "cast-response": "^1.0.7",
     "crypto-js": "^4.1.1",
-    "customs-schematics": "^0.0.12",
+    "customs-schematics": "^0.0.13",
     "ngx-cookie": "^6.0.1",
     "ngx-mask": "^15.1.0",
     "ngx-progressbar": "^9.0.0",

@@ -9,6 +9,7 @@ import { PenaltyComponent } from '@modules/administration/components/penalty/pen
 import { ViolationClassificationComponent } from '@modules/administration/components/violation-classification/violation-classification.component';
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
+import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: AppRoutes.VIOLATION_TYPE,
     component: ViolationTypeComponent,
+  },
+  {
+    path: AppRoutes.PERMISSION_ROLE,
+    component: PermissionRoleComponent,
   },
 ];
 

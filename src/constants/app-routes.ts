@@ -9,4 +9,5 @@ export const AppRoutes = {
   VIOLATION_TYPE: 'violation-type',
   TEAM: 'team',
   JOB_TITLE: 'job-title',
+  PERMISSION_ROLE: 'permission-role',
 };
