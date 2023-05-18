@@ -54,7 +54,7 @@
         <mat-slide-toggle
           class="self-center"
           [matTooltip]="element.statusInfo.getNames()"
-          (click)="status$.next(element)"
+          (toggleChange)="status$.next(element)"
           [checked]="element.isActive()"
           [disabled]="element.isSystem">
         </mat-slide-toggle>
