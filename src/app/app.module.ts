@@ -42,7 +42,6 @@ import { MatOptionModule } from '@angular/material/core';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { SelectComponent } from '@standalone/components/select/select.component';
 import { LangService } from '@services/lang.service';
 import { NgProgressModule } from 'ngx-progressbar';
 
@@ -57,7 +56,6 @@ import { NgProgressModule } from 'ngx-progressbar';
     MatSnackBarModule,
     MatDialogModule,
     InputComponent,
-    SelectComponent,
     FormsModule,
     ReactiveFormsModule,
     NgxMaskDirective,
