@@ -67,9 +67,7 @@ export class JobTitleComponent extends AdminComponent<
     ),
     new SelectFilterColumn(
       'jobType',
-      this.lookupService.lookups.userType.filter(
-        (i) => i.lookupKey !== UserTypes.ALL
-      ),
+      this.lookupService.lookups.userType,
       'lookupKey',
       'getNames'
     ),

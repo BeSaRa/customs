@@ -41,7 +41,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.JOB_TITLE,
     langKey: 'menu_job_title',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.JOB_TITLE,
     path: AppFullRoutes.JOB_TITLE,
     parent: MenuIdes.ADMINISTRATION,
   },
