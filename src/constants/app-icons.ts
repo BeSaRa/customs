@@ -16,6 +16,7 @@ export const AppIcons = {
   FILTER_REMOVE: 'filter-remove',
   VALID_FORM: 'check',
   INVALID_FORM: 'alert-circle-outline',
+  INTERNAL_USER: 'account',
 };
 
 export type AppIconsType = typeof AppIcons;

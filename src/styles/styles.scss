@@ -60,3 +60,7 @@ html[dir="rtl"] body {
 .table-style {
   @apply [&_td]:text-slate-700 [&_th]:text-slate-700;
 }
+
+.status-min-width {
+  min-width: 150px;
+}

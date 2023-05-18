@@ -20,7 +20,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.INTERNAL_USER,
     langKey: 'menu_internal_user',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.INTERNAL_USER,
     path: AppFullRoutes.INTERNAL_USER,
     parent: MenuIdes.ADMINISTRATION,
   },
