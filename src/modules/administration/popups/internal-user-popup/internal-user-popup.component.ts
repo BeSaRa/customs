@@ -41,7 +41,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         customRoleId: [this.model?.customRoleId],
       }),
     });
-    if (this.data.operation === OperationType.UPDATE) {
+    if (this.data.operation !== OperationType.CREATE) {
       this.loadUserPermissions(this.model);
     }
   }
