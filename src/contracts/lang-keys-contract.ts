@@ -69,4 +69,5 @@ export interface LangKeysContract {
   clear_all_filters: string;
   default_lang: string;
   job_type: string;
+  more_details: string;
 }

@@ -17,6 +17,7 @@ export const AppIcons = {
   VALID_FORM: 'check',
   INVALID_FORM: 'alert-circle-outline',
   INTERNAL_USER: 'account',
+  MORE_DETAILS: 'information-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

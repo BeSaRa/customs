@@ -5,7 +5,6 @@ import { InternalUserService } from '@services/internal-user.service';
 import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
-import { UserPreferencesService } from '@services/user-preferences.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
@@ -56,6 +55,30 @@ export class InternalUserComponent extends AdminComponent<
         this.delete$.next(item);
       },
     },
+    {
+      name: 'more-details',
+      type: 'info',
+      label: 'more_details',
+      icon:AppIcons.MORE_DETAILS,
+    },
+    {
+      name:'email',
+      type:'info',
+      label:(item)=> `${this.lang.map.email} : ${item.email}`,
+      parent:'more-details'
+    },
+    {
+      name:'job-title-info',
+      type:'info',
+      label:(item)=> `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
+      parent:'more-details'
+    },
+    {
+      name:'phone-number',
+      type:'info',
+      label:(item)=> `${this.lang.map.phone_number} : ${item.phoneNumber}`,
+      parent:'more-details'
+    }
   ];
 
   override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(
@@ -71,7 +94,6 @@ export class InternalUserComponent extends AdminComponent<
       'lookupKey',
       'getNames'
     ),
-    new TextFilterColumn('email'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 
