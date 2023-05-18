@@ -2,7 +2,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 export interface ContextMenuActionContract<T = unknown> {
   name: string;
-  type: 'divider' | 'action';
+  type: 'divider' | 'action' | 'info';
   label?: keyof LangKeysContract | ((item: T) => string);
   callback?: (item: T) => void;
   icon?: string;

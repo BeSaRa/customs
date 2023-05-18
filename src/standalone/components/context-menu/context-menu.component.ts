@@ -127,6 +127,8 @@ export class ContextMenuComponent {
   }
 
   getActionLabel(action: ContextMenuActionContract<never>): string {
+    if (!this.item) return '';
+
     return typeof action.label === 'function'
       ? action.label(this.item as never)
       : this.lang.map[action.label as keyof LangKeysContract];

@@ -55,7 +55,7 @@ export class InternalUserComponent extends AdminComponent<
       callback: (item) => {
         this.delete$.next(item);
       },
-    }
+    },
   ];
 
   override columnsWrapper: ColumnsWrapper<InternalUser> = new ColumnsWrapper(

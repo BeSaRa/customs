@@ -5,10 +5,10 @@
         <mat-icon *ngIf="action.icon" [svgIcon]="action.icon"></mat-icon>
         <span>{{ getActionLabel(action) }}</span>
       </button>
-      <app-context-menu-item [actions]="action.children!" #subMenu></app-context-menu-item>
+      <app-context-menu-item [item]="item" [actions]="action.children!" #subMenu></app-context-menu-item>
     </ng-container>
     <ng-container *ngIf="!hasChildren(action)">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="callback(action)">
         <mat-icon *ngIf="action.icon" [svgIcon]="action.icon"></mat-icon>
         <span>{{ getActionLabel(action) }}</span>
       </button>

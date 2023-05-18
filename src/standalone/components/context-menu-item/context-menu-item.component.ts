@@ -40,9 +40,24 @@ export class ContextMenuItemComponent {
   }
 
   getActionLabel(action: ContextMenuActionContract<never>): string {
+    if (!this.item) return '';
     return typeof action.label === 'function'
       ? action.label(this.item as never)
       : this.lang.map[action.label as keyof LangKeysContract] ||
           `messing key ${action.label}`;
+  }
+
+  callback(action: ContextMenuActionContract<never>) {
+    typeof action.callback === 'function' &&
+      !this.isDisabled(action) &&
+      action.callback(this.item as never);
+  }
+
+  isDisabled(action: ContextMenuActionContract<never>): boolean {
+    return typeof action.disabled !== 'undefined'
+      ? typeof action.disabled === 'function'
+        ? action.disabled(this.item as never)
+        : action.disabled
+      : false;
   }
 }
