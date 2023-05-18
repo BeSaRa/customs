@@ -34,7 +34,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.PENALTY,
     langKey: 'menu_penalty',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.PENALTY,
     path: AppFullRoutes.PENALTY,
     parent: MenuIdes.ADMINISTRATION,
   },

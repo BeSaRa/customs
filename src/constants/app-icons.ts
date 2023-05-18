@@ -19,6 +19,7 @@ export const AppIcons = {
   INTERNAL_USER: 'account',
   MORE_DETAILS: 'information-outline',
   JOB_TITLE: 'badge-account-horizontal',
+  PENALTY: 'gavel',
 };
 
 export type AppIconsType = typeof AppIcons;
