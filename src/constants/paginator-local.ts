@@ -32,7 +32,9 @@ export class PaginatorLocal
     length: number
   ): string => {
     if (length === 0) {
-      return `${this.lang.getTranslate('paginator_page_label')} 1 of 1`;
+      return `${this.lang.getTranslate(
+        'paginator_page_label'
+      )} 1 ${this.lang.getTranslate('paginator_of_label')} 1`;
     }
     const amountPages = Math.ceil(length / pageSize);
     return `${this.lang.getTranslate('paginator_page_label')} ${
