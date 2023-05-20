@@ -19,10 +19,11 @@ export const AppIcons = {
   INTERNAL_USER: 'account',
   MORE_DETAILS: 'information-outline',
   JOB_TITLE: 'badge-account-horizontal',
+  PENALTY: 'gavel',
   CANCEL: 'cancel',
   TABLE_CANCEL: 'table-cancel',
   BOOK_CANCEL: 'book-cancel',
-  BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
+  BOOK_CANCEL_OUTLINE: 'book-cancel-outline'
 };
 
 export type AppIconsType = typeof AppIcons;
