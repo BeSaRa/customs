@@ -8,10 +8,9 @@
   <div class="flex-auto"></div>
 </div>
 <div class="shadow relative">
-  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-    <mat-spinner style="margin-top: 120px" [diameter]="75"></mat-spinner>
+  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center items-center">
+    <mat-spinner [diameter]="75"></mat-spinner>
   </div>
-
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -54,24 +53,22 @@
     </ng-container>
     <!-- status status -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>{{ lang.map.status }}</th>
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
       <td mat-cell *matCellDef="let element">
-        <mat-slide-toggle
-          [disabled]="(loading$ | async)!"
-          class="cursor-not-allowed"
-          [matTooltip]="lang.map.change_status"
-          color="primary"
-          (click)="status$.next(element)"
-          [checked]="element.isActive()">
-          <span>{{ element.statusInfo.getNames() }}</span>
-        </mat-slide-toggle>
+        <div class="flex items-center justify-center">
+          <mat-slide-toggle
+            [disabled]="(loading$ | async)!"
+            [matTooltip]="lang.map.change_status"
+            (toggleChange)="status$.next(element)"
+            [checked]="element.isActive()" />
+        </div>
       </td>
     </ng-container>
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
-        <div class="flex items-center">
+        <div class="flex items-center justify-center">
           <app-icon-button
             [disabled]="loading$ | async"
             [matTooltip]="lang.map.view"
