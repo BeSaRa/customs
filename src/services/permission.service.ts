@@ -5,6 +5,8 @@ import { CastResponse, CastResponseContainer } from 'cast-response';
 import { map, Observable, tap } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
 
+interface savePermissionsResult {count:number, sc: number, rs: number[]}
+
 @CastResponseContainer({
   $default: {
     model: () => Permission,
@@ -34,14 +36,14 @@ export class PermissionService extends BaseCrudService<Permission> {
   private _savePermissions(
     userId: number,
     permissions: number[]
-  ): Observable<any> {
-    return this.http.post(
+  ): Observable<savePermissionsResult> {
+    return this.http.post<savePermissionsResult>(
       this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk',
       permissions
     );
   }
 
-  savePermissions(userId: number, permissions: number[]): Observable<any> {
+  savePermissions(userId: number, permissions: number[]): Observable<savePermissionsResult> {
     return this._savePermissions(userId, permissions);
   }
 
