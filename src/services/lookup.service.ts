@@ -32,6 +32,18 @@ export class LookupService
         return lookup;
       });
     });
+    this.lookups.permissionGroups = [
+      new Lookup().clone<Lookup>({
+        arName: 'إدارة',
+        enName: 'Administration',
+        lookupKey: 1,
+      }),
+      new Lookup().clone<Lookup>({
+        arName: 'غير',
+        enName: 'Other',
+        lookupKey: 2,
+      }),
+    ];
     return this.lookups;
   }
 }

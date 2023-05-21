@@ -71,4 +71,8 @@ export interface LangKeysContract {
   default_lang: string;
   job_type: string;
   more_details: string;
+  description: string;
+  selected: string;
+  msg_select_one_at_least_x_to_proceed: string;
+  permission: string;
 }

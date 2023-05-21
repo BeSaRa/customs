@@ -41,8 +41,8 @@ export abstract class AdminDialogComponent<
   dialogRef = inject(MatDialogRef);
 
   ngOnInit(): void {
-    this._init();
     this._initPopup();
+    this._init();
     this._buildForm();
     this._afterBuildForm();
     this._listenToSave();

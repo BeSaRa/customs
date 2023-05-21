@@ -23,7 +23,8 @@ export const AppIcons = {
   CANCEL: 'cancel',
   TABLE_CANCEL: 'table-cancel',
   BOOK_CANCEL: 'book-cancel',
-  BOOK_CANCEL_OUTLINE: 'book-cancel-outline'
+  BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
+  PERMISSIONS_LIST: 'format-list-checks',
 };
 
 export type AppIconsType = typeof AppIcons;

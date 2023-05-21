@@ -27,4 +27,5 @@ export interface LookupMapContract {
   serviceActionType: Lookup[];
   serviceRequestType: Lookup[];
   userType: Lookup[];
+  permissionGroups: Lookup[];
 }

@@ -209,3 +209,13 @@ export function generateUUID() {
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
   });
 }
+
+function* generateChunks<T>(arr: T[], n: number): Generator<T[], void> {
+  for (let i = 0; i < arr.length; i += n) {
+    yield arr.slice(i, i + n);
+  }
+}
+
+export function chunks<T>(arr: T[], n: number): T[][] {
+  return [...generateChunks(arr, n)];
+}

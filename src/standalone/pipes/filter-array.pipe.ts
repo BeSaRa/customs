@@ -2,12 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { objectHasOwnProperty } from '@utils/utils';
 
 @Pipe({
-  name: 'filterSelectInput',
+  name: 'FilterArray',
   standalone: true,
 })
-export class FilterSelectInputPipe implements PipeTransform {
-  transform(
-    options: unknown[] | undefined,
+export class FilterArrayPipe implements PipeTransform {
+  transform<T>(
+    options: T[],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bindFilter: string | ((item: any) => any) | undefined,
     filterTxt: string | null

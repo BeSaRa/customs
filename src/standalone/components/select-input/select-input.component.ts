@@ -31,8 +31,8 @@ import { InputPrefixDirective } from '@standalone/directives/input-prefix.direct
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { InputComponent } from '../input/input.component';
 import { MatIconModule } from '@angular/material/icon';
-import { FilterSelectInputPipe } from '@standalone/pipes/filter-select-input.pipe';
 import { LangService } from '@services/lang.service';
+import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 
 @Component({
   selector: 'app-select-input',
@@ -45,7 +45,7 @@ import { LangService } from '@services/lang.service';
     ValidationErrorsComponent,
     ReactiveFormsModule,
     InputComponent,
-    FilterSelectInputPipe,
+    FilterArrayPipe,
   ],
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
@@ -94,8 +94,8 @@ export class SelectInputComponent
   isMultiple = false;
   @Input()
   name = generateUUID();
-  @Input()
-  options?: unknown[] = [];
+  @Input({ required: true })
+  options: unknown[] = [];
   @Input()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bindValue?: string | ((item: any) => any);

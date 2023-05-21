@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterContentInit,
   Component,
-  ContentChild,
+  EventEmitter,
+  inject,
   Injector,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewEncapsulation,
-  inject,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -17,8 +17,10 @@ import {
   NgControl,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ControlDirective } from '@standalone/directives/control.directive';
+import {
+  MatSlideToggleChange,
+  MatSlideToggleModule,
+} from '@angular/material/slide-toggle';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -37,7 +39,7 @@ import { Subject, takeUntil } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
 })
 export class SwitchComponent
-  implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit
+  implements ControlValueAccessor, OnInit, OnDestroy
 {
   @Input()
   trueValue: unknown = true;
@@ -48,17 +50,9 @@ export class SwitchComponent
   @Input()
   label = '';
 
-  @ContentChild(ControlDirective)
-  template?: ControlDirective;
-
-  ngAfterContentInit(): void {
-    this.hasCustomControl = !!this.template;
-    Promise.resolve().then(() => {
-      if (this.template) {
-        this.ctrl = this.template.control;
-      }
-    });
-  }
+  @Output()
+  changed: EventEmitter<MatSlideToggleChange> =
+    new EventEmitter<MatSlideToggleChange>();
 
   private destroy$ = new Subject<void>();
 
@@ -70,8 +64,6 @@ export class SwitchComponent
   onTouch!: () => void;
 
   control = new FormControl(true);
-  hasCustomControl = false;
-  // noinspection JSUnusedLocalSymbols
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -117,5 +109,11 @@ export class SwitchComponent
 
   switchTouch() {
     this.onTouch && this.onTouch();
+  }
+
+  change($event: MatSlideToggleChange) {
+    this.changed.emit($event);
+    this.onChange &&
+      this.onChange($event.checked ? this.trueValue : this.falseValue);
   }
 }

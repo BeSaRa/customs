@@ -64,3 +64,13 @@ html[dir="rtl"] body {
 .status-min-width {
   min-width: 150px;
 }
+
+//noinspection HtmlDeprecatedTag
+mat-tab-body {
+  padding-block: 10px;
+  max-height: calc(100vh - 300px);
+  min-height: 400px;
+}
+.mdc-tab--active {
+  background-color: theme("colors.primary-light/0.1") !important;
+}

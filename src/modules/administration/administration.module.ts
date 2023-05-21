@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatOptionModule } from '@angular/material/core';
+import { MatOptionModule, MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -49,6 +49,8 @@ import { LocalizationComponent } from './components/localization/localization.co
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
 import { PermissionRolePopupComponent } from '@modules/administration/popups/permission-role-popup/permission-role-popup.component';
+import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @NgModule({
   declarations: [
@@ -111,6 +113,9 @@ import { PermissionRolePopupComponent } from '@modules/administration/popups/per
     MatCardModule,
     SwitchComponent,
     MatProgressBarModule,
+    FilterArrayPipe,
+    InputSuffixDirective,
+    MatRippleModule,
   ],
 })
 export class AdministrationModule {}

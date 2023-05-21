@@ -28,7 +28,7 @@
         ></app-input>
       </div>
       <ng-container
-        *ngFor="let option of options | filterSelectInput : bindFilter : (filterTxt$ | async)"
+        *ngFor="let option of options | FilterArray : bindFilter : (filterTxt$ | async)"
         [ngTemplateOutlet]="optionTemplate?.templateRef || defaultTemplate"
         [ngTemplateOutletContext]="{ $implicit: option }"></ng-container>
       <ng-template #defaultTemplate let-option>

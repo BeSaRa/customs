@@ -13,6 +13,6 @@ export class Permission
   override arName!: string;
   override enName!: string;
   permissionKey!: keyof AppPermissionsType;
-  permissionGroup!: string;
+  groupId!: number;
   category!: string;
 }

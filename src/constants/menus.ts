@@ -62,7 +62,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.PERMISSION_ROLE,
     langKey: 'menu_permission_role',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.PERMISSIONS_LIST,
     path: AppFullRoutes.PERMISSION_ROLE,
     parent: MenuIdes.ADMINISTRATION,
   },
