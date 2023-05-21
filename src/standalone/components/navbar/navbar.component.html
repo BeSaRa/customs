@@ -18,5 +18,16 @@
     </div>
   </button>
   <app-icon-button (click)="logout()" [matTooltip]="lang.map.logout" icon="LOGOUT"></app-icon-button>
+  <button mat-button [matMenuTriggerFor]="langMenu">
+    <div class="flex items-center justify-start gap-x-2">
+      <div class="w-7">
+        <img alt="language-switcher" ngSrc="assets/images/lang.png" height="512" width="512" />
+      </div>
+      <span>{{ lang.getCurrent().name }}</span>
+    </div>
+  </button>
+  <mat-menu #langMenu="matMenu">
+    <button (click)="lang.setCurrent(item)" *ngFor="let item of lang.languages" mat-menu-item>{{ item.name }}</button>
+  </mat-menu>
   <div class="w-10"></div>
 </div>
