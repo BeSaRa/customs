@@ -131,6 +131,7 @@ export class SelectInputComponent
 
   lang = inject(LangService);
   filterControl = new FormControl('');
+
   get filterTxt$() {
     return this.filterControl.valueChanges;
   }
