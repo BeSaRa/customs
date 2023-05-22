@@ -25,6 +25,8 @@ export class BrokerService extends BaseCrudWithDialogService<
   BrokerPopupComponent,
   Broker
 > {
+  serviceName = 'BrokerService';
+
   protected getModelClass(): Constructor<Broker> {
     return Broker;
   }
