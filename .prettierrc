@@ -5,7 +5,8 @@
       "files": "*.ts",
       "options": {
         "singleQuote": true,
-        "endOfLine": "lf"
+        "endOfLine": "lf",
+        "printWidth": 150
       }
     },
     {
