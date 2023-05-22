@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_broker_company : string;
   menu_permission_role: string;
   menu_penalty: string;
   penalty_grace_period: string;
