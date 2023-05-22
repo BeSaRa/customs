@@ -4,10 +4,10 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4 items-center">
             <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
             <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
             <app-input formControlName="domainName" [label]="lang.map.domain_name"></app-input>
