@@ -26,6 +26,7 @@ export const AppIcons = {
   BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
   PERMISSIONS_LIST: 'format-list-checks',
   BROKER_COMPANY: 'domain',
+  MAWARED_DEPARTMENT: 'select-group',
 };
 
 export type AppIconsType = typeof AppIcons;

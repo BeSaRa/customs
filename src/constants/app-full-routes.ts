@@ -9,4 +9,5 @@ export const AppFullRoutes = {
   JOB_TITLE: '/home/administration/job-title',
   PERMISSION_ROLE: '/home/administration/permission-role',
   BROKER_COMPANY: '/home/administration/broker-company',
+  MAWARED_DEPARTMENT: '/home/administration/mawared-department',
 };

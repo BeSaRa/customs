@@ -9,4 +9,5 @@ export const MenuIdes = {
   TEAM: 8,
   PERMISSION_ROLE: 9,
   BROKER_COMPANY: 10,
+  MAWARED_DEPARTMENT: 11,
 };
