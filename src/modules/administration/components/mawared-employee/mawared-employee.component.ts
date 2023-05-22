@@ -8,6 +8,10 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
+import { LookupService } from '@services/lookup.service';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-mawared-employee',
@@ -20,7 +24,9 @@ export class MawaredEmployeeComponent extends AdminComponent<
   MawaredEmployeeService
 > {
   service = inject(MawaredEmployeeService);
-
+  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
+    (lookupItem) => lookupItem.lookupKey !== StatusTypes.DELETED
+  );
   actions: ContextMenuActionContract<MawaredEmployee>[] = [
     {
       name: 'view',
@@ -37,6 +43,12 @@ export class MawaredEmployeeComponent extends AdminComponent<
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames'
+    ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }
