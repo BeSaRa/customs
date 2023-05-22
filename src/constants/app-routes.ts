@@ -10,4 +10,5 @@ export const AppRoutes = {
   TEAM: 'team',
   JOB_TITLE: 'job-title',
   PERMISSION_ROLE: 'permission-role',
+  MAWARED_EMPLOYEE: 'mawared-employee',
 };

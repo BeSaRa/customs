@@ -25,6 +25,7 @@ export const AppIcons = {
   BOOK_CANCEL: 'book-cancel',
   BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
   PERMISSIONS_LIST: 'format-list-checks',
+  RESOURCES_CASE: 'briefcase',
 };
 
 export type AppIconsType = typeof AppIcons;

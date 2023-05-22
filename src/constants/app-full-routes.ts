@@ -8,4 +8,5 @@ export const AppFullRoutes = {
   TEAM: '/home/administration/team',
   JOB_TITLE: '/home/administration/job-title',
   PERMISSION_ROLE: '/home/administration/permission-role',
+  MAWARED_EMPLOYEE: '/home/administration/mawared-employee',
 };

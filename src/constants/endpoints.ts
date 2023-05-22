@@ -13,6 +13,7 @@ export const EndPoints = {
   VIOLATION_TYPE: '/entity/violation-type',
   JOB_TITLE: '/entity/job-title',
   PERMISSION_ROLE: '/entity/permission-role',
+  MAWARED_EMPLOYEE: '/entity/mawared-employee',
 };
 
 export type EndpointsType = typeof EndPoints;
