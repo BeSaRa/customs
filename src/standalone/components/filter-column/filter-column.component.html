@@ -8,7 +8,7 @@
     tabindex="0"
     appInputSuffix
     [matTooltip]="lang.map.clear_filter"
-    [svgIcon]="control.value ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
+    [svgIcon]="getFilterIcon()"></mat-icon>
 </app-input>
 
 <app-icon-button
@@ -38,5 +38,5 @@
     tabindex="0"
     appInputSuffix
     [matTooltip]="lang.map.clear_filter"
-    [svgIcon]="control.value || control.value === '0' ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
+    [svgIcon]="getFilterIcon()"></mat-icon>
 </app-select-input>

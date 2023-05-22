@@ -122,6 +122,7 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
 
   lang = inject(LangService);
   filterControl = new FormControl('');
+
   get filterTxt$() {
     return this.filterControl.valueChanges;
   }

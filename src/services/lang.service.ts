@@ -23,11 +23,11 @@ export class LangService
     string
   >;
 
-  private languages: LangContract[] = [
+  languages: LangContract[] = [
     {
       id: 1,
       code: LangCodes.AR,
-      name: 'Arabic',
+      name: 'العربية',
       direction: 'rtl',
       toggleTo: LangCodes.EN,
     },

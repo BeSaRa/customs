@@ -49,7 +49,9 @@ export class FilterColumnComponent
 {
   @Input()
   column?: ColumnMapContract<unknown>;
-  control = new FormControl('');
+  control: FormControl<string> = new FormControl<string>('', {
+    nonNullable: true,
+  });
   @Output()
   filterChange = new EventEmitter<{ key: string; value: null | string }>();
 
@@ -80,7 +82,7 @@ export class FilterColumnComponent
 
   private listenToClearValue() {
     this.column?.clear.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.control.reset(null, { emitEvent: false });
+      this.control.reset('', { emitEvent: false });
     });
   }
 
@@ -127,5 +129,11 @@ export class FilterColumnComponent
       (this.column && this.column.config && this.column.config.options) ||
       of([])
     );
+  }
+
+  getFilterIcon() {
+    return ('' + this.control.value).length
+      ? AppIcons.FILTER_REMOVE
+      : AppIcons.FILTER_OUTLINE;
   }
 }
