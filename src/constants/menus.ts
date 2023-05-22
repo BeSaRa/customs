@@ -69,7 +69,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.BROKER_COMPANY,
     langKey: 'menu_broker_company',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.BROKER_COMPANY,
     path: AppFullRoutes.BROKER_COMPANY,
     parent: MenuIdes.ADMINISTRATION,
   },
