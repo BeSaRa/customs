@@ -14,4 +14,5 @@ export const AppRoutes = {
   ORGANIZATION_UNIT: 'organization-unit',
   MAWARED_DEPARTMENT: 'mawared-department',
   MAWARED_EMPLOYEE: 'mawared-employee',
+  BROKER: 'broker',
 };

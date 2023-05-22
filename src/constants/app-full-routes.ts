@@ -12,4 +12,5 @@ export const AppFullRoutes = {
   BROKER_COMPANY: '/home/administration/broker-company',
   ORGANIZATION_UNIT: '/home/administration/organization-unit',
   MAWARED_DEPARTMENT: '/home/administration/mawared-department',
+  BROKER: '/home/administration/broker',
 };

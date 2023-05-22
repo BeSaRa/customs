@@ -14,6 +14,7 @@ import { MawaredEmployeeComponent } from '@modules/administration/components/maw
 import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
+import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -71,10 +72,14 @@ const routes: Routes = [
     path: AppRoutes.MAWARED_DEPARTMENT,
     component: MawaredDepartmentComponent,
   },
+  {
+    path: AppRoutes.BROKER,
+    component: BrokerComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdministrationRoutingModule { }
+export class AdministrationRoutingModule {}

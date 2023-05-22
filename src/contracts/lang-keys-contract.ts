@@ -8,6 +8,7 @@ export interface LangKeysContract {
   menu_organization_unit: string;
   menu_mawared_department: string;
   menu_mawared_employee: string;
+  menu_broker: string;
   menu_permission_role: string;
   menu_penalty: string;
   penalty_grace_period: string;
