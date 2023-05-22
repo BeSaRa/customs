@@ -55,6 +55,8 @@ import { BrokerCompanyComponent } from '@modules/administration/components/broke
 import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
+import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
+import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/mawared-department-popup/mawared-department-popup.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +82,8 @@ import { OrganizationUnitPopupComponent } from '@modules/administration/popups/o
     BrokerCompanyPopupComponent,
     OrganizationUnitComponent,
     OrganizationUnitPopupComponent,
+    MawaredDepartmentComponent,
+    MawaredDepartmentPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -126,4 +130,4 @@ import { OrganizationUnitPopupComponent } from '@modules/administration/popups/o
     MatRippleModule,
   ],
 })
-export class AdministrationModule {}
+export class AdministrationModule { }

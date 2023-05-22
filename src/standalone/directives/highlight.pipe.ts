@@ -13,14 +13,14 @@ export class HighlightPipe implements PipeTransform {
     }
     // Match in a case-insensitive
     const re = new RegExp(args, 'gi');
-    const match = value.match(re);
+    const match = String(value).match(re);
 
     // If there's no match, just return the original value.
     if (!match) {
       return value;
     }
 
-    const result = value.replace(re, '<mark>' + match[0] + '</mark>');
+    const result = String(value).replace(re, '<mark>' + match[0] + '</mark>');
     return this.sanitizer.bypassSecurityTrustHtml(result);
   }
 }
