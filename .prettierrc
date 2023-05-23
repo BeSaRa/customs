@@ -3,7 +3,6 @@
   "overrides": [
     {
       "files": "*.ts",
-      "printWidth": 120,
       "options": {
         "singleQuote": true,
         "endOfLine": "lf",

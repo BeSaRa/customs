@@ -13,14 +13,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-  ValidationErrors,
-} from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
@@ -57,9 +50,7 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
     },
   ],
 })
-export class SelectInputComponent
-  implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit
-{
+export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
     Promise.resolve(!!this.optionTemplate).then((value) => {
       if (!value) return;
@@ -139,9 +130,7 @@ export class SelectInputComponent
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() =>
-        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined
-      )
+      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
     );
   }
 
@@ -150,9 +139,7 @@ export class SelectInputComponent
 
   control = new FormControl('');
   // noinspection JSUnusedLocalSymbols
-  private values = this.control.valueChanges
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((value) => this.onChange && this.onChange(value));
+  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -181,9 +168,7 @@ export class SelectInputComponent
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.disabled
-      ? this.control.disable({ emitEvent: false })
-      : this.control.enable({ emitEvent: false });
+    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
   }
 
   inputTouch() {
