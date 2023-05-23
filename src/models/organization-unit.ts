@@ -33,12 +33,15 @@ export class OrganizationUnit extends BaseModel<
   mainTeam!: AdminResult;
 
   buildForm(controls = false): object {
-    const { arName, enName, code, type, status } = this;
+    const { arName, enName, code, type, managerId, parent, status } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
       code: controls ? [code, CustomValidators.required] : code,
       type: controls ? [type, CustomValidators.required] : type,
+      managerId: controls ? [managerId, CustomValidators.required] : managerId,
+      parent: controls ? [parent, CustomValidators.required] : parent,
+
       status: status,
     };
   }

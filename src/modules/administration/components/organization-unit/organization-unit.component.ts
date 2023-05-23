@@ -24,7 +24,7 @@ export class OrganizationUnitComponent extends AdminComponent<
 > {
   service = inject(OrganizationUnitService);
 
-  // internalUserService = inject(InternalUserService);
+  internalUserService = inject(InternalUserService);
   actions: ContextMenuActionContract<OrganizationUnit>[] = [
     {
       name: 'view',
@@ -93,18 +93,18 @@ export class OrganizationUnitComponent extends AdminComponent<
       'getNames'
     ),
     // for parent
-    // new SelectFilterColumn(
-    //   'parent',
-    //   this.service.loadAsLookups(),
-    //   'id',
-    //   'getNames'
-    // ),
-    // new SelectFilterColumn(
-    //   'managerId',
-    //   this.internalUserService.loadAsLookups(),
-    //   'id',
-    //   'getNames'
-    // ),
+    new SelectFilterColumn(
+      'parent',
+      this.service.loadAsLookups(),
+      'id',
+      'getNames'
+    ),
+    new SelectFilterColumn(
+      'managerId',
+      this.internalUserService.loadAsLookups(),
+      'id',
+      'getNames'
+    ),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(

@@ -1,3 +1,4 @@
+import { OrganizationUnitService } from './../../../../services/organization-unit.service';
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -8,6 +9,8 @@ import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
+import { InternalUserService } from '@services/internal-user.service';
+import { InternalUser } from '@models/internal-user';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -17,7 +20,18 @@ import { LookupService } from '@services/lookup.service';
 export class OrganizationUnitPopupComponent extends AdminDialogComponent<OrganizationUnit> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<OrganizationUnit> = inject(MAT_DIALOG_DATA);
+
   unitTypes: Lookup[] = inject(LookupService).lookups.organizationUniType;
+  internalUserService = inject(InternalUserService);
+  internalUsers!: InternalUser[];
+  organizationUnitService = inject(OrganizationUnitService);
+  organizationUnits!: OrganizationUnit[];
+
+  protected override _initPopup(): void {
+    super._initPopup();
+    this.getInternalUsers();
+    this.getOrganizationUnits();
+  }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -43,5 +57,17 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     );
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
+  }
+
+  protected getInternalUsers() {
+    this.internalUserService.loadAsLookups().subscribe((data) => {
+      this.internalUsers = data;
+    });
+  }
+
+  protected getOrganizationUnits() {
+    this.organizationUnitService.loadAsLookups().subscribe((data) => {
+      this.organizationUnits = data;
+    });
   }
 }

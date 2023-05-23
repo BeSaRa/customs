@@ -16,6 +16,23 @@
           [label]="lang.map.unit_type"
           bindValue="lookupKey"
           bindLabel="getNames" />
+        <app-select-input
+          formControlName="managerId"
+          [options]="internalUsers"
+          [label]="lang.map.manager"
+          bindValue="id"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames" />
+
+        <app-select-input
+          formControlName="parent"
+          [options]="organizationUnits"
+          [label]="lang.map.parent_unit"
+          bindValue="id"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames" />
 
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
       </div>
