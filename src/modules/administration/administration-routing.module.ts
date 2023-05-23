@@ -10,6 +10,7 @@ import { ViolationClassificationComponent } from '@modules/administration/compon
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
+import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -51,6 +52,10 @@ const routes: Routes = [
     path: AppRoutes.PERMISSION_ROLE,
     component: PermissionRoleComponent,
   },
+  {
+    path: AppRoutes.BROKER_COMPANY,
+    component: BrokerCompanyComponent,
+  }
 ];
 
 @NgModule({

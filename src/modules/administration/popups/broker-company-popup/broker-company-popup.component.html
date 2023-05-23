@@ -1,0 +1,33 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_broker_company }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+        <ng-container [formGroup]="form">
+          <div class="grid grid-cols-2 gap-4 items-center">
+            <app-input [disabled]="true" formControlName="arName" [label]="lang.map.ar_name"></app-input>
+            <app-input [disabled]="true" formControlName="enName" [label]="lang.map.en_name"></app-input>       
+            <app-input [disabled]="true" formControlName="email" [label]="lang.map.email"></app-input>       
+            <app-input [disabled]="true" formControlName="licenseNumber" [label]="lang.map.lbl_license_number"></app-input>       
+            <app-input [disabled]="true" formControlName="code" [label]="lang.map.lbl_code"></app-input>       
+            <app-input [disabled]="true" formControlName="commercialRecord" [label]="lang.map.lbl_commercial_record"></app-input>       
+            <app-input [disabled]="true" formControlName="begingEstablished" [label]="lang.map.lbl_being_established"></app-input>       
+            <app-input [disabled]="true" formControlName="phoneNumber" [label]="lang.map.phone_number"></app-input>       
+            <app-input [disabled]="true" formControlName="address" [label]="lang.map.lbl_address"></app-input>       
+            <app-input [disabled]="true" formControlName="responsibleName" [label]="lang.map.lbl_responsible_name"></app-input>       
+            <app-input [disabled]="true" formControlName="bokerCompanyPenalties" [label]="lang.map.lbl_broker_company_penalties"></app-input>       
+            <app-input [disabled]="true" formControlName="licenseStartDate" [label]="lang.map.lbl_license_start_date"></app-input>       
+            <app-input [disabled]="true" formControlName="licenseEndDate" [label]="lang.map.lbl_license_end_date"></app-input>       
+            <app-switch
+              formControlName="status"
+              [label]="lang.map.lbl_status"
+              trueValue="1"
+              falseValue="0"></app-switch>
+          </div>
+        </ng-container>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>

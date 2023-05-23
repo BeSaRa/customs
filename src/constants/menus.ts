@@ -66,4 +66,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.PERMISSION_ROLE,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.BROKER_COMPANY,
+    langKey: 'menu_broker_company',
+    icon: AppIcons.BROKER_COMPANY,
+    path: AppFullRoutes.BROKER_COMPANY,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];
