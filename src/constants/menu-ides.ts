@@ -8,4 +8,5 @@ export const MenuIdes = {
   PENALTY: 7,
   TEAM: 8,
   PERMISSION_ROLE: 9,
+  BROKER_COMPANY: 10,
 };
