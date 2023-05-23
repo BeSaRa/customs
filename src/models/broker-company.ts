@@ -19,6 +19,8 @@ export class BrokerCompany extends BaseModel<BrokerCompany, BrokerCompanyService
   address!: string;
   responsibleName!: string;
   bokerCompanyPenalties!: string;
+  licenseStartDate!: string;
+  licenseEndDate!: string;
 
   buildForm(controls = false): object {
     const {
@@ -34,11 +36,15 @@ export class BrokerCompany extends BaseModel<BrokerCompany, BrokerCompanyService
       address,
       responsibleName,
       bokerCompanyPenalties,
+      licenseStartDate,
+      licenseEndDate,
     } = this;
 
     return {
       arName: controls ? [arName, [CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      enName: controls
+        ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]]
+        : enName,
       licenseNumber: controls ? [licenseNumber, [CustomValidators.required]] : licenseNumber,
       code: controls ? [code, [CustomValidators.required]] : code,
       commercialRecord: controls ? [commercialRecord, [CustomValidators.required]] : commercialRecord,
@@ -48,8 +54,9 @@ export class BrokerCompany extends BaseModel<BrokerCompany, BrokerCompanyService
       address: controls ? [address, [CustomValidators.required]] : address,
       responsibleName: controls ? [responsibleName, [CustomValidators.required]] : responsibleName,
       bokerCompanyPenalties: controls ? [bokerCompanyPenalties, [CustomValidators.required]] : bokerCompanyPenalties,
-
-      status: controls ? [status ? status : 1, CustomValidators.required] : status ? status : 1,
+      status: controls ? [status, CustomValidators.required] : status,
+      licenseStartDate: controls ? [licenseStartDate, CustomValidators.required] : licenseStartDate,
+      licenseEndDate: controls ? [licenseEndDate, CustomValidators.required] : licenseEndDate,
     };
   }
 }

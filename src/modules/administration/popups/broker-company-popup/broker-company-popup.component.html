@@ -5,7 +5,7 @@
   </div>
   <div class="dialog-content">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-3 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center">
             <app-input [disabled]="true" formControlName="arName" [label]="lang.map.ar_name"></app-input>
             <app-input [disabled]="true" formControlName="enName" [label]="lang.map.en_name"></app-input>       
             <app-input [disabled]="true" formControlName="email" [label]="lang.map.email"></app-input>       
@@ -17,6 +17,8 @@
             <app-input [disabled]="true" formControlName="address" [label]="lang.map.lbl_address"></app-input>       
             <app-input [disabled]="true" formControlName="responsibleName" [label]="lang.map.lbl_responsible_name"></app-input>       
             <app-input [disabled]="true" formControlName="bokerCompanyPenalties" [label]="lang.map.lbl_broker_company_penalties"></app-input>       
+            <app-input [disabled]="true" formControlName="licenseStartDate" [label]="lang.map.lbl_license_start_date"></app-input>       
+            <app-input [disabled]="true" formControlName="licenseEndDate" [label]="lang.map.lbl_license_end_date"></app-input>       
             <app-switch
               formControlName="status"
               [label]="lang.map.lbl_status"
@@ -29,14 +31,3 @@
     <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>
-
-
-<!-- email
-licenseNumber
-code
-commercialRecord
-begingEstablished
-phoneNumber
-address
-responsibleName
-bokerCompanyPenalties -->

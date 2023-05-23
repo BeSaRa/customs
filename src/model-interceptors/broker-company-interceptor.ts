@@ -7,6 +7,9 @@ export class BrokerCompanyInterceptor implements ModelInterceptorContract<Broker
   }
 
   receive(model: BrokerCompany): BrokerCompany {
+    model.licenseStartDate = new Date(model.licenseStartDate).toDateString();
+    model.licenseEndDate = new Date(model.licenseEndDate).toDateString();
+
     return model;
   }
 }

@@ -83,4 +83,6 @@ export interface LangKeysContract {
   lbl_address: string;
   lbl_responsible_name: string;
   lbl_broker_company_penalties: string;
+  lbl_license_start_date: string;
+  lbl_license_end_date: string;
 }

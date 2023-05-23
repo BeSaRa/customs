@@ -41,11 +41,6 @@ export class BrokerCompanyComponent extends AdminComponent<BrokerCompanyPopupCom
     new TextFilterColumn('licenseNumber'),
     new TextFilterColumn('code'),
     new TextFilterColumn('commercialRecord'),
-    // new TextFilterColumn('begingEstablished'),
-    // new TextFilterColumn('phoneNumber'),
-    // new TextFilterColumn('address'),
-    // new TextFilterColumn('responsibleName'),
-    // new TextFilterColumn('bokerCompanyPenalties'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);

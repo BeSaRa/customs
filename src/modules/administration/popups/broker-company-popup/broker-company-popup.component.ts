@@ -22,22 +22,15 @@ export class BrokerCompanyPopupComponent extends AdminDialogComponent<BrokerComp
 
   protected _beforeSave(): boolean | Observable<boolean> {
     return false;
-    // this.form.markAllAsTouched();
-    // return this.form.valid;
   }
 
   protected _prepareModel(): BrokerCompany | Observable<BrokerCompany> {
     return new BrokerCompany().clone<BrokerCompany>({
       ...this.model,
-      // ...this.form.value,
     });
   }
 
   protected _afterSave(model: BrokerCompany): void {
-    // this.model = model;
-    // this.operation = OperationType.UPDATE;
-    // this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
-    // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
 }
