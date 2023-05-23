@@ -4,6 +4,7 @@ import { Permission } from '@models/permission';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { map, Observable, tap } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
+import { ResponseContract } from '@contracts/response-contract';
 
 @CastResponseContainer({
   $default: {
@@ -26,22 +27,14 @@ export class PermissionService extends BaseCrudService<Permission> {
 
   @CastResponse(() => Permission)
   private _loadPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(
-      this.getUrlSegmentUserPreferences() + '/internal/' + userId
-    );
+    return this.http.get<Permission[]>(this.getUrlSegmentUserPreferences() + '/internal/' + userId);
   }
 
-  private _savePermissions(
-    userId: number,
-    permissions: number[]
-  ): Observable<any> {
-    return this.http.post(
-      this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk',
-      permissions
-    );
+  private _savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
+    return this.http.post<ResponseContract<number>>(this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk', permissions);
   }
 
-  savePermissions(userId: number, permissions: number[]): Observable<any> {
+  savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
     return this._savePermissions(userId, permissions);
   }
 
@@ -54,7 +47,7 @@ export class PermissionService extends BaseCrudService<Permission> {
    */
   generateAppPermission(): Observable<Record<string, string>> {
     return this.loadAsLookups().pipe(
-      map((items) => {
+      map(items => {
         return items.reduce((acc, permission) => {
           return {
             ...acc,
@@ -62,9 +55,9 @@ export class PermissionService extends BaseCrudService<Permission> {
           };
         }, {} as Record<string, string>);
       }),
-      tap((values) => {
+      tap(values => {
         let content = '';
-        Object.keys(values).forEach((item) => {
+        Object.keys(values).forEach(item => {
           content += `\n${item}:'${item}',`;
         });
         console.log(content);
