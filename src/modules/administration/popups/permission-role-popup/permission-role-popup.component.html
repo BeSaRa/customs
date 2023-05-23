@@ -46,7 +46,7 @@
                   [svgIcon]="filter.control.value ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
               </app-input>
             </div>
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
               <mat-checkbox
                 [disabled]="inViewMode()"
                 [checked]="group.isSelected(permission.id)"
