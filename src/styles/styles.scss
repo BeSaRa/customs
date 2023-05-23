@@ -51,7 +51,7 @@ html[dir="rtl"] body {
 }
 
 .dialog-container {
-  @apply max-w-full min-w-[600px];
+  @apply max-w-full lg:min-w-[600px] md:min-w-[400px];
 }
 
 .close-btn {
