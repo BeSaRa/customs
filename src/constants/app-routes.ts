@@ -11,4 +11,5 @@ export const AppRoutes = {
   JOB_TITLE: 'job-title',
   PERMISSION_ROLE: 'permission-role',
   BROKER_COMPANY: 'broker-company',
+  ORGANIZATION_UNIT: 'organization-unit',
 };

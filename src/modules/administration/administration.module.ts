@@ -53,6 +53,8 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
+import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
+import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +78,8 @@ import { BrokerCompanyPopupComponent } from '@modules/administration/popups/brok
     PermissionRolePopupComponent,
     BrokerCompanyComponent,
     BrokerCompanyPopupComponent,
+    OrganizationUnitComponent,
+    OrganizationUnitPopupComponent,
   ],
   imports: [
     CommonModule,
