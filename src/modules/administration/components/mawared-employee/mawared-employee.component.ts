@@ -43,6 +43,7 @@ export class MawaredEmployeeComponent extends AdminComponent<
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new TextFilterColumn('employeeQId'),
     new SelectFilterColumn(
       'status',
       this.commonStatus,

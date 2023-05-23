@@ -76,4 +76,20 @@ export interface LangKeysContract {
   selected: string;
   msg_select_one_at_least_x_to_proceed: string;
   permission: string;
+  username: string;
+  another_email: string;
+  phone: string;
+  another_phone: string;
+  lbl_job_info: string;
+  gender: string;
+  sub_department: string;
+  career_level: string;
+  qualification: string;
+  grad_date: string;
+  total_absent: string;
+  total_sick_leave: string;
+  number_of_penalties: string;
+  last_penalties: string;
+  total_exams: string;
+  total_thanks_books: string;
 }

@@ -16,6 +16,7 @@ export class MawaredEmployee extends BaseModel<
   anotherEmail!: string;
   phone!: string;
   anotherPhone!: string;
+  employeeQId!: string;
   adName!: string;
   employeeDepartmentId!: number;
   isDepMailManager!: boolean;
@@ -29,7 +30,6 @@ export class MawaredEmployee extends BaseModel<
   gradDate!: string;
   totalAbsent!: number;
   totalSickLeave!: number;
-  employeeQId!: string;
   employeeNumberOfPenalties!: number;
   employeeLastPenalties!: string;
   employeeLastRatingScore!: string;
@@ -38,10 +38,47 @@ export class MawaredEmployee extends BaseModel<
   gethDate!: string;
 
   buildForm(controls = false): object {
-    const { arName, enName } = this;
+    const {
+      arName,
+      enName,
+      username,
+      email,
+      anotherEmail,
+      phone,
+      anotherPhone,
+      employeeQId,
+      gender,
+      subDepartmentName,
+      employeeCareerLevel,
+      employeeQualification,
+      gradDate,
+      totalAbsent,
+      totalSickLeave,
+      employeeNumberOfPenalties,
+      employeeLastPenalties,
+      totalExams,
+      totalThanksBooks,
+    } = this;
     return {
       arName: arName,
       enName: enName,
+      username: username,
+      email: email,
+      anotherEmail: anotherEmail,
+      phone: phone,
+      anotherPhone: anotherPhone,
+      employeeQId: employeeQId,
+      gender: gender,
+      subDepartmentName: subDepartmentName,
+      employeeCareerLevel: employeeCareerLevel,
+      employeeQualification: employeeQualification,
+      gradDate: gradDate,
+      totalAbsent: totalAbsent,
+      totalSickLeave: totalSickLeave,
+      employeeNumberOfPenalties: employeeNumberOfPenalties,
+      employeeLastPenalties: employeeLastPenalties,
+      totalExams: totalExams,
+      totalThanksBooks: totalThanksBooks,
     };
   }
 }
