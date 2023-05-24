@@ -26,6 +26,10 @@ export const AppIcons = {
   BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
   PERMISSIONS_LIST: 'format-list-checks',
   BROKER_COMPANY: 'domain',
+  HOME_GROUP: 'home-group',
+
+  SITE_MAP: 'sitemap',
+  SITE_MAP_OUTLINE: 'sitemap-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
