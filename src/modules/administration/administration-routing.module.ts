@@ -13,6 +13,7 @@ import { PermissionRoleComponent } from '@modules/administration/components/perm
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
+import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -66,10 +67,14 @@ const routes: Routes = [
     path: AppRoutes.ORGANIZATION_UNIT,
     component: OrganizationUnitComponent,
   },
+  {
+    path: AppRoutes.MAWARED_DEPARTMENT,
+    component: MawaredDepartmentComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class AdministrationRoutingModule {}
+export class AdministrationRoutingModule { }

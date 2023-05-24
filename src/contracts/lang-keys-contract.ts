@@ -6,6 +6,7 @@ export interface LangKeysContract {
   unit_code: string;
   unit_type: string;
   menu_organization_unit: string;
+  menu_mawared_department: string;
   menu_mawared_employee: string;
   menu_permission_role: string;
   menu_penalty: string;
@@ -92,6 +93,7 @@ export interface LangKeysContract {
   lbl_broker_company_penalties: string;
   lbl_license_start_date: string;
   lbl_license_end_date: string;
+  ldap_code: string;
   username: string;
   another_email: string;
   phone: string;

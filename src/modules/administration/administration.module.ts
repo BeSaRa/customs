@@ -55,6 +55,8 @@ import { BrokerCompanyComponent } from '@modules/administration/components/broke
 import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
+import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
+import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/mawared-department-popup/mawared-department-popup.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 
@@ -82,6 +84,8 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
     BrokerCompanyPopupComponent,
     OrganizationUnitComponent,
     OrganizationUnitPopupComponent,
+    MawaredDepartmentComponent,
+    MawaredDepartmentPopupComponent,
     MawaredEmployeeComponent,
     MawaredEmployeePopupComponent,
   ],
@@ -130,4 +134,4 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
     MatRippleModule,
   ],
 })
-export class AdministrationModule {}
+export class AdministrationModule { }

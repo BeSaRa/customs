@@ -27,9 +27,9 @@ export const AppIcons = {
   PERMISSIONS_LIST: 'format-list-checks',
   BROKER_COMPANY: 'domain',
   HOME_GROUP: 'home-group',
-
   SITE_MAP: 'sitemap',
   SITE_MAP_OUTLINE: 'sitemap-outline',
+  MAWARED_DEPARTMENT: 'select-group',
   RESOURCES_CASE: 'briefcase',
 };
 
