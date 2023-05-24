@@ -67,6 +67,13 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
   },
   {
+    id: MenuIdes.MAWARED_EMPLOYEE,
+    langKey: 'menu_mawared_employee',
+    icon: AppIcons.RESOURCES_CASE,
+    path: AppFullRoutes.MAWARED_EMPLOYEE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
+  {
     id: MenuIdes.BROKER_COMPANY,
     langKey: 'menu_broker_company',
     icon: AppIcons.BROKER_COMPANY,

@@ -7,7 +7,7 @@
 </div>
 <div class="shadow relative">
   <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-    <mat-spinner  [diameter]="75"></mat-spinner>
+    <mat-spinner [diameter]="75"></mat-spinner>
   </div>
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
@@ -67,7 +67,9 @@
 
     <!-- begingEstablished -->
     <ng-container matColumnDef="begingEstablished">
-      <th mat-header-cell mat-sort-header="begingEstablished" *matHeaderCellDef>{{ lang.map.lbl_being_established }}</th>
+      <th mat-header-cell mat-sort-header="begingEstablished" *matHeaderCellDef>
+        {{ lang.map.lbl_being_established }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.begingEstablished }}</td>
     </ng-container>
 
@@ -91,19 +93,17 @@
 
     <!-- bokerCompanyPenalties -->
     <ng-container matColumnDef="bokerCompanyPenalties">
-      <th mat-header-cell mat-sort-header="bokerCompanyPenalties" *matHeaderCellDef>{{ lang.map.lbl_broker_company_penalties }}</th>
+      <th mat-header-cell mat-sort-header="bokerCompanyPenalties" *matHeaderCellDef>
+        {{ lang.map.lbl_broker_company_penalties }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.bokerCompanyPenalties }}</td>
     </ng-container>
 
- <!-- status -->
+    <!-- status -->
     <ng-container matColumnDef="status">
       <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
       <td mat-cell *matCellDef="let element">
-        <mat-slide-toggle
-          [disabled]="true"
-          class="cursor-not-allowed"
-          color="primary"
-          [checked]="element.isActive()">
+        <mat-slide-toggle [disabled]="true" class="cursor-not-allowed" color="primary" [checked]="element.isActive()">
         </mat-slide-toggle>
       </td>
     </ng-container>
@@ -114,29 +114,31 @@
       <td mat-cell *matCellDef="let element">
         <div class="flex">
           <app-icon-button
-          [disabled]="(loading$ | async)!"
-          [matTooltip]="lang.map.view" (click)="view$.next(element)" icon="VIEW"></app-icon-button>
+            [disabled]="(loading$ | async)!"
+            [matTooltip]="lang.map.view"
+            (click)="view$.next(element)"
+            icon="VIEW"></app-icon-button>
         </div>
       </td>
     </ng-container>
-  
-  <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
-    <!-- filtered Columns -->
-    <ng-container [matColumnDef]="filter">
-      <th mat-header-cell *matHeaderCellDef>
-        <app-filter-column
-        (filterChange)="filterChange($event)"
-        [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
-      </th>
+
+    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
+      <!-- filtered Columns -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+        </th>
+      </ng-container>
     </ng-container>
-  </ng-container>
-  
+
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
     <tr
-    mat-row
-    (contextmenu)="contextMenu.open($event, element)"
-    *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
+      mat-row
+      (contextmenu)="contextMenu.open($event, element)"
+      *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>

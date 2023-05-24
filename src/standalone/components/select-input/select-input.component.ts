@@ -52,7 +52,7 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 })
 export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
-    Promise.resolve(!!this.optionTemplate).then((value) => {
+    Promise.resolve(!!this.optionTemplate).then(value => {
       if (!value) return;
       const options = this._selectOptions?.toArray() || [];
       this.selectInput?.options.reset(options);
@@ -139,7 +139,7 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
 
   control = new FormControl('');
   // noinspection JSUnusedLocalSymbols
-  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => this.onChange && this.onChange(value));
+  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {

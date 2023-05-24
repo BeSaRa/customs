@@ -21,10 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class OrganizationUnitService extends BaseCrudWithDialogService<
-  OrganizationUnitPopupComponent,
-  OrganizationUnit
-> {
+export class OrganizationUnitService extends BaseCrudWithDialogService<OrganizationUnitPopupComponent, OrganizationUnit> {
   override serviceName = 'OrganizationUnitService';
   protected getModelClass(): Constructor<OrganizationUnit> {
     return OrganizationUnit;

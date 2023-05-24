@@ -2,9 +2,7 @@ import { ModelInterceptorContract } from 'cast-response';
 import { OrganizationUnit } from '@models/organization-unit';
 import { AdminResult } from '@models/admin-result';
 
-export class OrganizationUnitInterceptor
-  implements ModelInterceptorContract<OrganizationUnit>
-{
+export class OrganizationUnitInterceptor implements ModelInterceptorContract<OrganizationUnit> {
   send(model: Partial<OrganizationUnit>): Partial<OrganizationUnit> {
     return model;
   }

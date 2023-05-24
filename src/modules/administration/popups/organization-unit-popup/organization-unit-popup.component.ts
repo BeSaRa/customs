@@ -52,21 +52,19 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   protected _afterSave(model: OrganizationUnit): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
   }
 
   protected getInternalUsers() {
-    this.internalUserService.loadAsLookups().subscribe((data) => {
+    this.internalUserService.loadAsLookups().subscribe(data => {
       this.internalUsers = data;
     });
   }
 
   protected getOrganizationUnits() {
-    this.organizationUnitService.loadAsLookups().subscribe((data) => {
+    this.organizationUnitService.loadAsLookups().subscribe(data => {
       this.organizationUnits = data;
     });
   }

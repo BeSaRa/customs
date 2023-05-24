@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -21,9 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class BrokerCompanyService extends BaseCrudWithDialogService<
-BrokerCompanyPopupComponent,
-BrokerCompany> {
+export class BrokerCompanyService extends BaseCrudWithDialogService<BrokerCompanyPopupComponent, BrokerCompany> {
   serviceName = 'BrokerCompanyService';
   protected getModelClass(): Constructor<BrokerCompany> {
     return BrokerCompany;

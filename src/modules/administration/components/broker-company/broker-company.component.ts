@@ -19,7 +19,7 @@ import { StatusTypes } from '@enums/status-types';
 })
 export class BrokerCompanyComponent extends AdminComponent<BrokerCompanyPopupComponent, BrokerCompany, BrokerCompanyService> {
   service = inject(BrokerCompanyService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter((s) => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
 
   actions: ContextMenuActionContract<BrokerCompany>[] = [
     {
@@ -27,7 +27,7 @@ export class BrokerCompanyComponent extends AdminComponent<BrokerCompanyPopupCom
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
