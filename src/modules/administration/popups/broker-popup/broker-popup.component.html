@@ -22,11 +22,19 @@
           formControlName="licenseEndDate"
           type="datetime-local"
           [label]="lang.map.license_end_date"></app-input>
-        <app-switch
-          formControlName="status"
-          [trueValue]="1"
-          [falseValue]="0"
-          [label]="lang.map.change_status"></app-switch>
+        <app-select-input
+          formControlName="companyId"
+          [options]="brokerCompanies"
+          [label]="lang.map.menu_broker_company"
+          bindValue="id"
+          bindLabel="getNames" />
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch
+            formControlName="status"
+            [trueValue]="1"
+            [falseValue]="0"
+            [label]="lang.map.change_status"></app-switch>
+        </div>
       </ng-container>
     </div>
   </div>

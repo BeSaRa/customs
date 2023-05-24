@@ -20,43 +20,24 @@ export class Broker extends BaseModel<Broker, BrokerService> {
   email!: string;
   bokerPenalties!: string;
   companyInfo!: AdminResult;
+  companyId!: number;
 
   buildForm(controls = false): object {
-    const {
-      arName,
-      enName,
-      status,
-      licenseNumber,
-      licenseStartDate,
-      licenseEndDate,
-      phoneNumber,
-      email,
-      bokerPenalties,
-      code,
-      qid,
-    } = this;
+    const { arName, enName, status, licenseNumber, licenseStartDate, licenseEndDate, phoneNumber, email, bokerPenalties, code, qid, companyId } =
+      this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
       status: controls ? [status, CustomValidators.required] : status,
-      licenseNumber: controls
-        ? [licenseNumber, CustomValidators.required]
-        : licenseNumber,
-      licenseStartDate: controls
-        ? [licenseStartDate, CustomValidators.required]
-        : licenseStartDate,
-      licenseEndDate: controls
-        ? [licenseEndDate, CustomValidators.required]
-        : licenseEndDate,
-      phoneNumber: controls
-        ? [phoneNumber, CustomValidators.required]
-        : phoneNumber,
+      licenseNumber: controls ? [licenseNumber, CustomValidators.required] : licenseNumber,
+      licenseStartDate: controls ? [licenseStartDate, CustomValidators.required] : licenseStartDate,
+      licenseEndDate: controls ? [licenseEndDate, CustomValidators.required] : licenseEndDate,
+      phoneNumber: controls ? [phoneNumber, CustomValidators.required] : phoneNumber,
       email: controls ? [email, CustomValidators.required] : email,
-      bokerPenalties: controls
-        ? [bokerPenalties, CustomValidators.required]
-        : bokerPenalties,
+      bokerPenalties: controls ? [bokerPenalties, CustomValidators.required] : bokerPenalties,
       code: controls ? [code, CustomValidators.required] : code,
       qid: controls ? [qid, CustomValidators.required] : qid,
+      companyId: controls ? [companyId, CustomValidators.required] : companyId,
     };
   }
 }

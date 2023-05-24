@@ -7,6 +7,8 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { StatusTypes } from '@enums/status-types';
+import { BrokerCompany } from '@models/broker-company';
+import { BrokerCompanyService } from '@services/broker-company.service';
 
 @Component({
   selector: 'app-broker-popup',
@@ -14,10 +16,22 @@ import { StatusTypes } from '@enums/status-types';
   styleUrls: ['./broker-popup.component.scss'],
 })
 export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
+  brokerCompanyService = inject(BrokerCompanyService);
+
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Broker> = inject(MAT_DIALOG_DATA);
+  brokerCompanies!: BrokerCompany[];
 
-  date = new Date('2023-02-25');
+  getBrokerCompaniesAsLookUp() {
+    this.brokerCompanyService.loadAsLookups().subscribe(data => {
+      this.brokerCompanies = data;
+    });
+  }
+
+  protected override _init() {
+    super._init();
+    this.getBrokerCompaniesAsLookUp();
+  }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -40,9 +54,7 @@ export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
   protected _afterSave(model: Broker): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
   }
