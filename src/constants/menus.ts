@@ -78,6 +78,7 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_organization_unit',
     icon: AppIcons.SITE_MAP_OUTLINE,
     path: AppFullRoutes.ORGANIZATION_UNIT,
+    parent: MenuIdes.ADMINISTRATION,
   },
   {
     id: MenuIdes.MAWARED_DEPARTMENT,
