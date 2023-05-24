@@ -17,7 +17,7 @@ export class BrokerCompanyPopupComponent extends AdminDialogComponent<BrokerComp
   data: CrudDialogDataContract<BrokerCompany> = inject(MAT_DIALOG_DATA);
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm());
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
