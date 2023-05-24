@@ -3,10 +3,17 @@
   "overrides": [
     {
       "files": "*.ts",
-      "printWidth": 120,
       "options": {
         "singleQuote": true,
-        "endOfLine": "lf"
+        "endOfLine": "lf",
+        "tabWidth": 2,
+        "useTabs": false,
+        "semi": true,
+        "bracketSpacing": true,
+        "arrowParens": "avoid",
+        "trailingComma": "es5",
+        "bracketSameLine": false,
+        "printWidth": 150
       }
     },
     {

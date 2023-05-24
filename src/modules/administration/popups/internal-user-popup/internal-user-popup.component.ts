@@ -4,19 +4,16 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUser } from '@models/internal-user';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import {
-  Observable,
-  catchError,
-  filter,
-  of,
-  takeUntil,
-  withLatestFrom,
-} from 'rxjs';
+import { Observable, catchError, combineLatest, filter, map, of, takeUntil, tap } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { PermissionService } from '@services/permission.service';
 import { Permission } from '@models/permission';
+import { PermissionRoleService } from '@services/permission-role.service';
+import { PermissionRole } from '@models/permission-role';
+import { CheckGroup } from '@models/check-group';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -28,18 +25,20 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   data: CrudDialogDataContract<InternalUser> = inject(MAT_DIALOG_DATA);
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
+  private readonly permissionRoleService = inject(PermissionRoleService);
 
   statusList!: Lookup[];
-  allPermissions!: Permission[];
+  permissionsRoles!: PermissionRole[];
+  groups: CheckGroup<Permission>[] = [];
+  selectedIds: number[] = [];
+  permissionsByGroup: Record<number, Permission[]> = {} as Record<number, Permission[]>;
+
+  protected readonly AppIcons = AppIcons;
 
   _buildForm(): void {
     this.form = this.fb.group({
       ...this.model.buildForm(true),
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
-      userPermissions: this.fb.group({
-        permissions: [],
-        customRoleId: [this.model?.customRoleId],
-      }),
     });
     if (this.data.operation !== OperationType.CREATE) {
       this.loadUserPermissions(this.model);
@@ -47,7 +46,17 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
+    this.form.get('permissionRoleId')?.setValue(this.permissionRoleId?.value);
     this.form.markAllAsTouched();
+    const hasSelected = this.groups.some(group => group.getSelectedValue().length);
+    if (!hasSelected) {
+      this.toast.error(
+        this.lang.map.msg_select_one_at_least_x_to_proceed.change({
+          x: this.lang.map.permission,
+        })
+      );
+      return false;
+    }
     return this.form.valid;
   }
 
@@ -61,14 +70,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   protected _afterSave(model: InternalUser): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    const permissions = this.groups.map(g => g.getSelectedValue()).flat();
     this.permissionService
-      .savePermissions(model.id, this.userPermissions?.value)
+      .savePermissions(model.id, permissions)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null)
+        filter(response => response !== null)
       )
       .subscribe();
     // you can close the dialog after save here
@@ -77,46 +85,75 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
 
   protected override _init(): void {
     this.statusList = this.lookupService.lookups.commonStatus;
-    this.loadPermissions();
+    this.loadPermissionsRoles();
+    this.loadGroups();
   }
 
-  get permissionsFormTab() {
-    return this.form.get('userPermissions');
+  private load(): Observable<CheckGroup<Permission>[]> {
+    return combineLatest({
+      permissions: this.permissionService.loadAsLookups(),
+      groups: of(this.lookupService.lookups.permissionGroups),
+    }).pipe(
+      tap(({ permissions }) => {
+        this.permissionsByGroup = permissions.reduce((acc, permission) => {
+          return {
+            ...acc,
+            [permission.groupId]: [...(acc[permission.groupId] ? acc[permission.groupId].concat(permission) : [permission])],
+          };
+        }, {} as Record<number, Permission[]>);
+      }),
+      map(({ groups }) => {
+        return groups.map(group => {
+          return new CheckGroup<Permission>(group, this.permissionsByGroup[group.lookupKey] || [], this.selectedIds, 3);
+        });
+      })
+    );
   }
 
-  get customRoleId() {
-    return this.permissionsFormTab?.get('customRoleId');
+  protected override _afterBuildForm(): void {
+    this.listenToPermissionRoleChange();
   }
 
-  get userPermissions() {
-    return this.permissionsFormTab?.get('permissions');
+  get permissionRoleId() {
+    return this.form.get('permissionRoleId');
   }
 
   get userPreferences() {
     return this.form.get('userPreferences');
   }
 
-  get customRoleIdField() {
-    return this.form.get('customRoleId');
-  }
-
   private loadUserPermissions(model: InternalUser) {
-    this.permissionService.loadPermissions(model?.id).subscribe((val) => {
+    this.permissionService.loadPermissions(model?.id).subscribe(val => {
       const ids: number[] = [];
-      val.forEach((permission) => {
+      val.forEach(permission => {
         ids.push(permission.permissionId);
       });
-      this.userPermissions?.patchValue(ids);
+      this.selectedIds = ids;
+      this.loadGroups();
     });
   }
 
-  private loadPermissions() {
-    this.permissionService
+  private loadPermissionsRoles() {
+    this.permissionRoleService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .pipe(withLatestFrom(of(this.lookupService.lookups.permissionCategory)))
-      .subscribe((userPermissions) => {
-        this.allPermissions = userPermissions[0];
+      .subscribe(permissionsRoles => {
+        this.permissionsRoles = permissionsRoles;
       });
+  }
+
+  private listenToPermissionRoleChange() {
+    this.permissionRoleId?.valueChanges.subscribe(val => {
+      const selectedRoleId = this.permissionsRoles.find(permission => permission.id === val);
+      const ids = selectedRoleId!.permissionSet.map(permission => permission.permissionId);
+      this.selectedIds = ids;
+      this.loadGroups();
+    });
+  }
+
+  loadGroups() {
+    this.load().subscribe(groups => {
+      this.groups = groups;
+    });
   }
 }

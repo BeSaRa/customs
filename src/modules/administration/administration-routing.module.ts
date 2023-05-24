@@ -11,6 +11,7 @@ import { ViolationTypeComponent } from '@modules/administration/components/viola
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
+import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -55,6 +56,10 @@ const routes: Routes = [
   {
     path: AppRoutes.MAWARED_EMPLOYEE,
     component: MawaredEmployeeComponent,
+  },
+  {
+    path: AppRoutes.BROKER_COMPANY,
+    component: BrokerCompanyComponent,
   },
 ];
 

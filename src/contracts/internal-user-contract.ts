@@ -2,7 +2,7 @@ import { AdminResult } from '@models/admin-result';
 
 export interface InternalUserContract {
   arName: string;
-  customRoleId: number;
+  permissionRoleId: number;
   defaultDepartmentInfo: AdminResult;
   defaultOUId: number;
   departmentInfo: AdminResult;

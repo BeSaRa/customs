@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_broker_company: string;
   menu_mawared_employee: string;
   menu_permission_role: string;
   menu_penalty: string;
@@ -76,6 +77,15 @@ export interface LangKeysContract {
   selected: string;
   msg_select_one_at_least_x_to_proceed: string;
   permission: string;
+  lbl_license_number: string;
+  lbl_code: string;
+  lbl_commercial_record: string;
+  lbl_being_established: string;
+  lbl_address: string;
+  lbl_responsible_name: string;
+  lbl_broker_company_penalties: string;
+  lbl_license_start_date: string;
+  lbl_license_end_date: string;
   username: string;
   another_email: string;
   phone: string;

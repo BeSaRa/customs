@@ -51,6 +51,8 @@ import { PermissionRoleComponent } from '@modules/administration/components/perm
 import { PermissionRolePopupComponent } from '@modules/administration/popups/permission-role-popup/permission-role-popup.component';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
+import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 
@@ -74,6 +76,8 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
     JobTitlePopupComponent,
     PermissionRoleComponent,
     PermissionRolePopupComponent,
+    BrokerCompanyComponent,
+    BrokerCompanyPopupComponent,
     MawaredEmployeeComponent,
     MawaredEmployeePopupComponent,
   ],

@@ -13,6 +13,7 @@ export const EndPoints = {
   VIOLATION_TYPE: '/entity/violation-type',
   JOB_TITLE: '/entity/job-title',
   PERMISSION_ROLE: '/entity/permission-role',
+  BROKER_COMPANY: '/entity/broker-company',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
 };
 
