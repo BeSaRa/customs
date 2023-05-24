@@ -57,6 +57,8 @@ import { OrganizationUnitComponent } from '@modules/administration/components/or
 import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/mawared-department-popup/mawared-department-popup.component';
+import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
+import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 
 @NgModule({
   declarations: [
@@ -84,6 +86,8 @@ import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/
     OrganizationUnitPopupComponent,
     MawaredDepartmentComponent,
     MawaredDepartmentPopupComponent,
+    MawaredEmployeeComponent,
+    MawaredEmployeePopupComponent,
   ],
   imports: [
     CommonModule,

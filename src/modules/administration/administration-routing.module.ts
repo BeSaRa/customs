@@ -10,6 +10,7 @@ import { ViolationClassificationComponent } from '@modules/administration/compon
 import { ViolationTypeComponent } from '@modules/administration/components/violation-type/violation-type.component';
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
+import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
@@ -53,6 +54,10 @@ const routes: Routes = [
   {
     path: AppRoutes.PERMISSION_ROLE,
     component: PermissionRoleComponent,
+  },
+  {
+    path: AppRoutes.MAWARED_EMPLOYEE,
+    component: MawaredEmployeeComponent,
   },
   {
     path: AppRoutes.BROKER_COMPANY,

@@ -16,6 +16,7 @@ export const EndPoints = {
   BROKER_COMPANY: '/entity/broker-company',
   ORGANIZATION_UNIT: '/entity/organization-unit',
   MAWARED_DEPARTMENT: '/entity/mawared-department',
+  MAWARED_EMPLOYEE: '/entity/mawared-employee',
 };
 
 export type EndpointsType = typeof EndPoints;

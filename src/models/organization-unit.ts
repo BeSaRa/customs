@@ -10,10 +10,7 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new OrganizationUnitInterceptor();
 
 @InterceptModel({ send, receive })
-export class OrganizationUnit extends BaseModel<
-  OrganizationUnit,
-  OrganizationUnitService
-> {
+export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUnitService> {
   $$__service_name__$$ = 'OrganizationUnitService';
   override status = StatusTypes.ACTIVE;
 

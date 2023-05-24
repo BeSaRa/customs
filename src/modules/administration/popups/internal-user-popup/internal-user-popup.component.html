@@ -40,7 +40,6 @@
 
               <!-- limited circulation -->
               <app-switch formControlName="limitedCirculation" [label]="lang.map.limited_circulation"></app-switch>
-
             </div>
           </ng-container>
         </div>
@@ -54,54 +53,52 @@
               bindValue="id"
               bindLabel="getNames"
               [label]="lang.map.lbl_custom_role"
-              formControlName="permissionRoleId"
-              ></app-select-input>
+              formControlName="permissionRoleId"></app-select-input>
           </div>
-          
-            <div class="grid grid-cols-1 gap-4" *ngIf="permissionRoleId?.valid">
-              <ng-container *ngFor="let group of groups">
-                <div class="border-b flex items-center justify-between bg-slate-300">
-                  <mat-checkbox
-                    [disabled]="!group.list.length || inViewMode()"
-                    (change)="group.toggleSelection()"
-                    [checked]="group.isFull()"
-                    [indeterminate]="group.isIndeterminate()">
-                    <div class="flex space-x-4 rtl:space-x-reverse">
-                      <span class="inline-block">{{ group.getNames() }}</span>
-                      <span class="inline-block">
-                        {{
-                          group.hasSelectedValue()
-                            ? "(" + group.getSelectedValue().length + "" + lang.map.selected + ")"
-                            : ""
-                        }}
-                      </span>
-                    </div>
-                  </mat-checkbox>
-                  <app-input label="" #filter class="mx-3" [noMargin]="true" size="sm" [placeholder]="lang.map.filter">
-                    <mat-icon
-                      (keydown.enter)="filter.control.setValue('')"
-                      (keydown.space)="filter.control.setValue('')"
-                      (click)="filter.control.setValue('')"
-                      class="cursor-pointer"
-                      mat-ripple
-                      tabindex="0"
-                      appInputSuffix
-                      [matTooltip]="lang.map.clear_filter"
-                      [svgIcon]="filter.control.value ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
-                  </app-input>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
-                  <mat-checkbox
-                    [disabled]="inViewMode()"
-                    [checked]="group.isSelected(permission.id)"
-                    (change)="group.toggle(permission.id)"
-                    *ngFor="let permission of group.list | FilterArray : 'getNames' : filter.control.value">
-                    <span [innerHTML]="permission.getNames() | highlight : filter.control.value || ''"></span>
-                  </mat-checkbox>
-                </div>
-              </ng-container>
-            </div>
-          
+
+          <div class="grid grid-cols-1 gap-4" *ngIf="permissionRoleId?.valid">
+            <ng-container *ngFor="let group of groups">
+              <div class="border-b flex items-center justify-between bg-slate-300">
+                <mat-checkbox
+                  [disabled]="!group.list.length || inViewMode()"
+                  (change)="group.toggleSelection()"
+                  [checked]="group.isFull()"
+                  [indeterminate]="group.isIndeterminate()">
+                  <div class="flex space-x-4 rtl:space-x-reverse">
+                    <span class="inline-block">{{ group.getNames() }}</span>
+                    <span class="inline-block">
+                      {{
+                        group.hasSelectedValue()
+                          ? "(" + group.getSelectedValue().length + "" + lang.map.selected + ")"
+                          : ""
+                      }}
+                    </span>
+                  </div>
+                </mat-checkbox>
+                <app-input label="" #filter class="mx-3" [noMargin]="true" size="sm" [placeholder]="lang.map.filter">
+                  <mat-icon
+                    (keydown.enter)="filter.control.setValue('')"
+                    (keydown.space)="filter.control.setValue('')"
+                    (click)="filter.control.setValue('')"
+                    class="cursor-pointer"
+                    mat-ripple
+                    tabindex="0"
+                    appInputSuffix
+                    [matTooltip]="lang.map.clear_filter"
+                    [svgIcon]="filter.control.value ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
+                </app-input>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
+                <mat-checkbox
+                  [disabled]="inViewMode()"
+                  [checked]="group.isSelected(permission.id)"
+                  (change)="group.toggle(permission.id)"
+                  *ngFor="let permission of group.list | FilterArray : 'getNames' : filter.control.value">
+                  <span [innerHTML]="permission.getNames() | highlight : filter.control.value || ''"></span>
+                </mat-checkbox>
+              </div>
+            </ng-container>
+          </div>
         </ng-container>
       </mat-tab>
     </mat-tab-group>

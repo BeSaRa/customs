@@ -30,6 +30,7 @@ export const AppIcons = {
   SITE_MAP: 'sitemap',
   SITE_MAP_OUTLINE: 'sitemap-outline',
   MAWARED_DEPARTMENT: 'select-group',
+  RESOURCES_CASE: 'briefcase',
 };
 
 export type AppIconsType = typeof AppIcons;
