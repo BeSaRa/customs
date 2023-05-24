@@ -10,4 +10,5 @@ export const AppFullRoutes = {
   PERMISSION_ROLE: '/home/administration/permission-role',
   MAWARED_EMPLOYEE: '/home/administration/mawared-employee',
   BROKER_COMPANY: '/home/administration/broker-company',
+  ORGANIZATION_UNIT: '/home/administration/organization-unit',
 };

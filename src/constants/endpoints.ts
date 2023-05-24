@@ -14,6 +14,7 @@ export const EndPoints = {
   JOB_TITLE: '/entity/job-title',
   PERMISSION_ROLE: '/entity/permission-role',
   BROKER_COMPANY: '/entity/broker-company',
+  ORGANIZATION_UNIT: '/entity/organization-unit',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
 };
 

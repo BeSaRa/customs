@@ -1,5 +1,11 @@
 export interface LangKeysContract {
   menu_broker_company: string;
+  parent_unit: string;
+  main_team: string;
+  manager: string;
+  unit_code: string;
+  unit_type: string;
+  menu_organization_unit: string;
   menu_mawared_employee: string;
   menu_permission_role: string;
   menu_penalty: string;

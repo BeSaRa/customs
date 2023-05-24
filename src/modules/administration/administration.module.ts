@@ -53,6 +53,8 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
+import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
+import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 
@@ -78,6 +80,8 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
     PermissionRolePopupComponent,
     BrokerCompanyComponent,
     BrokerCompanyPopupComponent,
+    OrganizationUnitComponent,
+    OrganizationUnitPopupComponent,
     MawaredEmployeeComponent,
     MawaredEmployeePopupComponent,
   ],
