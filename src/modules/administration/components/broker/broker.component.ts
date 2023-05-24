@@ -8,6 +8,9 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-broker',
@@ -20,6 +23,9 @@ export class BrokerComponent extends AdminComponent<
   BrokerService
 > {
   service = inject(BrokerService);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED
+  );
   actions: ContextMenuActionContract<Broker>[] = [
     {
       name: 'view',
@@ -53,6 +59,14 @@ export class BrokerComponent extends AdminComponent<
   columnsWrapper: ColumnsWrapper<Broker> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new TextFilterColumn('qid'),
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames'
+    ),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

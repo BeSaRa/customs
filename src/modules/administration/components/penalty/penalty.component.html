@@ -82,7 +82,6 @@
     </ng-container>
 
     <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
-      <!-- localizationKey Column -->
       <ng-container [matColumnDef]="filter">
         <th mat-header-cell *matHeaderCellDef>
           <app-filter-column

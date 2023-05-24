@@ -111,4 +111,9 @@ export interface LangKeysContract {
   last_penalties: string;
   total_exams: string;
   total_thanks_books: string;
+  broker_code: string;
+  broker_penalties: string;
+  license_number: string;
+  license_start_date: string;
+  license_end_date: string;
 }

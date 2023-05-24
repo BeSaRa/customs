@@ -6,6 +6,7 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-broker-popup',
@@ -15,6 +16,8 @@ import { OperationType } from '@enums/operation-type';
 export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Broker> = inject(MAT_DIALOG_DATA);
+
+  date = new Date('2023-02-25');
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -26,6 +29,8 @@ export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
   }
 
   protected _prepareModel(): Broker | Observable<Broker> {
+    console.log('this.form.value: ', this.form.value);
+
     return new Broker().clone<Broker>({
       ...this.model,
       ...this.form.value,

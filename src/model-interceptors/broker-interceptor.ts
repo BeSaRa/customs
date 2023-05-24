@@ -7,6 +7,10 @@ export class BrokerInterceptor implements ModelInterceptorContract<Broker> {
   }
 
   receive(model: Broker): Broker {
+    model.licenseStartDate =
+      model.licenseStartDate?.split('.')[0] ?? model.licenseStartDate;
+    model.licenseEndDate =
+      model.licenseEndDate?.split('.')[0] ?? model.licenseEndDate;
     return model;
   }
 }
