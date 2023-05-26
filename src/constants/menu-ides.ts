@@ -12,4 +12,5 @@ export const MenuIdes = {
   ORGANIZATION_UNIT: 11,
   MAWARED_DEPARTMENT: 12,
   MAWARED_EMPLOYEE: 13,
+  BROKER: 14,
 };

@@ -8,6 +8,7 @@ export interface LangKeysContract {
   menu_organization_unit: string;
   menu_mawared_department: string;
   menu_mawared_employee: string;
+  menu_broker: string;
   menu_permission_role: string;
   menu_penalty: string;
   penalty_grace_period: string;
@@ -110,4 +111,9 @@ export interface LangKeysContract {
   last_penalties: string;
   total_exams: string;
   total_thanks_books: string;
+  broker_code: string;
+  broker_penalties: string;
+  license_number: string;
+  license_start_date: string;
+  license_end_date: string;
 }
