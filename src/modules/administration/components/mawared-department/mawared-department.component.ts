@@ -16,11 +16,7 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './mawared-department.component.html',
   styleUrls: ['./mawared-department.component.scss'],
 })
-export class MawaredDepartmentComponent extends AdminComponent<
-  MawaredDepartmentPopupComponent,
-  MawaredDepartment,
-  MawaredDepartmentService
-> {
+export class MawaredDepartmentComponent extends AdminComponent<MawaredDepartmentPopupComponent, MawaredDepartment, MawaredDepartmentService> {
   service = inject(MawaredDepartmentService);
   actions: ContextMenuActionContract<MawaredDepartment>[] = [
     {
@@ -28,7 +24,7 @@ export class MawaredDepartmentComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -41,9 +37,7 @@ export class MawaredDepartmentComponent extends AdminComponent<
     new TextFilterColumn('ldapCode'),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED
-      ),
+      this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
       'lookupKey',
       'getNames'
     ),
