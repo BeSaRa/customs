@@ -56,11 +56,11 @@
               formControlName="permissionRoleId"></app-select-input>
           </div>
 
-          <div class="grid grid-cols-1 gap-4" *ngIf="permissionRoleId?.valid">
+          <div class="grid grid-cols-1 gap-4">
             <ng-container *ngFor="let group of groups">
               <div class="border-b flex items-center justify-between bg-slate-300">
                 <mat-checkbox
-                  [disabled]="!group.list.length || inViewMode()"
+                  [disabled]="!group.list.length || inViewMode() || !permissionRoleId?.valid"
                   (change)="group.toggleSelection()"
                   [checked]="group.isFull()"
                   [indeterminate]="group.isIndeterminate()">
@@ -90,7 +90,7 @@
               </div>
               <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-hidden">
                 <mat-checkbox
-                  [disabled]="inViewMode()"
+                  [disabled]="inViewMode() || !permissionRoleId?.valid"
                   [checked]="group.isSelected(permission.id)"
                   (change)="group.toggle(permission.id)"
                   *ngFor="let permission of group.list | FilterArray : 'getNames' : filter.control.value">
