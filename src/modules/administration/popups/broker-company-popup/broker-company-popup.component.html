@@ -37,7 +37,11 @@
           [disabled]="true"
           formControlName="licenseEndDate"
           [label]="lang.map.lbl_license_end_date"></app-input>
-        <app-switch formControlName="status" [label]="lang.map.lbl_status" trueValue="1" falseValue="0"></app-switch>
+        <app-input
+          [disabled]="true"
+          formControlName="statusInfo"
+          [label]="lang.map.lbl_status"></app-input>
+        
       </div>
     </ng-container>
   </div>
