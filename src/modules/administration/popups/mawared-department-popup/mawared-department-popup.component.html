@@ -6,12 +6,11 @@
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4">
-        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-        <app-input formControlName="ldapCode" [label]="lang.map.ldap_code"></app-input>
-        <div class="flex flex-row pl-1 items-center justify-start">
-          <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>
-        </div>
+        <app-input [disabled]="true" formControlName="arName" [label]="lang.map.ar_name"></app-input>
+        <app-input [disabled]="true" formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input [disabled]="true" formControlName="ldapCode" [label]="lang.map.ldap_code"></app-input>
+        <app-input [disabled]="true" formControlName="ldapCode" [label]="lang.map.ldap_code"></app-input>
+        <app-input [disabled]="true" formControlName="statusInfo" [label]="lang.map.status"></app-input>
       </div>
     </ng-container>
   </div>

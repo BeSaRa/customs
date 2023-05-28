@@ -17,28 +17,18 @@ export class MawaredDepartmentPopupComponent extends AdminDialogComponent<Maware
   data: CrudDialogDataContract<MawaredDepartment> = inject(MAT_DIALOG_DATA);
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm());
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.markAllAsTouched();
-    return this.form.valid;
+    return false;
   }
 
   protected _prepareModel(): MawaredDepartment | Observable<MawaredDepartment> {
     return new MawaredDepartment().clone<MawaredDepartment>({
       ...this.model,
-      ...this.form.value,
     });
   }
 
-  protected _afterSave(model: MawaredDepartment): void {
-    this.model = model;
-    this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
-    // you can close the dialog after save here
-    // this.dialogRef.close(this.model);
-  }
+  protected _afterSave(model: MawaredDepartment): void {}
 }
