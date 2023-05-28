@@ -54,6 +54,11 @@ export class BrokerCompany extends BaseModel<BrokerCompany, BrokerCompanyService
       bokerCompanyPenalties,
       licenseStartDate,
       licenseEndDate,
+      statusInfo: this.getStatusInfoName(),
     };
+  }
+
+  getStatusInfoName() {
+    return this.statusInfo.getNames();
   }
 }
