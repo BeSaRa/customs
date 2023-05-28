@@ -34,28 +34,18 @@ export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
   }
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm());
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.markAllAsTouched();
-    return this.form.valid;
+    return false;
   }
 
   protected _prepareModel(): Broker | Observable<Broker> {
-    console.log('this.form.value: ', this.form.value);
-
     return new Broker().clone<Broker>({
       ...this.model,
-      ...this.form.value,
     });
   }
 
-  protected _afterSave(model: Broker): void {
-    this.model = model;
-    this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
-    // you can close the dialog after save here
-    // this.dialogRef.close(this.model);
-  }
+  protected _afterSave(model: Broker): void {}
 }

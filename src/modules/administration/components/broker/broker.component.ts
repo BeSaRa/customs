@@ -17,41 +17,17 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './broker.component.html',
   styleUrls: ['./broker.component.scss'],
 })
-export class BrokerComponent extends AdminComponent<
-  BrokerPopupComponent,
-  Broker,
-  BrokerService
-> {
+export class BrokerComponent extends AdminComponent<BrokerPopupComponent, Broker, BrokerService> {
   service = inject(BrokerService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED
-  );
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
   actions: ContextMenuActionContract<Broker>[] = [
     {
       name: 'view',
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
-      },
-    },
-    {
-      name: 'edit',
-      type: 'action',
-      label: 'edit',
-      icon: AppIcons.EDIT,
-      callback: (item) => {
-        this.edit$.next(item);
-      },
-    },
-    {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: (item) => {
-        this.delete$.next(item);
       },
     },
   ];
@@ -61,12 +37,7 @@ export class BrokerComponent extends AdminComponent<
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('qid'),
-    new SelectFilterColumn(
-      'status',
-      this.commonStatus,
-      'lookupKey',
-      'getNames'
-    ),
+    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

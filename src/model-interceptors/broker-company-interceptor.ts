@@ -4,6 +4,7 @@ import { AdminResult } from '@models/admin-result';
 
 export class BrokerCompanyInterceptor implements ModelInterceptorContract<BrokerCompany> {
   send(model: Partial<BrokerCompany>): Partial<BrokerCompany> {
+    delete model.statusInfo;
     return model;
   }
 
