@@ -58,12 +58,6 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       label: item => `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
       parent: 'more-details',
     },
-    {
-      name: 'main_team',
-      type: 'info',
-      label: item => `${this.lang.map.main_team} : ${item.mainTeam.getNames()}`,
-      parent: 'more-details',
-    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<OrganizationUnit> = new ColumnsWrapper(
