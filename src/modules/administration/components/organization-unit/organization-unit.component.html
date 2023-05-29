@@ -89,7 +89,6 @@
       <td mat-cell *matCellDef="let element">
         <div class="flex items-center justify-center">
           <mat-slide-toggle
-            [disabled]="true"
             [matTooltip]="lang.map.change_status"
             (toggleChange)="status$.next(element)"
             [checked]="element.isActive()" />
