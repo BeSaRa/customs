@@ -12,7 +12,6 @@ export class OrganizationUnitInterceptor implements ModelInterceptorContract<Org
     model.typeInfo = new AdminResult().clone(model.typeInfo);
     model.managerInfo = new AdminResult().clone(model.managerInfo);
     model.parentInfo = new AdminResult().clone(model.parentInfo);
-    model.mainTeam = new AdminResult().clone(model.mainTeam);
 
     return model;
   }

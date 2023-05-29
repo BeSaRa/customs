@@ -20,6 +20,7 @@ export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUn
   code!: string;
   email!: string;
   ldapGroupName!: string;
+  ldapLimitedGroupName!: string;
 
   managerId!: number;
   managerInfo!: AdminResult;
@@ -27,10 +28,8 @@ export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUn
   parent!: number;
   parentInfo!: AdminResult;
 
-  mainTeam!: AdminResult;
-
   buildForm(controls = false): object {
-    const { arName, enName, code, type, managerId, parent, status } = this;
+    const { arName, enName, code, email, type, managerId, ldapGroupName, ldapLimitedGroupName, parent, status } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
@@ -38,6 +37,9 @@ export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUn
       type: controls ? [type, CustomValidators.required] : type,
       managerId: controls ? [managerId, CustomValidators.required] : managerId,
       parent: controls ? [parent, CustomValidators.required] : parent,
+      email: controls ? [email, CustomValidators.required] : email,
+      ldapGroupName: controls ? [ldapGroupName, CustomValidators.required] : ldapGroupName,
+      ldapLimitedGroupName: controls ? [ldapLimitedGroupName, CustomValidators.required] : ldapLimitedGroupName,
 
       status: status,
     };
