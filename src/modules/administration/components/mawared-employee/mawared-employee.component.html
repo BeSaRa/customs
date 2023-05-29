@@ -79,7 +79,10 @@
 
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
-    <tr mat-row *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
+    <tr
+      mat-row
+      (contextmenu)="contextMenu.open($event, element)"
+      *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
@@ -94,4 +97,5 @@
     [showFirstLastButtons]="showFirstLastButtons"
     [length]="length">
   </mat-paginator>
+  <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
