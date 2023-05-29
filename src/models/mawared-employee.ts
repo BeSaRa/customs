@@ -6,10 +6,7 @@ import { InterceptModel } from 'cast-response';
 const { send, receive } = new MawaredEmployeeInterceptor();
 
 @InterceptModel({ send, receive })
-export class MawaredEmployee extends BaseModel<
-  MawaredEmployee,
-  MawaredEmployeeService
-> {
+export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeService> {
   $$__service_name__$$ = 'MawaredEmployeeService';
   username!: string;
   email!: string;
@@ -37,7 +34,7 @@ export class MawaredEmployee extends BaseModel<
   totalThanksBooks!: number;
   gethDate!: string;
 
-  buildForm(controls = false): object {
+  buildForm(): object {
     const {
       arName,
       enName,
@@ -60,25 +57,30 @@ export class MawaredEmployee extends BaseModel<
       totalThanksBooks,
     } = this;
     return {
-      arName: arName,
-      enName: enName,
-      username: username,
-      email: email,
-      anotherEmail: anotherEmail,
-      phone: phone,
-      anotherPhone: anotherPhone,
-      employeeQId: employeeQId,
-      gender: gender,
-      subDepartmentName: subDepartmentName,
-      employeeCareerLevel: employeeCareerLevel,
-      employeeQualification: employeeQualification,
-      gradDate: gradDate,
-      totalAbsent: totalAbsent,
-      totalSickLeave: totalSickLeave,
-      employeeNumberOfPenalties: employeeNumberOfPenalties,
-      employeeLastPenalties: employeeLastPenalties,
-      totalExams: totalExams,
-      totalThanksBooks: totalThanksBooks,
+      arName,
+      enName,
+      username,
+      email,
+      anotherEmail,
+      phone,
+      anotherPhone,
+      employeeQId,
+      gender,
+      subDepartmentName,
+      employeeCareerLevel,
+      employeeQualification,
+      gradDate,
+      totalAbsent,
+      totalSickLeave,
+      employeeNumberOfPenalties,
+      employeeLastPenalties,
+      totalExams,
+      totalThanksBooks,
+      statusInfo: this.getStatusInfoName(),
     };
+  }
+
+  getStatusInfoName() {
+    return this.statusInfo.getNames() || '';
   }
 }
