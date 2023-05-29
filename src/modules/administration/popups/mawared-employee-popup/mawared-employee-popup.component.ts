@@ -22,28 +22,18 @@ export class MawaredEmployeePopupComponent extends AdminDialogComponent<MawaredE
   genderTypes: Lookup[] = this.lookupService.lookups.gender;
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm());
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.markAllAsTouched();
-    return this.form.valid;
+    return false;
   }
 
   protected _prepareModel(): MawaredEmployee | Observable<MawaredEmployee> {
     return new MawaredEmployee().clone<MawaredEmployee>({
       ...this.model,
-      ...this.form.value,
     });
   }
 
-  protected _afterSave(model: MawaredEmployee): void {
-    this.model = model;
-    this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
-    // you can close the dialog after save here
-    // this.dialogRef.close(this.model);
-  }
+  protected _afterSave(model: MawaredEmployee): void {}
 }

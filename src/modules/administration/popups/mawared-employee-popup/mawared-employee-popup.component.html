@@ -8,39 +8,49 @@
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
-            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-            <app-input formControlName="username" [label]="lang.map.username"></app-input>
-            <app-input formControlName="employeeQId" [label]="lang.map.qid"></app-input>
-            <app-input formControlName="email" [label]="lang.map.email"></app-input>
-            <app-input formControlName="anotherEmail" [label]="lang.map.another_email"></app-input>
-            <app-input formControlName="phone" [label]="lang.map.phone"></app-input>
-            <app-input formControlName="anotherPhone" [label]="lang.map.another_phone"> </app-input
-            ><app-select-input
+            <app-input [disabled]="true" formControlName="arName" [label]="lang.map.ar_name"></app-input>
+            <app-input [disabled]="true" formControlName="enName" [label]="lang.map.en_name"></app-input>
+            <app-input [disabled]="true" formControlName="username" [label]="lang.map.username"></app-input>
+            <app-input [disabled]="true" formControlName="employeeQId" [label]="lang.map.qid"></app-input>
+            <app-input [disabled]="true" formControlName="email" [label]="lang.map.email"></app-input>
+            <app-input [disabled]="true" formControlName="anotherEmail" [label]="lang.map.another_email"></app-input>
+            <app-input [disabled]="true" formControlName="phone" [label]="lang.map.phone"></app-input>
+            <app-input [disabled]="true" formControlName="anotherPhone" [label]="lang.map.another_phone"></app-input>
+            <app-input [disabled]="true" formControlName="statusInfo" [label]="lang.map.status"></app-input>
+            <app-select-input
+              [disabled]="true"
               formControlName="gender"
               [options]="genderTypes"
               bindValue="lookupKey"
               bindLabel="getNames"
-              [label]="lang.map.gender" /></div></ng-container
-      ></mat-tab>
+              [label]="lang.map.gender" />
+          </div>
+        </ng-container>
+      </mat-tab>
       <mat-tab [label]="lang.map.lbl_job_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
-            <app-input formControlName="subDepartmentName" [label]="lang.map.sub_department"></app-input>
-            <app-input formControlName="employeeCareerLevel" [label]="lang.map.career_level"></app-input>
-            <app-input formControlName="employeeQualification" [label]="lang.map.qualification"></app-input>
-            <app-input formControlName="gradDate" [label]="lang.map.grad_date"></app-input>
-            <app-input formControlName="totalExams" [label]="lang.map.total_exams"></app-input>
-            <app-input formControlName="totalThanksBooks" [label]="lang.map.total_thanks_books"></app-input>
-            <app-input type="number" formControlName="totalAbsent" [label]="lang.map.total_absent"></app-input>
-            <app-input type="number" formControlName="totalSickLeave" [label]="lang.map.total_sick_leave"></app-input>
-            <app-input
+            <app-input [disabled]="true" formControlName="subDepartmentName" [label]="lang.map.sub_department"></app-input>
+            <app-input [disabled]="true" formControlName="employeeCareerLevel" [label]="lang.map.career_level"></app-input>
+            <app-input [disabled]="true" formControlName="employeeQualification" [label]="lang.map.qualification"></app-input>
+            <app-input [disabled]="true" formControlName="gradDate" [label]="lang.map.grad_date"></app-input>
+            <app-input [disabled]="true" formControlName="totalExams" [label]="lang.map.total_exams"></app-input>
+            <app-input [disabled]="true" formControlName="totalThanksBooks" [label]="lang.map.total_thanks_books"></app-input>
+            <app-input [disabled]="true" type="number" formControlName="totalAbsent" [label]="lang.map.total_absent"></app-input>
+            <app-input [disabled]="true" type="number" formControlName="totalSickLeave" [label]="lang.map.total_sick_leave"></app-input>
+            <app-input 
+              [disabled]="true"
               type="number"
               formControlName="employeeNumberOfPenalties"
-              [label]="lang.map.number_of_penalties"></app-input>
+              [label]="lang.map.number_of_penalties">
+            </app-input>
             <app-input
+              [disabled]="true"
               formControlName="employeeLastPenalties"
-              [label]="lang.map.last_penalties"></app-input></div></ng-container
+              [label]="lang.map.last_penalties">
+            </app-input>
+          </div>
+        </ng-container
       ></mat-tab>
     </mat-tab-group>
   </div>
