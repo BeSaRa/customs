@@ -31,13 +31,24 @@ export class BrokerCompanyComponent extends AdminComponent<BrokerCompanyPopupCom
         this.view$.next(item);
       },
     },
+    {
+      name: 'more-details',
+      type: 'info',
+      label: 'more_details',
+      icon: AppIcons.MORE_DETAILS,
+    },
+    {
+      name: 'email',
+      type: 'info',
+      label: item => `${this.lang.map.email} : ${item.email}`,
+      parent: 'more-details',
+    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<BrokerCompany> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new TextFilterColumn('email'),
     new TextFilterColumn('licenseNumber'),
     new TextFilterColumn('code'),
     new TextFilterColumn('commercialRecord'),
