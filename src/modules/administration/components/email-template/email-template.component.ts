@@ -1,24 +1,27 @@
 import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
-import { JobTitle } from '@models/job-title';
-import { JobTitleService } from '@services/job-title.service';
-import { JobTitlePopupComponent } from '@modules/administration/popups/job-title-popup/job-title-popup.component';
-import { AppIcons } from '@constants/app-icons';
+import { EmailTemplate } from '@models/email-template';
+import { EmailTemplateService } from '@services/email-template.service';
+import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
-import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
+import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-
 @Component({
-  selector: 'app-job-title',
-  templateUrl: './job-title.component.html',
-  styleUrls: ['./job-title.component.scss'],
+  selector: 'app-email-template',
+  templateUrl: './email-template.component.html',
+  styleUrls: ['./email-template.component.scss'],
 })
-export class JobTitleComponent extends AdminComponent<JobTitlePopupComponent, JobTitle, JobTitleService> {
-  service = inject(JobTitleService);
-  actions: ContextMenuActionContract<JobTitle>[] = [
+export class EmailTemplateComponent extends AdminComponent<EmailTemplatePopupComponent, EmailTemplate, EmailTemplateService> {
+  constructor() {
+    super();
+    this.data$.subscribe(data => console.log(data));
+  }
+  service = inject(EmailTemplateService);
+  actions: ContextMenuActionContract<EmailTemplate>[] = [
     {
       name: 'view',
       type: 'action',
@@ -48,7 +51,7 @@ export class JobTitleComponent extends AdminComponent<JobTitlePopupComponent, Jo
     },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
-  columnsWrapper: ColumnsWrapper<JobTitle> = new ColumnsWrapper(
+  columnsWrapper: ColumnsWrapper<EmailTemplate> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
@@ -58,7 +61,6 @@ export class JobTitleComponent extends AdminComponent<JobTitlePopupComponent, Jo
       'lookupKey',
       'getNames'
     ),
-    new SelectFilterColumn('jobType', this.lookupService.lookups.userType, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

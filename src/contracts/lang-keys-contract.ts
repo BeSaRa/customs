@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_email_template: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
   parent_unit: string;
@@ -117,4 +118,9 @@ export interface LangKeysContract {
   license_number: string;
   license_start_date: string;
   license_end_date: string;
+  en_subject_template: string;
+  en_body_template: string;
+  ar_subject_template: string;
+  ar_body_template: string;
+  body_template: string;
 }

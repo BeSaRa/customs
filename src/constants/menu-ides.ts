@@ -13,4 +13,5 @@ export const MenuIdes = {
   MAWARED_DEPARTMENT: 12,
   MAWARED_EMPLOYEE: 13,
   BROKER: 14,
+  EMAIL_TEMPLATE: 15,
 };

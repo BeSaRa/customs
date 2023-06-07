@@ -18,6 +18,7 @@ export const EndPoints = {
   MAWARED_DEPARTMENT: '/entity/mawared-department',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
   BROKER: '/entity/broker',
+  EMAIL_TEMPLATE: '/entity/email-template',
 };
 
 export type EndpointsType = typeof EndPoints;

@@ -101,4 +101,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.BROKER,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.EMAIL_TEMPLATE,
+    langKey: 'menu_email_template',
+    icon: AppIcons.EMAIL_TEMPLATE,
+    path: AppFullRoutes.EMAIL_TEMPLATE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

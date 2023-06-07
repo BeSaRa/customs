@@ -1,0 +1,52 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_email_template }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab [label]="lang.map.lbl_basic_info">
+        <ng-container [formGroup]="form">
+          <div class="grid grid-cols-2 gap-4">
+            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+            <app-input formControlName="arSubjectTemplate" [label]="lang.map.ar_subject_template"></app-input>
+            <app-input formControlName="enSubjectTemplate" [label]="lang.map.en_subject_template"></app-input>
+          </div>
+        </ng-container>
+      </mat-tab>
+      <mat-tab [label]="lang.map.body_template">
+        <ng-container [formGroup]="form">
+          <div class="grid grid-cols-2 gap-4">
+            <!-- body template as text -->
+            <app-textarea
+              *ngIf="!inViewMode()"
+              class="whitespace-pre-wrap"
+              formControlName="arBodyTemplate"
+              [label]="lang.map.ar_body_template"></app-textarea>
+            <app-textarea
+              *ngIf="!inViewMode()"
+              class="whitespace-pre-wrap"
+              formControlName="enBodyTemplate"
+              [label]="lang.map.en_body_template"></app-textarea>
+
+            <!-- body template as HTML (to preview)-->
+            <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
+              <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.ar_body_template }}</span>
+              <div class="overflow-visible" [innerHTML]="arBodyTemplate"></div>
+            </div>
+            <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
+              <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.en_body_template }}</span>
+              <div class="overflow-visible" [innerHTML]="enBodyTemplate"></div>
+            </div>
+          </div>
+        </ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>
