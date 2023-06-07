@@ -14,4 +14,5 @@ export const MenuIdes = {
   MAWARED_EMPLOYEE: 13,
   BROKER: 14,
   SERVICES: 15,
+  GLOBAL_SETTING: 16,
 };

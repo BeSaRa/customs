@@ -105,7 +105,14 @@ export const Menus: MenuItemContract[] = [
     id: MenuIdes.SERVICES,
     langKey: 'menu_services',
     icon: AppIcons.SERVICES,
+    parent: MenuIdes.ADMINISTRATION,
     path: AppFullRoutes.SERVICES,
+  },
+  {
+    id: MenuIdes.GLOBAL_SETTING,
+    langKey: 'menu_global_setting',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.GLOBAL_SETTING,
     parent: MenuIdes.ADMINISTRATION,
   },
 ];

@@ -16,5 +16,7 @@ export const AppRoutes = {
   MAWARED_EMPLOYEE: 'mawared-employee',
   BROKER: 'broker',
   SERVICES: 'services',
-  SERVICE_STEPS: 'service-steps'
+  SERVICE_STEPS: 'service-steps',
+  GLOBAL_SETTING: 'global-setting',
+  FILE_TYPE: 'file-type',
 };

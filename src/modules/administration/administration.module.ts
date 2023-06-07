@@ -66,6 +66,8 @@ import { ServicesComponent } from '@modules/administration/components/services/s
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 import { ServiceStepsPopupComponent } from '@modules/administration/popups/service-steps-popup/service-steps-popup.component';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+import { GlobalSettingPopupComponent } from '@modules/administration/popups/global-setting-popup/global-setting-popup.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +104,8 @@ import { ServiceStepsPopupComponent } from '@modules/administration/popups/servi
     ServicesPopupComponent,
     ServiceStepsComponent,
     ServiceStepsPopupComponent,
+    GlobalSettingComponent,
+    GlobalSettingPopupComponent,
   ],
   imports: [
     CommonModule,
