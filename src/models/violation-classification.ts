@@ -9,10 +9,7 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new ViolationClassificationInterceptor();
 
 @InterceptModel({ send, receive })
-export class ViolationClassification extends BaseModel<
-  ViolationClassification,
-  ViolationClassificationService
-> {
+export class ViolationClassification extends BaseModel<ViolationClassification, ViolationClassificationService> {
   $$__service_name__$$ = 'ViolationClassificationService';
   penaltyType!: number;
   typeInfo!: AdminResult;
@@ -24,9 +21,7 @@ export class ViolationClassification extends BaseModel<
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      penaltyType: controls
-        ? [penaltyType, CustomValidators.required]
-        : penaltyType,
+      penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
       status: status,
     };
   }

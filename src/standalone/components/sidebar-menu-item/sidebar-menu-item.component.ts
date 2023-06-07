@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -22,23 +15,13 @@ import { SidebarComponent } from '@standalone/components/sidebar/sidebar.compone
 @Component({
   selector: 'app-sidebar-menu-item',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    RouterLinkActive,
-    RouterLink,
-    FilterSidebarMenuItemPipe,
-    HighlightPipe,
-  ],
+  imports: [CommonModule, MatIconModule, RouterLinkActive, RouterLink, FilterSidebarMenuItemPipe, HighlightPipe],
   templateUrl: './sidebar-menu-item.component.html',
   styleUrls: ['./sidebar-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [SidebarMenuAnimation, ShrinkAnimation],
 })
-export class SidebarMenuItemComponent
-  extends OnDestroyMixin(class {})
-  implements OnInit
-{
+export class SidebarMenuItemComponent extends OnDestroyMixin(class {}) implements OnInit {
   private _searchText = '';
   @Input()
   level!: number;

@@ -3,8 +3,12 @@ import { Component, inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { LangContract } from '@contracts/lang-contract';
 import { InternalUser } from '@models/internal-user';
+import { Lookup } from '@models/lookup';
 import { UserPreferences } from '@models/user-preferences';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,34 +17,49 @@ import { Observable } from 'rxjs';
   styleUrls: ['./user-preferences-popup.component.scss'],
 })
 export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPreferences> {
-  user!: InternalUser;
-
+  form!: UntypedFormGroup;
+  data: CrudDialogDataContract<UserPreferences> = inject(MAT_DIALOG_DATA);
+  //user!: InternalUser;
+  lookupService = inject(LookupService);
+  langService = inject(LangService);
+  arName!: string;
+  enName!: string;
+  empNum!: string;
+  qid!: string;
+  phoneNumber!: string;
+  email!: string;
+  languages: LangContract[] = this.langService.languages;
   override _buildForm(): void {
-    // this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm(true));
+    this.form.controls['alternateEmailList'].disable();
+    this.form.controls['isSMSNotificationEnabled'].disable();
+    this.form.controls['isPrivateUser'].disable();
+    this.form.controls['limitedCirculation'].disable();
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
-  protected override _prepareModel():
-    | UserPreferences
-    | Observable<UserPreferences> {
+  protected override _prepareModel(): UserPreferences | Observable<UserPreferences> {
     return new UserPreferences().clone<UserPreferences>({
-      ...this.model,
+      //...this.model,
       ...this.form.value,
     });
   }
 
   protected override _init(): void {
-    this.user = this.data.extras?.['user'] as InternalUser;
+    //this.user = this.data.extras?.['user'] as InternalUser;
+    //popup extras
+    this.arName = this.data.extras?.['arName'] as string;
+    this.enName = this.data.extras?.['enName'] as string;
+    this.empNum = this.data.extras?.['empNum'] as string;
+    this.qid = this.data.extras?.['qid'] as string;
+    this.phoneNumber = this.data.extras?.['phoneNumber'] as string;
+    this.email = this.data.extras?.['email'] as string;
   }
 
   protected override _afterSave(model: UserPreferences): void {
     this.model = model;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
   }
-  form!: UntypedFormGroup;
-  data: CrudDialogDataContract<UserPreferences> = inject(MAT_DIALOG_DATA);
 }

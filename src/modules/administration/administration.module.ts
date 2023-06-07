@@ -140,4 +140,4 @@ import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
     MatRippleModule,
   ],
 })
-export class AdministrationModule { }
+export class AdministrationModule {}

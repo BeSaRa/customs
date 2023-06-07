@@ -1,12 +1,8 @@
 import { AbstractConstructor, Constructor } from '@app-types/constructors';
 import { ServiceRegistry } from '@services/service-registry';
 
-export function RegisterServiceMixin<T extends AbstractConstructor<object>>(
-  base: T
-): T;
-export function RegisterServiceMixin<T extends Constructor<object>>(
-  base: T
-): T {
+export function RegisterServiceMixin<T extends AbstractConstructor<object>>(base: T): T;
+export function RegisterServiceMixin<T extends Constructor<object>>(base: T): T {
   return class BaseServiceMixin extends base {
     serviceName!: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

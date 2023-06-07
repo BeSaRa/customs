@@ -57,20 +57,14 @@ export class LoginComponent implements OnInit {
   }
 
   listenToLogin(): void {
-    this.login$
-      .pipe(
-        switchMap(() =>
-          this.authService.login(this.form.value).pipe(ignoreErrors())
-        )
-      )
-      .subscribe(() => {
-        this.toast.success('logged in successfully!');
-        this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
-      });
+    this.login$.pipe(switchMap(() => this.authService.login(this.form.value).pipe(ignoreErrors()))).subscribe(value => {
+      console.log('login response: ', value);
+      this.toast.success('logged in successfully!');
+      this.router.navigate([AppFullRoutes.ADMINISTRATION]).then();
+    });
   }
 
   toggleEye() {
-    this.selectedPasswordOptions =
-      this.eyeIcons[this.selectedPasswordOptions.icon];
+    this.selectedPasswordOptions = this.eyeIcons[this.selectedPasswordOptions.icon];
   }
 }

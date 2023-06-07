@@ -2,12 +2,8 @@ import { ModelInterceptorContract } from 'cast-response';
 import { ViolationClassification } from '@models/violation-classification';
 import { AdminResult } from '@models/admin-result';
 
-export class ViolationClassificationInterceptor
-  implements ModelInterceptorContract<ViolationClassification>
-{
-  send(
-    model: Partial<ViolationClassification>
-  ): Partial<ViolationClassification> {
+export class ViolationClassificationInterceptor implements ModelInterceptorContract<ViolationClassification> {
+  send(model: Partial<ViolationClassification>): Partial<ViolationClassification> {
     return model;
   }
 
