@@ -3,6 +3,7 @@ import { EmailTemplateService } from '@services/email-template.service';
 import { EmailTemplateInterceptor } from '@model-interceptors/email-template-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new EmailTemplateInterceptor();
 
@@ -15,9 +16,12 @@ export class EmailTemplate extends BaseModel<EmailTemplate, EmailTemplateService
 
   enBodyTemplate!: string;
   enSubjectTemplate!: string;
+  isGlobal = true;
+
+  override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {
-    const { arBodyTemplate, arName, arSubjectTemplate, enBodyTemplate, enName, enSubjectTemplate, status } = this;
+    const { arBodyTemplate, arName, arSubjectTemplate, enBodyTemplate, enName, enSubjectTemplate, isGlobal, status } = this;
     return {
       arBodyTemplate: controls ? [arBodyTemplate, CustomValidators.required] : arBodyTemplate,
       arName: controls ? [arName, CustomValidators.required] : arName,
@@ -25,6 +29,7 @@ export class EmailTemplate extends BaseModel<EmailTemplate, EmailTemplateService
       enBodyTemplate: controls ? [enBodyTemplate, CustomValidators.required] : enBodyTemplate,
       enName: controls ? [enName, CustomValidators.required] : enName,
       enSubjectTemplate: controls ? [enSubjectTemplate, CustomValidators.required] : enSubjectTemplate,
+      isGlobal: controls ? [isGlobal, CustomValidators.required] : isGlobal,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }

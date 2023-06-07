@@ -57,9 +57,7 @@ export abstract class AdminComponent<
   lang = inject(LangService);
   reload$ = new ReplaySubject<void>(1);
   filter$ = new BehaviorSubject<Partial<M>>({});
-  sort$: ReplaySubject<SortOptionsContract | undefined> = new ReplaySubject<
-    SortOptionsContract | undefined
-  >(1);
+  sort$: ReplaySubject<SortOptionsContract | undefined> = new ReplaySubject<SortOptionsContract | undefined>(1);
 
   data$: Observable<M[]> = this._load();
   private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -83,10 +81,7 @@ export abstract class AdminComponent<
   showFirstLastButtons = true;
   allowMultiSelect = true;
   initialSelection: M[] = [];
-  selection = new SelectionModel<M>(
-    this.allowMultiSelect,
-    this.initialSelection
-  );
+  selection = new SelectionModel<M>(this.allowMultiSelect, this.initialSelection);
 
   lookupService = inject(LookupService);
 
@@ -99,19 +94,12 @@ export abstract class AdminComponent<
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
         switchMap(() => {
-          return combineLatest([
-            this.reload$,
-            this.paginate$,
-            this.filter$,
-            this.sort$,
-          ]).pipe(
+          return combineLatest([this.reload$, this.paginate$, this.filter$, this.sort$]).pipe(
             switchMap(([, paginationOptions, filter, sort]) => {
               this.selection.clear();
               this.loadingSubject.next(true);
               return (
-                this.loadComposite
-                  ? this.service.loadComposite(paginationOptions, filter, sort)
-                  : this.service.load(paginationOptions, filter, sort)
+                this.loadComposite ? this.service.loadComposite(paginationOptions, filter, sort) : this.service.load(paginationOptions, filter, sort)
               ).pipe(
                 finalize(() => this.loadingSubject.next(false)),
                 ignoreErrors()
@@ -121,7 +109,7 @@ export abstract class AdminComponent<
               this.length = count;
               this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map((response) => response.rs)
+            map(response => response.rs)
           );
         })
       );
@@ -146,11 +134,7 @@ export abstract class AdminComponent<
   }
 
   sort($event: Sort): void {
-    this.sort$.next(
-      $event.direction
-        ? { sortBy: $event.active, sortOrder: $event.direction }
-        : undefined
-    );
+    this.sort$.next($event.direction ? { sortBy: $event.active, sortOrder: $event.direction } : undefined);
   }
 
   /**
@@ -185,7 +169,7 @@ export abstract class AdminComponent<
     this.edit$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           console.log('to edit model: ', model);
 
           return this.service
@@ -211,7 +195,7 @@ export abstract class AdminComponent<
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.service
             .openViewDialog(model, this._getViewExtras() as object)
             .afterClosed()
@@ -229,13 +213,11 @@ export abstract class AdminComponent<
     this.delete$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.dialog
-            .confirm(
-              this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() })
-            )
+            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() }))
             .afterClosed()
-            .pipe(filter((value) => value === UserClick.YES))
+            .pipe(filter(value => value === UserClick.YES))
             .pipe(
               switchMap(() => {
                 this.loadingSubject.next(true);
@@ -250,10 +232,8 @@ export abstract class AdminComponent<
             )
         )
       )
-      .subscribe((model) => {
-        this.toast.success(
-          this.lang.map.msg_delete_x_success.change({ x: model.getNames() })
-        );
+      .subscribe(model => {
+        this.toast.success(this.lang.map.msg_delete_x_success.change({ x: model.getNames() }));
         this.reload$.next();
       });
   }
@@ -262,7 +242,7 @@ export abstract class AdminComponent<
     this.status$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           this.loadingSubject.next(true);
           return model.toggleStatus().pipe(
             // Updating statusInfo is done in baseModel and no need for it here
@@ -271,12 +251,13 @@ export abstract class AdminComponent<
           );
         })
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_status_x_changed_success.change({
             x: model.getNames(),
           })
         );
+        this.reload$.next();
       });
   }
 
@@ -315,9 +296,7 @@ export abstract class AdminComponent<
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   filterChange($event: { key: string; value: string | null }) {
@@ -338,8 +317,6 @@ export abstract class AdminComponent<
   }
 
   getFilterStringColumn(column: string): string {
-    return objectHasOwnProperty(this.filter$.value, column)
-      ? (this.filter$.value[column as keyof M] as string)
-      : '';
+    return objectHasOwnProperty(this.filter$.value, column) ? (this.filter$.value[column as keyof M] as string) : '';
   }
 }

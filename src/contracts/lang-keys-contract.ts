@@ -123,4 +123,5 @@ export interface LangKeysContract {
   ar_subject_template: string;
   ar_body_template: string;
   body_template: string;
+  is_global: string;
 }

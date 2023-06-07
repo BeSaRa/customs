@@ -12,6 +12,16 @@
             <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
             <app-input formControlName="arSubjectTemplate" [label]="lang.map.ar_subject_template"></app-input>
             <app-input formControlName="enSubjectTemplate" [label]="lang.map.en_subject_template"></app-input>
+            <div class="flex flex-row pl-1 items-center justify-start">
+              <app-switch
+                [trueValue]="1"
+                [falseValue]="0"
+                formControlName="status"
+                [label]="lang.map.status"></app-switch>
+            </div>
+            <div class="flex flex-row pl-1 items-center justify-start">
+              <app-switch formControlName="isGlobal" [label]="lang.map.is_global"></app-switch>
+            </div>
           </div>
         </ng-container>
       </mat-tab>
@@ -21,13 +31,12 @@
             <!-- body template as text -->
             <app-textarea
               *ngIf="!inViewMode()"
-              class="whitespace-pre-wrap"
+              class="min-w-[400px]"
               formControlName="arBodyTemplate"
-              [label]="lang.map.ar_body_template"
-              dir="ltr"></app-textarea>
+              [label]="lang.map.ar_body_template"></app-textarea>
             <app-textarea
               *ngIf="!inViewMode()"
-              class="whitespace-pre-wrap"
+              class="min-w-[400px]"
               formControlName="enBodyTemplate"
               [label]="lang.map.en_body_template"
               dir="ltr"></app-textarea>
@@ -35,11 +44,11 @@
             <!-- body template as HTML (to preview)-->
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.ar_body_template }}</span>
-              <div class="overflow-visible" dir="rtl" [innerHTML]="arBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" [innerHTML]="arBodyTemplate | txtToHtml"></div>
             </div>
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.en_body_template }}</span>
-              <div class="overflow-visible" dir="ltr" [innerHTML]="enBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" [innerHTML]="enBodyTemplate | txtToHtml"></div>
             </div>
           </div>
         </ng-container>
