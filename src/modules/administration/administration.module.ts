@@ -64,7 +64,7 @@ import { BrokerPopupComponent } from '@modules/administration/popups/broker-popu
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
-
+import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 @NgModule({
   declarations: [
     AdministrationComponent,
@@ -142,6 +142,7 @@ import { EmailTemplatePopupComponent } from '@modules/administration/popups/emai
     FilterArrayPipe,
     InputSuffixDirective,
     MatRippleModule,
+    TxtToHtmlPipe,
   ],
 })
 export class AdministrationModule {}
