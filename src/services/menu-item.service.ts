@@ -29,18 +29,14 @@ export class MenuItemService {
   }
 
   filterStaticMenu(): void {
-    this.filteredStaticMenu = this.staticMenus.filter((item) => {
-      return (
-        !item.permission ||
-        (item.permission &&
-          this.employeeService.hasPermissionTo(item.permission))
-      );
+    this.filteredStaticMenu = this.staticMenus.filter(item => {
+      return !item.permission || (item.permission && this.employeeService.hasPermissionTo(item.permission));
     });
   }
 
   buildHierarchy() {
     this.clearMenu();
-    this.filteredStaticMenu.forEach((item) => {
+    this.filteredStaticMenu.forEach(item => {
       if (!item.parent) {
         this.parents.push(item);
         return;
@@ -53,7 +49,7 @@ export class MenuItemService {
       this.children[item.parent].push(item);
     });
 
-    this.parents.forEach((item) => {
+    this.parents.forEach(item => {
       item.children = this.getItemChildren(item);
       const arabic: string[] = [];
       const english: string[] = [];
@@ -70,7 +66,7 @@ export class MenuItemService {
   }
 
   private getItemChildren(item: MenuItemContract) {
-    return (this.children[item.id] ?? []).map((item) => {
+    return (this.children[item.id] ?? []).map(item => {
       item.children = this.getItemChildren(item);
       return item;
     });
@@ -90,14 +86,8 @@ export class MenuItemService {
     englishChildren.push(enName);
     item.arabicSearchText = arabicSearchText + '󰜈' + arName;
     item.englishSearchText = englishSearchText + '󰜈' + enName;
-    (item.children ?? []).forEach((child) => {
-      this.getSearchText(
-        child,
-        item.arabicSearchText || '',
-        item.englishSearchText || '',
-        arabicChildren,
-        englishChildren
-      );
+    (item.children ?? []).forEach(child => {
+      this.getSearchText(child, item.arabicSearchText || '', item.englishSearchText || '', arabicChildren, englishChildren);
     });
   }
 
@@ -106,17 +96,15 @@ export class MenuItemService {
       return this.lang.getCurrent().code === 'ar';
     };
     item.translate = isArabic() ? item.arName : item.enName;
-    item.searchText = isArabic()
-      ? item.arabicSearchText
-      : item.englishSearchText;
+    item.searchText = isArabic() ? item.arabicSearchText : item.englishSearchText;
 
-    item.children?.forEach((item) => {
+    item.children?.forEach(item => {
       this.translateMenu(item);
     });
   }
 
   private translateMenuItems(): void {
-    this.parents.forEach((item) => {
+    this.parents.forEach(item => {
       this.translateMenu(item);
     });
   }

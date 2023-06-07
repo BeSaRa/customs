@@ -22,10 +22,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Injectable({
   providedIn: 'root',
 })
-export class InternalUserService extends BaseCrudWithDialogService<
-  InternalUserPopupComponent,
-  InternalUser
-> {
+export class InternalUserService extends BaseCrudWithDialogService<InternalUserPopupComponent, InternalUser> {
   override serviceName = 'InternalUserService';
   protected getModelClass(): Constructor<InternalUser> {
     return InternalUser;

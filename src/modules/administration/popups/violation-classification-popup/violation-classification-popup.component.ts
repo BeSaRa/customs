@@ -16,8 +16,7 @@ import { Lookup } from '@models/lookup';
 })
 export class ViolationClassificationPopupComponent extends AdminDialogComponent<ViolationClassification> {
   form!: UntypedFormGroup;
-  data: CrudDialogDataContract<ViolationClassification> =
-    inject(MAT_DIALOG_DATA);
+  data: CrudDialogDataContract<ViolationClassification> = inject(MAT_DIALOG_DATA);
   penaltyTypes: Lookup[] = inject(LookupService).lookups.penaltyType;
 
   _buildForm(): void {
@@ -29,9 +28,7 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
     return this.form.valid;
   }
 
-  protected _prepareModel():
-    | ViolationClassification
-    | Observable<ViolationClassification> {
+  protected _prepareModel(): ViolationClassification | Observable<ViolationClassification> {
     return new ViolationClassification().clone<ViolationClassification>({
       ...this.model,
       ...this.form.value,
@@ -41,9 +38,7 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   protected _afterSave(model: ViolationClassification): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }

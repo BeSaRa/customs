@@ -1,11 +1,4 @@
-import {
-  BehaviorSubject,
-  isObservable,
-  Observable,
-  Subject,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, isObservable, Observable, Subject, takeUntil, tap } from 'rxjs';
 import { DataSource } from '@angular/cdk/collections';
 
 export class AppTableDataSource<M> extends DataSource<M> {
@@ -38,12 +31,12 @@ export class AppTableDataSource<M> extends DataSource<M> {
   private listenToDataChanges(items: Observable<M[]>) {
     items
       .pipe(takeUntil(this._destroy$))
-      .pipe(tap((data) => this._data.next(data)))
+      .pipe(tap(data => this._data.next(data)))
       .subscribe({
         next: () => {
           //
         },
-        error: (e) => {
+        error: e => {
           console.log(e);
         },
         complete: () => {

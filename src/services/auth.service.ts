@@ -2,16 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
 import { CredentialsContract } from '@contracts/credentials-contract';
-import {
-  catchError,
-  iif,
-  map,
-  Observable,
-  of,
-  OperatorFunction,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { catchError, iif, map, Observable, of, OperatorFunction, switchMap, tap } from 'rxjs';
 import { EmployeeService } from '@services/employee.service';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { CastResponse } from 'cast-response';
@@ -23,10 +14,7 @@ import { ServiceContract } from '@contracts/service-contract';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService
-  extends RegisterServiceMixin(class {})
-  implements ServiceContract
-{
+export class AuthService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'AuthService';
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
@@ -36,40 +24,19 @@ export class AuthService
   private authenticated = false;
 
   @CastResponse()
-  private _login(
-    credentials: Partial<CredentialsContract>
-  ): Observable<LoginDataContract> {
-    return this.http.post<LoginDataContract>(
-      this.urlService.URLS.AUTH,
-      credentials
-    );
+  private _login(credentials: Partial<CredentialsContract>): Observable<LoginDataContract> {
+    return this.http.post<LoginDataContract>(this.urlService.URLS.AUTH, credentials);
   }
 
-  login(
-    credentials: Partial<CredentialsContract>
-  ): Observable<LoginDataContract> {
+  login(credentials: Partial<CredentialsContract>): Observable<LoginDataContract> {
     return this._login(credentials).pipe(this.setDateAfterAuthenticate());
   }
 
   validateToken(): Observable<boolean> {
     return of(false)
+      .pipe(tap(() => this.tokenService.getTokenFromStore() && this.tokenService.setToken(this.tokenService.getTokenFromStore())))
       .pipe(
-        tap(
-          () =>
-            this.tokenService.getTokenFromStore() &&
-            this.tokenService.setToken(this.tokenService.getTokenFromStore())
-        )
-      )
-      .pipe(
-        switchMap(() =>
-          iif(
-            () => this.tokenService.hasToken(),
-            this.tokenService
-              .validateToken()
-              .pipe(this.setDateAfterAuthenticate()),
-            of(false)
-          )
-        )
+        switchMap(() => iif(() => this.tokenService.hasToken(), this.tokenService.validateToken().pipe(this.setDateAfterAuthenticate()), of(false)))
       )
       .pipe(map(() => true))
       .pipe(
@@ -85,14 +52,11 @@ export class AuthService
     this.employeeService.clearEmployee();
   }
 
-  private setDateAfterAuthenticate(): OperatorFunction<
-    LoginDataContract,
-    LoginDataContract
-  > {
-    return (source) => {
+  private setDateAfterAuthenticate(): OperatorFunction<LoginDataContract, LoginDataContract> {
+    return source => {
       return source.pipe(
-        map((data) => this.employeeService.setLoginData(data)),
-        tap((data) => this.tokenService.setToken(data.token)),
+        map(data => this.employeeService.setLoginData(data)),
+        tap(data => this.tokenService.setToken(data.token)),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
         tap(() => this.menuItemService.buildHierarchy())
