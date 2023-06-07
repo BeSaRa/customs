@@ -38,10 +38,16 @@
                 "glob": "mdi.svg",
                 "input": "./node_modules/@mdi/angular-material",
                 "output": "./assets/mdi"
-              }
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/font-awesome/fonts",
+                "output": "assets/fonts"
+           }
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",
+              "node_modules/font-awesome/scss/font-awesome.scss"
             ],
             "scripts": []
           },

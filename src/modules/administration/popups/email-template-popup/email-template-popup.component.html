@@ -29,7 +29,7 @@
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
             <!-- body template as text -->
-            <app-textarea
+            <!-- <app-textarea
               *ngIf="!inViewMode()"
               class="min-w-[400px]"
               formControlName="arBodyTemplate"
@@ -38,18 +38,19 @@
               *ngIf="!inViewMode()"
               class="min-w-[400px]"
               formControlName="enBodyTemplate"
-              [label]="lang.map.en_body_template"
-              dir="ltr"></app-textarea>
+              [label]="lang.map.en_body_template"></app-textarea> -->
+            <angular-editor id="editor1" formControlName="arBodyTemplate" [config]="editorConfig"></angular-editor>
+            <angular-editor id="editor2" formControlName="enBodyTemplate" [config]="editorConfig"></angular-editor>
 
             <!-- body template as HTML (to preview)-->
-            <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
-              <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.ar_body_template }}</span>
+            <!-- <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
+              <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.ar_body_template }}</p>
               <div class="overflow-visible" [innerHTML]="arBodyTemplate | txtToHtml"></div>
             </div>
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
-              <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.en_body_template }}</span>
+              <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.en_body_template }}</p>
               <div class="overflow-visible" [innerHTML]="enBodyTemplate | txtToHtml"></div>
-            </div>
+            </div> -->
           </div>
         </ng-container>
       </mat-tab>
