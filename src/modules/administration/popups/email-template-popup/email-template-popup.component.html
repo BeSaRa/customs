@@ -39,17 +39,24 @@
               class="min-w-[400px]"
               formControlName="enBodyTemplate"
               [label]="lang.map.en_body_template"></app-textarea> -->
-            <angular-editor id="editor1" formControlName="arBodyTemplate" [config]="editorConfig"></angular-editor>
-            <angular-editor id="editor2" formControlName="enBodyTemplate" [config]="editorConfig"></angular-editor>
-
+            <angular-editor
+              *ngIf="!inViewMode()"
+              id="editor1"
+              formControlName="arBodyTemplate"
+              [config]="editorConfig"></angular-editor>
+            <angular-editor
+              *ngIf="!inViewMode()"
+              id="editor2"
+              formControlName="enBodyTemplate"
+              [config]="editorConfig"></angular-editor>
             <!-- body template as HTML (to preview)-->
             <!-- <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.ar_body_template }}</p>
-              <div class="overflow-visible" [innerHTML]="arBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" [innerHTML]="arBodyTemplate"></div>
             </div>
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.en_body_template }}</p>
-              <div class="overflow-visible" [innerHTML]="enBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" [innerHTML]="enBodyTemplate"></div>
             </div> -->
           </div>
         </ng-container>

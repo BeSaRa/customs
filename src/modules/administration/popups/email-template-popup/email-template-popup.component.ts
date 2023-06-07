@@ -75,6 +75,13 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
   }
 
   protected _prepareModel(): EmailTemplate | Observable<EmailTemplate> {
+    console.log(
+      '',
+      new EmailTemplate().clone<EmailTemplate>({
+        ...this.model,
+        ...this.form.value,
+      })
+    );
     return new EmailTemplate().clone<EmailTemplate>({
       ...this.model,
       ...this.form.value,
