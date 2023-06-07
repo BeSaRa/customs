@@ -13,5 +13,6 @@ export const AppFullRoutes = {
   ORGANIZATION_UNIT: '/home/administration/organization-unit',
   MAWARED_DEPARTMENT: '/home/administration/mawared-department',
   BROKER: '/home/administration/broker',
-  SERVICES: '/home/administration/services'
+  SERVICES: '/home/administration/services',
+  SERVICE_STEPS: '/home/administration/service-steps'
 };

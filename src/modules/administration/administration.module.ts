@@ -64,6 +64,8 @@ import { BrokerPopupComponent } from '@modules/administration/popups/broker-popu
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
+import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
+import { ServiceStepsPopupComponent } from '@modules/administration/popups/service-steps-popup/service-steps-popup.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +100,8 @@ import { ServicesPopupComponent } from '@modules/administration/popups/services-
     StringToDatePipe,
     ServicesComponent,
     ServicesPopupComponent,
+    ServiceStepsComponent,
+    ServiceStepsPopupComponent,
   ],
   imports: [
     CommonModule,

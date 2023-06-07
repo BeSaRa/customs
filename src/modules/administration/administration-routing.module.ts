@@ -16,6 +16,7 @@ import { OrganizationUnitComponent } from '@modules/administration/components/or
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
+import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -80,6 +81,10 @@ const routes: Routes = [
   {
     path: AppRoutes.SERVICES,
     component: ServicesComponent,
+  },
+  {
+    path: AppRoutes.SERVICE_STEPS,
+    component: ServiceStepsComponent,
   }
 ];
 

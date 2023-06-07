@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_service_steps : string;
   menu_services: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
