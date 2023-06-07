@@ -34,6 +34,7 @@ export const AppIcons = {
   BROKER: 'account-tie-outline',
   SERVICES: 'face-agent',
   USERPREFERENCES: 'account-star-outline',
+  GLOBAL_SETTING: 'cogs',
 };
 
 export type AppIconsType = typeof AppIcons;

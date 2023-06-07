@@ -4,14 +4,9 @@ import { GlobalSetting } from '@models/global-setting';
 
 export class GlobalSettingInterceptor implements ModelInterceptorContract<GlobalSetting> {
   send(model: Partial<GlobalSetting>): Partial<GlobalSetting> {
-    console.log('1', model);
     GlobalSettingInterceptor.stringifyFileTypes(model);
     GlobalSettingInterceptor.stringifyEmailList(model);
-    console.log('2', model);
-
     GlobalSettingInterceptor._deleteBeforeSend(model);
-    console.log('3', model);
-
     return model;
   }
 
@@ -40,9 +35,7 @@ export class GlobalSettingInterceptor implements ModelInterceptorContract<Global
       model.supportEmailListParsed = [];
     }
   }
-  // static isValidValue(value:any):boolean{
-  //   return ((typeof value === 'string') ? (value.trim() !== '') : (typeof value !== 'undefined' && value !== null));
-  // }
+
   static _deleteBeforeSend(model: Partial<GlobalSetting>) {
     delete model.fileTypeParsed;
     delete model.supportEmailListParsed;

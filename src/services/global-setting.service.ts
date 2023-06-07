@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GlobalSetting } from '@models/global-setting';
 import { CastResponseContainer } from 'cast-response';
-import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
-import { ComponentType } from '@angular/cdk/portal';
-import { GlobalSettingPopupComponent } from '@modules/administration/popups/global-setting-popup/global-setting-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
+import { BaseCrudService } from '@abstracts/base-crud-service';
 
 @CastResponseContainer({
   $pagination: {
@@ -21,18 +19,15 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class GlobalSettingService extends BaseCrudWithDialogService<GlobalSettingPopupComponent, GlobalSetting> {
+export class GlobalSettingService extends BaseCrudService<GlobalSetting> {
   serviceName = 'GlobalSettingService';
+
   protected getModelClass(): Constructor<GlobalSetting> {
     return GlobalSetting;
   }
 
   protected getModelInstance(): GlobalSetting {
     return new GlobalSetting();
-  }
-
-  getDialogComponent(): ComponentType<GlobalSettingPopupComponent> {
-    return GlobalSettingPopupComponent;
   }
 
   getUrlSegment(): string {

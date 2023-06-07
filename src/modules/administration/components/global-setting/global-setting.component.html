@@ -3,63 +3,73 @@
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_global_setting }}
   </h1>
-  <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
-  <app-icon-button [matTooltip]="lang.map.edit" (click)="edit$.next(globalSettings)" icon="EDIT"></app-icon-button>
+  <app-icon-button [matTooltip]="lang.map.reset" (click)="resetForm()" icon="RELOAD"></app-icon-button>
 </div>
-<div class="shadow relative">
+<div class="shadow relative p-2">
   <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
     <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
   </div>
-  <div class="dialog-content">
-    <ng-container [formGroup]="form">
-      <div class="grid grid-cols-4 gap-4">
-        <app-input formControlName="systemArabicName" [label]="lang.map.system_ar_name" />
-        <app-input formControlName="systemEnglishName" [label]="lang.map.system_en_name" />
-        <app-input
-          formControlName="sessionTimeout"
-          type="number"
-          [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ') '" />
-        <app-input formControlName="fileSize" type="number" [label]="lang.map.file_size" />
-        <app-select-input
-          formControlName="fileTypeParsed"
-          [options]="fileTypes"
-          [label]="lang.map.file_type"
-          bindValue="id"
-          [isMultiple]="true"
-          bindLabel="getNames" />
-        <app-input
-          formControlName="inboxRefreshInterval"
-          type="number"
-          [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
-        <!-- <app-input formControlName="supportEmailListParsed" [label]="lang.map.support_email_list" /> -->
-
-        <!-- <mat-select [formControl]="toppings" (selectionChange)="filter($event)" multiple [(value)]="selected" >
-          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-      </mat-select> -->
-        <!-- <app-select-input formControlName="supportEmailList" options="" [isMultiple]="true" /> -->
-        <app-input formControlName="maxDeductionRatio" type="number" [label]="lang.map.max_deduction_ratio" />
-        <div class="flex flex-row pl-1 items-center justify-start">
-          <app-switch
-            [trueValue]="1"
-            [falseValue]="0"
-            formControlName="enableMailNotification"
-            [label]="lang.map.mail_notifications"></app-switch>
-        </div>
-        <div class="flex flex-row pl-1 items-center justify-start">
-          <app-switch
-            [trueValue]="1"
-            [falseValue]="0"
-            formControlName="enableSMSNotification"
-            [label]="lang.map.sms_notifications"></app-switch>
-        </div>
+  <ng-container [formGroup]="form">
+    <div class="grid grid-cols-12 gap-4">
+      <app-input class="col-span-4" formControlName="systemArabicName" [label]="lang.map.system_ar_name" />
+      <app-input class="col-span-4" formControlName="systemEnglishName" [label]="lang.map.system_en_name" />
+      <app-input
+        class="col-span-4"
+        formControlName="sessionTimeout"
+        type="number"
+        [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ') '" />
+      <app-input class="col-span-4" formControlName="fileSize" type="number" [label]="lang.map.file_size" />
+      <app-select-input
+        class="col-span-4"
+        formControlName="fileTypeParsed"
+        [options]="fileTypes"
+        [label]="lang.map.file_type"
+        bindValue="id"
+        [isMultiple]="true"
+        bindLabel="getNames" />
+      <app-input
+        class="col-span-4"
+        formControlName="inboxRefreshInterval"
+        type="number"
+        [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
+      <app-input
+        class="col-span-4"
+        formControlName="maxDeductionRatio"
+        type="number"
+        [label]="lang.map.max_deduction_ratio" />
+      <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
+        <app-switch
+          [trueValue]="1"
+          [falseValue]="0"
+          formControlName="enableMailNotification"
+          [label]="lang.map.mail_notifications"></app-switch>
       </div>
-      <div class="flex items-center">
-        <ng-container formArrayName="supportEmailListParsed">
-          <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
-            <app-input class="mx-2" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)" />
-          </ng-container>
+      <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
+        <app-switch
+          [trueValue]="1"
+          [falseValue]="0"
+          formControlName="enableSMSNotification"
+          [label]="lang.map.sms_notifications"></app-switch>
+      </div>
+      <ng-container formArrayName="supportEmailListParsed">
+        <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
+          <app-input class="col-span-3" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)" />
+          <div class="flex flex-row col-span-1 pl-1 items-center justify-start">
+            <app-icon-button
+              tabindex="-1"
+              icon="DELETE"
+              (click)="deleteEmail(i)"
+              [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
+          </div>
         </ng-container>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
+    <div class="col-span-3 flex flex-row pl-1 items-center justify-start">
+      <app-icon-button icon="PLUS" (click)="addEmail()" [matTooltip]="lang.map.add + ' ' + lang.map.email" />
+      <label>{{ lang.map.support_email_list }}</label>
+    </div>
+  </ng-container>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
   </div>
 </div>

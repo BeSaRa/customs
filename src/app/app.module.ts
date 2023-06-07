@@ -115,8 +115,7 @@ export class AppModule {
     url: UrlService,
     info: InfoService,
     lookup: LookupService,
-    auth: AuthService,
-    globalSetting: GlobalSetting
+    auth: AuthService
   ): () => Observable<unknown> {
     return () =>
       forkJoin([config.load()])

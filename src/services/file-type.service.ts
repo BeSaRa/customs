@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FileType } from '@models/file-type';
 import { CastResponseContainer } from 'cast-response';
-import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
-import { ComponentType } from '@angular/cdk/portal';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { BaseCrudService } from '@abstracts/base-crud-service';
