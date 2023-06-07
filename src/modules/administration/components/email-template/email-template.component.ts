@@ -16,10 +16,6 @@ import { StatusTypes } from '@enums/status-types';
   styleUrls: ['./email-template.component.scss'],
 })
 export class EmailTemplateComponent extends AdminComponent<EmailTemplatePopupComponent, EmailTemplate, EmailTemplateService> {
-  constructor() {
-    super();
-    this.data$.subscribe(data => console.log(data));
-  }
   service = inject(EmailTemplateService);
   actions: ContextMenuActionContract<EmailTemplate>[] = [
     {
