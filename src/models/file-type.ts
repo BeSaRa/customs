@@ -8,7 +8,10 @@ const { send, receive } = new FileTypeInterceptor();
 @InterceptModel({ send, receive })
 export class FileType extends BaseModel<FileType, FileTypeService> {
   $$__service_name__$$ = 'FileTypeService';
-
+  extension!: string;
+  description!: string;
+  mimeType!: string;
+  size!: number;
   buildForm(controls = false): object {
     return {};
   }

@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  reset: string;
   menu_file_type: string;
   max_deduction_ratio: string;
   support_email_list: string;

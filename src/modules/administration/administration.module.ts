@@ -63,7 +63,6 @@ import { BrokerComponent } from '@modules/administration/components/broker/broke
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
-import { GlobalSettingPopupComponent } from '@modules/administration/popups/global-setting-popup/global-setting-popup.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +96,6 @@ import { GlobalSettingPopupComponent } from '@modules/administration/popups/glob
     BrokerPopupComponent,
     StringToDatePipe,
     GlobalSettingComponent,
-    GlobalSettingPopupComponent,
   ],
   imports: [
     CommonModule,

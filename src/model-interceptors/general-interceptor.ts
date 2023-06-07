@@ -4,7 +4,6 @@ export class GeneralInterceptor implements GeneralInterceptorContract {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   send(model: Partial<any>): Partial<any> {
     delete model['$$__service_name__$$'];
-    delete model['$$__lookupService__$$'];
     return model;
   }
 
