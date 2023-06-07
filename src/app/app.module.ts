@@ -5,10 +5,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
-  MatSnackBarModule,
-} from '@angular/material/snack-bar';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { httpInterceptors } from '@http-interceptors/index';
@@ -44,6 +41,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LangService } from '@services/lang.service';
 import { NgProgressModule } from 'ngx-progressbar';
+import { GlobalSetting } from '@models/global-setting';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -79,15 +77,7 @@ import { NgProgressModule } from 'ngx-progressbar';
     {
       provide: APP_INITIALIZER,
       useFactory: AppModule.initialize,
-      deps: [
-        LangService,
-        ConfigService,
-        UrlService,
-        InfoService,
-        LookupService,
-        AuthService,
-        MenuItemService,
-      ],
+      deps: [LangService, ConfigService, UrlService, InfoService, LookupService, AuthService, MenuItemService],
       multi: true,
     },
     {
@@ -116,9 +106,7 @@ import { NgProgressModule } from 'ngx-progressbar';
 })
 export class AppModule {
   constructor(registry: MatIconRegistry, domSanitizer: DomSanitizer) {
-    registry.addSvgIconSet(
-      domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi/mdi.svg')
-    );
+    registry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('./assets/mdi/mdi.svg'));
   }
 
   static initialize(
@@ -127,14 +115,15 @@ export class AppModule {
     url: UrlService,
     info: InfoService,
     lookup: LookupService,
-    auth: AuthService
+    auth: AuthService,
+    globalSetting: GlobalSetting
   ): () => Observable<unknown> {
     return () =>
       forkJoin([config.load()])
         .pipe(tap(() => url.setConfigService(config)))
         .pipe(tap(() => url.prepareUrls()))
         .pipe(switchMap(() => info.load()))
-        .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
+        .pipe(tap(info => lookup.setLookups(info.lookupMap)))
         .pipe(switchMap(() => auth.validateToken()));
   }
 }

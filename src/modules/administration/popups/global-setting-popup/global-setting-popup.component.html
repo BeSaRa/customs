@@ -1,0 +1,72 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_global_setting }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-3 gap-4">
+        <app-input formControlName="systemArabicName" [label]="lang.map.system_ar_name" />
+        <app-input formControlName="systemEnglishName" [label]="lang.map.system_en_name" />
+        <app-input
+          formControlName="sessionTimeout"
+          type="number"
+          [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ') '" />
+        <app-input formControlName="fileSize" type="number" [label]="lang.map.file_size" />
+        <app-select-input
+          formControlName="fileTypeParsed"
+          [options]="fileTypes"
+          [label]="lang.map.file_type"
+          bindValue="id"
+          [isMultiple]="true"
+          bindLabel="getNames" />
+        <app-input
+          formControlName="inboxRefreshInterval"
+          type="number"
+          [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
+        <!-- <app-input formControlName="supportEmailListParsed" [label]="lang.map.support_email_list" /> -->
+
+        <!-- <mat-select [formControl]="toppings" (selectionChange)="filter($event)" multiple [(value)]="selected" >
+          <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+      </mat-select> -->
+        <!-- <app-select-input formControlName="supportEmailList" options="" [isMultiple]="true" /> -->
+        <app-input formControlName="maxDeductionRatio" type="number" [label]="lang.map.max_deduction_ratio" />
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch
+            [trueValue]="1"
+            [falseValue]="0"
+            formControlName="enableMailNotification"
+            [label]="lang.map.mail_notifications"></app-switch>
+        </div>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch
+            [trueValue]="1"
+            [falseValue]="0"
+            formControlName="enableSMSNotification"
+            [label]="lang.map.sms_notifications"></app-switch>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+        <div class="col-span-1 flex flex-row pl-1 items-center justify-start">
+          <app-icon-button icon="PLUS" (click)="addEmail()" [matTooltip]="lang.map.add + ' ' + lang.map.email" />
+          <label>{{ lang.map.support_email_list }}</label>
+        </div>
+        <div class="col-span-2">
+          <ng-container formArrayName="supportEmailListParsed">
+            <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
+              <div class="flex flex-row pl-1 items-center justify-start">
+                <app-input [formControlName]="i" [label]="lang.map.email + ' ' + i" />
+                <app-icon-button tabindex="-1" icon="DELETE" (click)="deleteEmail(i)" />
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>
