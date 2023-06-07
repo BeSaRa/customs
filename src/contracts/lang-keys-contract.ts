@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_services : string;
+  menu_services: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
   parent_unit: string;
@@ -118,4 +118,19 @@ export interface LangKeysContract {
   license_number: string;
   license_start_date: string;
   license_end_date: string;
+  baw_service_code: string;
+  updated_on: string;
+  updated_by: string;
+  lbl_service_steps: string;
+  license_serial_code: string;
+  request_serial_code: string;
+  service_time_limit: string;
+  license_min_time: string;
+  license_max_time: string;
+  fees: string;
+  service_terms: string;
+  service_requirements: string;
+  service_description: string;
+  service_steps_arabic: string;
+  service_steps_english: string;
 }
