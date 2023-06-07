@@ -23,21 +23,23 @@
               *ngIf="!inViewMode()"
               class="whitespace-pre-wrap"
               formControlName="arBodyTemplate"
-              [label]="lang.map.ar_body_template"></app-textarea>
+              [label]="lang.map.ar_body_template"
+              dir="ltr"></app-textarea>
             <app-textarea
               *ngIf="!inViewMode()"
               class="whitespace-pre-wrap"
               formControlName="enBodyTemplate"
-              [label]="lang.map.en_body_template"></app-textarea>
+              [label]="lang.map.en_body_template"
+              dir="ltr"></app-textarea>
 
             <!-- body template as HTML (to preview)-->
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.ar_body_template }}</span>
-              <div class="overflow-visible" [innerHTML]="arBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" dir="rtl" [innerHTML]="arBodyTemplate | txtToHtml"></div>
             </div>
             <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
               <span *ngIf="inViewMode()" class="block font-medium">{{ lang.map.en_body_template }}</span>
-              <div class="overflow-visible" [innerHTML]="enBodyTemplate | txtToHtml"></div>
+              <div class="overflow-visible" dir="ltr" [innerHTML]="enBodyTemplate | txtToHtml"></div>
             </div>
           </div>
         </ng-container>
