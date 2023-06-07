@@ -31,6 +31,8 @@ export class ServiceStepsComponent extends AdminComponent<ServiceStepsPopupCompo
   columnsWrapper: ColumnsWrapper<ServiceSteps> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new TextFilterColumn('stepName'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

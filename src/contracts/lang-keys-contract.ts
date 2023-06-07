@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_service_steps : string;
+  menu_service_steps: string;
   menu_services: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
@@ -134,4 +134,9 @@ export interface LangKeysContract {
   service_description: string;
   service_steps_arabic: string;
   service_steps_english: string;
+  step_name: string;
+  ar_desc: string;
+  en_desc: string;
+  activity_name: string;
+  step_sla: string;
 }

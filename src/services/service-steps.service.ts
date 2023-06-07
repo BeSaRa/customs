@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ServiceStepsPopupComponent } from '@modules/administration/popups/service-steps-popup/service-steps-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -21,9 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceStepsService extends BaseCrudWithDialogService<
-ServiceStepsPopupComponent,
-ServiceSteps> {
+export class ServiceStepsService extends BaseCrudWithDialogService<ServiceStepsPopupComponent, ServiceSteps> {
   serviceName = 'ServiceStepsService';
   protected getModelClass(): Constructor<ServiceSteps> {
     return ServiceSteps;
@@ -40,4 +38,5 @@ ServiceSteps> {
   getUrlSegment(): string {
     return this.urlService.URLS.SERVICE_STEPS;
   }
+  stepsByServiceId(id: number) {}
 }

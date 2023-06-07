@@ -28,10 +28,23 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    <!-- arName arName -->
+
+    <!-- arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
+    </ng-container>
+
+    <!-- enName -->
+    <ng-container matColumnDef="enName">
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+    </ng-container>
+
+    <!-- stepName -->
+    <ng-container matColumnDef="stepName">
+      <th mat-header-cell mat-sort-header="stepName" *matHeaderCellDef>{{ lang.map.step_name }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.stepName }}</td>
     </ng-container>
 
     <!-- actions Column -->
