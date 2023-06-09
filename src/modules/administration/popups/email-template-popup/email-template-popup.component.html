@@ -4,7 +4,7 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
@@ -28,36 +28,30 @@
       <mat-tab [label]="lang.map.body_template">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
-            <!-- body template as text -->
-            <!-- <app-textarea
+            <!-- <angular-editor class="prose" *ngIf="!inViewMode()" id="editor1" formControlName="arBodyTemplate"
+              [config]="config"></angular-editor> -->
+            <!-- <angular-editor class="prose" *ngIf="!inViewMode()" id="editor2" formControlName="enBodyTemplate"
+              [config]="config"></angular-editor> -->
+            <app-html-editor
               *ngIf="!inViewMode()"
-              class="min-w-[400px]"
+              [id]="'arBodyEditor'"
               formControlName="arBodyTemplate"
-              [label]="lang.map.ar_body_template"></app-textarea>
-            <app-textarea
+              [label]="lang.map.ar_body_template"></app-html-editor>
+            <app-html-editor
               *ngIf="!inViewMode()"
-              class="min-w-[400px]"
+              [id]="'enBodyEditor'"
               formControlName="enBodyTemplate"
-              [label]="lang.map.en_body_template"></app-textarea> -->
-            <angular-editor
-              *ngIf="!inViewMode()"
-              id="editor1"
-              formControlName="arBodyTemplate"
-              [config]="editorConfig"></angular-editor>
-            <angular-editor
-              *ngIf="!inViewMode()"
-              id="editor2"
-              formControlName="enBodyTemplate"
-              [config]="editorConfig"></angular-editor>
+              [label]="lang.map.en_body_template"></app-html-editor>
+
             <!-- body template as HTML (to preview)-->
-            <!-- <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
-              <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.ar_body_template }}</p>
-              <div class="overflow-visible" [innerHTML]="arBodyTemplate"></div>
+            <div *ngIf="inViewMode()" class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
+              <span class="block font-medium text-slate-700">{{ lang.map.ar_body_template }}</span>
+              <div class="prose overflow-visible" [innerHTML]="form.get('arBodyTemplate')?.value | txtToHtml"></div>
             </div>
-            <div class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
-              <p *ngIf="inViewMode()" class="block font-medium text-slate-700">{{ lang.map.en_body_template }}</p>
-              <div class="overflow-visible" [innerHTML]="enBodyTemplate"></div>
-            </div> -->
+            <div *ngIf="inViewMode()" class="max-h-screen overflow-scroll grid grid-cols-1 gap-4">
+              <span class="block font-medium text-slate-700">{{ lang.map.en_body_template }}</span>
+              <div class="prose overflow-visible" [innerHTML]="form.get('enBodyTemplate')?.value | txtToHtml"></div>
+            </div>
           </div>
         </ng-container>
       </mat-tab>

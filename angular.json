@@ -41,13 +41,12 @@
               },
               {
                 "glob": "**/*",
-                "input": "node_modules/font-awesome/fonts",
-                "output": "assets/fonts"
-           }
+                "input": "./node_modules/@kolkov/angular-editor/assets/",
+                "output": "./assets/fonts/"
+              }
             ],
             "styles": [
-              "src/styles/styles.scss",
-              "node_modules/font-awesome/scss/font-awesome.scss"
+              "src/styles/styles.scss"
             ],
             "scripts": []
           },

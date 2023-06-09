@@ -65,7 +65,7 @@ import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
 import { TxtToHtmlPipe } from '@standalone/directives/txtToHtml.pipe';
-import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
 @NgModule({
   declarations: [
     AdministrationComponent,
@@ -144,7 +144,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     InputSuffixDirective,
     MatRippleModule,
     TxtToHtmlPipe,
-    AngularEditorModule,
+    HtmlEditorComponent,
   ],
 })
 export class AdministrationModule {}
