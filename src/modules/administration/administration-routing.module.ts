@@ -15,6 +15,7 @@ import { BrokerCompanyComponent } from '@modules/administration/components/broke
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -75,6 +76,10 @@ const routes: Routes = [
   {
     path: AppRoutes.BROKER,
     component: BrokerComponent,
+  },
+  {
+    path: AppRoutes.GLOBAL_SETTING,
+    component: GlobalSettingComponent,
   },
 ];
 

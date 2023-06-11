@@ -41,6 +41,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LangService } from '@services/lang.service';
 import { NgProgressModule } from 'ngx-progressbar';
+import { GlobalSetting } from '@models/global-setting';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],

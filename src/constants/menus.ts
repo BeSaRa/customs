@@ -101,4 +101,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.BROKER,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.GLOBAL_SETTING,
+    langKey: 'menu_global_setting',
+    icon: AppIcons.GLOBAL_SETTING,
+    path: AppFullRoutes.GLOBAL_SETTING,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

@@ -18,6 +18,8 @@ export const EndPoints = {
   MAWARED_DEPARTMENT: '/entity/mawared-department',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
   BROKER: '/entity/broker',
+  GLOBAL_SETTING: '/admin/global-setting',
+  FILE_TYPE: '/admin/global-setting/file-types',
 };
 
 export type EndpointsType = typeof EndPoints;

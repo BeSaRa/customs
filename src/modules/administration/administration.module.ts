@@ -62,6 +62,7 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
     BrokerComponent,
     BrokerPopupComponent,
     StringToDatePipe,
+    GlobalSettingComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,16 @@
 export interface LangKeysContract {
+  reset: string;
+  menu_file_type: string;
+  max_deduction_ratio: string;
+  support_email_list: string;
+  inbox_refresh_interval: string;
+  file_type: string;
+  file_size: string;
+  minutes: string;
+  session_time_out: string;
+  system_ar_name: string;
+  system_en_name: string;
+  menu_global_setting: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
   parent_unit: string;
