@@ -7,6 +7,7 @@ import { LangContract } from '@contracts/lang-contract';
 import { InternalUser } from '@models/internal-user';
 import { Lookup } from '@models/lookup';
 import { UserPreferences } from '@models/user-preferences';
+import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { Observable } from 'rxjs';
@@ -22,6 +23,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   //user!: InternalUser;
   lookupService = inject(LookupService);
   langService = inject(LangService);
+  employeeService = inject(EmployeeService);
   arName!: string;
   enName!: string;
   empNum!: string;
@@ -60,6 +62,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
 
   protected override _afterSave(model: UserPreferences): void {
     this.model = model;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.employeeService.changeUserPreferences$.next(model);
+    //this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
   }
 }
