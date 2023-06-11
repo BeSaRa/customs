@@ -118,7 +118,7 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   protected _saveFail(error: unknown) {
     console.log(error);
   }
-  private loadingSubject = new BehaviorSubject<boolean>(false);
+  private loadingSubject = new BehaviorSubject<boolean>(true);
   public loading$ = this.loadingSubject.asObservable();
 
   service = inject(GlobalSettingService);
@@ -129,35 +129,41 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   fileTypes!: FileType[];
 
   _getGlobalSettings() {
+    this.loadingSubject.next(true);
     return this.service
       .loadById(10)
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors(),
-        tap(() => {
-          this.loadingSubject.next(false);
+        tap(data => {
+          this.supportEmailListParsed.removeAt(0);
+          data.supportEmailListParsed.forEach(element => {
+            this.supportEmailListParsed.push(new FormControl({ value: element, disabled: true }, CustomValidators.required));
+          });
+          this.form.patchValue(data);
+          this.globalSettings = data;
+          this.model = data;
+          this._buildForm();
         })
       )
-      .subscribe(data => {
-        this.supportEmailListParsed.removeAt(0);
-        data.supportEmailListParsed.forEach(element => {
-          this.supportEmailListParsed.push(new FormControl({ value: element, disabled: true }, CustomValidators.required));
-        });
-        this.form.patchValue(data);
-        this.globalSettings = data;
-        this.model = data;
-        this._buildForm();
-        this.loadingSubject.next(true);
-      });
+      .subscribe();
   }
   get supportEmailListParsed() {
     return this.form.controls['supportEmailListParsed'] as FormArray;
   }
 
   protected getFileTypes() {
-    this.fileTypeService.load().subscribe(data => {
-      this.fileTypes = data.rs;
-    });
+    this.loadingSubject.next(true);
+    this.fileTypeService
+      .load()
+      .pipe(
+        finalize(() => this.loadingSubject.next(false)),
+        ignoreErrors()
+      )
+      .subscribe(data => {
+        this.fileTypes = data.rs;
+        this.loadingSubject.next(false);
+      });
   }
 
   protected _afterSave(model: GlobalSetting): void {
