@@ -16,11 +16,7 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './permission-role.component.html',
   styleUrls: ['./permission-role.component.scss'],
 })
-export class PermissionRoleComponent extends AdminComponent<
-  PermissionRolePopupComponent,
-  PermissionRole,
-  PermissionRoleService
-> {
+export class PermissionRoleComponent extends AdminComponent<PermissionRolePopupComponent, PermissionRole, PermissionRoleService> {
   service = inject(PermissionRoleService);
   actions: ContextMenuActionContract<PermissionRole>[] = [
     {
@@ -28,7 +24,7 @@ export class PermissionRoleComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -37,7 +33,7 @@ export class PermissionRoleComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +42,7 @@ export class PermissionRoleComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },
@@ -58,9 +54,7 @@ export class PermissionRoleComponent extends AdminComponent<
     new TextFilterColumn('enName'),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(
-        (i) => i.lookupKey !== StatusTypes.DELETED
-      ),
+      this.lookupService.lookups.commonStatus.filter(i => i.lookupKey !== StatusTypes.DELETED),
       'lookupKey',
       'getNames'
     ),

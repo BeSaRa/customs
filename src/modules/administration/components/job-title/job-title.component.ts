@@ -16,11 +16,7 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './job-title.component.html',
   styleUrls: ['./job-title.component.scss'],
 })
-export class JobTitleComponent extends AdminComponent<
-  JobTitlePopupComponent,
-  JobTitle,
-  JobTitleService
-> {
+export class JobTitleComponent extends AdminComponent<JobTitlePopupComponent, JobTitle, JobTitleService> {
   service = inject(JobTitleService);
   actions: ContextMenuActionContract<JobTitle>[] = [
     {
@@ -28,7 +24,7 @@ export class JobTitleComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -37,7 +33,7 @@ export class JobTitleComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +42,7 @@ export class JobTitleComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },
@@ -58,18 +54,11 @@ export class JobTitleComponent extends AdminComponent<
     new TextFilterColumn('enName'),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED
-      ),
+      this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
       'lookupKey',
       'getNames'
     ),
-    new SelectFilterColumn(
-      'jobType',
-      this.lookupService.lookups.userType,
-      'lookupKey',
-      'getNames'
-    ),
+    new SelectFilterColumn('jobType', this.lookupService.lookups.userType, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }

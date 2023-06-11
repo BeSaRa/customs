@@ -9,14 +9,7 @@ import { FilterSidebarMenuItemPipe } from '@standalone/pipes/filter-sidebar-menu
 @Component({
   selector: 'app-sidebar-menu',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    RouterLinkActive,
-    RouterLink,
-    SidebarMenuItemComponent,
-    FilterSidebarMenuItemPipe,
-  ],
+  imports: [CommonModule, MatIconModule, RouterLinkActive, RouterLink, SidebarMenuItemComponent, FilterSidebarMenuItemPipe],
   templateUrl: './sidebar-menu.component.html',
   styleUrls: ['./sidebar-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

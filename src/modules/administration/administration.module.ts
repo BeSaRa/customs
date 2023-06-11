@@ -148,4 +148,4 @@ import { ServiceStepsPopupComponent } from '@modules/administration/popups/servi
     MatRippleModule,
   ],
 })
-export class AdministrationModule { }
+export class AdministrationModule {}

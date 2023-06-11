@@ -23,10 +23,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   penaltyTypes: Lookup[] = this.lookupService.lookups.penaltyType;
 
-  statusTooltipText =
-    this.model?.status === StatusTypes.ACTIVE
-      ? this.lang.map.active
-      : this.lang.map.in_active;
+  statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -52,18 +49,14 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   protected _afterSave(model: Penalty): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
   }
 
   protected listenToStatusChange() {
-    this.status?.valueChanges.subscribe((value) => {
-      this.statusTooltipText = value
-        ? this.lang.map.active
-        : this.lang.map.in_active;
+    this.status?.valueChanges.subscribe(value => {
+      this.statusTooltipText = value ? this.lang.map.active : this.lang.map.in_active;
     });
   }
 

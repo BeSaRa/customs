@@ -54,33 +54,27 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   protected _afterSave(model: ViolationType): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
-    );
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
 
   protected listenToPenaltyTypeChange() {
-    this.penaltyType?.valueChanges.subscribe((penaltyTypeValue) => {
-      this.classifications = this.allclassifications.filter(
-        (classification) => {
-          return classification.penaltyType === penaltyTypeValue;
-        }
-      );
+    this.penaltyType?.valueChanges.subscribe(penaltyTypeValue => {
+      this.classifications = this.allclassifications.filter(classification => {
+        return classification.penaltyType === penaltyTypeValue;
+      });
     });
   }
 
   protected getViolationClassifications() {
-    this.violationClassificationService.loadAsLookups().subscribe((data) => {
+    this.violationClassificationService.loadAsLookups().subscribe(data => {
       this.allclassifications = data;
       this.classifications =
         this.operation === 'CREATE'
           ? data
-          : data.filter((classification) => {
-              return !this.model.penaltyType
-                ? true
-                : classification.penaltyType === this.model.penaltyType;
+          : data.filter(classification => {
+              return !this.model.penaltyType ? true : classification.penaltyType === this.model.penaltyType;
             });
     });
   }

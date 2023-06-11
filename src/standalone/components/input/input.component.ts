@@ -1,23 +1,6 @@
-import {
-  AfterContentInit,
-  Component,
-  ContentChild,
-  inject,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterContentInit, Component, ContentChild, inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-  ValidationErrors,
-} from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 import { NgxMaskDirective } from 'ngx-mask';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
@@ -29,12 +12,7 @@ import { generateUUID } from '@utils/utils';
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [
-    CommonModule,
-    ValidationErrorsComponent,
-    NgxMaskDirective,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, ValidationErrorsComponent, NgxMaskDirective, ReactiveFormsModule],
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   providers: [
@@ -46,16 +24,12 @@ import { generateUUID } from '@utils/utils';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class InputComponent
-  implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit
-{
+export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit {
   ngAfterContentInit(): void {
     this.hasCustomControl = !!this.template;
     Promise.resolve().then(() => {
       if (this.template) {
-        const input =
-          this.template.element.nativeElement.querySelector('input') ??
-          this.template.element.nativeElement;
+        const input = this.template.element.nativeElement.querySelector('input') ?? this.template.element.nativeElement;
         this.setInputMissingProperties(input);
         this.ctrl = this.template.control;
       }
@@ -105,9 +79,7 @@ export class InputComponent
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() =>
-        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined
-      )
+      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
     );
   }
 
@@ -117,9 +89,7 @@ export class InputComponent
   control = new FormControl('');
   hasCustomControl = false;
   // noinspection JSUnusedLocalSymbols
-  private values = this.control.valueChanges
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((value) => this.onChange && this.onChange(value));
+  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -148,9 +118,7 @@ export class InputComponent
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.disabled
-      ? this.control.disable({ emitEvent: false })
-      : this.control.enable({ emitEvent: false });
+    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
   }
 
   inputTouch() {

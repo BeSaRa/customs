@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -43,10 +36,7 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
   templateUrl: './filter-column.component.html',
   styleUrls: ['./filter-column.component.scss'],
 })
-export class FilterColumnComponent
-  extends OnDestroyMixin(class {})
-  implements OnInit
-{
+export class FilterColumnComponent extends OnDestroyMixin(class {}) implements OnInit {
   @Input()
   column?: ColumnMapContract<unknown>;
   control: FormControl<string> = new FormControl<string>('', {
@@ -67,7 +57,7 @@ export class FilterColumnComponent
   private listenToControl() {
     if (!this.column || !this.column.filter) return;
 
-    this.control.valueChanges.pipe(debounceTime(250)).subscribe((value) => {
+    this.control.valueChanges.pipe(debounceTime(250)).subscribe(value => {
       this.column &&
         this.filterChange.emit({
           key: this.column.config.bindKey,
@@ -86,15 +76,8 @@ export class FilterColumnComponent
     });
   }
 
-  private isType(
-    type: 'text' | 'select' | 'date' | 'none',
-    hasFilter = true
-  ): boolean {
-    return !!(
-      this.column &&
-      this.column.config.filter === hasFilter &&
-      this.column.config.type === type
-    );
+  private isType(type: 'text' | 'select' | 'date' | 'none', hasFilter = true): boolean {
+    return !!(this.column && this.column.config.filter === hasFilter && this.column.config.type === type);
   }
 
   isText(): boolean {
@@ -106,11 +89,7 @@ export class FilterColumnComponent
   }
 
   isActions(): boolean {
-    return !!(
-      this.isType('none', false) &&
-      this.column &&
-      this.column.config.name === 'actions'
-    );
+    return !!(this.isType('none', false) && this.column && this.column.config.name === 'actions');
   }
 
   clearAllFilters() {
@@ -119,21 +98,14 @@ export class FilterColumnComponent
   }
 
   noFilteredColumns() {
-    return (
-      this.column?.filter().value && isEmptyObject(this.column?.filter().value)
-    );
+    return this.column?.filter().value && isEmptyObject(this.column?.filter().value);
   }
 
   get options() {
-    return (
-      (this.column && this.column.config && this.column.config.options) ||
-      of([])
-    );
+    return (this.column && this.column.config && this.column.config.options) || of([]);
   }
 
   getFilterIcon() {
-    return ('' + this.control.value).length
-      ? AppIcons.FILTER_REMOVE
-      : AppIcons.FILTER_OUTLINE;
+    return ('' + this.control.value).length ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE;
   }
 }

@@ -139,4 +139,7 @@ export interface LangKeysContract {
   en_desc: string;
   activity_name: string;
   step_sla: string;
+  alternate_email_list: string;
+  change_default_language: string;
+  default_language: string;
 }

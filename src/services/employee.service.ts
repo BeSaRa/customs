@@ -10,10 +10,7 @@ import { AppPermissionsType } from '@constants/app-permissions';
 })
 export class EmployeeService {
   private loginData?: LoginDataContract;
-  private readonly permissionMap = new Map<
-    keyof AppPermissionsType,
-    Permission
-  >();
+  private readonly permissionMap = new Map<keyof AppPermissionsType, Permission>();
   private readonly lookupService = inject(LookupService);
 
   setLoginData(data: LoginDataContract): LoginDataContract {
@@ -34,7 +31,7 @@ export class EmployeeService {
 
   private generatePermissionMap(permissionSet: Permission[]) {
     this.permissionMap.clear();
-    permissionSet.forEach((permission) => {
+    permissionSet.forEach(permission => {
       this.permissionMap.set(permission.permissionKey, permission);
     });
   }
@@ -52,7 +49,7 @@ export class EmployeeService {
    * @param permissions
    */
   hasAnyPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
-    return permissions.some((permission) => {
+    return permissions.some(permission => {
       return this.permissionMap.has(permission);
     });
   }
@@ -62,7 +59,7 @@ export class EmployeeService {
    * @param permissions
    */
   hasAllPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
-    return !permissions.some((permission) => {
+    return !permissions.some(permission => {
       return !this.permissionMap.has(permission);
     });
   }
