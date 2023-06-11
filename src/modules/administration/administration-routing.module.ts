@@ -15,6 +15,8 @@ import { BrokerCompanyComponent } from '@modules/administration/components/broke
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
+import { ServicesComponent } from '@modules/administration/components/services/services.component';
+import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
@@ -77,6 +79,14 @@ const routes: Routes = [
   {
     path: AppRoutes.BROKER,
     component: BrokerComponent,
+  },
+  {
+    path: AppRoutes.SERVICES,
+    component: ServicesComponent,
+  },
+  {
+    path: AppRoutes.SERVICE_STEPS,
+    component: ServiceStepsComponent,
   },
   {
     path: AppRoutes.EMAIL_TEMPLATE,

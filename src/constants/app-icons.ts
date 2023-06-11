@@ -32,9 +32,10 @@ export const AppIcons = {
   MAWARED_DEPARTMENT: 'select-group',
   RESOURCES_CASE: 'briefcase',
   BROKER: 'account-tie-outline',
-  EMAIL_TEMPLATE: 'email-multiple',
+  SERVICES: 'face-agent',
+  USERPREFERENCES: 'account-star-outline',
   GLOBAL_SETTING: 'cogs',
-  USERPREFERENCES: 'account-star-outline'
+  EMAIL_TEMPLATE: 'email-multiple',
 };
 
 export type AppIconsType = typeof AppIcons;
