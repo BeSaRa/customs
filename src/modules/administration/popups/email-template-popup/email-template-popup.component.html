@@ -28,10 +28,6 @@
       <mat-tab [label]="lang.map.body_template">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
-            <!-- <angular-editor class="prose" *ngIf="!inViewMode()" id="editor1" formControlName="arBodyTemplate"
-              [config]="config"></angular-editor> -->
-            <!-- <angular-editor class="prose" *ngIf="!inViewMode()" id="editor2" formControlName="enBodyTemplate"
-              [config]="config"></angular-editor> -->
             <app-html-editor
               *ngIf="!inViewMode()"
               [id]="'arBodyEditor'"
