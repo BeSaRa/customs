@@ -6,7 +6,7 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { UserPreferences } from '@models/user-preferences';
 import { UserPreferencesPopupComponent } from '@modules/administration/popups/user-preferences-popup/user-preferences-popup.component';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { EmployeeService } from './employee.service';
 import { Observable } from 'rxjs';
 @CastResponseContainer({
@@ -41,6 +41,7 @@ export class UserPreferencesService extends BaseCrudWithDialogService<UserPrefer
     return UserPreferences;
   }
 
+  @CastResponse()
   save(model: UserPreferences): Observable<UserPreferences> {
     return this.http.post<UserPreferences>(this.urlService.URLS.USER_PREFERENCES + `/${this.employee?.id}`, model);
   }

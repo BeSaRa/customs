@@ -4,6 +4,8 @@ import { InternalUser } from '@models/internal-user';
 import { Permission } from '@models/permission';
 import { LookupService } from '@services/lookup.service';
 import { AppPermissionsType } from '@constants/app-permissions';
+import { UserPreferences } from '@models/user-preferences';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +14,11 @@ export class EmployeeService {
   private loginData?: LoginDataContract;
   private readonly permissionMap = new Map<keyof AppPermissionsType, Permission>();
   private readonly lookupService = inject(LookupService);
+  changeUserPreferences$: BehaviorSubject<UserPreferences> = new BehaviorSubject<UserPreferences>(new UserPreferences());
 
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
+    this.changeUserPreferences$.next(this.loginData.internalUser.userPreferences);
     return this.loginData;
   }
 
