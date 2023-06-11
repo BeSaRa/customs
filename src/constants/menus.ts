@@ -106,6 +106,12 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_email_template',
     icon: AppIcons.EMAIL_TEMPLATE,
     path: AppFullRoutes.EMAIL_TEMPLATE,
+  },
+  {
+    id: MenuIdes.GLOBAL_SETTING,
+    langKey: 'menu_global_setting',
+    icon: AppIcons.GLOBAL_SETTING,
+    path: AppFullRoutes.GLOBAL_SETTING,
     parent: MenuIdes.ADMINISTRATION,
   },
 ];

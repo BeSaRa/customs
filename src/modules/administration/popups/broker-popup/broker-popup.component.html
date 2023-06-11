@@ -14,7 +14,7 @@
         <app-input [disabled]="true" formControlName="phoneNumber" [label]="lang.map.phone_number"></app-input>
         <app-input [disabled]="true" formControlName="email" [label]="lang.map.email"></app-input>
         <app-input [disabled]="true" formControlName="licenseNumber" [label]="lang.map.license_number"></app-input>
-        <app-input 
+        <app-input
           [disabled]="true"
           formControlName="licenseStartDate"
           type="datetime-local"
@@ -31,10 +31,7 @@
           [label]="lang.map.menu_broker_company"
           bindValue="id"
           bindLabel="getNames" />
-          <app-input
-            [disabled]="true"
-            formControlName="statusInfo"
-            [label]="lang.map.status"></app-input>
+        <app-input [disabled]="true" formControlName="statusInfo" [label]="lang.map.status"></app-input>
       </ng-container>
     </div>
   </div>

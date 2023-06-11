@@ -21,10 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class LocalizationService extends BaseCrudWithDialogService<
-  LocalizationPopupComponent,
-  Localization
-> {
+export class LocalizationService extends BaseCrudWithDialogService<LocalizationPopupComponent, Localization> {
   serviceName = 'LocalizationService';
   protected getModelClass(): Constructor<Localization> {
     return Localization;

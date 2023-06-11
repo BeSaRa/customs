@@ -1,5 +1,17 @@
 export interface LangKeysContract {
   menu_email_template: string;
+  reset: string;
+  menu_file_type: string;
+  max_deduction_ratio: string;
+  support_email_list: string;
+  inbox_refresh_interval: string;
+  file_type: string;
+  file_size: string;
+  minutes: string;
+  session_time_out: string;
+  system_ar_name: string;
+  system_en_name: string;
+  menu_global_setting: string;
   ldap_limited_group_name: string;
   menu_broker_company: string;
   parent_unit: string;
@@ -124,4 +136,7 @@ export interface LangKeysContract {
   ar_body_template: string;
   body_template: string;
   is_global: string;
+  alternate_email_list: string;
+  change_default_language: string;
+  default_language: string;
 }

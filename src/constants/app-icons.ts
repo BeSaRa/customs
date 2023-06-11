@@ -33,6 +33,8 @@ export const AppIcons = {
   RESOURCES_CASE: 'briefcase',
   BROKER: 'account-tie-outline',
   EMAIL_TEMPLATE: 'email-multiple',
+  GLOBAL_SETTING: 'cogs',
+  USERPREFERENCES: 'account-star-outline'
 };
 
 export type AppIconsType = typeof AppIcons;

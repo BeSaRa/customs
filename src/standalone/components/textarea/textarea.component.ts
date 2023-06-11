@@ -1,23 +1,7 @@
-import {
-  AfterContentInit,
-  ChangeDetectorRef,
-  Component,
-  ContentChild,
-  inject,
-  Injector,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Component, ContentChild, inject, Injector, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { debounceTime, map, Observable, of, takeUntil } from 'rxjs';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-  ValidationErrors,
-} from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { generateUUID, isNgModel } from '@utils/utils';
@@ -37,17 +21,12 @@ import { ValidationErrorsComponent } from '@standalone/components/validation-err
     },
   ],
 })
-export class TextareaComponent
-  extends OnDestroyMixin(class {})
-  implements ControlValueAccessor, OnInit, AfterContentInit
-{
+export class TextareaComponent extends OnDestroyMixin(class {}) implements ControlValueAccessor, OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     this.hasCustomControl = !!this.template;
     Promise.resolve().then(() => {
       if (this.template) {
-        const input =
-          this.template.element.nativeElement.querySelector('textarea') ??
-          this.template.element.nativeElement;
+        const input = this.template.element.nativeElement.querySelector('textarea') ?? this.template.element.nativeElement;
         this.setInputMissingProperties(input);
         this.ctrl = this.template.control;
         !isNgModel(this.ctrl) && this.listenToCtrlValueChanges();
@@ -90,9 +69,7 @@ export class TextareaComponent
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() =>
-        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined
-      )
+      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
     );
   }
 
@@ -102,9 +79,7 @@ export class TextareaComponent
   control = new FormControl('');
   hasCustomControl = false;
   // noinspection JSUnusedLocalSymbols
-  private values = this.control.valueChanges
-    .pipe(takeUntil(this.destroy$))
-    .subscribe((value) => this.onChange && this.onChange(value));
+  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -128,9 +103,7 @@ export class TextareaComponent
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.disabled
-      ? this.control.disable({ emitEvent: false })
-      : this.control.enable({ emitEvent: false });
+    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
   }
 
   inputTouch() {

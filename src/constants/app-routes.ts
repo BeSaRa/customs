@@ -16,4 +16,6 @@ export const AppRoutes = {
   MAWARED_EMPLOYEE: 'mawared-employee',
   BROKER: 'broker',
   EMAIL_TEMPLATE: 'email-template',
+  GLOBAL_SETTING: 'global-setting',
+  FILE_TYPE: 'file-type',
 };

@@ -13,15 +13,9 @@ import { ServiceContract } from '@contracts/service-contract';
 @Injectable({
   providedIn: 'root',
 })
-export class LangService
-  extends RegisterServiceMixin(class {})
-  implements ServiceContract
-{
+export class LangService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'LangService';
-  map: Record<keyof LangKeysContract, string> = {} as Record<
-    keyof LangKeysContract,
-    string
-  >;
+  map: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
 
   languages: LangContract[] = [
     {
@@ -40,38 +34,20 @@ export class LangService
     },
   ];
   private change = new Subject<LangContract>();
-  private langChangerNotifier: Subject<LangChangeProcess> =
-    new Subject<LangChangeProcess>();
-  private arabic: Record<keyof LangKeysContract, string> = {} as Record<
-    keyof LangKeysContract,
-    string
-  >;
-  private english: Record<keyof LangKeysContract, string> = {} as Record<
-    keyof LangKeysContract,
-    string
-  >;
-  private records: Record<keyof LangKeysContract, Localization> = {} as Record<
-    keyof LangKeysContract,
-    Localization
-  >;
+  private langChangerNotifier: Subject<LangChangeProcess> = new Subject<LangChangeProcess>();
+  private arabic: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
+  private english: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
+  private records: Record<keyof LangKeysContract, Localization> = {} as Record<keyof LangKeysContract, Localization>;
 
-  langChangeProcess$ = this.langChangerNotifier
-    .asObservable()
-    .pipe(distinctUntilChanged());
+  langChangeProcess$ = this.langChangerNotifier.asObservable().pipe(distinctUntilChanged());
 
   change$ = this.change.asObservable();
   private current: LangContract = this.languages[1];
-  private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
-    (acc, item) => {
-      return { ...acc, [item.code]: item };
-    },
-    {} as Record<LangCodes, LangContract>
-  );
+  private langMap: Record<LangCodes, LangContract> = this.languages.reduce((acc, item) => {
+    return { ...acc, [item.code]: item };
+  }, {} as Record<LangCodes, LangContract>);
 
-  constructor(
-    private _http: HttpClient,
-    @Inject(DOCUMENT) private document: Document
-  ) {
+  constructor(private _http: HttpClient, @Inject(DOCUMENT) private document: Document) {
     super();
     this.setDirection(this.current.direction);
   }
@@ -105,7 +81,7 @@ export class LangService
   }
 
   prepareLanguages(localizations: Localization[]): void {
-    localizations.forEach((local) => {
+    localizations.forEach(local => {
       const key = local.localizationKey as keyof LangKeysContract;
       this.arabic[key] = local.arName;
       this.english[key] = local.enName;

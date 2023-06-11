@@ -14,4 +14,5 @@ export const AppFullRoutes = {
   MAWARED_DEPARTMENT: '/home/administration/mawared-department',
   BROKER: '/home/administration/broker',
   EMAIL_TEMPLATE: '/home/administration/email-template',
+  GLOBAL_SETTING: '/home/administration/global-setting',
 };

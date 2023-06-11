@@ -10,6 +10,10 @@
     <div>
       <span>{{ employee && employee.getNames() }}</span>
       <mat-menu #userMenu="matMenu">
+        <button class="text-slate-700" (click)="editUserPreferences$.next()" mat-menu-item>
+          <mat-icon [svgIcon]="AppIcons.USERPREFERENCES"></mat-icon>
+          <span>{{ lang.map.lbl_user_preferences }}</span>
+        </button>
         <button class="text-slate-700" (click)="logout()" mat-menu-item>
           <mat-icon [svgIcon]="AppIcons.LOGOUT"></mat-icon>
           <span>{{ lang.map.logout }}</span>

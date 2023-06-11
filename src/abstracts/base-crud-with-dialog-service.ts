@@ -9,11 +9,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
 import { BaseModel } from '@abstracts/base-model';
 
-export abstract class BaseCrudWithDialogService<
-    C,
-    M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>,
-    PrimaryType = number
-  >
+export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>, PrimaryType = number>
   extends BaseCrudService<M, PrimaryType>
   implements BaseCrudWithDialogServiceContract<C, M, PrimaryType>
 {
@@ -26,17 +22,14 @@ export abstract class BaseCrudWithDialogService<
     extras?: object | undefined,
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
-      this.getDialogComponent(),
-      {
-        ...config,
-        data: {
-          model: model || this.getModelInstance(),
-          extras: { ...extras },
-          operation: OperationType.CREATE,
-        },
-      }
-    );
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
+      ...config,
+      data: {
+        model: model || this.getModelInstance(),
+        extras: { ...extras },
+        operation: OperationType.CREATE,
+      },
+    });
   }
 
   openEditDialog(
@@ -44,17 +37,14 @@ export abstract class BaseCrudWithDialogService<
     extras?: object | undefined,
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
-      this.getDialogComponent(),
-      {
-        ...config,
-        data: {
-          model,
-          extras: { ...extras },
-          operation: OperationType.UPDATE,
-        },
-      }
-    );
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.UPDATE,
+      },
+    });
   }
 
   openEditDialogWithComposite(
@@ -62,17 +52,14 @@ export abstract class BaseCrudWithDialogService<
     extras?: object | undefined,
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
-      this.getDialogComponent(),
-      {
-        ...config,
-        data: {
-          model,
-          extras: { ...extras },
-          operation: OperationType.UPDATE,
-        },
-      }
-    );
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.UPDATE,
+      },
+    });
   }
 
   openViewDialog(
@@ -80,16 +67,13 @@ export abstract class BaseCrudWithDialogService<
     extras?: object | undefined,
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<C, UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(
-      this.getDialogComponent(),
-      {
-        ...config,
-        data: {
-          model,
-          extras: { ...extras },
-          operation: OperationType.VIEW,
-        },
-      }
-    );
+    return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(this.getDialogComponent(), {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.VIEW,
+      },
+    });
   }
 }

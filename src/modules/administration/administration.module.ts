@@ -65,6 +65,8 @@ import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+
 @NgModule({
   declarations: [
     AdministrationComponent,
@@ -98,6 +100,7 @@ import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
     StringToDatePipe,
     EmailTemplateComponent,
     EmailTemplatePopupComponent,
+    GlobalSettingComponent,
   ],
   imports: [
     CommonModule,

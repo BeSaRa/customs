@@ -16,6 +16,7 @@ import { OrganizationUnitComponent } from '@modules/administration/components/or
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -80,6 +81,10 @@ const routes: Routes = [
   {
     path: AppRoutes.EMAIL_TEMPLATE,
     component: EmailTemplateComponent,
+  },
+  {
+    path: AppRoutes.GLOBAL_SETTING,
+    component: GlobalSettingComponent,
   },
 ];
 
