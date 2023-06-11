@@ -15,5 +15,6 @@ export const AppFullRoutes = {
   BROKER: '/home/administration/broker',
   SERVICES: '/home/administration/services',
   SERVICE_STEPS: '/home/administration/service-steps',
+  EMAIL_TEMPLATE: '/home/administration/email-template',
   GLOBAL_SETTING: '/home/administration/global-setting',
 };

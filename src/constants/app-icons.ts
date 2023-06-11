@@ -35,6 +35,7 @@ export const AppIcons = {
   SERVICES: 'face-agent',
   USERPREFERENCES: 'account-star-outline',
   GLOBAL_SETTING: 'cogs',
+  EMAIL_TEMPLATE: 'email-multiple',
 };
 
 export type AppIconsType = typeof AppIcons;

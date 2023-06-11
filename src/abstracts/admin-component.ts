@@ -257,6 +257,7 @@ export abstract class AdminComponent<
             x: model.getNames(),
           })
         );
+        this.reload$.next();
       });
   }
 

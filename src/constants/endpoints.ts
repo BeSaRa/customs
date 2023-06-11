@@ -20,6 +20,7 @@ export const EndPoints = {
   BROKER: '/entity/broker',
   SERVICES: '/entity/services',
   SERVICE_STEPS: '/entity/service-steps',
+  EMAIL_TEMPLATE: '/entity/email-template',
   GLOBAL_SETTING: '/admin/global-setting',
   FILE_TYPE: '/admin/global-setting/file-types',
 };

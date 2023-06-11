@@ -17,6 +17,7 @@ export const AppRoutes = {
   BROKER: 'broker',
   SERVICES: 'services',
   SERVICE_STEPS: 'service-steps',
+  EMAIL_TEMPLATE: 'email-template',
   GLOBAL_SETTING: 'global-setting',
   FILE_TYPE: 'file-type',
 };

@@ -109,6 +109,13 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.SERVICES,
   },
   {
+    id: MenuIdes.EMAIL_TEMPLATE,
+    langKey: 'menu_email_template',
+    icon: AppIcons.EMAIL_TEMPLATE,
+    parent: MenuIdes.ADMINISTRATION,
+    path: AppFullRoutes.EMAIL_TEMPLATE,
+  },
+  {
     id: MenuIdes.GLOBAL_SETTING,
     langKey: 'menu_global_setting',
     icon: AppIcons.GLOBAL_SETTING,

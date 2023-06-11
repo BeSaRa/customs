@@ -1,6 +1,7 @@
 export interface LangKeysContract {
   menu_service_steps: string;
   menu_services: string;
+  menu_email_template: string;
   reset: string;
   menu_file_type: string;
   max_deduction_ratio: string;
@@ -151,6 +152,12 @@ export interface LangKeysContract {
   en_desc: string;
   activity_name: string;
   step_sla: string;
+  en_subject_template: string;
+  en_body_template: string;
+  ar_subject_template: string;
+  ar_body_template: string;
+  body_template: string;
+  is_global: string;
   alternate_email_list: string;
   change_default_language: string;
   default_language: string;

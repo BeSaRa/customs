@@ -17,6 +17,7 @@ import { MawaredDepartmentComponent } from '@modules/administration/components/m
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
+import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
 const routes: Routes = [
@@ -86,6 +87,10 @@ const routes: Routes = [
   {
     path: AppRoutes.SERVICE_STEPS,
     component: ServiceStepsComponent,
+  },
+  {
+    path: AppRoutes.EMAIL_TEMPLATE,
+    component: EmailTemplateComponent,
   },
   {
     path: AppRoutes.GLOBAL_SETTING,
