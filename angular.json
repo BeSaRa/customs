@@ -38,6 +38,11 @@
                 "glob": "mdi.svg",
                 "input": "./node_modules/@mdi/angular-material",
                 "output": "./assets/mdi"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@kolkov/angular-editor/assets/",
+                "output": "./assets/fonts/"
               }
             ],
             "styles": [

@@ -67,6 +67,7 @@ import { ServiceStepsComponent } from '@modules/administration/components/servic
 import { ServiceStepsPopupComponent } from '@modules/administration/popups/service-steps-popup/service-steps-popup.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
+import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
@@ -153,6 +154,7 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
     InputSuffixDirective,
     MatRippleModule,
     TxtToHtmlPipe,
+    HtmlEditorComponent,
   ],
 })
 export class AdministrationModule {}

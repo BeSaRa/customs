@@ -11,7 +11,22 @@ module.exports = {
         secondary: "#d0a239",
         "secondary-dark": "#8d6e26",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            code: {
+              color: '#000 !important',
+            },
+            pre: {
+              backgroundColor: '#fff',
+              padding: 0,
+            }
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };

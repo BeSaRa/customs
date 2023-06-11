@@ -16,13 +16,6 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<EmailTemplate> = inject(MAT_DIALOG_DATA);
 
-  get arBodyTemplate() {
-    return this.form.get('arBodyTemplate')?.value ?? '';
-  }
-  get enBodyTemplate() {
-    return this.form.get('enBodyTemplate')?.value ?? '';
-  }
-
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -33,10 +26,11 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
   }
 
   protected _prepareModel(): EmailTemplate | Observable<EmailTemplate> {
-    return new EmailTemplate().clone<EmailTemplate>({
+    const newModel = new EmailTemplate().clone<EmailTemplate>({
       ...this.model,
       ...this.form.value,
     });
+    return newModel;
   }
 
   protected _afterSave(model: EmailTemplate): void {
