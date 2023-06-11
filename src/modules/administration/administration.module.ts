@@ -62,6 +62,9 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
+import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
+import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
+import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 
 @NgModule({
@@ -95,6 +98,8 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
     BrokerComponent,
     BrokerPopupComponent,
     StringToDatePipe,
+    EmailTemplateComponent,
+    EmailTemplatePopupComponent,
     GlobalSettingComponent,
   ],
   imports: [
@@ -140,6 +145,7 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
     FilterArrayPipe,
     InputSuffixDirective,
     MatRippleModule,
+    TxtToHtmlPipe,
   ],
 })
 export class AdministrationModule {}

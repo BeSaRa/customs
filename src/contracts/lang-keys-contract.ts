@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_email_template: string;
   reset: string;
   menu_file_type: string;
   max_deduction_ratio: string;
@@ -129,6 +130,12 @@ export interface LangKeysContract {
   license_number: string;
   license_start_date: string;
   license_end_date: string;
+  en_subject_template: string;
+  en_body_template: string;
+  ar_subject_template: string;
+  ar_body_template: string;
+  body_template: string;
+  is_global: string;
   alternate_email_list: string;
   change_default_language: string;
   default_language: string;
