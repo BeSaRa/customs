@@ -1,26 +1,7 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Injector,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewEncapsulation,
-} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALUE_ACCESSOR,
-  NgControl,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
-  MatSlideToggleChange,
-  MatSlideToggleModule,
-} from '@angular/material/slide-toggle';
+import { Component, EventEmitter, inject, Injector, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -38,9 +19,7 @@ import { Subject, takeUntil } from 'rxjs';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class SwitchComponent
-  implements ControlValueAccessor, OnInit, OnDestroy
-{
+export class SwitchComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input()
   trueValue: unknown = true;
   @Input()
@@ -51,8 +30,7 @@ export class SwitchComponent
   label = '';
 
   @Output()
-  changed: EventEmitter<MatSlideToggleChange> =
-    new EventEmitter<MatSlideToggleChange>();
+  changed: EventEmitter<MatSlideToggleChange> = new EventEmitter<MatSlideToggleChange>();
 
   private destroy$ = new Subject<void>();
 
@@ -73,11 +51,7 @@ export class SwitchComponent
 
     this.control.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (isChecked) =>
-          this.onChange &&
-          this.onChange(isChecked ? this.trueValue : this.falseValue)
-      );
+      .subscribe(isChecked => this.onChange && this.onChange(isChecked ? this.trueValue : this.falseValue));
   }
 
   ngOnDestroy(): void {
@@ -102,9 +76,7 @@ export class SwitchComponent
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.disabled
-      ? this.control.disable({ emitEvent: false })
-      : this.control.enable({ emitEvent: false });
+    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
   }
 
   switchTouch() {
@@ -113,7 +85,6 @@ export class SwitchComponent
 
   change($event: MatSlideToggleChange) {
     this.changed.emit($event);
-    this.onChange &&
-      this.onChange($event.checked ? this.trueValue : this.falseValue);
+    this.onChange && this.onChange($event.checked ? this.trueValue : this.falseValue);
   }
 }

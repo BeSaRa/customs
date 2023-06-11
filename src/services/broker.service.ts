@@ -21,10 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class BrokerService extends BaseCrudWithDialogService<
-  BrokerPopupComponent,
-  Broker
-> {
+export class BrokerService extends BaseCrudWithDialogService<BrokerPopupComponent, Broker> {
   serviceName = 'BrokerService';
 
   protected getModelClass(): Constructor<Broker> {

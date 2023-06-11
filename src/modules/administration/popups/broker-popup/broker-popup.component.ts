@@ -47,5 +47,7 @@ export class BrokerPopupComponent extends AdminDialogComponent<Broker> {
     });
   }
 
-  protected _afterSave(model: Broker): void {}
+  protected _afterSave(model: Broker): void {
+    return;
+  }
 }

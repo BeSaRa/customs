@@ -32,6 +32,9 @@ export const AppIcons = {
   MAWARED_DEPARTMENT: 'select-group',
   RESOURCES_CASE: 'briefcase',
   BROKER: 'account-tie-outline',
+  SERVICES: 'face-agent',
+  USERPREFERENCES: 'account-star-outline',
+  GLOBAL_SETTING: 'cogs',
   EMAIL_TEMPLATE: 'email-multiple',
 };
 

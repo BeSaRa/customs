@@ -1,18 +1,7 @@
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
 import { Directive, inject, OnInit } from '@angular/core';
-import {
-  catchError,
-  exhaustMap,
-  filter,
-  isObservable,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-  takeUntil,
-  throwError,
-} from 'rxjs';
+import { catchError, exhaustMap, filter, isObservable, Observable, of, Subject, switchMap, takeUntil, throwError } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { LangService } from '@services/lang.service';
@@ -23,12 +12,7 @@ import { ToastService } from '@services/toast.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Directive()
-export abstract class AdminDialogComponent<
-    M extends BaseModel<M, BaseCrudServiceContract<M>>
-  >
-  extends OnDestroyMixin(class {})
-  implements OnInit
-{
+export abstract class AdminDialogComponent<M extends BaseModel<M, BaseCrudServiceContract<M>>> extends OnDestroyMixin(class {}) implements OnInit {
   abstract data: CrudDialogDataContract<M>;
   model!: M;
   operation!: OperationType;
@@ -75,7 +59,7 @@ export abstract class AdminDialogComponent<
           return isObservable(result) ? result : of(result);
         })
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -83,9 +67,9 @@ export abstract class AdminDialogComponent<
         })
       )
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           return model.save().pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               return throwError(error);
             }),
@@ -93,7 +77,7 @@ export abstract class AdminDialogComponent<
           );
         })
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this._afterSave(model);
       });
   }

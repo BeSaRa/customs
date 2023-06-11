@@ -44,7 +44,6 @@ import { OptionTemplateDirective } from '@standalone/directives/option-template.
 import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
 import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
-
 import { LocalizationComponent } from './components/localization/localization.component';
 import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
@@ -62,10 +61,16 @@ import { MawaredEmployeePopupComponent } from '@modules/administration/popups/ma
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
 import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
+import { ServicesComponent } from '@modules/administration/components/services/services.component';
+import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
+import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
+import { ServiceStepsPopupComponent } from '@modules/administration/popups/service-steps-popup/service-steps-popup.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { EmailTemplatePopupComponent } from '@modules/administration/popups/email-template-popup/email-template-popup.component';
-import { TxtToHtmlPipe } from '@standalone/directives/txtToHtml.pipe';
 import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
+import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
+import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+
 @NgModule({
   declarations: [
     AdministrationComponent,
@@ -97,8 +102,13 @@ import { HtmlEditorComponent } from '@standalone/components/html-editor/html-edi
     BrokerComponent,
     BrokerPopupComponent,
     StringToDatePipe,
+    ServicesComponent,
+    ServicesPopupComponent,
+    ServiceStepsComponent,
+    ServiceStepsPopupComponent,
     EmailTemplateComponent,
     EmailTemplatePopupComponent,
+    GlobalSettingComponent,
   ],
   imports: [
     CommonModule,

@@ -8,22 +8,13 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 export class EncryptionService extends RegisterServiceMixin(class {}) {
   encrypt<T = unknown>(model: T): string {
     const randomPrivateKey = MD5(Math.random().toString()).toString();
-    return (
-      AES.encrypt(JSON.stringify(model), randomPrivateKey).toString() +
-      ':' +
-      randomPrivateKey
-    );
+    return AES.encrypt(JSON.stringify(model), randomPrivateKey).toString() + ':' + randomPrivateKey;
   }
 
   decrypt<T = unknown>(encryptedText: string | undefined): T {
     if (!encryptedText) {
       return null as unknown as T;
     }
-    return JSON.parse(
-      AES.decrypt(
-        encryptedText.split(':').shift() + '',
-        encryptedText.split(':').pop() + ''
-      ).toString(enc.Utf8)
-    );
+    return JSON.parse(AES.decrypt(encryptedText.split(':').shift() + '', encryptedText.split(':').pop() + '').toString(enc.Utf8));
   }
 }

@@ -6,7 +6,7 @@ export const EndPoints = {
   VALIDATE_TOKEN: '/auth/validate-token',
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
-  USER_PREFERENCES: '/entity/internal-user-permission',
+  USER_PREFERENCES: '/entity/user-preferences/internal-user-id',
   TEAM: '/entity/baw/team',
   PENALTY: '/entity/penalty',
   VIOLATION_CLASSIFICATION: '/entity/violation-classification',
@@ -18,7 +18,11 @@ export const EndPoints = {
   MAWARED_DEPARTMENT: '/entity/mawared-department',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
   BROKER: '/entity/broker',
+  SERVICES: '/entity/services',
+  SERVICE_STEPS: '/entity/service-steps',
   EMAIL_TEMPLATE: '/entity/email-template',
+  GLOBAL_SETTING: '/admin/global-setting',
+  FILE_TYPE: '/admin/global-setting/file-types',
 };
 
 export type EndpointsType = typeof EndPoints;
