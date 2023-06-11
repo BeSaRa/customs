@@ -33,6 +33,7 @@ export const AppIcons = {
   RESOURCES_CASE: 'briefcase',
   BROKER: 'account-tie-outline',
   GLOBAL_SETTING: 'cogs',
+  USERPREFERENCES: 'account-star-outline'
 };
 
 export type AppIconsType = typeof AppIcons;

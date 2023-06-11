@@ -20,9 +20,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      penaltyType: controls
-        ? [penaltyType, CustomValidators.required]
-        : penaltyType,
+      penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }

@@ -32,17 +32,14 @@ describe('ScreenSizeComponent', () => {
     { width: 1024, expected: 'lg' },
     { width: 1280, expected: 'xl' },
     { width: 1536, expected: 'xxl' },
-  ])(
-    'should $width queries work fine width $expected',
-    function ({ width, expected }, done) {
-      // noinspection JSConstantReassignment
-      window.innerWidth = width;
-      component[expected as keyof MediaQueriesContract].subscribe((v) => {
-        expect(width).toBe(v.width);
-        expect(expected).toBe(v.name);
-        (done as unknown as jest.DoneCallback)();
-      });
-      component.resize();
-    }
-  );
+  ])('should $width queries work fine width $expected', function ({ width, expected }, done) {
+    // noinspection JSConstantReassignment
+    window.innerWidth = width;
+    component[expected as keyof MediaQueriesContract].subscribe(v => {
+      expect(width).toBe(v.width);
+      expect(expected).toBe(v.name);
+      (done as unknown as jest.DoneCallback)();
+    });
+    component.resize();
+  });
 });

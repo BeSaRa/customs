@@ -21,10 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class MawaredDepartmentService extends BaseCrudWithDialogService<
-  MawaredDepartmentPopupComponent,
-  MawaredDepartment
-> {
+export class MawaredDepartmentService extends BaseCrudWithDialogService<MawaredDepartmentPopupComponent, MawaredDepartment> {
   serviceName = 'MawaredDepartmentService';
   protected getModelClass(): Constructor<MawaredDepartment> {
     return MawaredDepartment;

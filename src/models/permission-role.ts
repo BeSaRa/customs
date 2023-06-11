@@ -7,10 +7,7 @@ import { CustomValidators } from '@validators/custom-validators';
 const { send, receive } = new PermissionRoleInterceptor();
 
 @InterceptModel({ send, receive })
-export class PermissionRole extends BaseModel<
-  PermissionRole,
-  PermissionRoleService
-> {
+export class PermissionRole extends BaseModel<PermissionRole, PermissionRoleService> {
   $$__service_name__$$ = 'PermissionRoleService';
   description!: string;
   permissionSet: { id?: number; permissionId: number }[] = [];

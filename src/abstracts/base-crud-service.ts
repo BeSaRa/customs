@@ -101,10 +101,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   @CastResponse()
   deactivate(id: PrimaryType): Observable<M> {
-    return this.http.put<M>(
-      this.getUrlSegment() + `/admin/${id}/de-activate`,
-      {}
-    );
+    return this.http.put<M>(this.getUrlSegment() + `/admin/${id}/de-activate`, {});
   }
 
   @CastResponse()
@@ -120,29 +117,19 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   @CastResponse()
   deleteBulk(modelsIds: PrimaryType[]): Observable<M> {
-    return this.http.request<M>(
-      'DELETE',
-      this.getUrlSegment() + `/admin/bulk`,
-      {
-        body: modelsIds,
-      }
-    );
+    return this.http.request<M>('DELETE', this.getUrlSegment() + `/admin/bulk`, {
+      body: modelsIds,
+    });
   }
 
   @CastResponse()
   activateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
-    return this.http.put<M[]>(
-      this.getUrlSegment() + `/admin/bulk/activate`,
-      modelsIds
-    );
+    return this.http.put<M[]>(this.getUrlSegment() + `/admin/bulk/activate`, modelsIds);
   }
 
   @CastResponse()
   deactivateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
-    return this.http.put<M[]>(
-      this.getUrlSegment() + `/admin/bulk/activate`,
-      modelsIds
-    );
+    return this.http.put<M[]>(this.getUrlSegment() + `/admin/bulk/activate`, modelsIds);
   }
 
   @HasInterception
@@ -154,10 +141,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   @HasInterception
   @CastResponse()
   createBulkFull(@InterceptParam() models: M[]): Observable<M[]> {
-    return this.http.post<M[]>(
-      this.getUrlSegment() + '/admin/bulk/full',
-      models
-    );
+    return this.http.post<M[]>(this.getUrlSegment() + '/admin/bulk/full', models);
   }
 
   @HasInterception

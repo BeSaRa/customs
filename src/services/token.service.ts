@@ -12,10 +12,7 @@ import { ServiceContract } from '@contracts/service-contract';
 @Injectable({
   providedIn: 'root',
 })
-export class TokenService
-  extends RegisterServiceMixin(class {})
-  implements ServiceContract
-{
+export class TokenService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'TokenService';
   private readonly eCookieService = inject(ECookieService);
   private readonly tokenStoreKey = inject(ConfigService).CONFIG.TOKEN_STORE_KEY;
@@ -55,10 +52,7 @@ export class TokenService
 
   @CastResponse()
   private _validateToken(): Observable<LoginDataContract> {
-    return this.http.post<LoginDataContract>(
-      this.urlService.URLS.VALIDATE_TOKEN,
-      {}
-    );
+    return this.http.post<LoginDataContract>(this.urlService.URLS.VALIDATE_TOKEN, {});
   }
 
   validateToken(): Observable<LoginDataContract> {

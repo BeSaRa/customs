@@ -9,10 +9,7 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new ViolationTypeInterceptor();
 
 @InterceptModel({ send, receive })
-export class ViolationType extends BaseModel<
-  ViolationType,
-  ViolationTypeService
-> {
+export class ViolationType extends BaseModel<ViolationType, ViolationTypeService> {
   $$__service_name__$$ = 'ViolationTypeService';
   penaltyType!: number;
   violationClassificationId!: number;
@@ -22,26 +19,13 @@ export class ViolationType extends BaseModel<
 
   override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
-    const {
-      arName,
-      enName,
-      penaltyType,
-      violationClassificationId,
-      penaltyGracePeriod,
-      status,
-    } = this;
+    const { arName, enName, penaltyType, violationClassificationId, penaltyGracePeriod, status } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      penaltyType: controls
-        ? [penaltyType, CustomValidators.required]
-        : penaltyType,
-      violationClassificationId: controls
-        ? [violationClassificationId, CustomValidators.required]
-        : violationClassificationId,
-      penaltyGracePeriod: controls
-        ? [penaltyGracePeriod, CustomValidators.required]
-        : penaltyGracePeriod,
+      penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
+      violationClassificationId: controls ? [violationClassificationId, CustomValidators.required] : violationClassificationId,
+      penaltyGracePeriod: controls ? [penaltyGracePeriod, CustomValidators.required] : penaltyGracePeriod,
       status: status,
     };
   }

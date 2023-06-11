@@ -8,10 +8,7 @@ import { ServiceContract } from '@contracts/service-contract';
 @Injectable({
   providedIn: 'root',
 })
-export class ECookieService
-  extends RegisterServiceMixin(class {})
-  implements ICookieService, ServiceContract
-{
+export class ECookieService extends RegisterServiceMixin(class {}) implements ICookieService, ServiceContract {
   serviceName = 'ECookieService';
   readonly encryptedKeyPrefix = '$$';
   private readonly service = inject(CookieService);
@@ -46,10 +43,7 @@ export class ECookieService
   }
 
   removeE(key: string, options?: CookieOptions): void {
-    this.remove(
-      this.encryptedKeyPrefix + key + this.encryptedKeyPrefix,
-      options
-    );
+    this.remove(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix, options);
   }
 
   removeAll(options?: CookieOptions): void {
@@ -57,30 +51,18 @@ export class ECookieService
   }
 
   putE(key: string, value: string, options?: CookieOptions): void {
-    this.put(
-      this.encryptedKeyPrefix + key + this.encryptedKeyPrefix,
-      this.encryptionService.encrypt(value),
-      options
-    );
+    this.put(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix, this.encryptionService.encrypt(value), options);
   }
 
   getE(key: string): string | undefined {
-    return this.encryptionService.decrypt(
-      this.get(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix)
-    );
+    return this.encryptionService.decrypt(this.get(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix));
   }
 
   putEObject(key: string, value: object, options?: CookieOptions): void {
-    return this.put(
-      this.encryptedKeyPrefix + key + this.encryptedKeyPrefix,
-      this.encryptionService.encrypt(value),
-      options
-    );
+    return this.put(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix, this.encryptionService.encrypt(value), options);
   }
 
   getEObject(key: string): object | undefined {
-    return this.encryptionService.decrypt(
-      this.get(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix)
-    );
+    return this.encryptionService.decrypt(this.get(this.encryptedKeyPrefix + key + this.encryptedKeyPrefix));
   }
 }

@@ -27,10 +27,8 @@ export class FilterArrayPipe implements PipeTransform {
         : option;
     }
 
-    return options.filter((option) => {
-      return getBindFilter(option)
-        .toLowerCase()
-        .includes(filterTxt.toLowerCase());
+    return options.filter(option => {
+      return getBindFilter(option).toLowerCase().includes(filterTxt.toLowerCase());
     });
   }
 }

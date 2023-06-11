@@ -10,8 +10,7 @@ describe('ProgressInterceptor', () => {
   );
 
   it('should be created', () => {
-    const interceptor: ProgressInterceptor =
-      TestBed.inject(ProgressInterceptor);
+    const interceptor: ProgressInterceptor = TestBed.inject(ProgressInterceptor);
     expect(interceptor).toBeTruthy();
   });
 });

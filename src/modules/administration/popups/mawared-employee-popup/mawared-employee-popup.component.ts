@@ -35,5 +35,7 @@ export class MawaredEmployeePopupComponent extends AdminDialogComponent<MawaredE
     });
   }
 
-  protected _afterSave(model: MawaredEmployee): void {}
+  protected _afterSave(model: MawaredEmployee): void {
+    return;
+  }
 }

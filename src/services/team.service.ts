@@ -21,10 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class TeamService extends BaseCrudWithDialogService<
-  TeamPopupComponent,
-  Team
-> {
+export class TeamService extends BaseCrudWithDialogService<TeamPopupComponent, Team> {
   serviceName = 'TeamService';
   protected getModelClass(): Constructor<Team> {
     return Team;

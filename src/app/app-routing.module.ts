@@ -14,10 +14,7 @@ const routes: Routes = [
     children: [
       {
         path: AppRoutes.ADMINISTRATION,
-        loadChildren: () =>
-          import('../modules/administration/administration.module').then(
-            (m) => m.AdministrationModule
-          ),
+        loadChildren: () => import('../modules/administration/administration.module').then(m => m.AdministrationModule),
       },
     ],
   },

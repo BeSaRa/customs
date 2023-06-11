@@ -129,4 +129,7 @@ export interface LangKeysContract {
   license_number: string;
   license_start_date: string;
   license_end_date: string;
+  alternate_email_list: string;
+  change_default_language: string;
+  default_language: string;
 }

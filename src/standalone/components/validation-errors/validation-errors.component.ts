@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidationErrors } from '@angular/forms';
-import {
-  ValidationMessages,
-  ValidationMessagesType,
-} from '@constants/validation-messages';
+import { ValidationMessages, ValidationMessagesType } from '@constants/validation-messages';
 import { identity } from 'rxjs';
 
 @Component({
@@ -50,8 +47,6 @@ export class ValidationErrorsComponent {
       this.currentError = `Error: key not exists (${validationKey}) in ValidationMessages`;
       return;
     }
-    this.currentError = validation.replace
-      ? validation.replace(validation.key)
-      : identity(validation.key);
+    this.currentError = validation.replace ? validation.replace(validation.key) : identity(validation.key);
   }
 }

@@ -6,14 +6,9 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
   standalone: true,
 })
 export class FilterSidebarMenuItemPipe implements PipeTransform {
-  transform(
-    items: MenuItemContract[] | undefined,
-    searchText: string
-  ): MenuItemContract[] {
-    return (items ?? []).filter((item) => {
-      return (item.searchText ?? '')
-        .toLowerCase()
-        .includes(searchText.toLowerCase());
+  transform(items: MenuItemContract[] | undefined, searchText: string): MenuItemContract[] {
+    return (items ?? []).filter(item => {
+      return (item.searchText ?? '').toLowerCase().includes(searchText.toLowerCase());
     });
   }
 }

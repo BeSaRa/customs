@@ -30,5 +30,7 @@ export class MawaredDepartmentPopupComponent extends AdminDialogComponent<Maware
     });
   }
 
-  protected _afterSave(model: MawaredDepartment): void {}
+  protected _afterSave(model: MawaredDepartment): void {
+    return;
+  }
 }
