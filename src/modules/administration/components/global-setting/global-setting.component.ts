@@ -16,6 +16,7 @@ import {
   throwError,
   finalize,
   tap,
+  delay,
 } from 'rxjs';
 import { CustomValidators } from '@validators/custom-validators';
 import { FileType } from '@models/file-type';
@@ -30,14 +31,17 @@ import { ignoreErrors } from '@utils/utils';
   styleUrls: ['./global-setting.component.scss'],
 })
 export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements OnInit {
+  service = inject(GlobalSettingService);
   model!: GlobalSetting;
-  globalSettingForm!: UntypedFormGroup;
   form!: UntypedFormGroup;
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
   save$: Subject<void> = new Subject<void>();
   toast = inject(ToastService);
+  private loadingSubject = new BehaviorSubject<boolean>(true);
+  public loading$ = this.loadingSubject.asObservable();
 
+  fileTypes!: FileType[];
   ngOnInit(): void {
     this._initForm();
     this._getFileTypes();
@@ -115,13 +119,6 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   protected _saveFail(error: unknown) {
     console.log(error);
   }
-  private loadingSubject = new BehaviorSubject<boolean>(true);
-  public loading$ = this.loadingSubject.asObservable();
-
-  service = inject(GlobalSettingService);
-  globalSettings!: GlobalSetting;
-
-  fileTypes!: FileType[];
 
   _getGlobalSettings() {
     this.loadingSubject.next(true);
@@ -136,7 +133,7 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
             this.supportEmailListParsed.push(new FormControl({ value: element, disabled: true }, CustomValidators.required));
           });
           this.form.patchValue(data);
-          this.globalSettings = data;
+          this.model = data;
           this.model = data;
           this._buildForm();
         })
@@ -176,6 +173,6 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   }
 
   getApplicationName(): string {
-    return this.lang.getCurrent().code === 'ar' ? this.globalSettings.systemArabicName : this.globalSettings.systemEnglishName;
+    return this.lang.getCurrent().code === 'ar' ? this.model.systemArabicName : this.model.systemEnglishName;
   }
 }

@@ -10,6 +10,7 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { TokenService } from '@services/token.service';
 import { MenuItemService } from '@services/menu-item.service';
 import { ServiceContract } from '@contracts/service-contract';
+import { GlobalSettingService } from './global-setting.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +22,7 @@ export class AuthService extends RegisterServiceMixin(class {}) implements Servi
   private readonly employeeService = inject(EmployeeService);
   private readonly tokenService = inject(TokenService);
   private readonly menuItemService = inject(MenuItemService);
+  private readonly globalSettingsService = inject(GlobalSettingService);
   private authenticated = false;
 
   @CastResponse()
@@ -59,7 +61,8 @@ export class AuthService extends RegisterServiceMixin(class {}) implements Servi
         tap(data => this.tokenService.setToken(data.token)),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
-        tap(() => this.menuItemService.buildHierarchy())
+        tap(() => this.menuItemService.buildHierarchy()),
+        tap(() => this.globalSettingsService.loadCurrentGlobalSettings().subscribe())
       );
     };
   }
