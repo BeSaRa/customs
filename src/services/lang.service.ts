@@ -59,9 +59,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
 
   private _listenToUserPreferences() {
     this.employeeService.changeUserPreferences$.subscribe((userPreferences: UserPreferences) => {
-      console.log('userPreferences: ', userPreferences);
-      console.log('this.languages[userPreferences.defaultLang - 1]: ', this.languages[userPreferences.defaultLang - 1]);
-
       this.setCurrent(this.languages[userPreferences.defaultLang - 1]);
     });
   }

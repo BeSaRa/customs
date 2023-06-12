@@ -170,8 +170,6 @@ export abstract class AdminComponent<
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(model => {
-          console.log('to edit model: ', model);
-
           return this.service
             .openEditDialog(model, this._getEditExtras() as object)
             .afterClosed()
