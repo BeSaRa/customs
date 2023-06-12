@@ -1,18 +1,13 @@
-import { BaseModel } from '@abstracts/base-model';
-import { FileTypeService } from '@services/file-type.service';
-import { FileTypeInterceptor } from '@model-interceptors/file-type-interceptor';
-import { InterceptModel } from 'cast-response';
+import { ClonerMixin } from '@mixins/cloner-mixin';
+import { GetNamesMixin } from '@mixins/get-names-mixin';
 
-const { send, receive } = new FileTypeInterceptor();
-
-@InterceptModel({ send, receive })
-export class FileType extends BaseModel<FileType, FileTypeService> {
-  $$__service_name__$$ = 'FileTypeService';
+export class FileType extends ClonerMixin(GetNamesMixin(class {})) {
+  id!: number;
+  updatedBy!: number;
+  updatedOn!: string;
+  clientData!: string;
   extension!: string;
   description!: string;
   mimeType!: string;
   size!: number;
-  buildForm(controls = false): object {
-    return {};
-  }
 }

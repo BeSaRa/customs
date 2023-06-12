@@ -19,7 +19,6 @@ import {
 } from 'rxjs';
 import { CustomValidators } from '@validators/custom-validators';
 import { FileType } from '@models/file-type';
-import { FileTypeService } from '@services/file-type.service';
 import { LangService } from '@services/lang.service';
 import { ToastService } from '@services/toast.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -41,8 +40,8 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
 
   ngOnInit(): void {
     this._initForm();
-
-    // this._afterBuildForm();
+    this._getFileTypes();
+    this._getGlobalSettings();
     this._listenToSave();
   }
   protected _initForm(): void {
@@ -53,22 +52,20 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
       fileSize: new FormControl(0, [CustomValidators.required, CustomValidators.number]),
       fileTypeParsed: new FormControl([''], CustomValidators.required),
       inboxRefreshInterval: new FormControl(0, CustomValidators.required),
-      supportEmailListParsed: new FormArray([new FormControl('', CustomValidators.required)]),
+      supportEmailListParsed: new FormArray([new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')])]),
       enableMailNotification: new FormControl(true, CustomValidators.required),
       enableSMSNotification: new FormControl(true, CustomValidators.required),
       maxDeductionRatio: new FormControl(0, CustomValidators.required),
     });
-    this.getFileTypes();
-    this._getGlobalSettings();
   }
   _buildForm(): void {
     this.form = this.fb.group({
       ...this.model.buildForm(true),
-      supportEmailListParsed: this.fb.array([['', CustomValidators.required]]),
+      supportEmailListParsed: this.fb.array([['', [CustomValidators.required, CustomValidators.pattern('EMAIL')]]]),
     });
     this.supportEmailListParsed.removeAt(0);
     this.model.supportEmailListParsed.forEach(element => {
-      this.supportEmailListParsed.push(new FormControl(element, CustomValidators.required));
+      this.supportEmailListParsed.push(new FormControl(element, [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
     });
   }
   resetForm() {
@@ -124,14 +121,12 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   service = inject(GlobalSettingService);
   globalSettings!: GlobalSetting;
 
-  fileTypeService = inject(FileTypeService);
-
   fileTypes!: FileType[];
 
   _getGlobalSettings() {
     this.loadingSubject.next(true);
-    return this.service
-      .loadById(10)
+    this.service
+      .loadCurrentGlobalSettings()
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors(),
@@ -152,16 +147,16 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
     return this.form.controls['supportEmailListParsed'] as FormArray;
   }
 
-  protected getFileTypes() {
+  protected _getFileTypes() {
     this.loadingSubject.next(true);
-    this.fileTypeService
-      .load()
+    this.service
+      .loadAllFileTypes()
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors()
       )
       .subscribe(data => {
-        this.fileTypes = data.rs;
+        this.fileTypes = data;
         this.loadingSubject.next(false);
       });
   }
@@ -171,6 +166,8 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   }
 
   addEmail() {
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
     this.supportEmailListParsed.push(new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
   }
 

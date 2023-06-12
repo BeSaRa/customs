@@ -10,50 +10,71 @@
     <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
   </div>
   <ng-container [formGroup]="form">
-    <div class="grid grid-cols-12 gap-4">
+    <div class="grid grid-cols-4 gap-4 py-2">
       <app-input
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
         formControlName="systemArabicName"
         [label]="lang.map.system_ar_name" />
       <app-input
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
         formControlName="systemEnglishName"
         [label]="lang.map.system_en_name" />
+
       <app-input
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
         formControlName="sessionTimeout"
         type="number"
         [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ') '" />
       <app-input
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
         formControlName="fileSize"
         type="number"
         [label]="lang.map.file_size" />
-      <app-select-input
+
+      <app-input
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
+        formControlName="inboxRefreshInterval"
+        type="number"
+        [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
+      <app-input
+        [disabled]="(loading$ | async)!"
+        formControlName="maxDeductionRatio"
+        type="number"
+        [label]="lang.map.max_deduction_ratio" />
+      <app-select-input
+        class="col-span-2"
+        [disabled]="(loading$ | async)!"
         formControlName="fileTypeParsed"
         [options]="fileTypes"
         [label]="lang.map.file_type"
         bindValue="id"
         [isMultiple]="true"
         bindLabel="getNames" />
-      <app-input
+    </div>
+    <div class="flex flex-row pl-1 items-center justify-start">
+      <span class="block font-medium text-slate-700">{{ lang.map.support_email_list }}</span>
+
+      <app-icon-button
         [disabled]="(loading$ | async)!"
-        class="col-span-4"
-        formControlName="inboxRefreshInterval"
-        type="number"
-        [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
-      <app-input
-        [disabled]="(loading$ | async)!"
-        class="col-span-4"
-        formControlName="maxDeductionRatio"
-        type="number"
-        [label]="lang.map.max_deduction_ratio" />
+        icon="PLUS"
+        (click)="addEmail()"
+        [matTooltip]="lang.map.add + ' ' + lang.map.email" />
+    </div>
+
+    <div class="grid grid-cols-4 gap-2 py-2">
+      <ng-container formArrayName="supportEmailListParsed">
+        <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
+          <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
+            ><app-icon-button
+              appInputSuffix
+              icon="DELETE"
+              (click)="deleteEmail(i)"
+              [matTooltip]="lang.map.delete + ' ' + lang.map.email"
+          /></app-input>
+        </ng-container>
+      </ng-container>
+    </div>
+    <div class="grid grid-rows-2 gap-4 py-2">
       <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
         <app-switch
           [disabled]="(loading$ | async)!"
@@ -70,34 +91,9 @@
           formControlName="enableSMSNotification"
           [label]="lang.map.sms_notifications"></app-switch>
       </div>
-      <ng-container formArrayName="supportEmailListParsed">
-        <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
-          <app-input
-            [disabled]="(loading$ | async)!"
-            class="col-span-3"
-            [formControlName]="i"
-            [label]="lang.map.email + ' ' + (i + 1)" />
-          <div class="flex flex-row col-span-1 pl-1 items-center justify-start">
-            <app-icon-button
-              [disabled]="(loading$ | async)!"
-              tabindex="-1"
-              icon="DELETE"
-              (click)="deleteEmail(i)"
-              [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
-          </div>
-        </ng-container>
-      </ng-container>
-    </div>
-    <div class="col-span-3 flex flex-row pl-1 items-center justify-start">
-      <app-icon-button
-        [disabled]="(loading$ | async)!"
-        icon="PLUS"
-        (click)="addEmail()"
-        [matTooltip]="lang.map.add + ' ' + lang.map.email" />
-      <label>{{ lang.map.support_email_list }}</label>
     </div>
   </ng-container>
-  <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+  <div class="flex justify-end">
+    <app-button size="lg" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
   </div>
 </div>
