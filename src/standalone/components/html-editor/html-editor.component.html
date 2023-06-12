@@ -1,7 +1,13 @@
-<span class="block font-medium mb-2"> {{ label }}</span>
-<angular-editor
-  class="prose"
-  (click)="switchTouch()"
-  [id]="editorId"
-  [formControl]="control"
-  [config]="config"></angular-editor>
+<label [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }" class="group block relative">
+  <span class="block font-medium mb-2"> {{ label }}</span>
+  <angular-editor
+    class="prose"
+    [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
+    (click)="switchTouch()"
+    [id]="editorId"
+    [formControl]="control"
+    [config]="config"></angular-editor>
+  <ng-container *ngIf="displayErrors">
+    <app-validation-errors [errors]="errors | async"></app-validation-errors>
+  </ng-container>
+</label>

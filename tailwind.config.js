@@ -20,6 +20,9 @@ module.exports = {
             pre: {
               backgroundColor: '#fff',
               padding: 0,
+            },
+            ".has-error .angular-editor-textarea" :{
+              borderColor: 'rgb(239 68 68) !important'
             }
           },
         },

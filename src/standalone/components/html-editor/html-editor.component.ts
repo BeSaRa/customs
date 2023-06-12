@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 import { Component, inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-html-editor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AngularEditorModule],
+  imports: [CommonModule, ReactiveFormsModule, AngularEditorModule, ValidationErrorsComponent],
   templateUrl: './html-editor.component.html',
   styleUrls: ['./html-editor.component.scss'],
   providers: [
@@ -23,6 +24,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() label = '';
   @Input() editorId = '';
+  @Input() displayErrors = true;
 
   private destroy$ = new Subject<void>();
 
@@ -46,6 +48,13 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     toolbarHiddenButtons: [],
   };
   control = new FormControl('');
+
+  get errors(): Observable<ValidationErrors | null | undefined> {
+    return of(null).pipe(
+      debounceTime(200),
+      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
+    );
+  }
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
