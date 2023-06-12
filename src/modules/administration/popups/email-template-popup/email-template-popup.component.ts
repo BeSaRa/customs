@@ -29,7 +29,6 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
     if (!validBasicInfo) {
       this.activeTab = 0;
     } else if (!validBodyTemplate) {
-      // this.toast.error(this.lang.map.msg_make_sure_all_required_fields_are_filled);
       this.activeTab = 1;
     }
   }
