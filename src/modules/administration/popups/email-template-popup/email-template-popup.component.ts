@@ -15,6 +15,24 @@ import { OperationType } from '@enums/operation-type';
 export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTemplate> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<EmailTemplate> = inject(MAT_DIALOG_DATA);
+  activeTab = 0;
+
+  FocusInvalidTab() {
+    const validBodyTemplate = this.form.get('arBodyTemplate')?.valid && this.form.get('enBodyTemplate')?.valid;
+
+    const validBasicInfo =
+      this.form.get('arName')?.valid &&
+      this.form.get('enName')?.valid &&
+      this.form.get('arSubjectTemplate')?.valid &&
+      this.form.get('enSubjectTemplate')?.valid;
+
+    if (!validBasicInfo) {
+      this.activeTab = 0;
+    } else if (!validBodyTemplate) {
+      this.toast.error(this.lang.map.msg_make_sure_all_required_fields_are_filled);
+      this.activeTab = 1;
+    }
+  }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -22,6 +40,8 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
 
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
+    this.FocusInvalidTab();
+
     return this.form.valid;
   }
 
