@@ -163,4 +163,6 @@ export interface LangKeysContract {
   alternate_email_list: string;
   change_default_language: string;
   default_language: string;
+  only_arabic_letters_and_numbers: string;
+  only_english_letters_and_numbers: string;
 }
