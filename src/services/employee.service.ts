@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, OnInit } from '@angular/core';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { InternalUser } from '@models/internal-user';
 import { Permission } from '@models/permission';
@@ -19,6 +19,9 @@ export class EmployeeService {
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
     this.changeUserPreferences$.next(this.loginData.internalUser.userPreferences);
+    this.changeUserPreferences$.subscribe((userPreferences: UserPreferences) => {
+      this.loginData!.internalUser.userPreferences = new UserPreferences().clone<UserPreferences>({ ...userPreferences });
+    });
     return this.loginData;
   }
 

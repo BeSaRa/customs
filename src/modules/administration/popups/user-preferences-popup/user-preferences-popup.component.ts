@@ -1,6 +1,6 @@
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { Component, inject } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { LangContract } from '@contracts/lang-contract';
@@ -11,6 +11,8 @@ import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { Observable } from 'rxjs';
+import { FormArray } from '@angular/forms';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-user-preferences-popup',
@@ -32,11 +34,21 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   email!: string;
   languages: LangContract[] = this.langService.languages;
   override _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
-    this.form.controls['alternateEmailList'].disable();
-    this.form.controls['isSMSNotificationEnabled'].disable();
-    this.form.controls['isPrivateUser'].disable();
-    this.form.controls['limitedCirculation'].disable();
+    const formObj = this.model.buildForm(true);
+    const alternateEmailListParsed = ((formObj.alternateEmailListParsed as string[]) ?? []).map(
+      email => new FormControl(email, [CustomValidators.required, CustomValidators.pattern('EMAIL')])
+    );
+    const formModel = { ...formObj, alternateEmailListParsed: this.fb.array(alternateEmailListParsed) };
+    this.form = this.fb.group(formModel);
+  }
+  get alternateEmailListParsed() {
+    return this.form.get('alternateEmailListParsed') as FormArray;
+  }
+  addAltEmail() {
+    this.alternateEmailListParsed.push(new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
+  }
+  deleteEmail(i: number) {
+    this.alternateEmailListParsed.removeAt(i);
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
