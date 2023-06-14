@@ -10,7 +10,11 @@ export class UserPreferencesInterceptor implements ModelInterceptorContract<User
       })
     );
     delete model.alternateEmailListParsed;
-    return model;
+    const toSendObj = {
+      ...model,
+      alternateEmailList: model.alternateEmailList,
+    };
+    return toSendObj;
   }
 
   receive(model: UserPreferences): UserPreferences {

@@ -1,4 +1,6 @@
 export interface LangKeysContract {
+  alt_email: string;
+  alt_emails: string;
   menu_service_steps: string;
   menu_services: string;
   menu_email_template: string;
