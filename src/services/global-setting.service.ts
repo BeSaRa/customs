@@ -16,7 +16,6 @@ import { FileType } from '@models/file-type';
 })
 export class GlobalSettingService extends BaseCrudService<GlobalSetting> {
   serviceName = 'GlobalSettingService';
-  listGlobalSettings!: GlobalSetting[];
   private _currentGlobalSettings!: GlobalSetting;
 
   getGlobalSettings(): GlobalSetting {
