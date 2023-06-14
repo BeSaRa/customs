@@ -24,23 +24,27 @@
         [disabled]="(loading$ | async)!"
         formControlName="sessionTimeout"
         type="number"
-        [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ') '" />
-      <app-input
-        [disabled]="(loading$ | async)!"
-        formControlName="fileSize"
-        type="number"
-        [label]="lang.map.file_size" />
+        [label]="lang.map.session_time_out"
+        ><span appInputSuffix>{{ lang.map.minutes }}</span></app-input
+      >
+      <app-input [disabled]="(loading$ | async)!" formControlName="fileSize" type="number" [label]="lang.map.file_size"
+        ><span appInputSuffix>MB</span></app-input
+      >
 
       <app-input
         [disabled]="(loading$ | async)!"
         formControlName="inboxRefreshInterval"
         type="number"
-        [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ') '" />
+        [label]="lang.map.inbox_refresh_interval"
+        ><span appInputSuffix>{{ lang.map.minutes }}</span></app-input
+      >
       <app-input
         [disabled]="(loading$ | async)!"
         formControlName="maxDeductionRatio"
         type="number"
-        [label]="lang.map.max_deduction_ratio" />
+        [label]="lang.map.max_deduction_ratio"
+        ><span appInputSuffix>&percnt;</span></app-input
+      >
       <app-select-input
         class="col-span-2"
         [disabled]="(loading$ | async)!"
@@ -58,7 +62,7 @@
         [disabled]="(loading$ | async)!"
         icon="PLUS"
         (click)="addEmail()"
-        [matTooltip]="lang.map.add + ' ' + lang.map.email" />
+        [matTooltip]="lang.map.add + ' ' + lang.map.support_email_list" />
     </div>
 
     <div class="grid grid-cols-4 gap-2 py-2">
@@ -66,7 +70,7 @@
         <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
           <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
             ><app-icon-button
-              appInputSuffix
+              appInputPrefix
               icon="DELETE"
               (click)="deleteEmail(i)"
               [matTooltip]="lang.map.delete + ' ' + lang.map.email"
@@ -77,19 +81,21 @@
     <div class="grid grid-rows-2 gap-4 py-2">
       <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
         <app-switch
-          [disabled]="(loading$ | async)!"
+          [disabled]="(loading$ | async)! || form.invalid"
           [trueValue]="1"
           [falseValue]="0"
           formControlName="enableMailNotification"
-          [label]="lang.map.mail_notifications"></app-switch>
+          [label]="lang.map.mail_notifications"
+          (changed)="save$.next()"></app-switch>
       </div>
       <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
         <app-switch
-          [disabled]="(loading$ | async)!"
+          [disabled]="(loading$ | async)! || form.invalid"
           [trueValue]="1"
           [falseValue]="0"
           formControlName="enableSMSNotification"
-          [label]="lang.map.sms_notifications"></app-switch>
+          [label]="lang.map.sms_notifications"
+          (changed)="save$.next()"></app-switch>
       </div>
     </div>
   </ng-container>

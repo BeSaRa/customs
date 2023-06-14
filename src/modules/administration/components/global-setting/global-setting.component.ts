@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChildren, inject } from '@angular/core';
 import { GlobalSetting } from '@models/global-setting';
 import { GlobalSettingService } from '@services/global-setting.service';
 import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -16,7 +16,6 @@ import {
   throwError,
   finalize,
   tap,
-  delay,
 } from 'rxjs';
 import { CustomValidators } from '@validators/custom-validators';
 import { FileType } from '@models/file-type';
@@ -48,24 +47,13 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
     this._getGlobalSettings();
     this._listenToSave();
   }
+
   protected _initForm(): void {
-    this.form = new FormGroup({
-      systemArabicName: new FormControl('', [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_ONLY')]),
-      systemEnglishName: new FormControl('', [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_ONLY')]),
-      sessionTimeout: new FormControl(0, [CustomValidators.required, CustomValidators.number]),
-      fileSize: new FormControl(0, [CustomValidators.required, CustomValidators.number]),
-      fileTypeParsed: new FormControl([''], CustomValidators.required),
-      inboxRefreshInterval: new FormControl(0, CustomValidators.required),
-      supportEmailListParsed: new FormArray([new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')])]),
-      enableMailNotification: new FormControl(true, CustomValidators.required),
-      enableSMSNotification: new FormControl(true, CustomValidators.required),
-      maxDeductionRatio: new FormControl(0, CustomValidators.required),
-    });
+    this.form = this.fb.group(new GlobalSetting().buildForm());
   }
   _buildForm(): void {
     this.form = this.fb.group({
       ...this.model.buildForm(true),
-      supportEmailListParsed: this.fb.array([['', [CustomValidators.required, CustomValidators.pattern('EMAIL')]]]),
     });
     this.supportEmailListParsed.removeAt(0);
     this.model.supportEmailListParsed.forEach(element => {
@@ -88,6 +76,8 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
+          this.loadingSubject.next(true);
+
           return isObservable(result) ? result : of(result);
         })
       )
@@ -96,7 +86,9 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
           return model.save().pipe(
             catchError(error => {
               this._saveFail(error);
-              return throwError(error);
+              this.loadingSubject.next(false);
+
+              return throwError(() => new Error(error));
             }),
             ignoreErrors()
           );
@@ -130,7 +122,9 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
         tap(data => {
           this.supportEmailListParsed.removeAt(0);
           data.supportEmailListParsed.forEach(element => {
-            this.supportEmailListParsed.push(new FormControl({ value: element, disabled: true }, CustomValidators.required));
+            this.supportEmailListParsed.push(
+              new FormControl({ value: element, disabled: true }, [CustomValidators.required, CustomValidators.pattern('EMAIL')])
+            );
           });
           this.form.patchValue(data);
           this.model = data;
@@ -159,7 +153,8 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
   }
 
   protected _afterSave(model: GlobalSetting): void {
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.getApplicationName() }));
+    this.loadingSubject.next(false);
+    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.menu_global_setting }));
   }
 
   addEmail() {
@@ -170,9 +165,5 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
 
   deleteEmail(emailIndex: number) {
     this.supportEmailListParsed.removeAt(emailIndex);
-  }
-
-  getApplicationName(): string {
-    return this.lang.getCurrent().code === 'ar' ? this.model.systemArabicName : this.model.systemEnglishName;
   }
 }
