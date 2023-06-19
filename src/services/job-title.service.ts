@@ -22,6 +22,10 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class JobTitleService extends BaseCrudWithDialogService<JobTitlePopupComponent, JobTitle> {
+  getAuditDialogComponent() {
+    return JobTitlePopupComponent;
+  }
+
   serviceName = 'JobTitleService';
   protected getModelClass(): Constructor<JobTitle> {
     return JobTitle;

@@ -22,6 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class PermissionRoleService extends BaseCrudWithDialogService<PermissionRolePopupComponent, PermissionRole> {
+  protected override getAuditDialogComponent(): ComponentType<PermissionRolePopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'PermissionRoleService';
 
   protected getModelClass(): Constructor<PermissionRole> {

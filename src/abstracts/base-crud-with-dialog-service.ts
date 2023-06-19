@@ -16,6 +16,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   protected dialog = inject(DialogService);
 
   protected abstract getDialogComponent(): ComponentType<C>;
+  protected abstract getAuditDialogComponent(): ComponentType<C>;
 
   openCreateDialog(
     model?: M | undefined,
