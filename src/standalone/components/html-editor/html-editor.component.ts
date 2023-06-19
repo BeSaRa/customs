@@ -5,6 +5,7 @@ import { ValidationErrorsComponent } from '@standalone/components/validation-err
 import { Component, inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
+import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-html-editor',
@@ -25,7 +26,12 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
   @Input() label = '';
   @Input() editorId = '';
   @Input() displayErrors = true;
+  tabelRows = new FormControl(2);
+  tabelCols = new FormControl(2);
+  headerBgColor = new FormControl('#8a1538');
 
+  isTableWithTitle = false;
+  lang = inject(LangService);
   private destroy$ = new Subject<void>();
 
   private injector = inject(Injector);
@@ -47,8 +53,30 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     defaultFontName: 'Arial',
     toolbarHiddenButtons: [],
   };
-  control = new FormControl('');
 
+  control = new FormControl('');
+  isTableHeader() {
+    this.isTableWithTitle = !this.isTableWithTitle;
+  }
+  createTable() {
+    // let table = document.createElement('table');
+    // table.setAttribute("id", new Date().toString());
+    // table.insertRow();
+    let tableString = '<table > <tbody>';
+    if (this.isTableWithTitle)
+      tableString = tableString.concat(
+        `<tr style=" word-wrap: break-word;"> <td style="color: white; outline: ${this.headerBgColor.value} solid thin;" colspan="${this.tabelCols
+          .value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`
+      );
+    for (let i = 1; i <= this.tabelRows.value!; i++) {
+      tableString = tableString.concat('<tr>');
+      for (let j = 1; j <= this.tabelCols.value!; j++)
+        tableString = tableString.concat('<td style=" outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>');
+      tableString = tableString.concat('</tr>');
+    }
+    tableString = tableString.concat('</tbody></table>');
+    return tableString;
+  }
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
