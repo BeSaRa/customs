@@ -77,4 +77,15 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
       },
     });
   }
+
+  openViewAuditDialog(model: M, extras?: object | undefined, config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined) {
+    return this.dialog.open(this.getAuditDialogComponent(), {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.VIEW,
+      },
+    });
+  }
 }

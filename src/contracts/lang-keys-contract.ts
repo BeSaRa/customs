@@ -163,4 +163,5 @@ export interface LangKeysContract {
   alternate_email_list: string;
   change_default_language: string;
   default_language: string;
+  audit: string;
 }

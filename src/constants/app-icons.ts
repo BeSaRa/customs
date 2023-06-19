@@ -36,6 +36,7 @@ export const AppIcons = {
   USERPREFERENCES: 'account-star-outline',
   GLOBAL_SETTING: 'cogs',
   EMAIL_TEMPLATE: 'email-multiple',
+  HISTORY: 'history',
 };
 
 export type AppIconsType = typeof AppIcons;
