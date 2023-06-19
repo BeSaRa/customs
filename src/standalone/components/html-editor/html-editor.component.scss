@@ -1,0 +1,19 @@
+input.editor-input {
+  background-color: white;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  padding: 0.4rem;
+  min-width: 2rem;
+  float: left;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #f1f1f1;
+    transition: 0.2s ease;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+  }
+}
