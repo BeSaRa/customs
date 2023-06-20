@@ -22,6 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class MawaredDepartmentService extends BaseCrudWithDialogService<MawaredDepartmentPopupComponent, MawaredDepartment> {
+  protected override getAuditDialogComponent(): ComponentType<MawaredDepartmentPopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'MawaredDepartmentService';
   protected getModelClass(): Constructor<MawaredDepartment> {
     return MawaredDepartment;

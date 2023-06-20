@@ -24,6 +24,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class UserPreferencesService extends BaseCrudWithDialogService<UserPreferencesPopupComponent, UserPreferences> {
+  protected override getAuditDialogComponent(): ComponentType<UserPreferencesPopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   override serviceName = 'UserPreferencesService';
 
   protected employee = inject(EmployeeService).getEmployee();

@@ -16,6 +16,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   protected dialog = inject(DialogService);
 
   protected abstract getDialogComponent(): ComponentType<C>;
+  protected abstract getAuditDialogComponent(): any;
 
   openCreateDialog(
     model?: M | undefined,
@@ -68,6 +69,17 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<C, UserClick.CLOSE> {
     return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(this.getDialogComponent(), {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.VIEW,
+      },
+    });
+  }
+
+  openViewAuditDialog(model: M, extras?: object | undefined, config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined) {
+    return this.dialog.open(this.getAuditDialogComponent(), {
       ...config,
       data: {
         model,

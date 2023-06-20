@@ -22,6 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class EmailTemplateService extends BaseCrudWithDialogService<EmailTemplatePopupComponent, EmailTemplate> {
+  protected override getAuditDialogComponent(): ComponentType<EmailTemplatePopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'EmailTemplateService';
   protected getModelClass(): Constructor<EmailTemplate> {
     return EmailTemplate;

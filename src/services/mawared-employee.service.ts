@@ -22,6 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class MawaredEmployeeService extends BaseCrudWithDialogService<MawaredEmployeePopupComponent, MawaredEmployee> {
+  protected override getAuditDialogComponent(): ComponentType<MawaredEmployeePopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'MawaredEmployeeService';
   protected getModelClass(): Constructor<MawaredEmployee> {
     return MawaredEmployee;
