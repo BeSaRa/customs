@@ -5,12 +5,12 @@
   </h1>
   <app-icon-button [matTooltip]="lang.map.reset" (click)="resetForm()" icon="RELOAD"></app-icon-button>
 </div>
-<div class="shadow relative p-2">
+<div class="!bg-primary/5 shadow relative p-2 h-max">
   <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
     <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
   </div>
   <ng-container [formGroup]="form">
-    <div class="grid grid-cols-4 gap-4 py-2">
+    <div class="grid grid-cols-4 gap-4 p-4">
       <app-input
         [disabled]="(loading$ | async)!"
         formControlName="systemArabicName"
@@ -55,17 +55,11 @@
         [isMultiple]="true"
         bindLabel="getNames" />
     </div>
-    <div class="flex flex-row pl-1 items-center justify-start">
+    <div class="flex flex-row items-center justify-start px-4">
       <span class="block font-medium text-slate-700">{{ lang.map.support_email_list }}</span>
-
-      <app-icon-button
-        [disabled]="(loading$ | async)!"
-        icon="PLUS"
-        (click)="addEmail()"
-        [matTooltip]="lang.map.add + ' ' + lang.map.support_email_list" />
     </div>
 
-    <div class="grid grid-cols-4 gap-2 py-2">
+    <div class="grid grid-cols-4 gap-4 p-4">
       <ng-container formArrayName="supportEmailListParsed">
         <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
           <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
@@ -77,8 +71,16 @@
           /></app-input>
         </ng-container>
       </ng-container>
+      <div class="w-full flex items-center justify-start">
+        <app-icon-button
+          class="bg-slate-300 rounded-full"
+          [disabled]="(loading$ | async)!"
+          icon="PLUS"
+          (click)="addEmail()"
+          [matTooltip]="lang.map.add + ' ' + lang.map.alt_email" />
+      </div>
     </div>
-    <div class="grid grid-rows-2 gap-4 py-2">
+    <div class="grid grid-rows-2 gap-4 p-4">
       <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
         <app-switch
           [disabled]="(loading$ | async)! || form.invalid"
