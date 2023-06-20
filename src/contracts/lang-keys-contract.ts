@@ -164,4 +164,6 @@ export interface LangKeysContract {
   change_default_language: string;
   default_language: string;
   audit: string;
+  audit_job_title: string;
+  audit_id: string;
 }
