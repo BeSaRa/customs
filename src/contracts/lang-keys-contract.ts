@@ -166,4 +166,6 @@ export interface LangKeysContract {
   audit: string;
   audit_job_title: string;
   audit_id: string;
+  only_arabic_letters_and_numbers: string;
+  only_english_letters_and_numbers: string;
 }
