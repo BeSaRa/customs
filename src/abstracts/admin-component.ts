@@ -67,6 +67,7 @@ export abstract class AdminComponent<
 
   create$: Subject<void> = new Subject<void>();
   view$: Subject<M> = new Subject<M>();
+  viewAudit$: Subject<M> = new Subject<M>();
   edit$: Subject<M> = new Subject<M>();
   delete$: Subject<M> = new Subject<M>();
   status$: Subject<M> = new Subject<M>();
@@ -122,6 +123,7 @@ export abstract class AdminComponent<
     this._listenToCreate();
     this._listenToEdit();
     this._listenToView();
+    this._listenToViewAudit();
     this._listenToDelete();
     this._listenToChangeStatus();
   }
@@ -196,6 +198,24 @@ export abstract class AdminComponent<
         switchMap(model => {
           return this.service
             .openViewDialog(model, this._getViewExtras() as object)
+            .afterClosed()
+            .pipe(filter(() => this._reloadWhenViewPopupClosed()));
+        })
+      )
+      .subscribe(() => this.reload$.next());
+  }
+
+  /**
+   * listen to view audit event
+   * @protected
+   */
+  protected _listenToViewAudit() {
+    this.viewAudit$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(model => {
+          return this.service
+            .openViewAuditDialog(model, this._getViewExtras() as object)
             .afterClosed()
             .pipe(filter(() => this._reloadWhenViewPopupClosed()));
         })

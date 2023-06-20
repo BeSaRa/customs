@@ -70,6 +70,7 @@ import { EmailTemplatePopupComponent } from '@modules/administration/popups/emai
 import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+import { JobTitleAuditPopupComponent } from './popups/job-title-audit-popup/job-title-audit-popup.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
     EmailTemplateComponent,
     EmailTemplatePopupComponent,
     GlobalSettingComponent,
+    JobTitleAuditPopupComponent,
   ],
   imports: [
     CommonModule,

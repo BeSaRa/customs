@@ -22,6 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class PenaltyService extends BaseCrudWithDialogService<PenaltyPopupComponent, Penalty> {
+  protected override getAuditDialogComponent(): ComponentType<PenaltyPopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'PenaltyService';
 
   protected getModelClass(): Constructor<Penalty> {

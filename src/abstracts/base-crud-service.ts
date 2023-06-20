@@ -10,6 +10,7 @@ import { Constructor } from '@app-types/constructors';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { Pagination } from '@models/pagination';
 import { ServiceContract } from '@contracts/service-contract';
+import { Audit } from '@models/audit';
 
 export abstract class BaseCrudService<M, PrimaryType = number>
   extends RegisterServiceMixin(class {})
@@ -54,6 +55,14 @@ export abstract class BaseCrudService<M, PrimaryType = number>
         fromObject: { ...options, ...criteria, ...sortOptions },
       }),
     });
+  }
+
+  @CastResponse(undefined, {
+    unwrap: '',
+    fallback: '$pagination',
+  })
+  loadAudit(id: PrimaryType): Observable<Pagination<Audit[]>> {
+    return this.http.get<Pagination<Audit[]>>(`${this.getUrlSegment()}/audit/${id}`);
   }
 
   @CastResponse(undefined, {

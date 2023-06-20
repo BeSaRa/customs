@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -21,9 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class ServicesService extends BaseCrudWithDialogService<
-ServicesPopupComponent,
-Services> {
+export class ServicesService extends BaseCrudWithDialogService<ServicesPopupComponent, Services> {
+  protected override getAuditDialogComponent(): ComponentType<ServicesPopupComponent> {
+    throw new Error('Method not implemented.');
+  }
   serviceName = 'ServicesService';
   protected getModelClass(): Constructor<Services> {
     return Services;
