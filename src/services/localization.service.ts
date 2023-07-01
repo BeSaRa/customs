@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class LocalizationService extends BaseCrudWithDialogService<LocalizationPopupComponent, Localization> {
-  protected override getAuditDialogComponent(): ComponentType<LocalizationPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   serviceName = 'LocalizationService';
   protected getModelClass(): Constructor<Localization> {
     return Localization;

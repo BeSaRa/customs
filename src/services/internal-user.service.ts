@@ -6,7 +6,6 @@ import { ComponentType } from '@angular/cdk/portal';
 import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @CastResponseContainer({
   $pagination: {
@@ -23,9 +22,6 @@ import { DomSanitizer } from '@angular/platform-browser';
   providedIn: 'root',
 })
 export class InternalUserService extends BaseCrudWithDialogService<InternalUserPopupComponent, InternalUser> {
-  protected override getAuditDialogComponent(): ComponentType<InternalUserPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   override serviceName = 'InternalUserService';
   protected getModelClass(): Constructor<InternalUser> {
     return InternalUser;
@@ -41,9 +37,5 @@ export class InternalUserService extends BaseCrudWithDialogService<InternalUserP
 
   getUrlSegment(): string {
     return this.urlService.URLS.INTERNAL_USER;
-  }
-
-  constructor(private domSanitizer: DomSanitizer) {
-    super();
   }
 }

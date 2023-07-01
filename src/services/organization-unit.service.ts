@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class OrganizationUnitService extends BaseCrudWithDialogService<OrganizationUnitPopupComponent, OrganizationUnit> {
-  protected override getAuditDialogComponent(): ComponentType<OrganizationUnitPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   override serviceName = 'OrganizationUnitService';
   protected getModelClass(): Constructor<OrganizationUnit> {
     return OrganizationUnit;

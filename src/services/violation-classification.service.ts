@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class ViolationClassificationService extends BaseCrudWithDialogService<ViolationClassificationPopupComponent, ViolationClassification> {
-  protected override getAuditDialogComponent(): ComponentType<ViolationClassificationPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   serviceName = 'ViolationClassificationService';
   protected getModelClass(): Constructor<ViolationClassification> {
     return ViolationClassification;

@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class ServiceStepsService extends BaseCrudWithDialogService<ServiceStepsPopupComponent, ServiceSteps> {
-  protected override getAuditDialogComponent(): ComponentType<ServiceStepsPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   serviceName = 'ServiceStepsService';
   protected getModelClass(): Constructor<ServiceSteps> {
     return ServiceSteps;
@@ -41,5 +38,8 @@ export class ServiceStepsService extends BaseCrudWithDialogService<ServiceStepsP
   getUrlSegment(): string {
     return this.urlService.URLS.SERVICE_STEPS;
   }
-  stepsByServiceId(id: number) {}
+
+  stepsByServiceId(_id: number) {
+    //
+  }
 }

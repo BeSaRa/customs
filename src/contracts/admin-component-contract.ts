@@ -9,6 +9,7 @@ export interface AdminComponentContract<M, S> {
   edit$: Subject<M>;
   delete$: Subject<M>;
   view$: Subject<M>;
+  viewAudit$: Subject<M>;
   create$: Subject<void>;
   reload$: Subject<void>;
 }

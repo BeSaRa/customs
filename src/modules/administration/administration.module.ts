@@ -60,7 +60,7 @@ import { MawaredEmployeeComponent } from '@modules/administration/components/maw
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
-import { StringToDatePipe } from '../../pipes/string-to-date.pipe';
+import { StringToDatePipe } from '@pipes/string-to-date.pipe';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
@@ -70,7 +70,6 @@ import { EmailTemplatePopupComponent } from '@modules/administration/popups/emai
 import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
-import { JobTitleAuditPopupComponent } from './popups/job-title-audit-popup/job-title-audit-popup.component';
 
 @NgModule({
   declarations: [
@@ -110,7 +109,6 @@ import { JobTitleAuditPopupComponent } from './popups/job-title-audit-popup/job-
     EmailTemplateComponent,
     EmailTemplatePopupComponent,
     GlobalSettingComponent,
-    JobTitleAuditPopupComponent,
   ],
   imports: [
     CommonModule,

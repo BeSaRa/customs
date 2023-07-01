@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class BrokerService extends BaseCrudWithDialogService<BrokerPopupComponent, Broker> {
-  protected override getAuditDialogComponent(): ComponentType<BrokerPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   serviceName = 'BrokerService';
 
   protected getModelClass(): Constructor<Broker> {

@@ -22,9 +22,6 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class TeamService extends BaseCrudWithDialogService<TeamPopupComponent, Team> {
-  protected override getAuditDialogComponent(): ComponentType<TeamPopupComponent> {
-    throw new Error('Method not implemented.');
-  }
   serviceName = 'TeamService';
   protected getModelClass(): Constructor<Team> {
     return Team;
