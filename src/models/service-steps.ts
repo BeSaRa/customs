@@ -21,7 +21,7 @@ export class ServiceSteps extends BaseModel<ServiceSteps, ServiceStepsService> {
     //return this.$$getService$$<ServiceStepsService>().stepsByServiceId(this.id);
   }
 
-  buildForm(controls?: boolean): any {
+  buildForm(controls?: boolean) {
     const { arName, enName, arDesc, enDesc, stepName, activityName, stepSLA } = this;
 
     return {
