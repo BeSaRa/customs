@@ -39,7 +39,7 @@ export class ServiceStepsService extends BaseCrudWithDialogService<ServiceStepsP
     return this.urlService.URLS.SERVICE_STEPS;
   }
 
-  stepsByServiceId(_id: number) {
+  stepsByServiceId() {
     //
   }
 }
