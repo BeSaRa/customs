@@ -18,7 +18,7 @@ export class ServiceSteps extends BaseModel<ServiceSteps, ServiceStepsService> {
   stepSLA!: number;
 
   loadSteps() {
-    return this.$$getService$$<ServiceStepsService>().stepsByServiceId(this.id);
+    //return this.$$getService$$<ServiceStepsService>().stepsByServiceId(this.id);
   }
 
   buildForm(controls?: boolean): any {
