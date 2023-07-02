@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BaseModel } from '@abstracts/base-model';
@@ -21,6 +21,8 @@ import { LangService } from '@services/lang.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-audit-popup',
@@ -65,6 +67,8 @@ export class AuditPopupComponent implements OnInit {
   showFirstLastButtons = true;
   length = 50;
 
+  destroyRef = inject(DestroyRef);
+
   columnsWrapper: ColumnsWrapper<Audit> = new ColumnsWrapper<Audit>(
     new NoneFilterColumn('ip'),
     new NoneFilterColumn('user'),
@@ -79,11 +83,12 @@ export class AuditPopupComponent implements OnInit {
   protected _load(): Observable<Audit[]> {
     return of(undefined)
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         switchMap(() => {
           return combineLatest([this.paginate$]);
         })
       )
-      .pipe(switchMap(([pagination]) => this.service.loadAudit(this.model.id, pagination)))
+      .pipe(switchMap(([pagination]) => this.service.loadAudit(this.model.id, pagination).pipe(ignoreErrors())))
       .pipe(tap(result => (this.length = result.count)))
       .pipe(map(pagination => pagination.rs));
   }
@@ -91,9 +96,9 @@ export class AuditPopupComponent implements OnInit {
   private listenToView() {
     this.view$
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         switchMap(audit => {
-          console.log(audit);
-          return this.service.loadAuditEntityById(audit.auditId);
+          return this.service.loadAuditEntityById(audit.auditId).pipe(ignoreErrors());
         })
       )
       .subscribe(model => {
