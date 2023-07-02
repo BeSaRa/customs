@@ -1,4 +1,7 @@
 export interface LangKeysContract {
+  user: string;
+  operation: string;
+  ip: string;
   alt_email: string;
   alt_emails: string;
   menu_service_steps: string;

@@ -13,12 +13,11 @@ export class Audit {
   status!: number;
   orgInfo!: AdminResult;
   userInfo!: AdminResult;
-  clientData: string = '';
-  statusDateModified: string = '';
+  clientData = '';
+  statusDateModified = '';
   statusInfo!: AdminResult;
   qId!: number;
-  clientIP: string = '';
-
+  clientIP = '';
   // extra properties
   statusDateModifiedString!: string;
   updatedOnString!: string;

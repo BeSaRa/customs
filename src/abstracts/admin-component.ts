@@ -125,6 +125,7 @@ export abstract class AdminComponent<
     this._listenToView();
     this._listenToDelete();
     this._listenToChangeStatus();
+    this._listenToViewAudit();
   }
 
   paginate($event: PageEvent) {
@@ -237,6 +238,20 @@ export abstract class AdminComponent<
       });
   }
 
+  protected _listenToViewAudit() {
+    this.viewAudit$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(model => {
+          return this.service
+            .openViewAuditDialog(model)
+            .afterClosed()
+            .pipe(filter(() => this._reloadWhenViewAuditPopupClosed()));
+        })
+      )
+      .subscribe(() => this.reload$.next());
+  }
+
   protected _listenToChangeStatus() {
     this.status$
       .pipe(takeUntil(this.destroy$))
@@ -285,6 +300,13 @@ export abstract class AdminComponent<
    * @description return true to reload after closing the viewPopup
    */
   _reloadWhenViewPopupClosed(): boolean {
+    return false;
+  }
+
+  /**
+   * @description return true to reload after closing the viewAuditPopup
+   */
+  _reloadWhenViewAuditPopupClosed(): boolean {
     return false;
   }
 

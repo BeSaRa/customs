@@ -8,6 +8,7 @@ import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
 import { BaseModel } from '@abstracts/base-model';
+import { AuditPopupComponent } from '@standalone/components/audit-popup/audit-popup.component';
 
 export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>, PrimaryType = number>
   extends BaseCrudService<M, PrimaryType>
@@ -73,6 +74,21 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
         model,
         extras: { ...extras },
         operation: OperationType.VIEW,
+      },
+    });
+  }
+
+  openViewAuditDialog(
+    model: M,
+    extras?: object | undefined,
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+  ): MatDialogRef<AuditPopupComponent, UserClick.CLOSE> {
+    return this.dialog.open<AuditPopupComponent, CrudDialogDataContract<M>, UserClick.CLOSE>(AuditPopupComponent, {
+      ...config,
+      data: {
+        model,
+        extras: { ...extras },
+        operation: OperationType.VIEW_AUDIT,
       },
     });
   }

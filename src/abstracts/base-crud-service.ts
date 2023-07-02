@@ -57,12 +57,29 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     });
   }
 
-  @CastResponse(undefined, {
+  @CastResponse(() => Pagination, {
     unwrap: '',
-    fallback: '$pagination',
+    shape: {
+      'rs.*': () => Audit, // clearly defined the model here because I know that all service will return the same model
+    },
   })
-  loadAudit(id: PrimaryType): Observable<Pagination<Audit[]>> {
-    return this.http.get<Pagination<Audit[]>>(`${this.getUrlSegment()}/audit/${id}`);
+  loadAudit(
+    id: PrimaryType,
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    }
+  ): Observable<Pagination<Audit[]>> {
+    return this.http.get<Pagination<Audit[]>>(`${this.getUrlSegment()}/audit/${id}`, {
+      params: new HttpParams({
+        fromObject: { ...options },
+      }),
+    });
+  }
+
+  @CastResponse(undefined)
+  loadAuditEntityById<PrimaryType>(id: PrimaryType): Observable<M> {
+    return this.http.get<M>(`${this.getUrlSegment()}/audit/updates/${id}`);
   }
 
   @CastResponse(undefined, {

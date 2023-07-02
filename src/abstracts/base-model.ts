@@ -88,7 +88,6 @@ export abstract class BaseModel<
   }
 
   toggleStatus(): Observable<M> {
-    console.log(this.status);
     return this.isActive() ? this.deactivate() : this.activate();
   }
 
