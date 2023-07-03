@@ -6,6 +6,7 @@ const { send, receive } = new AuditInterceptor();
 
 @InterceptModel({ send, receive })
 export class Audit {
+  id!: number;
   auditId!: number;
   updatedOn!: string;
   operation!: number;

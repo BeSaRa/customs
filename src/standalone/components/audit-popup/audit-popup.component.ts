@@ -98,7 +98,7 @@ export class AuditPopupComponent implements OnInit {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         switchMap(audit => {
-          return this.service.loadAuditEntityById(audit.auditId).pipe(ignoreErrors());
+          return this.service.loadAuditEntityById(audit.id).pipe(ignoreErrors());
         })
       )
       .subscribe(model => {
