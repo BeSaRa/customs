@@ -31,6 +31,15 @@ export class MawaredEmployeeComponent extends AdminComponent<MawaredEmployeePopu
         this.view$.next(item);
       },
     },
+    {
+      name: 'audit',
+      type: 'action',
+      label: 'audit',
+      icon: AppIcons.HISTORY,
+      callback: item => {
+        this.viewAudit$.next(item);
+      },
+    },
   ];
 
   columnsWrapper: ColumnsWrapper<MawaredEmployee> = new ColumnsWrapper(
