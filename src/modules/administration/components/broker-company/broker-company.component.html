@@ -111,6 +111,11 @@
             [matTooltip]="lang.map.view"
             (click)="view$.next(element)"
             icon="VIEW"></app-icon-button>
+          <app-icon-button
+            [disabled]="loading$ | async"
+            [matTooltip]="lang.map.audit"
+            (click)="viewAudit$.next(element)"
+            icon="HISTORY"></app-icon-button>
         </div>
       </td>
     </ng-container>
