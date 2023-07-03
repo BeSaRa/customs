@@ -41,6 +41,15 @@ export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, Team
         this.edit$.next(item);
       },
     },
+    {
+      name: 'audit',
+      type: 'action',
+      label: 'audit',
+      icon: AppIcons.HISTORY,
+      callback: item => {
+        this.viewAudit$.next(item);
+      },
+    },
   ];
 
   columnsWrapper: ColumnsWrapper<Team> = new ColumnsWrapper(
