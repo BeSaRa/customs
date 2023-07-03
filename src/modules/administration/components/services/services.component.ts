@@ -32,6 +32,15 @@ export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Se
       },
     },
     {
+      name: 'audit',
+      type: 'action',
+      label: 'audit',
+      icon: AppIcons.HISTORY,
+      callback: item => {
+        this.viewAudit$.next(item);
+      },
+    },
+    {
       name: 'edit',
       type: 'action',
       label: 'edit',
