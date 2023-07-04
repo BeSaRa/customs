@@ -42,6 +42,15 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       },
     },
     {
+      name: 'audit',
+      type: 'action',
+      label: 'audit',
+      icon: AppIcons.HISTORY,
+      callback: item => {
+        this.viewAudit$.next(item);
+      },
+    },
+    {
       name: 'delete',
       type: 'action',
       label: 'delete',
