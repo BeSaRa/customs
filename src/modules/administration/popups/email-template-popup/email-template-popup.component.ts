@@ -18,7 +18,8 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
   activeTab = 0;
 
   FocusInvalidTab() {
-    const validBodyTemplate = this.form.get('arBodyTemplate')?.valid && this.form.get('enBodyTemplate')?.valid;
+    const validArBodyTemplate = this.form.get('arBodyTemplate')?.valid;
+    const validEnBodyTemplate = this.form.get('enBodyTemplate')?.valid;
 
     const validBasicInfo =
       this.form.get('arName')?.valid &&
@@ -28,8 +29,10 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
 
     if (!validBasicInfo) {
       this.activeTab = 0;
-    } else if (!validBodyTemplate) {
+    } else if (!validArBodyTemplate) {
       this.activeTab = 1;
+    } else if (!validEnBodyTemplate) {
+      this.activeTab = 2;
     }
   }
 
