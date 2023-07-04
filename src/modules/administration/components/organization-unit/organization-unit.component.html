@@ -107,6 +107,11 @@
             (click)="view$.next(element)"
             icon="VIEW" />
           <app-icon-button
+            [disabled]="loading$ | async"
+            [matTooltip]="lang.map.audit"
+            (click)="viewAudit$.next(element)"
+            icon="HISTORY" />
+          <app-icon-button
             [disabled]="(loading$ | async)!"
             [matTooltip]="lang.map.edit"
             (click)="edit$.next(element)"

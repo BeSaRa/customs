@@ -41,6 +41,15 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       },
     },
     {
+      name: 'audit',
+      type: 'action',
+      label: 'audit',
+      icon: AppIcons.HISTORY,
+      callback: item => {
+        this.viewAudit$.next(item);
+      },
+    },
+    {
       name: 'more-details',
       type: 'info',
       label: 'more_details',
