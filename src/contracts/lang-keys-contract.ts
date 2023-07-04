@@ -171,4 +171,5 @@ export interface LangKeysContract {
   audit_id: string;
   only_arabic_letters_and_numbers: string;
   only_english_letters_and_numbers: string;
+  mail_template_placeholder: string;
 }

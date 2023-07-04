@@ -23,7 +23,8 @@ import { LangService } from '@services/lang.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
-  @Input() label = '';
+  // @Input() label = '';
+  @Input() placeHolder = '';
   @Input() editorId = '';
   @Input() displayErrors = true;
   tabelRows = new FormControl(2);
@@ -45,9 +46,11 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     editable: true,
     sanitize: false,
     spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Enter email body template here ...',
+    maxHeight: '17rem',
+    minHeight: '17rem',
+    width: '45rem',
+    minWidth: '5rem',
+    placeholder: this.placeHolder,
     translate: 'no',
     defaultParagraphSeparator: 'p',
     defaultFontName: 'Arial',
@@ -65,13 +68,13 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     let tableString = '<table > <tbody>';
     if (this.isTableWithTitle)
       tableString = tableString.concat(
-        `<tr style=" word-wrap: break-word;"> <td style="color: white; outline: ${this.headerBgColor.value} solid thin;" colspan="${this.tabelCols
-          .value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`
+        `<tr style="height:40px; word-wrap: break-word;"> <td style="color: white; outline: ${this.headerBgColor.value} solid thin;" colspan="${this
+          .tabelCols.value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`
       );
     for (let i = 1; i <= this.tabelRows.value!; i++) {
       tableString = tableString.concat('<tr>');
       for (let j = 1; j <= this.tabelCols.value!; j++)
-        tableString = tableString.concat('<td style=" outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>');
+        tableString = tableString.concat('<td style=" height:40px; outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>');
       tableString = tableString.concat('</tr>');
     }
     tableString = tableString.concat('</tbody></table>');
@@ -91,6 +94,7 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     });
 
     this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
+    this.config.placeholder = this.placeHolder;
   }
 
   ngOnDestroy(): void {
