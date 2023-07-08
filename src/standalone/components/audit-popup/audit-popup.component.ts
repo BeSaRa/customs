@@ -114,10 +114,12 @@ export class AuditPopupComponent implements OnInit {
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         switchMap(audit => {
+          this.loadingSubject.next(true);
           return this.service.loadAuditEntityById(audit.id).pipe(ignoreErrors());
         })
       )
       .subscribe(model => {
+        this.loadingSubject.next(false);
         model.openView();
       });
   }
