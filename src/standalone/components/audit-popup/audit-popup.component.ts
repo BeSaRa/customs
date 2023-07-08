@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BaseModel } from '@abstracts/base-model';
 import { BaseCrudService } from '@abstracts/base-crud-service';
-import { BehaviorSubject, combineLatest, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, delay, finalize, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { Audit } from '@models/audit';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
@@ -61,7 +61,8 @@ export class AuditPopupComponent implements OnInit {
   });
   dataSource = new AppTableDataSource(this._load());
   view$ = new Subject<Audit>();
-  loading$ = new Subject<boolean>();
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
   lang = inject(LangService);
   pageSizeOptions: number[] = [50, 100, 150, 200];
   showFirstLastButtons = true;
@@ -82,14 +83,29 @@ export class AuditPopupComponent implements OnInit {
 
   protected _load(): Observable<Audit[]> {
     return of(undefined)
+      .pipe(delay(0)) // delay for loadingSubject to be initialized
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         switchMap(() => {
+          this.loadingSubject.next(true);
           return combineLatest([this.paginate$]);
         })
       )
-      .pipe(switchMap(([pagination]) => this.service.loadAudit(this.model.id, pagination).pipe(ignoreErrors())))
-      .pipe(tap(result => (this.length = result.count)))
+      .pipe(
+        switchMap(([pagination]) => {
+          this.loadingSubject.next(true);
+          return this.service.loadAudit(this.model.id, pagination).pipe(
+            finalize(() => this.loadingSubject.next(false)),
+            ignoreErrors()
+          );
+        })
+      )
+      .pipe(
+        tap(result => {
+          this.length = result.count;
+          this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
+        })
+      )
       .pipe(map(pagination => pagination.rs));
   }
 
