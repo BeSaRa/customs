@@ -8,6 +8,10 @@
       <ng-container [formGroup]="form">
         <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
         <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input
+          formControlName="penaltyGracePeriod"
+          [label]="lang.map.penalty_grace_period"
+          type="number"></app-input>
         <app-select-input
           [label]="lang.map.penalty_type"
           formControlName="penaltyType"
