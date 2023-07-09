@@ -103,23 +103,25 @@ export class AuditPopupComponent implements OnInit {
       .pipe(
         tap(result => {
           this.length = result.count;
-          this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
         })
       )
-      .pipe(map(pagination => pagination.rs));
+      .pipe(map(pagination => pagination.rs))
+      .pipe(finalize(() => this.loadingSubject.next(false)));
   }
 
   private listenToView() {
     this.view$
       .pipe(
+        tap(() => this.loadingSubject.next(true)),
         takeUntilDestroyed(this.destroyRef),
         switchMap(audit => {
-          this.loadingSubject.next(true);
-          return this.service.loadAuditEntityById(audit.id).pipe(ignoreErrors());
+          return this.service
+            .loadAuditEntityById(audit.id)
+            .pipe(finalize(() => this.loadingSubject.next(false)))
+            .pipe(ignoreErrors());
         })
       )
       .subscribe(model => {
-        this.loadingSubject.next(false);
         model.openView();
       });
   }
