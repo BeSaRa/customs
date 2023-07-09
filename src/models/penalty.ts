@@ -11,15 +11,17 @@ const { send, receive } = new PenaltyInterceptor();
 export class Penalty extends BaseModel<Penalty, PenaltyService> {
   $$__service_name__$$ = 'PenaltyService';
   penaltyType!: number;
-  isSystem = true;
+  penaltyGracePeriod!: number;
+  isSystem!: boolean;
 
   override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {
-    const { arName, enName, penaltyType, status } = this;
+    const { arName, enName, penaltyGracePeriod, penaltyType, status } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
+      penaltyGracePeriod: controls ? [penaltyGracePeriod, CustomValidators.required] : penaltyGracePeriod,
       penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
       status: controls ? [status, CustomValidators.required] : status,
     };
