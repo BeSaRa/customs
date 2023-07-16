@@ -20,4 +20,5 @@ export const AppRoutes = {
   EMAIL_TEMPLATE: 'email-template',
   GLOBAL_SETTING: 'global-setting',
   FILE_TYPE: 'file-type',
+  MAIN: 'main',
 };

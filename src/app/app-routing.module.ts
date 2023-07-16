@@ -13,6 +13,10 @@ const routes: Routes = [
     canMatch: [authGuard('AUTH', AppRoutes.LOGIN)],
     children: [
       {
+        path: AppRoutes.MAIN,
+        loadComponent: () => import('@standalone/components/main/main.component'),
+      },
+      {
         path: AppRoutes.ADMINISTRATION,
         loadChildren: () => import('../modules/administration/administration.module').then(m => m.AdministrationModule),
       },

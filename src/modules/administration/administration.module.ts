@@ -70,6 +70,7 @@ import { EmailTemplatePopupComponent } from '@modules/administration/popups/emai
 import { HtmlEditorComponent } from '@standalone/components/html-editor/html-editor.component';
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
 
 @NgModule({
   declarations: [
@@ -156,6 +157,7 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
     MatRippleModule,
     TxtToHtmlPipe,
     HtmlEditorComponent,
+    MenuItemListComponent,
   ],
 })
 export class AdministrationModule {}

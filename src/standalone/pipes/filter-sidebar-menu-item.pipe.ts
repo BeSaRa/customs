@@ -6,9 +6,9 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
   standalone: true,
 })
 export class FilterSidebarMenuItemPipe implements PipeTransform {
-  transform(items: MenuItemContract[] | undefined, searchText: string): MenuItemContract[] {
+  transform(items: MenuItemContract[] | undefined, searchText: string, onlyTranslation = false): MenuItemContract[] {
     return (items ?? []).filter(item => {
-      return (item.searchText ?? '').toLowerCase().includes(searchText.toLowerCase());
+      return ((onlyTranslation ? item.translate : item.searchText) ?? '').toLowerCase().includes(searchText.toLowerCase());
     });
   }
 }

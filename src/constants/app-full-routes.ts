@@ -17,4 +17,5 @@ export const AppFullRoutes = {
   SERVICE_STEPS: '/home/administration/service-steps',
   EMAIL_TEMPLATE: '/home/administration/email-template',
   GLOBAL_SETTING: '/home/administration/global-setting',
+  MAIN: '/home/main',
 };

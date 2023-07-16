@@ -28,6 +28,10 @@ export class MenuItemService {
     return this.parents;
   }
 
+  getChildren(parentId: number): MenuItemContract[] {
+    return this.children[parentId];
+  }
+
   filterStaticMenu(): void {
     this.filteredStaticMenu = this.staticMenus.filter(item => {
       return !item.permission || (item.permission && this.employeeService.hasPermissionTo(item.permission));

@@ -11,6 +11,9 @@ module.exports = {
         secondary: "#d0a239",
         "secondary-dark": "#8d6e26",
       },
+      backgroundImage: {
+        stars: 'url("/assets/images/stars.svg")'
+      },
       typography: {
         DEFAULT: {
           css: {

@@ -12,6 +12,7 @@ import { SidebarAnimation } from '@animations/sidebar-animation';
 import { SearchAnimation } from '@animations/search-animation';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LangService } from '@services/lang.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,6 +27,7 @@ import { LangService } from '@services/lang.service';
     SidebarMenuComponent,
     ReactiveFormsModule,
     NgScrollbarModule,
+    RouterLink,
   ],
   animations: [SidebarAnimation, SearchAnimation],
   templateUrl: './sidebar.component.html',

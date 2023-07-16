@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  search: string;
   user: string;
   operation: string;
   ip: string;

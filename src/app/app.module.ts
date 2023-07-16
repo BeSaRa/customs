@@ -33,15 +33,13 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { Observable, forkJoin, switchMap, tap } from 'rxjs';
-import { MatSelectModule } from '@angular/material/select';
+import { forkJoin, Observable, switchMap, tap } from 'rxjs';
+import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER, MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LangService } from '@services/lang.service';
 import { NgProgressModule } from 'ngx-progressbar';
-import { GlobalSetting } from '@models/global-setting';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],

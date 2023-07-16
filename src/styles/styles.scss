@@ -33,6 +33,11 @@ html[dir="rtl"] body {
     width: 48px !important;
     height: 48px !important;
   }
+
+  &.size-80 {
+    width: 80px !important;
+    height: 80px !important;
+  }
 }
 
 .dialog-footer {
