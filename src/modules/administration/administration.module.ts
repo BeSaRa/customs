@@ -70,6 +70,8 @@ import { HtmlEditorComponent } from '@standalone/components/html-editor/html-edi
 import { TxtToHtmlPipe } from '@standalone/pipes/txtToHtml.pipe';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
+import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
+import { ViolationPenaltyPopupComponent } from '@modules/administration/popups/violation-penalty-popup/violation-penalty-popup.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +110,8 @@ import { MenuItemListComponent } from '@standalone/components/menu-item-list/men
     EmailTemplateComponent,
     EmailTemplatePopupComponent,
     GlobalSettingComponent,
+    ViolationPenaltyComponent,
+    ViolationPenaltyPopupComponent,
   ],
   imports: [
     CommonModule,

@@ -46,6 +46,7 @@ export const AppIcons = {
   COLLAPSE_ALL: 'arrow-collapse-vertical',
   EXPAND_ALL: 'arrow-expand-vertical',
   USER_INBOX: 'card-account-mail',
+  VIOLATION_PENALTY: 'pen',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -25,6 +25,7 @@ export const EndPoints = {
   FILE_TYPE: '/admin/global-setting/file-types',
   INVESTIGATION: '/investigation-case',
   USER_INBOX: '/inbox/team/3',
+  VIOLATION_PENALTY: '/entity/violation-penalty',
 };
 
 export type EndpointsType = typeof EndPoints;
