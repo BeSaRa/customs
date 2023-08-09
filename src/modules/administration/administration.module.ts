@@ -73,6 +73,8 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
 import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
 import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 import { ViolationPenaltyPopupComponent } from '@modules/administration/popups/violation-penalty-popup/violation-penalty-popup.component';
+import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
+import { LegalRulePopupComponent } from '@modules/administration/popups/legal-rule-popup/legal-rule-popup.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +116,8 @@ import { ViolationPenaltyPopupComponent } from '@modules/administration/popups/v
     GlobalSettingComponent,
     ViolationPenaltyComponent,
     ViolationPenaltyPopupComponent,
+    LegalRuleComponent,
+    LegalRulePopupComponent,
   ],
   imports: [
     CommonModule,

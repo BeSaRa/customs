@@ -38,6 +38,7 @@ export const AppIcons = {
   EMAIL_TEMPLATE: 'email-multiple',
   HISTORY: 'history',
   VIOLATION_PENALTY: 'pen',
+  LEGAL_RULE: 'scale-balance',
 };
 
 export type AppIconsType = typeof AppIcons;
