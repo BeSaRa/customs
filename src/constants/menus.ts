@@ -156,4 +156,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.VIOLATION_PENALTY,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.LEGAL_RULE,
+    langKey: 'menu_legal_rule',
+    icon: AppIcons.LEGAL_RULE,
+    path: AppFullRoutes.LEGAL_RULE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

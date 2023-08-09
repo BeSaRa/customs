@@ -23,4 +23,5 @@ export const AppFullRoutes = {
   ELECTRONIC_SERVICES: '/home/electronic-services',
   INVESTIGATION: '/home/electronic-services/investigation',
   VIOLATION_PENALTY: '/home/administration/violation-penalty',
+  LEGAL_RULE: '/home/administration/legal-rule',
 };

@@ -15,6 +15,7 @@ export interface LangKeysContract {
   basic_info: string;
   menu_investigation: string;
   menu_electronic_services: string;
+  menu_legal_rule: string;
   menu_violation_penalty: string;
   search: string;
   user: string;
