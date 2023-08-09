@@ -16,4 +16,5 @@ export const MenuIdes = {
   SERVICES: 15,
   EMAIL_TEMPLATE: 16,
   GLOBAL_SETTING: 17,
+  VIOLATION_PENALTY: 18
 };

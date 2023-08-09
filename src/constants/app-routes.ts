@@ -21,4 +21,5 @@ export const AppRoutes = {
   GLOBAL_SETTING: 'global-setting',
   FILE_TYPE: 'file-type',
   MAIN: 'main',
+  VIOLATION_PENALTY: 'violation-penalty'
 };

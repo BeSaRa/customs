@@ -1,0 +1,66 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.menu_violation_penalty }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-2 gap-4">
+          <!-- <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+          <app-input formControlName="enName" [label]="lang.map.en_name"></app-input> -->
+          <app-select-input
+            formControlName="offenderType"
+            [options]="offenderTypes"
+            [label]="lang.map.offender_type"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+          <app-select-input
+            formControlName="violationTypeId"
+            [options]="violationTypes"
+            [label]="lang.map.violation_type"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+          <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
+          <app-select-input
+            *ngIf="offenderTypeValue"
+            formControlName="penaltySigner"
+            [options]="filteredPenaltySigners"
+            [label]="lang.map.penalty_signer"
+            bindValue="lookupKey"
+            bindLabel="getNames"/>
+          <app-select-input
+            *ngIf="needOffenderLevel()"
+            formControlName="offenderLevel"
+            [options]="filteredOffenderLevels"
+            [label]="lang.map.offender_level"
+            bindValue="lookupKey"
+            bindLabel="getNames" />
+          <app-select-input
+            formControlName="penaltyId"
+            [options]="penalties"
+            [label]="lang.map.penalty"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+          <app-select-input
+            formControlName="penaltyGuidance"
+            [options]="penaltyGuidances"
+            [label]="lang.map.penalty_guidance"
+            bindValue="lookupKey"
+            bindLabel="getNames" />
+          
+          
+      </div>
+    </ng-container>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>

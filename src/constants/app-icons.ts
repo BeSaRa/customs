@@ -37,6 +37,7 @@ export const AppIcons = {
   GLOBAL_SETTING: 'cogs',
   EMAIL_TEMPLATE: 'email-multiple',
   HISTORY: 'history',
+  VIOLATION_PENALTY: 'pen',
 };
 
 export type AppIconsType = typeof AppIcons;

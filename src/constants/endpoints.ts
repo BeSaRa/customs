@@ -23,6 +23,7 @@ export const EndPoints = {
   EMAIL_TEMPLATE: '/entity/email-template',
   GLOBAL_SETTING: '/admin/global-setting',
   FILE_TYPE: '/admin/global-setting/file-types',
+  VIOLATION_PENALTY: '/entity/violation-penalty'
 };
 
 export type EndpointsType = typeof EndPoints;

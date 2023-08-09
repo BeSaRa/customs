@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_violation_penalty: string;
   search: string;
   user: string;
   operation: string;
@@ -173,4 +174,11 @@ export interface LangKeysContract {
   only_arabic_letters_and_numbers: string;
   only_english_letters_and_numbers: string;
   mail_template_placeholder: string;
+  repeat: string;
+  violation_type: string;
+  offender_type: string;
+  offender_level: string;
+  penalty: string;
+  penalty_signer: string;
+  penalty_guidance: string;
 }
