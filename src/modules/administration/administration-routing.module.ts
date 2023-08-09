@@ -105,7 +105,7 @@ const routes: Routes = [
   {
     path: AppRoutes.LEGAL_RULE,
     component: LegalRuleComponent,
-  }
+  },
 ];
 
 @NgModule({

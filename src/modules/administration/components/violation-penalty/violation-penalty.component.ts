@@ -8,10 +8,13 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+<<<<<<< HEAD
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
 import { PenaltyService } from '@services/penalty.service';
 import { ViolationTypeService } from '@services/violation-type.service';
+=======
+>>>>>>> 3e6b933 (init violation penalty)
 
 @Component({
   selector: 'app-violation-penalty',
@@ -20,9 +23,12 @@ import { ViolationTypeService } from '@services/violation-type.service';
 })
 export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPopupComponent, ViolationPenalty, ViolationPenaltyService> {
   service = inject(ViolationPenaltyService);
+<<<<<<< HEAD
   penaltyService = inject(PenaltyService);
   violationTypeService = inject(ViolationTypeService);
 
+=======
+>>>>>>> 3e6b933 (init violation penalty)
   actions: ContextMenuActionContract<ViolationPenalty>[] = [
     {
       name: 'view',

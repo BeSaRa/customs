@@ -47,6 +47,7 @@ export const AppIcons = {
   ATTACHMENT: 'attachment',
   COLLAPSE_ALL: 'arrow-collapse-vertical',
   EXPAND_ALL: 'arrow-expand-vertical',
+  VIOLATION_PENALTY: 'pen',
 };
 
 export type AppIconsType = typeof AppIcons;

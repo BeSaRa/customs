@@ -25,4 +25,5 @@ export const AppRoutes = {
   LEGAL_RULE: 'legal-rule',
   ELECTRONIC_SERVICES: 'electronic-services',
   INVESTIGATION: 'investigation',
+  VIOLATION_PENALTY: 'violation-penalty',
 };
