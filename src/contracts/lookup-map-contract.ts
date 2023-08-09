@@ -21,6 +21,7 @@ export interface LookupMapContract {
   organizationUniType: Lookup[];
   penaltyPowers: Lookup[];
   penaltyRepeat: Lookup[];
+  penaltySigner: Lookup[];
   penaltyType: Lookup[];
   permissionCategory: Lookup[];
   riskStatus: Lookup[];
@@ -28,4 +29,7 @@ export interface LookupMapContract {
   serviceRequestType: Lookup[];
   userType: Lookup[];
   permissionGroups: Lookup[];
+  offenderLevel: Lookup[];
+  penaltyGuidance: Lookup[];
+  offenderType: Lookup[];
 }

@@ -19,6 +19,7 @@ import { ServicesComponent } from '@modules/administration/components/services/s
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
+import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -96,6 +97,10 @@ const routes: Routes = [
     path: AppRoutes.GLOBAL_SETTING,
     component: GlobalSettingComponent,
   },
+  {
+    path: AppRoutes.VIOLATION_PENALTY,
+    component: ViolationPenaltyComponent,
+  }
 ];
 
 @NgModule({

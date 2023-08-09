@@ -24,4 +24,5 @@ export const AppRoutes = {
   ELECTRONIC_SERVICES: 'electronic-services',
   INVESTIGATION: 'investigation',
   USER_INBOX: 'user-inbox',
+  VIOLATION_PENALTY: 'violation-penalty',
 };
