@@ -25,4 +25,5 @@ export const AppRoutes = {
   INVESTIGATION: 'investigation',
   USER_INBOX: 'user-inbox',
   VIOLATION_PENALTY: 'violation-penalty',
+  LEGAL_RULE: 'legal-rule',
 };

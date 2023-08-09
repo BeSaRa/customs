@@ -47,6 +47,7 @@ export const AppIcons = {
   EXPAND_ALL: 'arrow-expand-vertical',
   USER_INBOX: 'card-account-mail',
   VIOLATION_PENALTY: 'pen',
+  LEGAL_RULE: 'scale-balance',
 };
 
 export type AppIconsType = typeof AppIcons;

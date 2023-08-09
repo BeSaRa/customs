@@ -26,6 +26,7 @@ export const EndPoints = {
   INVESTIGATION: '/investigation-case',
   USER_INBOX: '/inbox/team/3',
   VIOLATION_PENALTY: '/entity/violation-penalty',
+  LEGAL_RULE: '/entity/legal-rule',
 };
 
 export type EndpointsType = typeof EndPoints;
