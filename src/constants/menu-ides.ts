@@ -20,4 +20,5 @@ export const MenuIdes = {
   INVESTIGATION: 19,
   USER_INBOX: 20,
   VIOLATION_PENALTY: 21,
+  LEGAL_RULE: 22,
 };

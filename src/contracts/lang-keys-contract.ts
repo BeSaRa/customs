@@ -13,6 +13,7 @@ export interface LangKeysContract {
   basic_info: string;
   menu_investigation: string;
   menu_electronic_services: string;
+  menu_legal_rule: string;
   menu_violation_penalty: string;
   search: string;
   user: string;
@@ -205,4 +206,9 @@ export interface LangKeysContract {
   penalty: string;
   penalty_signer: string;
   penalty_guidance: string;
+  law: string;
+  law_start_date: string;
+  article_number: string;
+  legal_text_ar: string;
+  legal_text_en: string;
 }
