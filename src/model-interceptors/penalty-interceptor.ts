@@ -9,6 +9,8 @@ export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
 
   receive(model: Penalty): Penalty {
     model.statusInfo = new AdminResult().clone<AdminResult>(model.statusInfo);
+    model.offenderTypeInfo = new AdminResult().clone<AdminResult>(model.offenderTypeInfo);
+
     return model;
   }
 }
