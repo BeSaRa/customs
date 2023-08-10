@@ -46,6 +46,22 @@
       </td>
     </ng-container>
 
+    <!-- offenderType -->
+    <ng-container matColumnDef="offenderType">
+      <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span> {{ element.offenderTypeInfo.getNames() }}</span>
+      </td>
+    </ng-container>
+
+    <!-- penaltyGracePeriod -->
+    <ng-container matColumnDef="penaltyGracePeriod">
+      <th mat-header-cell mat-sort-header="penaltyGracePeriod" *matHeaderCellDef>{{ lang.map.penalty_grace_period }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.penaltyGracePeriod | highlight : getFilterStringColumn('penaltyGracePeriod')"></span>
+      </td>
+    </ng-container>
+
     <!-- status -->
     <ng-container matColumnDef="status">
       <th class="status-min-width" mat-header-cell mat-sort-header="status" *matHeaderCellDef>{{ lang.map.status }}</th>
