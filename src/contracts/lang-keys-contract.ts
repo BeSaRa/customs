@@ -187,4 +187,9 @@ export interface LangKeysContract {
   article_number: string;
   legal_text_ar: string;
   legal_text_en: string;
+  penalty_weight: string;
+  is_deduction: string;
+  is_cash: string;
+  deduction_days: string;
+  cash_amount: string;
 }
