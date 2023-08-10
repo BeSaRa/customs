@@ -11,6 +11,7 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-penalty',
@@ -20,6 +21,7 @@ import { StatusTypes } from '@enums/status-types';
 export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Penalty, PenaltyService> {
   service = inject(PenaltyService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 
   actions: ContextMenuActionContract<Penalty>[] = [
     {
@@ -64,6 +66,8 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new SelectFilterColumn('offenderType', this.offenderTypes, 'lookupKey', 'getNames'),
+    new TextFilterColumn('penaltyGracePeriod'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
