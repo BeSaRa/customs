@@ -11,7 +11,7 @@
             <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
             <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
             <app-input
-              formControlName="penaltyGracePeriod"
+              formControlName="erasureDuration"
               [label]="lang.map.penalty_grace_period"
               type="number"></app-input>
             <app-input formControlName="penaltyWeight" [label]="lang.map.penalty_weight" type="number"></app-input>
@@ -47,11 +47,7 @@
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.more_details">
-        <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 items-center">
-
-          </div>
-        </ng-container>
+        <app-penalty-details [list]="penaltyDetails"></app-penalty-details>
       </mat-tab>
     </mat-tab-group>
   </div>
