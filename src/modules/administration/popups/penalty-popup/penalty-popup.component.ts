@@ -3,13 +3,14 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { Penalty } from '@models/penalty';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
 import { CustomValidators } from '@validators/custom-validators';
+import { PenaltyDetails } from '@models/penalty-details';
 
 @Component({
   selector: 'app-penalty-popup',
@@ -54,7 +55,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     this.operation = OperationType.UPDATE;
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
-    // this.dialogRef.close(this.model);
+    this.dialogRef.close(this.model);
   }
 
   protected listenToStatusChange() {
@@ -95,5 +96,8 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
   get isCashTrue() {
     return this.form.get('isCash')?.value === 1;
+  }
+  get penaltyDetails() {
+    return this.model.detailsList as unknown as PenaltyDetails[];
   }
 }

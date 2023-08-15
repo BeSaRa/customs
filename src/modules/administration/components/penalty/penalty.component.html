@@ -58,7 +58,7 @@
     <ng-container matColumnDef="erasureDuration">
       <th mat-header-cell mat-sort-header="erasureDuration" *matHeaderCellDef>{{ lang.map.penalty_grace_period }}</th>
       <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.erasureDuration | highlight : getFilterStringColumn('penaltyGracePeriod')"></span>
+        <span [innerHTML]="element.erasureDuration | highlight : getFilterStringColumn('erasureDuration')"></span>
       </td>
     </ng-container>
 

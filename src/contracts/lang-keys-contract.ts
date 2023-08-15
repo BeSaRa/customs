@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_penalty_details : string;
   menu_legal_rule: string;
   menu_violation_penalty: string;
   search: string;
