@@ -192,4 +192,5 @@ export interface LangKeysContract {
   is_cash: string;
   deduction_days: string;
   cash_amount: string;
+  legal_rule: string;
 }

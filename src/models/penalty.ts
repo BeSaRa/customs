@@ -5,8 +5,6 @@ import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
 import { AdminResult } from './admin-result';
-import { FormGroup, Validators } from '@angular/forms';
-import { patternValidator } from '@validators/validation-utils';
 
 const { send, receive } = new PenaltyInterceptor();
 
@@ -15,24 +13,26 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   $$__service_name__$$ = 'PenaltyService';
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
-  penaltyGracePeriod!: number;
-  isSystem!: boolean;
+  isSystem: boolean = false;
+  penaltyKey: number = 0;
   penaltyWeight!: number;
   isDeduction: boolean = false;
+  erasureDuration!: number;
   deductionDays!: number;
   isCash: boolean = false;
   cashAmount!: number;
   override status = StatusTypes.ACTIVE;
+  // detailsList!: PenaltyDetails[];
 
   buildForm(controls = false): object {
-    const { arName, enName, penaltyGracePeriod, offenderType, status, penaltyWeight, isDeduction, deductionDays } = this;
+    const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      penaltyGracePeriod: controls ? [penaltyGracePeriod, CustomValidators.required] : penaltyGracePeriod,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       status: controls ? [status, CustomValidators.required] : status,
       penaltyWeight: controls ? [penaltyWeight, CustomValidators.required] : penaltyWeight,
+      erasureDuration: controls ? [erasureDuration, CustomValidators.required] : erasureDuration,
       isDeduction: controls ? [isDeduction, CustomValidators.required] : isDeduction,
       deductionDays: controls ? [deductionDays] : deductionDays,
       isCash: controls ? [isDeduction, CustomValidators.required] : isDeduction,
