@@ -5,6 +5,7 @@ import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
 import { AdminResult } from './admin-result';
+import { PenaltyDetails } from './penalty-details';
 
 const { send, receive } = new PenaltyInterceptor();
 
@@ -22,7 +23,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   isCash: boolean = false;
   cashAmount!: number;
   override status = StatusTypes.ACTIVE;
-  // detailsList!: PenaltyDetails[];
+  detailsList!: PenaltyDetails[];
 
   buildForm(controls = false): object {
     const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration } = this;

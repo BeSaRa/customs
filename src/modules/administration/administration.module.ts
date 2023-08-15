@@ -74,6 +74,8 @@ import { ViolationPenaltyComponent } from '@modules/administration/components/vi
 import { ViolationPenaltyPopupComponent } from '@modules/administration/popups/violation-penalty-popup/violation-penalty-popup.component';
 import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
 import { LegalRulePopupComponent } from '@modules/administration/popups/legal-rule-popup/legal-rule-popup.component';
+import { PenaltyDetailsComponent } from '@modules/administration/components/penalty-details/penalty-details.component';
+import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/penalty-details-popup/penalty-details-popup.component';
 
 @NgModule({
   declarations: [
@@ -116,6 +118,8 @@ import { LegalRulePopupComponent } from '@modules/administration/popups/legal-ru
     ViolationPenaltyPopupComponent,
     LegalRuleComponent,
     LegalRulePopupComponent,
+    PenaltyDetailsComponent,
+    PenaltyDetailsPopupComponent,
   ],
   imports: [
     CommonModule,
