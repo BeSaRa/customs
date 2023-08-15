@@ -11,7 +11,6 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
-import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-penalty',
@@ -67,7 +66,7 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new SelectFilterColumn('offenderType', this.offenderTypes, 'lookupKey', 'getNames'),
-    new TextFilterColumn('penaltyGracePeriod'),
+    new TextFilterColumn('erasureDuration'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
