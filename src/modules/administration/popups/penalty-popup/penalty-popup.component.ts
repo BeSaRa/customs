@@ -133,4 +133,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   get penaltyDetails() {
     return this.model.detailsList;
   }
+  get penaltyDetails() {
+    return this.model.detailsList as unknown as PenaltyDetails[];
+  }
 }
