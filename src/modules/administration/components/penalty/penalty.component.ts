@@ -19,6 +19,7 @@ import { StatusTypes } from '@enums/status-types';
 })
 export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Penalty, PenaltyService> {
   service = inject(PenaltyService);
+
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 

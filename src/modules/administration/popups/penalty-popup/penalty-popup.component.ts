@@ -19,13 +19,16 @@ import { PenaltyDetails } from '@models/penalty-details';
 })
 export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   lookupService = inject(LookupService);
-
+  penaltyDetailsList!: PenaltyDetails[];
+  tempList!: PenaltyDetails[];
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Penalty> = inject(MAT_DIALOG_DATA);
+  penaltyDetailsListIsEmpty = false;
 
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 
   statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
+  activeTab = 0;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -33,20 +36,34 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
+    this.penaltyDetailsList = this.penaltyDetails ?? [];
+    this.tempList = this.penaltyDetailsList.map(detail => new PenaltyDetails().clone<PenaltyDetails>(detail));
     this.listenToStatusChange();
     this.listenToIsCash();
     this.listenToIsDeduction();
   }
 
+  checkDetailsListValidity(listIsEmpty: boolean) {
+    this.penaltyDetailsListIsEmpty = listIsEmpty;
+  }
+
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
-    return this.form.valid;
+
+    if (!this.penaltyDetailsList.length) {
+      this.activeTab = 1;
+      this.penaltyDetailsListIsEmpty = true;
+    }
+    if (!this.form.valid) this.activeTab = 0;
+
+    return this.form.valid && !this.penaltyDetailsListIsEmpty;
   }
 
   protected _prepareModel(): Penalty | Observable<Penalty> {
     return new Penalty().clone<Penalty>({
       ...this.model,
       ...this.form.value,
+      detailsList: this.penaltyDetailsList,
     });
   }
 
@@ -66,20 +83,33 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   listenToIsCash() {
     this.form.get('isCash')?.valueChanges.subscribe(value => {
-      value
-        ? this.cashAmountField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)])
-        : this.cashAmountField?.clearValidators();
+      // this.isDeductionTrue ? this.form.get('isCash')?.disable() : this.form.get('isCash')?.enable();
+      if (value) {
+        this.cashAmountField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
+        this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
+      } else {
+        this.cashAmountField?.clearValidators();
+      }
       this.cashAmountField?.updateValueAndValidity();
     });
   }
 
   listenToIsDeduction() {
     this.form.get('isDeduction')?.valueChanges.subscribe(value => {
-      value
-        ? this.deductionDaysField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)])
-        : this.deductionDaysField?.clearValidators();
+      // this.isCashTrue ? this.form.get('isDeduction')?.disable() : this.form.get('isDeduction')?.enable();
+
+      if (value) {
+        this.deductionDaysField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
+        this.form.get('isCash')?.setValue(false, { emitEvent: false });
+      } else {
+        this.deductionDaysField?.clearValidators();
+      }
       this.deductionDaysField?.updateValueAndValidity();
     });
+  }
+
+  resetDetailsList() {
+    this.model.detailsList = this.tempList.slice();
   }
 
   get cashAmountField() {
@@ -98,6 +128,6 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return this.form.get('isCash')?.value === 1;
   }
   get penaltyDetails() {
-    return this.model.detailsList as unknown as PenaltyDetails[];
+    return this.model.detailsList;
   }
 }
