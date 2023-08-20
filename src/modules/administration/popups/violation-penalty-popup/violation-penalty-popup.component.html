@@ -40,8 +40,9 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
           <app-select-input
+          *ngIf="hasPenaltySignerAnOffenderLevel()"
             formControlName="penaltyId"
-            [options]="penalties"
+            [options]="filteredPenalties"
             [label]="lang.map.penalty"
             bindValue="id"
             bindLabel="getNames"

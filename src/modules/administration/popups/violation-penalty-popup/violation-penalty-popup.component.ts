@@ -30,6 +30,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   penaltyService = inject(PenaltyService);
   penalties!: Penalty[];
+  filteredPenalties!: Penalty[];
 
   penaltySigners: Lookup[] = inject(LookupService).lookups.penaltySigner;
   filteredPenaltySigners!: Lookup[];
@@ -87,39 +88,69 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   get penaltySignerValue() {
     return this.form.get('penaltySigner')?.value;
   }
+
+  get offenderLevelValue() {
+    return this.form.get('offenderLevel')?.value;
+  }
+
   protected override _afterBuildForm(): void {
     this.onOffenderTypeChange();
     this.onPenaltySignerChange();
+    this.onOffenderLevelChange();
+  }
+  onOffenderLevelChange() {
+    this.form.get('offenderLevel')?.valueChanges.subscribe(value => this.setFilteredPenalties());
   }
   onPenaltySignerChange() {
     this.form.get('penaltySigner')?.valueChanges.subscribe(value => {
-      switch (value) {
-        case PenaltySignerTypes.MANAGER_DIRECTOR:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem =>
-              lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
-              lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.PRESIDENT_ASSISTANT:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem =>
-              lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
-              lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem => lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
-          this.filteredOffenderLevels = this.offenderLevels.filter(lookupItem => lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS);
-          break;
-        default:
-          break;
-      }
+      this.form.get('offenderLevel')?.setValue(null);
+      this.setFilteredOffenderLevels(value);
+      this.setFilteredPenalties();
     });
+  }
+  setFilteredOffenderLevels(value: PenaltySignerTypes) {
+    switch (value) {
+      case PenaltySignerTypes.MANAGER_DIRECTOR:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
+        );
+        break;
+      case PenaltySignerTypes.PRESIDENT_ASSISTANT:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
+        );
+        break;
+      case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem => lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
+        );
+        break;
+      case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
+        this.filteredOffenderLevels = this.offenderLevels.filter(lookupItem => lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS);
+        break;
+      default:
+        break;
+    }
+  }
+  setFilteredPenalties() {
+    if (this.hasPenaltySignerAnOffenderLevel()) {
+      this.filteredPenalties = [];
+      this.penalties.forEach(penalty => {
+        if (penalty.isSystem) {
+          this.filteredPenalties.push(penalty);
+        } else {
+          penalty.detailsList.forEach(details => {
+            if (details.penaltySigner === this.penaltySignerValue && details.offenderLevel === this.offenderLevelValue) {
+              this.filteredPenalties.push(penalty);
+            }
+          });
+        }
+      });
+    }
   }
   onOffenderTypeChange() {
     this.form.get('offenderType')?.valueChanges.subscribe(value => {
@@ -138,5 +169,8 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   needOffenderLevel(): any {
     const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.id === this.offenderTypeValue)?.lookupKey;
     return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
+  }
+  hasPenaltySignerAnOffenderLevel(): any {
+    return this.penaltySignerValue && this.offenderLevelValue;
   }
 }
