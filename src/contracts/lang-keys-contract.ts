@@ -218,4 +218,5 @@ export interface LangKeysContract {
   deduction_days: string;
   cash_amount: string;
   legal_rule: string;
+  msg_add_one_item_at_least_to_x_to_proceed: string;
 }

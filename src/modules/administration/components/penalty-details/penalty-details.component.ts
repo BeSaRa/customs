@@ -1,27 +1,35 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { PenaltyDetails } from '@models/penalty-details';
 import { PenaltyDetailsService } from '@services/penalty-details.service';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
 import { LangService } from '@services/lang.service';
 import { DialogService } from '@services/dialog.service';
-import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/penalty-details-popup/penalty-details-popup.component';
-import { OperationType } from '@enums/operation-type';
-import { Subject } from 'rxjs';
+import { filter } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-penalty-details',
   templateUrl: './penalty-details.component.html',
 })
 export class PenaltyDetailsComponent implements OnInit {
-  ngOnInit(): void {}
   dialog = inject(DialogService);
-  @Input() list!: PenaltyDetails[];
-  displayedList = new MatTableDataSource(this.list);
-
   service = inject(PenaltyDetailsService);
   lang = inject(LangService);
+
+  @Input() list!: PenaltyDetails[];
+  @Output() listChange = new EventEmitter<PenaltyDetails[]>();
+
+  @Output() listIsEmpty = new EventEmitter<boolean>();
+  @Input() viewMode!: boolean;
+
+  displayedList: MatTableDataSource<PenaltyDetails> = new MatTableDataSource<PenaltyDetails>(this.list);
+  displayedColumns = ['penaltySigner', 'offenderLevel', 'legalRule', 'actions'];
+
+  ngOnInit(): void {
+    this.displayedList = new MatTableDataSource<PenaltyDetails>(this.list);
+  }
 
   actions: ContextMenuActionContract<PenaltyDetails>[] = [
     {
@@ -38,9 +46,6 @@ export class PenaltyDetailsComponent implements OnInit {
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
-        this.editDetails(item);
-      },
     },
     {
       name: 'delete',
@@ -50,24 +55,65 @@ export class PenaltyDetailsComponent implements OnInit {
       callback: item => {
         this.deleteDetails(item);
       },
+      disabled: this.viewMode,
     },
   ];
+
+  viewDetails(penaltyDetails: PenaltyDetails) {
+    this.service.openViewDialog(penaltyDetails).afterClosed().subscribe();
+  }
+
   createDetails() {
-    this.dialog.open(PenaltyDetailsPopupComponent, {
-      data: {
-        model: new PenaltyDetails(),
-        operation: OperationType.CREATE,
-      },
-    });
+    this.service
+      .openCreateDialog(undefined)
+      .afterClosed()
+      .pipe(
+        filter((model): model is PenaltyDetails => {
+          return this.service.isInstanceOf(model);
+        })
+      )
+      .subscribe(result => {
+        // if (!result) return;
+        this.list = this.list.concat(result);
+        this.reloadDataSource();
+      });
   }
-  viewDetails(penaltyDetails: PenaltyDetails) {}
 
-  deleteDetails(_t30: any) {
-    throw new Error('Method not implemented.');
-  }
-  editDetails(_t30: any) {
-    throw new Error('Method not implemented.');
+  editDetails(penaltyDetails: PenaltyDetails) {
+    this.service
+      .openEditDialog(penaltyDetails)
+      .afterClosed()
+      .pipe(
+        filter((model): model is PenaltyDetails => {
+          return this.service.isInstanceOf(model);
+        })
+      )
+      .subscribe(result => {
+        const index = this.list.indexOf(penaltyDetails);
+        this.list[index] = result;
+        this.reloadDataSource();
+      });
   }
 
-  displayedColumns = ['penaltySigner', 'offenderLevel', 'legalRule', 'actions'];
+  deleteDetails(penaltyDetails: PenaltyDetails) {
+    this.dialog
+      .confirm(this.lang.map.msg_delete_x_confirm.change({ x: this.lang.map.menu_penalty_details }))
+      .afterClosed()
+      .pipe(
+        filter(value => {
+          return value === UserClick.YES;
+        })
+      )
+      .subscribe(() => {
+        const index = this.list.indexOf(penaltyDetails);
+        this.list.splice(index, 1);
+        this.reloadDataSource();
+      });
+  }
+
+  protected reloadDataSource() {
+    this.listChange.emit(this.list);
+    this.displayedList = new MatTableDataSource(this.list);
+    this.listIsEmpty.emit(!this.list.length);
+  }
 }

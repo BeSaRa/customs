@@ -11,6 +11,7 @@ export class PenaltyDetails extends BaseModel<PenaltyDetails, PenaltyDetailsServ
   legalRuleInfo!: AdminResult;
   offenderLevelInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
+
   buildForm(controls = false): object {
     const { penaltySigner, offenderLevel, legalRule } = this;
     return {

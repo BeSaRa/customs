@@ -1,6 +1,7 @@
 import { ModelInterceptorContract } from 'cast-response';
 import { Penalty } from '@models/penalty';
 import { AdminResult } from '@models/admin-result';
+import { PenaltyDetails } from '@models/penalty-details';
 
 export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
   send(model: Partial<Penalty>): Partial<Penalty> {
@@ -14,7 +15,7 @@ export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
       detail.penaltySignerInfo = new AdminResult().clone<AdminResult>(detail.penaltySignerInfo);
       detail.legalRuleInfo = new AdminResult().clone<AdminResult>(detail.legalRuleInfo);
       detail.offenderLevelInfo = new AdminResult().clone<AdminResult>(detail.offenderLevelInfo);
-      return detail;
+      return new PenaltyDetails().clone<PenaltyDetails>(detail);
     });
     return model;
   }
