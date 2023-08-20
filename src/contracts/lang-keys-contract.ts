@@ -93,6 +93,7 @@ export interface LangKeysContract {
   delete_bulk: string;
   mail_notifications: string;
   qid: string;
+  basic_settings: string;
   lbl_basic_info: string;
   lbl_user_preferences: string;
   lbl_permissions: string;
