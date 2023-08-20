@@ -115,6 +115,10 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     });
   }
 
+  resetDetailsList() {
+    this.model.detailsList = this.tempList.slice();
+  }
+
   get cashAmountField() {
     return this.form.get('cashAmount');
   }
@@ -132,8 +136,5 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
   get penaltyDetails() {
     return this.model.detailsList;
-  }
-  get penaltyDetails() {
-    return this.model.detailsList as unknown as PenaltyDetails[];
   }
 }
