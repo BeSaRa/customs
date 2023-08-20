@@ -30,16 +30,12 @@
               formControlName="deductionDays"
               [label]="lang.map.deduction_days"
               type="number"
-              *ngIf="isDeductionTrue"
-              min="1"
-              max="15"></app-input>
+              *ngIf="isDeductionTrue"></app-input>
             <app-input
               formControlName="cashAmount"
               [label]="lang.map.cash_amount"
               type="number"
-              *ngIf="isCashTrue"
-              min="500"
-              max="5000"></app-input>
+              *ngIf="isCashTrue"></app-input>
           </div>
           <div class="grid grid-cols-2 gap-4 items-center">
             <app-switch
@@ -48,16 +44,8 @@
               [falseValue]="0"
               [label]="lang.map.change_status"
               [matTooltip]="statusTooltipText"></app-switch>
-            <app-switch
-              formControlName="isCash"
-              [trueValue]="1"
-              [falseValue]="0"
-              [label]="lang.map.is_cash"></app-switch>
-            <app-switch
-              formControlName="isDeduction"
-              [trueValue]="1"
-              [falseValue]="0"
-              [label]="lang.map.is_deduction"></app-switch>
+            <app-switch formControlName="isCash" [label]="lang.map.is_cash"></app-switch>
+            <app-switch formControlName="isDeduction" [label]="lang.map.is_deduction"></app-switch>
           </div>
         </ng-container>
       </mat-tab>

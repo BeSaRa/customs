@@ -63,6 +63,8 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return new Penalty().clone<Penalty>({
       ...this.model,
       ...this.form.value,
+      cashAmount: this.isCashTrue ? this.cashAmountField?.value : null,
+      deductionDays: this.isDeductionTrue ? this.deductionDaysField?.value : null,
       detailsList: this.penaltyDetailsList,
     });
   }
@@ -83,10 +85,11 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   listenToIsCash() {
     this.form.get('isCash')?.valueChanges.subscribe(value => {
-      // this.isDeductionTrue ? this.form.get('isCash')?.disable() : this.form.get('isCash')?.enable();
       if (value) {
         this.cashAmountField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
         this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
+        this.deductionDaysField?.clearValidators();
+        this.deductionDaysField?.updateValueAndValidity();
       } else {
         this.cashAmountField?.clearValidators();
       }
@@ -96,11 +99,11 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   listenToIsDeduction() {
     this.form.get('isDeduction')?.valueChanges.subscribe(value => {
-      // this.isCashTrue ? this.form.get('isDeduction')?.disable() : this.form.get('isDeduction')?.enable();
-
       if (value) {
         this.deductionDaysField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
         this.form.get('isCash')?.setValue(false, { emitEvent: false });
+        this.cashAmountField?.clearValidators();
+        this.cashAmountField?.updateValueAndValidity();
       } else {
         this.deductionDaysField?.clearValidators();
       }
@@ -122,10 +125,10 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return this.form.get('status');
   }
   get isDeductionTrue() {
-    return this.form.get('isDeduction')?.value === 1;
+    return this.form.get('isDeduction')?.value;
   }
   get isCashTrue() {
-    return this.form.get('isCash')?.value === 1;
+    return this.form.get('isCash')?.value;
   }
   get penaltyDetails() {
     return this.model.detailsList;
