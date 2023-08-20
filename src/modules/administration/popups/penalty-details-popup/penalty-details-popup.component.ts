@@ -4,7 +4,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { PenaltyDetails } from '@models/penalty-details';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, isObservable, of, switchMap, takeUntil } from 'rxjs';
+import { Observable, filter, isObservable, of, switchMap, takeUntil } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -73,6 +73,7 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
           return isObservable(result) ? result : of(result);
         })
       )
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
