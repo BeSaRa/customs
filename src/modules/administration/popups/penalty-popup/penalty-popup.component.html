@@ -1,10 +1,15 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_penalty }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      (click)="resetDetailsList()"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group [(selectedIndex)]="activeTab" mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 items-center">
@@ -21,8 +26,20 @@
               [options]="offenderTypes"
               bindLabel="getNames"
               bindValue="lookupKey" />
-            <app-input formControlName="deductionDays" [label]="lang.map.deduction_days" type="number" *ngIf="isDeductionTrue" min="1" max="15"></app-input>
-            <app-input formControlName="cashAmount" [label]="lang.map.cash_amount" type="number" *ngIf="isCashTrue" min="500" max="5000"></app-input>
+            <app-input
+              formControlName="deductionDays"
+              [label]="lang.map.deduction_days"
+              type="number"
+              *ngIf="isDeductionTrue"
+              min="1"
+              max="15"></app-input>
+            <app-input
+              formControlName="cashAmount"
+              [label]="lang.map.cash_amount"
+              type="number"
+              *ngIf="isCashTrue"
+              min="500"
+              max="5000"></app-input>
           </div>
           <div class="grid grid-cols-2 gap-4 items-center">
             <app-switch
@@ -35,25 +52,37 @@
               formControlName="isCash"
               [trueValue]="1"
               [falseValue]="0"
-              [label]="lang.map.is_cash"
-              ></app-switch>
+              [label]="lang.map.is_cash"></app-switch>
             <app-switch
               formControlName="isDeduction"
               [trueValue]="1"
               [falseValue]="0"
-              [label]="lang.map.is_deduction"
-              ></app-switch>
+              [label]="lang.map.is_deduction"></app-switch>
           </div>
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.more_details">
-        <app-penalty-details [list]="penaltyDetails"></app-penalty-details>
+        <app-penalty-details
+          [(list)]="penaltyDetailsList"
+          [viewMode]="inViewMode()"
+          (listIsEmpty)="checkDetailsListValidity($event)"></app-penalty-details>
+        <label class="group block relative">
+          <span
+            *ngIf="penaltyDetailsListIsEmpty"
+            class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
+            {{
+              this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({ x: this.lang.map.menu_penalty_details })
+            }}
+          </span></label
+        >
       </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
     <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="!inViewMode()" (click)="resetDetailsList()" mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
     <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>

@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_penalty_details : string;
+  menu_penalty_details: string;
   menu_legal_rule: string;
   menu_violation_penalty: string;
   search: string;
@@ -194,4 +194,5 @@ export interface LangKeysContract {
   deduction_days: string;
   cash_amount: string;
   legal_rule: string;
+  msg_add_one_item_at_least_to_x_to_proceed: string;
 }
