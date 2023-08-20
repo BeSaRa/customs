@@ -31,33 +31,47 @@ export class PenaltyDetailsComponent implements OnInit {
     this.displayedList = new MatTableDataSource<PenaltyDetails>(this.list);
   }
 
-  actions: ContextMenuActionContract<PenaltyDetails>[] = [
-    {
-      name: 'view',
-      type: 'action',
-      label: 'view',
-      icon: AppIcons.VIEW,
-      callback: item => {
-        this.viewDetails(item);
-      },
-    },
-    {
-      name: 'edit',
-      type: 'action',
-      label: 'edit',
-      icon: AppIcons.EDIT,
-    },
-    {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: item => {
-        this.deleteDetails(item);
-      },
-      disabled: this.viewMode,
-    },
-  ];
+  actions: ContextMenuActionContract<PenaltyDetails>[] = this.viewMode
+    ? [
+        {
+          name: 'view',
+          type: 'action',
+          label: 'view',
+          icon: AppIcons.VIEW,
+          callback: item => {
+            this.viewDetails(item);
+          },
+        },
+        {
+          name: 'edit',
+          type: 'action',
+          label: 'edit',
+          callback: item => {
+            this.editDetails(item);
+          },
+          icon: AppIcons.EDIT,
+        },
+        {
+          name: 'delete',
+          type: 'action',
+          label: 'delete',
+          icon: AppIcons.DELETE,
+          callback: item => {
+            this.deleteDetails(item);
+          },
+        },
+      ]
+    : [
+        {
+          name: 'view',
+          type: 'action',
+          label: 'view',
+          icon: AppIcons.VIEW,
+          callback: item => {
+            this.viewDetails(item);
+          },
+        },
+      ];
 
   viewDetails(penaltyDetails: PenaltyDetails) {
     this.service.openViewDialog(penaltyDetails).afterClosed().subscribe();
