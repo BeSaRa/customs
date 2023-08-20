@@ -14,19 +14,19 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   $$__service_name__$$ = 'PenaltyService';
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
-  isSystem: boolean = false;
-  penaltyKey: number = 0;
+  isSystem = false;
+  penaltyKey = 0;
   penaltyWeight!: number;
-  isDeduction: boolean = false;
+  isDeduction = false;
   erasureDuration!: number;
   deductionDays!: number;
-  isCash: boolean = false;
+  isCash = false;
   cashAmount!: number;
   override status = StatusTypes.ACTIVE;
   detailsList!: PenaltyDetails[];
 
   buildForm(controls = false): object {
-    const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration } = this;
+    const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration, isCash, cashAmount } = this;
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
@@ -36,8 +36,8 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
       erasureDuration: controls ? [erasureDuration, CustomValidators.required] : erasureDuration,
       isDeduction: controls ? [isDeduction, CustomValidators.required] : isDeduction,
       deductionDays: controls ? [deductionDays] : deductionDays,
-      isCash: controls ? [isDeduction, CustomValidators.required] : isDeduction,
-      cashAmount: controls ? [deductionDays] : deductionDays,
+      isCash: controls ? [isCash, CustomValidators.required] : isCash,
+      cashAmount: controls ? [cashAmount] : cashAmount,
     };
   }
 }
