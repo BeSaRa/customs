@@ -37,6 +37,11 @@ export const AppIcons = {
   GLOBAL_SETTING: 'cogs',
   EMAIL_TEMPLATE: 'email-multiple',
   HISTORY: 'history',
+  ELECTRONIC_SERVICES: 'alpha-e-box',
+  INVESTIGATION: 'file-document-edit',
+  INFORMATION: 'information',
+  ACCOUNT_MULTIPLE_REMOVE: 'account-multiple-remove',
+  ACCOUNT_GROUP_OUTLINE: 'account-group-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

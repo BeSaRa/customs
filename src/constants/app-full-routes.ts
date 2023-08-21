@@ -18,4 +18,6 @@ export const AppFullRoutes = {
   EMAIL_TEMPLATE: '/home/administration/email-template',
   GLOBAL_SETTING: '/home/administration/global-setting',
   MAIN: '/home/main',
+  ELECTRONIC_SERVICES: '/home/electronic-services',
+  INVESTIGATION: '/home/electronic-services/investigation',
 };

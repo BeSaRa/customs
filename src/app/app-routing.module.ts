@@ -18,7 +18,11 @@ const routes: Routes = [
       },
       {
         path: AppRoutes.ADMINISTRATION,
-        loadChildren: () => import('../modules/administration/administration.module').then(m => m.AdministrationModule),
+        loadChildren: () => import('@modules/administration/administration.module').then(m => m.AdministrationModule),
+      },
+      {
+        path: AppRoutes.ELECTRONIC_SERVICES,
+        loadChildren: () => import('@modules/electronic-services/electronic-services.module').then(m => m.ElectronicServicesModule),
       },
     ],
   },

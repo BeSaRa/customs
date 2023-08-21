@@ -1,4 +1,10 @@
 export interface LangKeysContract {
+  external_persons: string;
+  offenders: string;
+  violations: string;
+  basic_info: string;
+  menu_investigation: string;
+  menu_electronic_services: string;
   search: string;
   user: string;
   operation: string;

@@ -29,7 +29,7 @@ export class MenuItemService {
   }
 
   getChildren(parentId: number): MenuItemContract[] {
-    return this.children[parentId];
+    return this.children[parentId] || [];
   }
 
   filterStaticMenu(): void {

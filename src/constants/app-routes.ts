@@ -21,4 +21,6 @@ export const AppRoutes = {
   GLOBAL_SETTING: 'global-setting',
   FILE_TYPE: 'file-type',
   MAIN: 'main',
+  ELECTRONIC_SERVICES: 'electronic-services',
+  INVESTIGATION: 'investigation',
 };

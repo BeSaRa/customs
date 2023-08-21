@@ -1,17 +1,14 @@
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { Component, inject } from '@angular/core';
-import { FormControl, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { LangContract } from '@contracts/lang-contract';
-import { InternalUser } from '@models/internal-user';
-import { Lookup } from '@models/lookup';
 import { UserPreferences } from '@models/user-preferences';
 import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { Observable } from 'rxjs';
-import { FormArray } from '@angular/forms';
 import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
@@ -33,6 +30,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   phoneNumber!: string;
   email!: string;
   languages: LangContract[] = this.langService.languages;
+
   override _buildForm(): void {
     const formObj = this.model.buildForm(true);
     const alternateEmailListParsed = ((formObj.alternateEmailListParsed as string[]) ?? []).map(
@@ -41,19 +39,24 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
     const formModel = { ...formObj, alternateEmailListParsed: this.fb.array(alternateEmailListParsed) };
     this.form = this.fb.group(formModel);
   }
+
   get alternateEmailListParsed() {
     return this.form.get('alternateEmailListParsed') as FormArray;
   }
+
   addAltEmail() {
     this.alternateEmailListParsed.push(new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
   }
+
   deleteEmail(i: number) {
     this.alternateEmailListParsed.removeAt(i);
   }
+
   protected override _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
+
   protected override _prepareModel(): UserPreferences | Observable<UserPreferences> {
     return new UserPreferences().clone<UserPreferences>({
       //...this.model,
