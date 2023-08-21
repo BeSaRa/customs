@@ -28,7 +28,7 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
   penaltyGuidanceInfo!: AdminResult;
 
   buildForm(controls = false): object {
-    const { arName, enName, repeat, violationTypeId, penaltySigner, penaltyId, penaltyGuidance, offenderType, offenderLevel } = this;
+    const { repeat, violationTypeId, penaltySigner, penaltyId, penaltyGuidance, offenderType, offenderLevel } = this;
     return {
       repeat: controls ? [repeat, CustomValidators.required] : repeat,
       violationTypeId: controls ? [violationTypeId, CustomValidators.required] : violationTypeId,
