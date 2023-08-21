@@ -1,4 +1,15 @@
-import { AfterContentInit, Component, ContentChild, inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChild,
+  inject,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
@@ -37,9 +48,9 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, 
   }
 
   private destroy$ = new Subject<void>();
-  @Input()
+  @Input({ transform: booleanAttribute })
   disabled = false;
-  @Input()
+  @Input({ transform: booleanAttribute })
   displayErrors = true;
   @Input()
   size: 'sm' | 'md' | 'lg' = 'md';
@@ -96,6 +107,8 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, 
       self: true,
       optional: true,
     });
+
+    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
   }
 
   ngOnDestroy(): void {
