@@ -19,5 +19,7 @@ export const AppFullRoutes = {
   GLOBAL_SETTING: '/home/administration/global-setting',
   MAIN: '/home/main',
   VIOLATION_PENALTY: '/home/administration/violation-penalty',
-  LEGAL_RULE: '/home/administration/legal-rule'
+  LEGAL_RULE: '/home/administration/legal-rule',
+  ELECTRONIC_SERVICES: '/home/electronic-services',
+  INVESTIGATION: '/home/electronic-services/investigation',
 };

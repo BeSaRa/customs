@@ -1,16 +1,23 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { Localization } from '@models/localization';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { CommonModule } from '@angular/common';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 
 @Component({
   selector: 'app-localization-popup',
   templateUrl: './localization-popup.component.html',
   styleUrls: ['./localization-popup.component.scss'],
+  standalone: true,
+  imports: [CommonModule, InputComponent, IconButtonComponent, TextareaComponent, ButtonComponent, ReactiveFormsModule, MatDialogModule],
 })
 export class LocalizationPopupComponent extends AdminDialogComponent<Localization> {
   form!: UntypedFormGroup;

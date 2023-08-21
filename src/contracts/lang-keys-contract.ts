@@ -2,6 +2,12 @@ export interface LangKeysContract {
   menu_penalty_details: string;
   menu_legal_rule: string;
   menu_violation_penalty: string;
+  external_persons: string;
+  offenders: string;
+  violations: string;
+  basic_info: string;
+  menu_investigation: string;
+  menu_electronic_services: string;
   search: string;
   user: string;
   operation: string;

@@ -45,7 +45,6 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
 import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
 import { LocalizationComponent } from './components/localization/localization.component';
-import { LocalizationPopupComponent } from './popups/localization-popup/localization-popup.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
 import { PermissionRolePopupComponent } from '@modules/administration/popups/permission-role-popup/permission-role-popup.component';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
@@ -81,7 +80,6 @@ import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/pen
 @NgModule({
   declarations: [
     AdministrationComponent,
-    LocalizationPopupComponent,
     LocalizationComponent,
     InternalUserComponent,
     InternalUserPopupComponent,

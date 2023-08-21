@@ -24,7 +24,8 @@ export const EndPoints = {
   GLOBAL_SETTING: '/admin/global-setting',
   FILE_TYPE: '/admin/global-setting/file-types',
   VIOLATION_PENALTY: '/entity/violation-penalty',
-  LEGAL_RULE: '/entity/legal-rule'
+  LEGAL_RULE: '/entity/legal-rule',
+  INVESTIGATION: '/investigation-case',
 };
 
 export type EndpointsType = typeof EndPoints;

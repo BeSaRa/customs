@@ -1,0 +1,40 @@
+<div
+  class="flex bg-gradient-to-br from-primary to-primary-light px-3 text-white rounded-t-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+    {{ lang.map.menu_investigation }}
+  </h1>
+  <div class="flex-auto"></div>
+</div>
+<div class="bg-white shadow rounded-b-lg relative">
+  <mat-tab-group preserveContent mat-stretch-tabs="false">
+    <mat-tab>
+      <div class="flex items-center gap-2 justify-center" *mat-tab-label>
+        <mat-icon [svgIcon]="AppIcons.INFORMATION"></mat-icon>
+        <span>{{ lang.map.basic_info }}</span>
+      </div>
+      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+    </mat-tab>
+    <mat-tab>
+      <div class="flex items-center gap-2 justify-center" *mat-tab-label>
+        <mat-icon [svgIcon]="AppIcons.BOOK_CANCEL"></mat-icon>
+        <span> {{ lang.map.violations }}</span>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <div class="flex items-center gap-2 justify-center" *mat-tab-label>
+        <mat-icon [svgIcon]="AppIcons.ACCOUNT_MULTIPLE_REMOVE"></mat-icon>
+        <span> {{ lang.map.offenders }}</span>
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <div class="flex items-center gap-2 justify-center" *mat-tab-label>
+        <mat-icon [svgIcon]="AppIcons.ACCOUNT_GROUP_OUTLINE"></mat-icon>
+        <span> {{ lang.map.external_persons }}</span>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <ng-template #basic_info_tab>
+    <div class="px-3">welcome</div>
+  </ng-template>
+</div>

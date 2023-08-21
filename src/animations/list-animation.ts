@@ -9,7 +9,7 @@ export const listAnimation = trigger('listAnimation', [
           opacity: 0,
           transform: 'translateY(100%)',
         }),
-        stagger(50, [
+        stagger(30, [
           animate(
             '.1s',
             style({

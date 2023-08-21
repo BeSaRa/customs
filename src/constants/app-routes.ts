@@ -22,5 +22,7 @@ export const AppRoutes = {
   FILE_TYPE: 'file-type',
   MAIN: 'main',
   VIOLATION_PENALTY: 'violation-penalty',
-  LEGAL_RULE: 'legal-rule'
+  LEGAL_RULE: 'legal-rule',
+  ELECTRONIC_SERVICES: 'electronic-services',
+  INVESTIGATION: 'investigation',
 };
