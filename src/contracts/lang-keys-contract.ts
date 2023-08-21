@@ -2,6 +2,8 @@ export interface LangKeysContract {
   menu_penalty_details: string;
   menu_legal_rule: string;
   menu_violation_penalty: string;
+  expand_all: string;
+  collapse_all: string;
   report_attachments: string;
   general_explanation_of_violations: string;
   report_entry_date: string;
