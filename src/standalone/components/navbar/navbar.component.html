@@ -2,7 +2,7 @@
   <button (click)="menuClicked()" mat-icon-button>
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
-  <app-input label="" placeholder="search" [noMargin]="true" class="flex-auto [&_.input-form]:bg-read-500"></app-input>
+  <app-input label="" placeholder="search" [noMargin]="true" class="flex-auto hidden sm:block"></app-input>
   <button class="space-x-4 rtl:space-x-reverse flex items-center" [matMenuTriggerFor]="userMenu">
     <div class="rounded-full w-10">
       <img ngSrc="assets/images/user.png" alt="avatar" height="512" width="512" />
