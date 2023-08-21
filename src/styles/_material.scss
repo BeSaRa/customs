@@ -87,10 +87,12 @@ $customs-theme: mat.define-light-theme(
 .mat-mdc-checkbox.mat-accent {
   --mdc-checkbox-selected-checkmark-color: #fff;
 }
+
 :root {
   // text color for primary theme
   --mdc-theme-text-primary-on-background: theme("textColor.slate.700");
 }
+
 .mat-mdc-paginator {
   color: var(--mdc-theme-text-primary-on-background);
 }
@@ -109,5 +111,31 @@ html[dir="ltr"] {
 html[dir="rtl"] {
   .cdk-column-select {
     padding-left: 0 !important;
+  }
+}
+
+.custom-accordion {
+  .mat-expansion-panel-header {
+    @apply bg-primary-light text-white;
+  }
+
+  .mat-expansion-panel
+    .mat-expansion-panel-header.cdk-keyboard-focused:not(
+      [aria-disabled="true"]
+    ),
+  .mat-expansion-panel
+    .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled="true"]),
+  .mat-expansion-panel:not(.mat-expanded)
+    .mat-expansion-panel-header:hover:not([aria-disabled="true"]),
+  .mat-expansion-panel-header.mat-expanded:focus,
+  .mat-expansion-panel-header.mat-expanded:hover {
+    @apply bg-primary;
+  }
+
+  .mat-expansion-panel-header.mat-expanded {
+    height: 48px;
+  }
+  .mat-expansion-panel-body {
+    @apply p-4;
   }
 }

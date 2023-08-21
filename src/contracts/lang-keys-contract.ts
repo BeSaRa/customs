@@ -1,4 +1,10 @@
 export interface LangKeysContract {
+  report_attachments: string;
+  general_explanation_of_violations: string;
+  report_entry_date: string;
+  report_security_level: string;
+  investigation_file_number: string;
+  report_draft_number: string;
   external_persons: string;
   offenders: string;
   violations: string;

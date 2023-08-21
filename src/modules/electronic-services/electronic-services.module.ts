@@ -9,6 +9,10 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent],
@@ -20,6 +24,10 @@ import { MatIconModule } from '@angular/material/icon';
     MatTooltipModule,
     MatTabsModule,
     MatIconModule,
+    InputComponent,
+    SelectInputComponent,
+    TextareaComponent,
+    MatExpansionModule,
   ],
 })
 export class ElectronicServicesModule {}
