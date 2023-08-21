@@ -41,6 +41,10 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     this.listenToStatusChange();
     this.listenToIsCash();
     this.listenToIsDeduction();
+
+    this.dialogRef.afterClosed().subscribe(() => {
+      this.model.detailsList = this.tempList.slice();
+    });
   }
 
   checkDetailsListValidity(listIsEmpty: boolean) {
@@ -109,10 +113,6 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
       }
       this.deductionDaysField?.updateValueAndValidity();
     });
-  }
-
-  resetDetailsList() {
-    this.model.detailsList = this.tempList.slice();
   }
 
   get cashAmountField() {
