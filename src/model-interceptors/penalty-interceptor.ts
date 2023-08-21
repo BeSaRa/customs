@@ -11,12 +11,14 @@ export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
   receive(model: Penalty): Penalty {
     model.statusInfo = new AdminResult().clone<AdminResult>(model.statusInfo);
     model.offenderTypeInfo = new AdminResult().clone<AdminResult>(model.offenderTypeInfo);
-    model.detailsList = model.detailsList.map(detail => {
-      detail.penaltySignerInfo = new AdminResult().clone<AdminResult>(detail.penaltySignerInfo);
-      detail.legalRuleInfo = new AdminResult().clone<AdminResult>(detail.legalRuleInfo);
-      detail.offenderLevelInfo = new AdminResult().clone<AdminResult>(detail.offenderLevelInfo);
-      return new PenaltyDetails().clone<PenaltyDetails>(detail);
-    });
+    model.detailsList = model.detailsList
+      ? model.detailsList.map(detail => {
+          detail.penaltySignerInfo = new AdminResult().clone<AdminResult>(detail.penaltySignerInfo);
+          detail.legalRuleInfo = new AdminResult().clone<AdminResult>(detail.legalRuleInfo);
+          detail.offenderLevelInfo = new AdminResult().clone<AdminResult>(detail.offenderLevelInfo);
+          return new PenaltyDetails().clone<PenaltyDetails>(detail);
+        })
+      : [];
     return model;
   }
 }
