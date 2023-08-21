@@ -4,9 +4,11 @@
     {{ lang.map.menu_investigation }}
   </h1>
   <div class="flex-auto"></div>
+  <app-icon-button [matTooltip]="lang.map.collapse_all" (click)="accordion.closeAll()" icon="COLLAPSE_ALL" />
+  <app-icon-button [matTooltip]="lang.map.expand_all" (click)="accordion.openAll()" icon="EXPAND_ALL" />
 </div>
 <div class="relative">
-  <mat-accordion class="custom-accordion" multi>
+  <mat-accordion #accordion="matAccordion" class="custom-accordion" multi>
     <mat-expansion-panel id="basic_info" expanded>
       <mat-expansion-panel-header>
         <div class="flex gap-5 items-center justify-start">

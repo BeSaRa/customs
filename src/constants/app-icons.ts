@@ -43,6 +43,8 @@ export const AppIcons = {
   ACCOUNT_MULTIPLE_REMOVE: 'account-multiple-remove',
   ACCOUNT_GROUP_OUTLINE: 'account-group-outline',
   ATTACHMENT: 'attachment',
+  COLLAPSE_ALL: 'arrow-collapse-vertical',
+  EXPAND_ALL: 'arrow-expand-vertical',
 };
 
 export type AppIconsType = typeof AppIcons;

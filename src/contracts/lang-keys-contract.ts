@@ -1,4 +1,6 @@
 export interface LangKeysContract {
+  expand_all: string;
+  collapse_all: string;
   report_attachments: string;
   general_explanation_of_violations: string;
   report_entry_date: string;
