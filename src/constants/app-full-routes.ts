@@ -1,6 +1,5 @@
 export const AppFullRoutes = {
   ADMINISTRATION: '/home/administration',
-  USERSERVICES: '/home/user-services',
   LOCALIZATION: '/home/administration/localization',
   INTERNAL_USER: '/home/administration/internal-user',
   PENALTY: '/home/administration/penalty',

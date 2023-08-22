@@ -11,17 +11,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.ADMINISTRATION,
   },
   {
-    id: MenuIdes.USER_SERVICES,
-    langKey: 'menu_user_services',
-    icon: AppIcons.USER_SERVICES,
-    path: AppFullRoutes.USERSERVICES,
-  },
-  {
     id: MenuIdes.USER_INBOX,
     langKey: 'menu_user_inbox',
     icon: AppIcons.USER_INBOX,
     path: AppFullRoutes.USER_INBOX,
-    parent: MenuIdes.USER_SERVICES,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
   },
   {
     id: MenuIdes.LOCALIZATION,
