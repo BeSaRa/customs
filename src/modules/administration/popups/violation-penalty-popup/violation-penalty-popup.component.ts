@@ -133,8 +133,11 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
   }
 
-  noOffenderLevelOrPenaltySigner() {
-    return !this.penaltySignerValue || !this.offenderLevelValue;
+  showPenaltiesAndPenaltyGuidances() {
+    return (
+      (this.penaltySignerValue && this.offenderLevelValue) ||
+      this.penaltySignerValue === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+    );
   }
 
   setFilteredPenaltySigners() {
@@ -183,7 +186,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   setFilteredPenalties() {
-    if (this.noOffenderLevelOrPenaltySigner()) return;
+    if (!this.showPenaltiesAndPenaltyGuidances()) return;
     this.filteredPenalties = [];
     this.penalties.forEach(penalty => {
       if (penalty.isSystem) this.filteredPenalties.push(penalty);
@@ -198,7 +201,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   setFilteredPenaltyGuidances() {
-    if (this.noOffenderLevelOrPenaltySigner()) return;
+    if (!this.showPenaltiesAndPenaltyGuidances()) return;
     const penaltySignerValue: PenaltySignerTypes = this.penaltySignerValue;
     const offenderLevelValue: OffenderLevels = this.offenderLevelValue;
     switch (penaltySignerValue) {
