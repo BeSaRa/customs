@@ -37,8 +37,6 @@ export const AppIcons = {
   GLOBAL_SETTING: 'cogs',
   EMAIL_TEMPLATE: 'email-multiple',
   HISTORY: 'history',
-  VIOLATION_PENALTY: 'pen',
-  LEGAL_RULE: 'scale-balance',
   ELECTRONIC_SERVICES: 'alpha-e-box',
   INVESTIGATION: 'file-document-edit',
   INFORMATION: 'information',
@@ -47,8 +45,6 @@ export const AppIcons = {
   ATTACHMENT: 'attachment',
   COLLAPSE_ALL: 'arrow-collapse-vertical',
   EXPAND_ALL: 'arrow-expand-vertical',
-  VIOLATION_PENALTY: 'pen',
-  LEGAL_RULE: 'scale-balance',
 };
 
 export type AppIconsType = typeof AppIcons;
