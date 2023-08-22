@@ -24,14 +24,6 @@ const routes: Routes = [
         path: AppRoutes.ELECTRONIC_SERVICES,
         loadChildren: () => import('@modules/electronic-services/electronic-services.module').then(m => m.ElectronicServicesModule),
       },
-      {
-        path: AppRoutes.USER_SERVICES,
-        loadChildren: () => import('../modules/userServices/userServices.module').then(m => m.UserServicesModule),
-      },
-      // {
-      //   path: AppRoutes.USER_INBOX,
-      //   component: UserInboxComponent
-      // },
     ],
   },
   {

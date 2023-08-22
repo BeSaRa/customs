@@ -13,9 +13,14 @@ import { InputComponent } from '@standalone/components/input/input.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
 @NgModule({
-  declarations: [ElectronicServicesComponent, InvestigationComponent],
+  declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
   imports: [
     CommonModule,
     ElectronicServicesRoutingModule,
@@ -28,6 +33,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
     SelectInputComponent,
     TextareaComponent,
     MatExpansionModule,
+
+    MatProgressSpinnerModule,
+    MatTableModule,
+    FilterColumnComponent,
+    ContextMenuComponent,
   ],
 })
 export class ElectronicServicesModule {}
