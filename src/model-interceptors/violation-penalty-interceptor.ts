@@ -15,7 +15,7 @@ export class ViolationPenaltyInterceptor implements ModelInterceptorContract<Vio
     model.penaltyGuidanceInfo = new AdminResult().clone(model.penaltyGuidanceInfo);
     model.offenderLevelInfo = new AdminResult().clone(model.offenderLevelInfo);
     model.statusInfo = new AdminResult().clone(model.statusInfo);
-
+    model.offenderTypeInfo = new AdminResult().clone(model.offenderTypeInfo);
     return model;
   }
 }
