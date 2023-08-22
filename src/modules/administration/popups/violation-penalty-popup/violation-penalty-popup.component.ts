@@ -16,6 +16,7 @@ import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { OffenderLevels } from '@enums/offender-levels';
 import { PenaltyGuidances } from '@enums/penalty-guidances';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-violation-penalty-popup',
@@ -40,6 +41,8 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   penaltyGuidances: Lookup[] = inject(LookupService).lookups.penaltyGuidance;
   filteredPenaltyGuidances!: Lookup[];
   offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
+
+  statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -134,7 +137,9 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
         break;
       case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
         this.filteredOffenderLevels = this.offenderLevels.filter(
-          lookupItem => lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS
         );
         break;
       case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
@@ -210,7 +215,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
   onOffenderTypeChange() {
     this.form.get('offenderType')?.valueChanges.subscribe(value => {
-      const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.id === value)?.lookupKey;
+      const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === value)?.lookupKey;
       if (offenderTypeLookupKey === OffenderTypes.BROKER) {
         this.filteredPenaltySigners = this.penaltySigners.filter(
           lookupItem => lookupItem.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
@@ -223,7 +228,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     });
   }
   needOffenderLevel(): any {
-    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.id === this.offenderTypeValue)?.lookupKey;
+    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
     return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
   }
   hasPenaltySignerAnOffenderLevel(): any {

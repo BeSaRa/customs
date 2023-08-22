@@ -5,25 +5,19 @@
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
-      <div class="grid grid-cols-2 gap-4">
-          <!-- <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-          <app-input formControlName="enName" [label]="lang.map.en_name"></app-input> -->
+      <div class="grid grid-cols-2 gap-4  items-center justify-start">
           <app-select-input
             formControlName="offenderType"
             [options]="offenderTypes"
             [label]="lang.map.offender_type"
-            bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
+            bindValue="lookupKey"
+            bindLabel="getNames" />
           <app-select-input
             formControlName="violationTypeId"
             [options]="violationTypes"
             [label]="lang.map.violation_type"
             bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
+            bindLabel="getNames"/>
           <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
           <app-select-input
             *ngIf="offenderTypeValue"
@@ -40,14 +34,12 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
           <app-select-input
-          *ngIf="hasPenaltySignerAnOffenderLevel()"
+            *ngIf="hasPenaltySignerAnOffenderLevel()"
             formControlName="penaltyId"
             [options]="filteredPenalties"
             [label]="lang.map.penalty"
             bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
+            bindLabel="getNames"/>
           <app-select-input
             *ngIf="hasPenaltySignerAnOffenderLevel()"
             formControlName="penaltyGuidance"
@@ -55,7 +47,12 @@
             [label]="lang.map.penalty_guidance"
             bindValue="lookupKey"
             bindLabel="getNames" />
-          
+          <app-switch
+              formControlName="status"
+              [trueValue]="1"
+              [falseValue]="0"
+              [label]="lang.map.change_status"
+              [matTooltip]="statusTooltipText"></app-switch>
           
       </div>
     </ng-container>
