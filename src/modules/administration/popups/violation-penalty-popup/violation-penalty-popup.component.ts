@@ -15,6 +15,7 @@ import { Penalty } from '@models/penalty';
 import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { OffenderLevels } from '@enums/offender-levels';
+import { PenaltyGuidances } from '@enums/penalty-guidances';
 
 @Component({
   selector: 'app-violation-penalty-popup',
@@ -30,12 +31,14 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   penaltyService = inject(PenaltyService);
   penalties!: Penalty[];
+  filteredPenalties: Penalty[] = [];
 
   penaltySigners: Lookup[] = inject(LookupService).lookups.penaltySigner;
   filteredPenaltySigners!: Lookup[];
   offenderLevels: Lookup[] = inject(LookupService).lookups.offenderLevel;
   filteredOffenderLevels!: Lookup[];
   penaltyGuidances: Lookup[] = inject(LookupService).lookups.penaltyGuidance;
+  filteredPenaltyGuidances!: Lookup[];
   offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
 
   protected override _initPopup(): void {
@@ -87,56 +90,157 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   get penaltySignerValue() {
     return this.form.get('penaltySigner')?.value;
   }
+
+  get offenderLevelValue() {
+    return this.form.get('offenderLevel')?.value;
+  }
+
   protected override _afterBuildForm(): void {
+    super._afterBuildForm();
     this.onOffenderTypeChange();
     this.onPenaltySignerChange();
+    this.onOffenderLevelChange();
   }
+
   onPenaltySignerChange() {
-    this.form.get('penaltySigner')?.valueChanges.subscribe(value => {
-      switch (value) {
-        case PenaltySignerTypes.MANAGER_DIRECTOR:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem =>
-              lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
-              lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.PRESIDENT_ASSISTANT:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem =>
-              lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
-              lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
-          this.filteredOffenderLevels = this.offenderLevels.filter(
-            lookupItem => lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
-          );
-          break;
-        case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
-          this.filteredOffenderLevels = this.offenderLevels.filter(lookupItem => lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS);
-          break;
-        default:
-          break;
-      }
+    this.form.get('penaltySigner')?.valueChanges.subscribe(() => {
+      this.form.get('offenderLevel')?.setValue(null);
+      this.form.get('penaltyId')?.setValue(null);
+      this.form.get('penaltyGuidance')?.setValue(null);
+      this.setFilteredOffenderLevels();
+      this.setFilteredPenalties();
+      this.setFilteredPenaltyGuidances();
     });
   }
+  onOffenderLevelChange() {
+    this.form.get('offenderLevel')?.valueChanges.subscribe(() => {
+      this.form.get('penaltyId')?.setValue(null);
+      this.form.get('penaltyGuidance')?.setValue(null);
+      this.setFilteredPenalties();
+      this.setFilteredPenaltyGuidances();
+    });
+  }
+
   onOffenderTypeChange() {
-    this.form.get('offenderType')?.valueChanges.subscribe(value => {
-      const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.id === value)?.lookupKey;
-      if (offenderTypeLookupKey === OffenderTypes.BROKER) {
-        this.filteredPenaltySigners = this.penaltySigners.filter(
-          lookupItem => lookupItem.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+    this.form.get('offenderType')?.valueChanges.subscribe(() => {
+      this.form.get('penaltySigners')?.setValue(null);
+      this.setFilteredPenaltySigners();
+    });
+  }
+
+  needOffenderLevel(): any {
+    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
+    return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
+  }
+
+  noOffenderLevelOrPenaltySigner() {
+    return !this.penaltySignerValue || !this.offenderLevelValue;
+  }
+
+  setFilteredPenaltySigners() {
+    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
+    if (offenderTypeLookupKey === OffenderTypes.BROKER) {
+      this.filteredPenaltySigners = this.penaltySigners.filter(
+        lookupItem => lookupItem.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+      );
+    } else if (offenderTypeLookupKey === OffenderTypes.EMPLOYEE) {
+      this.filteredPenaltySigners = this.penaltySigners.filter(
+        lookupItem => lookupItem.lookupKey !== PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+      );
+    }
+  }
+
+  setFilteredOffenderLevels() {
+    const penaltySignerValue: PenaltySignerTypes = this.penaltySignerValue;
+    switch (penaltySignerValue) {
+      case PenaltySignerTypes.MANAGER_DIRECTOR:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
         );
-      } else if (offenderTypeLookupKey === OffenderTypes.EMPLOYEE) {
-        this.filteredPenaltySigners = this.penaltySigners.filter(
-          lookupItem => lookupItem.lookupKey !== PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+        break;
+      case PenaltySignerTypes.PRESIDENT_ASSISTANT:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
         );
+        break;
+      case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS
+        );
+        break;
+      case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
+        this.filteredOffenderLevels = this.offenderLevels.filter(lookupItem => lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS);
+        break;
+      default:
+        break;
+    }
+  }
+
+  setFilteredPenalties() {
+    if (this.noOffenderLevelOrPenaltySigner()) return;
+    this.filteredPenalties = [];
+    this.penalties.forEach(penalty => {
+      if (penalty.isSystem) this.filteredPenalties.push(penalty);
+      else {
+        penalty.detailsList.forEach(detail => {
+          if (detail.offenderLevel === this.offenderLevelValue && detail.penaltySigner === this.penaltySignerValue) {
+            this.filteredPenalties.push(penalty);
+          }
+        });
       }
     });
   }
-  needOffenderLevel(): any {
-    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.id === this.offenderTypeValue)?.lookupKey;
-    return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
+
+  setFilteredPenaltyGuidances() {
+    if (this.noOffenderLevelOrPenaltySigner()) return;
+    const penaltySignerValue: PenaltySignerTypes = this.penaltySignerValue;
+    const offenderLevelValue: OffenderLevels = this.offenderLevelValue;
+    switch (penaltySignerValue) {
+      case PenaltySignerTypes.MANAGER_DIRECTOR:
+        if (offenderLevelValue === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE) {
+          this.filteredPenaltyGuidances = this.penaltyGuidances.filter(
+            lookupItem => lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL
+          );
+        } else if (offenderLevelValue === OffenderLevels.FOURTH_DEGREE_OR_LESS) {
+          this.filteredPenaltyGuidances = this.penaltyGuidances.filter(
+            lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE || lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL
+          );
+        }
+        break;
+      case PenaltySignerTypes.PRESIDENT_ASSISTANT:
+        if (offenderLevelValue === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE) {
+          this.filteredPenaltyGuidances = this.penaltyGuidances.filter(
+            lookupItem =>
+              lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE ||
+              lookupItem.lookupKey === PenaltyGuidances.REFERRAL_TO_THE_PERMANENT_DISCIPLINARY_COUNCIL
+          );
+        } else if (offenderLevelValue === OffenderLevels.SECOND_DEGREE_OR_LESS) {
+          this.filteredPenaltyGuidances = this.penaltyGuidances.filter(
+            lookupItem =>
+              lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE ||
+              lookupItem.lookupKey === PenaltyGuidances.REFERRAL_TO_THE_DISCIPLINARY_COMMITTEE
+          );
+        }
+        break;
+      case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
+        if (offenderLevelValue === OffenderLevels.SECOND_DEGREE_OR_LESS) {
+          this.filteredPenaltyGuidances = this.penaltyGuidances.filter(lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE);
+        }
+        break;
+      case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
+        this.filteredPenaltyGuidances = [];
+        break;
+      case PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER:
+        this.filteredPenaltyGuidances = this.penaltyGuidances.filter(lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE);
+        break;
+      default:
+        break;
+    }
   }
 }
