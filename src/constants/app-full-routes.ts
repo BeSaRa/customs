@@ -1,5 +1,6 @@
 export const AppFullRoutes = {
   ADMINISTRATION: '/home/administration',
+  USERSERVICES: '/home/user-services',
   LOCALIZATION: '/home/administration/localization',
   INTERNAL_USER: '/home/administration/internal-user',
   PENALTY: '/home/administration/penalty',
@@ -20,4 +21,5 @@ export const AppFullRoutes = {
   MAIN: '/home/main',
   ELECTRONIC_SERVICES: '/home/electronic-services',
   INVESTIGATION: '/home/electronic-services/investigation',
+  USER_INBOX: '/home/electronic-services/user-inbox',
 };

@@ -188,4 +188,13 @@ export interface LangKeysContract {
   only_arabic_letters_and_numbers: string;
   only_english_letters_and_numbers: string;
   mail_template_placeholder: string;
+  menu_user_inbox: string;
+  serial_number: string;
+  subject: string;
+  case_type: string;
+  creation_date: string;
+  received_date: string;
+  due_date: string;
+  sender: string;
+  menu_user_services: string;
 }
