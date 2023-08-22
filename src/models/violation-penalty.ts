@@ -26,9 +26,9 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
   penaltyInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
   penaltyGuidanceInfo!: AdminResult;
-
+  override status: number = 1;
   buildForm(controls = false): object {
-    const { arName, enName, repeat, violationTypeId, penaltySigner, penaltyId, penaltyGuidance, offenderType, offenderLevel } = this;
+    const { repeat, violationTypeId, penaltySigner, penaltyId, penaltyGuidance, offenderType, offenderLevel, status } = this;
     return {
       repeat: controls ? [repeat, CustomValidators.required] : repeat,
       violationTypeId: controls ? [violationTypeId, CustomValidators.required] : violationTypeId,
@@ -37,6 +37,7 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
       penaltyGuidance: controls ? [penaltyGuidance] : penaltyGuidance,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       offenderLevel: controls ? [offenderLevel, CustomValidators.required] : offenderLevel,
+      status: controls ? [status, CustomValidators.required] : status,
     };
   }
 }
