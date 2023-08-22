@@ -29,28 +29,12 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    <!-- arName arName -->
-    <ng-container matColumnDef="arName">
-      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
-    </ng-container>
-
-    <!-- enName -->
-    <ng-container matColumnDef="enName">
-      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
-    </ng-container>
-
-    <!-- repeat -->
-    <ng-container matColumnDef="repeat">
-      <th mat-header-cell mat-sort-header="repeat" *matHeaderCellDef>{{ lang.map.repeat }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.repeat }}</td>
-    </ng-container>
 
 
-    <!-- violationTypeInfo -->
-    <ng-container matColumnDef="violationTypeInfo">
-      <th mat-header-cell mat-sort-header="violationTypeInfo" *matHeaderCellDef>{{ lang.map.violation_type }}</th>
+
+    <!-- violationType -->
+    <ng-container matColumnDef="violationType">
+      <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>{{ lang.map.violation_type }}</th>
       <td mat-cell *matCellDef="let element">{{ element.violationTypeInfo.getNames() }}</td>
     </ng-container>
 
@@ -60,28 +44,48 @@
       <td mat-cell *matCellDef="let element">{{ element.offenderType }}</td>
     </ng-container>
    
-    <!-- offenderLevelInfo -->
-    <ng-container matColumnDef="offenderLevelInfo">
-      <th mat-header-cell mat-sort-header="offenderLevelInfo" *matHeaderCellDef>{{ lang.map.offender_level }}</th>
+    <!-- offenderLevel -->
+    <ng-container matColumnDef="offenderLevel">
+      <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>{{ lang.map.offender_level }}</th>
       <td mat-cell *matCellDef="let element">{{ element.offenderLevelInfo.getNames() }}</td>
     </ng-container>
+    
 
-    <!-- penaltyInfo -->
-    <ng-container matColumnDef="penaltyInfo">
-      <th mat-header-cell mat-sort-header="penaltyInfo" *matHeaderCellDef>{{ lang.map.penalty }}</th>
+    <!-- repeat -->
+    <ng-container matColumnDef="repeat">
+      <th mat-header-cell mat-sort-header="repeat" *matHeaderCellDef>{{ lang.map.repeat }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.repeat }}</td>
+    </ng-container>
+
+    <!-- penalty -->
+    <ng-container matColumnDef="penalty">
+      <th mat-header-cell mat-sort-header="penalty" *matHeaderCellDef>{{ lang.map.penalty }}</th>
       <td mat-cell *matCellDef="let element">{{ element.penaltyInfo.getNames() }}</td>
     </ng-container>
    
-    <!-- penaltySignerInfo -->
-    <ng-container matColumnDef="penaltySignerInfo">
-      <th mat-header-cell mat-sort-header="penaltySignerInfo" *matHeaderCellDef>{{ lang.map.penalty_signer }}</th>
+    <!-- penaltySigner -->
+    <ng-container matColumnDef="penaltySigner">
+      <th mat-header-cell mat-sort-header="penaltySigner" *matHeaderCellDef>{{ lang.map.penalty_signer }}</th>
       <td mat-cell *matCellDef="let element">{{ element.penaltySignerInfo.getNames() }}</td>
     </ng-container>
 
-    <!-- penaltyGuidanceInfo -->
-    <ng-container matColumnDef="penaltyGuidanceInfo">
-      <th mat-header-cell mat-sort-header="penaltyGuidanceInfo" *matHeaderCellDef>{{ lang.map.penalty_guidance }}</th>
+    <!-- penaltyGuidance -->
+    <ng-container matColumnDef="penaltyGuidance">
+      <th mat-header-cell mat-sort-header="penaltyGuidance" *matHeaderCellDef>{{ lang.map.penalty_guidance }}</th>
       <td mat-cell *matCellDef="let element">{{ element.penaltyGuidanceInfo.getNames() }}</td>
+    </ng-container>
+
+    <!-- status status -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-slide-toggle
+          [disabled]="true"
+          class="cursor-not-allowed"
+          color="primary"
+          [checked]="element.isActive()">
+        </mat-slide-toggle>
+      </td>
     </ng-container>
 
     <!-- actions Column -->
