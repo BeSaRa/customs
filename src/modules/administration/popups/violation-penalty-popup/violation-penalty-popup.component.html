@@ -38,7 +38,7 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
           <app-select-input
-            *ngIf="!noOffenderLevelOrPenaltySigner()"
+            *ngIf="showPenaltiesAndPenaltyGuidances()"
             formControlName="penaltyId"
             [options]="filteredPenalties"
             [label]="lang.map.penalty"
@@ -47,7 +47,7 @@
             [enableFilter]="true"
             bindFilter="getNames" />
           <app-select-input
-            *ngIf="!noOffenderLevelOrPenaltySigner()"
+            *ngIf="showPenaltiesAndPenaltyGuidances()"
             formControlName="penaltyGuidance"
             [options]="filteredPenaltyGuidances"
             [label]="lang.map.penalty_guidance"
