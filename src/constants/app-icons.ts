@@ -45,6 +45,7 @@ export const AppIcons = {
   ATTACHMENT: 'attachment',
   COLLAPSE_ALL: 'arrow-collapse-vertical',
   EXPAND_ALL: 'arrow-expand-vertical',
+  USER_INBOX: 'card-account-mail',
 };
 
 export type AppIconsType = typeof AppIcons;

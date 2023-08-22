@@ -2,6 +2,7 @@ export const AppRoutes = {
   LOGIN: 'login',
   HOME: 'home',
   ADMINISTRATION: 'administration',
+  USER_SERVICES: 'user-services',
   LOCALIZATION: 'localization',
   INTERNAL_USER: 'internal-user',
   PENALTY: 'penalty',
@@ -23,4 +24,5 @@ export const AppRoutes = {
   MAIN: 'main',
   ELECTRONIC_SERVICES: 'electronic-services',
   INVESTIGATION: 'investigation',
+  USER_INBOX: 'user-inbox',
 };
