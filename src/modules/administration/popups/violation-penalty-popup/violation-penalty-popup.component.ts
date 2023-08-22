@@ -31,14 +31,14 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   penaltyService = inject(PenaltyService);
   penalties!: Penalty[];
-  filteredPenalties: Penalty[] = [];
+  filteredPenalties!: Penalty[];
 
   penaltySigners: Lookup[] = inject(LookupService).lookups.penaltySigner;
-  filteredPenaltySigners!: Lookup[];
+  filteredPenaltySigners: Lookup[] = this.penaltySigners;
   offenderLevels: Lookup[] = inject(LookupService).lookups.offenderLevel;
-  filteredOffenderLevels!: Lookup[];
+  filteredOffenderLevels: Lookup[] = this.offenderLevels;
   penaltyGuidances: Lookup[] = inject(LookupService).lookups.penaltyGuidance;
-  filteredPenaltyGuidances!: Lookup[];
+  filteredPenaltyGuidances: Lookup[] = this.penaltyGuidances;
   offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
 
   protected override _initPopup(): void {
@@ -56,6 +56,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   protected getPenalties() {
     this.penaltyService.loadAsLookups().subscribe(data => {
       this.penalties = data;
+      this.filteredPenalties = data;
     });
   }
 
