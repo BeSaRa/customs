@@ -17,6 +17,7 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
   repeat!: number;
 
   offenderType!: number;
+  offenderTypeInfo!: AdminResult;
   offenderLevel!: number;
   offenderLevelInfo!: AdminResult;
 

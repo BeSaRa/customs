@@ -41,7 +41,7 @@
     <!-- offenderType -->
     <ng-container matColumnDef="offenderType">
       <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderType }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderTypeInfo.getNames() }}</td>
     </ng-container>
    
     <!-- offenderLevel -->
