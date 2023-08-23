@@ -16,6 +16,7 @@ import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { OffenderLevels } from '@enums/offender-levels';
 import { PenaltyGuidances } from '@enums/penalty-guidances';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-violation-penalty-popup',
@@ -126,7 +127,16 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     this.form.get('offenderType')?.valueChanges.subscribe(() => {
       this.form.get('penaltySigners')?.setValue(null);
       this.setFilteredPenaltySigners();
+      this.setOffenderLevelValidity();
     });
+  }
+  setOffenderLevelValidity() {
+    const offenderType: OffenderTypes = this.offenderTypeValue;
+    const offenderLevel = this.form.get('offenderLevel');
+    offenderLevel?.clearValidators();
+    if (offenderType === OffenderTypes.EMPLOYEE) {
+      offenderLevel?.setValidators(CustomValidators.required);
+    }
   }
 
   needOffenderLevel(): any {

@@ -37,7 +37,7 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
       penaltyId: controls ? [penaltyId, CustomValidators.required] : penaltyId,
       penaltyGuidance: controls ? [penaltyGuidance] : penaltyGuidance,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
-      offenderLevel: controls ? [offenderLevel, CustomValidators.required] : offenderLevel,
+      offenderLevel: controls ? [offenderLevel] : offenderLevel,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }
