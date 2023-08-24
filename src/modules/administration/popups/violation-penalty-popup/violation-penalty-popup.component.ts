@@ -17,6 +17,7 @@ import { OffenderTypes } from '@enums/offender-types';
 import { OffenderLevels } from '@enums/offender-levels';
 import { PenaltyGuidances } from '@enums/penalty-guidances';
 import { CustomValidators } from '@validators/custom-validators';
+import { SystemPenalties } from '@enums/system-penalties';
 
 @Component({
   selector: 'app-violation-penalty-popup',
@@ -198,10 +199,26 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   setFilteredPenalties() {
     if (!this.showPenaltiesAndPenaltyGuidances()) return;
+    const penaltySigner = this.penaltySignerValue;
     this.filteredPenalties = [];
     this.penalties.forEach(penalty => {
-      if (penalty.isSystem) this.filteredPenalties.push(penalty);
-      else {
+      if (penalty.isSystem) {
+        if (penaltySigner === PenaltySignerTypes.MANAGER_DIRECTOR) {
+          if (
+            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PRESIDENT ||
+            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+          ) {
+            this.filteredPenalties.push(penalty);
+          }
+        } else if (penaltySigner === PenaltySignerTypes.PRESIDENT_ASSISTANT) {
+          if (
+            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL ||
+            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL
+          ) {
+            this.filteredPenalties.push(penalty);
+          }
+        }
+      } else {
         penalty.detailsList.forEach(detail => {
           if (detail.offenderLevel === this.offenderLevelValue && detail.penaltySigner === this.penaltySignerValue) {
             this.filteredPenalties.push(penalty);
