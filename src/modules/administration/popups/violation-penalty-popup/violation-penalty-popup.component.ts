@@ -59,6 +59,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     this.penaltyService.loadAsLookups().subscribe(data => {
       this.penalties = data;
       this.filteredPenalties = data;
+      if (this.operation === OperationType.UPDATE) this.setFilteredPenalties();
     });
   }
 
@@ -103,6 +104,12 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     this.onOffenderTypeChange();
     this.onPenaltySignerChange();
     this.onOffenderLevelChange();
+    if (this.operation === OperationType.UPDATE) {
+      this.setFilteredPenaltySigners();
+      this.setFilteredOffenderLevels();
+      this.setFilteredPenaltyGuidances();
+      this.setOffenderLevelValidity();
+    }
   }
 
   onPenaltySignerChange() {
