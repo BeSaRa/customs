@@ -1,4 +1,4 @@
-import { Inject, Injectable, inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LangContract } from '@contracts/lang-contract';
 import { distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
@@ -9,8 +9,6 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Localization } from '@models/localization';
 import { ServiceContract } from '@contracts/service-contract';
-import { EmployeeService } from '@services/employee.service';
-import { UserPreferences } from '@models/user-preferences';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +16,6 @@ import { UserPreferences } from '@models/user-preferences';
 export class LangService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'LangService';
   map: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
-
-  private readonly employeeService = inject(EmployeeService);
 
   languages: LangContract[] = [
     {
@@ -54,13 +50,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
   constructor(private _http: HttpClient, @Inject(DOCUMENT) private document: Document) {
     super();
     this.setDirection(this.current.direction);
-    this._listenToUserPreferences();
-  }
-
-  private _listenToUserPreferences() {
-    this.employeeService.changeUserPreferences$.subscribe((userPreferences: UserPreferences) => {
-      this.setCurrent(this.languages[userPreferences.defaultLang - 1]);
-    });
   }
 
   getCurrent(): LangContract {

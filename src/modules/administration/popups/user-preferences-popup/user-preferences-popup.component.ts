@@ -5,7 +5,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { LangContract } from '@contracts/lang-contract';
 import { UserPreferences } from '@models/user-preferences';
-import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { Observable } from 'rxjs';
@@ -22,7 +21,6 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   //user!: InternalUser;
   lookupService = inject(LookupService);
   langService = inject(LangService);
-  employeeService = inject(EmployeeService);
   arName!: string;
   enName!: string;
   empNum!: string;
@@ -77,7 +75,6 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
 
   protected override _afterSave(model: UserPreferences): void {
     this.model = model;
-    this.employeeService.changeUserPreferences$.next(model);
     //this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
   }
 }
