@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
 
   form: UntypedFormGroup = this.fb.nonNullable.group({
     lang: ['AR'],
-    userName: ['cdiadmin', Validators.required],
+    userName: ['cdiuser1', Validators.required],
     userPassword: ['P@ssw0rd', Validators.required],
   });
 
