@@ -1,7 +1,6 @@
 {
   "ENVIRONMENTS_URLS": {
-    "DEV_IP": "http://100.100.9.101:9092/cdi/api/",
-    "DEV_DOMAIN": "http://eblaepm.no-ip.org:9092/cdi/api/"
+    "DEV_IP": "https://192.168.51.5:9445/cdi/api/"
   },
-  "BASE_ENVIRONMENT": "DEV_DOMAIN"
+  "BASE_ENVIRONMENT": "DEV_IP"
 }
