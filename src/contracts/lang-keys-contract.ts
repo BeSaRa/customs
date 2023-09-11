@@ -10,7 +10,6 @@ export interface LangKeysContract {
   external_persons: string;
   offenders: string;
   violations: string;
-  basic_info: string;
   menu_investigation: string;
   menu_electronic_services: string;
   menu_penalty_details: string;
@@ -26,7 +25,6 @@ export interface LangKeysContract {
   menu_services: string;
   menu_email_template: string;
   reset: string;
-  menu_file_type: string;
   max_deduction_ratio: string;
   support_email_list: string;
   inbox_refresh_interval: string;
