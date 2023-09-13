@@ -55,7 +55,6 @@ export class SidebarMenuItemComponent extends OnDestroyMixin(class {}) implement
   }
 
   toggleMenu(): void {
-    if (this.sidebar.isClosed()) return;
     this.menuStatus = this.menuStatus === 'opened' ? 'closed' : 'opened';
   }
 
