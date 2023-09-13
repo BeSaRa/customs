@@ -4,7 +4,7 @@
     *ngIf="!hasChildren"
     [routerLink]="item.path"
     routerLinkActive="active"
-    class="flex hover:bg-secondary [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] p-2 menu-item-link mb-1 level-{{
+    class="flex hover:bg-secondary [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] py-2 px-1 menu-item-link mb-1 level-{{
       level
     }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <ng-container [ngTemplateOutlet]="itemContent"> </ng-container>
@@ -12,7 +12,7 @@
   <button
     *ngIf="hasChildren"
     (click)="toggleMenu()"
-    class="flex  hover:bg-secondary w-full has-children  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] p-2 menu-item-link mb-1 level-{{
+    class="flex  hover:bg-secondary w-full has-children  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] py-2 px-1 menu-item-link mb-1 level-{{
       level
     }} items-center text-start outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
     <a [routerLink]="item.path" class="hidden"></a>
@@ -27,10 +27,6 @@
         class="flex-none size-18 transition-transform children-indicator"
         svgIcon="menu-right"></mat-icon>
     </div>
-    <!-- <span
-      class="bg-slate-400 shadow py-1 px-2 rounded-full group-[.closed]:-top-2 rtl:group-[.closed]:left-0 rtl:group-[.opened]:left-6 ltr:group-[.closed]:right-0 ltr:group-[.opened]:right-6 text-sm absolute">
-      10
-    </span> -->
   </ng-template>
   <div
     [@shrink]="shrinkMode"
@@ -45,7 +41,8 @@
         tabindex="-1"
         [item]="childItem"
         [searchText]="searchText"
-        [level]="level + 1"></app-sidebar-menu-item>
+        [level]="level + 1" 
+        [shrinkMode]="shrinkMode"></app-sidebar-menu-item>
     </ng-container>
   </div>
 </div>
