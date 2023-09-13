@@ -19,8 +19,8 @@ export class LegalRule extends BaseModel<LegalRule, LegalRuleService> {
   buildForm(controls = false): object {
     const { enName, arName, law, lawStartDate, articleNumber, legalTextArabic, legalTextEnglish, status } = this;
     return {
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      enName: controls ? [enName, CustomValidators.required] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       law: controls ? [law, CustomValidators.required] : law,
       lawStartDate: controls ? [lawStartDate, CustomValidators.required] : lawStartDate,
       articleNumber: controls ? [articleNumber, CustomValidators.required] : articleNumber,
