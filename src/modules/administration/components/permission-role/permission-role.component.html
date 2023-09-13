@@ -41,11 +41,16 @@
       <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
     </ng-container>
 
-    <!-- status -->
+     <!--  status -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>{{ lang.map.status }}</th>
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
       <td mat-cell *matCellDef="let element">
-        <app-switch label="" [matTooltip]="lang.map.change_status" (changed)="status$.next(element)"></app-switch>
+        <mat-slide-toggle
+          [disabled]="(loading$ | async)!"
+          color="primary"
+          (toggleChange)="status$.next(element)"
+          [checked]="element.isActive()">
+        </mat-slide-toggle>
       </td>
     </ng-container>
 
