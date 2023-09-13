@@ -75,11 +75,6 @@
             [matTooltip]="lang.map.edit"
             (click)="edit$.next(element)"
             icon="EDIT"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.delete"
-            (click)="delete$.next(element)"
-            icon="DELETE"></app-icon-button>
         </div>
       </td>
     </ng-container>

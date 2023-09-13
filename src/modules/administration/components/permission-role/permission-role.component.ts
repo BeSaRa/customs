@@ -37,15 +37,6 @@ export class PermissionRoleComponent extends AdminComponent<PermissionRolePopupC
         this.edit$.next(item);
       },
     },
-    {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: item => {
-        this.delete$.next(item);
-      },
-    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<PermissionRole> = new ColumnsWrapper(
