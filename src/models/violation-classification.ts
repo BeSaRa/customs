@@ -19,8 +19,8 @@ export class ViolationClassification extends BaseModel<ViolationClassification, 
     const { arName, enName, penaltyType, status } = this;
 
     return {
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      enName: controls ? [enName, CustomValidators.required] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_ONLY')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_ONLY')]] : enName,
       penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
       status: status,
     };
