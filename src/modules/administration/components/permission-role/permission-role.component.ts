@@ -52,6 +52,7 @@ export class PermissionRoleComponent extends AdminComponent<PermissionRolePopupC
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new TextFilterColumn('description'),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(i => i.lookupKey !== StatusTypes.DELETED),
