@@ -25,8 +25,8 @@ export class ServiceSteps extends BaseModel<ServiceSteps, ServiceStepsService> {
     const { arName, enName, arDesc, enDesc, stepName, activityName, stepSLA } = this;
 
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       arDesc: controls ? [{ value: arDesc, disabled: true }, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : arDesc,
       enDesc: controls ? [{ value: enDesc, disabled: true }, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : enDesc,
       stepName: controls ? [{ value: stepName, disabled: true }] : stepName,

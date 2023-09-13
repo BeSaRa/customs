@@ -28,8 +28,8 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   buildForm(controls = false): object {
     const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration, isCash, cashAmount } = this;
     return {
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      enName: controls ? [enName, CustomValidators.required] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       status: controls ? [status, CustomValidators.required] : status,
       penaltyWeight: controls ? [penaltyWeight, CustomValidators.required] : penaltyWeight,

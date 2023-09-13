@@ -55,8 +55,8 @@ export class Services extends BaseModel<Services, ServicesService> {
       serviceStepsEnglish,
     } = this;
     return {
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      enName: controls ? [enName, CustomValidators.required] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       status: controls ? [status, CustomValidators.required] : status,
       caseType: controls ? [caseType, CustomValidators.required] : caseType,
       bawServiceCode: controls ? [bawServiceCode, CustomValidators.required] : bawServiceCode,
