@@ -11,14 +11,14 @@ export class PermissionRole extends BaseModel<PermissionRole, PermissionRoleServ
   $$__service_name__$$ = 'PermissionRoleService';
   description!: string;
   permissionSet: { id?: number; permissionId: number }[] = [];
-
+  override status: number = this.status ? this.status : 1;
   buildForm(controls = false): object {
     const { arName, enName, description, status } = this;
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       description: controls ? [description] : description,
-      status: controls ? [status ? status : 1, CustomValidators.required] : status ? status : 1,
+      status: controls ? [status, CustomValidators.required] : status,
     };
   }
 }
