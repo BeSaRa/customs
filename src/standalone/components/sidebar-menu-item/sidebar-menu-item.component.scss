@@ -1,6 +1,7 @@
 :host-context(html[dir="ltr"]) {
   a.menu-item-link:not(.level-1) {
-    padding-left: calc((var(--level) - 1) * 35px);
+    padding-left: calc((var(--level) - 1) * 20px);
+    min-width: 58px;
   }
 
   .opened > a > div > .children-indicator,
@@ -15,7 +16,8 @@
 
 :host-context(html[dir="rtl"]) {
   a.menu-item-link:not(.level-1) {
-    padding-right: calc((var(--level) - 1) * 35px);
+    padding-right: calc((var(--level) - 1) * 20px);
+    min-width: 58px;
   }
 
   .opened > a > div > .children-indicator,
