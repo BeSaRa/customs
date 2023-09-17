@@ -50,15 +50,6 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
       },
     },
     {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: item => {
-        this.delete$.next(item);
-      },
-    },
-    {
       name: 'more-details',
       type: 'info',
       label: 'more_details',
