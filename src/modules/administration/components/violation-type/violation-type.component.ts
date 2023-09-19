@@ -11,6 +11,7 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-violation-type',
@@ -65,8 +66,16 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('penaltyType', this.lookupService.lookups.penaltyType, 'lookupKey', 'getNames'),
     new SelectFilterColumn('violationClassificationId', this.violationClassificationService.loadAsLookups(), 'id', 'getNames'),
+    new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
+    new TextFilterColumn('numericFrom'),
+    new TextFilterColumn('numericTo'),
+    new TextFilterColumn('absence'),
+    // new TextFilterColumn('criminalType'),
+    // new TextFilterColumn('responsibilityForTheRecurrence'),
+    new TextFilterColumn('level'),
+    new SelectFilterColumn('managerDecision', this.lookupService.lookups.managerDecisionControl, 'lookupKey', 'getNames'),
+
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
