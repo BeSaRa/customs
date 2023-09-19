@@ -7,6 +7,7 @@ export const EndPoints = {
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
   USER_PREFERENCES: '/entity/user-preferences/internal-user-id',
+  USER_PERMISSION: '/entity/internal-user-permission',
   TEAM: '/entity/baw/team',
   PENALTY: '/entity/penalty',
   VIOLATION_CLASSIFICATION: '/entity/violation-classification',

@@ -21,25 +21,26 @@ export class PermissionService extends BaseCrudService<Permission> {
   protected getUrlSegment(): string {
     return this.urlService.URLS.PERMISSION;
   }
-  getUrlSegmentUserPreferences(): string {
-    return this.urlService.URLS.USER_PREFERENCES;
+
+  getUrlSegmentUserPermission(): string {
+    return this.urlService.URLS.USER_PERMISSION;
   }
 
   @CastResponse(() => Permission)
-  private _loadPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.getUrlSegmentUserPreferences() + '/' + userId);
+  private _loadUserPermissions(userId: number): Observable<Permission[]> {
+    return this.http.get<Permission[]>(this.getUrlSegmentUserPermission() + '/internal/' + userId);
   }
 
   private _savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
-    return this.http.post<ResponseContract<number>>(this.getUrlSegmentUserPreferences() + '/' + userId + '/bulk', permissions);
+    return this.http.post<ResponseContract<number>>(this.getUrlSegmentUserPermission() + '/' + userId + '/bulk', permissions);
   }
 
   savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
     return this._savePermissions(userId, permissions);
   }
 
-  loadPermissions(userId: number): Observable<Permission[]> {
-    return this._loadPermissions(userId);
+  loadUserPermissions(userId: number): Observable<Permission[]> {
+    return this._loadUserPermissions(userId);
   }
 
   /**
