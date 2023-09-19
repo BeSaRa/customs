@@ -218,4 +218,9 @@ export interface LangKeysContract {
   cash_amount: string;
   legal_rule: string;
   msg_add_one_item_at_least_to_x_to_proceed: string;
+  numeric_from: string;
+  numeric_to: string;
+  absence: string;
+  level: string;
+  manager_decision: string;
 }

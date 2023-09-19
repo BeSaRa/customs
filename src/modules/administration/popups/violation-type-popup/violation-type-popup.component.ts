@@ -27,7 +27,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   protected override _initPopup(): void {
     super._initPopup();
-    this.getViolationClassifications();
+    // this.getViolationClassifications();
   }
 
   _buildForm(): void {
@@ -67,17 +67,17 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
   }
 
-  protected getViolationClassifications() {
-    this.violationClassificationService.loadAsLookups().subscribe(data => {
-      this.allclassifications = data;
-      this.classifications =
-        this.operation === 'CREATE'
-          ? data
-          : data.filter(classification => {
-              return !this.model.penaltyType ? true : classification.penaltyType === this.model.penaltyType;
-            });
-    });
-  }
+  // protected getViolationClassifications() {
+  //   this.violationClassificationService.loadAsLookups().subscribe(data => {
+  //     this.allclassifications = data;
+  //     this.classifications =
+  //       this.operation === 'CREATE'
+  //         ? data
+  //         : data.filter(classification => {
+  //             return !this.model.penaltyType ? true : classification.penaltyType === this.model.penaltyType;
+  //           });
+  //   });
+  // }
 
   get penaltyType() {
     return this.form.get('penaltyType');
