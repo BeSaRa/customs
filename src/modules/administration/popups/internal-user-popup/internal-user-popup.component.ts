@@ -46,7 +46,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.get('permissionRoleId')?.setValue(this.permissionRoleId?.value);
     this.form.markAllAsTouched();
     const hasSelected = this.groups.some(group => group.getSelectedValue().length);
     if (!hasSelected) {
@@ -123,7 +122,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   private loadUserPermissions(model: InternalUser) {
-    this.permissionService.loadPermissions(model?.id).subscribe(val => {
+    this.permissionService.loadUserPermissions(model?.id).subscribe(val => {
       const ids: number[] = [];
       val.forEach(permission => {
         ids.push(permission.permissionId);
