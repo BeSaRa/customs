@@ -19,6 +19,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { MatCardModule } from '@angular/material/card';
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
   imports: [
@@ -38,6 +39,7 @@ import { FilterColumnComponent } from '@standalone/components/filter-column/filt
     MatTableModule,
     FilterColumnComponent,
     ContextMenuComponent,
+    MatCardModule,
   ],
 })
 export class ElectronicServicesModule {}

@@ -4,57 +4,27 @@
     {{ lang.map.menu_investigation }}
   </h1>
   <div class="flex-auto"></div>
-  <app-icon-button [matTooltip]="lang.map.collapse_all" (click)="accordion.closeAll()" icon="COLLAPSE_ALL" />
-  <app-icon-button [matTooltip]="lang.map.expand_all" (click)="accordion.openAll()" icon="EXPAND_ALL" />
+  <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
+  <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
 </div>
 <div class="relative">
-  <mat-accordion #accordion="matAccordion" class="custom-accordion" multi>
-    <mat-expansion-panel id="basic_info" expanded>
-      <mat-expansion-panel-header>
-        <div class="flex gap-5 items-center justify-start">
-          <mat-icon [svgIcon]="AppIcons.INFORMATION"></mat-icon>
-          <span>{{ lang.map.lbl_basic_info }}</span>
-        </div>
-      </mat-expansion-panel-header>
-      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-    </mat-expansion-panel>
-    <mat-expansion-panel id="violations" expanded>
-      <mat-expansion-panel-header>
-        <div class="flex gap-5 items-center justify-start">
-          <mat-icon [svgIcon]="AppIcons.BOOK_CANCEL"></mat-icon>
-          <span>{{ lang.map.violations }}</span>
-        </div>
-      </mat-expansion-panel-header>
-      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-    </mat-expansion-panel>
-    <mat-expansion-panel id="offenders" expanded>
-      <mat-expansion-panel-header>
-        <div class="flex gap-5 items-center justify-start">
-          <mat-icon [svgIcon]="AppIcons.ACCOUNT_MULTIPLE_REMOVE"></mat-icon>
-          <span>{{ lang.map.offenders }}</span>
-        </div>
-      </mat-expansion-panel-header>
-      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-    </mat-expansion-panel>
-    <mat-expansion-panel id="external_persons" expanded>
-      <mat-expansion-panel-header>
-        <div class="flex gap-5 items-center justify-start">
-          <mat-icon [svgIcon]="AppIcons.ACCOUNT_GROUP_OUTLINE"></mat-icon>
-          <span>{{ lang.map.external_persons }}</span>
-        </div>
-      </mat-expansion-panel-header>
-      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-    </mat-expansion-panel>
-    <mat-expansion-panel id="report_attachments" expanded>
-      <mat-expansion-panel-header>
-        <div class="flex gap-5 items-center justify-start">
-          <mat-icon [svgIcon]="AppIcons.ATTACHMENT"></mat-icon>
-          <span>{{ lang.map.report_attachments }}</span>
-        </div>
-      </mat-expansion-panel-header>
-      <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-    </mat-expansion-panel>
-  </mat-accordion>
+  <mat-card>
+    <mat-tab-group mat-stretch-tabs="false">
+      <mat-tab [label]="lang.map.lbl_basic_info">
+        <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="lang.map.violations">
+        <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="lang.map.offenders">
+        <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="lang.map.external_persons">
+        <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+
   <ng-template #basic_info_tab>
     <div class="px-3 grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4">
       <app-input [label]="lang.map.report_draft_number" />
