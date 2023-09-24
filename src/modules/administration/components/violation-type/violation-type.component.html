@@ -63,29 +63,6 @@
       </td>
     </ng-container>
 
-    <!-- numericFrom -->
-    <ng-container matColumnDef="numericFrom">
-      <th mat-header-cell mat-sort-header="numericFrom" *matHeaderCellDef>{{ lang.map.numeric_from }}</th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.numericFrom | highlight : getFilterStringColumn('numericFrom')"></span>
-      </td>
-    </ng-container>
-
-    <!-- numericTo -->
-    <ng-container matColumnDef="numericTo">
-      <th mat-header-cell mat-sort-header="numericTo" *matHeaderCellDef>{{ lang.map.numeric_to }}</th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.numericTo | highlight : getFilterStringColumn('numericTo')"></span>
-      </td>
-    </ng-container>
-
-    <!-- absence -->
-    <ng-container matColumnDef="absence">
-      <th mat-header-cell mat-sort-header="absence" *matHeaderCellDef>{{ lang.map.absence }}</th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.absence | highlight : getFilterStringColumn('absence')"></span>
-      </td>
-    </ng-container>
 
     <!-- level -->
     <ng-container matColumnDef="level">
@@ -95,13 +72,33 @@
       </td>
     </ng-container>
 
- <!-- managerDecision -->
+    <!-- managerDecision -->
     <ng-container matColumnDef="managerDecision">
       <th mat-header-cell mat-sort-header="managerDecision" *matHeaderCellDef>
         {{ lang.map.manager_decision }}
       </th>
       <td mat-cell *matCellDef="let element">
         {{ element.managerDecisionInfo.getNames() }}
+      </td>
+    </ng-container>
+
+    <!-- responsibilityRepeatViolations -->
+    <ng-container matColumnDef="responsibilityRepeatViolations">
+      <th mat-header-cell mat-sort-header="responsibilityRepeatViolations" *matHeaderCellDef>
+        {{ lang.map.responsibility_repeat_violations }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.responsibilityRepeatViolationsInfo.getNames() }}
+      </td>
+    </ng-container>
+    
+    <!-- criminalType -->
+    <ng-container matColumnDef="criminalType">
+      <th mat-header-cell mat-sort-header="criminalType" *matHeaderCellDef>
+        {{ lang.map.criminal_type }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.criminalTypeInfo.getNames() }}
       </td>
     </ng-container>
  
