@@ -18,8 +18,8 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
   numericFrom!: number;
   numericTo!: number;
   absence!: number;
-  // criminalType!: number;
-  // responsibilityForTheRecurrence!: number;
+  criminalType!: number;
+  responsibilityRepeatViolations!: number;
   level!: number;
   managerDecision!: number;
 
@@ -28,6 +28,8 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
   violationLevelInfo!: AdminResult;
   customsViolationEffectInfo!: AdminResult;
   managerDecisionInfo!: AdminResult;
+  responsibilityRepeatViolationsInfo!: AdminResult;
+  criminalTypeInfo!: AdminResult;
 
   override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
@@ -41,8 +43,8 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       numericFrom,
       numericTo,
       absence,
-      // criminalType,
-      // responsibilityForTheRecurrence,
+      criminalType,
+      responsibilityRepeatViolations,
       managerDecision,
       level,
     } = this;
@@ -55,11 +57,10 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       numericFrom: controls ? [numericFrom] : numericFrom,
       numericTo: controls ? [numericTo] : numericTo,
       absence: controls ? [absence] : absence,
-      // criminalType: controls ? [criminalType] : criminalType,
-      // responsibilityForTheRecurrence: controls ? [responsibilityForTheRecurrence] : responsibilityForTheRecurrence,
+      criminalType: controls ? [criminalType] : criminalType,
+      responsibilityRepeatViolations: controls ? [responsibilityRepeatViolations] : responsibilityRepeatViolations,
       level: controls ? [level, CustomValidators.required] : level,
       managerDecision: controls ? [managerDecision, CustomValidators.required] : managerDecision,
-
       status: status,
     };
   }

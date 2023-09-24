@@ -60,7 +60,46 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
         this.delete$.next(item);
       },
     },
+    {
+      name: 'more-details',
+      type: 'info',
+      label: 'more_details',
+      icon: AppIcons.MORE_DETAILS,
+    },
+    {
+      name: 'isNumeric',
+      type: 'info',
+      label: item => `${this.lang.map.is_numeric} : ${item.isNumeric ? 'Yes' : 'No'}`,
+      parent: 'more-details',
+    },
+    {
+      name: 'absence',
+      type: 'info',
+      label: item => `${this.lang.map.absence} : ${item.absence ? 'Yes' : 'No'}`,
+      parent: 'more-details',
+    },
+    {
+      name: 'absence',
+      type: 'info',
+      label: item => `${this.lang.map.absence} : ${item.absence ? 'Yes' : 'No'}`,
+      parent: 'more-details',
+    },
+    {
+      name: 'numericFrom',
+      type: 'info',
+      label: item => `${this.lang.map.numeric_from} : ${item.numericFrom}`,
+      parent: 'more-details',
+      hide: item => !item.isNumeric,
+    },
+    {
+      name: 'numericTo',
+      type: 'info',
+      label: item => `${this.lang.map.numeric_to} : ${item.numericTo}`,
+      parent: 'more-details',
+      hide: item => !item.isNumeric,
+    },
   ];
+
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper = new ColumnsWrapper(
     new NoneFilterColumn('select'),
@@ -68,14 +107,10 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
     new TextFilterColumn('enName'),
     new SelectFilterColumn('violationClassificationId', this.violationClassificationService.loadAsLookups(), 'id', 'getNames'),
     new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
-    new TextFilterColumn('numericFrom'),
-    new TextFilterColumn('numericTo'),
-    new TextFilterColumn('absence'),
-    // new TextFilterColumn('criminalType'),
-    // new TextFilterColumn('responsibilityForTheRecurrence'),
-    new TextFilterColumn('level'),
+    new SelectFilterColumn('level', this.lookupService.lookups.violationLevel, 'lookupKey', 'getNames'),
     new SelectFilterColumn('managerDecision', this.lookupService.lookups.managerDecisionControl, 'lookupKey', 'getNames'),
-
+    new SelectFilterColumn('responsibilityRepeatViolations', this.lookupService.lookups.responsibilityRepeatViolations, 'lookupKey', 'getNames'),
+    new SelectFilterColumn('criminalType', this.lookupService.lookups.criminalType, 'lookupKey', 'getNames'),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),

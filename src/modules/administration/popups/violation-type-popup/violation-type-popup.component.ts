@@ -6,10 +6,10 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
-import { LookupService } from '@services/lookup.service';
+import { ViolationClassification } from '@models/violation-classification';
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { Lookup } from '@models/lookup';
-import { ViolationClassification } from '@models/violation-classification';
+import { LookupService } from '@services/lookup.service';
 
 @Component({
   selector: 'app-violation-type-popup',
@@ -19,15 +19,18 @@ import { ViolationClassification } from '@models/violation-classification';
 export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationType> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationType> = inject(MAT_DIALOG_DATA);
-  penaltyTypes: Lookup[] = inject(LookupService).lookups.penaltyType;
+  lookupService = inject(LookupService);
+  violationClassifications!: ViolationClassification[];
   violationClassificationService = inject(ViolationClassificationService);
-  classifications!: ViolationClassification[];
-  allclassifications!: ViolationClassification[];
-  statusTooltip = this.lang.map.in_active;
+  offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
+  criminalTypes: Lookup[] = this.lookupService.lookups.criminalType;
+  responsibilityRepeatViolations: Lookup[] = this.lookupService.lookups.responsibilityRepeatViolations;
+  violationLevels: Lookup[] = this.lookupService.lookups.violationLevel;
+  managerDecisions: Lookup[] = this.lookupService.lookups.managerDecisionControl;
 
   protected override _initPopup(): void {
     super._initPopup();
-    // this.getViolationClassifications();
+    this.loadViolationClassifications();
   }
 
   _buildForm(): void {
@@ -36,7 +39,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
-    this.listenToPenaltyTypeChange();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -55,31 +57,16 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
-    // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
 
-  protected listenToPenaltyTypeChange() {
-    this.penaltyType?.valueChanges.subscribe(penaltyTypeValue => {
-      this.classifications = this.allclassifications.filter(classification => {
-        return classification.penaltyType === penaltyTypeValue;
-      });
+  protected loadViolationClassifications() {
+    this.violationClassificationService.loadAsLookups().subscribe(data => {
+      this.violationClassifications = data;
     });
   }
 
-  // protected getViolationClassifications() {
-  //   this.violationClassificationService.loadAsLookups().subscribe(data => {
-  //     this.allclassifications = data;
-  //     this.classifications =
-  //       this.operation === 'CREATE'
-  //         ? data
-  //         : data.filter(classification => {
-  //             return !this.model.penaltyType ? true : classification.penaltyType === this.model.penaltyType;
-  //           });
-  //   });
-  // }
-
-  get penaltyType() {
-    return this.form.get('penaltyType');
+  isNumeric(): any {
+    return this.form.get('isNumeric')?.value;
   }
 }

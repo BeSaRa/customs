@@ -8,21 +8,57 @@
       <div class="grid grid-cols-2 gap-4 my-auto items-center">
         <app-input formControlName="arName" [label]="lang.map.ar_name" />
         <app-input formControlName="enName" [label]="lang.map.en_name" />
+        
+        <app-select-input
+        formControlName="violationClassificationId"
+        [options]="violationClassifications"
+        [label]="lang.map.violation_classification"
+        bindValue="id"
+        bindLabel="getNames"
+        [enableFilter]="true"
+        bindFilter="getNames" />
+        
+        <app-select-input
+        formControlName="offenderType"
+        [options]="offenderTypes"
+        [label]="lang.map.unit_type"
+        bindValue="lookupKey"
+        bindLabel="getNames" />
 
         <app-select-input
-          formControlName="penaltyType"
-          [options]="penaltyTypes"
-          [label]="lang.map.penalty_type"
-          bindValue="lookupKey"
-          bindLabel="getNames" />
+        formControlName="criminalType"
+        [options]="criminalTypes"
+        [label]="lang.map.criminal_type"
+        bindValue="lookupKey"
+        bindLabel="getNames" />
+        
+        <app-select-input
+        formControlName="responsibilityRepeatViolations"
+        [options]="responsibilityRepeatViolations"
+        [label]="lang.map.responsibility_repeat_violations"
+        bindValue="lookupKey"
+        bindLabel="getNames" />
 
         <app-select-input
-          formControlName="violationClassificationId"
-          [options]="classifications"
-          [label]="lang.map.violation_classification"
-          bindValue="id"
-          bindLabel="getNames" />
-        <app-input [label]="lang.map.penalty_grace_period" formControlName="penaltyGracePeriod" type="number" />
+        formControlName="level"
+        [options]="violationLevels"
+        [label]="lang.map.level"
+        bindValue="lookupKey"
+        bindLabel="getNames" />
+        
+        <app-select-input
+        formControlName="managerDecision"
+        [options]="managerDecisions"
+        [label]="lang.map.manager_decision"
+        bindValue="lookupKey"
+        bindLabel="getNames" />
+        
+        <app-input *ngIf="isNumeric()" formControlName="numericFrom" [label]="lang.map.numeric_from" />
+        <app-input *ngIf="isNumeric()" formControlName="numericTo" [label]="lang.map.numeric_to" />
+        
+        
+        <app-switch formControlName="absence" [label]="lang.map.absence" />
+        <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
       </div>
     </ng-container>
