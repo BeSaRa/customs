@@ -49,8 +49,8 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       level,
     } = this;
     return {
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      enName: controls ? [enName, CustomValidators.required] : enName,
+      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
+      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       classificationId: controls ? [classificationId, CustomValidators.required] : classificationId,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       isNumeric: controls ? [isNumeric] : isNumeric,
