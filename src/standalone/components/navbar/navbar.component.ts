@@ -69,7 +69,7 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
   protected _listenToEditUserPreferences() {
     this.editUserPreferences$
       .pipe(takeUntil(this.destroy$))
-      .pipe(map(_ => new UserPreferences().clone<UserPreferences>(this.employee?.userPreferences)))
+      .pipe(map(() => new UserPreferences().clone<UserPreferences>(this.employee?.userPreferences)))
       .pipe(
         switchMap(model => {
           return this.userPreferencesService

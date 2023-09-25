@@ -66,7 +66,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
   }
 
-  isNumeric(): any {
-    return this.form.get('isNumeric')?.value;
+  isNumeric(): boolean {
+    return !!this.form.get('isNumeric')?.value;
   }
 }

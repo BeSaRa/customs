@@ -1,37 +1,13 @@
-import { Component, OnInit, ViewChildren, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserInbox } from '@models/user-inbox';
-import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import {
-  BehaviorSubject,
-  Observable,
-  switchMap,
-  takeUntil,
-  Subject,
-  isObservable,
-  of,
-  filter,
-  exhaustMap,
-  catchError,
-  throwError,
-  finalize,
-  tap,
-  ReplaySubject,
-  delay,
-  combineLatest,
-  map,
-} from 'rxjs';
-import { CustomValidators } from '@validators/custom-validators';
-import { FileType } from '@models/file-type';
+import { BehaviorSubject, combineLatest, delay, finalize, map, Observable, of, ReplaySubject, Subject, switchMap, tap } from 'rxjs';
 import { LangService } from '@services/lang.service';
-import { ToastService } from '@services/toast.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ignoreErrors } from '@utils/utils';
 import { UserInboxService } from '@services/user-inbox.services';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
-import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
-import { MatTableDataSource } from '@angular/material/table';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -50,7 +26,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
 
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
 
-  reloadInbox$: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
   reload$ = new ReplaySubject<void>(1);
   data$: Observable<UserInbox[]> = this._load();
   filter$ = new BehaviorSubject<Partial<UserInbox>>({});
@@ -79,7 +55,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: () => {
         console.log('navigate to view the case');
       },
     },

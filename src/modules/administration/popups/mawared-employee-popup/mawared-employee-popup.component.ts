@@ -5,7 +5,6 @@ import { MawaredEmployee } from '@models/mawared-employee';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { OperationType } from '@enums/operation-type';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
 
@@ -35,7 +34,7 @@ export class MawaredEmployeePopupComponent extends AdminDialogComponent<MawaredE
     });
   }
 
-  protected _afterSave(model: MawaredEmployee): void {
+  protected _afterSave(): void {
     return;
   }
 }

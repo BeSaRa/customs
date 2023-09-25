@@ -59,7 +59,6 @@ import { MawaredEmployeeComponent } from '@modules/administration/components/maw
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
 import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
-import { StringToDatePipe } from '@pipes/string-to-date.pipe';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
@@ -106,7 +105,6 @@ import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/pen
     MawaredEmployeePopupComponent,
     BrokerComponent,
     BrokerPopupComponent,
-    StringToDatePipe,
     ServicesComponent,
     ServicesPopupComponent,
     ServiceStepsComponent,

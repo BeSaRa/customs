@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ValidationErrors } from '@angular/forms';
 import { ValidationMessages, ValidationMessagesType } from '@constants/validation-messages';
-import { identity } from 'rxjs';
 import { LangService } from '@services/lang.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 

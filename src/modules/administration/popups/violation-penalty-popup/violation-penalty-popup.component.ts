@@ -147,7 +147,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     }
   }
 
-  needOffenderLevel(): any {
+  needOffenderLevel(): boolean {
     const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
     return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
   }
