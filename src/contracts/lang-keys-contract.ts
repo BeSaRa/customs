@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  draft: string;
   expand_all: string;
   collapse_all: string;
   report_attachments: string;

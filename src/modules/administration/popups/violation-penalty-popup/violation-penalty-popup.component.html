@@ -6,57 +6,56 @@
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4">
-          <app-select-input
-            formControlName="offenderType"
-            [options]="offenderTypes"
-            [label]="lang.map.offender_type"
-            bindValue="lookupKey"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-          <app-select-input
-            formControlName="violationTypeId"
-            [options]="violationTypes"
-            [label]="lang.map.violation_type"
-            bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-          <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
-          <app-select-input
-            *ngIf="offenderTypeValue"
-            formControlName="penaltySigner"
-            [options]="filteredPenaltySigners"
-            [label]="lang.map.penalty_signer"
-            bindValue="lookupKey"
-            bindLabel="getNames"/>
-          <app-select-input
-            *ngIf="needOffenderLevel()"
-            formControlName="offenderLevel"
-            [options]="filteredOffenderLevels"
-            [label]="lang.map.offender_level"
-            bindValue="lookupKey"
-            bindLabel="getNames" />
-          <app-select-input
-            *ngIf="showPenaltiesAndPenaltyGuidances()"
-            formControlName="penaltyId"
-            [options]="filteredPenalties"
-            [label]="lang.map.penalty"
-            bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-          <app-select-input
-            *ngIf="showPenaltiesAndPenaltyGuidances()"
-            formControlName="penaltyGuidance"
-            [options]="filteredPenaltyGuidances"
-            [label]="lang.map.penalty_guidance"
-            bindValue="lookupKey"
-            bindLabel="getNames" />
+        <app-select-input
+          formControlName="offenderType"
+          [options]="offenderTypes"
+          [label]="lang.map.offender_type"
+          bindValue="lookupKey"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames" />
+        <app-select-input
+          formControlName="violationTypeId"
+          [options]="violationTypes"
+          [label]="lang.map.violation_type"
+          bindValue="id"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames" />
+        <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
+        <app-select-input
+          *ngIf="offenderTypeValue"
+          formControlName="penaltySigner"
+          [options]="filteredPenaltySigners"
+          [label]="lang.map.penalty_signer"
+          bindValue="lookupKey"
+          bindLabel="getNames" />
+        <app-select-input
+          *ngIf="needOffenderLevel()"
+          formControlName="offenderLevel"
+          [options]="filteredOffenderLevels"
+          [label]="lang.map.offender_level"
+          bindValue="lookupKey"
+          bindLabel="getNames" />
+        <app-select-input
+          *ngIf="showPenaltiesAndPenaltyGuidance()"
+          formControlName="penaltyId"
+          [options]="filteredPenalties"
+          [label]="lang.map.penalty"
+          bindValue="id"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames" />
+        <app-select-input
+          *ngIf="showPenaltiesAndPenaltyGuidance()"
+          formControlName="penaltyGuidance"
+          [options]="filteredPenaltyGuidance"
+          [label]="lang.map.penalty_guidance"
+          bindValue="lookupKey"
+          bindLabel="getNames" />
         <div class="flex flex-row pl-1 items-center justify-start">
           <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>
         </div>
-          
       </div>
     </ng-container>
   </div>
