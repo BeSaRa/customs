@@ -12,7 +12,7 @@ const { send, receive } = new ViolationTypeInterceptor();
 export class ViolationType extends BaseModel<ViolationType, ViolationTypeService> {
   $$__service_name__$$ = 'ViolationTypeService';
 
-  violationClassificationId!: number;
+  classificationId!: number;
   offenderType!: number;
   isNumeric!: number;
   numericFrom!: number;
@@ -37,7 +37,7 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       arName,
       enName,
       offenderType,
-      violationClassificationId,
+      classificationId,
       status,
       isNumeric,
       numericFrom,
@@ -51,13 +51,13 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
     return {
       arName: controls ? [arName, CustomValidators.required] : arName,
       enName: controls ? [enName, CustomValidators.required] : enName,
-      violationClassificationId: controls ? [violationClassificationId, CustomValidators.required] : violationClassificationId,
+      classificationId: controls ? [classificationId, CustomValidators.required] : classificationId,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       isNumeric: controls ? [isNumeric] : isNumeric,
       numericFrom: controls ? [numericFrom] : numericFrom,
       numericTo: controls ? [numericTo] : numericTo,
       absence: controls ? [absence] : absence,
-      criminalType: controls ? [criminalType] : criminalType,
+      criminalType: controls ? [criminalType, CustomValidators.required] : criminalType,
       responsibilityRepeatViolations: controls ? [responsibilityRepeatViolations] : responsibilityRepeatViolations,
       level: controls ? [level, CustomValidators.required] : level,
       managerDecision: controls ? [managerDecision, CustomValidators.required] : managerDecision,

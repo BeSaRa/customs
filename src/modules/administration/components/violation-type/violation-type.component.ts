@@ -105,7 +105,7 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('violationClassificationId', this.violationClassificationService.loadAsLookups(), 'id', 'getNames'),
+    new SelectFilterColumn('classificationId', this.violationClassificationService.loadAsLookups(), 'id', 'getNames'),
     new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
     new SelectFilterColumn('level', this.lookupService.lookups.violationLevel, 'lookupKey', 'getNames'),
     new SelectFilterColumn('managerDecision', this.lookupService.lookups.managerDecisionControl, 'lookupKey', 'getNames'),

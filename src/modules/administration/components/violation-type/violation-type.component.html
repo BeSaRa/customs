@@ -43,9 +43,9 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
-    <!-- violationClassificationId -->
-    <ng-container matColumnDef="violationClassificationId">
-      <th mat-header-cell mat-sort-header="violationClassificationId" *matHeaderCellDef>
+    <!-- classificationId -->
+    <ng-container matColumnDef="classificationId">
+      <th mat-header-cell mat-sort-header="classificationId" *matHeaderCellDef>
         {{ lang.map.violation_classification }}
       </th>
       <td mat-cell *matCellDef="let element">
