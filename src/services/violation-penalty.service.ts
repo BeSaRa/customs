@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ViolationPenaltyPopupComponent } from '@modules/administration/popups/violation-penalty-popup/violation-penalty-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -21,9 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class ViolationPenaltyService extends BaseCrudWithDialogService<
-ViolationPenaltyPopupComponent,
-ViolationPenalty> {
+export class ViolationPenaltyService extends BaseCrudWithDialogService<ViolationPenaltyPopupComponent, ViolationPenalty> {
   serviceName = 'ViolationPenaltyService';
   protected getModelClass(): Constructor<ViolationPenalty> {
     return ViolationPenalty;

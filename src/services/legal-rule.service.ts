@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { LegalRulePopupComponent } from '@modules/administration/popups/legal-rule-popup/legal-rule-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -21,9 +21,7 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class LegalRuleService extends BaseCrudWithDialogService<
-LegalRulePopupComponent,
-LegalRule> {
+export class LegalRuleService extends BaseCrudWithDialogService<LegalRulePopupComponent, LegalRule> {
   serviceName = 'LegalRuleService';
   protected getModelClass(): Constructor<LegalRule> {
     return LegalRule;

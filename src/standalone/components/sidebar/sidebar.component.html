@@ -11,7 +11,7 @@
     </a>
   </div>
   <div class="relative h-[55px] flex justify-center py-2" *ngIf="!isClosingOrClosed()">
-    <div [@scaleInOut]="!isClosingOrClosed()" class="flex-none items-center justify-center pb-0 px-2 absolute w-full" >
+    <div [@scaleInOut]="!isClosingOrClosed()" class="flex-none items-center justify-center pb-0 px-2 absolute w-full">
       <app-input
         (keydown.arrowDown)="moveFocus()"
         [formControl]="control"
