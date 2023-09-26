@@ -10,7 +10,7 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   draftSerial!: number;
   investigationSerial!: number;
   override caseType = CaseTypes.INVESTIGATION;
-  override createdOn = new Date();
+  override createdOn: Date | string = new Date();
 
   buildForm(controls = false): object {
     const { description, createdOn, investigationFullSerial, draftFullSerial, limitedAccess } = this;

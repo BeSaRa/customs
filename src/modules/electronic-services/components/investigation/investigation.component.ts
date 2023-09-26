@@ -19,7 +19,12 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   fb = inject(UntypedFormBuilder);
   form!: UntypedFormGroup;
   service = inject(InvestigationService);
-  model: Investigation = new Investigation();
+  // mock data
+  model: Investigation = new Investigation().clone<Investigation>({
+    id: '{75388091-006E-CD67-8829-8AD3C1900000}',
+    draftFullSerial: 'INV/PUB/2023/45',
+    createdOn: '2023-09-26T23:09:53.680+00:00',
+  });
 
   caseFolders: CaseFolder[] = [];
 
