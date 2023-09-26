@@ -67,15 +67,21 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       label: item => `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
       parent: 'more-details',
     },
+    {
+      name: 'ldap_limited_group_name',
+      type: 'info',
+      label: item => `${this.lang.map.ldap_limited_group_name} : ${item.ldapLimitedGroupName}`,
+      parent: 'more-details',
+    },
   ];
-  // here we have a new implementation for displayed/filter Columns for the table
+
   columnsWrapper: ColumnsWrapper<OrganizationUnit> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('code'),
+    new TextFilterColumn('mawaredDepId'),
     new SelectFilterColumn('type', this.lookupService.lookups.organizationUniType, 'lookupKey', 'getNames'),
-    // for parent
     new SelectFilterColumn('parent', this.service.loadAsLookups(), 'id', 'getNames'),
     new SelectFilterColumn('managerId', this.internalUserService.loadAsLookups(), 'id', 'getNames'),
     new SelectFilterColumn(
