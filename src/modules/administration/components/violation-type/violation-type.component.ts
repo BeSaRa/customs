@@ -11,7 +11,6 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-violation-type',

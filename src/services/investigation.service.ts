@@ -3,7 +3,13 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
 import { Investigation } from '@models/investigation';
+import { CastResponseContainer } from 'cast-response';
 
+@CastResponseContainer({
+  $default: {
+    model: () => Investigation,
+  },
+})
 @Injectable({
   providedIn: 'root',
 })

@@ -26,14 +26,26 @@
   </mat-card>
 
   <ng-template #basic_info_tab>
-    <div class="px-3 grid grid-cols-1 md:grid-cols-2 gap-3 lg:grid-cols-4">
-      <app-input [label]="lang.map.report_draft_number" />
-      <app-input [label]="lang.map.investigation_file_number" />
-      <app-select-input [label]="lang.map.report_security_level" [options]="[]" />
-      <app-input [label]="lang.map.report_entry_date" />
+    <div [formGroup]="form" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+      <app-input formControlName="draftFullSerial" [label]="lang.map.report_draft_number" />
+      <app-input formControlName="investigationFullSerial" [label]="lang.map.investigation_file_number" />
+      <app-input formControlName="createdOn" [label]="lang.map.report_entry_date">
+        <input appControl formControlName="createdOn" (click)="datepicker.open()" [matDatepicker]="datepicker" />
+        <mat-datepicker #datepicker />
+      </app-input>
+      <div class="flex items-center">
+        <mat-slide-toggle #securityLevel="matSlideToggle" formControlName="limitedAccess">
+          {{ lang.map.limited_access }} : {{ getSecurityLevel(securityLevel.checked) }}
+        </mat-slide-toggle>
+      </div>
       <app-textarea
+        formControlName="description"
         class="col-span-1 md:col-span-2 lg:col-span-4"
         [label]="lang.map.general_explanation_of_violations" />
     </div>
   </ng-template>
+
+  <!--  <ng-template> </ng-template>-->
+
+  <app-button (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
 </div>

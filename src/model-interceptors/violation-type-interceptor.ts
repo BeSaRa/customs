@@ -9,7 +9,7 @@ export class ViolationTypeInterceptor implements ModelInterceptorContract<Violat
 
   receive(model: ViolationType): ViolationType {
     model.statusInfo = new AdminResult().clone(model.statusInfo);
-    model.typeInfo = new AdminResult().clone(model.typeInfo);
+    model.offenderTypeInfo = new AdminResult().clone(model.offenderTypeInfo);
     model.classificationInfo = new AdminResult().clone(model.classificationInfo);
     model.violationLevelInfo = new AdminResult().clone(model.violationLevelInfo);
     model.customsViolationEffectInfo = new AdminResult().clone(model.customsViolationEffectInfo);

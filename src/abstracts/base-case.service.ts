@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
+import { CastResponse } from 'cast-response';
+import { CaseFolder } from '@models/case-folder';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
@@ -16,12 +18,24 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
 
   abstract getModelClass(): Constructor<M>;
 
+  @CastResponse()
   create(model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment(), model);
   }
 
+  @CastResponse()
   update(model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment(), model);
+  }
+
+  @CastResponse()
+  commit(model: M): Observable<M> {
+    return this.http.post<M>(this.getUrlSegment() + '/commit', model);
+  }
+
+  @CastResponse()
+  draft(model: M): Observable<M> {
+    return this.http.post<M>(this.getUrlSegment() + '/draft', model);
   }
 
   getActions(criteria: { caseId: string; offset: number; limit: number }): Observable<unknown> {
@@ -85,10 +99,6 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     return this.http.post(this.getUrlSegment() + '/' + caseId + '/start', {});
   }
 
-  commit(model: M): Observable<unknown> {
-    return this.http.post(this.getUrlSegment() + '/commit', model);
-  }
-
   deleteDocument(docId: string): Observable<unknown> {
     return this.http.delete<unknown>(this.getUrlSegment() + '/document/' + docId);
   }
@@ -103,10 +113,6 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
         fromObject: { docIds: docIds },
       }),
     });
-  }
-
-  draft(model: M): Observable<M> {
-    return this.http.post<M>(this.getUrlSegment() + '/draft', model);
   }
 
   validateDraft(model: M): Observable<M> {
@@ -151,5 +157,26 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
 
   terminate(taskId: string): Observable<M> {
     throw new Error('Method not implemented.');
+  }
+
+  addOffenderAttachment(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  getOffenderAttachments(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  addCaseAttachment(caseId: string): Observable<unknown> {
+    return this.http.post(this.getUrlSegment() + `/${caseId}/attachment`, {});
+  }
+
+  addBulkCaseAttachments(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  @CastResponse(() => CaseFolder)
+  loadCaseFolders(caseId: string): Observable<CaseFolder[]> {
+    return this.http.get<CaseFolder[]>(this.getUrlSegment() + '/folder/custom/' + caseId);
   }
 }

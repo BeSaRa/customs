@@ -20,6 +20,14 @@ import { MatTableModule } from '@angular/material/table';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ControlDirective } from '@standalone/directives/control.directive';
+
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
   imports: [
@@ -34,12 +42,18 @@ import { MatCardModule } from '@angular/material/card';
     SelectInputComponent,
     TextareaComponent,
     MatExpansionModule,
-
     MatProgressSpinnerModule,
     MatTableModule,
     FilterColumnComponent,
     ContextMenuComponent,
     MatCardModule,
+    MatSlideToggleModule,
+    ButtonComponent,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatInputModule,
+    ControlDirective,
   ],
 })
 export class ElectronicServicesModule {}

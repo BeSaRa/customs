@@ -1,5 +1,6 @@
 import { Constructor } from '@app-types/constructors';
 import { Observable } from 'rxjs';
+import { CaseFolder } from '@models/case-folder';
 
 export interface BaseCaseServiceContract<M> {
   getUrlSegment(): string;
@@ -61,4 +62,14 @@ export interface BaseCaseServiceContract<M> {
   completeTask(taskId: string): Observable<M>;
 
   terminate(taskId: string): Observable<M>;
+
+  addOffenderAttachment(): void;
+
+  getOffenderAttachments(): void;
+
+  addCaseAttachment(caseId: string): Observable<unknown>;
+
+  addBulkCaseAttachments(): void;
+
+  loadCaseFolders(caseId: string): Observable<CaseFolder[]>;
 }

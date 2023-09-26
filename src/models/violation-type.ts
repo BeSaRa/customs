@@ -14,16 +14,16 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
 
   classificationId!: number;
   offenderType!: number;
-  isNumeric!: number;
+  isNumeric = false;
   numericFrom!: number;
   numericTo!: number;
-  absence!: number;
+  absence = false;
   criminalType!: number;
   responsibilityRepeatViolations!: number;
   level!: number;
   managerDecision!: number;
 
-  typeInfo!: AdminResult;
+  offenderTypeInfo!: AdminResult;
   classificationInfo!: AdminResult;
   violationLevelInfo!: AdminResult;
   customsViolationEffectInfo!: AdminResult;

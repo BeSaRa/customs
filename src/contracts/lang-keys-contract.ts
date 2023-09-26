@@ -1,4 +1,7 @@
 export interface LangKeysContract {
+  false: string;
+  true: string;
+  limited_access: string;
   draft: string;
   expand_all: string;
   collapse_all: string;
