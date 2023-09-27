@@ -42,6 +42,12 @@
         formControlName="description"
         class="col-span-1 md:col-span-2 lg:col-span-4"
         [label]="lang.map.general_explanation_of_violations" />
+
+      <app-case-attachments
+        [caseId]="model.id"
+        [service]="service"
+        [title]="lang.map.report_attachments"
+        class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
 

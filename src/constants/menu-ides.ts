@@ -21,4 +21,5 @@ export const MenuIdes = {
   USER_INBOX: 20,
   VIOLATION_PENALTY: 21,
   LEGAL_RULE: 22,
+  ATTACHMENT_TYPE: 23,
 };

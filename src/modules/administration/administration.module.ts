@@ -75,6 +75,8 @@ import { LegalRuleComponent } from '@modules/administration/components/legal-rul
 import { LegalRulePopupComponent } from '@modules/administration/popups/legal-rule-popup/legal-rule-popup.component';
 import { PenaltyDetailsComponent } from '@modules/administration/components/penalty-details/penalty-details.component';
 import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/penalty-details-popup/penalty-details-popup.component';
+import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
+import { AttachmentTypePopupComponent } from '@modules/administration/popups/attachment-type-popup/attachment-type-popup.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +120,8 @@ import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/pen
     LegalRulePopupComponent,
     PenaltyDetailsComponent,
     PenaltyDetailsPopupComponent,
+    AttachmentTypeComponent,
+    AttachmentTypePopupComponent,
   ],
   imports: [
     CommonModule,

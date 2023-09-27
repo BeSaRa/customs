@@ -21,6 +21,7 @@ import { EmailTemplateComponent } from '@modules/administration/components/email
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
+import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -105,6 +106,10 @@ const routes: Routes = [
   {
     path: AppRoutes.LEGAL_RULE,
     component: LegalRuleComponent,
+  },
+  {
+    path: AppRoutes.ATTACHMENT_TYPE,
+    component: AttachmentTypeComponent,
   },
 ];
 

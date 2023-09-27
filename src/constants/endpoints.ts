@@ -28,6 +28,7 @@ export const EndPoints = {
   USER_INBOX: '/inbox/team/3',
   VIOLATION_PENALTY: '/entity/violation-penalty',
   LEGAL_RULE: '/entity/legal-rule',
+  ATTACHMENT_TYPE: 'attachment-types',
 };
 
 export type EndpointsType = typeof EndPoints;

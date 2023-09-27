@@ -7,10 +7,15 @@ import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
 import { CastResponse } from 'cast-response';
 import { CaseFolder } from '@models/case-folder';
+import { CaseAttachment } from '@models/case-attachment';
+import { MatDialogRef } from '@angular/material/dialog';
+import { CaseAttachmentPopupComponent } from '@standalone/popups/case-attachment-popup/case-attachment-popup.component';
+import { DialogService } from '@services/dialog.service';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
+  protected dialog: DialogService = inject(DialogService);
 
   abstract getUrlSegment(): string;
 
@@ -178,5 +183,18 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
   @CastResponse(() => CaseFolder)
   loadCaseFolders(caseId: string): Observable<CaseFolder[]> {
     return this.http.get<CaseFolder[]>(this.getUrlSegment() + '/folder/custom/' + caseId);
+  }
+
+  @CastResponse(() => CaseAttachment)
+  loadFolderAttachments(caseId: string): Observable<CaseAttachment[]> {
+    return this.http.get<CaseAttachment[]>(this.getUrlSegment() + `/${caseId}/folder/contained-documents`);
+  }
+
+  openAddAttachmentDialog(caseId: string): MatDialogRef<CaseAttachmentPopupComponent> {
+    return this.dialog.open(CaseAttachmentPopupComponent, {
+      data: {
+        caseId,
+      },
+    });
   }
 }

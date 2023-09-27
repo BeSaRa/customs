@@ -27,6 +27,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ControlDirective } from '@standalone/directives/control.directive';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
@@ -54,6 +55,7 @@ import { ControlDirective } from '@standalone/directives/control.directive';
     MatDatepickerModule,
     MatInputModule,
     ControlDirective,
+    CaseAttachmentsComponent,
   ],
 })
 export class ElectronicServicesModule {}

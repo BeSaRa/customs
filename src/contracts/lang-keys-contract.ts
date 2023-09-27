@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_attachment_type: string;
   false: string;
   true: string;
   limited_access: string;
