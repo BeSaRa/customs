@@ -46,6 +46,24 @@ export class LegalRuleComponent extends AdminComponent<LegalRulePopupComponent, 
         this.delete$.next(item);
       },
     },
+    {
+      name: 'more-details',
+      type: 'info',
+      label: 'more_details',
+      icon: AppIcons.MORE_DETAILS,
+    },
+    {
+      name: 'law-start-date',
+      type: 'info',
+      label: item => `${this.lang.map.law_start_date} : ${item.lawStartDate}`,
+      parent: 'more-details',
+    },
+    {
+      name: 'article-number',
+      type: 'info',
+      label: item => `${this.lang.map.article_number} : ${item.articleNumber}`,
+      parent: 'more-details',
+    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<LegalRule> = new ColumnsWrapper(
@@ -53,8 +71,6 @@ export class LegalRuleComponent extends AdminComponent<LegalRulePopupComponent, 
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('law'),
-    new NoneFilterColumn('lawStartDate'),
-    new TextFilterColumn('articleNumber'),
     new TextFilterColumn('legalTextArabic'),
     new TextFilterColumn('legalTextEnglish'),
     new SelectFilterColumn(
