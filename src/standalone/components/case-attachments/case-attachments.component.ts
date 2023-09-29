@@ -5,7 +5,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { CaseAttachment } from '@models/case-attachment';
-import { combineLatest, delay, Observable, of, ReplaySubject, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, delay, exhaustMap, Observable, of, ReplaySubject, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LangService } from '@services/lang.service';
@@ -19,9 +19,10 @@ import { MatCardModule } from '@angular/material/card';
   styleUrls: ['./case-attachments.component.scss'],
 })
 export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implements OnInit {
+  view$ = new Subject<CaseAttachment>();
   reload$ = new ReplaySubject<void>(1);
   @Input()
-  caseId!: string;
+  caseId?: string;
   @Input()
   disabled = false;
   @Input()
@@ -33,10 +34,12 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
 
   dataSource: AppTableDataSource<CaseAttachment> = new AppTableDataSource<CaseAttachment>(this._load());
 
-  displayedColumns: string[] = ['id', 'name'];
+  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'actions'];
 
   ngOnInit(): void {
-    this.reload$.next();
+    if (this.caseId) this.reload$.next();
+
+    this.listenToView();
   }
 
   private _load(): Observable<CaseAttachment[]> {
@@ -44,6 +47,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
       .pipe(delay(0))
       .pipe(
         switchMap(() => {
+          console.log('LOAD');
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
               return this.caseId ? this.service.loadFolderAttachments(this.caseId) : of([]);
@@ -59,6 +63,27 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   }
 
   openAddDialog() {
-    this.service.openAddAttachmentDialog(this.caseId);
+    if (!this.caseId) {
+      return;
+    }
+    this.service
+      .openAddAttachmentDialog(this.caseId, this.service)
+      .afterClosed()
+      .subscribe(() => {
+        this.reload$.next();
+      });
+  }
+
+  private listenToView() {
+    //investigation-case/document/{docId}/download
+    this.view$
+      .pipe(
+        exhaustMap(item => {
+          return item.view(this.service);
+        })
+      )
+      .subscribe(() => {
+        console.log('VIEW');
+      });
   }
 }

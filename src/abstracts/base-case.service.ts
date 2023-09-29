@@ -1,7 +1,7 @@
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { Constructor } from '@app-types/constructors';
 import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
@@ -11,11 +11,15 @@ import { CaseAttachment } from '@models/case-attachment';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CaseAttachmentPopupComponent } from '@standalone/popups/case-attachment-popup/case-attachment-popup.component';
 import { DialogService } from '@services/dialog.service';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BlobModel } from '@models/blob-model';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
   protected dialog: DialogService = inject(DialogService);
+  protected domSanitizer = inject(DomSanitizer);
 
   abstract getUrlSegment(): string;
 
@@ -172,12 +176,21 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     throw new Error('Method not implemented.');
   }
 
-  addCaseAttachment(caseId: string): Observable<unknown> {
-    return this.http.post(this.getUrlSegment() + `/${caseId}/attachment`, {});
+  @CastResponse(() => CaseAttachment)
+  addCaseAttachment(caseId: string, attachment: CaseAttachment): Observable<unknown> {
+    const formData = new FormData();
+    attachment.content ? formData.append('content', attachment.content) : null;
+    delete attachment.content;
+    return this.http.post(this.getUrlSegment() + `/${caseId}/document`, formData, {
+      params: new HttpParams({
+        fromObject: attachment as never,
+      }),
+    });
   }
 
-  addBulkCaseAttachments(): void {
-    throw new Error('Method not implemented.');
+  @CastResponse(() => CaseAttachment)
+  addBulkCaseAttachments(caseId: string, attachments: CaseAttachment[]): Observable<unknown> {
+    return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, {});
   }
 
   @CastResponse(() => CaseFolder)
@@ -190,11 +203,31 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     return this.http.get<CaseAttachment[]>(this.getUrlSegment() + `/${caseId}/folder/contained-documents`);
   }
 
-  openAddAttachmentDialog(caseId: string): MatDialogRef<CaseAttachmentPopupComponent> {
+  openAddAttachmentDialog(caseId: string, service: BaseCaseService<unknown>): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
       data: {
         caseId,
+        service,
       },
     });
+  }
+
+  downloadAttachment(attachmentId: string): Observable<BlobModel> {
+    return this.http
+      .get(this.getUrlSegment() + '/document/' + attachmentId + '/download', { responseType: 'blob' })
+      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
+  }
+
+  viewAttachment(attachmentId: string, title = 'Document'): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+    return this.downloadAttachment(attachmentId).pipe(
+      map(blob => {
+        return this.dialog.open(ViewAttachmentPopupComponent, {
+          data: {
+            model: blob,
+            title: title,
+          },
+        });
+      })
+    );
   }
 }

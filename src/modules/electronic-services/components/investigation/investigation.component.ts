@@ -6,7 +6,7 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 
 @Component({
@@ -28,6 +28,8 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   caseFolders: CaseFolder[] = [];
 
+  caseFoldersMap?: Record<string, CaseFolder>;
+
   getSecurityLevel(limitedAccess: boolean): string {
     return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
   }
@@ -38,6 +40,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   _afterBuildForm(): void {
     //throw new Error('Method not implemented.');
+    this.loadCaseFolders();
   }
 
   _beforeSave(saveType: SaveTypes): boolean | Observable<boolean> {
@@ -56,16 +59,29 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.model = model;
     // display success message based on operation and save type
 
-    // if there is no folders load it
-    if (!this.caseFolders.length) {
-      this.model
-        .getService()
-        .loadCaseFolders(model.id)
-        .subscribe(folders => (this.caseFolders = folders));
-    }
+    this.loadCaseFolders();
   }
 
   _updateForm(model: Investigation): void {
     this.form.patchValue(model.buildForm());
+  }
+
+  loadCaseFolders(): void {
+    // if there is no folders load it
+    if (!this.caseFolders.length && this.model.id) {
+      this.model
+        .getService()
+        .loadCaseFolders(this.model.id)
+        .pipe(map(folders => (this.caseFolders = folders)))
+        .subscribe(folders => {
+          this.caseFoldersMap = folders.reduce((acc, item) => {
+            return { ...acc, [item.name.toLowerCase()]: item };
+          }, {} as Record<string, CaseFolder>);
+        });
+    }
+  }
+
+  getCaseFolderIdByName(name: string): string | undefined {
+    return this.caseFoldersMap && this.caseFoldersMap[name.toLowerCase()].id;
   }
 }

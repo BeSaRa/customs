@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  upload_files: string;
+  document_name: string;
+  attachment_type: string;
+  drag_and_drop_files: string;
+  add_attachments: string;
   menu_attachment_type: string;
   false: string;
   true: string;

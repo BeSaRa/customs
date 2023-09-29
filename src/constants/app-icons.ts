@@ -49,6 +49,7 @@ export const AppIcons = {
   VIOLATION_PENALTY: 'pen',
   LEGAL_RULE: 'scale-balance',
   PLUS_BOX: 'plus-box',
+  FOLDER_MULTIPLE_IMAGE: 'folder-multiple-image',
 };
 
 export type AppIconsType = typeof AppIcons;
