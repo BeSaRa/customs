@@ -2,6 +2,9 @@ import { Constructor } from '@app-types/constructors';
 import { Observable } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { CaseAttachment } from '@models/case-attachment';
+import { BlobModel } from '@models/blob-model';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 
 export interface BaseCaseServiceContract<M> {
   getUrlSegment(): string;
@@ -74,7 +77,9 @@ export interface BaseCaseServiceContract<M> {
 
   loadCaseFolders(caseId: string): Observable<CaseFolder[]>;
 
-  viewAttachment(attachmentId: string): unknown;
+  viewAttachment(attachmentId: string): Observable<MatDialogRef<ViewAttachmentPopupComponent>>;
 
-  downloadAttachment(attachmentId: string): Observable<unknown>;
+  downloadAttachment(attachmentId: string): Observable<BlobModel>;
+
+  deleteAttachment(attachmentId: string): Observable<unknown>;
 }

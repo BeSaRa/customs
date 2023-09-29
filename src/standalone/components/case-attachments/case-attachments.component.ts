@@ -5,11 +5,15 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { CaseAttachment } from '@models/case-attachment';
-import { combineLatest, delay, exhaustMap, Observable, of, ReplaySubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, delay, exhaustMap, filter, map, Observable, of, ReplaySubject, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LangService } from '@services/lang.service';
 import { MatCardModule } from '@angular/material/card';
+import { DialogService } from '@services/dialog.service';
+import { UserClick } from '@enums/user-click';
+import { ToastService } from '@services/toast.service';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-case-attachments',
@@ -21,6 +25,10 @@ import { MatCardModule } from '@angular/material/card';
 export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implements OnInit {
   view$ = new Subject<CaseAttachment>();
   reload$ = new ReplaySubject<void>(1);
+  delete$ = new Subject<CaseAttachment>();
+  dialog = inject(DialogService);
+  toast = inject(ToastService);
+
   @Input()
   caseId?: string;
   @Input()
@@ -40,6 +48,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
     if (this.caseId) this.reload$.next();
 
     this.listenToView();
+    this.listenToDelete();
   }
 
   private _load(): Observable<CaseAttachment[]> {
@@ -75,15 +84,41 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   }
 
   private listenToView() {
-    //investigation-case/document/{docId}/download
     this.view$
+      .pipe(takeUntil(this.destroy$))
       .pipe(
         exhaustMap(item => {
           return item.view(this.service);
         })
       )
-      .subscribe(() => {
-        console.log('VIEW');
-      });
+      .subscribe();
+  }
+
+  private listenToDelete() {
+    this.delete$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        exhaustMap(item => {
+          return this.dialog
+            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: item.documentTitle }))
+            .afterClosed()
+            .pipe(
+              map(userClick => {
+                return { userClick: userClick, item };
+              })
+            );
+        })
+      )
+      .pipe(filter(response => response.userClick === UserClick.YES))
+      .pipe(
+        exhaustMap(response =>
+          response.item
+            .delete(this.service)
+            .pipe(ignoreErrors())
+            .pipe(map(() => response.item))
+        )
+      )
+      .pipe(tap(item => this.toast.success(this.lang.map.msg_delete_x_success.change({ x: item.documentTitle }))))
+      .subscribe(() => this.reload$.next());
   }
 }

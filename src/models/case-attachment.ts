@@ -3,6 +3,7 @@ import { ClonerMixin } from '@mixins/cloner-mixin';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 
 export class CaseAttachment extends ClonerMixin(class {}) {
   id!: string;
@@ -34,7 +35,11 @@ export class CaseAttachment extends ClonerMixin(class {}) {
     this.content = file;
   }
 
-  view(service: BaseCaseService<unknown>): Observable<unknown> {
+  view(service: BaseCaseService<unknown>): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return service.viewAttachment(this.id);
+  }
+
+  delete(service: BaseCaseService<unknown>): Observable<unknown> {
+    return service.deleteAttachment(this.id);
   }
 }

@@ -3,7 +3,7 @@
     <h1>{{ lang.map.view }} : {{ data.title }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content w-[800px] h-[800px]">
+  <div class="dialog-content !p-0 w-[800px] h-[800px]">
     <iframe class="w-full h-full" [src]="data.model.safeUrl"></iframe>
   </div>
   <div class="dialog-footer justify-end">

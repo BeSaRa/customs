@@ -230,4 +230,8 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
       })
     );
   }
+
+  deleteAttachment(attachmentId: string): Observable<unknown> {
+    return this.http.delete(this.getUrlSegment() + `/document/${attachmentId}`);
+  }
 }

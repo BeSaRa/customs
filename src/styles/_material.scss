@@ -135,7 +135,12 @@ html[dir="rtl"] {
   .mat-expansion-panel-header.mat-expanded {
     height: 48px;
   }
+
   .mat-expansion-panel-body {
     @apply p-4;
   }
+}
+
+.table-primary {
+  @apply [&_th]:bg-primary [&_th]:text-white [&_th_.mat-sort-header-arrow]:text-white #{!important};
 }
