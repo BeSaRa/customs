@@ -1,7 +1,7 @@
-import { inject, Inject, Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LangContract } from '@contracts/lang-contract';
-import { distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
+import { map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
 import { LangCodes } from '@enums/lang-codes';
 import { DOCUMENT } from '@angular/common';
@@ -9,8 +9,6 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Localization } from '@models/localization';
 import { ServiceContract } from '@contracts/service-contract';
-import { DateAdapter } from '@angular/material/core';
-import { enUS, arEG } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +16,7 @@ import { enUS, arEG } from 'date-fns/locale';
 export class LangService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'LangService';
   map: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
-  dateAdapter = inject(DateAdapter);
+
   languages: LangContract[] = [
     {
       id: 1,
@@ -26,7 +24,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       name: 'العربية',
       direction: 'rtl',
       toggleTo: LangCodes.EN,
-      local: arEG,
     },
     {
       id: 2,
@@ -34,7 +31,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       name: 'English',
       direction: 'ltr',
       toggleTo: LangCodes.AR,
-      local: enUS,
     },
   ];
   private change = new Subject<LangContract>();
@@ -42,9 +38,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
   private arabic: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
   private english: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
   private records: Record<keyof LangKeysContract, Localization> = {} as Record<keyof LangKeysContract, Localization>;
-
-  langChangeProcess$ = this.langChangerNotifier.asObservable().pipe(distinctUntilChanged());
-
   change$ = this.change.asObservable();
   private current: LangContract = this.languages[1];
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce((acc, item) => {
@@ -70,7 +63,6 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
         this.change.next(this.current);
         this.setDirection(this.current.direction);
         this.langChangerNotifier.next(LangChangeProcess.END);
-        this.dateAdapter.setLocale(this.current.local);
       });
   }
 

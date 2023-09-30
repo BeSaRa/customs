@@ -14,6 +14,7 @@ import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { ignoreErrors } from '@utils/utils';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-case-attachments',
@@ -23,6 +24,7 @@ import { ignoreErrors } from '@utils/utils';
   styleUrls: ['./case-attachments.component.scss'],
 })
 export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implements OnInit {
+  protected readonly Config = Config;
   view$ = new Subject<CaseAttachment>();
   reload$ = new ReplaySubject<void>(1);
   delete$ = new Subject<CaseAttachment>();
