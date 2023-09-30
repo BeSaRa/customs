@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { LangContract } from '@contracts/lang-contract';
 import { map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
@@ -44,7 +43,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
     return { ...acc, [item.code]: item };
   }, {} as Record<LangCodes, LangContract>);
 
-  constructor(private _http: HttpClient, @Inject(DOCUMENT) private document: Document) {
+  constructor(@Inject(DOCUMENT) private document: Document) {
     super();
     this.setDirection(this.current.direction);
   }
