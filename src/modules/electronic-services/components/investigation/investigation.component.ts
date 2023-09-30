@@ -8,6 +8,7 @@ import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
 import { map, Observable } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-investigation',
@@ -29,6 +30,12 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   caseFolders: CaseFolder[] = [];
 
   caseFoldersMap?: Record<string, CaseFolder>;
+
+  adapter = inject(DateAdapter);
+
+  protected override _init() {
+    super._init();
+  }
 
   getSecurityLevel(limitedAccess: boolean): string {
     return this.lang.map[limitedAccess as unknown as 'true' | 'false'];

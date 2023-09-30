@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { inject, Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LangContract } from '@contracts/lang-contract';
 import { distinctUntilChanged, map, of, Subject, tap } from 'rxjs';
@@ -9,6 +9,8 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Localization } from '@models/localization';
 import { ServiceContract } from '@contracts/service-contract';
+import { DateAdapter } from '@angular/material/core';
+import { enUS, arEG } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +18,7 @@ import { ServiceContract } from '@contracts/service-contract';
 export class LangService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'LangService';
   map: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
-
+  dateAdapter = inject(DateAdapter);
   languages: LangContract[] = [
     {
       id: 1,
@@ -24,6 +26,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       name: 'العربية',
       direction: 'rtl',
       toggleTo: LangCodes.EN,
+      local: arEG,
     },
     {
       id: 2,
@@ -31,6 +34,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       name: 'English',
       direction: 'ltr',
       toggleTo: LangCodes.AR,
+      local: enUS,
     },
   ];
   private change = new Subject<LangContract>();
@@ -66,6 +70,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
         this.change.next(this.current);
         this.setDirection(this.current.direction);
         this.langChangerNotifier.next(LangChangeProcess.END);
+        this.dateAdapter.setLocale(this.current.local);
       });
   }
 

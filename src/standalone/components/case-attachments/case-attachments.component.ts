@@ -42,7 +42,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
 
   dataSource: AppTableDataSource<CaseAttachment> = new AppTableDataSource<CaseAttachment>(this._load());
 
-  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'actions'];
+  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'creationDate', 'actions'];
 
   ngOnInit(): void {
     if (this.caseId) this.reload$.next();
@@ -56,7 +56,6 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
       .pipe(delay(0))
       .pipe(
         switchMap(() => {
-          console.log('LOAD');
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
               return this.caseId ? this.service.loadFolderAttachments(this.caseId) : of([]);

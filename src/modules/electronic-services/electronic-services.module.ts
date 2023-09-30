@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ElectronicServicesRoutingModule } from './electronic-services-routing.module';
 import { ElectronicServicesComponent } from './electronic-services.component';
 import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
@@ -14,7 +13,6 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
-
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
@@ -25,7 +23,6 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule } from '@angular/material/core';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 
@@ -51,7 +48,6 @@ import { CaseAttachmentsComponent } from '@standalone/components/case-attachment
     MatSlideToggleModule,
     ButtonComponent,
     ReactiveFormsModule,
-    MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
     ControlDirective,

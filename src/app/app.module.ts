@@ -35,11 +35,14 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { forkJoin, Observable, switchMap, tap } from 'rxjs';
 import { MAT_SELECT_SCROLL_STRATEGY_PROVIDER, MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatOptionModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LangService } from '@services/lang.service';
 import { NgProgressModule } from 'ngx-progressbar';
+import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
+import { enUS } from 'date-fns/locale';
+import { Config } from '@constants/config';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -69,6 +72,7 @@ import { NgProgressModule } from 'ngx-progressbar';
     MatProgressSpinnerModule,
     MatProgressBarModule,
     NgProgressModule,
+    MatDateFnsModule,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
@@ -99,6 +103,8 @@ import { NgProgressModule } from 'ngx-progressbar';
 
     httpInterceptors,
     provideNgxMask(),
+    { provide: MAT_DATE_LOCALE, useValue: enUS },
+    { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
   ],
   bootstrap: [AppComponent],
 })

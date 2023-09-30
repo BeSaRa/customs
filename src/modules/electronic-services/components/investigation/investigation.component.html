@@ -25,7 +25,7 @@
       <app-input formControlName="investigationFullSerial" [label]="lang.map.investigation_file_number" />
       <app-input formControlName="createdOn" [label]="lang.map.report_entry_date">
         <input appControl formControlName="createdOn" (click)="datepicker.open()" [matDatepicker]="datepicker" />
-        <mat-datepicker #datepicker />
+        <mat-datepicker touchUi #datepicker />
       </app-input>
       <div class="flex items-center">
         <mat-slide-toggle #securityLevel="matSlideToggle" formControlName="limitedAccess">

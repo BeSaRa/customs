@@ -6,4 +6,5 @@ export interface LangContract {
   code: LangCodes;
   direction: 'rtl' | 'ltr';
   toggleTo: LangCodes;
+  local: Locale;
 }

@@ -17,7 +17,7 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
     return {
       draftFullSerial: controls ? [{ value: draftFullSerial, disabled: true }] : draftFullSerial,
       investigationFullSerial: controls ? [{ value: investigationFullSerial, disabled: true }] : investigationFullSerial,
-      createdOn: controls ? [{ value: createdOn, disabled: true }] : createdOn,
+      createdOn: controls ? [{ value: createdOn, disabled: false }] : createdOn,
       description: controls ? [description] : description,
       limitedAccess: controls ? [limitedAccess] : limitedAccess,
     };
