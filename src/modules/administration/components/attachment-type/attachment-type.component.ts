@@ -8,6 +8,9 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-attachment-type',
@@ -16,6 +19,7 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 })
 export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupComponent, AttachmentType, AttachmentTypeService> {
   service = inject(AttachmentTypeService);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
   actions: ContextMenuActionContract<AttachmentType>[] = [
     {
       name: 'view',
@@ -49,6 +53,8 @@ export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupC
   columnsWrapper: ColumnsWrapper<AttachmentType> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
+    new TextFilterColumn('enName'),
+    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }
