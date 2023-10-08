@@ -23,5 +23,5 @@ export const AppFullRoutes = {
   USER_INBOX: '/home/electronic-services/user-inbox',
   VIOLATION_PENALTY: '/home/administration/violation-penalty',
   LEGAL_RULE: '/home/administration/legal-rule',
-  ATTACHMENT_TYPE: '/home/administration/attachment-types',
+  ATTACHMENT_TYPE: '/home/administration/attachment-type',
 };
