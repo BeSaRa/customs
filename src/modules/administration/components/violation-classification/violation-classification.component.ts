@@ -66,7 +66,7 @@ export class ViolationClassificationComponent extends AdminComponent<
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('penaltyType', this.lookupService.lookups.penaltyType, 'lookupKey', 'getNames'),
+    new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),

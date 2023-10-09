@@ -17,7 +17,7 @@ import { Lookup } from '@models/lookup';
 export class ViolationClassificationPopupComponent extends AdminDialogComponent<ViolationClassification> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationClassification> = inject(MAT_DIALOG_DATA);
-  penaltyTypes: Lookup[] = inject(LookupService).lookups.penaltyType;
+  offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));

@@ -11,17 +11,16 @@ const { send, receive } = new ViolationClassificationInterceptor();
 @InterceptModel({ send, receive })
 export class ViolationClassification extends BaseModel<ViolationClassification, ViolationClassificationService> {
   $$__service_name__$$ = 'ViolationClassificationService';
-  penaltyType!: number;
-  typeInfo!: AdminResult;
-
+  offenderType!: number;
+  offenderTypeInfo!: AdminResult;
   override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
-    const { arName, enName, penaltyType, status } = this;
+    const { arName, enName, offenderType, status } = this;
 
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_ONLY')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_ONLY')]] : enName,
-      penaltyType: controls ? [penaltyType, CustomValidators.required] : penaltyType,
+      offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       status: status,
     };
   }

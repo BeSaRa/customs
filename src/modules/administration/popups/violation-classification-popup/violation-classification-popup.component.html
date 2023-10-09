@@ -9,9 +9,9 @@
         <app-input formControlName="arName" [label]="lang.map.ar_name" />
         <app-input formControlName="enName" [label]="lang.map.en_name" />
         <app-select-input
-          formControlName="penaltyType"
-          [options]="penaltyTypes"
-          [label]="lang.map.penalty_type"
+          formControlName="offenderType"
+          [options]="offenderTypes"
+          [label]="lang.map.offender_type"
           bindValue="lookupKey"
           bindLabel="getNames" />
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
