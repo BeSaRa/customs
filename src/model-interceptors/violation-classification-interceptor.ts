@@ -9,7 +9,7 @@ export class ViolationClassificationInterceptor implements ModelInterceptorContr
 
   receive(model: ViolationClassification): ViolationClassification {
     model.statusInfo = new AdminResult().clone(model.statusInfo);
-    model.typeInfo = new AdminResult().clone(model.typeInfo);
+    model.offenderTypeInfo = new AdminResult().clone(model.offenderTypeInfo);
     return model;
   }
 }

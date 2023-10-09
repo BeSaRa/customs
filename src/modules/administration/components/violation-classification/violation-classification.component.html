@@ -45,11 +45,11 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
-    <!-- penaltyType -->
-    <ng-container matColumnDef="penaltyType">
-      <th mat-header-cell mat-sort-header="penaltyType" *matHeaderCellDef>{{ lang.map.penalty_type }}</th>
+    <!-- offenderType -->
+    <ng-container matColumnDef="offenderType">
+      <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>
 
-      <td mat-cell *matCellDef="let element">{{ element.typeInfo.getNames() }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderTypeInfo.getNames() }}</td>
     </ng-container>
     <!-- status status -->
     <ng-container matColumnDef="status">
