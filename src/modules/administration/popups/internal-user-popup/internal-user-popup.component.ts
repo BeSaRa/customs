@@ -26,6 +26,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
   private readonly permissionRoleService = inject(PermissionRoleService);
+  Operations = OperationType;
 
   statusList!: Lookup[];
   permissionsRoles!: PermissionRole[];

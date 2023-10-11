@@ -6,6 +6,8 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
 
 @Component({
   selector: 'app-internal-user-ou-popup',
@@ -15,9 +17,15 @@ import { OperationType } from '@enums/operation-type';
 export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalUserOU> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
-
+  organizationUnits!: OrganizationUnit[];
+  organizationUnitService = inject(OrganizationUnitService);
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.organizationUnitService.loadAsLookups().subscribe(data => (this.organizationUnits = data));
+  }
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    this.internalUserId?.setValue(this.data.extras?.internalUserId);
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -38,5 +46,8 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
+  }
+  get internalUserId() {
+    return this.form.get('internalUserId');
   }
 }

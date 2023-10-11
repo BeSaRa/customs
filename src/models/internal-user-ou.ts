@@ -3,6 +3,7 @@ import { InternalUserOUService } from '@services/internal-user-ou.service';
 import { InternalUserOUInterceptor } from '@model-interceptors/internal-user-ou-interceptor';
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
+import { CustomValidators } from '@validators/custom-validators';
 
 const { send, receive } = new InternalUserOUInterceptor();
 
@@ -15,6 +16,10 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
   organizationUnitInfo!: AdminResult;
 
   buildForm(controls = false): object {
-    return {};
+    const { internalUserId, organizationUnitId } = this;
+    return {
+      internalUserId: controls ? [internalUserId, [CustomValidators.required]] : internalUserId,
+      organizationUnitId: controls ? [organizationUnitId, [CustomValidators.required]] : organizationUnitId,
+    };
   }
 }
