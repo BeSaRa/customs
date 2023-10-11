@@ -29,6 +29,7 @@ export const EndPoints = {
   VIOLATION_PENALTY: '/entity/violation-penalty',
   LEGAL_RULE: '/entity/legal-rule',
   ATTACHMENT_TYPE: 'attachment-types',
+  INTERNAL_USER_OU: '/entity/internal-user-ou',
 };
 
 export type EndpointsType = typeof EndPoints;
