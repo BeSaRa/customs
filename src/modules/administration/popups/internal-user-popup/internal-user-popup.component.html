@@ -101,6 +101,11 @@
           </div>
         </ng-container>
       </mat-tab>
+      <mat-tab [label]="lang.map.menu_internal_user_ou" *ngIf="operation == Operations.UPDATE">
+          <div class="mt-4">
+            <app-internal-user-ou [internalUser]="data.model"></app-internal-user-ou>
+          </div>
+      </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
