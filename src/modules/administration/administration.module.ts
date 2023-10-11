@@ -77,6 +77,8 @@ import { PenaltyDetailsComponent } from '@modules/administration/components/pena
 import { PenaltyDetailsPopupComponent } from '@modules/administration/popups/penalty-details-popup/penalty-details-popup.component';
 import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
 import { AttachmentTypePopupComponent } from '@modules/administration/popups/attachment-type-popup/attachment-type-popup.component';
+import { InternalUserOUComponent } from '@modules/administration/components/internal-user-ou/internal-user-ou.component';
+import { InternalUserOUPopupComponent } from '@modules/administration/popups/internal-user-ou-popup/internal-user-ou-popup.component';
 
 @NgModule({
   declarations: [
@@ -122,6 +124,8 @@ import { AttachmentTypePopupComponent } from '@modules/administration/popups/att
     PenaltyDetailsPopupComponent,
     AttachmentTypeComponent,
     AttachmentTypePopupComponent,
+    InternalUserOUComponent,
+    InternalUserOUPopupComponent,
   ],
   imports: [
     CommonModule,
