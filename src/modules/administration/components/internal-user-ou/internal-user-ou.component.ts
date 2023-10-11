@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject } from '@angular/core';
+import { Component, EventEmitter, Input, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { InternalUserOU } from '@models/internal-user-ou';
 import { InternalUserOUService } from '@services/internal-user-ou.service';
@@ -8,6 +8,7 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { InternalUser } from '@models/internal-user';
 
 @Component({
   selector: 'app-internal-user-ou',
@@ -15,21 +16,13 @@ import { NoneFilterColumn } from '@models/none-filter-column';
   styleUrls: ['./internal-user-ou.component.scss'],
 })
 export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupComponent, InternalUserOU, InternalUserOUService> {
+  @Input({ required: true }) internalUser!: InternalUser;
   override ngOnInit(): void {
     super.ngOnInit();
-    this.filter$.next({ internalUserId: 3 });
+    this.filter$.next({ internalUserId: this.internalUser.id });
   }
   service = inject(InternalUserOUService);
   actions: ContextMenuActionContract<InternalUserOU>[] = [
-    {
-      name: 'view',
-      type: 'action',
-      label: 'view',
-      icon: AppIcons.VIEW,
-      callback: item => {
-        this.view$.next(item);
-      },
-    },
     {
       name: 'edit',
       type: 'action',
@@ -51,9 +44,14 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<InternalUserOU> = new ColumnsWrapper(
-    new NoneFilterColumn('select'),
-    new TextFilterColumn('internalUserId'),
     new TextFilterColumn('organizationUnitId'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
+
+  override _getCreateExtras(): unknown {
+    return { internalUserId: this.internalUser.id };
+  }
+  override _getEditExtras(): unknown {
+    return { internalUserId: this.internalUser.id };
+  }
 }
