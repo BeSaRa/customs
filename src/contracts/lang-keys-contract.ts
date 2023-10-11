@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_internal_user_ou: string;
   upload_files: string;
   document_name: string;
   attachment_type: string;
@@ -236,4 +237,5 @@ export interface LangKeysContract {
   criminal_type: string;
   is_numeric: string;
   key_code: string;
+  organization_unit: string;
 }
