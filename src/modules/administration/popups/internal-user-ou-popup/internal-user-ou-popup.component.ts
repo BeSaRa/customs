@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
+import { InternalUserOUService } from '@services/internal-user-ou.service';
 
 @Component({
   selector: 'app-internal-user-ou-popup',
@@ -17,6 +18,7 @@ import { OrganizationUnitService } from '@services/organization-unit.service';
 export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalUserOU> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
+  service = inject(InternalUserOUService);
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
   override ngOnInit(): void {
@@ -49,5 +51,16 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   }
   get internalUserId() {
     return this.form.get('internalUserId');
+  }
+  get organizationUnitArray() {
+    return this.form.get('organizationUnitArray');
+  }
+
+  saveBulk() {
+    let payloadArr: any[] = [];
+    this.organizationUnitArray?.value.forEach((value: number) => {
+      payloadArr.push({ internalUserId: this.internalUserId?.value, organizationUnitId: value, status: 1 });
+    });
+    this.service.createBulkFull(payloadArr).subscribe();
   }
 }

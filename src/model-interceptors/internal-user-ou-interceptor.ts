@@ -14,6 +14,7 @@ export class InternalUserOUInterceptor implements ModelInterceptorContract<Inter
     model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.internalUserInfo && (model.internalUserInfo = AdminResult.createInstance(model.internalUserInfo));
     model.organizationUnitInfo && (model.organizationUnitInfo = AdminResult.createInstance(model.organizationUnitInfo));
+    model.organizationUnitArray = [model.organizationUnitId];
     return model;
   }
 }

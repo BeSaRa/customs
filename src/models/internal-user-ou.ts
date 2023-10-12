@@ -14,12 +14,14 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
   internalUserInfo!: AdminResult;
   organizationUnitId!: number;
   organizationUnitInfo!: AdminResult;
+  organizationUnitArray!: number[];
 
   buildForm(controls = false): object {
-    const { internalUserId, organizationUnitId } = this;
+    const { internalUserId, organizationUnitArray, status } = this;
     return {
       internalUserId: controls ? [internalUserId, [CustomValidators.required]] : internalUserId,
-      organizationUnitId: controls ? [organizationUnitId, [CustomValidators.required]] : organizationUnitId,
+      organizationUnitArray: controls ? [organizationUnitArray, [CustomValidators.required]] : organizationUnitArray,
+      status: controls ? [status] : status,
     };
   }
 }
