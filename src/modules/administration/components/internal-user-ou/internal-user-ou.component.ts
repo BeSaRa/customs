@@ -19,19 +19,12 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   @Input({ required: true }) internalUser!: InternalUser;
   override ngOnInit(): void {
     super.ngOnInit();
+    this.data$.subscribe(console.log);
+
     this.filter$.next({ internalUserId: this.internalUser.id });
   }
   service = inject(InternalUserOUService);
   actions: ContextMenuActionContract<InternalUserOU>[] = [
-    {
-      name: 'edit',
-      type: 'action',
-      label: 'edit',
-      icon: AppIcons.EDIT,
-      callback: item => {
-        this.edit$.next(item);
-      },
-    },
     {
       name: 'delete',
       type: 'action',
@@ -49,9 +42,6 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   ).attacheFilter(this.filter$);
 
   override _getCreateExtras(): unknown {
-    return { internalUserId: this.internalUser.id };
-  }
-  override _getEditExtras(): unknown {
     return { internalUserId: this.internalUser.id };
   }
 }

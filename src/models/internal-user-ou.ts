@@ -15,6 +15,7 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
   organizationUnitId!: number;
   organizationUnitInfo!: AdminResult;
   organizationUnitArray!: number[];
+  override status: number = 1;
 
   buildForm(controls = false): object {
     const { internalUserId, organizationUnitArray, status } = this;

@@ -4,11 +4,12 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, takeUntil, throwError } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { InternalUserOUService } from '@services/internal-user-ou.service';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-internal-user-ou-popup',
@@ -16,15 +17,21 @@ import { InternalUserOUService } from '@services/internal-user-ou.service';
   styleUrls: ['./internal-user-ou-popup.component.scss'],
 })
 export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalUserOU> {
+  saveBulk$: Subject<void> = new Subject<void>();
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
   service = inject(InternalUserOUService);
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
+
   override ngOnInit(): void {
     super.ngOnInit();
+    this.listenToSaveBulk();
+    console.log(this.data);
+
     this.organizationUnitService.loadAsLookups().subscribe(data => (this.organizationUnits = data));
   }
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
     this.internalUserId?.setValue(this.data.extras?.internalUserId);
@@ -42,11 +49,9 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     });
   }
 
-  protected _afterSave(model: InternalUserOU): void {
-    this.model = model;
+  protected _afterSave(): void {
     this.operation = OperationType.UPDATE;
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
-    // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
   get internalUserId() {
@@ -56,11 +61,43 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     return this.form.get('organizationUnitArray');
   }
 
-  saveBulk() {
+  createBulk(): Observable<InternalUserOU[]> {
     let payloadArr: any[] = [];
     this.organizationUnitArray?.value.forEach((value: number) => {
-      payloadArr.push({ internalUserId: this.internalUserId?.value, organizationUnitId: value, status: 1 });
+      payloadArr.push({ ...this.form.value, organizationUnitId: value });
     });
-    this.service.createBulkFull(payloadArr).subscribe();
+    return this.service.createBulkFull(payloadArr as unknown as InternalUserOU[]);
+  }
+
+  protected listenToSaveBulk() {
+    this.saveBulk$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => {
+          const result = this._beforeSave();
+          return isObservable(result) ? result : of(result);
+        })
+      )
+      .pipe(filter(value => value))
+      .pipe(
+        switchMap(() => {
+          const result = this._prepareModel();
+          return isObservable(result) ? result : of(result);
+        })
+      )
+      .pipe(
+        exhaustMap(() => {
+          return this.createBulk().pipe(
+            catchError(error => {
+              this._saveFail(error);
+              return throwError(error);
+            }),
+            ignoreErrors()
+          );
+        })
+      )
+      .subscribe(() => {
+        this._afterSave();
+      });
   }
 }
