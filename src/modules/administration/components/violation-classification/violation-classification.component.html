@@ -45,6 +45,15 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
+
+    <!-- key -->
+    <ng-container matColumnDef="key">
+      <th mat-header-cell mat-sort-header="key" *matHeaderCellDef>{{ lang.map.key_code }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.key | highlight : getFilterStringColumn('key')"></span>
+      </td>
+    </ng-container>
+
     <!-- offenderType -->
     <ng-container matColumnDef="offenderType">
       <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>

@@ -235,4 +235,5 @@ export interface LangKeysContract {
   responsibility_repeat_violations: string;
   criminal_type: string;
   is_numeric: string;
+  key_code: string;
 }

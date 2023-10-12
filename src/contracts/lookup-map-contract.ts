@@ -37,4 +37,5 @@ export interface LookupMapContract {
   criminalType: Lookup[];
   violationClassification: Lookup[];
   responsibilityRepeatViolations: Lookup[];
+  offenderTypeAll: Lookup[];
 }

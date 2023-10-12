@@ -13,13 +13,15 @@ export class ViolationClassification extends BaseModel<ViolationClassification, 
   $$__service_name__$$ = 'ViolationClassificationService';
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
+  key!: string;
   override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
-    const { arName, enName, offenderType, status } = this;
+    const { arName, enName, offenderType, key, status } = this;
 
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_ONLY')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_ONLY')]] : enName,
+      key: controls ? [key, [CustomValidators.required, CustomValidators.maxLength(20), CustomValidators.pattern('ENG_ONLY')]] : key,
       offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
       status: status,
     };
