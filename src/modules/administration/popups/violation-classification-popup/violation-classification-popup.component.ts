@@ -18,9 +18,15 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationClassification> = inject(MAT_DIALOG_DATA);
   offenderTypes: Lookup[] = inject(LookupService).lookups.offenderTypeAll;
-
+  isDisabled: boolean = false;
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    this.isDisabled = this.operation === OperationType.UPDATE && this.isSystem?.value == true;
+    if (this.isDisabled) {
+      this.key?.disable();
+      this.offenderType?.disable();
+      this.status?.disable();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -41,5 +47,17 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
+  }
+  get isSystem() {
+    return this.form.get('isSystem');
+  }
+  get status() {
+    return this.form.get('status');
+  }
+  get key() {
+    return this.form.get('key');
+  }
+  get offenderType() {
+    return this.form.get('offenderType');
   }
 }
