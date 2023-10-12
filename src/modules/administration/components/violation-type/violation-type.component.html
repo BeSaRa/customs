@@ -62,12 +62,12 @@
         {{ element.offenderTypeInfo.getNames() }}
       </td>
     </ng-container>
-
+    
     <!-- level -->
     <ng-container matColumnDef="level">
       <th mat-header-cell mat-sort-header="level" *matHeaderCellDef>{{ lang.map.level }}</th>
       <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.levelI | highlight : getFilterStringColumn('level')"></span>
+        {{ element.violationLevelInfo.getNames() }}
       </td>
     </ng-container>
 
