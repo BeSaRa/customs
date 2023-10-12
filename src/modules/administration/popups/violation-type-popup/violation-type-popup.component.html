@@ -21,11 +21,12 @@
         <app-select-input
           formControlName="offenderType"
           [options]="offenderTypes"
-          [label]="lang.map.unit_type"
+          [label]="lang.map.offender_type"
           bindValue="lookupKey"
           bindLabel="getNames" />
 
         <app-select-input
+          *ngIf="isCriminal()"
           formControlName="criminalType"
           [options]="criminalTypes"
           [label]="lang.map.criminal_type"
@@ -33,6 +34,7 @@
           bindLabel="getNames" />
 
         <app-select-input
+          *ngIf="isBroker()"
           formControlName="responsibilityRepeatViolations"
           [options]="responsibilityRepeatViolations"
           [label]="lang.map.responsibility_repeat_violations"
@@ -53,11 +55,11 @@
           bindValue="lookupKey"
           bindLabel="getNames" />
 
-        <app-input *ngIf="isNumeric()" formControlName="numericFrom" [label]="lang.map.numeric_from" />
-        <app-input *ngIf="isNumeric()" formControlName="numericTo" [label]="lang.map.numeric_to" />
+          <app-input *ngIf="isNumeric()" formControlName="numericFrom" [label]="lang.map.numeric_from" />
+          <app-input *ngIf="isNumeric()" formControlName="numericTo" [label]="lang.map.numeric_to" />
 
+          <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
         <app-switch formControlName="absence" [label]="lang.map.absence" />
-        <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.status" />
       </div>
     </ng-container>

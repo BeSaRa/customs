@@ -10,6 +10,8 @@ import { ViolationClassification } from '@models/violation-classification';
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
+import { OffenderTypes } from '@enums/offender-types';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-violation-type-popup',
@@ -35,6 +37,8 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    this.onOffenderTypeChange();
+    this.onViolationClassificationChange();
   }
 
   protected override _afterBuildForm(): void {
@@ -68,5 +72,51 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   isNumeric(): boolean {
     return !!this.form.get('isNumeric')?.value;
+  }
+  get classificationId() {
+    return this.form.get('classificationId');
+  }
+  get offenderType() {
+    return this.form.get('offenderType');
+  }
+  get responsibilityRepeatViolation() {
+    return this.form.get('responsibilityRepeatViolations');
+  }
+  get criminalType() {
+    return this.form.get('criminalType');
+  }
+
+  isCriminal(): boolean {
+    if (this.violationClassifications === undefined) return false;
+    let isCriminal = false;
+    this.violationClassifications.forEach(classification => {
+      if (classification.id === this.classificationId?.value && classification.key === 'criminal') isCriminal = true;
+    });
+    return isCriminal;
+  }
+  isBroker(): boolean {
+    let isBroker = false;
+    if (this.offenderType?.value === OffenderTypes.BROKER) isBroker = true;
+    return isBroker;
+  }
+  onOffenderTypeChange() {
+    this.offenderType?.valueChanges.subscribe(() => {
+      if (this.offenderType?.value === OffenderTypes.EMPLOYEE) {
+        this.responsibilityRepeatViolation?.setValue(null);
+        this.responsibilityRepeatViolation?.clearValidators();
+      } else {
+        this.responsibilityRepeatViolation?.setValidators(CustomValidators.required);
+      }
+    });
+  }
+  onViolationClassificationChange() {
+    this.classificationId?.valueChanges.subscribe(() => {
+      if (!this.isCriminal()) {
+        this.criminalType?.setValue(null);
+        this.criminalType?.clearValidators();
+      } else {
+        this.criminalType?.setValidators(CustomValidators.required);
+      }
+    });
   }
 }
