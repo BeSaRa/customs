@@ -4,7 +4,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, takeUntil, throwError } from 'rxjs';
+import { Observable, Subject, catchError, exhaustMap, filter, isObservable, map, of, switchMap, takeUntil, throwError } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
@@ -27,9 +27,12 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   override ngOnInit(): void {
     super.ngOnInit();
     this.listenToSaveBulk();
-    console.log(this.data);
-
-    this.organizationUnitService.loadAsLookups().subscribe(data => (this.organizationUnits = data));
+    this.organizationUnitService
+      .loadAsLookups()
+      .pipe(map(data => data.filter(ou => !(this.data.extras?.organizationUnits as number[]).includes(ou.id))))
+      .subscribe(filteredData => {
+        this.organizationUnits = filteredData;
+      });
   }
 
   _buildForm(): void {
