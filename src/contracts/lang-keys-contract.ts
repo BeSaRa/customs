@@ -1,5 +1,15 @@
 export interface LangKeysContract {
   menu_internal_user_ou: string;
+  report_number: string;
+  security_management: string;
+  control_report_number: string;
+  customs_declaration_number: string;
+  report_year: string;
+  date_from: string;
+  date_to: string;
+  violation_date: string;
+  add_violation: string;
+  classification: string;
   upload_files: string;
   document_name: string;
   attachment_type: string;

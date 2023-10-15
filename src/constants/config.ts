@@ -21,6 +21,7 @@ export const Config = {
       monthYearA11yLabel: 'MMMM yyyy',
     },
   },
+  YEAR_RANGE_FROM_CURRENT_YEAR: 10,
 };
 
 export type ConfigType = typeof Config;

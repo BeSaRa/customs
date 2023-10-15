@@ -55,10 +55,10 @@
           bindValue="lookupKey"
           bindLabel="getNames" />
 
-          <app-input *ngIf="isNumeric()" formControlName="numericFrom" [label]="lang.map.numeric_from" />
-          <app-input *ngIf="isNumeric()" formControlName="numericTo" [label]="lang.map.numeric_to" />
+        <app-input *ngIf="isNumeric()" formControlName="numericFrom" [label]="lang.map.numeric_from" />
+        <app-input *ngIf="isNumeric()" formControlName="numericTo" [label]="lang.map.numeric_to" />
 
-          <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
+        <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
         <app-switch formControlName="isAbsence" [label]="lang.map.absence" />
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.status" />
       </div>

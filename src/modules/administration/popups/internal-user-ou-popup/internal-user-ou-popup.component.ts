@@ -24,8 +24,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
 
-  override ngOnInit(): void {
-    super.ngOnInit();
+  override _init(): void {
     this.listenToSaveBulk();
     this.organizationUnitService
       .loadAsLookups()
@@ -65,7 +64,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   }
 
   createBulk(): Observable<InternalUserOU[]> {
-    let payloadArr: any[] = [];
+    const payloadArr: any[] = [];
     this.organizationUnitArray?.value.forEach((value: number) => {
       payloadArr.push({ ...this.form.value, organizationUnitId: value });
     });

@@ -8,8 +8,8 @@
       <ng-container [formGroup]="form">
         <app-input formControlName="arName" [label]="lang.map.ar_name" />
         <app-input formControlName="enName" [label]="lang.map.en_name" />
-        <app-input formControlName="key" [label]="lang.map.key_code"  />
-        <app-select-input 
+        <app-input formControlName="key" [label]="lang.map.key_code" />
+        <app-select-input
           formControlName="offenderType"
           [options]="offenderTypes"
           [label]="lang.map.offender_type"

@@ -1,0 +1,66 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.add_violation }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div [formGroup]="form" class="dialog-content w-[700px]">
+    <div class="grid gap-4 grid-cols-2">
+      <app-select-input
+        [label]="lang.map.classification"
+        bindLabel="getNames"
+        formControlName="violationClassificationId"
+        bindValue="id"
+        [options]="classifications" />
+      <app-select-input
+        [label]="lang.map.violation_type"
+        bindLabel="getNames"
+        bindValue="id"
+        formControlName="violationTypeId"
+        [options]="types" />
+      <app-textarea formControlName="description" [label]="lang.map.description" class="col-span-2" />
+      <app-input formControlName="violationsDate" [label]="lang.map.violation_date">
+        <input appControl formControlName="violationsDate" (click)="datepicker.open()" [matDatepicker]="datepicker" />
+        <mat-datepicker touchUi #datepicker />
+      </app-input>
+      <ng-container *ngIf="isAbsenceType">
+        <app-input formControlName="violationsDateFrom" [label]="lang.map.date_from">
+          <input
+            appControl
+            formControlName="violationsDateFrom"
+            (click)="violationDateFrom.open()"
+            [matDatepicker]="violationDateFrom" />
+          <mat-datepicker touchUi #violationDateFrom />
+        </app-input>
+        <app-input formControlName="violationsDateTo" [label]="lang.map.date_to">
+          <input
+            appControl
+            formControlName="violationsDateTo"
+            (click)="violationsDateTo.open()"
+            [matDatepicker]="violationsDateTo" />
+          <mat-datepicker touchUi #violationsDateTo />
+        </app-input>
+      </ng-container>
+
+      <ng-container *ngIf="isCriminal">
+        <app-input [label]="lang.map.report_number" formControlName="reportNumber" />
+        <app-select-input formControlName="reportYear" [label]="lang.map.report_year" [options]="years" />
+        <app-select-input
+          formControlName="securityAdminDecision"
+          [label]="lang.map.security_management"
+          bindLabel="getNames"
+          bindValue="lookupKey"
+          [options]="securityManagement" />
+      </ng-container>
+
+      <ng-container *ngIf="isCustoms">
+        <app-input [label]="lang.map.customs_declaration_number" formControlName="customsDeclarationNumber" />
+        <app-input [label]="lang.map.control_report_number" formControlName="controlReportNumber" />
+      </ng-container>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inCreateMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.add }}</app-button>
+    <app-button *ngIf="inEditMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+  </div>
+</div>

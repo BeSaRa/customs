@@ -58,8 +58,8 @@ export function arrayChunk<T>(arr: T[], bulkSize = 3): T[][] {
 
 /**
  * @description Generates the html ordered list of passed string values
- * @param title: string
- * @param namesList: string[]
+ * @param title
+ * @param namesList
  */
 export function generateHtmlList(title: string, namesList: string[]): HTMLDivElement {
   const div = document.createElement('div');
@@ -82,8 +82,8 @@ export function generateHtmlList(title: string, namesList: string[]): HTMLDivEle
 
 /**
  * @description Opens the blob data in new browser tab or download if IE browser
- * @param data:Blob
- * @param fileName?:string
+ * @param data
+ * @param fileName
  */
 export function printBlobData(data: Blob, fileName?: string): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -190,3 +190,4 @@ function* generateChunks<T>(arr: T[], n: number): Generator<T[], void> {
 export function chunks<T>(arr: T[], n: number): T[][] {
   return [...generateChunks(arr, n)];
 }
+export const range = (start: number, stop: number) => Array.from({ length: stop - start + 1 }, (_, i) => start + i);

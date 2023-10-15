@@ -25,6 +25,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
+import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
 
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
@@ -52,6 +54,8 @@ import { CaseAttachmentsComponent } from '@standalone/components/case-attachment
     MatInputModule,
     ControlDirective,
     CaseAttachmentsComponent,
+    ViolationListComponent,
+    OffenderListComponent,
   ],
 })
 export class ElectronicServicesModule {}

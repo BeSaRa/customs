@@ -100,6 +100,14 @@ export abstract class AdminDialogComponent<M extends BaseModel<M, BaseCrudServic
     return this.operation === OperationType.VIEW;
   }
 
+  protected inEditMode() {
+    return this.operation === OperationType.UPDATE;
+  }
+
+  protected inCreateMode() {
+    return this.operation === OperationType.CREATE;
+  }
+
   /**
    * @description override this method on your component to register listeners for control value changes
    * @protected

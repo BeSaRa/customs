@@ -6,9 +6,11 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable, take, takeUntil } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-investigation',
@@ -20,6 +22,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   fb = inject(UntypedFormBuilder);
   form!: UntypedFormGroup;
   service = inject(InvestigationService);
+  router = inject(Router);
+  activeRoute = inject(ActivatedRoute);
+  location = inject(Location);
   // mock data
   model: Investigation = new Investigation().clone<Investigation>({
     id: '{75388091-006E-CD67-8829-8AD3C1900000}',
@@ -32,6 +37,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   caseFoldersMap?: Record<string, CaseFolder>;
 
   adapter = inject(DateAdapter);
+  selectedTab = 0;
+
+  tabsArray = ['basic_info', 'violations', 'offenders', 'external_persons'];
 
   protected override _init() {
     super._init();
@@ -43,6 +51,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    this.listenToLocationChange();
   }
 
   _afterBuildForm(): void {
@@ -90,5 +99,27 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   getCaseFolderIdByName(name: string): string | undefined {
     return this.caseFoldersMap && this.caseFoldersMap[name.toLowerCase()].id;
+  }
+
+  tabChange($event: number) {
+    const selectedTab = this.tabsArray[$event];
+    // console.log(location);
+    this.router
+      .navigate([], {
+        relativeTo: this.activeRoute,
+        queryParams: { tab: selectedTab },
+      })
+      .then();
+  }
+
+  private listenToLocationChange() {
+    this.activeRoute.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .pipe(take(1))
+      .pipe(filter(value => !!value['tab']))
+      .pipe(map(val => this.tabsArray.indexOf(val['tab'] as string)))
+      .subscribe(index => {
+        this.selectedTab = index === -1 ? 1 : index;
+      });
   }
 }

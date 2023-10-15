@@ -30,6 +30,8 @@ export const EndPoints = {
   LEGAL_RULE: '/entity/legal-rule',
   ATTACHMENT_TYPE: '/entity/attachment-type',
   INTERNAL_USER_OU: '/entity/internal-user-ou',
+  VIOLATION: 'entity/violation',
+  REFRESH_CACHE: '/admin/config/refresh-cache',
 };
 
 export type EndpointsType = typeof EndPoints;

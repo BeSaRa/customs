@@ -8,9 +8,13 @@ import { BaseCaseContract } from '@contracts/base-case-contract';
 import { ignoreErrors } from '@utils/utils';
 import { OperationType } from '@enums/operation-type';
 import { AppIcons } from '@constants/app-icons';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 
 @Directive({})
-export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<Model>, Model>, Service> implements OnInit {
+export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<Model>, Model>, Service>
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   protected readonly AppIcons = AppIcons;
   protected readonly SaveTypes = SaveTypes;
   abstract form: UntypedFormGroup;

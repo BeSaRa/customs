@@ -18,7 +18,7 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationClassification> = inject(MAT_DIALOG_DATA);
   offenderTypes: Lookup[] = inject(LookupService).lookups.offenderTypeAll;
-  isDisabled: boolean = false;
+  isDisabled = false;
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
     this.isDisabled = this.operation === OperationType.UPDATE && this.isSystem?.value == true;
