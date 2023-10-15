@@ -103,6 +103,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.offenderType?.valueChanges.subscribe(() => {
       if (this.offenderType?.value === OffenderTypes.EMPLOYEE) {
         this.responsibilityRepeatViolation?.setValue(null);
+        this.responsibilityRepeatViolation?.setErrors(null);
         this.responsibilityRepeatViolation?.clearValidators();
       } else {
         this.responsibilityRepeatViolation?.setValidators(CustomValidators.required);
@@ -113,6 +114,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.classificationId?.valueChanges.subscribe(() => {
       if (!this.isCriminal()) {
         this.criminalType?.setValue(null);
+        this.criminalType?.setErrors(null);
         this.criminalType?.clearValidators();
       } else {
         this.criminalType?.setValidators(CustomValidators.required);
