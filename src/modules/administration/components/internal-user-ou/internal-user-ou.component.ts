@@ -9,6 +9,7 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InternalUser } from '@models/internal-user';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-internal-user-ou',
@@ -17,10 +18,12 @@ import { InternalUser } from '@models/internal-user';
 })
 export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupComponent, InternalUserOU, InternalUserOUService> {
   @Input({ required: true }) internalUser!: InternalUser;
+  organizationUnits: number[] = [];
   override ngOnInit(): void {
     super.ngOnInit();
-    this.data$.subscribe(console.log);
-
+    this.data$
+      .pipe(map(internalUsers => internalUsers.map(internalUserOu => internalUserOu.organizationUnitId)))
+      .subscribe(organizationUnitIds => (this.organizationUnits = organizationUnitIds));
     this.filter$.next({ internalUserId: this.internalUser.id });
   }
   service = inject(InternalUserOUService);
@@ -42,6 +45,6 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   ).attacheFilter(this.filter$);
 
   override _getCreateExtras(): unknown {
-    return { internalUserId: this.internalUser.id };
+    return { internalUserId: this.internalUser.id, organizationUnits: this.organizationUnits };
   }
 }
