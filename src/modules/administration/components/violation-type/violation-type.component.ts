@@ -72,15 +72,9 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       parent: 'more-details',
     },
     {
-      name: 'absence',
+      name: 'isAbsence',
       type: 'info',
-      label: item => `${this.lang.map.absence} : ${item.absence ? 'Yes' : 'No'}`,
-      parent: 'more-details',
-    },
-    {
-      name: 'absence',
-      type: 'info',
-      label: item => `${this.lang.map.absence} : ${item.absence ? 'Yes' : 'No'}`,
+      label: item => `${this.lang.map.absence} : ${item.isAbsence ? 'Yes' : 'No'}`,
       parent: 'more-details',
     },
     {
