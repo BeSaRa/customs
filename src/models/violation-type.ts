@@ -17,7 +17,7 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
   isNumeric = false;
   numericFrom!: number;
   numericTo!: number;
-  absence = false;
+  isAbsence = false;
   criminalType!: number;
   responsibilityRepeatViolations!: number;
   level!: number;
@@ -42,7 +42,7 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       isNumeric,
       numericFrom,
       numericTo,
-      absence,
+      isAbsence,
       criminalType,
       responsibilityRepeatViolations,
       managerDecision,
@@ -56,7 +56,7 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       isNumeric: controls ? [isNumeric] : isNumeric,
       numericFrom: controls ? [numericFrom] : numericFrom,
       numericTo: controls ? [numericTo] : numericTo,
-      absence: controls ? [absence] : absence,
+      isAbsence: controls ? [isAbsence] : isAbsence,
       criminalType: controls ? [criminalType] : criminalType,
       responsibilityRepeatViolations: controls ? [responsibilityRepeatViolations] : responsibilityRepeatViolations,
       level: controls ? [level, CustomValidators.required] : level,
