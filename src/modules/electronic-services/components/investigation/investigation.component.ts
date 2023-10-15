@@ -27,9 +27,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   location = inject(Location);
   // mock data
   model: Investigation = new Investigation().clone<Investigation>({
-    id: '{75388091-006E-CD67-8829-8AD3C1900000}',
-    draftFullSerial: 'INV/PUB/2023/45',
-    createdOn: '2023-09-26T23:09:53.680+00:00',
+    id: '{6A283D4E-73A8-C9DD-8956-8B34B5000000}',
+    draftFullSerial: 'INV/PUB/2023/72',
+    createdOn: '2023-10-15T18:59:22.477+00:00',
   });
 
   caseFolders: CaseFolder[] = [];

@@ -24,6 +24,7 @@ import { ConfigService } from '@services/config.service';
 import { LookupService } from '@services/lookup.service';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { CustomValidators } from '@validators/custom-validators';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-violation-popup',
@@ -65,7 +66,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   config = inject(ConfigService);
 
-  years: number[] = range(new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR, new Date().getFullYear());
+  years: string[] = range(new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR, new Date().getFullYear()).map(i =>
+    i.toString()
+  );
 
   classificationsMap: Record<number, ViolationClassification> = {} as Record<number, ViolationClassification>;
   typesMap: Record<number, ViolationType> = {} as Record<number, ViolationType>;
@@ -81,6 +84,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected override _init() {
     super._init();
     this.loadClassifications();
+    if (this.operation === OperationType.UPDATE) {
+      this.data.extras
+        ? (() => {
+            this.classifications = this.data.extras.classifciations as ViolationClassification[];
+            this.types = this.data.extras.types as ViolationType[];
+          })()
+        : null;
+    }
   }
 
   _buildForm(): void {
@@ -92,6 +103,13 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     // listen to some changes from specific properties
     this.listenToClassificationChange();
     this.listenToViolationTypeChange();
+
+    if (this.operation === OperationType.UPDATE) {
+      this.data.extras && this.controls.classification()?.patchValue(this.data.extras.classificationId, { emitEvent: false });
+      this.checkClassification();
+      this.checkViolationType();
+      this.checkRequiredField();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -110,7 +128,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected _afterSave(model: Violation): void {
     this.model = model;
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }));
-    //this.dialogRef.close(model);
+    this.dialogRef.close();
   }
 
   private prepareClassificationMap() {
@@ -123,13 +141,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.typesMap = this.types.reduce((acc, item) => {
       return { ...acc, [item.id]: item };
     }, {});
-  }
-
-  loadClassifications(): void {
-    this.violationClassificationService.loadAsLookups().subscribe(list => {
-      this.classifications = list;
-      this.prepareClassificationMap();
-    });
   }
 
   private listenToClassificationChange() {
@@ -166,8 +177,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   private checkViolationType(): void {
     const selectedType = this.typesMap[this.controls.violationType()?.value];
     this.isAbsenceType = selectedType && !!selectedType.isAbsence;
-
-    console.log({ selectedType });
   }
 
   private checkRequiredField(): void {
@@ -190,5 +199,12 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       : (() => {
           this.controls.customsDeclarationNumber()?.setValidators([]);
         })();
+  }
+
+  private loadClassifications(): void {
+    this.violationClassificationService.loadAsLookups().subscribe(list => {
+      this.classifications = list;
+      this.prepareClassificationMap();
+    });
   }
 }

@@ -8,4 +8,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent {}
+export class OffenderListComponent {
+  // @Input()
+  // items;
+}

@@ -5,21 +5,28 @@ import { ViolationPopupComponent } from '@standalone/popups/violation-popup/viol
 import { CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
+import { Pagination } from '@models/pagination';
 
 @CastResponseContainer({
   $default: {
     model: () => Violation,
+  },
+  $pagination: {
+    model: () => Pagination,
+    shape: {
+      'rs.*': () => Violation,
+    },
   },
 })
 @Injectable({
   providedIn: 'root',
 })
 export class ViolationService extends BaseCrudWithDialogService<ViolationPopupComponent, Violation> {
+  serviceName = 'ViolationService';
+
   protected getDialogComponent(): ComponentType<ViolationPopupComponent> {
     return ViolationPopupComponent;
   }
-
-  serviceName = 'ViolationService';
 
   protected getUrlSegment(): string {
     return this.urlService.URLS.VIOLATION;

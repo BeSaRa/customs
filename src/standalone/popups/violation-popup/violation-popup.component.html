@@ -18,7 +18,7 @@
         formControlName="violationTypeId"
         [options]="types" />
       <app-textarea formControlName="description" [label]="lang.map.description" class="col-span-2" />
-      <app-input formControlName="violationsDate" [label]="lang.map.violation_date">
+      <app-input *ngIf="!isAbsenceType" formControlName="violationsDate" [label]="lang.map.violation_date">
         <input appControl formControlName="violationsDate" (click)="datepicker.open()" [matDatepicker]="datepicker" />
         <mat-datepicker touchUi #datepicker />
       </app-input>
