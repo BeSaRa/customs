@@ -39,6 +39,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.form = this.fb.group(this.model.buildForm(true));
     this.onOffenderTypeChange();
     this.onViolationClassificationChange();
+    this.onIsNumericChange();
   }
 
   protected override _afterBuildForm(): void {
@@ -85,6 +86,12 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   get criminalType() {
     return this.form.get('criminalType');
   }
+  get numericFrom() {
+    return this.form.get('numericFrom');
+  }
+  get numericTo() {
+    return this.form.get('numericTo');
+  }
 
   isCriminal(): boolean {
     if (this.violationClassifications === undefined) return false;
@@ -118,6 +125,21 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.criminalType?.clearValidators();
       } else {
         this.criminalType?.setValidators(CustomValidators.required);
+      }
+    });
+  }
+  onIsNumericChange() {
+    this.form.get('isNumeric')?.valueChanges.subscribe(() => {
+      if (!this.isNumeric()) {
+        this.numericFrom?.setValue(null);
+        this.numericTo?.setValue(null);
+        this.numericFrom?.setErrors(null);
+        this.numericTo?.setErrors(null);
+        this.numericFrom?.clearValidators();
+        this.numericTo?.clearValidators();
+      } else {
+        this.numericFrom?.setValidators(CustomValidators.required);
+        this.numericTo?.setValidators(CustomValidators.required);
       }
     });
   }
