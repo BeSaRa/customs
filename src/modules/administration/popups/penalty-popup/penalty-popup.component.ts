@@ -92,9 +92,11 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
       if (value) {
         this.cashAmountField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
         this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
+        this.deductionDaysField?.setValue(null);
         this.deductionDaysField?.clearValidators();
         this.deductionDaysField?.updateValueAndValidity();
       } else {
+        this.cashAmountField?.setValue(null);
         this.cashAmountField?.clearValidators();
       }
       this.cashAmountField?.updateValueAndValidity();
@@ -106,9 +108,11 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
       if (value) {
         this.deductionDaysField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
         this.form.get('isCash')?.setValue(false, { emitEvent: false });
+        this.cashAmountField?.setValue(null);
         this.cashAmountField?.clearValidators();
         this.cashAmountField?.updateValueAndValidity();
       } else {
+        this.deductionDaysField?.setValue(null);
         this.deductionDaysField?.clearValidators();
       }
       this.deductionDaysField?.updateValueAndValidity();
