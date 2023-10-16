@@ -13,7 +13,7 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
   anotherEmail!: string;
   phone!: string;
   anotherPhone!: string;
-  employeeQId!: string;
+  qid!: string;
   adName!: string;
   employeeDepartmentId!: number;
   isDepMailManager!: boolean;
@@ -43,7 +43,7 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
       anotherEmail,
       phone,
       anotherPhone,
-      employeeQId,
+      qid,
       gender,
       subDepartmentName,
       employeeCareerLevel,
@@ -64,7 +64,7 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
       anotherEmail,
       phone,
       anotherPhone,
-      employeeQId,
+      qid,
       gender,
       subDepartmentName,
       employeeCareerLevel,

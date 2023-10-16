@@ -32,6 +32,7 @@ export const EndPoints = {
   INTERNAL_USER_OU: '/entity/internal-user-ou',
   VIOLATION: 'entity/violation',
   REFRESH_CACHE: '/admin/config/refresh-cache',
+  OFFENDER: '/entity/offender',
 };
 
 export type EndpointsType = typeof EndPoints;

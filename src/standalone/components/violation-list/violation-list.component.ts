@@ -33,11 +33,11 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
   @Input()
+  caseId!: string;
+  @Input()
   title: string = this.lang.map.violations;
   add$: Subject<void> = new Subject<void>();
   service = inject(InvestigationService);
-  @Input()
-  caseId!: string;
   data = new Subject<Violation[]>();
   dataSource = new AppTableDataSource(this.data);
   displayedColumns = ['violationType', 'description', 'actions'];
@@ -45,6 +45,7 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   edit$ = new Subject<Violation>();
   delete$ = new Subject<Violation>();
   violationService = inject(ViolationService);
+  protected readonly Config = Config;
 
   ngOnInit(): void {
     this.listenToAdd();
@@ -80,8 +81,6 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
       )
       .subscribe();
   }
-
-  protected readonly Config = Config;
 
   private listenToEdit() {
     this.edit$

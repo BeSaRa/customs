@@ -4,6 +4,7 @@ import { InternalUser } from '@models/internal-user';
 import { Permission } from '@models/permission';
 import { LookupService } from '@services/lookup.service';
 import { AppPermissionsType } from '@constants/app-permissions';
+import { OrganizationUnit } from '@models/organization-unit';
 
 @Injectable({
   providedIn: 'root',
@@ -70,5 +71,9 @@ export class EmployeeService {
 
   clearEmployee() {
     this.loginData = undefined;
+  }
+
+  getOrganizationUnit(): OrganizationUnit | undefined {
+    return this.loginData?.organizationUnit;
   }
 }

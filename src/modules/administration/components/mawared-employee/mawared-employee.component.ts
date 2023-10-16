@@ -46,7 +46,7 @@ export class MawaredEmployeeComponent extends AdminComponent<MawaredEmployeePopu
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new TextFilterColumn('employeeQId'),
+    new TextFilterColumn('qid'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);

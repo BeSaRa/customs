@@ -50,6 +50,11 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     criteria?: Partial<M>,
     sortOptions?: SortOptionsContract
   ): Observable<Pagination<M[]>> {
+    Object.keys(criteria as unknown as object).forEach(key => {
+      if (criteria && (criteria[key as keyof Partial<M>] === null || criteria[key as keyof Partial<M>] === undefined)) {
+        delete criteria[key as keyof Partial<M>];
+      }
+    });
     return this.http.get<Pagination<M[]>>(this.getUrlSegment(), {
       params: new HttpParams({
         fromObject: { ...options, ...criteria, ...sortOptions },
@@ -94,6 +99,11 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     criteria?: Partial<M>,
     sortOptions?: SortOptionsContract
   ): Observable<Pagination<M[]>> {
+    Object.keys(criteria as unknown as object).forEach(key => {
+      if (criteria && (criteria[key as keyof Partial<M>] === null || criteria[key as keyof Partial<M>] === undefined)) {
+        delete criteria[key as keyof Partial<M>];
+      }
+    });
     return this.http.get<Pagination<M[]>>(this.getUrlSegment() + '/composite', {
       params: new HttpParams({
         fromObject: { ...options, ...criteria, ...sortOptions },

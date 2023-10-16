@@ -1,4 +1,12 @@
 export interface LangKeysContract {
+  broker_company_er_number: string;
+  broker_company_cr_number: string;
+  broker_company_number: string;
+  broker_company_name: string;
+  broker_name: string;
+  job_title: string;
+  administration: string;
+  search_for_offender: string;
   menu_internal_user_ou: string;
   report_number: string;
   security_management: string;
