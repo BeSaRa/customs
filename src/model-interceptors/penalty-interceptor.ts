@@ -5,6 +5,8 @@ import { PenaltyDetails } from '@models/penalty-details';
 
 export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
   send(model: Partial<Penalty>): Partial<Penalty> {
+    delete model.statusInfo;
+    delete model.offenderTypeInfo;
     return model;
   }
 
