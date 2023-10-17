@@ -1,0 +1,5 @@
+export enum ManagerDecisions {
+  IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY = 1,
+  GUIDANCE = 2,
+  IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL = 3,
+}

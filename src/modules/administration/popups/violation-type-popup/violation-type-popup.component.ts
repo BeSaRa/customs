@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ViolationType } from '@models/violation-type';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { ViolationClassification } from '@models/violation-classification';
@@ -12,6 +12,8 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { OffenderTypes } from '@enums/offender-types';
 import { CustomValidators } from '@validators/custom-validators';
+import { ViolationLevels } from '@enums/violation-levels';
+import { ManagerDecisions } from '@enums/manager-decisions';
 
 @Component({
   selector: 'app-violation-type-popup',
@@ -25,10 +27,12 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   violationClassifications!: ViolationClassification[];
   violationClassificationService = inject(ViolationClassificationService);
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
+  filteredOffenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   criminalTypes: Lookup[] = this.lookupService.lookups.criminalType;
   responsibilityRepeatViolations: Lookup[] = this.lookupService.lookups.responsibilityRepeatViolations;
   violationLevels: Lookup[] = this.lookupService.lookups.violationLevel;
   managerDecisions: Lookup[] = this.lookupService.lookups.managerDecisionControl;
+  filteredManagerDecisions: Lookup[] = this.lookupService.lookups.managerDecisionControl;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -40,6 +44,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.onOffenderTypeChange();
     this.onViolationClassificationChange();
     this.onIsNumericChange();
+    this.onViolationLevelChange();
   }
 
   protected override _afterBuildForm(): void {
@@ -71,8 +76,8 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
   }
 
-  isNumeric(): boolean {
-    return !!this.form.get('isNumeric')?.value;
+  get isNumeric() {
+    return this.form.get('isNumeric');
   }
   get classificationId() {
     return this.form.get('classificationId');
@@ -91,6 +96,12 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   }
   get numericTo() {
     return this.form.get('numericTo');
+  }
+  get isAbsence() {
+    return this.form.get('isAbsence');
+  }
+  get violationLevel() {
+    return this.form.get('level');
   }
 
   isCriminal(): boolean {
@@ -118,28 +129,62 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
   }
   onViolationClassificationChange() {
-    this.classificationId?.valueChanges.subscribe(() => {
+    this.classificationId?.valueChanges.subscribe(value => {
       if (!this.isCriminal()) {
         this.criminalType?.setValue(null);
-        this.criminalType?.setErrors(null);
         this.criminalType?.clearValidators();
+        this.criminalType?.updateValueAndValidity();
       } else {
         this.criminalType?.setValidators(CustomValidators.required);
+      }
+      const offenderOfClassification = this.violationClassifications.find(vc => vc.id == value)?.offenderType;
+      if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
+        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE);
+      } else if (offenderOfClassification === OffenderTypes.BROKER) {
+        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.BROKER);
+      } else {
+        this.filteredOffenderTypes = this.offenderTypes;
       }
     });
   }
   onIsNumericChange() {
-    this.form.get('isNumeric')?.valueChanges.subscribe(() => {
-      if (!this.isNumeric()) {
+    this.isNumeric?.valueChanges.subscribe(() => {
+      if (!this.isNumeric?.value) {
+        this.isAbsence?.setValue(false);
         this.numericFrom?.setValue(null);
         this.numericTo?.setValue(null);
-        this.numericFrom?.setErrors(null);
-        this.numericTo?.setErrors(null);
         this.numericFrom?.clearValidators();
         this.numericTo?.clearValidators();
+        this.numericFrom?.updateValueAndValidity();
+        this.numericTo?.updateValueAndValidity();
       } else {
-        this.numericFrom?.setValidators(CustomValidators.required);
-        this.numericTo?.setValidators(CustomValidators.required);
+        this.numericFrom?.setValidators([CustomValidators.required, Validators.min(0)]);
+        this.numericTo?.setValidators([CustomValidators.required, Validators.min(0)]);
+      }
+    });
+  }
+  onViolationLevelChange() {
+    this.violationLevel?.valueChanges.subscribe(() => {
+      this.filteredManagerDecisions = this.managerDecisions;
+
+      const violationLevel = this.violationLevels.find(violationLevel => violationLevel.lookupKey === this.violationLevel?.value)?.lookupKey;
+
+      if (violationLevel === ViolationLevels.SIMPLE) {
+        this.filteredManagerDecisions = this.managerDecisions.filter(
+          managerDecision =>
+            managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY ||
+            managerDecision.lookupKey === ManagerDecisions.GUIDANCE
+        );
+      } else if (violationLevel === ViolationLevels.SERIOUS) {
+        this.filteredManagerDecisions = this.managerDecisions.filter(
+          managerDecision =>
+            managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL ||
+            managerDecision.lookupKey === ManagerDecisions.GUIDANCE
+        );
+      } else if (violationLevel === ViolationLevels.VERY_SERIOUS) {
+        this.filteredManagerDecisions = this.managerDecisions.filter(
+          managerDecision => managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL
+        );
       }
     });
   }
