@@ -24,8 +24,8 @@ export class LegalRule extends BaseModel<LegalRule, LegalRuleService> {
       law: controls ? [law, CustomValidators.required] : law,
       lawStartDate: controls ? [lawStartDate, CustomValidators.required] : lawStartDate,
       articleNumber: controls ? [articleNumber, CustomValidators.required] : articleNumber,
-      legalTextArabic: controls ? [legalTextArabic, CustomValidators.required, CustomValidators.pattern('AR_NUM')] : legalTextArabic,
-      legalTextEnglish: controls ? [legalTextEnglish, CustomValidators.required, CustomValidators.pattern('ENG_NUM')] : legalTextEnglish,
+      legalTextArabic: controls ? [legalTextArabic, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : legalTextArabic,
+      legalTextEnglish: controls ? [legalTextEnglish, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : legalTextEnglish,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }
