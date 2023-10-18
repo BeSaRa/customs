@@ -1,10 +1,22 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { AppIcons } from '@constants/app-icons';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OffenderTypes } from '@enums/offender-types';
+import { OperationType } from '@enums/operation-type';
+import { UserClick } from '@enums/user-click';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ColumnsWrapper } from '@models/columns-wrapper';
 import { GuidePanel } from '@models/guide-panel';
 import { Lookup } from '@models/lookup';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { Penalty } from '@models/penalty';
 import { ViolationType } from '@models/violation-type';
+import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
+import { DialogService } from '@services/dialog.service';
 import { GuidePanelService } from '@services/guide-panel.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
@@ -23,6 +35,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   lookupService = inject(LookupService);
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
+  dialog = inject(DialogService);
   violationTypeService = inject(ViolationTypeService);
 
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
@@ -32,6 +45,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
 
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
+  selectedTab = 0;
 
   ngOnInit(): void {
     this.getViolationTypes();
@@ -39,6 +53,34 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
     this.onOffenderTypeChange();
     this.listenToSearch();
   }
+
+  actions: ContextMenuActionContract<Penalty>[] = [
+    {
+      name: 'more-details',
+      type: 'action',
+      label: 'more_details',
+      icon: AppIcons.INFORMATION,
+      callback: item => {
+        this.viewRecord(item);
+      },
+    },
+  ];
+
+  columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
+    new NoneFilterColumn('arName'),
+    new NoneFilterColumn('enName'),
+    new NoneFilterColumn('offenderType'),
+    new NoneFilterColumn('penaltyWeight'),
+    new NoneFilterColumn('erasureDuration'),
+    new NoneFilterColumn('isCash'),
+    new NoneFilterColumn('cashAmount'),
+    new NoneFilterColumn('isDeduction'),
+    new NoneFilterColumn('deductionDays'),
+    new NoneFilterColumn('status'),
+    new NoneFilterColumn('actions')
+  );
+  displayedList = new MatTableDataSource<Penalty>();
+
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -92,8 +134,9 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
           );
         })
       )
-      .subscribe(result => {
-        console.log(result);
+      .subscribe((data: Penalty[]) => {
+        if (data.length) this.selectedTab = 1;
+        this.displayedList = new MatTableDataSource(data);
       });
   }
   formValidValues() {
@@ -106,5 +149,16 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
       delete values.repeat;
     }
     return values;
+  }
+  getBooleanString(bool: boolean) {
+    return this.lang.getTranslate(bool ? 'yes' : 'no');
+  }
+  viewRecord(model: Penalty): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
+    return this.dialog.open<PenaltyPopupComponent, CrudDialogDataContract<Penalty>, UserClick.CLOSE>(PenaltyPopupComponent, {
+      data: {
+        model,
+        operation: OperationType.VIEW,
+      },
+    });
   }
 }

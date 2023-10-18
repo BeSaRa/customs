@@ -1,42 +1,166 @@
-
-<div>
-    <ng-container [formGroup]="form">
-        <div class="grid grid-cols-4 gap-4">
-        <app-select-input
-            [label]="lang.map.offender_type"
-            formControlName="offenderType"
-            [options]="offenderTypes"
-            bindLabel="getNames"
-            bindValue="lookupKey" />
-        <app-select-input
-          *ngIf="isEmployee()"
-          [label]="lang.map.offender_level"
-          formControlName="offenderLevel"
-          [options]="offenderLevels"
-          bindLabel="getNames"
-          bindValue="lookupKey" />
-        <app-select-input
-          [label]="lang.map.penalty_signer"
-          formControlName="penaltySigner"
-          [options]="penaltySigners"
-          bindLabel="getNames"
-          bindValue="lookupKey" />
-        <app-select-input
-          formControlName="violationTypeIdsList"
-          [options]="violationTypes"
-          [label]="lang.map.violation_type"
-          bindValue="id"
-          bindLabel="getNames"
-          [enableFilter]="true"
-          bindFilter="getNames"
-          [isMultiple]="true"
-          />
-        <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
-
-        </div>
-    </ng-container>
+<div
+   class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
+   <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+      {{ lang.map.menu_guide_panel }}
+   </h1>
 </div>
-<div class="dialog-footer justify-end">
-    <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
-    <app-button (click)="resetForm()" buttonType="primary">{{ lang.map.reset }}</app-button>
+<div class="relative">
+   <mat-card>
+      <mat-tab-group [selectedIndex]="selectedTab" mat-stretch-tabs="false" dynamicHeight>
+         <mat-tab [label]="lang.map.search_for_guide_panel">
+            <ng-container [ngTemplateOutlet]="search_for_guide_panel"></ng-container>
+         </mat-tab>
+         <mat-tab [label]="lang.map.search_result">
+            <ng-container [ngTemplateOutlet]="search_result"></ng-container>
+         </mat-tab>
+      </mat-tab-group>
+   </mat-card>
+   <ng-template #search_for_guide_panel>
+      <div class="p-4">
+         <ng-container [formGroup]="form">
+            <div class="grid grid-cols-4 gap-4">
+               <app-select-input
+               [label]="lang.map.offender_type"
+               formControlName="offenderType"
+               [options]="offenderTypes"
+               bindLabel="getNames"
+               bindValue="lookupKey" />
+               <app-select-input
+               *ngIf="isEmployee()"
+               [label]="lang.map.offender_level"
+               formControlName="offenderLevel"
+               [options]="offenderLevels"
+               bindLabel="getNames"
+               bindValue="lookupKey" />
+               <app-select-input
+               [label]="lang.map.penalty_signer"
+               formControlName="penaltySigner"
+               [options]="penaltySigners"
+               bindLabel="getNames"
+               bindValue="lookupKey" />
+               <app-select-input
+               formControlName="violationTypeIdsList"
+               [options]="violationTypes"
+               [label]="lang.map.violation_type"
+               bindValue="id"
+               bindLabel="getNames"
+               [enableFilter]="true"
+               bindFilter="getNames"
+               [isMultiple]="true"
+               />
+               <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
+            </div>
+         </ng-container>
+         <div class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
+            <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
+            <app-button (click)="resetForm()" buttonType="primary">{{ lang.map.reset }}</app-button>
+         </div>
+      </div>
+   </ng-template>
+   <ng-template #search_result>
+      <div class="p-4">
+         <div
+            class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+            <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+               {{ lang.map.menu_penalty }}
+            </h1>
+            <div class="flex-auto"></div>
+         </div>
+         <div class="shadow relative">
+            <table mat-table matSort class="table-style" [dataSource]="displayedList">
+               <!-- arName arName -->
+               <ng-container matColumnDef="arName">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{element.arName}}</span>
+                  </td>
+               </ng-container>
+               <!-- enName enName -->
+               <ng-container matColumnDef="enName">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.en_name }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     {{ element.enName }}
+                  </td>
+               </ng-container>
+               <!-- offenderType -->
+               <ng-container matColumnDef="offenderType">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.offender_type }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span> {{ element.offenderTypeInfo.getNames() }}</span>
+                  </td>
+               </ng-container>
+               <!-- penaltyWeight -->
+               <ng-container matColumnDef="penaltyWeight">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.penalty_weight }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{element.penaltyWeight}}</span>
+                  </td>
+               </ng-container>
+               <!-- erasureDuration -->
+               <ng-container matColumnDef="erasureDuration">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.penalty_grace_period }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{element.erasureDuration}}</span>
+                  </td>
+               </ng-container>
+               <!-- status -->
+               <ng-container matColumnDef="status">
+                  <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.status }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{ element.statusInfo.getNames() }}</span>
+                  </td>
+               </ng-container>
+
+               <!-- isCash -->
+               <ng-container matColumnDef="isCash">
+                  <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.is_cash }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{getBooleanString(element.isCash)}}</span>
+                  </td>
+               </ng-container>
+
+               <!-- cashAmount -->
+               <ng-container matColumnDef="cashAmount">
+                  <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.cash_amount }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{element.cashAmount||'-'}}</span>
+                  </td>
+               </ng-container>
+               <!-- isDeduction -->
+               <ng-container matColumnDef="isDeduction">
+                  <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.is_deduction }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{getBooleanString(element.isDeduction)}}</span>
+                  </td>
+               </ng-container>
+               <!-- deductionDays -->
+               <ng-container matColumnDef="deductionDays">
+                  <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.deduction_days }}</th>
+                  <td mat-cell *matCellDef="let element">
+                     <span>{{element.deductionDays||'-'}}</span>
+                  </td>
+               </ng-container>
+               <!-- actions Column -->
+               <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
+                  <td mat-cell *matCellDef="let element">
+                  <div class="flex">
+                     <app-icon-button [matTooltip]="lang.map.more_details" (click)="viewRecord(element)" icon="MORE_DETAILS"></app-icon-button>
+                  </div>
+                  </td>
+               </ng-container>
+               <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
+               <tr
+               mat-row
+               (contextmenu)="contextMenu.open($event, element)"
+               *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
+               <!-- Row shown when there is no matching data. -->
+               <tr class="mat-row" *matNoDataRow>
+                  <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+               </tr>
+            </table>
+            <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+         </div>
+      </div>
+   </ng-template>
 </div>

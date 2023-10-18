@@ -2,11 +2,10 @@ import { BaseCrudService } from '@abstracts/base-crud-service';
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
-import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { GuidePanel } from '@models/guide-panel';
 import { Pagination } from '@models/pagination';
+import { Penalty } from '@models/penalty';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { Observable } from 'rxjs';
 
 @CastResponseContainer({
   $pagination: {
@@ -37,12 +36,9 @@ export class GuidePanelService extends BaseCrudService<GuidePanel> {
     return this.urlService.URLS.GUIDE_PANEL;
   }
 
-  @CastResponse(undefined, {
-    unwrap: '',
-    fallback: '',
-  })
-  loadSearchResult(criteria: any) {
-    return this.http.get(this.getUrlSegment(), {
+  @CastResponse(() => Penalty, { unwrap: 'rs', fallback: '$default' })
+  loadSearchResult(criteria: { offenderType: number; penaltySigner: number; violationIdsList: number[]; repeat?: number; offenderLevel?: number }) {
+    return this.http.get<Penalty[]>(this.getUrlSegment(), {
       params: new HttpParams({ fromObject: criteria }),
     });
   }
