@@ -24,4 +24,5 @@ export const AppFullRoutes = {
   VIOLATION_PENALTY: '/home/administration/violation-penalty',
   LEGAL_RULE: '/home/administration/legal-rule',
   ATTACHMENT_TYPE: '/home/administration/attachment-type',
+  GUIDE_PANEL: '/home/electronic-services/guide-panel',
 };

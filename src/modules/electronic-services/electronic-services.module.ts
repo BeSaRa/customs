@@ -27,9 +27,10 @@ import { ControlDirective } from '@standalone/directives/control.directive';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
+import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
 
 @NgModule({
-  declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent],
+  declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent, GuidePanelComponent],
   imports: [
     CommonModule,
     ElectronicServicesRoutingModule,
