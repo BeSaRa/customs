@@ -262,4 +262,8 @@ export interface LangKeysContract {
   key_code: string;
   organization_unit: string;
   menu_guide_panel: string;
+  search_result: string;
+  search_for_guide_panel: string;
+  yes: string;
+  no: string;
 }
