@@ -261,4 +261,5 @@ export interface LangKeysContract {
   is_numeric: string;
   key_code: string;
   organization_unit: string;
+  menu_guide_panel: string;
 }

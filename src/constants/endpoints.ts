@@ -34,6 +34,7 @@ export const EndPoints = {
   REFRESH_CACHE: '/admin/config/refresh-cache',
   OFFENDER: '/entity/offender',
   OFFENDER_VIOLATION: '/entity/offender-violation',
+  GUIDE_PANEL: '/entity/violation-penalty/guide-panel',
 };
 
 export type EndpointsType = typeof EndPoints;

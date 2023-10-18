@@ -163,4 +163,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.ATTACHMENT_TYPE,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.GUIDE_PANEL,
+    langKey: 'menu_guide_panel',
+    icon: AppIcons.GUIDE_PANEL,
+    path: AppFullRoutes.GUIDE_PANEL,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+  },
 ];

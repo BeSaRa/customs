@@ -52,6 +52,7 @@ export const AppIcons = {
   FOLDER_MULTIPLE_IMAGE: 'folder-multiple-image',
   VIOLATION_OUTLINE: 'alert-circle-outline',
   VIOLATION: 'alert-circle',
+  GUIDE_PANEL: 'book',
 };
 
 export type AppIconsType = typeof AppIcons;

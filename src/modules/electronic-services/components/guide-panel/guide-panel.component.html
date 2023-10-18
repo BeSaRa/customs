@@ -1,0 +1,42 @@
+
+<div>
+    <ng-container [formGroup]="form">
+        <div class="grid grid-cols-4 gap-4">
+        <app-select-input
+            [label]="lang.map.offender_type"
+            formControlName="offenderType"
+            [options]="offenderTypes"
+            bindLabel="getNames"
+            bindValue="lookupKey" />
+        <app-select-input
+          *ngIf="isEmployee()"
+          [label]="lang.map.offender_level"
+          formControlName="offenderLevel"
+          [options]="offenderLevels"
+          bindLabel="getNames"
+          bindValue="lookupKey" />
+        <app-select-input
+          [label]="lang.map.penalty_signer"
+          formControlName="penaltySigner"
+          [options]="penaltySigners"
+          bindLabel="getNames"
+          bindValue="lookupKey" />
+        <app-select-input
+          formControlName="violationTypeIdsList"
+          [options]="violationTypes"
+          [label]="lang.map.violation_type"
+          bindValue="id"
+          bindLabel="getNames"
+          [enableFilter]="true"
+          bindFilter="getNames"
+          [isMultiple]="true"
+          />
+        <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
+
+        </div>
+    </ng-container>
+</div>
+<div class="dialog-footer justify-end">
+    <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
+    <app-button (click)="resetForm()" buttonType="primary">{{ lang.map.reset }}</app-button>
+</div>

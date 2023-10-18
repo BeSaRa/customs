@@ -27,4 +27,5 @@ export const AppRoutes = {
   VIOLATION_PENALTY: 'violation-penalty',
   LEGAL_RULE: 'legal-rule',
   ATTACHMENT_TYPE: 'attachment-type',
+  GUIDE_PANEL: 'guide-panel',
 };

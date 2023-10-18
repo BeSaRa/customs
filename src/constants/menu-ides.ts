@@ -22,4 +22,5 @@ export const MenuIdes = {
   VIOLATION_PENALTY: 21,
   LEGAL_RULE: 22,
   ATTACHMENT_TYPE: 23,
+  GUIDE_PANEL: 24,
 };
