@@ -6,7 +6,7 @@
 </div>
 <div class="relative">
    <mat-card>
-      <mat-tab-group [selectedIndex]="selectedTab" mat-stretch-tabs="false" dynamicHeight>
+      <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false" dynamicHeight>
          <mat-tab [label]="lang.map.search_for_guide_panel">
             <ng-container [ngTemplateOutlet]="search_for_guide_panel"></ng-container>
          </mat-tab>
@@ -35,9 +35,11 @@
                <app-select-input
                [label]="lang.map.penalty_signer"
                formControlName="penaltySigner"
-               [options]="penaltySigners"
+               [options]="filteredPenaltySigners"
                bindLabel="getNames"
-               bindValue="lookupKey" />
+               bindValue="lookupKey"
+               *ngIf="hasFilteredPenaltySigners()"
+               />
                <app-select-input
                formControlName="violationTypeIdsList"
                [options]="violationTypes"
