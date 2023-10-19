@@ -41,6 +41,7 @@ export class AppComponent {
   }
 
   @HostListener('window:keydown.f2')
+  @HostListener('window:keydown.meta.r')
   refreshCache(): void {
     if (!this.authService.isAuthenticated()) {
       console.log('Pleas Authenticate first to make refresh token');

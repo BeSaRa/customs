@@ -7,6 +7,7 @@ import { ContextMenuActionContract } from '@contracts/context-menu-action-contra
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OffenderTypes } from '@enums/offender-types';
 import { OperationType } from '@enums/operation-type';
+import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 import { UserClick } from '@enums/user-click';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ColumnsWrapper } from '@models/columns-wrapper';
@@ -41,6 +42,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   offenderLevels: Lookup[] = this.lookupService.lookups.offenderLevel;
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
+  filteredPenaltySigners: Lookup[] = [];
   violationTypes!: ViolationType[];
 
   form!: UntypedFormGroup;
@@ -112,9 +114,15 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
     this.offenderTypeField?.valueChanges.subscribe(value => {
       if (value === OffenderTypes.EMPLOYEE) {
         this.offenderLevelField?.setValidators(CustomValidators.required);
+        this.filteredPenaltySigners = this.penaltySigners.filter(
+          penaltySigner => penaltySigner.lookupKey !== PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+        );
       } else {
         this.offenderLevelField?.setValue(null);
         this.offenderLevelField?.setValidators(null);
+        this.filteredPenaltySigners = this.penaltySigners.filter(
+          penaltySigner => penaltySigner.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+        );
       }
       this.offenderLevelField?.updateValueAndValidity();
     });
@@ -141,7 +149,9 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         })
       )
       .subscribe((data: Penalty[]) => {
-        if (data.length) this.selectedTab = 1;
+        if (data.length) {
+          this.selectedTab = 1;
+        }
         this.displayedList = new MatTableDataSource(data);
       });
   }
@@ -169,5 +179,9 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         operation: OperationType.VIEW,
       },
     });
+  }
+
+  hasFilteredPenaltySigners() {
+    return this.filteredPenaltySigners.length;
   }
 }
