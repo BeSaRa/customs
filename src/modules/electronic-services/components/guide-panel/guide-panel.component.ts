@@ -45,6 +45,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
 
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
+  displayedList = new MatTableDataSource<Penalty>();
   selectedTab = 0;
 
   ngOnInit(): void {
@@ -79,7 +80,6 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
     new NoneFilterColumn('status'),
     new NoneFilterColumn('actions')
   );
-  displayedList = new MatTableDataSource<Penalty>();
 
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
@@ -89,20 +89,25 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   get offenderTypeField() {
     return this.form.get('offenderType');
   }
+
   get offenderLevelField() {
     return this.form.get('offenderLevel');
   }
+
   resetForm() {
     this.form.reset();
   }
+
   protected getViolationTypes() {
     this.violationTypeService.loadAsLookups().subscribe(data => {
       this.violationTypes = data;
     });
   }
+
   isEmployee() {
     return this.offenderTypeField?.value === OffenderTypes.EMPLOYEE;
   }
+
   onOffenderTypeChange() {
     this.offenderTypeField?.valueChanges.subscribe(value => {
       if (value === OffenderTypes.EMPLOYEE) {
@@ -114,6 +119,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
       this.offenderLevelField?.updateValueAndValidity();
     });
   }
+
   private listenToSearch() {
     this.search$
       .pipe(
@@ -139,6 +145,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         this.displayedList = new MatTableDataSource(data);
       });
   }
+
   formValidValues() {
     let values = this.form.value;
 
@@ -150,9 +157,11 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
     }
     return values;
   }
+
   getBooleanString(bool: boolean) {
     return this.lang.getTranslate(bool ? 'yes' : 'no');
   }
+
   viewRecord(model: Penalty): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
     return this.dialog.open<PenaltyPopupComponent, CrudDialogDataContract<Penalty>, UserClick.CLOSE>(PenaltyPopupComponent, {
       data: {
