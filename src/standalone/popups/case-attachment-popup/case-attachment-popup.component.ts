@@ -22,6 +22,9 @@ import { AttachmentType } from '@models/attachment-type';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { BlobModel } from '@models/blob-model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-case-attachment-popup',
@@ -55,12 +58,14 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
   displayedColumns: string[] = ['documentTitle', 'attachmentType', 'actions'];
   attachmentTypeService = inject(AttachmentTypeService);
   attachmentTypes: AttachmentType[] = [];
+  domSanitize = inject(DomSanitizer);
 
   protected readonly AppIcons = AppIcons;
 
   ngOnInit(): void {
     this.listenToUploadFiles();
     this.loadAttachmentTypes();
+    this.listenToView();
     this.listenToDelete();
   }
 
@@ -144,5 +149,22 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
         this.attachments = [...this.attachments];
         this.toast.success(this.lang.map.msg_delete_x_success.change({ x: title }));
       });
+  }
+
+  private listenToView() {
+    this.view$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(ViewAttachmentPopupComponent, {
+              data: {
+                model: new BlobModel(model.content as unknown as Blob, this.domSanitize),
+                title: model.documentTitle,
+              },
+            })
+            .afterClosed();
+        })
+      )
+      .subscribe();
   }
 }
