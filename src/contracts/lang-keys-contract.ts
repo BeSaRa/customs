@@ -1,4 +1,8 @@
 export interface LangKeysContract {
+  add_violation_first_to_take_this_action: string;
+  results: string;
+  department_company: string;
+  add_offender: string;
   broker_company_er_number: string;
   broker_company_cr_number: string;
   broker_company_number: string;
@@ -100,6 +104,7 @@ export interface LangKeysContract {
   english_translation: string;
   save: string;
   close: string;
+  msg_add_x_success: string;
   msg_save_x_success: string;
   msg_make_sure_all_required_fields_are_filled: string;
   msg_delete_x_confirm: string;

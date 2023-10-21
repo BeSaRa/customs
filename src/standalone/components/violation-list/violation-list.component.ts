@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -47,6 +47,9 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   violationService = inject(ViolationService);
   protected readonly Config = Config;
 
+  @Output()
+  violations = new EventEmitter<Violation[]>();
+
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -79,7 +82,7 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
             .pipe(ignoreErrors())
         )
       )
-      .subscribe();
+      .subscribe(pagination => this.violations.next(pagination.rs || []));
   }
 
   private listenToEdit() {
@@ -125,7 +128,7 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
             .afterClosed()
         )
       )
-      .subscribe();
+      .subscribe(() => this.reload$.next());
   }
 
   private listenToDelete() {

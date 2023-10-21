@@ -39,7 +39,7 @@ export function ignoreErrors<T>(debug = false): MonoTypeOperatorFunction<T> {
           return of('CUSTOM_ERROR' as T);
         })
       )
-      .pipe(filter(value => value !== 'CUSTOM_ERROR'));
+      .pipe(filter<T>((value): value is T => value !== 'CUSTOM_ERROR'));
   };
 }
 

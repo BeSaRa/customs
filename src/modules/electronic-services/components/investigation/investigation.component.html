@@ -51,13 +51,13 @@
 
   <ng-template #violation_tab>
     <div class="p-4">
-      <app-violation-list [caseId]="model.id" />
+      <app-violation-list (violations)="violations = $event" [caseId]="model.id" />
     </div>
   </ng-template>
 
   <ng-template #offenders_tab>
     <div class="p-4">
-      <app-offender-list [caseId]="model.id" />
+      <app-offender-list [violations]="violations" [caseId]="model.id" />
     </div>
   </ng-template>
 

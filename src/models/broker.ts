@@ -4,6 +4,8 @@ import { BrokerInterceptor } from '@model-interceptors/broker-interceptor';
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
+import { Offender } from '@models/offender';
+import { OffenderTypes } from '@enums/offender-types';
 
 const { send, receive } = new BrokerInterceptor();
 
@@ -44,5 +46,16 @@ export class Broker extends BaseModel<Broker, BrokerService> {
 
   getStatusInfoName() {
     return this.statusInfo.getNames();
+  }
+
+  convertToOffender(caseId: string) {
+    return new Offender().clone<Offender>({
+      type: OffenderTypes.BROKER,
+      caseId: caseId,
+      arName: this.arName,
+      enName: this.enName,
+      status: 1,
+      offenderRefId: this.id,
+    });
   }
 }

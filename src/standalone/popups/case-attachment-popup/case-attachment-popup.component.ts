@@ -15,8 +15,13 @@ import { CaseAttachment } from '@models/case-attachment';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { combineLatest, exhaustMap, Subject } from 'rxjs';
+import { combineLatest, exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
+import { AttachmentTypeService } from '@services/attachment-type.service';
+import { AttachmentType } from '@models/attachment-type';
+import { DialogService } from '@services/dialog.service';
+import { UserClick } from '@enums/user-click';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-case-attachment-popup',
@@ -39,6 +44,8 @@ import { BaseCaseService } from '@abstracts/base-case.service';
   styleUrls: ['./case-attachment-popup.component.scss'],
 })
 export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+  dialog = inject(DialogService);
+  toast = inject(ToastService);
   data: { caseId: string; service: BaseCaseService<unknown> } = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   view$ = new Subject<CaseAttachment>();
@@ -46,12 +53,16 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
   save$: Subject<void> = new Subject<void>();
   attachments: CaseAttachment[] = [];
   displayedColumns: string[] = ['documentTitle', 'attachmentType', 'actions'];
-
-  ngOnInit(): void {
-    this.startUploadingFiles();
-  }
+  attachmentTypeService = inject(AttachmentTypeService);
+  attachmentTypes: AttachmentType[] = [];
 
   protected readonly AppIcons = AppIcons;
+
+  ngOnInit(): void {
+    this.listenToUploadFiles();
+    this.loadAttachmentTypes();
+    this.listenToDelete();
+  }
 
   filesDropped($event: DragEvent) {
     $event.preventDefault();
@@ -77,7 +88,7 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
     return true;
   }
 
-  private startUploadingFiles() {
+  private listenToUploadFiles() {
     this.save$
       .pipe(
         exhaustMap(() => {
@@ -90,6 +101,48 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
       )
       .subscribe(res => {
         console.log(res);
+      });
+  }
+
+  private loadAttachmentTypes(): void {
+    this.attachmentTypeService
+      .loadAsLookups()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(list => {
+        this.attachmentTypes = list;
+      });
+  }
+
+  private listenToDelete() {
+    this.delete$
+      .pipe(
+        switchMap(model =>
+          this.dialog
+            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: model.documentTitle }))
+            .afterClosed()
+            .pipe(
+              map(userClick => {
+                return {
+                  userClick,
+                  model,
+                };
+              })
+            )
+        )
+      )
+      .pipe(filter(result => result.userClick === UserClick.YES))
+      .pipe(
+        map(({ model }) => {
+          return {
+            title: model.documentTitle,
+            index: this.attachments.indexOf(model),
+          };
+        })
+      )
+      .subscribe(({ index, title }) => {
+        this.attachments.splice(index, 1);
+        this.attachments = [...this.attachments];
+        this.toast.success(this.lang.map.msg_delete_x_success.change({ x: title }));
       });
   }
 }

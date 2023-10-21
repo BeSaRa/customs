@@ -50,6 +50,8 @@ export const AppIcons = {
   LEGAL_RULE: 'scale-balance',
   PLUS_BOX: 'plus-box',
   FOLDER_MULTIPLE_IMAGE: 'folder-multiple-image',
+  VIOLATION_OUTLINE: 'alert-circle-outline',
+  VIOLATION: 'alert-circle',
 };
 
 export type AppIconsType = typeof AppIcons;

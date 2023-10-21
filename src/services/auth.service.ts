@@ -42,7 +42,8 @@ export class AuthService extends RegisterServiceMixin(class {}) implements Servi
       )
       .pipe(map(() => true))
       .pipe(
-        catchError(() => {
+        catchError(e => {
+          console.log(e);
           return of(false);
         })
       );

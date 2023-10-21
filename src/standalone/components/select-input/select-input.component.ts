@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  booleanAttribute,
   Component,
   ContentChild,
   ContentChildren,
@@ -79,7 +80,7 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
   inputColor = 'text-slate-700';
   @Input()
   marginBottom = 'mb-5';
-  @Input()
+  @Input({ transform: booleanAttribute })
   noMargin = false;
   @Input()
   isMultiple = false;

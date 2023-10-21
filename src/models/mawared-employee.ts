@@ -2,6 +2,8 @@ import { BaseModel } from '@abstracts/base-model';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { InterceptModel } from 'cast-response';
+import { Offender } from '@models/offender';
+import { OffenderTypes } from '@enums/offender-types';
 
 const { send, receive } = new MawaredEmployeeInterceptor();
 
@@ -82,5 +84,16 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
 
   getStatusInfoName() {
     return this.statusInfo.getNames() || '';
+  }
+
+  convertToOffender(caseId: string): Offender {
+    return new Offender().clone<Offender>({
+      caseId: caseId,
+      enName: this.arName,
+      arName: this.arName,
+      type: OffenderTypes.EMPLOYEE,
+      offenderRefId: this.id,
+      status: 1,
+    });
   }
 }

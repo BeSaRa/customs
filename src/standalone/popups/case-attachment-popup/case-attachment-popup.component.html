@@ -9,12 +9,26 @@
         <!-- arName -->
         <ng-container matColumnDef="documentTitle">
           <th mat-header-cell *matHeaderCellDef>{{ lang.map.document_name }}</th>
-          <td mat-cell *matCellDef="let element">{{ element.documentTitle }}</td>
+          <td mat-cell *matCellDef="let element">
+            <div class="p-2">
+              <app-input noMargin="true" label="" size="sm" />
+            </div>
+          </td>
         </ng-container>
         <!-- attachmentType -->
         <ng-container matColumnDef="attachmentType">
           <th mat-header-cell *matHeaderCellDef>{{ lang.map.attachment_type }}</th>
-          <td mat-cell *matCellDef="let element">{{ element.attachmentType }}</td>
+          <td mat-cell *matCellDef="let element">
+            <div class="p-2">
+              <app-select-input
+                noMargin="true"
+                label=""
+                size="sm"
+                bindLabel="getNames"
+                bindValue="id"
+                [options]="attachmentTypes" />
+            </div>
+          </td>
         </ng-container>
         <!-- actions Column -->
         <ng-container matColumnDef="actions">

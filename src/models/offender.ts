@@ -4,7 +4,7 @@ import { AdminResult } from '@models/admin-result';
 
 export class Offender extends BaseModel<Offender, OffenderService> {
   $$__service_name__$$ = 'OffenderService';
-  caseId!: 'string';
+  caseId!: string;
   offenderRefId!: number;
   type!: number;
   brokerCompmanyId!: number;
@@ -42,4 +42,12 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   brokerCompmanyInfo!: AdminResult;
   typeInfo!: AdminResult;
   penaltyInfo!: AdminResult;
+
+  override getNames(): string {
+    return (
+      (this.offenderInfo &&
+        (this.offenderInfo[(this.getLangService().getCurrent().code + 'Name') as keyof typeof this.offenderInfo] as unknown as string)) ||
+      ''
+    );
+  }
 }

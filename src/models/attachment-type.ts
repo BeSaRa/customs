@@ -9,6 +9,7 @@ const { send, receive } = new AttachmentTypeInterceptor();
 @InterceptModel({ send, receive })
 export class AttachmentType extends BaseModel<AttachmentType, AttachmentTypeService> {
   $$__service_name__$$ = 'AttachmentTypeService';
+  isSystem = false;
 
   buildForm(controls = false): object {
     const { arName, enName, status } = this;

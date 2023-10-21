@@ -11,6 +11,7 @@ import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Violation } from '@models/violation';
 
 @Component({
   selector: 'app-investigation',
@@ -40,6 +41,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   selectedTab = 0;
 
   tabsArray = ['basic_info', 'violations', 'offenders', 'external_persons'];
+  violations: Violation[] = [];
 
   protected override _init() {
     super._init();

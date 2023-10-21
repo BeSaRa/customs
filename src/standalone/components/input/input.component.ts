@@ -66,7 +66,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, 
   type = 'text';
   @Input()
   marginBottom = 'mb-5';
-  @Input()
+  @Input({ transform: booleanAttribute })
   noMargin = false;
   @Input()
   name = generateUUID();
