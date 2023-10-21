@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,6 +25,7 @@ import { ToastService } from '@services/toast.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { BlobModel } from '@models/blob-model';
 import { DomSanitizer } from '@angular/platform-browser';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-case-attachment-popup',
@@ -47,6 +48,8 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./case-attachment-popup.component.scss'],
 })
 export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+  dialogRef = inject(MatDialogRef);
+  fb = inject(UntypedFormBuilder);
   dialog = inject(DialogService);
   toast = inject(ToastService);
   data: { caseId: string; service: BaseCaseService<unknown> } = inject(MAT_DIALOG_DATA);
@@ -59,6 +62,10 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
   attachmentTypeService = inject(AttachmentTypeService);
   attachmentTypes: AttachmentType[] = [];
   domSanitize = inject(DomSanitizer);
+  createControlsInProgress = false;
+  form = this.fb.group({
+    list: new FormArray([]),
+  });
 
   protected readonly AppIcons = AppIcons;
 
@@ -78,14 +85,15 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
       if (!this.validFile(item)) {
         return;
       }
+      this.createControlsInProgress = true;
       this.attachments = [
         ...this.attachments,
         new CaseAttachment().clone<CaseAttachment>({
           content: item,
           documentTitle: item.name,
-          attachmentTypeId: 1,
         }),
       ];
+      this.createControls();
     });
   }
 
@@ -102,10 +110,12 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
               return this.data.service.addCaseAttachment(this.data.caseId, attachment);
             })
           );
+          // return this.data.service.addBulkCaseAttachments(this.data.caseId, this.attachments);
         })
       )
-      .subscribe(res => {
-        console.log(res);
+      .subscribe(() => {
+        this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.report_attachments }));
+        this.dialogRef.close();
       });
   }
 
@@ -147,6 +157,7 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
       .subscribe(({ index, title }) => {
         this.attachments.splice(index, 1);
         this.attachments = [...this.attachments];
+        (this.list as FormArray).removeAt(index);
         this.toast.success(this.lang.map.msg_delete_x_success.change({ x: title }));
       });
   }
@@ -166,5 +177,31 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
         })
       )
       .subscribe();
+  }
+
+  get list(): AbstractControl {
+    return this.form.get('list') as FormControl;
+  }
+
+  private createControls() {
+    const list = this.list as FormArray;
+    list.clear({ emitEvent: false });
+    this.attachments.forEach((item, index) => {
+      list.push(
+        this.fb.group({
+          documentTitle: [item.documentTitle, CustomValidators.required],
+          attachmentTypeId: [item.attachmentTypeId, CustomValidators.required],
+        })
+      );
+      (i => {
+        (list.controls.at(index) as UntypedFormGroup).controls.attachmentTypeId.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+          this.attachments[i].attachmentTypeId = value;
+        });
+        (list.controls.at(index) as UntypedFormGroup).controls.documentTitle.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => {
+          this.attachments[i].documentTitle = value;
+        });
+      })(index);
+    });
+    this.createControlsInProgress = false;
   }
 }

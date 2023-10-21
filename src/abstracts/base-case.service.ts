@@ -14,6 +14,7 @@ import { DialogService } from '@services/dialog.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
+import { stringify } from 'qs';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
@@ -190,7 +191,17 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
 
   @CastResponse(() => CaseAttachment)
   addBulkCaseAttachments(caseId: string, attachments: CaseAttachment[]): Observable<unknown> {
-    return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, {});
+    const formData = new FormData();
+    attachments.forEach(attachment => {
+      attachment.content ? formData.append('content', attachment.content) : null;
+      delete attachment.content;
+    });
+    // console.log(stringify({ attachmentist: attachments }, { arrayFormat: 'comma', encodeValuesOnly: true }));
+    return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, formData, {
+      params: new HttpParams({
+        fromString: stringify({ attachmentist: stringify(attachments) }, { arrayFormat: 'comma', encodeValuesOnly: true }),
+      }),
+    });
   }
 
   @CastResponse(() => CaseFolder)
