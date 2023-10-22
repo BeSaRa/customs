@@ -11,6 +11,7 @@ import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
 import { CustomValidators } from '@validators/custom-validators';
 import { PenaltyDetails } from '@models/penalty-details';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-penalty-popup',
@@ -29,6 +30,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
   activeTab = 0;
+  isEmployee: boolean = false;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
@@ -41,7 +43,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     this.listenToStatusChange();
     this.listenToIsCash();
     this.listenToIsDeduction();
-
+    this.listenToOffenderTypeChange();
     this.dialogRef.afterClosed().subscribe(() => {
       this.model.detailsList = this.tempList.slice();
     });
@@ -67,8 +69,8 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
     return new Penalty().clone<Penalty>({
       ...this.model,
       ...this.form.value,
-      cashAmount: this.isCashTrue ? this.cashAmountField?.value : null,
-      deductionDays: this.isDeductionTrue ? this.deductionDaysField?.value : null,
+      cashAmount: this.isCash?.value ? this.cashAmount?.value : null,
+      deductionDays: this.isDeduction?.value ? this.deductionDays?.value : null,
       detailsList: this.penaltyDetailsList,
     });
   }
@@ -90,49 +92,58 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   listenToIsCash() {
     this.form.get('isCash')?.valueChanges.subscribe(value => {
       if (value) {
-        this.cashAmountField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
+        this.cashAmount?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
         this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
-        this.deductionDaysField?.setValue(null);
-        this.deductionDaysField?.clearValidators();
-        this.deductionDaysField?.updateValueAndValidity();
+        this.deductionDays?.setValue(null);
+        this.deductionDays?.clearValidators();
+        this.deductionDays?.updateValueAndValidity();
       } else {
-        this.cashAmountField?.setValue(null);
-        this.cashAmountField?.clearValidators();
+        this.cashAmount?.setValue(null);
+        this.cashAmount?.clearValidators();
       }
-      this.cashAmountField?.updateValueAndValidity();
+      this.cashAmount?.updateValueAndValidity();
     });
   }
 
   listenToIsDeduction() {
     this.form.get('isDeduction')?.valueChanges.subscribe(value => {
       if (value) {
-        this.deductionDaysField?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
+        this.deductionDays?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
         this.form.get('isCash')?.setValue(false, { emitEvent: false });
-        this.cashAmountField?.setValue(null);
-        this.cashAmountField?.clearValidators();
-        this.cashAmountField?.updateValueAndValidity();
+        this.cashAmount?.setValue(null);
+        this.cashAmount?.clearValidators();
+        this.cashAmount?.updateValueAndValidity();
       } else {
-        this.deductionDaysField?.setValue(null);
-        this.deductionDaysField?.clearValidators();
+        this.deductionDays?.setValue(null);
+        this.deductionDays?.clearValidators();
       }
-      this.deductionDaysField?.updateValueAndValidity();
+      this.deductionDays?.updateValueAndValidity();
     });
   }
 
-  get cashAmountField() {
+  listenToOffenderTypeChange() {
+    this.form.get('offenderType')?.valueChanges.subscribe(value => {
+      this.deductionDays?.setValue(null);
+      this.cashAmount?.setValue(null);
+      this.isDeduction?.setValue(false);
+      this.isCash?.setValue(false);
+      this.isEmployee = value === OffenderTypes.EMPLOYEE;
+    });
+  }
+  get cashAmount() {
     return this.form.get('cashAmount');
   }
-  get deductionDaysField() {
+  get deductionDays() {
     return this.form.get('deductionDays');
   }
   get status() {
     return this.form.get('status');
   }
-  get isDeductionTrue() {
-    return this.form.get('isDeduction')?.value;
+  get isDeduction() {
+    return this.form.get('isDeduction');
   }
-  get isCashTrue() {
-    return this.form.get('isCash')?.value;
+  get isCash() {
+    return this.form.get('isCash');
   }
   get penaltyDetails() {
     return this.model.detailsList;
