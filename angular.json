@@ -20,7 +20,8 @@
             "allowedCommonJsDependencies": [
               "crypto-js",
               "bezier-easing",
-              "ng2-flatpickr"
+              "ng2-flatpickr",
+              "qs"
             ],
             "outputPath": "dist/customs",
             "index": "src/index.html",
