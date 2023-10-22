@@ -25,6 +25,12 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   override status = StatusTypes.ACTIVE;
   detailsList!: PenaltyDetails[];
 
+  // extras
+  repeat!: number;
+  violationTypeInfo!: AdminResult;
+  penGuidanceInfo!: AdminResult;
+  penGuidance!: number;
+
   buildForm(controls = false): object {
     const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration, isCash, cashAmount } = this;
     return {
