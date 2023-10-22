@@ -105,12 +105,12 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
     this.save$
       .pipe(
         exhaustMap(() => {
-          return combineLatest(
-            this.attachments.map(attachment => {
-              return this.data.service.addCaseAttachment(this.data.caseId, attachment);
-            })
-          );
-          // return this.data.service.addBulkCaseAttachments(this.data.caseId, this.attachments);
+          // return combineLatest(
+          //   this.attachments.map(attachment => {
+          //     return this.data.service.addCaseAttachment(this.data.caseId, attachment);
+          //   })
+          // );
+          return this.data.service.addBulkCaseAttachments(this.data.caseId, this.attachments);
         })
       )
       .subscribe(() => {

@@ -1,7 +1,7 @@
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { Constructor } from '@app-types/constructors';
 import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
@@ -196,10 +196,10 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
       attachment.content ? formData.append('content', attachment.content) : null;
       delete attachment.content;
     });
-    // console.log(stringify({ attachmentist: attachments }, { arrayFormat: 'comma', encodeValuesOnly: true }));
+    // console.log(stringify({ attachments: attachments.map(i => JSON.stringify(i)) }, { indices: false }));
     return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, formData, {
       params: new HttpParams({
-        fromString: stringify({ attachmentist: stringify(attachments) }, { arrayFormat: 'comma', encodeValuesOnly: true }),
+        fromString: stringify({ attachments: attachments.map(i => JSON.stringify(i)) }, { indices: false }),
       }),
     });
   }
