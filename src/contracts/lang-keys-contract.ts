@@ -266,4 +266,6 @@ export interface LangKeysContract {
   search_for_guide_panel: string;
   yes: string;
   no: string;
+  only_arabic_letters: string;
+  only_english_letters: string;
 }
