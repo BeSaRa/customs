@@ -24,7 +24,7 @@ import { LookupService } from '@services/lookup.service';
 import { ViolationTypeService } from '@services/violation-type.service';
 import { ignoreErrors } from '@utils/utils';
 import { CustomValidators } from '@validators/custom-validators';
-import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, takeUntil, throwError } from 'rxjs';
+import { Observable, ReplaySubject, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, takeUntil, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-guide-panel',
@@ -70,9 +70,11 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   ];
 
   columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
+    new NoneFilterColumn('violationType'),
+    new NoneFilterColumn('repeat'),
+    new NoneFilterColumn('penGuidance'),
     new NoneFilterColumn('arName'),
     new NoneFilterColumn('enName'),
-    new NoneFilterColumn('offenderType'),
     new NoneFilterColumn('penaltyWeight'),
     new NoneFilterColumn('erasureDuration'),
     new NoneFilterColumn('isCash'),
@@ -152,6 +154,12 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         if (data.length) {
           this.selectedTab = 1;
         }
+        data = data.sort((penalty1, penalty2) => {
+          if (penalty1.penGuidance === null || penalty2.penGuidance === null) {
+            return +(penalty1.penGuidance === null) - +(penalty2.penGuidance === null);
+          }
+          return penalty1.penGuidance - penalty2.penGuidance;
+        });
         this.displayedList = new MatTableDataSource(data);
       });
   }
