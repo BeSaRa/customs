@@ -23,7 +23,7 @@ export class PenaltyDetailsComponent implements OnInit {
 
   @Output() listIsEmpty = new EventEmitter<boolean>();
   @Input() viewMode!: boolean;
-
+  @Input() isEmployee!: boolean;
   displayedList: MatTableDataSource<PenaltyDetails> = new MatTableDataSource<PenaltyDetails>(this.list);
   displayedColumns = ['penaltySigner', 'offenderLevel', 'legalRule', 'actions'];
 
@@ -79,7 +79,7 @@ export class PenaltyDetailsComponent implements OnInit {
 
   createDetails() {
     this.service
-      .openCreateDialog(undefined)
+      .openCreateDialog(undefined, { isEmployee: this.isEmployee })
       .afterClosed()
       .pipe(
         filter((model): model is PenaltyDetails => {
@@ -95,7 +95,7 @@ export class PenaltyDetailsComponent implements OnInit {
 
   editDetails(penaltyDetails: PenaltyDetails) {
     this.service
-      .openEditDialog(penaltyDetails)
+      .openEditDialog(penaltyDetails, { isEmployee: this.isEmployee })
       .afterClosed()
       .pipe(
         filter((model): model is PenaltyDetails => {

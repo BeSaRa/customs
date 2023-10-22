@@ -11,6 +11,7 @@ import { LookupService } from '@services/lookup.service';
 import { LegalRuleService } from '@services/legal-rule.service';
 import { LegalRule } from '@models/legal-rule';
 import { AdminResult } from '@models/admin-result';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-penalty-details-popup',
@@ -26,7 +27,7 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
   offenderLevels: Lookup[] = this.lookupService.lookups.offenderLevel;
   legalRules!: LegalRule[];
-
+  isEmployee = this.data.extras?.isEmployee;
   protected override _initPopup(): void {
     super._initPopup();
     this.getLegalRules();
@@ -34,6 +35,7 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    if (this.isEmployee) this.form.get('offenderLevel')?.setValidators(CustomValidators.required);
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {

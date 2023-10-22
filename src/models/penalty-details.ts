@@ -16,7 +16,7 @@ export class PenaltyDetails extends BaseModel<PenaltyDetails, PenaltyDetailsServ
     const { penaltySigner, offenderLevel, legalRule } = this;
     return {
       penaltySigner: controls ? [penaltySigner, CustomValidators.required] : penaltySigner,
-      offenderLevel: controls ? [offenderLevel, CustomValidators.required] : offenderLevel,
+      offenderLevel: controls ? [offenderLevel] : offenderLevel,
       legalRule: controls ? [legalRule] : legalRule,
     };
   }

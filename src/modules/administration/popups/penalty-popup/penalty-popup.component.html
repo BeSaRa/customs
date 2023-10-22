@@ -50,7 +50,9 @@
         <app-penalty-details
           [(list)]="penaltyDetailsList"
           [viewMode]="inViewMode()"
-          (listIsEmpty)="checkDetailsListValidity($event)"></app-penalty-details>
+          (listIsEmpty)="checkDetailsListValidity($event)"
+          [isEmployee]="isEmployee"
+          ></app-penalty-details>
         <label class="group block relative">
           <span
             *ngIf="penaltyDetailsListIsEmpty"
