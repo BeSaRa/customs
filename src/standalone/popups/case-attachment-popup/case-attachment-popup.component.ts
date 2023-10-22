@@ -15,7 +15,7 @@ import { CaseAttachment } from '@models/case-attachment';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { combineLatest, exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { AttachmentTypeService } from '@services/attachment-type.service';
 import { AttachmentType } from '@models/attachment-type';
