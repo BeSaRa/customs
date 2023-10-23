@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ControlDirective } from '@standalone/directives/control.directive';
@@ -23,7 +23,7 @@ import { BrokerService } from '@services/broker.service';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { Broker } from '@models/broker';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { ToastService } from '@services/toast.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -81,8 +81,8 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addBroker$: Subject<Broker> = new Subject<Broker>();
   toast = inject(ToastService);
-
-  tabIndex = 0;
+  @ViewChild(MatTabGroup)
+  tabComponent!: MatTabGroup;
 
   ngOnInit(): void {
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
@@ -127,8 +127,9 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       )
       .pipe(map(pagination => pagination.rs))
       .subscribe(result => {
+        console.log(result);
         if (result.length) {
-          this.tabIndex = 1;
+          this.tabComponent.selectedIndex = 1;
         }
         this.employees$.next(result);
       });
@@ -140,8 +141,9 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       )
       .pipe(map(pagination => pagination.rs))
       .subscribe(result => {
+        console.log(result);
         if (result.length) {
-          this.tabIndex = 1;
+          this.tabComponent.selectedIndex = 1;
         }
         this.brokers$.next(result);
       });

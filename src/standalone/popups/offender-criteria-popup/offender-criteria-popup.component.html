@@ -4,7 +4,7 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
-    <mat-tab-group [selectedIndex]="tabIndex" mat-stretch-tabs="false">
+    <mat-tab-group mat-stretch-tabs="false">
       <mat-tab [label]="lang.map.search">
         <ng-container [ngTemplateOutlet]="searchCriteria"></ng-container>
       </mat-tab>
