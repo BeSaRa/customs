@@ -268,4 +268,8 @@ export interface LangKeysContract {
   no: string;
   only_arabic_letters: string;
   only_english_letters: string;
+  external_person_type: string;
+  add_external_person: string;
+  witness_type: string;
+  person_info: string;
 }

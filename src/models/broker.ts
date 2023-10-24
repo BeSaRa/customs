@@ -3,9 +3,10 @@ import { BrokerService } from '@services/broker.service';
 import { BrokerInterceptor } from '@model-interceptors/broker-interceptor';
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
-import { CustomValidators } from '@validators/custom-validators';
 import { Offender } from '@models/offender';
 import { OffenderTypes } from '@enums/offender-types';
+import { WitnessTypes } from '@enums/witness-types';
+import { Witness } from '@models/witness';
 
 const { send, receive } = new BrokerInterceptor();
 
@@ -56,6 +57,17 @@ export class Broker extends BaseModel<Broker, BrokerService> {
       enName: this.enName,
       status: 1,
       offenderRefId: this.id,
+    });
+  }
+  convertToWitness(caseId: string, personType: number): Witness {
+    return new Witness().clone<Witness>({
+      personType,
+      caseId: caseId,
+      enName: this.arName,
+      arName: this.arName,
+      witnessType: WitnessTypes.BROKER,
+      witnessRefId: this.id,
+      status: 1,
     });
   }
 }

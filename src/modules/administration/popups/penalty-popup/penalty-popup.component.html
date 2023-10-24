@@ -14,10 +14,10 @@
               [options]="offenderTypes"
               bindLabel="getNames"
               bindValue="lookupKey" />
-              <app-input
-                formControlName="erasureDuration"
-                [label]="lang.map.penalty_grace_period"
-                type="number"></app-input>
+            <app-input
+              formControlName="erasureDuration"
+              [label]="lang.map.penalty_grace_period"
+              type="number"></app-input>
             <app-input formControlName="penaltyWeight" [label]="lang.map.penalty_weight" type="number"></app-input>
             <app-input
               formControlName="deductionDays"
@@ -51,8 +51,7 @@
           [(list)]="penaltyDetailsList"
           [viewMode]="inViewMode()"
           (listIsEmpty)="checkDetailsListValidity($event)"
-          [isEmployee]="isEmployee"
-          ></app-penalty-details>
+          [isEmployee]="isEmployee"></app-penalty-details>
         <label class="group block relative">
           <span
             *ngIf="penaltyDetailsListIsEmpty"

@@ -28,6 +28,7 @@ import { CaseAttachmentsComponent } from '@standalone/components/case-attachment
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
+import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
 
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent, GuidePanelComponent],
@@ -57,6 +58,7 @@ import { GuidePanelComponent } from './components/guide-panel/guide-panel.compon
     CaseAttachmentsComponent,
     ViolationListComponent,
     OffenderListComponent,
+    WitnessesListComponent,
   ],
 })
 export class ElectronicServicesModule {}

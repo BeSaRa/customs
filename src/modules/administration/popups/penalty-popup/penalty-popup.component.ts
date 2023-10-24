@@ -30,7 +30,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
   activeTab = 0;
-  isEmployee: boolean = true;
+  isEmployee = true;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));

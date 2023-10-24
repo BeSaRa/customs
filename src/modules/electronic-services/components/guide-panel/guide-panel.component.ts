@@ -165,7 +165,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   }
 
   formValidValues() {
-    let values = this.form.value;
+    const values = this.form.value;
 
     if (values.offenderLevel === null) {
       delete values.offenderLevel;

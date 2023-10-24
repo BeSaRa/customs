@@ -39,4 +39,6 @@ export interface LookupMapContract {
   responsibilityRepeatViolations: Lookup[];
   offenderTypeAll: Lookup[];
   securityManagement: Lookup[];
+  personType: Lookup[];
+  witnessType: Lookup[];
 }
