@@ -19,6 +19,7 @@ import { ControlDirective } from '@standalone/directives/control.directive';
 import { InputPrefixDirective } from '@standalone/directives/input-prefix.directive';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { generateUUID } from '@utils/utils';
+import { requiredValidator } from '@validators/validation-utils';
 
 @Component({
   selector: 'app-input',
@@ -94,8 +95,8 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, 
     );
   }
 
-  get isRequired() {
-    return this.ctrl?.hasError('required');
+  get isRequired(): boolean {
+    return this.ctrl?.control?.hasValidator(requiredValidator) || false;
   }
 
   onChange!: (value: string | null) => void;
