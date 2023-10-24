@@ -27,6 +27,7 @@ import { InputComponent } from '../input/input.component';
 import { MatIconModule } from '@angular/material/icon';
 import { LangService } from '@services/lang.service';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
+import { requiredValidator } from '@validators/validation-utils';
 
 @Component({
   selector: 'app-select-input',
@@ -136,7 +137,7 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
   }
 
   get isRequired(): boolean {
-    return this.ctrl?.getError('required');
+    return this.ctrl?.control?.hasValidator(requiredValidator) || false;
   }
 
   onChange!: (value: string | null) => void;
