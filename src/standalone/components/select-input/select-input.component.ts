@@ -135,6 +135,10 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
     );
   }
 
+  get isRequired(): boolean {
+    return this.ctrl?.getError('required');
+  }
+
   onChange!: (value: string | null) => void;
   onTouch!: () => void;
 

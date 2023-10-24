@@ -94,6 +94,10 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnDestroy, 
     );
   }
 
+  get isRequired() {
+    return this.ctrl?.hasError('required');
+  }
+
   onChange!: (value: string | null) => void;
   onTouch!: () => void;
 

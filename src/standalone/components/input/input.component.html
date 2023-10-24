@@ -1,7 +1,9 @@
 <label
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
-  <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
+  <span [ngClass]="labelColor" class="block font-medium">{{ label }}
+        <span *ngIf="isRequired" class="text-amber-700">*</span>
+  </span>
   <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-start">
     <ng-content select="[appInputPrefix]"></ng-content>
     <span
