@@ -19,7 +19,9 @@
       <mat-tab [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.external_persons"></mat-tab>
+      <mat-tab [label]="lang.map.external_persons">
+        <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
+      </mat-tab>
     </mat-tab-group>
   </mat-card>
 
@@ -58,6 +60,12 @@
   <ng-template #offenders_tab>
     <div class="p-4">
       <app-offender-list [violations]="violations" [caseId]="model.id" />
+    </div>
+  </ng-template>
+
+  <ng-template #external_persons_tab>
+    <div class="p-4">
+      <app-witnesses-list [violations]="violations" [caseId]="model.id" />
     </div>
   </ng-template>
 

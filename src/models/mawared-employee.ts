@@ -4,6 +4,8 @@ import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { InterceptModel } from 'cast-response';
 import { Offender } from '@models/offender';
 import { OffenderTypes } from '@enums/offender-types';
+import { WitnessTypes } from '@enums/witness-types';
+import { Witness } from '@models/witness';
 
 const { send, receive } = new MawaredEmployeeInterceptor();
 
@@ -93,6 +95,17 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
       arName: this.arName,
       type: OffenderTypes.EMPLOYEE,
       offenderRefId: this.id,
+      status: 1,
+    });
+  }
+  convertToWitness(caseId: string, personType: number): Witness {
+    return new Witness().clone<Witness>({
+      personType,
+      caseId: caseId,
+      enName: this.arName,
+      arName: this.arName,
+      witnessType: WitnessTypes.EMPLOYEE,
+      witnessRefId: this.id,
       status: 1,
     });
   }
