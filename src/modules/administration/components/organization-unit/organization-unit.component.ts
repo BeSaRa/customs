@@ -79,11 +79,6 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new TextFilterColumn('code'),
-    new TextFilterColumn('mawaredDepId'),
-    new SelectFilterColumn('type', this.lookupService.lookups.organizationUniType, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('parent', this.service.loadAsLookups(), 'id', 'getNames'),
-    new SelectFilterColumn('managerId', this.internalUserService.loadAsLookups(), 'id', 'getNames'),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
