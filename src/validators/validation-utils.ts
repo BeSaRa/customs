@@ -71,6 +71,15 @@ export function numberValidator(control: AbstractControl): ValidationErrors | nu
   return !isValid ? { number: true } : null;
 }
 
+export function positiveNumberValidator(control: AbstractControl): ValidationErrors | null {
+  if (!control.value) {
+    return null;
+  }
+  const numberValue = Number(control.value);
+  const isValid = /^[0-9\u0660-\u0669]+$/.test(control.value) && numberValue > -1;
+  return !isValid ? { positiveNumber: true } : null;
+}
+
 export function decimalValidator(numberOfPlaces = 2): ValidatorFn {
   // , allowNegative: boolean = false
   if (!isValidValue(numberOfPlaces)) {

@@ -272,4 +272,7 @@ export interface LangKeysContract {
   add_external_person: string;
   witness_type: string;
   person_info: string;
+  positive_number: string;
+  minimum_valid_number_is_x: string;
+  maximum_valid_number_is_x: string;
 }
