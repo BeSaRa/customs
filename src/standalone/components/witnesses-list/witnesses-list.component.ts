@@ -4,7 +4,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { exhaustMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
@@ -25,7 +25,7 @@ import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criter
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })
-export class WitnessesListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class WitnessesListComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -42,10 +42,8 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Witness>();
   delete$ = new Subject<Witness>();
-  witnessTypeService = inject(WitnessService);
+  witnessService = inject(WitnessService);
   displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'actions'];
-
-  addViolation$: Subject<Witness> = new Subject<Witness>();
 
   personTypesMap: Record<number, Lookup> = this.lookupService.lookups.personType.reduce(
     (acc, item) => ({
@@ -67,12 +65,15 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
-    this.listenToAddViolationToWitness();
     this.reload$.next();
   }
 
   private listenToAdd() {
     this.add$
+      .pipe(
+        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
+        filter(() => !!this.violations.length)
+      )
       .pipe(
         exhaustMap(() =>
           this.dialog
@@ -90,7 +91,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   private listenToReload() {
     this.reload$
       .pipe(filter(() => !!this.caseId))
-      .pipe(switchMap(() => this.witnessTypeService.load(undefined, { caseId: this.caseId })))
+      .pipe(switchMap(() => this.witnessService.load(undefined, { caseId: this.caseId })))
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.data.next(list.rs);
@@ -114,15 +115,9 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
         this.reload$.next();
       });
   }
-
-  private listenToAddViolationToWitness() {
-    this.addViolation$
-      .pipe(
-        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
-        filter(() => !!this.violations.length)
-      )
-      .subscribe(() => {
-        this.reload$.next();
-      });
+  resetDataList() {
+    return this.witnessService.deleteBulk(this.dataSource.data.map((witness: Witness) => witness.id)).subscribe(() => {
+      this.reload$.next();
+    });
   }
 }
