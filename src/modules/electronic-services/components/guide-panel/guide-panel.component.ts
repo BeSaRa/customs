@@ -49,7 +49,6 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Penalty>();
   selectedTab = 0;
-  resultTapLabel = this.lang.map.search_result + ' (' + this.lang.map.menu_penalty + ')';
 
   ngOnInit(): void {
     this.getViolationTypes();

@@ -10,7 +10,7 @@
       <mat-tab [label]="lang.map.search_for_guide_panel">
         <ng-container [ngTemplateOutlet]="search_for_guide_panel"></ng-container>
       </mat-tab>
-      <mat-tab [label]="resultTapLabel">
+      <mat-tab [label]="lang.map.search_result + ' (' +this.lang.map.menu_penalty + ')'">
         <ng-container [ngTemplateOutlet]="search_result"></ng-container>
       </mat-tab>
     </mat-tab-group>
