@@ -26,7 +26,7 @@ import { ViolationClassificationService } from '@services/violation-classificati
   templateUrl: './violation-list.component.html',
   styleUrls: ['./violation-list.component.scss'],
 })
-export class ViolationListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class ViolationListComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -46,6 +46,9 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   delete$ = new Subject<Violation>();
   violationService = inject(ViolationService);
   protected readonly Config = Config;
+
+  @Output()
+  empty = new EventEmitter<void>();
 
   @Output()
   violations = new EventEmitter<Violation[]>();
@@ -136,7 +139,10 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
       .pipe(
         exhaustMap(model =>
           this.dialog
-            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: model.description }))
+            .confirm(
+              this.dataSource.data.length == 1 ? this.lang.map.reset_violations_effects_msg : '',
+              this.lang.map.msg_delete_x_confirm.change({ x: model.description })
+            )
             .afterClosed()
             .pipe(
               map(userClick => ({
@@ -150,6 +156,7 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
       .subscribe(model => {
         this.toast.success(this.lang.map.msg_delete_x_success.change({ x: model.description }));
+        this.empty.emit();
         this.reload$.next();
       });
   }

@@ -40,9 +40,6 @@
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <!--          <div [matTooltip]="lang.map.add_violation">-->
-          <!--            <app-icon-button (click)="addViolation$.next(element)" icon="VIOLATION_OUTLINE" />-->
-          <!--          </div>-->
           <div [matTooltip]="lang.map.delete">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>

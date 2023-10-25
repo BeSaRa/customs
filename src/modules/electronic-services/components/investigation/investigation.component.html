@@ -53,7 +53,10 @@
 
   <ng-template #violation_tab>
     <div class="p-4">
-      <app-violation-list (violations)="violations = $event" [caseId]="model.id" />
+      <app-violation-list
+        (empty)="resetOffendersAndExternalPersons()"
+        (violations)="violations = $event"
+        [caseId]="model.id" />
     </div>
   </ng-template>
 

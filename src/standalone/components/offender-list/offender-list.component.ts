@@ -4,7 +4,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { exhaustMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -25,7 +25,7 @@ import { Violation } from '@models/violation';
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffenderListComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -52,18 +52,20 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     }),
     {}
   );
-  addViolation$: Subject<Offender> = new Subject<Offender>();
 
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
-    this.listenToAddViolationToOffender();
     this.reload$.next();
   }
 
   private listenToAdd() {
     this.add$
+      .pipe(
+        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
+        filter(() => !!this.violations.length)
+      )
       .pipe(
         exhaustMap(() =>
           this.dialog
@@ -109,15 +111,9 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
         this.reload$.next();
       });
   }
-
-  private listenToAddViolationToOffender() {
-    this.addViolation$
-      .pipe(
-        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
-        filter(() => !!this.violations.length)
-      )
-      .subscribe(() => {
-        this.reload$.next();
-      });
+  resetDataList() {
+    this.offenderService.deleteBulk(this.dataSource.data.map((offender: Offender) => offender.id)).subscribe(() => {
+      this.reload$.next();
+    });
   }
 }
