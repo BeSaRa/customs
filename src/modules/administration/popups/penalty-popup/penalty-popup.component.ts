@@ -92,7 +92,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   listenToIsCash() {
     this.form.get('isCash')?.valueChanges.subscribe(value => {
       if (value) {
-        this.cashAmount?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(500), Validators.max(5000)]);
+        this.cashAmount?.addValidators([CustomValidators.required, CustomValidators.positiveNumber, Validators.min(500), Validators.max(5000)]);
         this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
         this.deductionDays?.setValue(null);
         this.deductionDays?.clearValidators();
@@ -108,7 +108,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   listenToIsDeduction() {
     this.form.get('isDeduction')?.valueChanges.subscribe(value => {
       if (value) {
-        this.deductionDays?.addValidators([CustomValidators.required, CustomValidators.number, Validators.min(1), Validators.max(15)]);
+        this.deductionDays?.addValidators([CustomValidators.required, CustomValidators.positiveNumber, Validators.min(1), Validators.max(15)]);
         this.form.get('isCash')?.setValue(false, { emitEvent: false });
         this.cashAmount?.setValue(null);
         this.cashAmount?.clearValidators();

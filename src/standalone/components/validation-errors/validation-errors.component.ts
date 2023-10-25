@@ -43,7 +43,7 @@ export class ValidationErrorsComponent {
     }
 
     const validationKey = currentNewError[0] as keyof ValidationMessagesType;
-
+    const validationReplace = currentNewError[1];
     const validation = ValidationMessages[validationKey];
     if (!validation) {
       this.currentError = `Error: key not exists (${validationKey}) in ValidationMessages`;
@@ -52,5 +52,8 @@ export class ValidationErrorsComponent {
     // this.currentError = validation.replace ? validation.replace(validation.key) : identity(validation.key);
     const languageKey = validation.key as keyof LangKeysContract;
     this.currentError = this.lang.map[languageKey];
+    if (validation.replace) {
+      this.currentError = validation.replace(this.currentError, validationReplace);
+    }
   }
 }

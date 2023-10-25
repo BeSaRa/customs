@@ -10,6 +10,7 @@ import {
   uniqueValidator,
   validateFieldsStatus,
   validateSum,
+  positiveNumberValidator,
 } from '@validators/validation-utils';
 
 export const CustomValidators = {
@@ -24,4 +25,5 @@ export const CustomValidators = {
   maxLength: maxlengthValidator,
   anyFieldsHasLength,
   unique: uniqueValidator,
+  positiveNumber: positiveNumberValidator,
 };
