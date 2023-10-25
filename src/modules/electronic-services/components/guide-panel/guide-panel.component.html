@@ -10,7 +10,7 @@
       <mat-tab [label]="lang.map.search_for_guide_panel">
         <ng-container [ngTemplateOutlet]="search_for_guide_panel"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.search_result">
+      <mat-tab [label]="resultTapLabel">
         <ng-container [ngTemplateOutlet]="search_result"></ng-container>
       </mat-tab>
     </mat-tab-group>
@@ -59,13 +59,6 @@
   </ng-template>
   <ng-template #search_result>
     <div class="p-4">
-      <div
-        class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
-        <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
-          {{ lang.map.menu_penalty }}
-        </h1>
-        <div class="flex-auto"></div>
-      </div>
       <div class="shadow relative overflow-auto" style="max-height: 62vh">
         <table mat-table matSort class="table-style" [dataSource]="displayedList">
           <!-- violationTypeInfo -->

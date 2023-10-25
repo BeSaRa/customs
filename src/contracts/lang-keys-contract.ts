@@ -272,4 +272,7 @@ export interface LangKeysContract {
   add_external_person: string;
   witness_type: string;
   person_info: string;
+  password: string;
+  user_name: string;
+  login_form: string;
 }

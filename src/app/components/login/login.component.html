@@ -7,20 +7,20 @@
   <div class="flex flex-col-reverse lg:flex-row relative w-full z-1">
     <div id="form" class="z-10 justify-center flex flex-auto">
       <div class="flex flex-col w-1/2 lg:-mt-20">
-        <h1 class="text-center text-2xl border-b-4 p-4 border-secondary">Login Form</h1>
+        <h1 class="text-center text-2xl border-b-4 p-4 border-secondary mb-4">{{lang.map.login_form}}</h1>
         <form [formGroup]="form" autocomplete="off">
           <app-input
             formControlName="userName"
             labelColor="text-white"
             class="mt-4"
             placeholder="username"
-            label="username" />
+            [label]="lang.map.user_name" />
           <app-input
             formControlName="userPassword"
             labelColor="text-white"
             placeholder="password"
             [type]="selectedPasswordOptions.inputType"
-            label="password">
+            [label]="lang.map.password">
             <button
               appInputSuffix
               (click)="toggleEye()"
