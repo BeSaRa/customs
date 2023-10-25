@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
+import { Component, inject, ViewChild } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InvestigationService } from '@services/investigation.service';
@@ -12,6 +13,7 @@ import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Violation } from '@models/violation';
+import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
 
 @Component({
   selector: 'app-investigation',
@@ -26,6 +28,8 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
+  @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
+  @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
   // mock data
   model: Investigation = new Investigation().clone<Investigation>({
     id: '{6A283D4E-73A8-C9DD-8956-8B34B5000000}',
@@ -123,5 +127,10 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
       .subscribe(index => {
         this.selectedTab = index === -1 ? 1 : index;
       });
+  }
+  resetOffendersAndExternalPersons() {
+    console.log('asfs')
+    this.offenderListComponent.resetDataList();
+    this.witnessestListComponent.resetDataList();
   }
 }

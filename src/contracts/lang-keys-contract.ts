@@ -275,4 +275,5 @@ export interface LangKeysContract {
   positive_number: string;
   minimum_valid_number_is_x: string;
   maximum_valid_number_is_x: string;
+  reset_violations_effects_msg: string;
 }
