@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  customs_investigation_platform: string;
   add_violation_first_to_take_this_action: string;
   results: string;
   department_company: string;

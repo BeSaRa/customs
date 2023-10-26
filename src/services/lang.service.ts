@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { LangContract } from '@contracts/lang-contract';
 import { map, of, Subject, tap } from 'rxjs';
 import { LangChangeProcess } from '@enums/lang-change-process';
@@ -8,6 +8,7 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Localization } from '@models/localization';
 import { ServiceContract } from '@contracts/service-contract';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ import { ServiceContract } from '@contracts/service-contract';
 export class LangService extends RegisterServiceMixin(class {}) implements ServiceContract {
   serviceName = 'LangService';
   map: Record<keyof LangKeysContract, string> = {} as Record<keyof LangKeysContract, string>;
-
+  titleService = inject(Title);
   languages: LangContract[] = [
     {
       id: 1,
@@ -61,6 +62,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       .subscribe(() => {
         this.change.next(this.current);
         this.setDirection(this.current.direction);
+        this.setAppTitle();
         this.langChangerNotifier.next(LangChangeProcess.END);
       });
   }
@@ -84,6 +86,7 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
       this.records[key] = local;
     });
     this.setCurrentLanguageMap();
+    this.setAppTitle();
   }
 
   setCurrentLanguageMap(): void {
@@ -110,5 +113,8 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
         enName: `key not exists ${langKey}`,
       })
     );
+  }
+  private setAppTitle() {
+    this.titleService.setTitle(this.map.customs_investigation_platform);
   }
 }
