@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  customs_investigation_platform: string;
   add_violation_first_to_take_this_action: string;
   results: string;
   department_company: string;
@@ -276,4 +277,7 @@ export interface LangKeysContract {
   minimum_valid_number_is_x: string;
   maximum_valid_number_is_x: string;
   reset_violations_effects_msg: string;
+  password: string;
+  user_name: string;
+  login_form: string;
 }

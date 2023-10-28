@@ -79,3 +79,9 @@ mat-tab-body {
 .mdc-tab--active {
   background-color: theme("colors.primary-light/0.1") !important;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

@@ -5,8 +5,8 @@ import { hasValidLength, isValidValue } from '@utils/utils';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 // noinspection RegExpDuplicateCharacterInClass
 export const validationPatterns = {
-  ENG_NUM: new RegExp(/^[a-zA-Z0-9\- ]+$/),
-  AR_NUM: new RegExp(/^[\u0621-\u064A0-9\u0660-\u0669\- ]+$/),
+  ENG_NUM: new RegExp(/^[a-zA-Z0-9\-., ]+$/),
+  AR_NUM: new RegExp(/^[\u0621-\u064A0-9\u0660-\u0669\-.، ]+$/),
   ENG_ONLY: new RegExp(/^[a-zA-Z ]+$/),
   AR_ONLY: new RegExp(/^[\u0621-\u064A ]+$/),
   ENG_NUM_ONLY: new RegExp(/^[a-zA-Z0-9]+$/),
