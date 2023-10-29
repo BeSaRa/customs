@@ -15,17 +15,17 @@ export class LegalRule extends BaseModel<LegalRule, LegalRuleService> {
   articleNumber!: number;
   legalTextArabic!: string;
   legalTextEnglish!: string;
-
+  override status: number = 1;
   buildForm(controls = false): object {
     const { enName, arName, law, lawStartDate, articleNumber, legalTextArabic, legalTextEnglish, status } = this;
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
-      law: controls ? [law, CustomValidators.required] : law,
-      lawStartDate: controls ? [lawStartDate, CustomValidators.required] : lawStartDate,
-      articleNumber: controls ? [articleNumber, CustomValidators.required] : articleNumber,
+      law: controls ? [law] : law,
+      lawStartDate: controls ? [lawStartDate] : lawStartDate,
+      articleNumber: controls ? [articleNumber] : articleNumber,
       legalTextArabic: controls ? [legalTextArabic, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : legalTextArabic,
-      legalTextEnglish: controls ? [legalTextEnglish, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : legalTextEnglish,
+      legalTextEnglish: controls ? [legalTextEnglish, [CustomValidators.pattern('ENG_NUM')]] : legalTextEnglish,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }
