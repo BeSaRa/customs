@@ -7,7 +7,7 @@ export class LegalRuleInterceptor implements ModelInterceptorContract<LegalRule>
   }
 
   receive(model: LegalRule): LegalRule {
-    model.lawStartDate = new Date(model.lawStartDate).toDateString();
+    model.lawStartDate = new Date(model.lawStartDate).toISOString().slice(0, 10);
     return model;
   }
 }
