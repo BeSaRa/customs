@@ -1,7 +1,7 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
-  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
-  <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
+  <app-icon-button *ngIf="!selectionList" (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+  <app-icon-button *ngIf="!selectionList" (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
 </div>
 <div>
   <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
@@ -20,11 +20,14 @@
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <div [matTooltip]="lang.map.edit">
+          <div *ngIf="!selectionList" [matTooltip]="lang.map.edit">
             <app-icon-button (click)="edit$.next(element)" icon="EDIT" />
           </div>
-          <div [matTooltip]="lang.map.delete">
+          <div *ngIf="!selectionList" [matTooltip]="lang.map.delete">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
+          </div>
+          <div *ngIf="selectionList">
+            <app-button (click)="selectViolation.emit(element)">{{ lang.map.select }}</app-button>
           </div>
         </div>
       </td>

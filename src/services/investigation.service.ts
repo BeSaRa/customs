@@ -8,6 +8,8 @@ import { CastResponseContainer } from 'cast-response';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
 import { ViolationService } from '@services/violation.service';
+import { Subject } from 'rxjs';
+import { TransformerAction } from '@contracts/transformer-action';
 
 @CastResponseContainer({
   $default: {
@@ -33,7 +35,7 @@ export class InvestigationService extends BaseCaseService<Investigation> impleme
     return Investigation;
   }
 
-  openAddViolation(caseId: string): MatDialogRef<ViolationPopupComponent> {
-    return this.violationService.openCreateDialog(undefined, { caseId });
+  openAddViolation(caseId: string, transformer$: Subject<TransformerAction<Investigation>>): MatDialogRef<ViolationPopupComponent> {
+    return this.violationService.openCreateDialog(undefined, { caseId, transformer$ });
   }
 }

@@ -1,3 +1,4 @@
+import { Investigation } from './../../../models/investigation';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ViolationTypeService } from '@services/violation-type.service';
@@ -8,7 +9,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { map, Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, Subject, switchMap, tap, filter } from 'rxjs';
 import { ViolationType } from '@models/violation-type';
 import { ViolationClassification } from '@models/violation-classification';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
@@ -25,6 +26,8 @@ import { LookupService } from '@services/lookup.service';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { CustomValidators } from '@validators/custom-validators';
 import { OperationType } from '@enums/operation-type';
+import { ActivatedRoute, Router } from '@angular/router';
+import { TransformerAction } from '@contracts/transformer-action';
 
 @Component({
   selector: 'app-violation-popup',
@@ -50,6 +53,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   data: CrudDialogDataContract<Violation> = inject(MAT_DIALOG_DATA);
   form!: UntypedFormGroup;
   lookupService = inject(LookupService);
+  router = inject(Router);
+  activeRoute = inject(ActivatedRoute);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
   types: ViolationType[] = [];
@@ -79,6 +84,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   securityManagement = this.lookupService.lookups.securityManagement;
 
+  transformer$ = this.data.extras && (this.data.extras.transformer$ as Subject<TransformerAction<Investigation>>);
   caseId = this.data.extras && (this.data.extras.caseId as string);
 
   protected override _init() {
@@ -92,8 +98,16 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
           })()
         : null;
     }
+    if (!this.caseId) this.listernToSaveCaseDone();
   }
-
+  listernToSaveCaseDone() {
+    this.transformer$
+      ?.pipe(filter((data: TransformerAction<Investigation>) => data.action == 'done'))
+      .subscribe((data: TransformerAction<Investigation>) => {
+        this.caseId = data.model?.id;
+        this.save$.next();
+      });
+  }
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -111,7 +125,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       this.checkRequiredField();
     }
   }
-
+  addViolation() {
+    if (!this.caseId) this.transformer$?.next({ action: 'save' });
+    else this.save$.next();
+  }
   protected _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
   }

@@ -1,7 +1,12 @@
 import { BaseCase } from '@models/base-case';
 import { InvestigationService } from '@services/investigation.service';
 import { CaseTypes } from '@enums/case-types';
+import { InterceptModel } from 'cast-response';
+import { InvestigationInterceptor } from '@model-interceptors/Investigation-interceptor';
 
+const { send, receive } = new InvestigationInterceptor();
+
+@InterceptModel({ send, receive })
 export class Investigation extends BaseCase<InvestigationService, Investigation> {
   $$__service_name__$$ = 'InvestigationService';
   limitedAccess = false;

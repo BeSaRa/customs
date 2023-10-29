@@ -1,10 +1,11 @@
+import { ViolationLinkPopupComponent } from './../../popups/violation-link-popup/violation-link-popup.component';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -33,7 +34,7 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
   @Input()
   violations!: Violation[];
   @Input()
-  caseId!: string;
+  caseId?: string;
   @Input()
   title: string = this.lang.map.offenders;
   add$: Subject<void> = new Subject<void>();
@@ -44,6 +45,7 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
   delete$ = new Subject<Offender>();
   offenderService = inject(OffenderService);
   displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
+  addViolation$: Subject<Offender> = new Subject<Offender>();
 
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
@@ -57,6 +59,7 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
+    this.listenToAddViolationToOffender();
     this.reload$.next();
   }
 
@@ -111,9 +114,35 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
         this.reload$.next();
       });
   }
-  resetDataList() {
+
+  deleteAllOffender() {
     this.offenderService.deleteBulk(this.dataSource.data.map((offender: Offender) => offender.id)).subscribe(() => {
       this.reload$.next();
     });
+  }
+  private listenToAddViolationToOffender() {
+    this.addViolation$
+      .pipe(
+        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
+        filter(() => !!this.violations.length)
+      )
+      .pipe(
+        switchMap((offender: Offender) => {
+          return this.dialog
+            .open(ViolationLinkPopupComponent, {
+              data: {
+                caseId: this.caseId,
+                offenderId: offender.id,
+              },
+            })
+            .afterClosed();
+        })
+      )
+      .subscribe(() => {
+        this.reload$.next();
+      });
+  }
+  resetDataList() {
+    this.data.next([]);
   }
 }

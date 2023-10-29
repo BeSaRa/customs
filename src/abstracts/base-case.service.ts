@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
 import { stringify } from 'qs';
 
-export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
+export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { }) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
   protected dialog: DialogService = inject(DialogService);
@@ -68,8 +68,9 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     return this.http.get<unknown>(this.getUrlSegment() + '/' + caseId + '/assigned-to');
   }
 
-  getDetails(caseId: string): Observable<unknown> {
-    return this.http.get<unknown>(this.getUrlSegment() + '/' + caseId + '/details');
+  @CastResponse()
+  getDetails(caseId: string): Observable<M> {
+    return this.http.get<M>(this.getUrlSegment() + '/' + caseId + '/details');
   }
 
   insertDocument(caseId: string, document: object): Observable<unknown> {
@@ -105,8 +106,8 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     return this.http.get(this.getUrlSegment() + '/' + caseId + '/folder/contained-documents-item');
   }
 
-  start(caseId: string): Observable<unknown> {
-    return this.http.post(this.getUrlSegment() + '/' + caseId + '/start', {});
+  start(caseId: string): Observable<boolean> {
+    return this.http.post<boolean>(this.getUrlSegment() + '/' + caseId + '/start', {});
   }
 
   deleteDocument(docId: string): Observable<unknown> {
@@ -153,8 +154,16 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     throw new Error('Method not implemented.');
   }
 
+  @CastResponse(undefined, {
+    unwrap: 'rs',
+    fallback: '$default'
+  })
+  private _getTask(taskId: string): Observable<M> {
+    return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId);
+  }
+
   getTask(taskId: string): Observable<M> {
-    throw new Error('Method not implemented.');
+    return this._getTask(taskId);
   }
 
   claimTask(taskId: string): Observable<M> {

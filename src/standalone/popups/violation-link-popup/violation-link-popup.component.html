@@ -1,0 +1,12 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.link_violations_offenders }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content w-[900px]">
+    <app-violation-list (selectViolation)="select$.next($event)" [selectionList]="true" [caseId]="caseId" />
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+  </div>
+</div>

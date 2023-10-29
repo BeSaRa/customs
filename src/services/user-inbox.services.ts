@@ -1,11 +1,14 @@
+import { InvestigationService } from '@services/investigation.service';
 import { Injectable } from '@angular/core';
 import { UserInbox } from '@models/user-inbox';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Observable } from 'rxjs';
-import { HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BaseCaseService } from '@abstracts/base-case.service';
+import { CaseTypes } from '@enums/case-types';
+import { UrlService } from './url.service';
 
 @CastResponseContainer({
   $pagination: {
@@ -21,9 +24,12 @@ import { HttpParams } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class UserInboxService extends BaseCrudService<UserInbox> {
+export class UserInboxService {
   serviceName = 'GlobalSettingService';
-
+  services: Map<number, unknown> = new Map<number, unknown>();
+  constructor(private urlService: UrlService, private http: HttpClient, private investigationService: InvestigationService) {
+    this.services.set(CaseTypes.INVESTIGATION, this.investigationService);
+  }
   protected getModelClass(): Constructor<UserInbox> {
     return UserInbox;
   }
@@ -43,6 +49,12 @@ export class UserInboxService extends BaseCrudService<UserInbox> {
     return this._loadUserInbox(options);
   }
 
+  getService(serviceNumber: number): BaseCaseService<any> {
+    if (!this.services.has(serviceNumber)) {
+      console.log('Service number ' + serviceNumber + ' not registered in InboxServices');
+    }
+    return this.services.get(serviceNumber) as BaseCaseService<any>;
+  }
   getUrlSegment(): string {
     return this.urlService.URLS.USER_INBOX;
   }
