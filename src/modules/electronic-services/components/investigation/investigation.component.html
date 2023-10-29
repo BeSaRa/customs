@@ -56,21 +56,25 @@
       <app-violation-list
         (empty)="resetOffendersAndExternalPersons()"
         (violations)="violations = $event"
-        [caseId]="model.id" />
+        (saveCase)="saveCase($event)"
+        [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #offenders_tab>
     <div class="p-4">
-      <app-offender-list [violations]="violations" [caseId]="model.id" />
+      <app-offender-list [violations]="violations" [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list [violations]="violations" [caseId]="model.id" />
+      <app-witnesses-list [violations]="violations" [caseId]="model?.id" />
     </div>
   </ng-template>
 
-  <app-button (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+  <div class="grid grid-flow-col gap-4 mt-3">
+    <app-button (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+    <app-button (click)="launchCase()" *ngIf="!!model?.getCaseType()">{{ lang.map.launch }}</app-button>
+  </div>
 </div>

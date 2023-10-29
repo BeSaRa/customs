@@ -1,3 +1,4 @@
+import { DialogService } from '@services/dialog.service';
 import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
 import { Component, inject, ViewChild } from '@angular/core';
 import { LangService } from '@services/lang.service';
@@ -7,13 +8,17 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { filter, map, Observable, take, takeUntil } from 'rxjs';
+import { filter, map, Observable, take, takeUntil, Subject } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Violation } from '@models/violation';
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
+import { TransformerAction } from '@contracts/transformer-action';
+import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
+import { ToastService } from '@services/toast.service';
+import { CaseTypes } from '@enums/case-types';
 
 @Component({
   selector: 'app-investigation',
@@ -22,21 +27,18 @@ import { OffenderListComponent } from '@standalone/components/offender-list/offe
 })
 export class InvestigationComponent extends BaseCaseComponent<Investigation, InvestigationService> {
   lang = inject(LangService);
+  route = inject(ActivatedRoute);
   fb = inject(UntypedFormBuilder);
+  dialog = inject(DialogService);
   form!: UntypedFormGroup;
   service = inject(InvestigationService);
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
+  toast = inject(ToastService);
+  @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
-  // mock data
-  model: Investigation = new Investigation().clone<Investigation>({
-    id: '{6A283D4E-73A8-C9DD-8956-8B34B5000000}',
-    draftFullSerial: 'INV/PUB/2023/72',
-    createdOn: '2023-10-15T18:59:22.477+00:00',
-  });
-
   caseFolders: CaseFolder[] = [];
 
   caseFoldersMap?: Record<string, CaseFolder>;
@@ -50,24 +52,22 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   protected override _init() {
     super._init();
   }
-
   getSecurityLevel(limitedAccess: boolean): string {
     return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
   }
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model ? this.model.buildForm(true) : new Investigation().buildForm(true));
     this.listenToLocationChange();
   }
 
   _afterBuildForm(): void {
-    //throw new Error('Method not implemented.');
     this.loadCaseFolders();
   }
 
   _beforeSave(saveType: SaveTypes): boolean | Observable<boolean> {
-    //throw new Error('Method not implemented.');
-    return true;
+    !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
+    return !!this.violations.length;
   }
 
   _prepareModel(): Investigation | Observable<Investigation> {
@@ -83,12 +83,33 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
     this.loadCaseFolders();
   }
-
+  _beforeLaunch(): boolean | Observable<boolean> {
+    return true;
+  }
+  _afterLaunch(): void {
+    this.resetForm();
+    this.toast.success(this.lang.map.request_has_been_sent_successfully);
+  }
   _updateForm(model: Investigation): void {
+    if (!model.id) this.resetForm();
+    this.model = model;
     this.form.patchValue(model.buildForm());
   }
-
+  saveCase(e: Subject<TransformerAction<Investigation>>) {
+    new Investigation().save().subscribe((model: Investigation) => {
+      this.router.navigate([], {
+        relativeTo: this.activeRoute,
+        queryParams: { ...this.activeRoute.snapshot.queryParams, item: JSON.stringify({ caseType: CaseTypes.INVESTIGATION, caseId: model.id }) },
+      });
+      e.next({
+        action: 'done',
+        model,
+      });
+      this._updateForm(model);
+    });
+  }
   loadCaseFolders(): void {
+    if (!this.model) return;
     // if there is no folders load it
     if (!this.caseFolders.length && this.model.id) {
       this.model
@@ -106,6 +127,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   getCaseFolderIdByName(name: string): string | undefined {
     return this.caseFoldersMap && this.caseFoldersMap[name.toLowerCase()].id;
   }
+  launchCase() {
+    this.launch().subscribe();
+  }
 
   tabChange($event: number) {
     const selectedTab = this.tabsArray[$event];
@@ -113,11 +137,20 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.router
       .navigate([], {
         relativeTo: this.activeRoute,
-        queryParams: { tab: selectedTab },
+        queryParams: { ...this.activeRoute.snapshot.queryParams, tab: selectedTab },
       })
       .then();
   }
-
+  resetForm() {
+    this.form.reset();
+    this.violationListComponent.resetDataList();
+    this.offenderListComponent.resetDataList();
+    this.witnessestListComponent.resetDataList();
+    this.router.navigate([], {
+      relativeTo: this.activeRoute,
+      queryParams: {},
+    });
+  }
   private listenToLocationChange() {
     this.activeRoute.queryParams
       .pipe(takeUntil(this.destroy$))
@@ -129,8 +162,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
       });
   }
   resetOffendersAndExternalPersons() {
-    console.log('asfs')
-    this.offenderListComponent.resetDataList();
-    this.witnessestListComponent.resetDataList();
+    this.offenderListComponent.deleteAllOffender();
+    this.witnessestListComponent.deleteAllWitnesses();
   }
 }

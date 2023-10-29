@@ -5,10 +5,15 @@ import { InvestigationComponent } from '@modules/electronic-services/components/
 import { AppRoutes } from '@constants/app-routes';
 import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
+import { ServiceItemResolver } from '@resolvers/service-item.resolver';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
-  { path: 'investigation', component: InvestigationComponent },
+  {
+    path: 'investigation',
+    component: InvestigationComponent,
+    resolve: { info: ServiceItemResolver.resolve },
+  },
   {
     path: AppRoutes.USER_INBOX,
     component: UserInboxComponent,
@@ -23,4 +28,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ElectronicServicesRoutingModule {}
+export class ElectronicServicesRoutingModule { }

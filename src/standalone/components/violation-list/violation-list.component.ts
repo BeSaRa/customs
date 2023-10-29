@@ -2,7 +2,7 @@ import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular
 import { CommonModule } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InvestigationService } from '@services/investigation.service';
 import { MatTableModule } from '@angular/material/table';
@@ -18,22 +18,25 @@ import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
+import { TransformerAction } from '@contracts/transformer-action';
+import { Investigation } from '@models/investigation';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-violation-list',
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatTableModule, MatSortModule, MatTooltipModule],
+  imports: [CommonModule, ButtonComponent, IconButtonComponent, MatTableModule, MatSortModule, MatTooltipModule],
   templateUrl: './violation-list.component.html',
   styleUrls: ['./violation-list.component.scss'],
 })
-export class ViolationListComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class ViolationListComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
   @Input()
-  caseId!: string;
+  caseId?: string;
   @Input()
   title: string = this.lang.map.violations;
   add$: Subject<void> = new Subject<void>();
@@ -44,12 +47,19 @@ export class ViolationListComponent extends OnDestroyMixin(class { }) implements
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Violation>();
   delete$ = new Subject<Violation>();
-  violationService = inject(ViolationService);
+  transformer$ = new Subject<TransformerAction<Investigation>>();
   protected readonly Config = Config;
+  @Input()
+  selectionList = false;
+  @Output()
+  selectViolation = new EventEmitter<Violation>();
+
+  @Output()
+  saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
+  violationService = inject(ViolationService);
 
   @Output()
   empty = new EventEmitter<void>();
-
   @Output()
   violations = new EventEmitter<Violation[]>();
 
@@ -58,13 +68,21 @@ export class ViolationListComponent extends OnDestroyMixin(class { }) implements
     this.listenToReload();
     this.listenToEdit();
     this.listenToDelete();
+    this.listernToSaveCase();
     this.reload$.next();
   }
-
+  listernToSaveCase() {
+    this.transformer$
+      .pipe(tap((data: TransformerAction<Investigation>) => data.action == 'done' && (this.caseId = data.model?.id || '')))
+      .pipe(filter((data: TransformerAction<Investigation>) => data.action == 'save'))
+      .subscribe(() => {
+        this.saveCase.emit(this.transformer$);
+      });
+  }
   private listenToAdd() {
     this.add$
       .pipe(takeUntil(this.destroy$))
-      .pipe(switchMap(() => this.service.openAddViolation(this.caseId).afterClosed()))
+      .pipe(switchMap(() => this.service.openAddViolation(this.caseId as string, this.transformer$).afterClosed()))
       .subscribe(() => this.reload$.next());
   }
 
@@ -159,5 +177,9 @@ export class ViolationListComponent extends OnDestroyMixin(class { }) implements
         this.empty.emit();
         this.reload$.next();
       });
+  }
+
+  resetDataList() {
+    this.data.next([]);
   }
 }
