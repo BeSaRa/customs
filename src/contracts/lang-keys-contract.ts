@@ -280,4 +280,8 @@ export interface LangKeysContract {
   password: string;
   user_name: string;
   login_form: string;
+  link_violations_offenders: string;
+  launch: string;
+  request_has_been_sent_successfully: string;
+  select: string;
 }

@@ -43,6 +43,10 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract buildForm(): any;
 
+  getCaseType(): number {
+    return this.caseType;
+  }
+
   save(): Observable<Model> {
     return this.id ? this.getService().update(this as unknown as Model) : this.getService().create(this as unknown as Model);
   }
@@ -53,5 +57,13 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 
   commit(): Observable<Model> {
     return this.getService().commit(this as unknown as Model);
+  }
+
+  details(caseId: string): Observable<Model> {
+    return this.getService().getDetails(caseId);
+  }
+
+  start(): Observable<boolean> {
+    return this.getService().start(this.id);
   }
 }

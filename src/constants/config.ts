@@ -21,6 +21,7 @@ export const Config = {
       monthYearA11yLabel: 'MMMM yyyy',
     },
   },
+  E_SERVICE_ITEM_KEY: 'item',
   YEAR_RANGE_FROM_CURRENT_YEAR: 10,
 };
 

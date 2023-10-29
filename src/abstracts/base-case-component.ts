@@ -1,5 +1,21 @@
 import { Directive, EventEmitter, OnInit } from '@angular/core';
-import { catchError, delay, exhaustMap, filter, isObservable, map, Observable, of, Subject, switchMap, tap, withLatestFrom } from 'rxjs';
+import {
+  catchError,
+  delay,
+  exhaustMap,
+  filter,
+  isObservable,
+  map,
+  Observable,
+  of,
+  startWith,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  withLatestFrom,
+} from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
 import { SaveTypes } from '@enums/save-types';
 import { BaseCase } from '@models/base-case';
@@ -9,6 +25,8 @@ import { ignoreErrors } from '@utils/utils';
 import { OperationType } from '@enums/operation-type';
 import { AppIcons } from '@constants/app-icons';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ActivatedRoute } from '@angular/router';
+import { CommonCaseStatus } from '@enums/common-case-status';
 
 @Directive({})
 export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<Model>, Model>, Service>
@@ -17,9 +35,12 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
 {
   protected readonly AppIcons = AppIcons;
   protected readonly SaveTypes = SaveTypes;
+  abstract route: ActivatedRoute;
   abstract form: UntypedFormGroup;
   abstract service: Service;
-  abstract model: Model;
+  model?: Model;
+  launch$: Subject<null> = new Subject<null>();
+  private afterLaunch$: Subject<boolean> = new Subject<boolean>();
   save$ = new Subject<SaveTypes>();
   afterSave$ = new EventEmitter<{ model: Model; saveType: SaveTypes }>();
   operation = OperationType.CREATE;
@@ -35,6 +56,7 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
       .pipe(tap(() => this._init()))
       .pipe(tap(() => this._buildForm()))
       .pipe(tap(() => this._listenToSave()))
+      .pipe(tap(() => this._listenToLaunch()))
       .pipe(delay(0))
       .pipe(tap(() => this._afterBuildForm()))
       .subscribe();
@@ -85,9 +107,47 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
         this.afterSave$.next({ model, saveType });
       });
   }
+  private _listenToLaunch() {
+    this.launch$
+      .pipe(
+        switchMap(_ => {
+          const result = this._beforeLaunch();
+          return isObservable(result) ? result : of(result);
+        }),
+        exhaustMap(_ => {
+          const model = this.model as unknown as BaseCase<any, any>;
+          return model.start().pipe(
+            catchError(error => {
+              this._launchFail(error);
+              return of(false);
+            })
+          );
+        }),
+        filter<boolean | unknown, boolean>((value): value is boolean => {
+          return !!value;
+        })
+      )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.afterLaunch$.next(true);
+        (this.model as unknown as BaseCase<any, any>).caseStatus = CommonCaseStatus.UNDER_PROCESSING;
+        this._afterLaunch();
+      });
+  }
+
+  launch(): Observable<boolean> {
+    return (() => {
+      return this.afterLaunch$
+        .pipe(takeUntil(this.destroy$))
+        .pipe(take(1))
+        .pipe(startWith(false))
+        .pipe(tap(value => !value && this.launch$.next(null)))
+        .pipe(filter(value => value));
+    })();
+  }
 
   protected _init(): void {
-    console.log('INIT');
+    this.model = this.route.snapshot.data.info?.model;
   }
 
   abstract _buildForm(): void;
@@ -96,13 +156,20 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
 
   abstract _beforeSave(saveType: SaveTypes): Observable<boolean> | boolean;
 
+  abstract _beforeLaunch(): boolean | Observable<boolean>;
+
   abstract _prepareModel(): Model | Observable<Model>;
 
   abstract _afterSave(model: Model, saveType: SaveTypes, operation: OperationType): void;
+
+  abstract _afterLaunch(): void;
 
   abstract _updateForm(model: Model): void;
 
   protected _saveFail(error: Error): void {
     console.log('SAVE_ERROR', error);
+  }
+  protected _launchFail(error: Error): void {
+    console.log('LAUNCH_ERROR', error);
   }
 }

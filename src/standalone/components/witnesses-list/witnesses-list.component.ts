@@ -33,7 +33,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
   @Input()
   violations!: Violation[];
   @Input()
-  caseId!: string;
+  caseId?: string;
   @Input()
   title: string = this.lang.map.external_persons;
   add$: Subject<void> = new Subject<void>();
@@ -115,9 +115,12 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
         this.reload$.next();
       });
   }
-  resetDataList() {
+  deleteAllWitnesses() {
     return this.witnessService.deleteBulk(this.dataSource.data.map((witness: Witness) => witness.id)).subscribe(() => {
       this.reload$.next();
     });
+  }
+  resetDataList() {
+    this.data.next([]);
   }
 }
