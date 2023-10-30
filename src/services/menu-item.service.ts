@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
+import { MenuIdes } from '@constants/menu-ides';
 import { Menus } from '@constants/menus';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
@@ -117,5 +119,9 @@ export class MenuItemService {
     this.lang.change$.subscribe(() => {
       this.translateMenuItems();
     });
+  }
+
+  getMenuItemByLangKey(langKey: keyof LangKeysContract): MenuItemContract | undefined {
+    return this.getChildren(MenuIdes.ELECTRONIC_SERVICES).find(item => item.langKey === langKey);
   }
 }

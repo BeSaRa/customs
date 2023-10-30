@@ -284,4 +284,6 @@ export interface LangKeysContract {
   launch: string;
   request_has_been_sent_successfully: string;
   select: string;
+  send_to_the_director_administration: string;
+  send_to_head_of_the_direct_department: string;
 }

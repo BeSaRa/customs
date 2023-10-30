@@ -9,6 +9,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { CaseTypes } from '@enums/case-types';
 import { UrlService } from './url.service';
+import { HasServiceMixin } from '@mixins/has-service-mixin';
 
 @CastResponseContainer({
   $pagination: {
@@ -24,10 +25,12 @@ import { UrlService } from './url.service';
 @Injectable({
   providedIn: 'root',
 })
-export class UserInboxService {
+export class UserInboxService extends HasServiceMixin(class { }) {
   serviceName = 'GlobalSettingService';
   services: Map<number, unknown> = new Map<number, unknown>();
+
   constructor(private urlService: UrlService, private http: HttpClient, private investigationService: InvestigationService) {
+    super();
     this.services.set(CaseTypes.INVESTIGATION, this.investigationService);
   }
   protected getModelClass(): Constructor<UserInbox> {
@@ -55,6 +58,11 @@ export class UserInboxService {
     }
     return this.services.get(serviceNumber) as BaseCaseService<any>;
   }
+
+  getServiceRoute(caseType: number): string {
+    return this.getService(caseType).getMenuItem().path as string;
+  }
+
   getUrlSegment(): string {
     return this.urlService.URLS.USER_INBOX;
   }

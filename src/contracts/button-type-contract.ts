@@ -11,4 +11,6 @@ export interface ButtonTypeContract {
   'error-outline': string;
   info: string;
   'info-outline': string;
+  light: string;
+  'light-outline': string;
 }

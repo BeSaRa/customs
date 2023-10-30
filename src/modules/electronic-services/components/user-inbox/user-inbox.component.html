@@ -13,10 +13,10 @@
 
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
     <!-- BD_FULL_SERIAL BD_FULL_SERIAL -->
-    <ng-container matColumnDef="BD_FULL_SERIAL">
-      <th mat-header-cell mat-sort-header="BD_FULL_SERIAL" *matHeaderCellDef>{{ lang.map.serial_number }}</th>
+    <ng-container matColumnDef="BD_DRAFT_FULL_SERIAL">
+      <th mat-header-cell mat-sort-header="BD_DRAFT_FULL_SERIAL" *matHeaderCellDef>{{ lang.map.serial_number }}</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.BD_FULL_SERIAL }}
+        {{ element.BD_DRAFT_FULL_SERIAL }}
       </td>
     </ng-container>
 

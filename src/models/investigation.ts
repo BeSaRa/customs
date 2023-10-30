@@ -14,6 +14,7 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   draftFullSerial!: string;
   draftSerial!: number;
   investigationSerial!: number;
+  applicantDecision!: number;
   override caseType = CaseTypes.INVESTIGATION;
   override createdOn: Date | string = new Date();
 
