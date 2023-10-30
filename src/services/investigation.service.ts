@@ -21,7 +21,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
   providedIn: 'root',
 })
 export class InvestigationService extends BaseCaseService<Investigation> implements ServiceContract {
-  override serviceKey: keyof LangKeysContract = 'menu_investigation';
+  serviceKey: keyof LangKeysContract = 'menu_investigation';
   serviceName = 'InvestigationService';
   violationService = inject(ViolationService);
 
