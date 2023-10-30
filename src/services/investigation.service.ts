@@ -10,6 +10,7 @@ import { ViolationPopupComponent } from '@standalone/popups/violation-popup/viol
 import { ViolationService } from '@services/violation.service';
 import { Subject } from 'rxjs';
 import { TransformerAction } from '@contracts/transformer-action';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 @CastResponseContainer({
   $default: {
@@ -20,6 +21,7 @@ import { TransformerAction } from '@contracts/transformer-action';
   providedIn: 'root',
 })
 export class InvestigationService extends BaseCaseService<Investigation> implements ServiceContract {
+  override serviceKey: keyof LangKeysContract = 'menu_investigation';
   serviceName = 'InvestigationService';
   violationService = inject(ViolationService);
 

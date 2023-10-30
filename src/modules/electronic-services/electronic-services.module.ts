@@ -29,7 +29,7 @@ import { ViolationListComponent } from '@standalone/components/violation-list/vi
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
 import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
-
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent, GuidePanelComponent],
   imports: [
@@ -46,6 +46,7 @@ import { WitnessesListComponent } from '@standalone/components/witnesses-list/wi
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatTableModule,
+    MatButtonToggleModule,
     FilterColumnComponent,
     ContextMenuComponent,
     MatCardModule,
@@ -61,4 +62,4 @@ import { WitnessesListComponent } from '@standalone/components/witnesses-list/wi
     WitnessesListComponent,
   ],
 })
-export class ElectronicServicesModule {}
+export class ElectronicServicesModule { }

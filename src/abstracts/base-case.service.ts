@@ -15,12 +15,17 @@ import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment
 import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
 import { stringify } from 'qs';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { MenuItemContract } from '@contracts/menu-item-contract';
+import { MenuItemService } from '@services/menu-item.service';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { }) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
   protected dialog: DialogService = inject(DialogService);
   protected domSanitizer = inject(DomSanitizer);
+  menuItemService = inject(MenuItemService);
+  abstract serviceKey: keyof LangKeysContract;
 
   abstract getUrlSegment(): string;
 
@@ -156,7 +161,7 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
 
   @CastResponse(undefined, {
     unwrap: 'rs',
-    fallback: '$default'
+    fallback: '$default',
   })
   private _getTask(taskId: string): Observable<M> {
     return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId);
@@ -253,5 +258,8 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
 
   deleteAttachment(attachmentId: string): Observable<unknown> {
     return this.http.delete(this.getUrlSegment() + `/document/${attachmentId}`);
+  }
+  getMenuItem(): MenuItemContract {
+    return this.menuItemService.getMenuItemByLangKey(this.serviceKey)!;
   }
 }
