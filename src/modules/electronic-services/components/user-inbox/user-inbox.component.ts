@@ -13,6 +13,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-inbox',
@@ -23,7 +24,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   inboxService = inject(UserInboxService);
   lookupService = inject(LookupService);
   lang = inject(LangService);
-
+  router = inject(Router);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
@@ -38,7 +39,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   length = 50;
 
   columnsWrapper: ColumnsWrapper<UserInbox> = new ColumnsWrapper(
-    new NoneFilterColumn('BD_FULL_SERIAL'),
+    new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
     new NoneFilterColumn('BD_SUBJECT'),
     new NoneFilterColumn('BD_CASE_TYPE'),
     new NoneFilterColumn('PI_CREATE'),
@@ -101,5 +102,9 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
       ...this.filter$.value,
       [$event.key]: $event.value,
     });
+  }
+
+  listenToView(item: UserInbox) {
+    this.router.navigate([item.itemRoute], { queryParams: { item: item.itemDetails } }).then();
   }
 }

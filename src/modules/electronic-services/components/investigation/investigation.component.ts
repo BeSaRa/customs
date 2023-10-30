@@ -8,7 +8,7 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { filter, map, Observable, take, takeUntil, Subject } from 'rxjs';
+import { filter, map, Observable, take, takeUntil, Subject, switchMap } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,6 +19,7 @@ import { TransformerAction } from '@contracts/transformer-action';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { ToastService } from '@services/toast.service';
 import { CaseTypes } from '@enums/case-types';
+import { SendTypes } from '@enums/send-types';
 
 @Component({
   selector: 'app-investigation',
@@ -40,6 +41,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
   caseFolders: CaseFolder[] = [];
+  sendTypes = SendTypes;
 
   caseFoldersMap?: Record<string, CaseFolder>;
 
@@ -127,8 +129,17 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   getCaseFolderIdByName(name: string): string | undefined {
     return this.caseFoldersMap && this.caseFoldersMap[name.toLowerCase()].id;
   }
-  launchCase() {
-    this.launch().subscribe();
+  launchCase(type: SendTypes) {
+    if (!this.model) return;
+    this.model.applicantDecision = type;
+    this.model
+      .save()
+      .pipe(
+        switchMap(() => {
+          return this.launch();
+        })
+      )
+      .subscribe();
   }
 
   tabChange($event: number) {
