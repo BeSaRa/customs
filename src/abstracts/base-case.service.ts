@@ -1,7 +1,7 @@
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { Constructor } from '@app-types/constructors';
 import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
-import { map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
@@ -14,7 +14,6 @@ import { DialogService } from '@services/dialog.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
-import { stringify } from 'qs';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
@@ -196,12 +195,8 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
       attachment.content ? formData.append('content', attachment.content) : null;
       delete attachment.content;
     });
-    // console.log(stringify({ attachments: attachments.map(i => JSON.stringify(i)) }, { indices: false }));
-    return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, formData, {
-      params: new HttpParams({
-        fromString: stringify({ attachments: attachments.map(i => JSON.stringify(i)) }, { indices: false }),
-      }),
-    });
+    formData.append('attachments', new Blob([JSON.stringify(attachments)], { type: 'application/json' }));
+    return this.http.post(this.getUrlSegment() + `/${caseId}/document/bulk`, formData);
   }
 
   @CastResponse(() => CaseFolder)
