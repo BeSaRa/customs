@@ -1,5 +1,5 @@
 import { InvestigationService } from '@services/investigation.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UserInbox } from '@models/user-inbox';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
@@ -9,7 +9,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { CaseTypes } from '@enums/case-types';
 import { UrlService } from './url.service';
-import { HasServiceMixin } from '@mixins/has-service-mixin';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 
 @CastResponseContainer({
   $pagination: {
@@ -25,11 +25,14 @@ import { HasServiceMixin } from '@mixins/has-service-mixin';
 @Injectable({
   providedIn: 'root',
 })
-export class UserInboxService extends HasServiceMixin(class { }) {
-  serviceName = 'GlobalSettingService';
+export class UserInboxService extends RegisterServiceMixin(class {}) {
+  serviceName = 'UserInboxService';
   services: Map<number, unknown> = new Map<number, unknown>();
+  urlService = inject(UrlService);
+  private http = inject(HttpClient);
+  private investigationService = inject(InvestigationService);
 
-  constructor(private urlService: UrlService, private http: HttpClient, private investigationService: InvestigationService) {
+  constructor() {
     super();
     this.services.set(CaseTypes.INVESTIGATION, this.investigationService);
   }
@@ -44,7 +47,7 @@ export class UserInboxService extends HasServiceMixin(class { }) {
   @CastResponse(() => UserInbox, { unwrap: 'rs.items', fallback: '$default' })
   private _loadUserInbox(options?: unknown): Observable<UserInbox[]> {
     return this.http.get<UserInbox[]>(this.urlService.URLS.USER_INBOX, {
-      params: new HttpParams({ fromObject: options as { [p: string]: string | number | boolean | readonly (string | number | boolean)[] } }),
+      params: new HttpParams({ fromObject: options as { [p: string]: string } }),
     });
   }
 

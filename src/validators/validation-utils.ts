@@ -63,6 +63,34 @@ export function validateSum(
   };
 }
 
+export const inputMaskPatterns = {
+  NUMBER_ONLY: '0*',
+  NUMBER_ONLY_WITH_LIMIT: (limit: number = 4, required: boolean = false): string => {
+    return ''.padEnd(limit, required ? '0' : '9')
+  },
+  DECIMAL: (numberOfPlaces: number = 2): string => {
+    // if numberOfPlaces < 1, use number mask instead of decimal
+    if (numberOfPlaces < 1) {
+      return '0*';
+    }
+    return '0*.' + ('0'.padEnd(numberOfPlaces, '0'));
+  },
+  /**
+   * @description Used to mask for decimal with separator. ThousandSeparator should be used along with it
+   * @param numberOfDecimalPlaces
+   */
+  DECIMAL_WITH_SEPARATOR: (numberOfDecimalPlaces: number = 2): string => {
+    // if numberOfDecimalPlaces < 1, use number mask instead of decimal
+    if (numberOfDecimalPlaces < 1) {
+      return 'separator';
+    }
+    return 'separator.' + numberOfDecimalPlaces;
+  },
+  PERCENT: 'percent',
+  SEPARATOR: 'separator',
+  THOUSAND_SEPARATOR: ','
+};
+
 export function numberValidator(control: AbstractControl): ValidationErrors | null {
   if (!control.value) {
     return null;

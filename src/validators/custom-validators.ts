@@ -11,6 +11,7 @@ import {
   validateFieldsStatus,
   validateSum,
   positiveNumberValidator,
+  inputMaskPatterns,
 } from '@validators/validation-utils';
 
 export const CustomValidators = {
@@ -26,4 +27,5 @@ export const CustomValidators = {
   anyFieldsHasLength,
   unique: uniqueValidator,
   positiveNumber: positiveNumberValidator,
+  inputMaskPatterns,
 };
