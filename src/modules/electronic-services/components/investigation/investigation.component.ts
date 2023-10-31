@@ -18,8 +18,10 @@ import { OffenderListComponent } from '@standalone/components/offender-list/offe
 import { TransformerAction } from '@contracts/transformer-action';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { ToastService } from '@services/toast.service';
-import { CaseTypes } from '@enums/case-types';
 import { SendTypes } from '@enums/send-types';
+import { OpenFrom } from '@enums/open-from';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { EncryptionService } from '@services/encryption.service';
 
 @Component({
   selector: 'app-investigation',
@@ -37,6 +39,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
   toast = inject(ToastService);
+  encrypt = inject(EncryptionService)
   @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
@@ -101,7 +104,15 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     new Investigation().save().subscribe((model: Investigation) => {
       this.router.navigate([], {
         relativeTo: this.activeRoute,
-        queryParams: { ...this.activeRoute.snapshot.queryParams, item: JSON.stringify({ caseType: CaseTypes.INVESTIGATION, caseId: model.id }) },
+        queryParams: {
+          ...this.activeRoute.snapshot.queryParams,
+          item: this.encrypt.encrypt<INavigatedItem>({
+            openFrom: OpenFrom.ADD_SCREEN,
+            taskId: model.id,
+            caseId: model.id,
+            caseType: model.caseType,
+          }),
+        },
       });
       e.next({
         action: 'done',
