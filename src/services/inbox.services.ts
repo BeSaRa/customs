@@ -1,6 +1,6 @@
 import { InvestigationService } from '@services/investigation.service';
 import { Injectable, inject } from '@angular/core';
-import { UserInbox } from '@models/user-inbox';
+import { InboxResult } from '@models/inbox-result';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
@@ -10,23 +10,24 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { CaseTypes } from '@enums/case-types';
 import { UrlService } from './url.service';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { QueryResultSet } from '@models/query-result-set';
 
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
     shape: {
-      'rs.items.*': () => UserInbox,
+      'rs.items.*': () => InboxResult,
     },
   },
   $default: {
-    model: () => UserInbox,
+    model: () => InboxResult,
   },
 })
 @Injectable({
   providedIn: 'root',
 })
-export class UserInboxService extends RegisterServiceMixin(class {}) {
-  serviceName = 'UserInboxService';
+export class InboxService extends RegisterServiceMixin(class {}) {
+  serviceName = 'InboxService';
   services: Map<number, unknown> = new Map<number, unknown>();
   urlService = inject(UrlService);
   private http = inject(HttpClient);
@@ -36,23 +37,32 @@ export class UserInboxService extends RegisterServiceMixin(class {}) {
     super();
     this.services.set(CaseTypes.INVESTIGATION, this.investigationService);
   }
-  protected getModelClass(): Constructor<UserInbox> {
-    return UserInbox;
+  protected getModelClass(): Constructor<InboxResult> {
+    return InboxResult;
   }
 
-  protected getModelInstance(): UserInbox {
-    return new UserInbox();
+  protected getModelInstance(): InboxResult {
+    return new InboxResult();
   }
 
-  @CastResponse(() => UserInbox, { unwrap: 'rs.items', fallback: '$default' })
-  private _loadUserInbox(options?: unknown): Observable<UserInbox[]> {
-    return this.http.get<UserInbox[]>(this.urlService.URLS.USER_INBOX, {
+  @CastResponse(() => QueryResultSet)
+  private _loadUserInbox(options?: any): Observable<QueryResultSet> {
+    return this.http.get<QueryResultSet>(this.urlService.URLS.USER_INBOX, {
+      params: new HttpParams({ fromObject: options || options }),
+    });
+  }
+  loadUserInbox(options?: unknown): Observable<QueryResultSet> {
+    return this._loadUserInbox(options);
+  }
+
+  @CastResponse(() => QueryResultSet)
+  private _loadTeamInbox(teamId: number, options?: unknown): Observable<QueryResultSet> {
+    return this.http.get<QueryResultSet>(this.urlService.URLS.TEAM_INBOX + teamId, {
       params: new HttpParams({ fromObject: options as { [p: string]: string } }),
     });
   }
-
-  loadUserInbox(options?: unknown): Observable<UserInbox[]> {
-    return this._loadUserInbox(options);
+  loadTeamInbox(teamId: number, options?: unknown): Observable<QueryResultSet> {
+    return this._loadTeamInbox(teamId, options);
   }
 
   getService(serviceNumber: number): BaseCaseService<any> {

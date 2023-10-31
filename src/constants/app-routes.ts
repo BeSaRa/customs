@@ -24,6 +24,7 @@ export const AppRoutes = {
   ELECTRONIC_SERVICES: 'electronic-services',
   INVESTIGATION: 'investigation',
   USER_INBOX: 'user-inbox',
+  TEAM_INBOX: 'team-inbox',
   VIOLATION_PENALTY: 'violation-penalty',
   LEGAL_RULE: 'legal-rule',
   ATTACHMENT_TYPE: 'attachment-type',

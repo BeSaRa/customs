@@ -6,6 +6,7 @@ import { AppRoutes } from '@constants/app-routes';
 import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
 import { ServiceItemResolver } from '@resolvers/service-item.resolver';
+import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: AppRoutes.USER_INBOX,
     component: UserInboxComponent,
+  },
+  {
+    path: AppRoutes.TEAM_INBOX,
+    component: TeamInboxComponent,
   },
   {
     path: AppRoutes.GUIDE_PANEL,

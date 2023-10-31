@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
 import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
@@ -15,11 +15,11 @@ import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
 
 @Component({
-  selector: 'app-user-inbox',
-  templateUrl: './user-inbox.component.html',
-  styleUrls: ['./user-inbox.component.scss'],
+  selector: 'app-team-inbox',
+  templateUrl: './team-inbox.component.html',
+  styleUrls: ['./team-inbox.component.scss'],
 })
-export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnInit, OnDestroy {
   inboxService = inject(InboxService);
   lookupService = inject(LookupService);
   lang = inject(LangService);
@@ -68,7 +68,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
       .pipe(
         switchMap(_ => {
           // if (!this.hasFilterCriteria()) {
-          return this.inboxService.loadUserInbox();
+          return this.inboxService.loadTeamInbox(null!);
           // } else {
           //   return this.inboxService.loadUserInbox(this.filterCriteria);
           // }

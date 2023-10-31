@@ -225,6 +225,7 @@ export interface LangKeysContract {
   only_english_letters_and_numbers: string;
   mail_template_placeholder: string;
   menu_user_inbox: string;
+  menu_team_inbox: string;
   serial_number: string;
   subject: string;
   case_type: string;

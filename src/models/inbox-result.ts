@@ -1,16 +1,17 @@
 import { InterceptModel } from 'cast-response';
-import { UserInboxInterceptor } from '@model-interceptors/user-inbox-interceptor';
+import { InboxInterceptor } from '@model-interceptors/inbox-interceptor';
 import { AdminResult } from './admin-result';
 import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
-import { UserInboxService } from '@services/user-inbox.services';
+import { InboxService } from '@services/inbox.services';
 import { ServiceRegistry } from '@services/service-registry';
+import { ClonerMixin } from '@mixins/cloner-mixin';
 
-const { send, receive } = new UserInboxInterceptor();
+const { send, receive } = new InboxInterceptor();
 
 @InterceptModel({ send, receive })
-export class UserInbox {
+export class InboxResult extends ClonerMixin(class {}) {
   BD_FULL_SERIAL!: string;
   BD_SUBJECT!: string;
   BD_CASE_TYPE!: number;
@@ -29,11 +30,12 @@ export class UserInbox {
   itemRoute!: string;
   itemDetails!: string;
 
-  service!: UserInboxService;
+  service!: InboxService;
   encrypt!: EncryptionService;
 
   constructor() {
-    this.service = ServiceRegistry.get('UserInboxService');
+    super();
+    this.service = ServiceRegistry.get('InboxService');
     this.encrypt = new EncryptionService();
   }
 
