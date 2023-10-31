@@ -5,13 +5,12 @@ import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
 import { UserInboxService } from '@services/user-inbox.services';
-import { HasServiceMixin } from '@mixins/has-service-mixin';
+import { ServiceRegistry } from '@services/service-registry';
 
 const { send, receive } = new UserInboxInterceptor();
 
 @InterceptModel({ send, receive })
-export class UserInbox extends HasServiceMixin(class { }) {
-  override $$__service_name__$$ = 'UserInboxService';
+export class UserInbox {
   BD_FULL_SERIAL!: string;
   BD_SUBJECT!: string;
   BD_CASE_TYPE!: number;
@@ -34,8 +33,7 @@ export class UserInbox extends HasServiceMixin(class { }) {
   encrypt!: EncryptionService;
 
   constructor() {
-    super();
-    this.service = this.$$getService$$<UserInboxService>();
+    this.service = ServiceRegistry.get('UserInboxService');
     this.encrypt = new EncryptionService();
   }
 

@@ -1,0 +1,15 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.repeatation }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <app-input class="w-100" [label]="lang.map.violation_repeate" type="number" [formControl]="control">
+      <input appControl [formControl]="control" [attr.mask]="inputMaskPatterns.NUMBER_ONLY" />
+    </app-input>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button (click)="next()" buttonType="primary">{{ lang.map.save }}</app-button>
+  </div>
+</div>

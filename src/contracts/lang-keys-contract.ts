@@ -286,4 +286,6 @@ export interface LangKeysContract {
   select: string;
   send_to_the_director_administration: string;
   send_to_head_of_the_direct_department: string;
+  violation_repeate: string;
+  repeatation: string;
 }

@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
   templateUrl: './user-inbox.component.html',
   styleUrls: ['./user-inbox.component.scss'],
 })
-export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class UserInboxComponent extends OnDestroyMixin(class { }) implements OnInit {
   inboxService = inject(UserInboxService);
   lookupService = inject(LookupService);
   lang = inject(LangService);
@@ -104,7 +104,7 @@ export class UserInboxComponent extends OnDestroyMixin(class {}) implements OnIn
     });
   }
 
-  listenToView(item: UserInbox) {
+  view(item: UserInbox) {
     this.router.navigate([item.itemRoute], { queryParams: { item: item.itemDetails } }).then();
   }
 }

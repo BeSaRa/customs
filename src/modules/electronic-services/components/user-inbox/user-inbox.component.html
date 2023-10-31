@@ -85,7 +85,7 @@
           <app-icon-button
             [disabled]="loading$ | async"
             [matTooltip]="lang.map.view"
-            (click)="view$.next(element)"
+            (click)="view(element)"
             icon="VIEW"></app-icon-button>
         </div>
       </td>
