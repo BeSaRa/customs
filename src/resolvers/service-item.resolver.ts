@@ -7,6 +7,7 @@ import { OpenFrom } from '@enums/open-from';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { ConfigService } from '@services/config.service';
 import { BaseCase } from '@models/base-case';
+import { EncryptionService } from '@services/encryption.service';
 
 export class ServiceItemResolver {
   private static data: {
@@ -15,11 +16,13 @@ export class ServiceItemResolver {
     info?: INavigatedItem;
     userInboxService: UserInboxService;
     configService: ConfigService;
+    encryptionService: EncryptionService;
   } = {} as any;
 
   private static _init(route: ActivatedRouteSnapshot): void {
     this.data.userInboxService = inject(UserInboxService);
     this.data.configService = inject(ConfigService);
+    this.data.encryptionService = inject(EncryptionService);
 
     this.data.itemKey = this.data.configService.CONFIG.E_SERVICE_ITEM_KEY;
     this.data.route = route;
@@ -36,7 +39,7 @@ export class ServiceItemResolver {
     }
     // decrypt information
     try {
-      this.data.info = JSON.parse(item);
+      this.data.info = this.data.encryptionService.decrypt<INavigatedItem>(item);
     } catch (e) {
       // if there is error in decryption return null
       console.log('error in decryption');
@@ -50,14 +53,7 @@ export class ServiceItemResolver {
     }
     const service = this.data.userInboxService.getService(caseType);
     return of(openFrom)
-      .pipe(
-        switchMap(() =>
-          iif(
-            () => openFrom === OpenFrom.SEARCH,
-            service.getDetails(caseId),
-            service.getDetails(caseId)
-      // service.getTask(taskId!)
-      )))
+      .pipe(switchMap(() => iif(() => openFrom === OpenFrom.SEARCH, service.getDetails(caseId), service.getTask(taskId!))))
       .pipe(
         map((model: BaseCase<any, any>) => {
           return { model, ...this.data.info } as OpenedInfoContract;

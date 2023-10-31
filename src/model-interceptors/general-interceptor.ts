@@ -10,6 +10,7 @@ export class GeneralInterceptor implements GeneralInterceptorContract {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   receive(model: any) {
+    model.setItemRoute && model.setItemRoute();
     return model;
   }
 }
