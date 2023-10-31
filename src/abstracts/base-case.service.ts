@@ -146,9 +146,9 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
     throw new Error('Method not implemented.');
   }
 
-  search(caseId: string): Observable<M[]> {
-    throw new Error('Method not implemented.');
-  }
+  // search(caseId: string): Observable<M[]> {
+  //   throw new Error('Method not implemented.');
+  // }
 
   exportSearchResult(caseId: string): Observable<M[]> {
     throw new Error('Method not implemented.');

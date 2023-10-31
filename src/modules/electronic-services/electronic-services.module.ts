@@ -30,8 +30,10 @@ import { OffenderListComponent } from '@standalone/components/offender-list/offe
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
 import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
+
 @NgModule({
-  declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent, GuidePanelComponent],
+  declarations: [ElectronicServicesComponent, InvestigationComponent, UserInboxComponent, GuidePanelComponent, InvestigationSearchComponent],
   imports: [
     CommonModule,
     ElectronicServicesRoutingModule,
@@ -62,4 +64,4 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     WitnessesListComponent,
   ],
 })
-export class ElectronicServicesModule { }
+export class ElectronicServicesModule {}
