@@ -25,4 +25,5 @@ export const AppFullRoutes = {
   LEGAL_RULE: '/home/administration/legal-rule',
   ATTACHMENT_TYPE: '/home/administration/attachment-type',
   GUIDE_PANEL: '/home/electronic-services/guide-panel',
+  INVESTIGATION_SEARCH: '/home/electronic-services/investigation-search',
 };

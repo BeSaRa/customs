@@ -53,7 +53,7 @@ export interface BaseCaseServiceContract<M> {
 
   exportCase(caseId: string): Observable<M[]>;
 
-  search(caseId: string): Observable<M[]>;
+  // search(caseId: string): Observable<M[]>;
 
   exportSearchResult(caseId: string): Observable<M[]>;
 

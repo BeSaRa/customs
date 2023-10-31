@@ -23,4 +23,5 @@ export const MenuIdes = {
   LEGAL_RULE: 22,
   ATTACHMENT_TYPE: 23,
   GUIDE_PANEL: 24,
+  INVESTIGATION_SEARCH: 25,
 };

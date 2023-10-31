@@ -53,6 +53,7 @@ export const AppIcons = {
   VIOLATION_OUTLINE: 'alert-circle-outline',
   VIOLATION: 'alert-circle',
   GUIDE_PANEL: 'book',
+  INVESTIGATION_SEARCH: 'magnify',
 };
 
 export type AppIconsType = typeof AppIcons;

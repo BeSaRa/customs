@@ -6,6 +6,7 @@ import { AppRoutes } from '@constants/app-routes';
 import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
 import { ServiceItemResolver } from '@resolvers/service-item.resolver';
+import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -22,10 +23,14 @@ const routes: Routes = [
     path: AppRoutes.GUIDE_PANEL,
     component: GuidePanelComponent,
   },
+  {
+    path: AppRoutes.INVESTIGATION_SEARCH,
+    component: InvestigationSearchComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ElectronicServicesRoutingModule { }
+export class ElectronicServicesRoutingModule {}
