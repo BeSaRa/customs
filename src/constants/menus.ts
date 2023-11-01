@@ -136,6 +136,13 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
   },
   {
+    id: MenuIdes.INVESTIGATION_SEARCH,
+    langKey: 'menu_investigation_search',
+    icon: AppIcons.INVESTIGATION_SEARCH,
+    path: AppFullRoutes.INVESTIGATION_SEARCH,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+  },
+  {
     id: MenuIdes.USER_INBOX,
     langKey: 'menu_user_inbox',
     icon: AppIcons.USER_INBOX,
@@ -168,13 +175,6 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_guide_panel',
     icon: AppIcons.GUIDE_PANEL,
     path: AppFullRoutes.GUIDE_PANEL,
-    parent: MenuIdes.ELECTRONIC_SERVICES,
-  },
-  {
-    id: MenuIdes.INVESTIGATION_SEARCH,
-    langKey: 'menu_investigation_search',
-    icon: AppIcons.INVESTIGATION_SEARCH,
-    path: AppFullRoutes.INVESTIGATION_SEARCH,
     parent: MenuIdes.ELECTRONIC_SERVICES,
   },
 ];

@@ -290,4 +290,5 @@ export interface LangKeysContract {
   send_to_head_of_the_direct_department: string;
   violation_repeate: string;
   repeatation: string;
+  creator: string;
 }

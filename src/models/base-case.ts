@@ -31,7 +31,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   departmentId!: number;
   sectionId!: number;
   taskDetails!: number;
-  departmenttInfo!: AdminResult;
+  departmentInfo!: AdminResult;
   sectionInfo!: AdminResult;
   caseStatusInfo!: AdminResult;
   className!: string;

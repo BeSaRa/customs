@@ -47,11 +47,40 @@
       <div class="shadow relative overflow-auto" style="max-height: 62vh">
         <table mat-table matSort class="table-style" [dataSource]="displayedList">
           
+          <!-- draft full serial -->
+          <ng-container matColumnDef="draftFullSerial">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.serial_number }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.draftFullSerial }}</span>
+            </td>
+          </ng-container>
           <!-- case status -->
           <ng-container matColumnDef="caseStatus">
-            <th class="status-min-width" mat-header-cell *matHeaderCellDef>{{ lang.map.status }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.status }}</th>
             <td mat-cell *matCellDef="let element">
               <span>{{ element.caseStatusInfo.getNames() }}</span>
+            </td>
+          </ng-container>
+          <!-- creator -->
+          <ng-container matColumnDef="creator">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.creator }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.creatorInfo.getNames() }}</span>
+            </td>
+          </ng-container>
+          <!-- limited access -->
+          <ng-container matColumnDef="limitedAccess">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.limited_access }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ getSecurityLevel(element.limitedAccess) }}</span>
+            </td>
+          </ng-container>
+         
+          <!-- department -->
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.department_company }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.departmentInfo.getNames() }}</span>
             </td>
           </ng-container>
 

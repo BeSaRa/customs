@@ -43,7 +43,13 @@ export class InvestigationSearchComponent {
       callback: item => {},
     },
   ];
-  columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(new NoneFilterColumn('caseStatus'));
+  columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
+    new NoneFilterColumn('draftFullSerial'),
+    new NoneFilterColumn('caseStatus'),
+    new NoneFilterColumn('limitedAccess'),
+    new NoneFilterColumn('creator'),
+    new NoneFilterColumn('department')
+  );
 
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
