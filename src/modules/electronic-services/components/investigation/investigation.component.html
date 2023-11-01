@@ -74,11 +74,11 @@
   </ng-template>
 
   <div class="grid grid-flow-col gap-4 mt-3">
-    <app-button (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!!model?.getCaseType()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
+    <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
       lang.map.send_to_the_director_administration
     }}</app-button>
-    <app-button *ngIf="!!model?.getCaseType()" (click)="launchCase(sendTypes.DIRECT_DEPARTMENT)">{{
+    <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECT_DEPARTMENT)">{{
       lang.map.send_to_head_of_the_direct_department
     }}</app-button>
   </div>

@@ -39,7 +39,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
   toast = inject(ToastService);
-  encrypt = inject(EncryptionService)
+  encrypt = inject(EncryptionService);
   @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
@@ -186,5 +186,8 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   resetOffendersAndExternalPersons() {
     this.offenderListComponent.deleteAllOffender();
     this.witnessestListComponent.deleteAllWitnesses();
+  }
+  canLaunch() {
+    return this.model?.canStart();
   }
 }

@@ -7,6 +7,7 @@ import { CloneContract } from '@contracts/clone-contract';
 import { Observable } from 'rxjs';
 import { CaseTypes } from '@enums/case-types';
 import { BaseCaseContract } from '@contracts/base-case-contract';
+import { CommonCaseStatus } from '@enums/common-case-status';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -45,6 +46,19 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 
   getCaseType(): number {
     return this.caseType;
+  }
+
+  isCancelled(): boolean {
+    return this.caseStatus === CommonCaseStatus.CANCELLED;
+  }
+  isReturned(): boolean {
+    return this.caseStatus === CommonCaseStatus.RECEIVED;
+  }
+  canSave(): boolean {
+    return !this.isCancelled() && this.isReturned();
+  }
+  canStart(): boolean {
+    return this.caseStatus === CommonCaseStatus.NEW;
   }
 
   save(): Observable<Model> {
