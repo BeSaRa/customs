@@ -63,13 +63,20 @@ export interface BaseCaseServiceContract<M> {
 
   claimTask(taskId: string): Observable<M>;
 
-  completeTask(taskId: string): Observable<M>;
+  completeTask(
+    taskId: string,
+    body: {
+      selectedResponse: string;
+      userId?: number;
+      comment: string;
+    }
+  ): Observable<M>;
 
   terminate(taskId: string): Observable<M>;
 
-  addOffenderAttachment(): void;
+  addOffenderAttachment(offenderId: number, attachment: CaseAttachment): Observable<unknown>;
 
-  getOffenderAttachments(): void;
+  getOffenderAttachments(offenderId: number): Observable<unknown>;
 
   addCaseAttachment(caseId: string, attachment: CaseAttachment): Observable<unknown>;
 

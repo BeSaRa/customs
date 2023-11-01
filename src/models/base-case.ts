@@ -1,3 +1,4 @@
+import { TaskDetails } from './task-details';
 import { AdminResult } from '@models/admin-result';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { HasServiceMixin } from '@mixins/has-service-mixin';
@@ -8,6 +9,7 @@ import { Observable } from 'rxjs';
 import { CaseTypes } from '@enums/case-types';
 import { BaseCaseContract } from '@contracts/base-case-contract';
 import { CommonCaseStatus } from '@enums/common-case-status';
+import { TaskResponses } from '@enums/task-responses';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -31,12 +33,13 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   securityLevel!: number;
   departmentId!: number;
   sectionId!: number;
-  taskDetails!: number;
+  taskDetails!: TaskDetails;
   departmenttInfo!: AdminResult;
   sectionInfo!: AdminResult;
   caseStatusInfo!: AdminResult;
   className!: string;
   description!: string;
+
   getService(): Service {
     return super.$$getService$$<Service>();
   }
@@ -47,7 +50,13 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   getCaseType(): number {
     return this.caseType;
   }
+  getResponses() {
+    return this.taskDetails.responses;
+  }
 
+  hasResponse(responses: TaskResponses) {
+    return this.getResponses().includes(responses);
+  }
   isCancelled(): boolean {
     return this.caseStatus === CommonCaseStatus.CANCELLED;
   }
@@ -57,10 +66,19 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   canSave(): boolean {
     return !this.isCancelled() && this.isReturned();
   }
+  canClaim(): boolean {
+    return true;
+  }
+  isClaimed(): boolean {
+    return false;
+  }
   canStart(): boolean {
     return this.caseStatus === CommonCaseStatus.NEW;
   }
 
+  claim(): Observable<Model> {
+    return this.getService().claimTask(this.taskDetails.tkiid);
+  }
   save(): Observable<Model> {
     return this.id ? this.getService().update(this as unknown as Model) : this.getService().create(this as unknown as Model);
   }

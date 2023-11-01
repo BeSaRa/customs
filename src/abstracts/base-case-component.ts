@@ -1,3 +1,4 @@
+import { TaskResponses } from './../enums/task-responses';
 import { Directive, EventEmitter, OnInit } from '@angular/core';
 import {
   catchError,
@@ -27,6 +28,7 @@ import { AppIcons } from '@constants/app-icons';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ActivatedRoute } from '@angular/router';
 import { CommonCaseStatus } from '@enums/common-case-status';
+import { FolderType } from '@enums/folder-type.enum';
 
 @Directive({})
 export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<Model>, Model>, Service>
@@ -50,7 +52,8 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
     [SaveTypes.FINAL]: 'save',
     [SaveTypes.DRAFT_CONTINUE]: 'draft',
   };
-
+  folderType = FolderType;
+  taskResponses = TaskResponses;
   ngOnInit(): void {
     of(true)
       .pipe(tap(() => this._init()))
