@@ -11,6 +11,11 @@ import { InvestigationService } from '@services/investigation.service';
 import { LangService } from '@services/lang.service';
 import { ignoreErrors } from '@utils/utils';
 import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
+import { EncryptionService } from '@services/encryption.service';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-investigation-search',
@@ -20,6 +25,8 @@ import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, 
 export class InvestigationSearchComponent {
   investigationService = inject(InvestigationService);
   investigationSearchService = inject(InvestigationSearchService);
+  router = inject(Router);
+  encrypt = inject(EncryptionService);
 
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
@@ -36,11 +43,13 @@ export class InvestigationSearchComponent {
 
   actions: ContextMenuActionContract<Investigation>[] = [
     {
-      name: 'more-details',
+      name: 'view',
       type: 'action',
-      label: 'more_details',
-      icon: AppIcons.INFORMATION,
-      callback: item => {},
+      label: 'view',
+      icon: AppIcons.VIEW,
+      callback: item => {
+        this.view(item);
+      },
     },
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
@@ -48,14 +57,14 @@ export class InvestigationSearchComponent {
     new NoneFilterColumn('caseStatus'),
     new NoneFilterColumn('limitedAccess'),
     new NoneFilterColumn('creator'),
-    new NoneFilterColumn('department')
+    new NoneFilterColumn('department'),
+    new NoneFilterColumn('actions')
   );
 
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
-  callback() {}
   resetForm() {
     this.form.reset();
   }
@@ -80,19 +89,24 @@ export class InvestigationSearchComponent {
         })
       )
       .subscribe((data: Investigation[]) => {
-        console.log(data);
-
         if (data.length) {
           this.selectedTab = 1;
         }
-        console.log(this.selectedTab);
-
         this.displayedList = new MatTableDataSource(data);
-        console.log(this.displayedList);
       });
   }
 
   getSecurityLevel(limitedAccess: boolean): string {
     return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
+  }
+
+  view(item: Investigation) {
+    const itemDetails = this.encrypt.encrypt<INavigatedItem>({
+      openFrom: OpenFrom.SEARCH,
+      taskId: item.id,
+      caseId: item.id,
+      caseType: item.caseType,
+    });
+    this.router.navigate([AppFullRoutes.INVESTIGATION], { queryParams: { item: itemDetails } }).then();
   }
 }

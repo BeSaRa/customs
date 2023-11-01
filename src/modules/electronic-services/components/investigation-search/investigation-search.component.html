@@ -90,9 +90,9 @@
             <td mat-cell *matCellDef="let element">
               <div class="flex">
                 <app-icon-button
-                  [matTooltip]="lang.map.more_details"
-                  (click)="callback()"
-                  icon="MORE_DETAILS"></app-icon-button>
+                  [matTooltip]="lang.map.view"
+                  (click)="view(element)"
+                  icon="VIEW"></app-icon-button>
               </div>
             </td>
           </ng-container>
