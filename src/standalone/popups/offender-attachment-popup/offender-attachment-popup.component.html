@@ -1,15 +1,17 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.comment }}</h1>
+    <h1>{{ lang.map.offender_attachments }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
-    <form [formGroup]="form">
-      <app-textarea formControlName="comment" [label]="lang.map.comment"></app-textarea>
-    </form>
+  <div class="dialog-content w-[900px]">
+    <app-case-attachments
+      [service]="model.getService()"
+      [entityId]="offenderId"
+      [type]="'offender'"
+      [title]="lang.map.attachments"
+      class="col-span-1 md:col-span-2 lg:col-span-4" />
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="comment$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
   </div>
 </div>

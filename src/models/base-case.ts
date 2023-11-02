@@ -10,6 +10,7 @@ import { CaseTypes } from '@enums/case-types';
 import { BaseCaseContract } from '@contracts/base-case-contract';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
+import { ActionNames } from '@enums/action-names';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -51,7 +52,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseType;
   }
   getResponses() {
-    return this.taskDetails.responses;
+    return this.taskDetails?.responses;
   }
 
   hasResponse(responses: TaskResponses) {
@@ -61,16 +62,19 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus === CommonCaseStatus.CANCELLED;
   }
   isReturned(): boolean {
-    return this.caseStatus === CommonCaseStatus.RECEIVED;
+    return this.caseStatus === CommonCaseStatus.RETURNED;
   }
   canSave(): boolean {
     return !this.isCancelled() && this.isReturned();
   }
   canClaim(): boolean {
-    return true;
+    return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);
+  }
+  canRelease(): boolean {
+    return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM);
   }
   isClaimed(): boolean {
-    return false;
+    return this.canRelease();
   }
   canStart(): boolean {
     return this.caseStatus === CommonCaseStatus.NEW;
