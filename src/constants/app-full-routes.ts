@@ -21,6 +21,7 @@ export const AppFullRoutes = {
   ELECTRONIC_SERVICES: '/home/electronic-services',
   INVESTIGATION: '/home/electronic-services/investigation',
   USER_INBOX: '/home/electronic-services/user-inbox',
+  TEAM_INBOX: '/home/electronic-services/team-inbox',
   VIOLATION_PENALTY: '/home/administration/violation-penalty',
   LEGAL_RULE: '/home/administration/legal-rule',
   ATTACHMENT_TYPE: '/home/administration/attachment-type',

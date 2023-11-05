@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
 import { INavigatedItem } from '@contracts/inavigated-item';
-import { UserInboxService } from '@services/user-inbox.services';
+import { InboxService } from '@services/inbox.services';
 import { iif, Observable, of, switchMap, map } from 'rxjs';
 import { OpenFrom } from '@enums/open-from';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
@@ -14,13 +14,13 @@ export class ServiceItemResolver {
     itemKey: string;
     route: ActivatedRouteSnapshot;
     info?: INavigatedItem;
-    userInboxService: UserInboxService;
+    userInboxService: InboxService;
     configService: ConfigService;
     encryptionService: EncryptionService;
   } = {} as any;
 
   private static _init(route: ActivatedRouteSnapshot): void {
-    this.data.userInboxService = inject(UserInboxService);
+    this.data.userInboxService = inject(InboxService);
     this.data.configService = inject(ConfigService);
     this.data.encryptionService = inject(EncryptionService);
 

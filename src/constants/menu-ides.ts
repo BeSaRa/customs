@@ -24,4 +24,5 @@ export const MenuIdes = {
   ATTACHMENT_TYPE: 23,
   GUIDE_PANEL: 24,
   INVESTIGATION_SEARCH: 25,
+  TEAM_INBOX: 24,
 };
