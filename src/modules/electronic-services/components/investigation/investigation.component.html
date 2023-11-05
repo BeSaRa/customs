@@ -22,6 +22,9 @@
       <mat-tab [label]="lang.map.external_persons">
         <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
       </mat-tab>
+      <mat-tab [label]="lang.map.correspondence">
+        <ng-container [ngTemplateOutlet]="correspondence_tab"></ng-container>
+      </mat-tab>
     </mat-tab-group>
   </mat-card>
 
@@ -44,7 +47,7 @@
         [label]="lang.map.general_explanation_of_violations" />
 
       <app-case-attachments
-        [caseId]="getCaseFolderIdByName('general')"
+        [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
         [service]="service"
         [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
@@ -73,8 +76,51 @@
     </div>
   </ng-template>
 
+  <ng-template #correspondence_tab>
+    <div class="p-4">
+      <app-case-attachments
+        [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
+        [service]="service"
+        [title]="lang.map.correspondence_attachments"
+        class="col-span-1 md:col-span-2 lg:col-span-4" />
+    </div>
+  </ng-template>
   <div class="grid grid-flow-col gap-4 mt-3">
     <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="model?.hasResponse(taskResponses.TO_USER)" (click)="responseAction$.next(taskResponses.TO_USER)">
+      {{ lang.map.return }}
+    </app-button>
+    <app-button
+      *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
+      (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)"
+      >{{ lang.map.return_to_same }}</app-button
+    >
+    <app-button
+      *ngIf="model?.hasResponse(taskResponses.RETURN_TO_APP)"
+      (click)="responseAction$.next(taskResponses.RETURN_TO_APP)"
+      >{{ lang.map.return_to_applicant_department }}</app-button
+    >
+    <app-button *ngIf="model?.hasResponse(taskResponses.CLOSE)" (click)="responseAction$.next(taskResponses.CLOSE)">
+      {{ lang.map.close }}
+    </app-button>
+    <app-button
+      *ngIf="model?.hasResponse(taskResponses.MANAGER_APPROVE)"
+      (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
+      {{ lang.map.manager_approve }}
+    </app-button>
+    <app-button
+      *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
+      (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
+      {{ lang.map.referral_to_presodent }}
+    </app-button>
+    <app-button
+      *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
+      (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
+      {{ lang.map.referral_to_presodent_assistant }}
+    </app-button>
+    <app-button *ngIf="model?.canClaim()" (click)="model?.claim()">
+      {{ lang.map.referral_to_presodent_assistant }}
+    </app-button>
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
       lang.map.send_to_the_director_administration
     }}</app-button>

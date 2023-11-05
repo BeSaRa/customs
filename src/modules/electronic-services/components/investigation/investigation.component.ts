@@ -8,7 +8,7 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { filter, map, Observable, take, takeUntil, Subject, switchMap } from 'rxjs';
+import { filter, map, Observable, take, takeUntil, Subject, switchMap, of } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,6 +22,10 @@ import { SendTypes } from '@enums/send-types';
 import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
+import { TaskResponses } from '@enums/task-responses';
+import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
+import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-investigation',
@@ -40,6 +44,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   location = inject(Location);
   toast = inject(ToastService);
   encrypt = inject(EncryptionService);
+  responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
   @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
@@ -56,6 +61,25 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   protected override _init() {
     super._init();
+    this.listenToResponseAction();
+  }
+  listenToResponseAction() {
+    this.responseAction$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap((responce: TaskResponses) => {
+          return this.dialog
+            .open(CommentPopupComponent, {
+              data: {
+                model: this.model,
+                responce,
+              },
+            })
+            .afterOpened();
+        })
+      )
+      .pipe(filter((click: any) => click == UserClick.YES))
+      .subscribe();
   }
   getSecurityLevel(limitedAccess: boolean): string {
     return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
