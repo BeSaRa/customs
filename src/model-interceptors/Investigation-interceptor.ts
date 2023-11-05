@@ -5,6 +5,11 @@ import { AdminResult } from '@models/admin-result';
 export class InvestigationInterceptor implements ModelInterceptorContract<Investigation> {
   send(model: Partial<Investigation>): Partial<Investigation> {
     delete model.$$__service_name__$$;
+    delete model.caseStatusInfo;
+    delete model.departmentInfo;
+    delete model.ouInfo;
+
+    console.log('send');
     return model;
   }
 
