@@ -170,6 +170,10 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
     return this._getTask(taskId);
   }
 
+  @CastResponse(undefined, {
+    unwrap: 'rs',
+    fallback: '$default',
+  })
   claimTask(taskId: string): Observable<M> {
     return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId + '/claim');
   }
@@ -194,7 +198,7 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
     const formData = new FormData();
     attachment.content ? formData.append('content', attachment.content) : null;
     delete attachment.content;
-    return this.http.post(this.getUrlSegment() + `/${offenderId}/attachment`, formData, {
+    return this.http.post(this.getUrlSegment() + `/offender/${offenderId}/attachment`, formData, {
       params: new HttpParams({
         fromObject: attachment as never,
       }),
@@ -202,7 +206,7 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
   }
 
   @CastResponse(() => CaseAttachment)
-  getOffenderAttachments(offenderId: number): Observable<unknown> {
+  getOffenderAttachments(offenderId: number): Observable<CaseAttachment[]> {
     return this.http.get<CaseAttachment[]>(this.getUrlSegment() + `/offender/${offenderId}/contained-attachments`);
   }
 
@@ -239,11 +243,18 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
     return this.http.get<CaseAttachment[]>(this.getUrlSegment() + `/${caseId}/folder/contained-documents`);
   }
 
-  openAddAttachmentDialog(caseId: string, service: BaseCaseService<unknown>): MatDialogRef<CaseAttachmentPopupComponent> {
+  openAddAttachmentDialog(
+    caseId: string,
+    service: BaseCaseService<unknown>,
+    type: 'folder' | 'offender',
+    entityId: number
+  ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
       data: {
         caseId,
         service,
+        type,
+        entityId,
       },
     });
   }

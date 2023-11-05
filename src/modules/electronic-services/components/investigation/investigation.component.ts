@@ -23,7 +23,6 @@ import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
 import { TaskResponses } from '@enums/task-responses';
-import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
 import { UserClick } from '@enums/user-click';
 
@@ -67,12 +66,12 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.responseAction$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((responce: TaskResponses) => {
+        switchMap((response: TaskResponses) => {
           return this.dialog
             .open(CommentPopupComponent, {
               data: {
                 model: this.model,
-                responce,
+                response,
               },
             })
             .afterOpened();
@@ -213,5 +212,10 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   }
   canLaunch() {
     return this.model?.canStart();
+  }
+  claim() {
+    this.model?.claim().subscribe((model: Investigation) => {
+      this._updateForm(model);
+    });
   }
 }

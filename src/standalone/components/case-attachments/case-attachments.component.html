@@ -13,7 +13,7 @@
     <!-- arName -->
     <ng-container matColumnDef="attachmentType">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.attachment_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.attachmentTypeId }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.attachmentTypeInfo.getNames() }}</td>
     </ng-container>
     <!-- arName -->
     <!-- creationDate -->

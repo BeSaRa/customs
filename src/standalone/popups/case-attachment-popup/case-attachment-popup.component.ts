@@ -15,7 +15,7 @@ import { CaseAttachment } from '@models/case-attachment';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { AttachmentTypeService } from '@services/attachment-type.service';
 import { AttachmentType } from '@models/attachment-type';
@@ -47,12 +47,12 @@ import { CustomValidators } from '@validators/custom-validators';
   templateUrl: './case-attachment-popup.component.html',
   styleUrls: ['./case-attachment-popup.component.scss'],
 })
-export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class CaseAttachmentPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialogRef = inject(MatDialogRef);
   fb = inject(UntypedFormBuilder);
   dialog = inject(DialogService);
   toast = inject(ToastService);
-  data: { caseId: string; service: BaseCaseService<unknown> } = inject(MAT_DIALOG_DATA);
+  data: { caseId: string; service: BaseCaseService<unknown>; type: 'folder' | 'offender'; entityId: number; } = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   view$ = new Subject<CaseAttachment>();
   delete$ = new Subject<CaseAttachment>();
@@ -105,12 +105,21 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) imple
     this.save$
       .pipe(
         exhaustMap(() => {
-          // return combineLatest(
-          //   this.attachments.map(attachment => {
-          //     return this.data.service.addCaseAttachment(this.data.caseId, attachment);
-          //   })
-          // );
-          return this.data.service.addBulkCaseAttachments(this.data.caseId, this.attachments);
+          if (this.data.type == 'folder') {
+            return this.data.service.addBulkCaseAttachments(this.data.caseId, this.attachments);
+          } else if (this.data.type == 'offender') {
+            return combineLatest(
+              this.attachments.map(attachment => {
+                return this.data.service.addOffenderAttachment(this.data.entityId, attachment);
+              })
+            );
+          } else {
+            return combineLatest(
+              this.attachments.map(attachment => {
+                return this.data.service.addCaseAttachment(this.data.caseId, attachment);
+              })
+            );
+          }
         })
       )
       .subscribe(() => {
