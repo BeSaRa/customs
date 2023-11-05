@@ -13,6 +13,7 @@ import { ContextMenuActionContract } from '@contracts/context-menu-action-contra
 import { AppIcons } from '@constants/app-icons';
 import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-team-inbox',
@@ -24,6 +25,7 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   lookupService = inject(LookupService);
   lang = inject(LangService);
   router = inject(Router);
+  employeeService = inject(EmployeeService);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
@@ -68,7 +70,7 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
       .pipe(
         switchMap(_ => {
           // if (!this.hasFilterCriteria()) {
-          return this.inboxService.loadTeamInbox(null!);
+          return this.inboxService.loadTeamInbox(this.employeeService.getEmployeeTeams()[0].id!);
           // } else {
           //   return this.inboxService.loadUserInbox(this.filterCriteria);
           // }

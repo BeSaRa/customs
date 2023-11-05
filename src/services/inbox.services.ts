@@ -57,7 +57,7 @@ export class InboxService extends RegisterServiceMixin(class {}) {
 
   @CastResponse(() => QueryResultSet)
   private _loadTeamInbox(teamId: number, options?: unknown): Observable<QueryResultSet> {
-    return this.http.get<QueryResultSet>(this.urlService.URLS.TEAM_INBOX + teamId, {
+    return this.http.get<QueryResultSet>(this.urlService.URLS.TEAM_INBOX + '/' + teamId, {
       params: new HttpParams({ fromObject: options as { [p: string]: string } }),
     });
   }
