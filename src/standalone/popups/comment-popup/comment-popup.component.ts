@@ -4,7 +4,7 @@ import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { Subject, takeUntil, filter, switchMap } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { CustomValidators } from '@validators/custom-validators';
 import { Investigation } from '@models/investigation';
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-comment-popup',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent, IconButtonComponent, TextareaComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent, IconButtonComponent, TextareaComponent, MatDialogModule],
   templateUrl: './comment-popup.component.html',
   styleUrls: ['./comment-popup.component.scss'],
 })

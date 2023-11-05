@@ -30,7 +30,10 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   delete$ = new Subject<CaseAttachment>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
-
+  @Input()
+  type: 'folder' | 'offender' = 'folder';
+  @Input()
+  entityId!: number;
   @Input()
   caseId?: string;
   @Input()
@@ -47,7 +50,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   displayedColumns: string[] = ['documentTitle', 'attachmentType', 'creationDate', 'actions'];
 
   ngOnInit(): void {
-    if (this.caseId) this.reload$.next();
+    this.reload$.next();
 
     this.listenToView();
     this.listenToDelete();
@@ -60,7 +63,14 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
         switchMap(() => {
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
-              return this.caseId ? this.service.loadFolderAttachments(this.caseId) : of([]);
+              switch (this.type) {
+                case 'folder':
+                  return this.caseId ? this.service.loadFolderAttachments(this.caseId) : of([]);
+                case 'offender':
+                  return this.entityId ? this.service.getOffenderAttachments(this.entityId) : of([]);
+                default:
+                  return of([]);
+              }
             })
           );
         })
@@ -73,11 +83,11 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   }
 
   openAddDialog() {
-    if (!this.caseId) {
+    if (!this.caseId && !this.entityId) {
       return;
     }
     this.service
-      .openAddAttachmentDialog(this.caseId, this.service)
+      .openAddAttachmentDialog(this.caseId as string, this.service, this.type, this.entityId)
       .afterClosed()
       .subscribe(() => {
         this.reload$.next();

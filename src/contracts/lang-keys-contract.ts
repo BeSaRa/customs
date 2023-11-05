@@ -300,5 +300,8 @@ export interface LangKeysContract {
   referral_to_presodent: string;
   referral_to_presodent_assistant: string;
   correspondence_attachments: string;
+  offender_attachments: string;
   comment: string;
+  claim: string;
+  attachments: string;
 }

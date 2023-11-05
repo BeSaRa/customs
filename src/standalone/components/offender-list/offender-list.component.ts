@@ -18,6 +18,8 @@ import { Lookup } from '@models/lookup';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { Violation } from '@models/violation';
+import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-offender-list',
@@ -26,7 +28,7 @@ import { Violation } from '@models/violation';
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffenderListComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -36,8 +38,11 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
   @Input()
   caseId?: string;
   @Input()
+  investigationModel?: Investigation;
+  @Input()
   title: string = this.lang.map.offenders;
   add$: Subject<void> = new Subject<void>();
+  attachments$: Subject<Offender> = new Subject<Offender>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -60,6 +65,7 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
     this.listenToReload();
     this.listenToDelete();
     this.listenToAddViolationToOffender();
+    this.listenToAttachments();
     this.reload$.next();
   }
 
@@ -142,6 +148,26 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
         this.reload$.next();
       });
   }
+
+  private listenToAttachments() {
+    this.attachments$
+      .pipe(
+        switchMap(model =>
+          this.dialog
+            .open(OffenderAttachmentPopupComponent, {
+              data: {
+                model: this.investigationModel,
+                offenderId: model.id,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe(model => {
+        this.reload$.next();
+      });
+  }
+
   resetDataList() {
     this.data.next([]);
   }

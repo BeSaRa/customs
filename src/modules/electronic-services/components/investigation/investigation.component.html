@@ -66,7 +66,7 @@
 
   <ng-template #offenders_tab>
     <div class="p-4">
-      <app-offender-list [violations]="violations" [caseId]="model?.id" />
+      <app-offender-list [investigationModel]="model" [violations]="violations" [caseId]="model?.id" />
     </div>
   </ng-template>
 
@@ -87,39 +87,43 @@
   </ng-template>
   <div class="grid grid-flow-col gap-4 mt-3">
     <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="model?.hasResponse(taskResponses.TO_USER)" (click)="responseAction$.next(taskResponses.TO_USER)">
+    <app-button
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_USER)"
+      (click)="responseAction$.next(taskResponses.TO_USER)">
       {{ lang.map.return }}
     </app-button>
     <app-button
-      *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.RETURN_TO_SAME)"
       (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)"
       >{{ lang.map.return_to_same }}</app-button
     >
     <app-button
-      *ngIf="model?.hasResponse(taskResponses.RETURN_TO_APP)"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.RETURN_TO_APP)"
       (click)="responseAction$.next(taskResponses.RETURN_TO_APP)"
       >{{ lang.map.return_to_applicant_department }}</app-button
     >
-    <app-button *ngIf="model?.hasResponse(taskResponses.CLOSE)" (click)="responseAction$.next(taskResponses.CLOSE)">
+    <app-button
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)"
+      (click)="responseAction$.next(taskResponses.CLOSE)">
       {{ lang.map.close }}
     </app-button>
     <app-button
-      *ngIf="model?.hasResponse(taskResponses.MANAGER_APPROVE)"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)"
       (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
     <app-button
-      *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
       (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
       {{ lang.map.referral_to_presodent }}
     </app-button>
     <app-button
-      *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
       (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
       {{ lang.map.referral_to_presodent_assistant }}
     </app-button>
-    <app-button *ngIf="model?.canClaim()" (click)="model?.claim()">
-      {{ lang.map.referral_to_presodent_assistant }}
+    <app-button *ngIf="model?.canClaim()" (click)="claim()">
+      {{ lang.map.claim }}
     </app-button>
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
       lang.map.send_to_the_director_administration

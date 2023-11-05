@@ -46,6 +46,9 @@
           <div [matTooltip]="lang.map.delete">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
+          <div [matTooltip]="lang.map.offender_attachments">
+            <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
+          </div>
         </div>
       </td>
     </ng-container>
