@@ -20,8 +20,6 @@ export class JobTitlePopupComponent extends AdminDialogComponent<JobTitle> imple
 
   lookupService = inject(LookupService);
 
-  jobTypes: Lookup[] = this.lookupService.lookups.userType;
-
   get status(): AbstractControl {
     return this.form.get('status')!;
   }

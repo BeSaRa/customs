@@ -12,7 +12,6 @@ const { send, receive } = new JobTitleInterceptor();
 export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
   $$__service_name__$$ = 'JobTitleService';
 
-  jobType!: number;
   isSystem!: boolean;
 
   // statusInfo!: AdminResult;
@@ -21,12 +20,11 @@ export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
   override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {
-    const { arName, enName, status, jobType } = this;
+    const { arName, enName, status } = this;
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
       status: controls ? [status, CustomValidators.required] : status,
-      jobType: controls ? [jobType, CustomValidators.required] : jobType,
     };
   }
 

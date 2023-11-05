@@ -67,7 +67,6 @@ export class JobTitleComponent extends AdminComponent<JobTitlePopupComponent, Jo
       'lookupKey',
       'getNames'
     ),
-    new SelectFilterColumn('jobType', this.lookupService.lookups.userType, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }
