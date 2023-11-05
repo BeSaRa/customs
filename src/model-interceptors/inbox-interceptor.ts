@@ -13,6 +13,9 @@ export class InboxInterceptor implements ModelInterceptorContract<InboxResult> {
     model.ACTIVATED = new Date(model.ACTIVATED).toLocaleDateString();
     model.riskStatusInfo = new AdminResult().clone(model.riskStatusInfo);
     model.fromUserInfo = new AdminResult().clone(model.fromUserInfo);
+    try {
+      model.setItemRoute();
+    } catch (e) {}
     return model;
   }
 }
