@@ -289,7 +289,16 @@ export interface LangKeysContract {
   select: string;
   send_to_the_director_administration: string;
   send_to_head_of_the_direct_department: string;
-  violation_repeate: string;
+  violation_repeat: string;
   repeatation: string;
   creator: string;
+  return: string;
+  return_to_same: string;
+  return_to_applicant_department: string;
+  correspondence: string;
+  manager_approve: string;
+  referral_to_presodent: string;
+  referral_to_presodent_assistant: string;
+  correspondence_attachments: string;
+  comment: string;
 }

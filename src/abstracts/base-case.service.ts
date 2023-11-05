@@ -171,23 +171,39 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
   }
 
   claimTask(taskId: string): Observable<M> {
-    throw new Error('Method not implemented.');
+    return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId + '/claim');
   }
 
-  completeTask(taskId: string): Observable<M> {
-    throw new Error('Method not implemented.');
+  completeTask(
+    taskId: string,
+    body: {
+      selectedResponse: string;
+      userId?: number;
+      comment: string;
+    }
+  ): Observable<M> {
+    return this.http.post<M>(this.getUrlSegment() + '/task/' + taskId + '/complete', body);
   }
 
   terminate(taskId: string): Observable<M> {
-    throw new Error('Method not implemented.');
+    return this.http.post<M>(this.getUrlSegment() + '/task/' + taskId + '/terminate', {});
   }
 
-  addOffenderAttachment(): void {
-    throw new Error('Method not implemented.');
+  @CastResponse(() => CaseAttachment)
+  addOffenderAttachment(offenderId: number, attachment: CaseAttachment): Observable<unknown> {
+    const formData = new FormData();
+    attachment.content ? formData.append('content', attachment.content) : null;
+    delete attachment.content;
+    return this.http.post(this.getUrlSegment() + `/${offenderId}/attachment`, formData, {
+      params: new HttpParams({
+        fromObject: attachment as never,
+      }),
+    });
   }
 
-  getOffenderAttachments(): void {
-    throw new Error('Method not implemented.');
+  @CastResponse(() => CaseAttachment)
+  getOffenderAttachments(offenderId: number): Observable<unknown> {
+    return this.http.get<CaseAttachment[]>(this.getUrlSegment() + `/offender/${offenderId}/contained-attachments`);
   }
 
   @CastResponse(() => CaseAttachment)

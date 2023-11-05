@@ -1,15 +1,15 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.repeatation }}</h1>
+    <h1>{{ lang.map.comment }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <app-input class="w-100" [label]="lang.map.violation_repeat" type="number" [formControl]="control">
-      <input appControl [formControl]="control" [attr.mask]="inputMaskPatterns.NUMBER_ONLY" />
-    </app-input>
+    <form [formGroup]="form">
+      <app-textarea formControlName="comment" [label]="lang.map.comment"></app-textarea>
+    </form>
   </div>
   <div class="dialog-footer justify-end">
+    <app-button (click)="comment$.next()" buttonType="primary">{{ lang.map.comment }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button (click)="next()" buttonType="primary">{{ lang.map.save }}</app-button>
   </div>
 </div>
