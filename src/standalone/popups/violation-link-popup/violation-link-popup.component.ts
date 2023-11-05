@@ -9,10 +9,9 @@ import { OffenderViolationService } from '@services/offender-violation.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
-import { map, concatMap, Subject, switchMap, takeUntil, of, filter } from 'rxjs';
+import { Subject, switchMap, takeUntil, filter } from 'rxjs';
 import { ViolationRepeatePopupComponent } from '../violation-repeate-popup/violation-repeate-popup.component';
 import { OffenderViolation } from '@models/offender-violation';
-import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-violation-link-popup',
@@ -47,13 +46,15 @@ export class ViolationLinkPopupComponent implements OnDestroy {
             .pipe(filter(value => !!value))
             .pipe(
               switchMap((repeat: unknown) => {
-                const offenderViolationLink = new OffenderViolation();
-                offenderViolationLink.repeat = +(repeat as number);
-                offenderViolationLink.status = 1;
-                offenderViolationLink.caseId = this.caseId;
-                offenderViolationLink.violationId = violation.id;
-                offenderViolationLink.offenderId = this.offenderId;
-                return this.offenderViolationService.create(offenderViolationLink);
+                return this.offenderViolationService.create(
+                  new OffenderViolation().clone<OffenderViolation>({
+                    repeat: +(repeat as number),
+                    status: 1,
+                    caseId: this.caseId,
+                    violationId: violation.id,
+                    offenderId: this.offenderId,
+                  })
+                );
               })
             );
         })

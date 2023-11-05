@@ -31,24 +31,14 @@ export class EmployeeService {
     this.generatePermissionMap(data.permissionSet);
 
     // set user teams
-    data.teams = data.teams.map((item: Team) => {
-      const nTeam = new Team();
-      nTeam.id = item.id;
-      nTeam.arName = item.arName;
-      nTeam.enName = item.enName;
-      return nTeam;
-    });
+    data.teams = data.teams.map((item: Team) => new Team().clone<Team>(item));
     // add static team called all with id -1 to load all teams items
     if (data.teams.length) {
-      const team = new Team();
-      team.id = -1;
-      team.arName = 'الكل';
-      team.enName = 'All';
-      // team.clone({
-      //   arName: 'الكل',
-      //   enName: 'All',
-      //   id: -1,
-      // });
+      const team = new Team().clone<Team>({
+        arName: 'الكل',
+        enName: 'All',
+        id: -1,
+      });
       data.teams = [team, ...data.teams];
     }
     return data;
