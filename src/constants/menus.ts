@@ -150,6 +150,13 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
   },
   {
+    id: MenuIdes.TEAM_INBOX,
+    langKey: 'menu_team_inbox',
+    icon: AppIcons.TEAM_INBOX,
+    path: AppFullRoutes.TEAM_INBOX,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+  },
+  {
     id: MenuIdes.VIOLATION_PENALTY,
     langKey: 'menu_violation_penalty',
     icon: AppIcons.VIOLATION_PENALTY,
