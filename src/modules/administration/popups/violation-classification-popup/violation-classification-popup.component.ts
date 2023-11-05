@@ -23,7 +23,6 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
     this.form = this.fb.group(this.model.buildForm(true));
     this.isDisabled = this.operation === OperationType.UPDATE && this.isSystem?.value == true;
     if (this.isDisabled) {
-      this.key?.disable();
       this.offenderType?.disable();
       this.status?.disable();
     }
@@ -53,9 +52,6 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   }
   get status() {
     return this.form.get('status');
-  }
-  get key() {
-    return this.form.get('key');
   }
   get offenderType() {
     return this.form.get('offenderType');
