@@ -1,4 +1,4 @@
-import { Directive, inject, OnInit } from '@angular/core';
+import { Directive, inject, OnInit, ViewChild } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import {
   BehaviorSubject,
@@ -19,7 +19,7 @@ import {
 import { AdminComponentContract } from '@contracts/admin-component-contract';
 import { EmployeeService } from '@services/employee.service';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { BaseModel } from '@abstracts/base-model';
@@ -83,6 +83,8 @@ export abstract class AdminComponent<
   allowMultiSelect = true;
   initialSelection: M[] = [];
   selection = new SelectionModel<M>(this.allowMultiSelect, this.initialSelection);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   lookupService = inject(LookupService);
 
@@ -331,6 +333,7 @@ export abstract class AdminComponent<
       this.filter$.next({ ...this.filter$.value });
       return;
     }
+    this.resetPaginator();
     this.filter$.next({
       ...this.filter$.value,
       [$event.key]: $event.value,
@@ -339,5 +342,10 @@ export abstract class AdminComponent<
 
   getFilterStringColumn(column: string): string {
     return objectHasOwnProperty(this.filter$.value, column) ? (this.filter$.value[column as keyof M] as string) : '';
+  }
+
+  resetPaginator() {
+    this.paginator.pageIndex = 0;
+    this.paginator._changePageSize(this.paginator.pageSize);
   }
 }
