@@ -1,7 +1,7 @@
 import {
   anyFieldsHasLength,
   decimalValidator,
-  maxlengthValidator,
+  maxLengthValidator,
   minlengthValidator,
   numberValidator,
   patternValidator,
@@ -23,7 +23,7 @@ export const CustomValidators = {
   number: numberValidator,
   decimal: decimalValidator,
   minLength: minlengthValidator,
-  maxLength: maxlengthValidator,
+  maxLength: maxLengthValidator,
   anyFieldsHasLength,
   unique: uniqueValidator,
   positiveNumber: positiveNumberValidator,
