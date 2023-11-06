@@ -66,14 +66,14 @@ export function validateSum(
 export const inputMaskPatterns = {
   NUMBER_ONLY: '0*',
   NUMBER_ONLY_WITH_LIMIT: (limit: number = 4, required: boolean = false): string => {
-    return ''.padEnd(limit, required ? '0' : '9')
+    return ''.padEnd(limit, required ? '0' : '9');
   },
   DECIMAL: (numberOfPlaces: number = 2): string => {
     // if numberOfPlaces < 1, use number mask instead of decimal
     if (numberOfPlaces < 1) {
       return '0*';
     }
-    return '0*.' + ('0'.padEnd(numberOfPlaces, '0'));
+    return '0*.' + '0'.padEnd(numberOfPlaces, '0');
   },
   /**
    * @description Used to mask for decimal with separator. ThousandSeparator should be used along with it
@@ -88,7 +88,7 @@ export const inputMaskPatterns = {
   },
   PERCENT: 'percent',
   SEPARATOR: 'separator',
-  THOUSAND_SEPARATOR: ','
+  THOUSAND_SEPARATOR: ',',
 };
 
 export function numberValidator(control: AbstractControl): ValidationErrors | null {
@@ -128,7 +128,7 @@ function getValueLength(control: AbstractControl): number {
   return typeof control.value !== 'undefined' || control.value !== null ? ('' + control.value).length : 0;
 }
 
-export function maxlengthValidator(maxLength: number): ValidatorFn {
+export function maxLengthValidator(maxLength: number): ValidatorFn {
   if (maxLength === 0 || !isValidValue(maxLength)) {
     return Validators.nullValidator;
   }
@@ -137,7 +137,7 @@ export function maxlengthValidator(maxLength: number): ValidatorFn {
       return null;
     }
     const valueLength = getValueLength(control);
-    return valueLength > maxLength ? { maxlength: { requiredLength: maxLength, actualLength: valueLength } } : null;
+    return valueLength > maxLength ? { maxLength: { requiredLength: maxLength, actualLength: valueLength } } : null;
   };
 }
 

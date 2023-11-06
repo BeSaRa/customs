@@ -304,4 +304,5 @@ export interface LangKeysContract {
   comment: string;
   claim: string;
   attachments: string;
+  maxlength_valid_is_x: string;
 }

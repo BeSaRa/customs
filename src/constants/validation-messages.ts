@@ -15,6 +15,10 @@ export const ValidationMessages: Record<string, ValidationMessageContract> = {
     key: 'maximum_valid_number_is_x',
     replace: (message: string, errorValue: any) => message.change({ x: errorValue.max }),
   },
+  maxLength: {
+    key: 'maxlength_valid_is_x',
+    replace: (message: string, errorValue: any) => message.change({ x: errorValue.requiredLength }),
+  },
 };
 
 export type ValidationMessagesType = typeof ValidationMessages;
