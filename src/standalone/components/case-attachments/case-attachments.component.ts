@@ -84,6 +84,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
 
   openAddDialog() {
     if (!this.caseId && !this.entityId) {
+      this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
       return;
     }
     this.service
