@@ -8,4 +8,5 @@
 <!--    [spinnerPosition]="spinnerPosition"-->
 <!--    [thick]="true"></ng-progress>-->
 <!--</div>-->
+<app-loading *ngIf="loadingService.loading$ | async"></app-loading>
 <router-outlet class="hidden"></router-outlet>

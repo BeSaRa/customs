@@ -4,6 +4,7 @@ import { LangService } from '@services/lang.service';
 import { AuthService } from '@services/auth.service';
 import { LocalizationService } from '@services/localization.service';
 import { CacheService } from '@services/cache.service';
+import { LoadingService } from '@services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent {
   dialog = inject(DialogService);
   lang = inject(LangService);
   authService = inject(AuthService);
+  loadingService = inject(LoadingService);
   localizationService = inject(LocalizationService);
   cacheService = inject(CacheService);
 
