@@ -6,9 +6,11 @@
   <app-icon-button [matTooltip]="lang.map.reset" (click)="resetForm()" icon="RELOAD"></app-icon-button>
 </div>
 <div class="bg-white shadow relative p-2 h-max">
-  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
+  @if (loading$ | async) {
+  <div class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
     <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
   </div>
+  }
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
     <!-- first tab -->
     <mat-tab [label]="lang.map.basic_settings">
@@ -100,15 +102,17 @@
       <ng-container [formGroup]="form">
         <div class="grid grid-cols-4 gap-4 p-4">
           <ng-container formArrayName="supportEmailListParsed">
-            <ng-container *ngFor="let emailInput of supportEmailListParsed.controls; let i = index">
-              <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
-                ><app-icon-button
-                  appInputPrefix
-                  icon="DELETE"
-                  (click)="deleteEmail(i)"
-                  [matTooltip]="lang.map.delete + ' ' + lang.map.email"
-              /></app-input>
-            </ng-container>
+            @for (emailInput of supportEmailListParsed.controls; track emailInput; let i = $index) {
+
+            <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
+              ><app-icon-button
+                appInputPrefix
+                icon="DELETE"
+                (click)="deleteEmail(i)"
+                [matTooltip]="lang.map.delete + ' ' + lang.map.email"
+            /></app-input>
+
+            }
           </ng-container>
           <div class="w-full flex items-center justify-start">
             <app-icon-button

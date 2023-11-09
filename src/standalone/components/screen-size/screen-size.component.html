@@ -1,4 +1,5 @@
-<div *ngIf="debugMode" class="fixed bottom-1/2 left-1/2 -translate-x-1/2">
+@if (debugMode) {
+<div class="fixed bottom-1/2 left-1/2 -translate-x-1/2">
   <div class="sm:hidden bg-black w-30 h-30 p-5 rounded-3xl text-white">
     <p>css : xs</p>
     <p>js : xs</p>
@@ -24,3 +25,4 @@
     <p>js : xxl</p>
   </div>
 </div>
+}

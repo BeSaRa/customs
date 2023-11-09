@@ -3,6 +3,8 @@
   (click)="clickEvent($event)"
   [ngClass]="buttonType"
   class="flex items-center justify-center w-full btn {{ size }}">
-  <mat-icon *ngIf="inProgress" class="animate-spin duration-200 size-18" [svgIcon]="AppIcons.DOTS_CIRCLE"></mat-icon>
+  @if (inProgress) {
+  <mat-icon class="animate-spin duration-200 size-18" [svgIcon]="AppIcons.DOTS_CIRCLE"></mat-icon>
+  }
   <ng-content></ng-content>
 </button>

@@ -6,9 +6,11 @@
         <mat-icon [ngClass]="selectedClass.text" class="size-48" [svgIcon]="selectedClass.icon"></mat-icon>
       </div>
       <div class="flex-auto flex flex-col">
-        <div *ngIf="data.title" class="dialog-body-title font-semibold text-lg">
+        @if (data.title) {
+        <div class="dialog-body-title font-semibold text-lg">
           {{ data.title }}
         </div>
+        }
         <div class="dialog-body-content">
           {{ data.content }}
         </div>
@@ -16,16 +18,19 @@
     </div>
   </div>
   <div class="dialog-footer justify-center">
-    <ng-container *ngIf="!isConfirmDialog()">
-      <app-button (click)="close()" [buttonType]="selectedClass.btn">Close</app-button>
-    </ng-container>
-    <ng-container *ngIf="isConfirmDialog()">
-      <app-button (click)="yes()" [buttonType]="selectedClass.btn">
-        {{ data.buttons!.yes }}
-      </app-button>
-      <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
-        {{ data.buttons!.no }}
-      </app-button>
-    </ng-container>
+    @if (!isConfirmDialog()) {
+
+    <app-button (click)="close()" [buttonType]="selectedClass.btn">Close</app-button>
+
+    } @if (isConfirmDialog()) {
+
+    <app-button (click)="yes()" [buttonType]="selectedClass.btn">
+      {{ data.buttons!.yes }}
+    </app-button>
+    <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
+      {{ data.buttons!.no }}
+    </app-button>
+
+    }
   </div>
 </div>

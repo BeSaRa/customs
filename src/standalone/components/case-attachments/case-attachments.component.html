@@ -1,5 +1,7 @@
 <div class="flex items-center">
-  <h1 *ngIf="title" class="text-primary text-xl">{{ title }}</h1>
+  @if (title) {
+  <h1 class="text-primary text-xl">{{ title }}</h1>
+  }
   <app-icon-button class="text-primary" (click)="openAddDialog()" icon="PLUS_BOX"></app-icon-button>
   <app-icon-button class="text-primary" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
 </div>

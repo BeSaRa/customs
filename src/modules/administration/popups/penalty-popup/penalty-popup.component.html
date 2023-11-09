@@ -19,16 +19,11 @@
               [label]="lang.map.penalty_grace_period"
               type="number"></app-input>
             <app-input formControlName="penaltyWeight" [label]="lang.map.penalty_weight" type="number"></app-input>
-            <app-input
-              formControlName="deductionDays"
-              [label]="lang.map.deduction_days"
-              type="number"
-              *ngIf="isDeduction?.value"></app-input>
-            <app-input
-              formControlName="cashAmount"
-              [label]="lang.map.cash_amount"
-              type="number"
-              *ngIf="isCash?.value"></app-input>
+            @if (isDeduction?.value) {
+            <app-input formControlName="deductionDays" [label]="lang.map.deduction_days" type="number"></app-input>
+            } @if (isCash?.value) {
+            <app-input formControlName="cashAmount" [label]="lang.map.cash_amount" type="number"></app-input>
+            }
           </div>
           <div class="grid grid-cols-2 gap-4 items-center">
             <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
@@ -41,8 +36,11 @@
               [falseValue]="0"
               [label]="lang.map.change_status"
               [matTooltip]="statusTooltipText"></app-switch>
-            <app-switch *ngIf="!isEmployee" formControlName="isCash" [label]="lang.map.is_cash"></app-switch>
-            <app-switch *ngIf="isEmployee" formControlName="isDeduction" [label]="lang.map.is_deduction"></app-switch>
+            @if (!isEmployee) {
+            <app-switch formControlName="isCash" [label]="lang.map.is_cash"></app-switch>
+            } @if (isEmployee) {
+            <app-switch formControlName="isDeduction" [label]="lang.map.is_deduction"></app-switch>
+            }
           </div>
         </ng-container>
       </mat-tab>
@@ -53,20 +51,24 @@
           (listIsEmpty)="checkDetailsListValidity($event)"
           [isEmployee]="isEmployee"></app-penalty-details>
         <label class="group block relative">
-          <span
-            *ngIf="penaltyDetailsListIsEmpty"
-            class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
+          @if (penaltyDetailsListIsEmpty) {
+          <span class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
             {{
               this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({ x: this.lang.map.menu_penalty_details })
             }}
-          </span></label
+          </span>
+          }</label
         >
       </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    }
   </div>
 </div>

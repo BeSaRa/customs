@@ -3,21 +3,26 @@
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
   <div [ngClass]="size" class="group/text-area-wrapper input-form {{ inputColor }} flex items-center justify-start">
-    <ng-container *ngIf="!hasCustomControl">
-      <textarea
-        [rows]="rows"
-        [ngClass]="tailwindClass"
-        autocomplete="off"
-        (blur)="inputTouch()"
-        [name]="name"
-        [placeholder]="placeholder"
-        [formControl]="control"></textarea>
-    </ng-container>
-    <ng-container *ngIf="hasCustomControl">
-      <ng-content select="[appControl]"></ng-content>
-    </ng-container>
+    @if (!hasCustomControl) {
+
+    <textarea
+      [rows]="rows"
+      [ngClass]="tailwindClass"
+      autocomplete="off"
+      (blur)="inputTouch()"
+      [name]="name"
+      [placeholder]="placeholder"
+      [formControl]="control"></textarea>
+
+    } @if (hasCustomControl) {
+
+    <ng-content select="[appControl]"></ng-content>
+
+    }
   </div>
-  <ng-container *ngIf="displayErrors">
-    <app-validation-errors [errors]="errors | async"></app-validation-errors>
-  </ng-container>
+  @if (displayErrors) {
+
+  <app-validation-errors [errors]="errors | async"></app-validation-errors>
+
+  }
 </label>
