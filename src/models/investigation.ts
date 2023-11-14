@@ -3,6 +3,9 @@ import { InvestigationService } from '@services/investigation.service';
 import { CaseTypes } from '@enums/case-types';
 import { InterceptModel } from 'cast-response';
 import { InvestigationInterceptor } from '@model-interceptors/Investigation-interceptor';
+import { Offender } from './offender';
+import { OffenderViolation } from './offender-violation';
+import { Violation } from './violation';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -17,15 +20,17 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   applicantDecision!: number;
   override caseType = CaseTypes.INVESTIGATION;
   override createdOn: Date | string = new Date();
-
-  buildForm(controls = false): object {
+  offenderInfo: Offender[] = [];
+  offenderViolationInfo: OffenderViolation[] = [];
+  violationInfo: Violation[] = [];
+  buildForm(controls = false, disabled = false): object {
     const { description, createdOn, investigationFullSerial, draftFullSerial, limitedAccess } = this;
     return {
       draftFullSerial: controls ? [{ value: draftFullSerial, disabled: true }] : draftFullSerial,
       investigationFullSerial: controls ? [{ value: investigationFullSerial, disabled: true }] : investigationFullSerial,
-      createdOn: controls ? [{ value: createdOn, disabled: false }] : createdOn,
-      description: controls ? [description] : description,
-      limitedAccess: controls ? [limitedAccess] : limitedAccess,
+      createdOn: controls ? [{ value: createdOn, disabled: disabled }] : createdOn,
+      description: controls ? [{ value: description, disabled: disabled }] : description,
+      limitedAccess: controls ? [{ value: limitedAccess, disabled: disabled }] : limitedAccess,
     };
   }
 }

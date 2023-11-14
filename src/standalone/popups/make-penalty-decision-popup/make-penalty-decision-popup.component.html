@@ -1,0 +1,22 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.make_penalty_decision }}</h1>
+    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <form [formGroup]="form">
+        <app-select-input
+          class="col-span-2"
+          formControlName="penalty"
+          [options]="penaltyList"
+          [label]="lang.map.penalty"
+          bindValue="id" bindLabel="getNames" />
+      </form>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+  </div>
+</div>

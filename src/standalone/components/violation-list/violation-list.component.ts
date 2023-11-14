@@ -43,14 +43,13 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   service = inject(InvestigationService);
   data = new Subject<Violation[]>();
   dataSource = new AppTableDataSource(this.data);
-  displayedColumns = ['violationType', 'description', 'actions'];
+  displayedColumns = ['violationType', 'description', 'violationData', 'actions'];
   reload$: Subject<void> = new Subject<void>();
+  view$ = new Subject<Violation>();
   edit$ = new Subject<Violation>();
   delete$ = new Subject<Violation>();
   transformer$ = new Subject<TransformerAction<Investigation>>();
   protected readonly Config = Config;
-  @Input()
-  selectionList = false;
   @Output()
   selectViolation = new EventEmitter<Violation>();
 
@@ -62,11 +61,13 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   empty = new EventEmitter<void>();
   @Output()
   violations = new EventEmitter<Violation[]>();
-
+  @Input()
+  readonly = false;
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
     this.listenToEdit();
+    this.listenToView();
     this.listenToDelete();
     this.listernToSaveCase();
     this.reload$.next();
@@ -104,6 +105,52 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
         )
       )
       .subscribe(pagination => this.violations.next(pagination.rs || []));
+  }
+
+  private listenToView() {
+    this.view$
+      .pipe(
+        exhaustMap(model =>
+          this.violationTypeService
+            .loadById(model.violationTypeId)
+            .pipe(
+              map(type => ({
+                type,
+                model,
+              }))
+            )
+            .pipe(ignoreErrors())
+        )
+      )
+      .pipe(
+        exhaustMap(({ type, model }) =>
+          this.violationClassificationService
+            .loadById(type.classificationId)
+            .pipe(
+              map(classification => {
+                return {
+                  classification,
+                  model,
+                  type,
+                };
+              })
+            )
+            .pipe(ignoreErrors())
+        )
+      )
+      .pipe(
+        exhaustMap(({ model, type, classification }) =>
+          model
+            .openView({
+              caseId: this.caseId,
+              classificationId: type.classificationId,
+              classifications: [classification],
+              types: [type],
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe(() => this.reload$.next());
   }
 
   private listenToEdit() {

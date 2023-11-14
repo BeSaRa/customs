@@ -1,20 +1,20 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViolationRepeatePopupComponent } from './violation-repeate-popup.component';
+import { OffenderViolationsPopupComponent } from './offender-violations-popup.component';
 
-describe('ViolationRepeatePopupComponent', () => {
-  let component: ViolationRepeatePopupComponent;
-  let fixture: ComponentFixture<ViolationRepeatePopupComponent>;
+describe('OffenderViolationsPopupComponent', () => {
+  let component: OffenderViolationsPopupComponent;
+  let fixture: ComponentFixture<OffenderViolationsPopupComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ViolationRepeatePopupComponent],
+      declarations: [OffenderViolationsPopupComponent],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViolationRepeatePopupComponent);
+    fixture = TestBed.createComponent(OffenderViolationsPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,11 +8,12 @@ export function OnDestroyMixin<T extends AbstractConstructor<object>>(base: T): 
 export function OnDestroyMixin<T extends Constructor<object>>(base: T): CanDestroy & T {
   return class HasDestroySubject extends base implements HasDestroySubjectContract {
     destroy$: Subject<void> = new Subject<void>();
-
+    extraNgDestroy() {}
     ngOnDestroy(): void {
       this.destroy$.next();
       this.destroy$.complete();
       this.destroy$.unsubscribe();
+      this.extraNgDestroy();
     }
   };
 }

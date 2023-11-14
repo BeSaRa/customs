@@ -69,4 +69,7 @@ export class Violation extends BaseModel<Violation, ViolationService> {
       controlReportNumber: controls ? [controlReportNumber] : controlReportNumber,
     };
   }
+  getOffenderViolationSelectNames() {
+    return this.$$getService$$<ViolationService>().getViolationWithDateLabel(this);
+  }
 }

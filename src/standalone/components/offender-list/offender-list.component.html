@@ -1,6 +1,6 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
-  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+  <app-icon-button (click)="add$.next()" *ngIf="!readonly" class="text-primary" icon="PLUS_BOX"></app-icon-button>
   <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
 </div>
 <div>
@@ -13,17 +13,17 @@
     <!-- classification -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderInfo.arName }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.arName }}</td>
     </ng-container>
     <!-- classification -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderInfo.enName }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.enName }}</td>
     </ng-container>
     <!-- classification -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>{{ lang.map.qid }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderInfo.qid }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.qid }}</td>
     </ng-container>
     <!-- classification -->
     <ng-container matColumnDef="jobTitle">
@@ -33,21 +33,24 @@
     <!-- classification -->
     <ng-container matColumnDef="departmentCompany">
       <th mat-header-cell mat-sort-header="departmentCompany" *matHeaderCellDef>{{ lang.map.department_company }}</th>
-      <td mat-cell *matCellDef="let element">---</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderOUInfo?.getNames() }}</td>
     </ng-container>
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <div [matTooltip]="lang.map.add_violation">
-            <app-icon-button (click)="addViolation$.next(element)" icon="VIOLATION_OUTLINE" />
+          <div [matTooltip]="lang.map.violations">
+            <app-icon-button (click)="offenderViolation$.next(element)" icon="VIOLATION_OUTLINE" />
           </div>
-          <div [matTooltip]="lang.map.delete">
-            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
+          <div [matTooltip]="lang.map.make_penalty_decision" *ngIf="canMakeDecision && !readonly">
+            <app-icon-button (click)="makeDecision$.next(element)" icon="ACCOUNT_MAKE_DECISION" />
           </div>
           <div [matTooltip]="lang.map.offender_attachments">
             <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
+          </div>
+          <div [matTooltip]="lang.map.delete" *ngIf="!readonly">
+            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
         </div>
       </td>

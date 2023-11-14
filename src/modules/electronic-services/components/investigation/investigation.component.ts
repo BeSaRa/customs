@@ -49,7 +49,6 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
   caseFolders: CaseFolder[] = [];
   sendTypes = SendTypes;
-
   caseFoldersMap?: Record<string, CaseFolder>;
 
   adapter = inject(DateAdapter);
@@ -85,7 +84,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   }
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model ? this.model.buildForm(true) : new Investigation().buildForm(true));
+    this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
     this.listenToLocationChange();
   }
 
@@ -119,9 +118,28 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.toast.success(this.lang.map.request_has_been_sent_successfully);
   }
   _updateForm(model: Investigation): void {
+    console.log(this.readonly);
+    this.handleReadOnly();
     if (!model.id) this.resetForm();
     this.model = model;
-    this.form.patchValue(model.buildForm());
+    console.log(this.readonly);
+    this.form.patchValue(model.buildForm(false, this.readonly));
+  }
+  handleReadOnly() {
+    if (!this.model?.id) {
+      return;
+    }
+    // let caseStatus = this.model.getCaseStatus();
+    if (this.openFrom === OpenFrom.USER_INBOX) {
+    } else if (this.openFrom === OpenFrom.TEAM_INBOX) {
+      if (this.model.isClaimed()) {
+      }
+    } else if (this.openFrom === OpenFrom.SEARCH) {
+      // if saved as draft, then no readonly
+      if (this.model?.canCommit()) {
+        this.readonly = false;
+      }
+    }
   }
   saveCase(e: Subject<TransformerAction<Investigation>>) {
     new Investigation().save().subscribe((model: Investigation) => {

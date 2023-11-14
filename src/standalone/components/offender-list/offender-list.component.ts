@@ -1,4 +1,5 @@
-import { ViolationLinkPopupComponent } from './../../popups/violation-link-popup/violation-link-popup.component';
+import { OffenderViolationService } from '@services/offender-violation.service';
+import { EmployeeService } from '@services/employee.service';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -20,6 +21,9 @@ import { ToastService } from '@services/toast.service';
 import { Violation } from '@models/violation';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
 import { Investigation } from '@models/investigation';
+import { Penalty } from '@models/penalty';
+import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
+import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 
 @Component({
   selector: 'app-offender-list',
@@ -33,6 +37,9 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   toast = inject(ToastService);
   lang = inject(LangService);
   lookupService = inject(LookupService);
+  employeeService = inject(EmployeeService);
+  offenderService = inject(OffenderService);
+  offenderViolationService = inject(OffenderViolationService);
   @Input()
   violations!: Violation[];
   @Input()
@@ -41,6 +48,8 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   investigationModel?: Investigation;
   @Input()
   title: string = this.lang.map.offenders;
+  @Input()
+  readonly = false;
   add$: Subject<void> = new Subject<void>();
   attachments$: Subject<Offender> = new Subject<Offender>();
   data = new Subject<Offender[]>();
@@ -48,10 +57,10 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
-  offenderService = inject(OffenderService);
+  makeDecision$ = new Subject<Offender>();
   displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
-  addViolation$: Subject<Offender> = new Subject<Offender>();
-
+  offenderViolation$: Subject<Offender> = new Subject<Offender>();
+  penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
       ...acc,
@@ -64,8 +73,9 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
-    this.listenToAddViolationToOffender();
     this.listenToAttachments();
+    this.listenToMakeDecision();
+    this.listenToOffenderViolation();
     this.reload$.next();
   }
 
@@ -81,6 +91,8 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
             .open(OffenderCriteriaPopupComponent, {
               data: {
                 caseId: this.caseId,
+                violations: this.violations,
+                offenders: this.dataSource.data,
               },
             })
             .afterClosed()
@@ -93,12 +105,25 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.reload$
       .pipe(filter(() => !!this.caseId))
       .pipe(switchMap(() => this.offenderService.load(undefined, { caseId: this.caseId })))
+      .pipe(
+        tap(() => {
+          (this.employeeService.isApplicantManager() || this.employeeService.isApplicantChief()) &&
+            this.investigationModel
+              ?.getService()
+              .getCasePenalty(this.caseId as string)
+              .subscribe(data => {
+                this.penaltyMap = data;
+              });
+        })
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.data.next(list.rs);
       });
   }
-
+  get canMakeDecision() {
+    return this.employeeService.isApplicantManager();
+  }
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
   }
@@ -126,29 +151,6 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
       this.reload$.next();
     });
   }
-  private listenToAddViolationToOffender() {
-    this.addViolation$
-      .pipe(
-        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
-        filter(() => !!this.violations.length)
-      )
-      .pipe(
-        switchMap((offender: Offender) => {
-          return this.dialog
-            .open(ViolationLinkPopupComponent, {
-              data: {
-                caseId: this.caseId,
-                offenderId: offender.id,
-              },
-            })
-            .afterClosed();
-        })
-      )
-      .subscribe(() => {
-        this.reload$.next();
-      });
-  }
-
   private listenToAttachments() {
     this.attachments$
       .pipe(
@@ -158,6 +160,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
               data: {
                 model: this.investigationModel,
                 offenderId: model.id,
+                readonly: this.readonly,
               },
             })
             .afterClosed()
@@ -167,7 +170,42 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
         this.reload$.next();
       });
   }
-
+  private listenToOffenderViolation() {
+    this.offenderViolation$
+      .pipe(
+        switchMap((offender: Offender) =>
+          this.dialog
+            .open(OffenderViolationsPopupComponent, {
+              data: {
+                offenderId: offender.id,
+                caseId: this.investigationModel?.id,
+                violations: this.violations,
+                readonly: this.readonly,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
+  }
+  private listenToMakeDecision() {
+    this.makeDecision$
+      .pipe(filter((offender: Offender) => !!this.penaltyMap[offender.id]))
+      .pipe(
+        switchMap((offender: Offender) =>
+          this.dialog
+            .open(MakePenaltyDecisionPopupComponent, {
+              data: {
+                model: offender,
+                caseId: this.investigationModel?.id,
+                penalties: this.penaltyMap[offender.id],
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
+  }
   resetDataList() {
     this.data.next([]);
   }
