@@ -16,7 +16,7 @@
     </mat-tab-group>
   </mat-card>
   <ng-template #search_for_guide_panel>
-    <div class="p-4">
+    <div class="p-4 overflow-auto" style="height: 100%">
       <ng-container [formGroup]="form">
         <div class="grid grid-cols-4 gap-4">
           <app-select-input
@@ -58,8 +58,8 @@
     </div>
   </ng-template>
   <ng-template #search_result>
-    <div class="p-4">
-      <div class="shadow relative overflow-auto" style="max-height: 62vh">
+   <div class="p-4 overflow-auto" style="height: 100%">
+      <div class="shadow relative" style="max-height: 62vh">
         <table mat-table matSort class="table-style" [dataSource]="displayedList">
           <!-- violationTypeInfo -->
           <ng-container matColumnDef="violationType">
