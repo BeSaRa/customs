@@ -25,7 +25,7 @@ import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criter
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })
-export class WitnessesListComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class WitnessesListComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -36,6 +36,8 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
   caseId?: string;
   @Input()
   title: string = this.lang.map.external_persons;
+  @Input()
+  readonly = false;
   add$: Subject<void> = new Subject<void>();
   data = new Subject<Witness[]>();
   dataSource = new AppTableDataSource(this.data);
@@ -66,6 +68,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
     this.listenToReload();
     this.listenToDelete();
     this.reload$.next();
+    if (this.readonly) this.displayedColumns.pop();
   }
 
   private listenToAdd() {

@@ -57,6 +57,7 @@ export class Broker extends BaseModel<Broker, BrokerService> {
       enName: this.enName,
       status: 1,
       offenderRefId: this.id,
+      ouId: this.companyId,
     });
   }
   convertToWitness(caseId: string, personType: number): Witness {

@@ -1,3 +1,4 @@
+import { OpenFrom } from './../enums/open-from';
 import { TaskResponses } from './../enums/task-responses';
 import { Directive, EventEmitter, OnInit } from '@angular/core';
 import {
@@ -40,6 +41,8 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
   abstract route: ActivatedRoute;
   abstract form: UntypedFormGroup;
   abstract service: Service;
+  openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
+  readonly = false;
   model?: Model;
   launch$: Subject<null> = new Subject<null>();
   private afterLaunch$: Subject<boolean> = new Subject<boolean>();
@@ -151,6 +154,8 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
 
   protected _init(): void {
     this.model = this.route.snapshot.data.info?.model;
+    this.readonly = !this.model?.canStart();
+    this.openFrom = this.route.snapshot.data.info?.openFrom;
   }
 
   abstract _buildForm(): void;

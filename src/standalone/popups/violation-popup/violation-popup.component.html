@@ -19,7 +19,12 @@
         [options]="types" />
       <app-textarea formControlName="description" [label]="lang.map.description" class="col-span-2" />
       <app-input *ngIf="!isAbsenceType" formControlName="violationsDate" [label]="lang.map.violation_date">
-        <input appControl formControlName="violationsDate" (click)="datepicker.open()" [matDatepicker]="datepicker" />
+        <input
+          appControl
+          formControlName="violationsDate"
+          [max]="todayDate"
+          (click)="datepicker.open()"
+          [matDatepicker]="datepicker" />
         <mat-datepicker touchUi #datepicker />
       </app-input>
       <ng-container *ngIf="isAbsenceType">
@@ -28,12 +33,15 @@
             appControl
             formControlName="violationsDateFrom"
             (click)="violationDateFrom.open()"
+            [max]="controls.violationsDateTo()?.value || todayDate"
             [matDatepicker]="violationDateFrom" />
           <mat-datepicker touchUi #violationDateFrom />
         </app-input>
         <app-input formControlName="violationsDateTo" [label]="lang.map.date_to">
           <input
             appControl
+            [min]="controls.violationsDateFrom()?.value"
+            [max]="todayDate"
             formControlName="violationsDateTo"
             (click)="violationsDateTo.open()"
             [matDatepicker]="violationsDateTo" />

@@ -158,6 +158,7 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
     this.destroy$.next();
     this.destroy$.complete();
     this.destroy$.unsubscribe();
+    this.values.unsubscribe();
   }
 
   writeValue(value: string): void {

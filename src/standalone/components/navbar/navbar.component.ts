@@ -52,7 +52,10 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
 
   logout() {
     this.dialog
-      .confirm(this.lang.map.are_you_sure_you_want_to_logout)
+      .confirm(this.lang.map.are_you_sure_you_want_to_logout, '', {
+        yes: this.lang.map.yes,
+        no: this.lang.map.no,
+      })
       .afterClosed()
       .pipe(filter(value => value === UserClick.YES))
       .subscribe(() => {

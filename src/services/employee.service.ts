@@ -6,6 +6,7 @@ import { LookupService } from '@services/lookup.service';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { OrganizationUnit } from '@models/organization-unit';
 import { Team } from '@models/team';
+import { DepartmentGroupNames } from '@enums/department-group-names.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -79,11 +80,20 @@ export class EmployeeService {
     });
   }
 
+  isApplicantUser() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department);
+  }
+  isApplicantManager() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager);
+  }
+  isApplicantChief() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Chief);
+  }
+
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;
   }
   getEmployeeTeams(): Team[] {
-    console.log(this.loginData?.teams);
     return this.loginData?.teams || [];
   }
   clearEmployee() {

@@ -14,10 +14,25 @@
     </mat-tab-group>
     <ng-template #searchCriteria>
       <div class="p-4">
+        <div [formGroup]="brokerFormGroup" class="grid grid-cols-1 gap-4">
+          <app-select-input
+            [formControl]="offenderViolationControl"
+            [label]="lang.map.violations"
+            bindLabel="getOffenderViolationSelectNames"
+            bindValue="id"
+            [isMultiple]="true"
+            [options]="violations">
+            <span appInputSuffix>
+              <app-icon-button (click)="addViolation$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+            </span>
+          </app-select-input>
+        </div>
+        <hr class="mb-5" />
+        <h4 class="mb-4 text-primary">{{ lang.map.search_criteria }}</h4>
         <ng-container *ngIf="isEmployee && employeeFormGroup">
           <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
             <app-select-input
-              [formControl]="control"
+              [formControl]="offenderTypeControl"
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
@@ -38,7 +53,7 @@
         <ng-container *ngIf="isBroker">
           <div [formGroup]="brokerFormGroup" class="grid grid-cols-3 gap-4">
             <app-select-input
-              [formControl]="control"
+              [formControl]="offenderTypeControl"
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
@@ -55,9 +70,8 @@
         </ng-container>
       </div>
     </ng-template>
-
     <ng-template #searchResult>
-      <div *ngIf="isEmployee" class="p-4">
+      <div [hidden]="!isEmployee" class="p-4">
         <table mat-table class="table-style table-primary" [dataSource]="employeeDatasource">
           <!-- arName -->
           <ng-container matColumnDef="employee_number">
@@ -103,7 +117,7 @@
           </tr>
         </table>
       </div>
-      <div *ngIf="isBroker" class="p-4">
+      <div [hidden]="!isBroker" class="p-4">
         <table mat-table class="table-style table-primary" [dataSource]="brokersDatasource">
           <!-- arName -->
           <ng-container matColumnDef="brokerCode">
@@ -153,6 +167,8 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
+    <app-button (click)="search$.next()" [disabled]="!offenderViolationControl.value?.length" buttonType="primary">{{
+      lang.map.search
+    }}</app-button>
   </div>
 </div>

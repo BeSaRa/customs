@@ -96,6 +96,7 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
       type: OffenderTypes.EMPLOYEE,
       offenderRefId: this.id,
       status: 1,
+      ouId: this.employeeDepartmentId,
     });
   }
   convertToWitness(caseId: string, personType: number): Witness {

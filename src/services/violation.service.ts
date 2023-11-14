@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { LangService } from '@services/lang.service';
+import { inject, Injectable } from '@angular/core';
 import { Violation } from '@models/violation';
 import { Constructor } from '@app-types/constructors';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
@@ -6,7 +7,6 @@ import { CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
 import { Pagination } from '@models/pagination';
-import { Observable, of } from 'rxjs';
 
 @CastResponseContainer({
   $default: {
@@ -23,6 +23,7 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root',
 })
 export class ViolationService extends BaseCrudWithDialogService<ViolationPopupComponent, Violation> {
+  lang = inject(LangService);
   serviceName = 'ViolationService';
 
   protected getDialogComponent(): ComponentType<ViolationPopupComponent> {
@@ -39,5 +40,20 @@ export class ViolationService extends BaseCrudWithDialogService<ViolationPopupCo
 
   protected getModelClass(): Constructor<Violation> {
     return Violation;
+  }
+  getViolationWithDateLabel(model: Violation) {
+    return (
+      model.violationTypeInfo?.getNames() +
+      ' - ' +
+      (model.violationsDate
+        ? new Date(model.violationsDate).toLocaleDateString('en-GB')
+        : this.lang.map.date_to +
+          ' ' +
+          new Date(model.violationsDateFrom).toLocaleDateString('en-GB') +
+          ' ' +
+          this.lang.map.date_to +
+          ' ' +
+          new Date(model.violationsDateTo).toLocaleDateString('en-GB'))
+    );
   }
 }

@@ -111,6 +111,7 @@ export interface LangKeysContract {
   msg_save_x_success: string;
   msg_make_sure_all_required_fields_are_filled: string;
   msg_delete_x_confirm: string;
+  msg_delete_link_with_x_confirm: string;
   msg_delete_x_success: string;
   msg_status_x_changed_success: string;
   actions: string;
@@ -287,8 +288,6 @@ export interface LangKeysContract {
   launch: string;
   request_has_been_sent_successfully: string;
   select: string;
-  send_to_the_director_administration: string;
-  send_to_head_of_the_direct_department: string;
   violation_repeat: string;
   repeatation: string;
   creator: string;
@@ -304,4 +303,14 @@ export interface LangKeysContract {
   comment: string;
   claim: string;
   attachments: string;
+  make_penalty_decision: string;
+  referral: string;
+  to_manager: string;
+  send_to_manager: string;
+  send_to_chief: string;
+  offender_violations: string;
+  add_selected: string;
+  search_criteria: string;
+  can_not_delete_offender_must_has_at_least_one_violation: string;
+  return_to_manager: string;
 }

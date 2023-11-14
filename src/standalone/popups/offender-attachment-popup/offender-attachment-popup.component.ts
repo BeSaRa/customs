@@ -24,6 +24,7 @@ export class OffenderAttachmentPopupComponent extends OnDestroyMixin(class {}) {
 
   model: Investigation = this.data && (this.data.model as Investigation);
   offenderId: number = this.data && (this.data.offenderId as number);
+  readonly = this.data && this.data.readonly;
 
   constructor() {
     super();

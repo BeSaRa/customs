@@ -1,7 +1,12 @@
 import { BaseModel } from '@abstracts/base-model';
 import { OffenderService } from '@services/offender.service';
 import { AdminResult } from '@models/admin-result';
+import { InterceptModel } from 'cast-response';
+import { OffenderInterceptor } from '@model-interceptors/offender-interceptor';
 
+const { send, receive } = new OffenderInterceptor();
+
+@InterceptModel({ send, receive })
 export class Offender extends BaseModel<Offender, OffenderService> {
   $$__service_name__$$ = 'OffenderService';
   caseId!: string;
@@ -12,6 +17,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   penaltyId!: number;
   linkedPid!: number;
   statusDateModified?: Date | string;
+  ouId!: number;
   offenderInfo?: {
     updatedBy: 0;
     updatedOn: '2023-10-16T20:15:23.434Z';
@@ -38,6 +44,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
     };
     id: 0;
   };
+  offenderOUInfo?: AdminResult;
   customsViolationEffectInfo?: AdminResult;
   brokerCompmanyInfo!: AdminResult;
   typeInfo!: AdminResult;
