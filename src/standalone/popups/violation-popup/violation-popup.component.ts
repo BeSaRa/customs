@@ -59,7 +59,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   violationClassificationService = inject(ViolationClassificationService);
   types: ViolationType[] = [];
   classifications: ViolationClassification[] = [];
-
+  todayDate: Date = new Date();
   controls = {
     classification: () => this.form.get('violationClassificationId'),
     violationType: () => this.form.get('violationTypeId'),
@@ -86,11 +86,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   transformer$ = this.data.extras && (this.data.extras.transformer$ as Subject<TransformerAction<Investigation>>);
   caseId = this.data.extras && (this.data.extras.caseId as string);
-
   protected override _init() {
     super._init();
     this.loadClassifications();
-    if (this.operation === OperationType.UPDATE) {
+    if (this.operation === OperationType.UPDATE || this.operation === OperationType.VIEW) {
       this.data.extras
         ? (() => {
             this.classifications = this.data.extras.classifciations as ViolationClassification[];
@@ -118,7 +117,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.listenToClassificationChange();
     this.listenToViolationTypeChange();
 
-    if (this.operation === OperationType.UPDATE) {
+    if (this.operation === OperationType.UPDATE || this.operation === OperationType.VIEW) {
       this.data.extras && this.controls.classification()?.patchValue(this.data.extras.classificationId, { emitEvent: false });
       this.checkClassification();
       this.checkViolationType();
@@ -145,7 +144,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected _afterSave(model: Violation): void {
     this.model = model;
     this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }));
-    this.dialogRef.close();
+    this.dialogRef.close(model);
   }
 
   private prepareClassificationMap() {

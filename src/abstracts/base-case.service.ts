@@ -17,8 +17,10 @@ import { BlobModel } from '@models/blob-model';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { MenuItemService } from '@services/menu-item.service';
+import { Penalty } from '@models/penalty';
+import { OpenFrom } from '@enums/open-from';
 
-export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { }) implements BaseCaseServiceContract<M> {
+export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
   protected dialog: DialogService = inject(DialogService);
@@ -178,6 +180,26 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class { })
     return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId + '/claim');
   }
 
+  @CastResponse(undefined, {
+    unwrap: 'rs',
+  })
+  private _getCasePenalty(caseId: string): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
+    return this.http.get<{ [key: string]: { first: unknown; second: Penalty[] } }>(this.getUrlSegment() + '/' + caseId + '/penalty');
+  }
+  getCasePenalty(caseId: string): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
+    return this._getCasePenalty(caseId).pipe(
+      map(rs => {
+        const obj: { [key: string]: { first: unknown; second: Penalty[] } } = {};
+        Object.keys(rs).map((key: string) => {
+          obj[key] = {
+            ...rs[key],
+            second: rs[key].second.map(o => new Penalty().clone<Penalty>({ ...o })),
+          };
+        });
+        return obj;
+      })
+    );
+  }
   completeTask(
     taskId: string,
     body: {

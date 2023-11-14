@@ -55,6 +55,7 @@ export const AppIcons = {
   VIOLATION: 'alert-circle',
   GUIDE_PANEL: 'book',
   INVESTIGATION_SEARCH: 'magnify',
+  ACCOUNT_MAKE_DECISION: 'account-cog',
 };
 
 export type AppIconsType = typeof AppIcons;

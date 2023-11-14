@@ -1,3 +1,4 @@
+import { MatMenuModule } from '@angular/material/menu';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElectronicServicesRoutingModule } from './electronic-services-routing.module';
@@ -54,6 +55,7 @@ import { TeamInboxComponent } from './components/team-inbox/team-inbox.component
     SelectInputComponent,
     TextareaComponent,
     MatExpansionModule,
+    MatMenuModule,
     MatProgressSpinnerModule,
     MatTableModule,
     MatButtonToggleModule,

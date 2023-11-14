@@ -54,7 +54,9 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   getResponses() {
     return this.taskDetails?.responses;
   }
-
+  getCaseStatus() {
+    return this.caseStatus;
+  }
   hasResponse(responses: TaskResponses) {
     return this.getResponses().includes(responses);
   }
@@ -75,6 +77,9 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   }
   isClaimed(): boolean {
     return this.canRelease();
+  }
+  canCommit(): boolean {
+    return this.caseStatus === CommonCaseStatus.DRAFT;
   }
   canStart(): boolean {
     return this.caseStatus === CommonCaseStatus.NEW;

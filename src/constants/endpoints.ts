@@ -37,6 +37,7 @@ export const EndPoints = {
   OFFENDER_VIOLATION: '/entity/offender-violation',
   GUIDE_PANEL: '/entity/violation-penalty/guide-panel',
   WITNESS: '/entity/witness',
+  PENALTY_DECISION: '/entity/penalty-decision',
 };
 
 export type EndpointsType = typeof EndPoints;

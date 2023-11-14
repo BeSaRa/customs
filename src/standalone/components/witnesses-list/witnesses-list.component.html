@@ -1,6 +1,6 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
-  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+  <app-icon-button (click)="add$.next()" *ngIf="!readonly" class="text-primary" icon="PLUS_BOX"></app-icon-button>
   <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
 </div>
 <div>
@@ -34,7 +34,7 @@
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <div [matTooltip]="lang.map.delete">
+          <div [matTooltip]="lang.map.delete" *ngIf="!readonly">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
         </div>

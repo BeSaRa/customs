@@ -42,6 +42,8 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   title?: string;
   @Input()
   service!: BaseCaseService<unknown>;
+  @Input()
+  readonly = false;
 
   lang = inject(LangService);
 
