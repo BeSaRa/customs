@@ -133,6 +133,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     if (this.openFrom === OpenFrom.USER_INBOX) {
     } else if (this.openFrom === OpenFrom.TEAM_INBOX) {
       if (this.model.isClaimed()) {
+        this.readonly = false;
       }
     } else if (this.openFrom === OpenFrom.SEARCH) {
       // if saved as draft, then no readonly

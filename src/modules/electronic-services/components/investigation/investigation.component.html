@@ -109,7 +109,8 @@
         model?.isClaimed() &&
         (model?.hasResponse(taskResponses.TO_USER) ||
           model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
-          model?.hasResponse(taskResponses.RETURN_TO_APP))
+          model?.hasResponse(taskResponses.RETURN_TO_APP) ||
+          model?.hasResponse(taskResponses.RETURN_APP_MANAGER))
       "
       buttonType="secondary"
       mat-button
@@ -119,25 +120,25 @@
     <mat-menu #returnMenu="matMenu">
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.RETURN_APP_MANAGER)"
+        *ngIf="model?.hasResponse(taskResponses.RETURN_APP_MANAGER)"
         (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
         {{ lang.map.return_to_manager }}
       </button>
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_USER)"
+        *ngIf="model?.hasResponse(taskResponses.TO_USER)"
         (click)="responseAction$.next(taskResponses.TO_USER)">
         {{ lang.map.return }}
       </button>
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.RETURN_TO_SAME)"
+        *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
         (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
         {{ lang.map.return_to_same }}
       </button>
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.RETURN_TO_APP)"
+        *ngIf="model?.hasResponse(taskResponses.RETURN_TO_APP)"
         (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
         {{ lang.map.return_to_applicant_department }}
       </button>
@@ -156,17 +157,38 @@
     <mat-menu #referralMenu="matMenu">
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
+        *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
         (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
         {{ lang.map.referral_to_presodent }}
       </button>
       <button
         mat-menu-item
-        *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
+        *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
         (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
         {{ lang.map.referral_to_presodent_assistant }}
       </button>
     </mat-menu>
+    <app-button
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)"
+      buttonType="secondary"
+      mat-button
+      [matMenuTriggerFor]="transferMenu">
+      {{ lang.map.transfer }}
+    </app-button>
+    <mat-menu #transferMenu="matMenu">
+      <button
+        mat-menu-item
+        *ngIf="model?.hasResponse(taskResponses.TO_PO)"
+        (click)="responseAction$.next(taskResponses.TO_PO)">
+        {{ lang.map.transfer_report_to_staff_president_office }}
+      </button>
+    </mat-menu>
+    <app-button
+      buttonType="secondary"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)"
+      (click)="responseAction$.next(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)">
+      {{ lang.map.issuing_referral_decision_to_legal_affairs_manager }}
+    </app-button>
     <app-button *ngIf="model?.canClaim()" (click)="claim()">
       {{ lang.map.claim }}
     </app-button>
@@ -181,6 +203,12 @@
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)"
       (click)="responseAction$.next(taskResponses.CLOSE)">
       {{ lang.map.close }}
+    </app-button>
+    <app-button
+      buttonType="error"
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)"
+      (click)="responseAction$.next(taskResponses.TERMINATE)">
+      {{ lang.map.terminate }}
     </app-button>
   </div>
 </div>
