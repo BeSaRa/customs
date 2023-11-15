@@ -154,7 +154,7 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
 
   protected _init(): void {
     this.model = this.route.snapshot.data.info?.model;
-    this.readonly = !this.model?.canStart();
+    // this.readonly = !this.model?.canStart();
     this.openFrom = this.route.snapshot.data.info?.openFrom;
   }
 
