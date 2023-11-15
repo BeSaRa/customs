@@ -8,7 +8,7 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { filter, map, Observable, take, takeUntil, Subject, switchMap, of } from 'rxjs';
+import { filter, map, Observable, take, takeUntil, Subject, switchMap } from 'rxjs';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -76,7 +76,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
             .afterOpened();
         })
       )
-      .pipe(filter((click: any) => click == UserClick.YES))
+      .pipe(filter((click: unknown) => click == UserClick.YES))
       .subscribe();
   }
   getSecurityLevel(limitedAccess: boolean): string {
