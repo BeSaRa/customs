@@ -18,55 +18,49 @@
         formControlName="violationTypeId"
         [options]="types" />
       <app-textarea formControlName="description" [label]="lang.map.description" class="col-span-2" />
-      @if (!isAbsenceType) {
-      <app-input formControlName="violationsDate" [label]="lang.map.violation_date">
+      <app-input *ngIf="!isAbsenceType" formControlName="violationsDate" [label]="lang.map.violation_date">
         <input appControl formControlName="violationsDate" (click)="datepicker.open()" [matDatepicker]="datepicker" />
         <mat-datepicker touchUi #datepicker />
       </app-input>
-      } @if (isAbsenceType) {
+      <ng-container *ngIf="isAbsenceType">
+        <app-input formControlName="violationsDateFrom" [label]="lang.map.date_from">
+          <input
+            appControl
+            formControlName="violationsDateFrom"
+            (click)="violationDateFrom.open()"
+            [matDatepicker]="violationDateFrom" />
+          <mat-datepicker touchUi #violationDateFrom />
+        </app-input>
+        <app-input formControlName="violationsDateTo" [label]="lang.map.date_to">
+          <input
+            appControl
+            formControlName="violationsDateTo"
+            (click)="violationsDateTo.open()"
+            [matDatepicker]="violationsDateTo" />
+          <mat-datepicker touchUi #violationsDateTo />
+        </app-input>
+      </ng-container>
 
-      <app-input formControlName="violationsDateFrom" [label]="lang.map.date_from">
-        <input
-          appControl
-          formControlName="violationsDateFrom"
-          (click)="violationDateFrom.open()"
-          [matDatepicker]="violationDateFrom" />
-        <mat-datepicker touchUi #violationDateFrom />
-      </app-input>
-      <app-input formControlName="violationsDateTo" [label]="lang.map.date_to">
-        <input
-          appControl
-          formControlName="violationsDateTo"
-          (click)="violationsDateTo.open()"
-          [matDatepicker]="violationsDateTo" />
-        <mat-datepicker touchUi #violationsDateTo />
-      </app-input>
+      <ng-container *ngIf="isCriminal">
+        <app-input [label]="lang.map.report_number" formControlName="reportNumber" />
+        <app-select-input formControlName="reportYear" [label]="lang.map.report_year" [options]="years" />
+        <app-select-input
+          formControlName="securityAdminDecision"
+          [label]="lang.map.security_management"
+          bindLabel="getNames"
+          bindValue="lookupKey"
+          [options]="securityManagement" />
+      </ng-container>
 
-      } @if (isCriminal) {
-
-      <app-input [label]="lang.map.report_number" formControlName="reportNumber" />
-      <app-select-input formControlName="reportYear" [label]="lang.map.report_year" [options]="years" />
-      <app-select-input
-        formControlName="securityAdminDecision"
-        [label]="lang.map.security_management"
-        bindLabel="getNames"
-        bindValue="lookupKey"
-        [options]="securityManagement" />
-
-      } @if (isCustoms) {
-
-      <app-input [label]="lang.map.customs_declaration_number" formControlName="customsDeclarationNumber" />
-      <app-input [label]="lang.map.control_report_number" formControlName="controlReportNumber" />
-
-      }
+      <ng-container *ngIf="isCustoms">
+        <app-input [label]="lang.map.customs_declaration_number" formControlName="customsDeclarationNumber" />
+        <app-input [label]="lang.map.control_report_number" formControlName="controlReportNumber" />
+      </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    @if (inCreateMode()) {
-    <app-button (click)="addViolation()" buttonType="primary">{{ lang.map.add }}</app-button>
-    } @if (inEditMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    }
+    <app-button *ngIf="inCreateMode()" (click)="addViolation()" buttonType="primary">{{ lang.map.add }}</app-button>
+    <app-button *ngIf="inEditMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
   </div>
 </div>

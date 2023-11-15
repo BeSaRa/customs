@@ -31,41 +31,33 @@
       </mat-tab>
       <mat-tab [label]="lang.map.ar_body_template">
         <ng-container [formGroup]="form">
-          @if (!inViewMode()) {
           <app-html-editor
+            *ngIf="!inViewMode()"
             [id]="'arBodyEditor'"
             formControlName="arBodyTemplate"
             [placeHolder]="lang.map.mail_template_placeholder"></app-html-editor>
-          } @if (inViewMode()) {
-          <div class="!w-fit">
+          <div *ngIf="inViewMode()" class="!w-fit">
             <div class="prose" [innerHTML]="form.get('arBodyTemplate')?.value | txtToHtml"></div>
           </div>
-          }
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.en_body_template">
         <ng-container [formGroup]="form">
-          @if (!inViewMode()) {
           <app-html-editor
+            *ngIf="!inViewMode()"
             [id]="'enBodyEditor'"
             formControlName="enBodyTemplate"
             [placeHolder]="lang.map.mail_template_placeholder"></app-html-editor>
-          } @if (inViewMode()) {
-          <div>
+          <div *ngIf="inViewMode()">
             <div class="prose" [innerHTML]="form.get('enBodyTemplate')?.value | txtToHtml"></div>
           </div>
-          }
         </ng-container>
       </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
-    @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
-    }
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>

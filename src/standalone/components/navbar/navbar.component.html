@@ -31,9 +31,7 @@
     </div>
   </button>
   <mat-menu #langMenu="matMenu">
-    @for (item of lang.languages; track item) {
-    <button (click)="lang.setCurrent(item)" mat-menu-item>{{ item.name }}</button>
-    }
+    <button (click)="lang.setCurrent(item)" *ngFor="let item of lang.languages" mat-menu-item>{{ item.name }}</button>
   </mat-menu>
   <div class="w-10"></div>
 </div>

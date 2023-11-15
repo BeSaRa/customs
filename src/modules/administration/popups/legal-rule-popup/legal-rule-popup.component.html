@@ -14,7 +14,7 @@
       </div>
       <div class="grid grid-cols-2 gap-4">
         <app-textarea formControlName="legalTextArabic" [label]="lang.map.legal_text_ar"></app-textarea>
-        <app-textarea formControlName="legalTextEnglish" [label]="lang.map.legal_text_en"></app-textarea>
+        <app-textarea formControlName="legalTextEnglish" [label]="lang.map.legal_text_en"></app-textarea>        
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-row pl-1 items-center justify-start">
@@ -24,12 +24,8 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
-    }
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>

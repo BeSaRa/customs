@@ -8,9 +8,12 @@
   [config]="config">
   <ng-template #customButtons let-executeCommandFn="executeCommandFn">
     <ae-toolbar-set>
-      @if (isTableWithTitle) {
-      <input type="color" class="editor-input" [formControl]="headerBgColor" title="header background color" />
-      }
+      <input
+        type="color"
+        class="editor-input"
+        *ngIf="isTableWithTitle"
+        [formControl]="headerBgColor"
+        title="header background color" />
 
       <ae-button
         [iconClass]="'fa fa-' + (isTableWithTitle ? 'check-square-o' : 'square-o')"
@@ -40,8 +43,6 @@
       </ae-button>
     </ae-toolbar-set> </ng-template
 ></angular-editor>
-@if (displayErrors) {
-
-<app-validation-errors class="block relative" [errors]="errors | async"></app-validation-errors>
-
-}
+<ng-container *ngIf="displayErrors">
+  <app-validation-errors class="block relative" [errors]="errors | async"></app-validation-errors>
+</ng-container>

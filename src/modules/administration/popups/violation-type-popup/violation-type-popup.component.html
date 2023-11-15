@@ -25,21 +25,21 @@
           bindValue="lookupKey"
           bindLabel="getNames" />
 
-        @if (isCriminal()) {
         <app-select-input
+          *ngIf="isCriminal()"
           formControlName="criminalType"
           [options]="criminalTypes"
           [label]="lang.map.criminal_type"
           bindValue="lookupKey"
           bindLabel="getNames" />
-        } @if (isBroker()) {
+
         <app-select-input
+          *ngIf="isBroker()"
           formControlName="responsibilityRepeatViolations"
           [options]="responsibilityRepeatViolations"
           [label]="lang.map.responsibility_repeat_violations"
           bindValue="lookupKey"
           bindLabel="getNames" />
-        }
 
         <app-select-input
           formControlName="level"
@@ -55,27 +55,18 @@
           bindValue="lookupKey"
           bindLabel="getNames" />
 
-        @if (isNumeric?.value) {
-        <app-input formControlName="numericFrom" [label]="lang.map.numeric_from" />
-        } @if (isNumeric?.value) {
-        <app-input formControlName="numericTo" [label]="lang.map.numeric_to" />
-        }
+        <app-input *ngIf="isNumeric?.value" formControlName="numericFrom" [label]="lang.map.numeric_from" />
+        <app-input *ngIf="isNumeric?.value" formControlName="numericTo" [label]="lang.map.numeric_to" />
 
         <app-switch formControlName="isNumeric" [label]="lang.map.is_numeric" />
-        @if (isNumeric?.value) {
-        <app-switch formControlName="isAbsence" [label]="lang.map.absence" />
-        }
+        <app-switch *ngIf="isNumeric?.value" formControlName="isAbsence" [label]="lang.map.absence" />
         <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.status" />
       </div>
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
-    }
+    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>

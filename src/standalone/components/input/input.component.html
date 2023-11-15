@@ -1,39 +1,31 @@
 <label
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
-  <span [ngClass]="labelColor" class="block font-medium"
-    >{{ label }}
-    @if (isRequired) {
-    <span class="text-amber-700">*</span>
-    }
+  <span [ngClass]="labelColor" class="block font-medium">{{ label }}
+        <span *ngIf="isRequired" class="text-amber-700">*</span>
   </span>
   <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-start">
     <ng-content select="[appInputPrefix]"></ng-content>
     <span
       [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
       class="peer absolute hidden pointer-events-none"></span>
-    @if (!hasCustomControl) {
-
-    <input
-      [readonly]="disabled"
-      [ngClass]="tailwindClass"
-      autocomplete="off"
-      [type]="type"
-      (blur)="inputTouch()"
-      [name]="name"
-      [placeholder]="placeholder"
-      [formControl]="control" />
-
-    } @if (hasCustomControl) {
-
-    <ng-content select="[appControl]"></ng-content>
-
-    }
+    <ng-container *ngIf="!hasCustomControl">
+      <input
+        [readonly]="disabled"
+        [ngClass]="tailwindClass"
+        autocomplete="off"
+        [type]="type"
+        (blur)="inputTouch()"
+        [name]="name"
+        [placeholder]="placeholder"
+        [formControl]="control" />
+    </ng-container>
+    <ng-container *ngIf="hasCustomControl">
+      <ng-content select="[appControl]"></ng-content>
+    </ng-container>
     <ng-content select="[appInputSuffix]"></ng-content>
   </div>
-  @if (displayErrors) {
-
-  <app-validation-errors [errors]="errors | async"></app-validation-errors>
-
-  }
+  <ng-container *ngIf="displayErrors">
+    <app-validation-errors [errors]="errors | async"></app-validation-errors>
+  </ng-container>
 </label>

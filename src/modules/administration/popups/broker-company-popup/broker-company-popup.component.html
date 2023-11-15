@@ -42,8 +42,6 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
-    }
+    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>

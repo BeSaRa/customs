@@ -1,7 +1,5 @@
 <div class="text-white space-y-0.5 relative">
-  @for (item of items | filterSidebarMenuItem : searchText; track item) {
-
-  <app-sidebar-menu-item [shrinkMode]="shrinkMode" [searchText]="searchText" [level]="level" [item]="item" />
-
-  }
+  <ng-container *ngFor="let item of items | filterSidebarMenuItem : searchText">
+    <app-sidebar-menu-item [shrinkMode]="shrinkMode" [searchText]="searchText" [level]="level" [item]="item" />
+  </ng-container>
 </div>

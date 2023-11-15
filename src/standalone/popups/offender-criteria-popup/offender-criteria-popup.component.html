@@ -14,54 +14,50 @@
     </mat-tab-group>
     <ng-template #searchCriteria>
       <div class="p-4">
-        @if (isEmployee && employeeFormGroup) {
-
-        <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
-          <app-select-input
-            [formControl]="control"
-            [label]="lang.map.offender_type"
-            bindLabel="getNames"
-            bindValue="lookupKey"
-            [options]="offenderTypes" />
-          <app-select-input
-            formControlName="employeeDepartmentId"
-            [label]="lang.map.administration"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="administrations" />
-          <app-input formControlName="employeeQualificationId" [label]="lang.map.employee_number" />
-          <app-input formControlName="arName" [label]="lang.map.ar_name" />
-          <app-input formControlName="enName" [label]="lang.map.en_name" />
-          <app-input formControlName="qid" [label]="lang.map.qid" />
-          <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
-        </div>
-
-        } @if (isBroker) {
-
-        <div [formGroup]="brokerFormGroup" class="grid grid-cols-3 gap-4">
-          <app-select-input
-            [formControl]="control"
-            [label]="lang.map.offender_type"
-            bindLabel="getNames"
-            bindValue="lookupKey"
-            [options]="offenderTypes" />
-          <app-input formControlName="code" [label]="lang.map.broker_code" />
-          <app-input formControlName="arName" [label]="lang.map.ar_name" />
-          <app-input formControlName="enName" [label]="lang.map.en_name" />
-          <app-input formControlName="qid" [label]="lang.map.qid" />
-          <app-input [label]="lang.map.broker_company_name" />
-          <app-input [label]="lang.map.broker_company_number" />
-          <app-input [label]="lang.map.broker_company_cr_number" />
-          <app-input [label]="lang.map.broker_company_er_number" />
-        </div>
-
-        }
+        <ng-container *ngIf="isEmployee && employeeFormGroup">
+          <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
+            <app-select-input
+              [formControl]="control"
+              [label]="lang.map.offender_type"
+              bindLabel="getNames"
+              bindValue="lookupKey"
+              [options]="offenderTypes" />
+            <app-select-input
+              formControlName="employeeDepartmentId"
+              [label]="lang.map.administration"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="administrations" />
+            <app-input formControlName="employeeQualificationId" [label]="lang.map.employee_number" />
+            <app-input formControlName="arName" [label]="lang.map.ar_name" />
+            <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="qid" [label]="lang.map.qid" />
+            <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isBroker">
+          <div [formGroup]="brokerFormGroup" class="grid grid-cols-3 gap-4">
+            <app-select-input
+              [formControl]="control"
+              [label]="lang.map.offender_type"
+              bindLabel="getNames"
+              bindValue="lookupKey"
+              [options]="offenderTypes" />
+            <app-input formControlName="code" [label]="lang.map.broker_code" />
+            <app-input formControlName="arName" [label]="lang.map.ar_name" />
+            <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="qid" [label]="lang.map.qid" />
+            <app-input [label]="lang.map.broker_company_name" />
+            <app-input [label]="lang.map.broker_company_number" />
+            <app-input [label]="lang.map.broker_company_cr_number" />
+            <app-input [label]="lang.map.broker_company_er_number" />
+          </div>
+        </ng-container>
       </div>
     </ng-template>
 
     <ng-template #searchResult>
-      @if (isEmployee) {
-      <div class="p-4">
+      <div *ngIf="isEmployee" class="p-4">
         <table mat-table class="table-style table-primary" [dataSource]="employeeDatasource">
           <!-- arName -->
           <ng-container matColumnDef="employee_number">
@@ -107,8 +103,7 @@
           </tr>
         </table>
       </div>
-      } @if (isBroker) {
-      <div class="p-4">
+      <div *ngIf="isBroker" class="p-4">
         <table mat-table class="table-style table-primary" [dataSource]="brokersDatasource">
           <!-- arName -->
           <ng-container matColumnDef="brokerCode">
@@ -154,7 +149,6 @@
           </tr>
         </table>
       </div>
-      }
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">

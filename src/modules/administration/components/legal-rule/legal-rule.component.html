@@ -7,11 +7,9 @@
   <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
 </div>
 <div class="shadow relative">
-  @if (loading$ | async) {
-  <div class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
+  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
     <mat-spinner [diameter]="75"></mat-spinner>
   </div>
-  }
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -100,18 +98,16 @@
       </td>
     </ng-container>
 
-    @for (filter of columnsWrapper.filteredColumns; track filter) {
-
-    <!-- filtered Columns -->
-    <ng-container [matColumnDef]="filter">
-      <th mat-header-cell *matHeaderCellDef>
-        <app-filter-column
-          (filterChange)="filterChange($event)"
-          [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
-      </th>
+    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
+      <!-- filtered Columns -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+        </th>
+      </ng-container>
     </ng-container>
-
-    }
 
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
