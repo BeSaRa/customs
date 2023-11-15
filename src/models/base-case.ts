@@ -58,7 +58,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus;
   }
   hasResponse(responses: TaskResponses) {
-    return this.getResponses().includes(responses);
+    return this.getResponses() && this.getResponses().includes(responses);
   }
   isCancelled(): boolean {
     return this.caseStatus === CommonCaseStatus.CANCELLED;
