@@ -67,7 +67,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus === CommonCaseStatus.RETURNED;
   }
   canSave(): boolean {
-    return !this.isCancelled() && this.isReturned();
+    return true;
   }
   canClaim(): boolean {
     return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);

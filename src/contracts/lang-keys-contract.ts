@@ -313,5 +313,10 @@ export interface LangKeysContract {
   add_selected: string;
   search_criteria: string;
   can_not_delete_offender_must_has_at_least_one_violation: string;
+  transfer: string;
+  // need to full
   return_to_manager: string;
+  terminate: string;
+  issuing_referral_decision_to_legal_affairs_manager: string;
+  transfer_report_to_staff_president_office: string;
 }
