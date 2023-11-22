@@ -33,6 +33,7 @@ import { WitnessesListComponent } from '@standalone/components/witnesses-list/wi
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
+import { SituationSearchComponent } from './components/situation-search/situation-search.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { TeamInboxComponent } from './components/team-inbox/team-inbox.component
     GuidePanelComponent,
     TeamInboxComponent,
     InvestigationSearchComponent,
+    SituationSearchComponent,
   ],
   imports: [
     CommonModule,

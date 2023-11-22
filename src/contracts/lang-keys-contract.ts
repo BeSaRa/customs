@@ -319,4 +319,7 @@ export interface LangKeysContract {
   terminate: string;
   issuing_referral_decision_to_legal_affairs_manager: string;
   transfer_report_to_staff_president_office: string;
+  situation_search: string;
+  is_proved: string;
+  situation_search_brokerage_company: string;
 }
