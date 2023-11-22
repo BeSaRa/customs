@@ -24,6 +24,8 @@ import { Investigation } from '@models/investigation';
 import { Penalty } from '@models/penalty';
 import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
+import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-offender-list',
@@ -58,6 +60,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
   makeDecision$ = new Subject<Offender>();
+  situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
@@ -76,6 +79,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.listenToAttachments();
     this.listenToMakeDecision();
     this.listenToOffenderViolation();
+    this.listenToSituationSearch();
     this.reload$.next();
   }
 
@@ -206,7 +210,27 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
       )
       .subscribe();
   }
+  listenToSituationSearch() {
+    this.situationSearch$
+      .pipe(
+        switchMap((data: { offender: Offender; isCompany: boolean }) =>
+          this.dialog
+            .open(SituationSearchComponent, {
+              data: {
+                id: data.offender.offenderInfo?.id,
+                type: data.offender.type,
+                isCompany: data.isCompany,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
+  }
   resetDataList() {
     this.data.next([]);
+  }
+  isBroker(element: Offender) {
+    return element.type === OffenderTypes.BROKER;
   }
 }

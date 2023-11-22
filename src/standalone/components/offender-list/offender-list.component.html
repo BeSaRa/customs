@@ -52,6 +52,12 @@
           <div [matTooltip]="lang.map.delete" *ngIf="!readonly">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
+          <div [matTooltip]="lang.map.situation_search">
+            <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:false })" icon="INFORMATION"></app-icon-button>
+          </div>
+          <div [matTooltip]="lang.map.situation_search_brokerage_company" *ngIf="isBroker(element)">
+            <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:true })" icon="BROKER_COMPANY"></app-icon-button>
+          </div>
         </div>
       </td>
     </ng-container>
