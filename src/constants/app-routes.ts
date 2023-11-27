@@ -30,4 +30,5 @@ export const AppRoutes = {
   ATTACHMENT_TYPE: 'attachment-type',
   GUIDE_PANEL: 'guide-panel',
   INVESTIGATION_SEARCH: 'investigation-search',
+  INVESTIGATION_DRAFTS: 'investigation-drafts',
 };

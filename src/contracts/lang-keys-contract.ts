@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_investigation_drafts: string;
   search_for_investigation: string;
   menu_investigation_search: string;
   customs_investigation_platform: string;
@@ -322,4 +323,5 @@ export interface LangKeysContract {
   situation_search: string;
   is_proved: string;
   situation_search_brokerage_company: string;
+  case_identifier: string;
 }

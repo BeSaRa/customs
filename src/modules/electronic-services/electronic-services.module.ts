@@ -34,6 +34,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
+import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SituationSearchComponent } from './components/situation-search/situatio
     TeamInboxComponent,
     InvestigationSearchComponent,
     SituationSearchComponent,
+    InvestigationDraftsComponent,
   ],
   imports: [
     CommonModule,

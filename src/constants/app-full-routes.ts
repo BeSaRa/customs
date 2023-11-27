@@ -27,4 +27,5 @@ export const AppFullRoutes = {
   ATTACHMENT_TYPE: '/home/administration/attachment-type',
   GUIDE_PANEL: '/home/electronic-services/guide-panel',
   INVESTIGATION_SEARCH: '/home/electronic-services/investigation-search',
+  INVESTIGATION_DRAFTS: '/home/electronic-services/investigation-drafts',
 };
