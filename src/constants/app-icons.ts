@@ -56,6 +56,7 @@ export const AppIcons = {
   GUIDE_PANEL: 'book',
   INVESTIGATION_SEARCH: 'magnify',
   ACCOUNT_MAKE_DECISION: 'account-cog',
+  INVESTIGATION_DRAFTS: 'file',
 };
 
 export type AppIconsType = typeof AppIcons;

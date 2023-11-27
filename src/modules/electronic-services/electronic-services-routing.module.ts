@@ -8,6 +8,7 @@ import { GuidePanelComponent } from './components/guide-panel/guide-panel.compon
 import { ServiceItemResolver } from '@resolvers/service-item.resolver';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
+import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
     path: AppRoutes.INVESTIGATION_SEARCH,
     component: InvestigationSearchComponent,
+  },
+  {
+    path: AppRoutes.INVESTIGATION_DRAFTS,
+    component: InvestigationDraftsComponent,
   },
 ];
 
