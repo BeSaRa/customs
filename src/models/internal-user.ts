@@ -5,6 +5,7 @@ import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { UserPreferences } from './user-preferences';
+import { StatusTypes } from '@enums/status-types';
 
 const { send, receive } = new InternalUserInterceptor();
 
@@ -27,7 +28,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   qid!: string;
 
   userPreferences!: UserPreferences;
-
+  override status = StatusTypes.ACTIVE;
   buildForm(controls = false): object {
     const { domainName, arName, enName, empNum, email, phoneNumber, status, qid, permissionRoleId } = this;
 
@@ -43,7 +44,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
         : empNum,
       email: controls ? [email, [CustomValidators.required, CustomValidators.pattern('EMAIL')]] : email,
       phoneNumber: controls ? [phoneNumber, CustomValidators.pattern('PHONE_NUMBER')] : phoneNumber,
-      status: controls ? [status ? status : 1, CustomValidators.required] : status ? status : 1,
+      status: controls ? [status, CustomValidators.required] : status,
       permissionRoleId: controls ? [permissionRoleId, CustomValidators.required] : permissionRoleId,
     };
   }
