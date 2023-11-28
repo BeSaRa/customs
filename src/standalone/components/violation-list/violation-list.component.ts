@@ -37,8 +37,6 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   violationClassificationService = inject(ViolationClassificationService);
   @Input()
   caseId?: string;
-  @Input()
-  title: string = this.lang.map.violations;
   add$: Subject<void> = new Subject<void>();
   service = inject(InvestigationService);
   data = new Subject<Violation[]>();
