@@ -49,8 +49,6 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   @Input()
   investigationModel?: Investigation;
   @Input()
-  title: string = this.lang.map.offenders;
-  @Input()
   readonly = false;
   add$: Subject<void> = new Subject<void>();
   attachments$: Subject<Offender> = new Subject<Offender>();

@@ -1,5 +1,5 @@
 <div class="flex justify-start items-center">
-  <h1 class="text-primary text-xl">{{ title }}</h1>
+  <h1 class="text-primary text-xl">{{ lang.map.offenders }}</h1>
   <app-icon-button (click)="add$.next()" *ngIf="!readonly" class="text-primary" icon="PLUS_BOX"></app-icon-button>
   <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
 </div>
