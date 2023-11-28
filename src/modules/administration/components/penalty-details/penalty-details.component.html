@@ -29,6 +29,12 @@
       <td mat-cell *matCellDef="let element">{{ element.legalRuleInfo.getNames() }}</td>
     </ng-container>
 
+    <!-- legalTextArabic -->
+    <ng-container matColumnDef="legalTextArabic">
+      <th mat-header-cell mat-sort-header="legalTextArabic" *matHeaderCellDef>{{ lang.map.legal_text_ar }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.legalTextArabic }}</td>
+    </ng-container>
+
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>

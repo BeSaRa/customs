@@ -8,6 +8,7 @@ export class PenaltyDetails extends BaseModel<PenaltyDetails, PenaltyDetailsServ
   penaltySigner!: number;
   offenderLevel!: number;
   legalRule!: number;
+  legalTextArabic!: string;
   legalRuleInfo!: AdminResult;
   offenderLevelInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
