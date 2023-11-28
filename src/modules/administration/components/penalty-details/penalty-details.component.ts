@@ -8,6 +8,8 @@ import { DialogService } from '@services/dialog.service';
 import { filter } from 'rxjs';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserClick } from '@enums/user-click';
+import { LegalRuleService } from '@services/legal-rule.service';
+import { LegalRule } from '@models/legal-rule';
 
 @Component({
   selector: 'app-penalty-details',
@@ -17,7 +19,8 @@ export class PenaltyDetailsComponent implements OnInit {
   dialog = inject(DialogService);
   service = inject(PenaltyDetailsService);
   lang = inject(LangService);
-
+  legalRuleService = inject(LegalRuleService);
+  legalRules!: LegalRule[];
   @Input() list!: PenaltyDetails[];
   @Output() listChange = new EventEmitter<PenaltyDetails[]>();
 
@@ -25,9 +28,20 @@ export class PenaltyDetailsComponent implements OnInit {
   @Input() viewMode!: boolean;
   @Input() isEmployee!: boolean;
   displayedList: MatTableDataSource<PenaltyDetails> = new MatTableDataSource<PenaltyDetails>(this.list);
-  displayedColumns = ['penaltySigner', 'offenderLevel', 'legalRule', 'actions'];
+  displayedColumns = ['penaltySigner', 'offenderLevel', 'legalRule', 'legalTextArabic', 'actions'];
 
   ngOnInit(): void {
+    this.legalRuleService.loadAsLookups().subscribe(data => {
+      this.legalRules = data;
+      this.setDisplayedList();
+    });
+  }
+  setDisplayedList() {
+    this.list = this.list.map(listItem => {
+      let legalTextArabic = this.legalRules.find(item => item.id === listItem.legalRule)?.legalTextArabic;
+      listItem.legalTextArabic = legalTextArabic || '';
+      return listItem;
+    });
     this.displayedList = new MatTableDataSource<PenaltyDetails>(this.list);
   }
 
