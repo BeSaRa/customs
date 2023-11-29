@@ -314,7 +314,6 @@ export interface LangKeysContract {
   search_criteria: string;
   can_not_delete_offender_must_has_at_least_one_violation: string;
   transfer: string;
-  // need to full
   return_to_manager: string;
   terminate: string;
   issuing_referral_decision_to_legal_affairs_manager: string;

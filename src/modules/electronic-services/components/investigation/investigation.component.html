@@ -116,6 +116,7 @@
       mat-button
       [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #returnMenu="matMenu">
       <button
@@ -155,6 +156,7 @@
       mat-button
       [matMenuTriggerFor]="referralMenu">
       {{ lang.map.referral }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #referralMenu="matMenu">
       <button
@@ -178,6 +180,7 @@
       mat-button
       [matMenuTriggerFor]="transferMenu">
       {{ lang.map.transfer }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #transferMenu="matMenu">
       <button

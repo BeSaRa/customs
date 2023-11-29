@@ -56,6 +56,8 @@ export const AppIcons = {
   GUIDE_PANEL: 'book',
   INVESTIGATION_SEARCH: 'magnify',
   ACCOUNT_MAKE_DECISION: 'account-cog',
+  CHEVRON_UP: 'chevron-up',
+  CHEVRON_DOWN: 'chevron-down',
 };
 
 export type AppIconsType = typeof AppIcons;
