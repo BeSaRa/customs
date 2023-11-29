@@ -6,7 +6,7 @@
   <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
   <div class="flex-auto"></div>
 </div>
-<div class="shadow relative">
+<div class="shadow relative overflow-auto">
   <table mat-table matSort class="table-style" [dataSource]="queryResultSet?.items || []">
     <!-- BD_FULL_SERIAL BD_FULL_SERIAL -->
     <ng-container matColumnDef="BD_DRAFT_FULL_SERIAL">
@@ -104,13 +104,5 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  <!-- <mat-paginator
-    class="border-t"
-    (page)="paginate($event)"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="limit"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>-->
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>

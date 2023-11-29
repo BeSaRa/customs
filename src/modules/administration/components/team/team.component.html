@@ -6,7 +6,7 @@
   <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
   <div class="flex-auto"></div>
 </div>
-<div class="shadow relative">
+<div class="shadow relative overflow-auto">
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -102,14 +102,14 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  <mat-paginator
-    [disabled]="(loading$ | async)!"
-    class="border-t border-gray-200"
-    (page)="paginate($event)"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="limit"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
+<mat-paginator
+  [disabled]="(loading$ | async)!"
+  class="border-t border-gray-200"
+  (page)="paginate($event)"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageSize]="limit"
+  [showFirstLastButtons]="showFirstLastButtons"
+  [length]="length">
+</mat-paginator>
