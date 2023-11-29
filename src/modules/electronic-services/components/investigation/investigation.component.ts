@@ -118,11 +118,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.toast.success(this.lang.map.request_has_been_sent_successfully);
   }
   _updateForm(model: Investigation): void {
-    console.log(this.readonly);
     this.handleReadOnly();
     if (!model.id) this.resetForm();
     this.model = model;
-    console.log(this.readonly);
     this.form.patchValue(model.buildForm(false, this.readonly));
   }
   handleReadOnly() {

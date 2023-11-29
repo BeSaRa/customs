@@ -216,7 +216,6 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                  repeat: 1,
                 })
               );
             })
@@ -254,7 +253,6 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                  repeat: 1,
                 })
               );
             })

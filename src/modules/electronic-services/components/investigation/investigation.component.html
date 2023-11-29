@@ -92,18 +92,18 @@
         class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
-  <div class="grid grid-cols-6 gap-4 mt-3">
+  <div class="grid grid-cols-5 gap-4 mt-3">
+    <!-- save -->
     <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+
+    <!-- manager approve -->
     <app-button
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)"
       (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
-    <app-button
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)"
-      (click)="responseAction$.next(taskResponses.TO_MANAGER)">
-      {{ lang.map.to_manager }}
-    </app-button>
+
+    <!-- return -->
     <app-button
       *ngIf="
         model?.isClaimed() &&
@@ -143,6 +143,8 @@
         {{ lang.map.return_to_applicant_department }}
       </button>
     </mat-menu>
+
+    <!-- referral -->
     <app-button
       *ngIf="
         model?.isClaimed() &&
@@ -168,6 +170,8 @@
         {{ lang.map.referral_to_presodent_assistant }}
       </button>
     </mat-menu>
+
+    <!-- transfer -->
     <app-button
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)"
       buttonType="secondary"
@@ -183,27 +187,47 @@
         {{ lang.map.transfer_report_to_staff_president_office }}
       </button>
     </mat-menu>
+
+    <!-- issuing referral decision to legal affairs manager -->
     <app-button
       buttonType="secondary"
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)"
       (click)="responseAction$.next(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)">
       {{ lang.map.issuing_referral_decision_to_legal_affairs_manager }}
     </app-button>
+
+    <!-- cliam -->
     <app-button *ngIf="model?.canClaim()" (click)="claim()">
       {{ lang.map.claim }}
     </app-button>
+
+    <!-- data entry actions -->
+    <!-- send to manager -->
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
       lang.map.send_to_manager
     }}</app-button>
+    <!-- send to chief -->
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECT_DEPARTMENT)">{{
       lang.map.send_to_chief
     }}</app-button>
+
+    <!-- data entry chief actions -->
+    <!-- send to manager -->
+    <app-button
+      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)"
+      (click)="responseAction$.next(taskResponses.TO_MANAGER)">
+      {{ lang.map.to_manager }}
+    </app-button>
+
+    <!-- close action -->
     <app-button
       buttonType="error"
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)"
       (click)="responseAction$.next(taskResponses.CLOSE)">
       {{ lang.map.close }}
     </app-button>
+
+    <!-- terminate -->
     <app-button
       buttonType="error"
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)"
