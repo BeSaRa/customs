@@ -321,4 +321,14 @@ export interface LangKeysContract {
   situation_search: string;
   is_proved: string;
   situation_search_brokerage_company: string;
+  basic_report_data_and_violations: string;
+  lbl_department: string;
+  lbl_clearance_company: string;
+  assignment_to_attend: string;
+  msg_assignment_to_attend_x_success: string;
+  selected_offender_related_to_another_department: string;
+  access_degree: string;
+  referral_request: string;
+  referral_request_to_presodent: string;
+  referral_request_to_presodent_assistant: string;
 }

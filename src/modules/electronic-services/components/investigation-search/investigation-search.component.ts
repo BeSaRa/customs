@@ -16,6 +16,7 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { EncryptionService } from '@services/encryption.service';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { OpenFrom } from '@enums/open-from';
+import { LookupService } from '@services/lookup.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -27,10 +28,13 @@ export class InvestigationSearchComponent {
   investigationSearchService = inject(InvestigationSearchService);
   router = inject(Router);
   encrypt = inject(EncryptionService);
-
+  lookupService = inject(LookupService);
+  
+  
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
-
+  
+  violationDegreeConfidentiality = this.lookupService.lookups.violationDegreeConfidentiality;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Investigation>();
@@ -94,10 +98,6 @@ export class InvestigationSearchComponent {
         }
         this.displayedList = new MatTableDataSource(data);
       });
-  }
-
-  getSecurityLevel(limitedAccess: boolean): string {
-    return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
   }
 
   view(item: Investigation) {

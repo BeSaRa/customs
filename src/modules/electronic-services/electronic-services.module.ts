@@ -34,6 +34,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
+import { OffendersViolaitonsPreviewComponent } from '@standalone/components/offenders-violaitons-preview/offenders-violaitons-preview.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { SituationSearchComponent } from './components/situation-search/situatio
     ViolationListComponent,
     OffenderListComponent,
     WitnessesListComponent,
+    OffendersViolaitonsPreviewComponent,
   ],
 })
 export class ElectronicServicesModule {}

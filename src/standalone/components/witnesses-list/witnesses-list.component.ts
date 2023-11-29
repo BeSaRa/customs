@@ -25,7 +25,7 @@ import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criter
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })
-export class WitnessesListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class WitnessesListComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -44,8 +44,9 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Witness>();
   delete$ = new Subject<Witness>();
+  assignmentToAttend$: Subject<Witness> = new Subject<Witness>();
   witnessService = inject(WitnessService);
-  displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'actions'];
+  displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'phoneNumber', 'email', 'actions'];
 
   personTypesMap: Record<number, Lookup> = this.lookupService.lookups.personType.reduce(
     (acc, item) => ({
@@ -68,7 +69,6 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
     this.listenToReload();
     this.listenToDelete();
     this.reload$.next();
-    if (this.readonly) this.displayedColumns.pop();
   }
 
   private listenToAdd() {
@@ -125,5 +125,15 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   }
   resetDataList() {
     this.data.next([]);
+  }
+  listenToAssignmentToAttend() {
+    this.assignmentToAttend$
+      .pipe(switchMap(() => of()))
+      .subscribe(model => {
+        this.toast.success(this.lang.map.msg_assignment_to_attend_x_success
+          // .change({ x: model.getNames() })
+        );
+        this.reload$.next();
+      });
   }
 }

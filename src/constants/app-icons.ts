@@ -58,6 +58,7 @@ export const AppIcons = {
   ACCOUNT_MAKE_DECISION: 'account-cog',
   CHEVRON_UP: 'chevron-up',
   CHEVRON_DOWN: 'chevron-down',
+  ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

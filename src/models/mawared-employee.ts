@@ -6,6 +6,7 @@ import { Offender } from '@models/offender';
 import { OffenderTypes } from '@enums/offender-types';
 import { WitnessTypes } from '@enums/witness-types';
 import { Witness } from '@models/witness';
+import { AdminResult } from './admin-result';
 
 const { send, receive } = new MawaredEmployeeInterceptor();
 
@@ -37,6 +38,9 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
   totalExams!: number;
   totalThanksBooks!: number;
   gethDate!: string;
+  address!: string;
+
+  typeInfo!: AdminResult;
 
   buildForm(): object {
     const {
