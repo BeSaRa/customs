@@ -57,6 +57,8 @@ export const AppIcons = {
   INVESTIGATION_SEARCH: 'magnify',
   ACCOUNT_MAKE_DECISION: 'account-cog',
   INVESTIGATION_DRAFTS: 'file',
+  CHEVRON_UP: 'chevron-up',
+  CHEVRON_DOWN: 'chevron-down',
 };
 
 export type AppIconsType = typeof AppIcons;
