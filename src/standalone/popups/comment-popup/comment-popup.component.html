@@ -3,9 +3,83 @@
     <h1>{{ lang.map.comment }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
-    <form [formGroup]="form">
-      <app-textarea formControlName="comment" [label]="lang.map.comment"></app-textarea>
+  <div class="dialog-content max-w-[900px]">
+    <ng-container *ngIf="isPreviewForm">
+      <div dir="rtl">
+        <div class="flex justify-between">
+          <div>
+            <strong>السيد {{ 'احمد' }} المحترم</strong>
+          </div>
+          <div>
+            <label class="pb-3 block" *ngIf="referralToPresodent
+             || referralToPresodentAssistant">
+              <strong>رقم ملف التحقيق:</strong> {{ 0 }}
+            </label>
+            <label class="pb-3 block" *ngIf="referralToPresodent
+            || referralToPresodentAssistant">
+              <strong>رقم القرار:</strong> {{ 0 }}
+            </label>
+            <label class="pb-3 block" *ngIf="referralToPresodent
+            || referralToPresodentAssistant">
+              <strong>تاريخ القرار:</strong> {{ '2022-2-2' |date}}
+            </label>
+
+            <label class="pb-3 block" *ngIf="chiefToManager">
+              <strong>رقم مسودة التحقيق:</strong> {{ 0 }}
+            </label>
+            <label class="pb-3 block" *ngIf="chiefToManager">
+              <strong>تاريخ مسودة التحقيق:</strong> {{ '2022-2-2' |date}}
+            </label>
+          </div>
+        </div>
+        <h4 class="text-center py-5"> <strong>{{ 'اسم النموذج' }}</strong></h4>
+        <div class="px-8">
+          <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia obcaecati tempore repellat
+            totam esse, suscipit laborum! Quaerat modi asperiores porro consequatur fuga neque non, rem animi, commodi
+            dolor quod inventore?</p>
+          <div class="mb-4">
+            <h5><strong>المخالف{{ 1 }}</strong></h5>
+            <ul class="list-none">
+              <li>{{ 'اسم المخالف' }} {{ 'نوع المخالف' }}</li>
+              <li>{{ 'مخالفة 1' }}</li>
+            </ul>
+          </div>
+          <div class="mb-4">
+            <h5><strong>المخالف{{ 2 }}</strong></h5>
+            <ul class="list-none">
+              <li>{{ 'اسم المخالف' }} {{ 'نوع المخالف' }}</li>
+              <li>{{ 'مخالفة 1' }}</li>
+            </ul>
+          </div>
+
+          <form class="mb-3" [formGroup]="form">
+            <app-textarea formControlName="comment" label="الوصف والتعليقات الأخرى"></app-textarea>
+          </form>
+          <p class="mb-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia obcaecati tempore repellat
+            totam esse, suscipit laborum! Quaerat modi asperiores porro consequatur fuga neque non, rem animi, commodi
+            dolor quod inventore?</p>
+          <div class="flex" [ngClass]="{
+            'justify-between': referralToPresodent || referralToPresodentAssistant,
+            'justify-end': !referralToPresodent && !referralToPresodentAssistant
+          }">
+            <div  *ngIf="referralToPresodent || referralToPresodentAssistant">
+              <ul class="list-none mt-5">
+                <li>- نسخة الى الموارد البشرية (حالة الموظف)</li>
+                <li>- نسخة الى الشؤون القانونية (حالة المخلص او شركة التخليص)</li>
+              </ul>
+            </div>
+            <div style="width: 240px;">
+              <h6 class="mb-4 text-center"><strong>صورة التوقيع</strong></h6>
+              <label class="pb-3 block">{{'اسم الموقع'}}</label>
+              <label class="pb-3 block">{{'صفة الموقع'}}</label>
+              <br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <form *ngIf="!isPreviewForm" class="mb-3" [formGroup]="form">
+      <app-textarea formControlName="comment" label="comment"></app-textarea>
     </form>
   </div>
   <div class="dialog-footer justify-end">

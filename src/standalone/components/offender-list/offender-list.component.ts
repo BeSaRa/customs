@@ -21,8 +21,6 @@ import { ToastService } from '@services/toast.service';
 import { Violation } from '@models/violation';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
 import { Investigation } from '@models/investigation';
-import { Penalty } from '@models/penalty';
-import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
@@ -59,11 +57,9 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
-  makeDecision$ = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
-  penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
       ...acc,
@@ -77,7 +73,6 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.listenToReload();
     this.listenToDelete();
     this.listenToAttachments();
-    this.listenToMakeDecision();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
     this.reload$.next();
@@ -109,24 +104,10 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.reload$
       .pipe(filter(() => !!this.caseId))
       .pipe(switchMap(() => this.offenderService.load(undefined, { caseId: this.caseId })))
-      .pipe(
-        tap(() => {
-          (this.employeeService.isApplicantManager() || this.employeeService.isApplicantChief()) &&
-            this.investigationModel
-              ?.getService()
-              .getCasePenalty(this.caseId as string)
-              .subscribe(data => {
-                this.penaltyMap = data;
-              });
-        })
-      )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.data.next(list.rs);
       });
-  }
-  get canMakeDecision() {
-    return this.employeeService.isApplicantManager();
   }
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
@@ -170,9 +151,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
             .afterClosed()
         )
       )
-      .subscribe(model => {
-        this.reload$.next();
-      });
+      .subscribe();
   }
   private listenToOffenderViolation() {
     this.offenderViolation$
@@ -181,28 +160,10 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
           this.dialog
             .open(OffenderViolationsPopupComponent, {
               data: {
-                offenderId: offender.id,
+                offender: offender,
                 caseId: this.investigationModel?.id,
                 violations: this.violations,
                 readonly: this.readonly,
-              },
-            })
-            .afterClosed()
-        )
-      )
-      .subscribe();
-  }
-  private listenToMakeDecision() {
-    this.makeDecision$
-      .pipe(filter((offender: Offender) => !!this.penaltyMap[offender.id]))
-      .pipe(
-        switchMap((offender: Offender) =>
-          this.dialog
-            .open(MakePenaltyDecisionPopupComponent, {
-              data: {
-                model: offender,
-                caseId: this.investigationModel?.id,
-                penalties: this.penaltyMap[offender.id],
               },
             })
             .afterClosed()

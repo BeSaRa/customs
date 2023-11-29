@@ -59,6 +59,7 @@ export const AppIcons = {
   INVESTIGATION_DRAFTS: 'file',
   CHEVRON_UP: 'chevron-up',
   CHEVRON_DOWN: 'chevron-down',
+  ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

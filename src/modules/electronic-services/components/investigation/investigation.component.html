@@ -10,20 +10,23 @@
 <div class="relative">
   <mat-card>
     <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="tabChange($event)" mat-stretch-tabs="false">
-      <mat-tab [label]="lang.map.lbl_basic_info">
+      <mat-tab [label]="!isApplicantManager() ? lang.map.lbl_basic_info : lang.map.basic_report_data_and_violations">
         <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.violations">
+      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.violations">
         <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.offenders">
+      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.external_persons">
         <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.correspondence">
+      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.correspondence">
         <ng-container [ngTemplateOutlet]="correspondence_tab"></ng-container>
+      </mat-tab>
+      <mat-tab *ngIf="isApplicantManager()" [label]="lang.map.attachments">
+        <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
@@ -36,59 +39,64 @@
         <input appControl formControlName="createdOn" (click)="datepicker.open()" [matDatepicker]="datepicker" />
         <mat-datepicker touchUi #datepicker />
       </app-input>
-      <div class="flex items-center">
-        <mat-slide-toggle #securityLevel="matSlideToggle" formControlName="limitedAccess">
-          {{ lang.map.limited_access }} : {{ getSecurityLevel(securityLevel.checked) }}
-        </mat-slide-toggle>
+      <app-select-input
+        formControlName="limitedAccess"
+        [label]="lang.map.access_degree"
+        bindValue="lookupKey"
+        bindLabel="getNames"
+        [options]="violationDegreeConfidentiality" />
+      <div class="group block relative mb-5" *ngIf="model && model.departmentInfo && isApplicantManager()">
+        <span class="block font-medium text-slate-700">{{ lang.map.lbl_department }}</span>
+        <div class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
+          {{ model.departmentInfo.getNames() }}
+        </div>
       </div>
-      <app-textarea
-        formControlName="description"
-        class="col-span-1 md:col-span-2 lg:col-span-4"
+      <app-textarea formControlName="description" class="col-span-1 md:col-span-2 lg:col-span-4"
         [label]="lang.map.general_explanation_of_violations" />
 
-      <app-case-attachments
-        [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
-        [service]="service"
-        [readonly]="readonly"
-        [title]="lang.map.report_attachments"
+      <app-offenders-violaitons-preview [investigationModel]="model" [data]="model?.offenderInfo || []"
+        class="col-span-1 md:col-span-2 lg:col-span-4" *ngIf="isApplicantManager()" />
+
+      <app-case-attachments *ngIf="!isApplicantManager()" [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
+        [service]="service" [readonly]="readonly" [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
 
   <ng-template #violation_tab>
     <div class="p-4">
-      <app-violation-list
-        (empty)="resetOffendersAndExternalPersons()"
-        (violations)="violations = $event"
-        (saveCase)="saveCase($event)"
-        [readonly]="readonly"
-        [caseId]="model?.id" />
+      <app-violation-list (empty)="resetOffendersAndExternalPersons()" (violations)="violations = $event"
+        (saveCase)="saveCase($event)" [readonly]="readonly" [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #offenders_tab>
     <div class="p-4">
-      <app-offender-list
-        [investigationModel]="model"
-        [violations]="violations"
-        [readonly]="readonly"
+      <app-offender-list [investigationModel]="model" [violations]="violations" [readonly]="readonly"
         [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list [violations]="violations" [readonly]="readonly" [caseId]="model?.id" />
+      <app-witnesses-list [violations]="violations" [readonly]="readonly || !!isApplicantManager()" [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #correspondence_tab>
     <div class="p-4">
-      <app-case-attachments
-        [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
-        [service]="service"
-        [readonly]="readonly"
-        [title]="lang.map.correspondence_attachments"
+      <app-case-attachments [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)" [service]="service"
+        [readonly]="readonly" [title]="lang.map.correspondence_attachments"
+        class="col-span-1 md:col-span-2 lg:col-span-4" />
+    </div>
+  </ng-template>
+
+  <ng-template #attachments_tab>
+    <div class="p-4">
+      <app-case-attachments [caseId]="getCaseFolderIdByName(folderType.GENERAL)" [service]="service"
+        [readonly]="true" [title]="lang.map.report_attachments" class="col-span-1 md:col-span-2 lg:col-span-4" />
+      <app-case-attachments [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)" [service]="service"
+        [readonly]="true" [title]="lang.map.correspondence_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
@@ -97,103 +105,76 @@
     <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
 
     <!-- manager approve -->
-    <app-button
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)"
+    <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)"
       (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
 
     <!-- return -->
-    <app-button
-      *ngIf="
+    <app-button *ngIf="
         model?.isClaimed() &&
         (model?.hasResponse(taskResponses.TO_USER) ||
           model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
           model?.hasResponse(taskResponses.RETURN_TO_APP) ||
           model?.hasResponse(taskResponses.RETURN_APP_MANAGER))
-      "
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="returnMenu">
+      " buttonType="secondary" mat-button [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #returnMenu="matMenu">
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.RETURN_APP_MANAGER)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_APP_MANAGER)"
         (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
         {{ lang.map.return_to_manager }}
       </button>
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.TO_USER)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.TO_USER)"
         (click)="responseAction$.next(taskResponses.TO_USER)">
         {{ lang.map.return }}
       </button>
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
         (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
         {{ lang.map.return_to_same }}
       </button>
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.RETURN_TO_APP)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_TO_APP)"
         (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
         {{ lang.map.return_to_applicant_department }}
       </button>
     </mat-menu>
 
-    <!-- referral -->
-    <app-button
-      *ngIf="
+    <!-- referral request -->
+    <app-button *ngIf="
         model?.isClaimed() &&
         (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT) ||
           model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT))
-      "
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="referralMenu">
-      {{ lang.map.referral }}
+      " buttonType="secondary" mat-button [matMenuTriggerFor]="referralMenu">
+      {{ lang.map.referral_request }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #referralMenu="matMenu">
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)"
         (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
-        {{ lang.map.referral_to_presodent }}
+        {{ lang.map.referral_request_to_presodent }}
       </button>
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
         (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
-        {{ lang.map.referral_to_presodent_assistant }}
+        {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
     </mat-menu>
 
     <!-- transfer -->
-    <app-button
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)"
-      buttonType="secondary"
-      mat-button
+    <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)" buttonType="secondary" mat-button
       [matMenuTriggerFor]="transferMenu">
       {{ lang.map.transfer }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #transferMenu="matMenu">
-      <button
-        mat-menu-item
-        *ngIf="model?.hasResponse(taskResponses.TO_PO)"
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.TO_PO)"
         (click)="responseAction$.next(taskResponses.TO_PO)">
         {{ lang.map.transfer_report_to_staff_president_office }}
       </button>
     </mat-menu>
 
     <!-- issuing referral decision to legal affairs manager -->
-    <app-button
-      buttonType="secondary"
+    <app-button buttonType="secondary"
       *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)"
       (click)="responseAction$.next(taskResponses.PR_LAUNCH_LEAGL_AFFAIRS)">
       {{ lang.map.issuing_referral_decision_to_legal_affairs_manager }}
@@ -208,32 +189,27 @@
     <!-- send to manager -->
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECTOR_ADMIN)">{{
       lang.map.send_to_manager
-    }}</app-button>
+      }}</app-button>
     <!-- send to chief -->
     <app-button *ngIf="canLaunch()" (click)="launchCase(sendTypes.DIRECT_DEPARTMENT)">{{
       lang.map.send_to_chief
-    }}</app-button>
+      }}</app-button>
 
     <!-- data entry chief actions -->
     <!-- send to manager -->
-    <app-button
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)"
+    <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)"
       (click)="responseAction$.next(taskResponses.TO_MANAGER)">
       {{ lang.map.to_manager }}
     </app-button>
 
     <!-- close action -->
-    <app-button
-      buttonType="error"
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)"
+    <app-button buttonType="error" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)"
       (click)="responseAction$.next(taskResponses.CLOSE)">
       {{ lang.map.close }}
     </app-button>
 
     <!-- terminate -->
-    <app-button
-      buttonType="error"
-      *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)"
+    <app-button buttonType="error" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)"
       (click)="responseAction$.next(taskResponses.TERMINATE)">
       {{ lang.map.terminate }}
     </app-button>

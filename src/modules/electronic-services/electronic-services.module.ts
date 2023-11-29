@@ -35,6 +35,7 @@ import { InvestigationSearchComponent } from './components/investigation-search/
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
+import { OffendersViolaitonsPreviewComponent } from '@standalone/components/offenders-violaitons-preview/offenders-violaitons-preview.component';
 
 @NgModule({
   declarations: [
@@ -76,6 +77,7 @@ import { InvestigationDraftsComponent } from './components/investigation-drafts/
     ViolationListComponent,
     OffenderListComponent,
     WitnessesListComponent,
+    OffendersViolaitonsPreviewComponent,
   ],
 })
 export class ElectronicServicesModule {}

@@ -19,6 +19,8 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CustomValidators } from '@validators/custom-validators';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Offender } from '@models/offender';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-offender-violations-popup',
@@ -43,21 +45,31 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
   offenderViolationService = inject(OffenderViolationService);
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  offenderTypes = OffenderTypes;
   offenderViolations = new Subject<OffenderViolation[]>();
   dataSource = new AppTableDataSource(this.offenderViolations);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   delete$ = new Subject<OffenderViolation>();
   addViolation$: Subject<void> = new Subject<void>();
-  displayedColumns = ['violationType', 'violationData', 'description', 'repeat', 'actions'];
+  displayedColumns = ['violationClassification', 'violationType', 'violationData', 'description', 'repeat', 'actions'];
   control = new FormControl<number[]>([], [CustomValidators.required]);
-  violations: Violation[] = this.data && ((this.data.violations || []) as Violation[]);
+  violations: Violation[] = [];
   readonly = this.data && this.data.readonly;
+  offender: Offender = this.data && (this.data.offender as Offender);
 
   constructor() {
     super();
   }
 
   ngOnInit() {
+    this.violations = this.data && (this.data.violations || [])
+    .filter((v:Violation | OffenderViolation) => this.data.offender &&
+      ((v as Violation).offenderTypeInfo
+        ? ((v as Violation).offenderTypeInfo.lookupKey == this.data.offender.type || 
+          (v as Violation).offenderTypeInfo.lookupKey == OffenderTypes.BOTH)
+        : ((v as OffenderViolation).offenderInfo.typeInfo.lookupKey == this.data.offender.type ||
+          (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == OffenderTypes.BOTH)
+      ))
     this.listenToReload();
     this.listenToDelete();
     this.listenToAdd();
@@ -67,13 +79,13 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter(() => !!this.data.caseId && !!this.data.offenderId))
+      .pipe(filter(() => !!this.data.caseId && !!this.data.offender.id))
       .pipe(
         switchMap(() =>
           this.offenderViolationService
             .load(undefined, {
               caseId: this.data.caseId,
-              offenderId: this.data.offenderId,
+              offenderId: this.data.offender.id,
             })
             .pipe(ignoreErrors())
         )
@@ -96,7 +108,7 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
               return this.offenderViolationService.create(
                 new OffenderViolation().clone<OffenderViolation>({
                   caseId: this.data.caseId,
-                  offenderId: this.data.offenderId,
+                  offenderId: this.data.offender.id,
                   violationId: violationId,
                   status: 1,
                   isProved: true,

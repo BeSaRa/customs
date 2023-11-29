@@ -1,0 +1,54 @@
+<div dir="rtl">
+  <div class="flex justify-between">
+    <div class="">
+      <strong>السيد {{ 'نوع المختالف واسمه' }} المحترم</strong>  
+    </div>
+    <div>
+      <label class="pb-3">
+        <strong>رقم ملف التحقيق:</strong> {{ 0 }}
+      </label>
+      <br />
+      <label class="pb-3">
+        <strong>رقم القرار:</strong> {{ 0 }}
+      </label>
+      <br />
+      <label>
+        <strong>تاريخ القرار:</strong> {{ '2022-2-2' |date}}
+      </label>
+    </div>
+  </div>
+  <h4 class="text-center py-5"> <strong>{{ 'اسم النموذج' }}</strong></h4>
+  <div class="px-8">
+    <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia obcaecati tempore repellat totam esse, suscipit laborum! Quaerat modi asperiores porro consequatur fuga neque non, rem animi, commodi dolor quod inventore?</p>
+    <div class="mb-4">
+      <ul class="list-none">
+        <li>{{ 'اسم المخالف' }} {{ 'نوع المخالف' }}</li>
+        <li>{{ 'مخالفة 1' }}</li>
+      </ul>
+    </div>
+    
+    <form class="mb-3" [formGroup]="form">
+      <app-textarea formControlName="comment" label="الوصف والتعليقات الأخرى"></app-textarea>
+    </form>
+    
+    <div class="mb-4">
+      <strong>القرار: </strong><span>{{'قرار\ حفظ'}}</span>
+    </div>
+    
+    <p class="mb-3">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia obcaecati tempore repellat totam esse, suscipit laborum! Quaerat modi asperiores porro consequatur fuga neque non, rem animi, commodi dolor quod inventore?</p>
+    <div class="flex justify-between">
+      <div style="width: 240px;">
+        <h6 class="mb-4 text-center"><strong>صورة التوقيع</strong></h6>
+        <label class="pb-3">{{'اسم الموقع'}}</label><br />
+        <label>{{'صفة الموقع'}}</label>
+        <br>
+      </div>
+      <div>
+        <ul class="list-none">
+          <li>- نسخة الى الموارد البشرية (حالة الموظف)</li>
+          <li>-	نسخة الى الشؤون القانونية (حالة المخلص او شركة التخليص)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

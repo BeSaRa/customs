@@ -9,7 +9,9 @@ export class ViolationInterceptor implements ModelInterceptorContract<Violation>
   }
 
   receive(model: Violation): Violation {
+    model.offenderTypeInfo = AdminResult.createInstance(model.offenderTypeInfo);
     model.violationTypeInfo = AdminResult.createInstance(model.violationTypeInfo);
+    model.classificationInfo = AdminResult.createInstance(model.classificationInfo);
     return model;
   }
 }

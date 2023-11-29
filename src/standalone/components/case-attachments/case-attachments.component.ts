@@ -49,7 +49,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
 
   dataSource: AppTableDataSource<CaseAttachment> = new AppTableDataSource<CaseAttachment>(this._load());
 
-  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'creationDate', 'actions'];
+  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'creationDate', 'creator', 'actions'];
 
   ngOnInit(): void {
     this.reload$.next();
