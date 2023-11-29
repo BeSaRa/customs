@@ -100,7 +100,6 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                  repeat: 1,
                 })
               );
             })

@@ -1,3 +1,4 @@
+import { EmployeeService } from '@services/employee.service';
 import { TaskDetails } from './task-details';
 import { AdminResult } from '@models/admin-result';
 import { BaseCaseService } from '@abstracts/base-case.service';
@@ -29,7 +30,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   caseState!: number;
   serial!: number;
 
-  caseStatus!: number;
+  caseStatus!: CommonCaseStatus;
   caseType!: CaseTypes;
   securityLevel!: number;
   departmentId!: number;
@@ -67,7 +68,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus === CommonCaseStatus.RETURNED;
   }
   canSave(): boolean {
-    return true;
+    return !!this.getService().employeeService.isApplicantManager();
   }
   canClaim(): boolean {
     return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);

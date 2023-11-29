@@ -1,3 +1,4 @@
+import { EmployeeService } from '@services/employee.service';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { Constructor } from '@app-types/constructors';
 import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
@@ -18,14 +19,14 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { MenuItemService } from '@services/menu-item.service';
 import { Penalty } from '@models/penalty';
-import { OpenFrom } from '@enums/open-from';
 
 export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) implements BaseCaseServiceContract<M> {
   protected http: HttpClient = inject(HttpClient);
   protected urlService: UrlService = inject(UrlService);
   protected dialog: DialogService = inject(DialogService);
   protected domSanitizer = inject(DomSanitizer);
-  menuItemService = inject(MenuItemService);
+  protected menuItemService = inject(MenuItemService);
+  employeeService = inject(EmployeeService);
   abstract serviceKey: keyof LangKeysContract;
 
   abstract getUrlSegment(): string;
