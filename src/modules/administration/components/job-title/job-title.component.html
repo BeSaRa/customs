@@ -7,11 +7,7 @@
   <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
   <div class="flex-auto"></div>
 </div>
-<div class="shadow relative">
-  <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-    <mat-spinner style="margin-top: 120px" [diameter]="75"></mat-spinner>
-  </div>
-
+<div class="shadow relative overflow-auto">
   <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -117,13 +113,13 @@
       <td *ngIf="(loading$ | async)!" class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  <mat-paginator
-    class="border-t"
-    (page)="paginate($event)"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="limit"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
+<mat-paginator
+  class="border-t"
+  (page)="paginate($event)"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageSize]="limit"
+  [showFirstLastButtons]="showFirstLastButtons"
+  [length]="length">
+</mat-paginator>
