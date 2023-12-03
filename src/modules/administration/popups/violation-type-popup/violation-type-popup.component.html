@@ -34,7 +34,7 @@
           bindLabel="getNames" />
 
         <app-select-input
-          *ngIf="isBroker()"
+          *ngIf="isCustom()"
           formControlName="responsibilityRepeatViolations"
           [options]="responsibilityRepeatViolations"
           [label]="lang.map.responsibility_repeat_violations"

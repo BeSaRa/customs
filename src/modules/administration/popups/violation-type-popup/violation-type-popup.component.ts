@@ -41,7 +41,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
-    this.onOffenderTypeChange();
     this.onViolationClassificationChange();
     this.onIsNumericChange();
     this.onViolationLevelChange();
@@ -112,21 +111,18 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
     return isCriminal;
   }
+  isCustom(): boolean {
+    if (this.violationClassifications === undefined) return false;
+    let isCustom = false;
+    this.violationClassifications.forEach(classification => {
+      if (classification.id === this.classificationId?.value && classification.key === 'custom') isCustom = true;
+    });
+    return isCustom;
+  }
   isBroker(): boolean {
     let isBroker = false;
     if (this.offenderType?.value === OffenderTypes.BROKER) isBroker = true;
     return isBroker;
-  }
-  onOffenderTypeChange() {
-    this.offenderType?.valueChanges.subscribe(() => {
-      if (this.offenderType?.value === OffenderTypes.EMPLOYEE) {
-        this.responsibilityRepeatViolation?.setValue(null);
-        this.responsibilityRepeatViolation?.setErrors(null);
-        this.responsibilityRepeatViolation?.clearValidators();
-      } else {
-        this.responsibilityRepeatViolation?.setValidators(CustomValidators.required);
-      }
-    });
   }
   onViolationClassificationChange() {
     this.classificationId?.valueChanges.subscribe(value => {
@@ -137,6 +133,15 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       } else {
         this.criminalType?.setValidators(CustomValidators.required);
       }
+
+      if (!this.isCustom()) {
+        this.responsibilityRepeatViolation?.setValue(null);
+        this.responsibilityRepeatViolation?.clearValidators();
+        this.responsibilityRepeatViolation?.updateValueAndValidity();
+      } else {
+        this.responsibilityRepeatViolation?.setValidators(CustomValidators.required);
+      }
+
       const offenderOfClassification = this.violationClassifications.find(vc => vc.id == value)?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
         this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE);
