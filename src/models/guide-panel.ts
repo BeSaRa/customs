@@ -18,7 +18,7 @@ export class GuidePanel {
       offenderType: [offenderType, [CustomValidators.required]],
       offenderLevel: [offenderLevel],
       violationTypeIdsList: [violationTypeIdsList, [CustomValidators.required]],
-      repeat: [repeat],
+      repeat: [repeat, [CustomValidators.positiveNumber]],
       penaltySigner: [penaltySigner, [CustomValidators.required]],
     };
   }
