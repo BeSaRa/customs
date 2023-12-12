@@ -56,10 +56,7 @@ export const AppIcons = {
   GUIDE_PANEL: 'book',
   INVESTIGATION_SEARCH: 'magnify',
   ACCOUNT_MAKE_DECISION: 'account-cog',
-<<<<<<< HEAD
   INVESTIGATION_DRAFTS: 'file',
-=======
->>>>>>> ba6482f8fcaa782b09c026520567d7447dec2832
   CHEVRON_UP: 'chevron-up',
   CHEVRON_DOWN: 'chevron-down',
   ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
