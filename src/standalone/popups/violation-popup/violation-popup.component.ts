@@ -28,6 +28,7 @@ import { CustomValidators } from '@validators/custom-validators';
 import { OperationType } from '@enums/operation-type';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TransformerAction } from '@contracts/transformer-action';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-violation-popup',
@@ -54,6 +55,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   form!: UntypedFormGroup;
   lookupService = inject(LookupService);
   router = inject(Router);
+  dialog = inject(DialogService);
   activeRoute = inject(ActivatedRoute);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
@@ -125,10 +127,16 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
   }
   addViolation() {
-    if (!this.caseId) this.transformer$?.next({ action: 'save' });
-    else this.save$.next();
+    if(this._beforeSave()) {
+      if (!this.caseId) {
+        this.transformer$?.next({ action: 'save' });
+      } else {
+        this.save$.next();
+      }
+    }
   }
   protected _beforeSave(): boolean | Observable<boolean> {
+    this.form.invalid && this.dialog.error(this.lang.map.msg_make_sure_all_required_fields_are_filled);
     return this.form.valid;
   }
 

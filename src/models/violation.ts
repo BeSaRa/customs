@@ -33,7 +33,8 @@ export class Violation extends BaseModel<Violation, ViolationService> {
   violationClassificationInfo!: AdminResult;
   customsDeclarationNumber!: string;
   controlReportNumber!: string;
-
+  offenderTypeInfo!: AdminResult;
+  classificationInfo!: AdminResult;
   // temp properties
   violationClassificationId!: number;
 

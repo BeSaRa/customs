@@ -11,6 +11,9 @@ export class Witness extends BaseModel<Witness, WitnessService> {
   witnessType!: number;
   personType!: number;
 
+  phoneNumber!: string;
+  email!: string;
+
   witnessInfo!: AdminResult;
   witnessTypeInfo!: AdminResult;
   personTypeInfo!: AdminResult;
@@ -22,6 +25,8 @@ export class Witness extends BaseModel<Witness, WitnessService> {
     return {
       arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
       enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      phoneNumber: controls ? [enName] : enName,
+      email: controls ? [enName] : enName,
     };
   }
 }

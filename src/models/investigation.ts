@@ -6,13 +6,16 @@ import { InvestigationInterceptor } from '@model-interceptors/Investigation-inte
 import { Offender } from './offender';
 import { OffenderViolation } from './offender-violation';
 import { Violation } from './violation';
+import { AdminResult } from './admin-result';
+import { CustomValidators } from '@validators/custom-validators';
+import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 
 const { send, receive } = new InvestigationInterceptor();
 
 @InterceptModel({ send, receive })
 export class Investigation extends BaseCase<InvestigationService, Investigation> {
   $$__service_name__$$ = 'InvestigationService';
-  limitedAccess = false;
+  limitedAccess: number = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
   investigationFullSerial!: string;
   draftFullSerial!: string;
   draftSerial!: number;
@@ -23,6 +26,7 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   offenderInfo: Offender[] = [];
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
+  limitedAccessInfo!: AdminResult;
   buildForm(controls = false, disabled = false): object {
     const { description, createdOn, investigationFullSerial, draftFullSerial, limitedAccess } = this;
     return {
@@ -30,7 +34,7 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
       investigationFullSerial: controls ? [{ value: investigationFullSerial, disabled: true }] : investigationFullSerial,
       createdOn: controls ? [{ value: createdOn, disabled: disabled }] : createdOn,
       description: controls ? [{ value: description, disabled: disabled }] : description,
-      limitedAccess: controls ? [{ value: limitedAccess, disabled: disabled }] : limitedAccess,
+      limitedAccess: controls ? [{ value: limitedAccess, disabled: disabled }, CustomValidators.required] : limitedAccess,
     };
   }
 }

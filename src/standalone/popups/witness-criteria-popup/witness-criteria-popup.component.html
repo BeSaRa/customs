@@ -30,6 +30,8 @@
               [options]="witnessTypes" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="phoneNumber" [label]="lang.map.phone_number" />
+            <app-input formControlName="email" [label]="lang.map.email" />
           </div>
         </ng-container>
         <ng-container *ngIf="isEmployee && employeeFormGroup">

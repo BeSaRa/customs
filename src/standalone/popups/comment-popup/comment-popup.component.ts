@@ -27,19 +27,37 @@ export class CommentPopupComponent extends OnDestroyMixin(class { }) implements 
   comment$ = new Subject<void>();
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
-  response: string = this.data && (this.data.response as TaskResponses);
+  response: TaskResponses = this.data && (this.data.response as TaskResponses);
+  isPreviewForm = false;
+  chiefToManager = false;
+  referralToPresodent = false;
+  referralToPresodentAssistant = false;
+  previewFormList: TaskResponses[] = [
+    TaskResponses.TO_MANAGER,
+    TaskResponses.MANAGER_APPROVE,
+    TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT,
+    TaskResponses.REFERRAL_TO_PRESODENT,
+  ];
   constructor() {
     super();
   }
 
   ngOnInit() {
+    this.chiefToManager = this.response == TaskResponses.TO_MANAGER;
+    this.referralToPresodent = this.response == TaskResponses.REFERRAL_TO_PRESODENT;
+    this.referralToPresodentAssistant = this.response == TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT;
+    
     this.buildForm();
     this.listenToComment();
+    this.isPreviewForm = this.previewFormList.includes(this.response)
   }
   buildForm() {
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [CustomValidators.required]),
     });
+  }
+  isResponse(response: TaskResponses) {
+    return this.response == response;
   }
   listenToComment() {
     this.comment$

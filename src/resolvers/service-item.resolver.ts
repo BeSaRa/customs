@@ -53,7 +53,11 @@ export class ServiceItemResolver {
     }
     const service = this.data.userInboxService.getService(caseType);
     return of(openFrom)
-      .pipe(switchMap(() => iif(() => openFrom === OpenFrom.SEARCH, service.getDetails(caseId), service.getTask(taskId!))))
+      .pipe(
+        switchMap(() =>
+          iif(() => openFrom === OpenFrom.SEARCH || openFrom === OpenFrom.ADD_SCREEN, service.getDetails(caseId), service.getTask(taskId!))
+        )
+      )
       .pipe(
         map((model: BaseCase<any, any>) => {
           return { model, ...this.data.info } as OpenedInfoContract;

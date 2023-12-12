@@ -315,7 +315,6 @@ export interface LangKeysContract {
   search_criteria: string;
   can_not_delete_offender_must_has_at_least_one_violation: string;
   transfer: string;
-  // need to full
   return_to_manager: string;
   terminate: string;
   issuing_referral_decision_to_legal_affairs_manager: string;
@@ -323,5 +322,18 @@ export interface LangKeysContract {
   situation_search: string;
   is_proved: string;
   situation_search_brokerage_company: string;
+<<<<<<< HEAD
   case_identifier: string;
+=======
+>>>>>>> ba6482f8fcaa782b09c026520567d7447dec2832
+  basic_report_data_and_violations: string;
+  lbl_department: string;
+  lbl_clearance_company: string;
+  assignment_to_attend: string;
+  msg_assignment_to_attend_x_success: string;
+  selected_offender_related_to_another_department: string;
+  access_degree: string;
+  referral_request: string;
+  referral_request_to_presodent: string;
+  referral_request_to_presodent_assistant: string;
 }

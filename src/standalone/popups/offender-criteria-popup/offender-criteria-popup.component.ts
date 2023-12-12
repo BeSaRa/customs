@@ -34,7 +34,6 @@ import { CustomValidators } from '@validators/custom-validators';
 import { OffenderViolation } from '@models/offender-violation';
 import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
-import { ViolationService } from '@services/violation.service';
 import { InvestigationService } from '@services/investigation.service';
 
 @Component({
@@ -80,8 +79,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
   administrations: unknown[] = [];
-  violations: Violation[] = this.data && ((this.data.violations || []) as Violation[]);
-  // .filter(v => this.offenderTypeControl && v.violationTypeId == this.offenderTypeControl?.value);
+  violations: Violation[] = [];
   offenders: Offender[] = this.data && ((this.data.offenders || []) as Offender[]);
   form!: UntypedFormGroup;
   isEmployee = true;
@@ -105,6 +103,9 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
     this.brokerFormGroup = this.fb.group(new BrokerCriteria().buildForm(true));
 
+    this.violations = this.data && ((this.data.violations || []) as Violation[])
+    .filter(v => this.offenderTypeControl && (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value || v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH))
+    
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
     });
@@ -115,13 +116,16 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
 
     this.listenToAddEmployee();
     this.listenToAddBroker();
-    this.listenToAdd();
+    this.listenToAddViolation();
   }
 
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
       this.isBroker = value === OffenderTypes.BROKER;
+      this.offenderViolationControl.reset();
+      this.violations = this.data && ((this.data.violations || []) as Violation[])
+        .filter(v => this.offenderTypeControl && v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value)
     });
   }
 
@@ -134,7 +138,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       });
   }
 
-  private listenToAdd() {
+  private listenToAddViolation() {
     this.addViolation$
       .pipe(takeUntil(this.destroy$))
       .pipe(switchMap(() => this.service.openAddViolation(this.data.caseId as string, new Subject()).afterClosed()))
@@ -216,7 +220,6 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                  repeat: 1,
                 })
               );
             })
@@ -230,6 +233,9 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
           this.employeeDatasource.data.findIndex(emp => emp.id == model.offenderRefId),
           1
         );
+        if(this.employeeService.getEmployee()?.defaultOUId !== model?.offenderInfo?.employeeDepartmentId) {
+          this.toast.info(this.lang.map.selected_offender_related_to_another_department)
+        }
         this.employees$.next(this.employeeDatasource.data);
         this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
       });
@@ -254,7 +260,6 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                  repeat: 1,
                 })
               );
             })

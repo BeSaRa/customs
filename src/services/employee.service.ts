@@ -83,11 +83,11 @@ export class EmployeeService {
   isApplicantUser() {
     return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department);
   }
-  isApplicantManager() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager);
-  }
   isApplicantChief() {
     return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Chief);
+  }
+  isApplicantManager() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager);
   }
 
   getEmployee(): InternalUser | undefined {

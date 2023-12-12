@@ -8,7 +8,8 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { filter, map, Observable, take, takeUntil, Subject, switchMap, of } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
+import { filter, map, take, takeUntil, switchMap, tap } from 'rxjs/operators';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,8 +24,10 @@ import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
 import { TaskResponses } from '@enums/task-responses';
-import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
 import { UserClick } from '@enums/user-click';
+import { EmployeeService } from '@services/employee.service';
+import { LookupService } from '@services/lookup.service';
+import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
 
 @Component({
   selector: 'app-investigation',
@@ -38,15 +41,18 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   dialog = inject(DialogService);
   form!: UntypedFormGroup;
   service = inject(InvestigationService);
+  employeeService = inject(EmployeeService);
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   location = inject(Location);
   toast = inject(ToastService);
   encrypt = inject(EncryptionService);
+  lookupService = inject(LookupService);
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
   @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
+  violationDegreeConfidentiality = this.lookupService.lookups.violationDegreeConfidentiality;
   caseFolders: CaseFolder[] = [];
   sendTypes = SendTypes;
   caseFoldersMap?: Record<string, CaseFolder>;
@@ -70,7 +76,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
             .open(CommentPopupComponent, {
               data: {
                 model: this.model,
-                response,
+                response
               },
             })
             .afterOpened();
@@ -79,10 +85,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
       .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
-  getSecurityLevel(limitedAccess: boolean): string {
-    return this.lang.map[limitedAccess as unknown as 'true' | 'false'];
+  isApplicantManager() {
+    return this.employeeService.isApplicantManager();
   }
-
   _buildForm(): void {
     this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
     this.listenToLocationChange();
@@ -118,11 +123,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.toast.success(this.lang.map.request_has_been_sent_successfully);
   }
   _updateForm(model: Investigation): void {
-    console.log(this.readonly);
     this.handleReadOnly();
     if (!model.id) this.resetForm();
     this.model = model;
-    console.log(this.readonly);
     this.form.patchValue(model.buildForm(false, this.readonly));
   }
   handleReadOnly() {
@@ -143,7 +146,16 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     }
   }
   saveCase(e: Subject<TransformerAction<Investigation>>) {
-    new Investigation().save().subscribe((model: Investigation) => {
+    of(new Investigation().clone<Investigation>(this.form.value))
+    .pipe(
+      tap(_ => {
+        this.form.invalid && this.dialog.error(this.lang.map.msg_make_sure_all_required_fields_are_filled)
+      }),
+      filter(_ => this.form.valid),
+      switchMap((model) => {
+        return model.save();
+      })
+    ).subscribe((model: Investigation) => {
       this.router.navigate([], {
         relativeTo: this.activeRoute,
         queryParams: {

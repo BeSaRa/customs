@@ -5,32 +5,32 @@
 </div>
 <div>
   <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
-    <!-- violationType -->
+    <!-- offenderType -->
     <ng-container matColumnDef="offenderType">
       <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>
       <td mat-cell *matCellDef="let element">{{ offenderTypesMap[element.type].getNames() }}</td>
     </ng-container>
-    <!-- classification -->
+    <!-- arName -->
     <ng-container matColumnDef="arName">
       <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.arName }}</td>
     </ng-container>
-    <!-- classification -->
+    <!-- enName -->
     <ng-container matColumnDef="enName">
       <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
       <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.enName }}</td>
     </ng-container>
-    <!-- classification -->
+    <!-- qid -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>{{ lang.map.qid }}</th>
       <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.qid }}</td>
     </ng-container>
-    <!-- classification -->
+    <!-- jobTitle -->
     <ng-container matColumnDef="jobTitle">
       <th mat-header-cell mat-sort-header="jobTitle" *matHeaderCellDef>{{ lang.map.job_title }}</th>
-      <td mat-cell *matCellDef="let element">---</td>
+      <td mat-cell *matCellDef="let element">{{ element.offenderInfo.jobTitle }}</td>
     </ng-container>
-    <!-- classification -->
+    <!-- departmentCompany -->
     <ng-container matColumnDef="departmentCompany">
       <th mat-header-cell mat-sort-header="departmentCompany" *matHeaderCellDef>{{ lang.map.department_company }}</th>
       <td mat-cell *matCellDef="let element">{{ element.offenderOUInfo?.getNames() }}</td>
@@ -42,9 +42,6 @@
         <div class="flex gap-2">
           <div [matTooltip]="lang.map.violations">
             <app-icon-button (click)="offenderViolation$.next(element)" icon="VIOLATION_OUTLINE" />
-          </div>
-          <div [matTooltip]="lang.map.make_penalty_decision" *ngIf="canMakeDecision && !readonly">
-            <app-icon-button (click)="makeDecision$.next(element)" icon="ACCOUNT_MAKE_DECISION" />
           </div>
           <div [matTooltip]="lang.map.offender_attachments">
             <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
