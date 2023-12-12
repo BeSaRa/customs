@@ -322,7 +322,10 @@ export interface LangKeysContract {
   situation_search: string;
   is_proved: string;
   situation_search_brokerage_company: string;
+<<<<<<< HEAD
   case_identifier: string;
+=======
+>>>>>>> ba6482f8fcaa782b09c026520567d7447dec2832
   basic_report_data_and_violations: string;
   lbl_department: string;
   lbl_clearance_company: string;

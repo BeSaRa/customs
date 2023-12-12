@@ -34,7 +34,10 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
+<<<<<<< HEAD
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
+=======
+>>>>>>> ba6482f8fcaa782b09c026520567d7447dec2832
 import { OffendersViolaitonsPreviewComponent } from '@standalone/components/offenders-violaitons-preview/offenders-violaitons-preview.component';
 
 @NgModule({
