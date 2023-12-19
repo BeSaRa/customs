@@ -84,6 +84,7 @@ export class DialogService implements DialogContract {
   open<T, D = unknown, R = unknown>(template: ComponentType<T> | TemplateRef<T>, config?: MatDialogConfig<D>): MatDialogRef<T, R> {
     return this.dialog.open<T, D, R>(template, {
       ...config,
+      disableClose: true,
       direction: this.lang.getCurrent().direction,
     });
   }

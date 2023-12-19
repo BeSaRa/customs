@@ -273,6 +273,7 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     entityId: number
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
+      disableClose: true,
       data: {
         caseId,
         service,
@@ -292,6 +293,7 @@ export abstract class BaseCaseService<M> extends RegisterServiceMixin(class {}) 
     return this.downloadAttachment(attachmentId).pipe(
       map(blob => {
         return this.dialog.open(ViewAttachmentPopupComponent, {
+          disableClose: true,
           data: {
             model: blob,
             title: title,
