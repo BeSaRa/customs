@@ -184,8 +184,8 @@
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
     <app-button (click)="search$.next()" *ngIf="!isExternal" buttonType="primary">{{ lang.map.search }}</app-button>
     <app-button (click)="addWitness$.next()" *ngIf="isExternal" buttonType="primary">{{ lang.map.add }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
   </div>
 </div>
