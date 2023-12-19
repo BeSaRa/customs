@@ -28,6 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LangService } from '@services/lang.service';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { requiredValidator } from '@validators/validation-utils';
+import { IconButtonComponent } from '../icon-button/icon-button.component';
 
 @Component({
   selector: 'app-select-input',
@@ -41,6 +42,7 @@ import { requiredValidator } from '@validators/validation-utils';
     ReactiveFormsModule,
     InputComponent,
     FilterArrayPipe,
+    IconButtonComponent,
   ],
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
@@ -209,5 +211,10 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
       : this.bindLabel && typeof this.bindLabel === 'function'
       ? this.bindLabel(option)
       : option;
+  }
+  delete(event: MouseEvent, option: unknown) {
+    event.preventDefault();
+    event.stopPropagation();
+    if (this.control.value == option) this.control.setValue(null);
   }
 }
