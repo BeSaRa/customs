@@ -1,6 +1,7 @@
 import { InterceptModel } from 'cast-response';
 import { GuidePanelInterceptor } from '@model-interceptors/guide-panel-interceptor';
 import { CustomValidators } from '@validators/custom-validators';
+import { Validators } from '@angular/forms';
 
 const { send, receive } = new GuidePanelInterceptor();
 
@@ -18,7 +19,7 @@ export class GuidePanel {
       offenderType: [offenderType, [CustomValidators.required]],
       offenderLevel: [offenderLevel],
       violationTypeIdsList: [violationTypeIdsList, [CustomValidators.required]],
-      repeat: [repeat, [CustomValidators.positiveNumber]],
+      repeat: [repeat, [Validators.min(1)]],
       penaltySigner: [penaltySigner, [CustomValidators.required]],
     };
   }

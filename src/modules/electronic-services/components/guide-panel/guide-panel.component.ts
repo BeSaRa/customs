@@ -48,7 +48,6 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Penalty>();
-  selectedTab = 0;
 
   ngOnInit(): void {
     this.getViolationTypes();
@@ -151,8 +150,8 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         })
       )
       .subscribe((data: Penalty[]) => {
-        if (data.length) {
-          this.selectedTab = 1;
+        if (!data.length) {
+          this.dialog.info(this.lang.map.no_records_to_display);
         }
         data = data.sort((penalty1, penalty2) => {
           if (penalty1.penGuidance === null || penalty2.penGuidance === null) {
