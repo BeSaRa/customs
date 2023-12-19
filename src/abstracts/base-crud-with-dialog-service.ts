@@ -25,6 +25,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   ): MatDialogRef<C, M | UserClick.CLOSE> {
     return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
       ...config,
+      disableClose: true,
       data: {
         model: model || this.getModelInstance(),
         extras: { ...extras },
@@ -40,6 +41,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   ): MatDialogRef<C, M | UserClick.CLOSE> {
     return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
       ...config,
+      disableClose: true,
       data: {
         model,
         extras: { ...extras },
@@ -55,6 +57,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   ): MatDialogRef<C, M | UserClick.CLOSE> {
     return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
       ...config,
+      disableClose: true,
       data: {
         model,
         extras: { ...extras },
@@ -70,6 +73,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   ): MatDialogRef<C, UserClick.CLOSE> {
     return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(this.getDialogComponent(), {
       ...config,
+      disableClose: true,
       data: {
         model,
         extras: { ...extras },
@@ -85,6 +89,7 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   ): MatDialogRef<AuditPopupComponent, UserClick.CLOSE> {
     return this.dialog.open<AuditPopupComponent, CrudDialogDataContract<M>, UserClick.CLOSE>(AuditPopupComponent, {
       ...config,
+      disableClose: true,
       data: {
         model,
         extras: { ...extras },

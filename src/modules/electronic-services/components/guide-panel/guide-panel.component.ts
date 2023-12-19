@@ -181,6 +181,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
 
   viewRecord(model: Penalty): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
     return this.dialog.open<PenaltyPopupComponent, CrudDialogDataContract<Penalty>, UserClick.CLOSE>(PenaltyPopupComponent, {
+      disableClose: true,
       data: {
         model,
         operation: OperationType.VIEW,
