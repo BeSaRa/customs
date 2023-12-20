@@ -30,7 +30,7 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class { })
   employeeService = inject(EmployeeService);
   model: Offender = this.data && (this.data.model as Offender);
   caseId: string = this.data && (this.data.caseId as string);
-  penaltyList: Penalty[] = this.data && (this.data.penalties.second as Penalty[]);
+  penaltyList: Penalty[] = this.data && (this.data.penalties.first || [] as Penalty[]);
   form: FormGroup = new FormGroup({
     penalty: new FormControl(null, [CustomValidators.required]),
   });

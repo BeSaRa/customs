@@ -10,7 +10,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
+import { Subject, filter, switchMap } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -22,9 +22,9 @@ import { OffenderService } from '@services/offender.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 
 @Component({
-  selector: 'app-offenders-violaitons-preview',
-  templateUrl: './offenders-violaitons-preview.component.html',
-  styleUrls: ['./offenders-violaitons-preview.component.scss'],
+  selector: 'app-offenders-violations-preview',
+  templateUrl: './offenders-violations-preview.component.html',
+  styleUrls: ['./offenders-violations-preview.component.scss'],
   standalone: true,
   imports: [CommonModule, IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
   animations: [
@@ -35,7 +35,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
     ]),
   ],
 })
-export class OffendersViolaitonsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
