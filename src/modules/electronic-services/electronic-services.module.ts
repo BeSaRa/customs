@@ -35,7 +35,7 @@ import { InvestigationSearchComponent } from './components/investigation-search/
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
-import { OffendersViolaitonsPreviewComponent } from '@standalone/components/offenders-violaitons-preview/offenders-violaitons-preview.component';
+import { OffendersViolationsPreviewComponent } from '@standalone/components/offenders-violations-preview/offenders-violations-preview.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,7 @@ import { OffendersViolaitonsPreviewComponent } from '@standalone/components/offe
     ViolationListComponent,
     OffenderListComponent,
     WitnessesListComponent,
-    OffendersViolaitonsPreviewComponent,
+    OffendersViolationsPreviewComponent,
   ],
 })
 export class ElectronicServicesModule {}

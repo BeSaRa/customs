@@ -54,7 +54,7 @@
       <app-textarea formControlName="description" class="col-span-1 md:col-span-2 lg:col-span-4"
         [label]="lang.map.general_explanation_of_violations" />
 
-      <app-offenders-violaitons-preview [investigationModel]="model" [data]="model?.offenderInfo || []"
+      <app-offenders-violations-preview [investigationModel]="model" [data]="model?.offenderInfo || []"
         class="col-span-1 md:col-span-2 lg:col-span-4" *ngIf="isApplicantManager()" />
 
       <app-case-attachments *ngIf="!isApplicantManager()" [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
