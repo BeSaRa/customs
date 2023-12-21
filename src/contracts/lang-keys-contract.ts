@@ -143,6 +143,7 @@ export interface LangKeysContract {
   auto_claim: string;
   logout: string;
   are_you_sure_you_want_to_logout: string;
+  are_you_sure_you_want_to_change_lang: string;
   logged_out_successfully: string;
   delete_bulk: string;
   mail_notifications: string;

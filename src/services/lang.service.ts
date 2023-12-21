@@ -72,6 +72,11 @@ export class LangService extends RegisterServiceMixin(class {}) implements Servi
     this.setCurrent(desiredLang);
   }
 
+  toggleToLangName(): string {
+    const desiredLang = this.langMap[this.current.toggleTo];
+    return desiredLang.name;
+  }
+
   private setDirection(direction: 'rtl' | 'ltr'): void {
     const html = this.document.querySelector('html');
     if (!html) return;
