@@ -14,6 +14,10 @@ import { PermissionRoleService } from '@services/permission-role.service';
 import { PermissionRole } from '@models/permission-role';
 import { CheckGroup } from '@models/check-group';
 import { AppIcons } from '@constants/app-icons';
+import { HttpClient } from '@angular/common/http';
+import { BlobModel } from '@models/blob-model';
+import { InternalUserService } from '@services/internal-user.service';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -26,8 +30,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
   private readonly permissionRoleService = inject(PermissionRoleService);
+  private readonly internalUserService = inject(InternalUserService);
   Operations = OperationType;
-
+  signatureSafeUrl: SafeResourceUrl | null = null;
   statusList!: Lookup[];
   permissionsRoles!: PermissionRole[];
   groups: CheckGroup<Permission>[] = [];
@@ -87,6 +92,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.statusList = this.lookupService.lookups.commonStatus;
     this.loadPermissionsRoles();
     this.loadGroups();
+    this.getSignatureSafeURL();
+  }
+
+  private getSignatureSafeURL() {
+    this.internalUserService.downloadSignature(this.model.id).subscribe(safeUrl => {
+      this.signatureSafeUrl = safeUrl;
+    });
   }
 
   private load(): Observable<CheckGroup<Permission>[]> {
