@@ -12,7 +12,7 @@ export class BrokerInterceptor implements ModelInterceptorContract<Broker> {
     model.licenseStartDate = model.licenseStartDate?.split('.')[0] ?? model.licenseStartDate;
     model.licenseEndDate = model.licenseEndDate?.split('.')[0] ?? model.licenseEndDate;
     model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
-
+    model.companyInfo && (model.companyInfo = AdminResult.createInstance(model.companyInfo));
     return model;
   }
 }
