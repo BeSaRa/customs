@@ -335,4 +335,6 @@ export interface LangKeysContract {
   referral_request: string;
   referral_request_to_presodent: string;
   referral_request_to_presodent_assistant: string;
+  user_type: string;
+  note: string;
 }
