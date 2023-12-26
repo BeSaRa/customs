@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { InternalUser } from '@models/internal-user';
 import { CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
@@ -6,6 +6,11 @@ import { ComponentType } from '@angular/cdk/portal';
 import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
+import { HttpParams } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BlobModel } from '@models/blob-model';
+import { Observable, map } from 'rxjs';
+import { UserSignature } from '@models/user-signature';
 
 @CastResponseContainer({
   $pagination: {
@@ -37,5 +42,22 @@ export class InternalUserService extends BaseCrudWithDialogService<InternalUserP
 
   getUrlSegment(): string {
     return this.urlService.URLS.INTERNAL_USER;
+  }
+
+  downloadSignature(id: number, domSanitizer: DomSanitizer): Observable<BlobModel> {
+    return this.http
+      .get(this.getUrlSegment() + '/signature/content', { params: new HttpParams({ fromObject: { internalUserId: id } }), responseType: 'blob' })
+      .pipe(map(blob => new BlobModel(blob, domSanitizer)));
+  }
+
+  uploadSignature(userSignature: UserSignature): Observable<unknown> {
+    const formData = new FormData();
+    userSignature.content ? formData.append('content', userSignature.content) : null;
+    delete userSignature.content;
+    return this.http.post(this.getUrlSegment() + '/signature', formData, {
+      params: new HttpParams({
+        fromObject: userSignature as never,
+      }),
+    });
   }
 }

@@ -106,6 +106,17 @@
           <app-internal-user-ou [internalUser]="data.model"></app-internal-user-ou>
         </div>
       </mat-tab>
+      <mat-tab *ngIf="!inCreateMode()" [label]="lang.map.lbl_user_signature">
+        <div class="dialog-content">
+          <div [formGroup]="form" class="flex flex-col">
+            <div (drop)="filesDropped($event)" (dragover)="$event.preventDefault()" [ngClass]="getSignatureStyle()">
+              <div *ngIf="signatureSafeUrl; else dragAndDrop" class="dialog-content !p-0 w-full h-full">
+                <img class="w-full h-full" [src]="signatureSafeUrl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
@@ -114,3 +125,10 @@
     <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>
 </div>
+
+<ng-template #dragAndDrop>
+  <div class="flex flex-col items-center text-gray-500">
+    <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
+    <span>{{ lang.map.drag_and_drop_files }}</span>
+  </div>
+</ng-template>

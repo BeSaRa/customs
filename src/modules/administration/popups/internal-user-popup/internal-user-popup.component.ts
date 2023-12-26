@@ -14,6 +14,10 @@ import { PermissionRoleService } from '@services/permission-role.service';
 import { PermissionRole } from '@models/permission-role';
 import { CheckGroup } from '@models/check-group';
 import { AppIcons } from '@constants/app-icons';
+import { InternalUserService } from '@services/internal-user.service';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UserSignature } from '@models/user-signature';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -26,8 +30,11 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private readonly lookupService = inject(LookupService);
   private readonly permissionService = inject(PermissionService);
   private readonly permissionRoleService = inject(PermissionRoleService);
+  private readonly internalUserService = inject(InternalUserService);
+  private readonly sanitizer = inject(DomSanitizer);
   Operations = OperationType;
-
+  signatureSafeUrl: SafeResourceUrl | null = null;
+  userSignature!: UserSignature;
   statusList!: Lookup[];
   permissionsRoles!: PermissionRole[];
   groups: CheckGroup<Permission>[] = [];
@@ -79,6 +86,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         filter(response => response !== null)
       )
       .subscribe();
+    this.internalUserService
+      .uploadSignature(this.userSignature)
+      .pipe(
+        catchError(() => of(null)),
+        filter(response => response !== null)
+      )
+      .subscribe();
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
@@ -87,6 +101,14 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.statusList = this.lookupService.lookups.commonStatus;
     this.loadPermissionsRoles();
     this.loadGroups();
+    this.getSignatureSafeURL();
+  }
+
+  private getSignatureSafeURL() {
+    if (this.inCreateMode()) return;
+    this.internalUserService.downloadSignature(this.model.id, this.sanitizer).subscribe(blob => {
+      this.signatureSafeUrl = blob.safeUrl;
+    });
   }
 
   private load(): Observable<CheckGroup<Permission>[]> {
@@ -155,5 +177,26 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.load().subscribe(groups => {
       this.groups = groups;
     });
+  }
+
+  filesDropped($event: DragEvent) {
+    $event.preventDefault();
+    if (!$event.dataTransfer) return;
+    if (!$event.dataTransfer.files) return;
+    if (!$event.dataTransfer.files[0]) return;
+    this.userSignature = new UserSignature(this.data.model.id, $event.dataTransfer.files[0]);
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const blob = new Blob([e.target.result]);
+      const url = window.URL.createObjectURL(blob);
+      this.signatureSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    };
+    reader.readAsArrayBuffer(this.userSignature.content as File);
+  }
+
+  getSignatureStyle(): string {
+    if (this.inEditMode()) return 'border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-96 bg-gray-200';
+    if (this.inViewMode()) return 'rounded w-full flex items-center justify-center h-96';
+    return '';
   }
 }
