@@ -22,6 +22,8 @@ import { OffenderService } from '@services/offender.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
 import { UserTypes } from '@enums/user-types';
+import { OffenderTypes } from '@enums/offender-types';
+import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -51,6 +53,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   attachments$: Subject<Offender> = new Subject<Offender>();
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
+  situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
 
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
@@ -73,6 +76,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.listenToMakeDecision();
     this.listenToAttachments();
     this.listenToAssignmentToAttend();
+    this.listenToSituationSearch();
   }
   private loadPenalties() {
     this.investigationModel
@@ -145,6 +149,26 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
                 offender: offender,
                 caseId: this.investigationModel?.id,
                 type: UserTypes.INTERNAL,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
+  }
+  isBroker(element: Offender) {
+    return element.type === OffenderTypes.BROKER;
+  }
+  listenToSituationSearch() {
+    this.situationSearch$
+      .pipe(
+        switchMap((data: { offender: Offender; isCompany: boolean }) =>
+          this.dialog
+            .open(SituationSearchComponent, {
+              data: {
+                id: data.offender.offenderInfo?.id,
+                type: data.offender.type,
+                isCompany: data.isCompany,
               },
             })
             .afterClosed()
