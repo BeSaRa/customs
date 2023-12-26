@@ -36,6 +36,7 @@ import { TeamInboxComponent } from './components/team-inbox/team-inbox.component
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 import { OffendersViolationsPreviewComponent } from '@standalone/components/offenders-violations-preview/offenders-violations-preview.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { OffendersViolationsPreviewComponent } from '@standalone/components/offe
     OffenderListComponent,
     WitnessesListComponent,
     OffendersViolationsPreviewComponent,
+    MatDialogModule,
   ],
 })
 export class ElectronicServicesModule {}
