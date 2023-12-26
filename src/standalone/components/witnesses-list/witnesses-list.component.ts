@@ -17,6 +17,8 @@ import { Lookup } from '@models/lookup';
 import { Witness } from '@models/witness';
 import { WitnessService } from '@services/witness.service';
 import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
+import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-witnesses-list',
@@ -25,7 +27,7 @@ import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criter
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })
-export class WitnessesListComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class WitnessesListComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -68,6 +70,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
+    this.listenToAssignmentToAttend();
     this.reload$.next();
   }
 
@@ -126,14 +129,21 @@ export class WitnessesListComponent extends OnDestroyMixin(class { }) implements
   resetDataList() {
     this.data.next([]);
   }
-  listenToAssignmentToAttend() {
+  private listenToAssignmentToAttend() {
     this.assignmentToAttend$
-      .pipe(switchMap(() => of()))
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_assignment_to_attend_x_success
-          // .change({ x: model.getNames() })
-        );
-        this.reload$.next();
-      });
+      .pipe(
+        switchMap((witness: Witness) =>
+          this.dialog
+            .open(AssignmentToAttendPopupComponent, {
+              data: {
+                witness: witness,
+                caseId: this.caseId,
+                type: UserTypes.EXTERNAL,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
   }
 }

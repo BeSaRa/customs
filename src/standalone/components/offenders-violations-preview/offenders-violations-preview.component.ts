@@ -20,6 +20,8 @@ import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penal
 import { Penalty } from '@models/penalty';
 import { OffenderService } from '@services/offender.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -35,7 +37,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
     ]),
   ],
 })
-export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
@@ -48,6 +50,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   makeDecision$ = new Subject<Offender>();
   attachments$: Subject<Offender> = new Subject<Offender>();
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
+  assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
 
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
@@ -65,12 +68,13 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     {}
   );
   ngOnInit(): void {
-    this.loadPanalties();
+    this.loadPenalties();
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
+    this.listenToAssignmentToAttend();
   }
-  private loadPanalties() {
+  private loadPenalties() {
     this.investigationModel
       ?.getService()
       .getCasePenalty(this.investigationModel?.id as string)
@@ -79,20 +83,21 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       });
   }
   private listenToView() {
-    this.view$.pipe(
-      switchMap((offender: Offender) =>
-        this.dialog
-          .open(OffenderViolationsPopupComponent, {
-            data: {
-              offender: offender,
-              caseId: this.investigationModel?.id,
-              violations: offender.violations,
-              readonly: true,
-            },
-          })
-          .afterClosed()
+    this.view$
+      .pipe(
+        switchMap((offender: Offender) =>
+          this.dialog
+            .open(OffenderViolationsPopupComponent, {
+              data: {
+                offender: offender,
+                caseId: this.investigationModel?.id,
+                violations: offender.violations,
+                readonly: true,
+              },
+            })
+            .afterClosed()
+        )
       )
-    )
       .subscribe();
   }
   private listenToAttachments() {
@@ -130,5 +135,21 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+  private listenToAssignmentToAttend() {
+    this.assignmentToAttend$
+      .pipe(
+        switchMap((offender: Offender) =>
+          this.dialog
+            .open(AssignmentToAttendPopupComponent, {
+              data: {
+                offender: offender,
+                caseId: this.investigationModel?.id,
+                type: UserTypes.INTERNAL,
+              },
+            })
+            .afterClosed()
+        )
+      )
+      .subscribe();
+  }
 }
-
