@@ -151,6 +151,7 @@ export interface LangKeysContract {
   basic_settings: string;
   lbl_basic_info: string;
   lbl_user_preferences: string;
+  lbl_user_signature: string;
   lbl_permissions: string;
   lbl_status: string;
   lbl_custom_role: string;
