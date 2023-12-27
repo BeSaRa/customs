@@ -21,7 +21,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
   templateUrl: './make-penalty-decision-popup.component.html',
   styleUrls: ['./make-penalty-decision-popup.component.scss'],
 })
-export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
   data = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dilogRef = inject(MatDialogRef);
@@ -30,9 +30,10 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class { })
   employeeService = inject(EmployeeService);
   model: Offender = this.data && (this.data.model as Offender);
   caseId: string = this.data && (this.data.caseId as string);
-  penaltyList: Penalty[] = this.data && (this.data.penalties.first || [] as Penalty[]);
+  penaltyList: Penalty[] = this.data && (this.data.penalties.second || ([] as Penalty[]));
+  penaltyImposedBySystem: number | null = this.data && this.data.penalties.first;
   form: FormGroup = new FormGroup({
-    penalty: new FormControl(null, [CustomValidators.required]),
+    penalty: new FormControl(this.penaltyImposedBySystem ? this.penaltyList[this.penaltyImposedBySystem].id : null, [CustomValidators.required]),
   });
   constructor() {
     super();
