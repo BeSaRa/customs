@@ -59,7 +59,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.offenderDataSource = new AppTableDataSource(offenders);
   }
   @Input() investigationModel?: Investigation;
-
+  @Input() isClaimed = false;
   offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
   expandedElement!: Offender;
