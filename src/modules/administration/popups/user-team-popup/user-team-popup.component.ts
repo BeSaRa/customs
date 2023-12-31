@@ -31,7 +31,6 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
       .pipe(map(teams => teams.filter(team => !(this.data.extras?.mappedUserTeamsIds as number[]).includes(team.id))))
       .subscribe(filteredTeams => {
         this.teams = filteredTeams;
-        console.log('this.teams: ', this.teams);
       });
   }
 
