@@ -47,6 +47,7 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) 
     this.listenToSave();
   }
   listenToSave() {
+    // show form 2
     this.save$
       .pipe(takeUntil(this.destroy$))
       .pipe(filter(() => !!this.form.valid))
