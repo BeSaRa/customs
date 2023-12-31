@@ -79,6 +79,8 @@ import { AttachmentTypeComponent } from '@modules/administration/components/atta
 import { AttachmentTypePopupComponent } from '@modules/administration/popups/attachment-type-popup/attachment-type-popup.component';
 import { InternalUserOUComponent } from '@modules/administration/components/internal-user-ou/internal-user-ou.component';
 import { InternalUserOUPopupComponent } from '@modules/administration/popups/internal-user-ou-popup/internal-user-ou-popup.component';
+import { UserTeamComponent } from '@modules/administration/components/user-team/user-team.component';
+import { UserTeamPopupComponent } from '@modules/administration/popups/user-team-popup/user-team-popup.component';
 
 @NgModule({
   declarations: [
@@ -126,6 +128,8 @@ import { InternalUserOUPopupComponent } from '@modules/administration/popups/int
     AttachmentTypePopupComponent,
     InternalUserOUComponent,
     InternalUserOUPopupComponent,
+    UserTeamComponent,
+    UserTeamPopupComponent,
   ],
   imports: [
     CommonModule,
