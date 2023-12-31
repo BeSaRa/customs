@@ -12,7 +12,6 @@ import { TaskResponses } from '@enums/task-responses';
 import { UserClick } from '@enums/user-click';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { CommonModule } from '@angular/common';
-import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-comment-popup',
@@ -29,37 +28,29 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
-  offender: Offender = this.data && (this.data.offender as Offender);
-  isPreviewForm = false;
-  chiefToManager = false;
-  referralToPresodent = false;
-  referralToPresodentAssistant = false;
-  previewFormList: TaskResponses[] = [
-    TaskResponses.TO_MANAGER,
-    TaskResponses.MANAGER_APPROVE,
-    TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT,
-    TaskResponses.REFERRAL_TO_PRESODENT,
-  ];
-  constructor() {
-    super();
-  }
+  taskResponses = TaskResponses;
 
   ngOnInit() {
-    this.chiefToManager = this.response == TaskResponses.TO_MANAGER;
-    this.referralToPresodent = this.response == TaskResponses.REFERRAL_TO_PRESODENT;
-    this.referralToPresodentAssistant = this.response == TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT;
-
     this.buildForm();
     this.listenToComment();
-    this.isPreviewForm = this.previewFormList.includes(this.response);
+    console.log(this.model);
+    console.log(this.response);
+    this.model.offenderInfo.forEach(offender => {
+      let newOffender = {
+        name: offender.offenderInfo?.arName ? offender.offenderInfo.arName : '',
+        jobTitle: offender.typeInfo.arName ? offender.typeInfo.arName : '',
+        violations: [{}],
+      };
+      offender.violations.forEach(violation => {
+        newOffender.violations.push({ name: violation.violationId });
+      });
+      this.violations.push(newOffender);
+    });
   }
   buildForm() {
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [CustomValidators.required]),
     });
-  }
-  isResponse(response: TaskResponses) {
-    return this.response == response;
   }
   listenToComment() {
     this.comment$
@@ -70,7 +61,7 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
           const completeBody = {
             selectedResponse: this.response,
             comment: this.form.value.comment,
-            userId: this.offender ? this.offender.id : undefined,
+            // userId
           };
           return this.model.getService().completeTask(this.model.taskDetails.tkiid, completeBody);
         })
@@ -78,5 +69,159 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
       .subscribe(() => {
         this.dialogRef.close(UserClick.YES);
       });
+  }
+  get sendToName() {
+    if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT) {
+      return '';
+    } else if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT) {
+      return '';
+    }
+    return 'احمد';
+  }
+
+  get sendToTitle() {
+    if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT) {
+      return 'الرئيس';
+    } else if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT) {
+      return 'مساعد الرئيس';
+    }
+    return '';
+  }
+  get formNumberAndType() {
+    if (this.response === this.taskResponses.TO_MANAGER) {
+      return 'رقم مسودة التحقيق: ((الرقم))';
+    } else if (
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM4 ||
+      // this.response === this.taskResponses.FORM5 ||
+      // this.response === this.taskResponses.FORM6 ||
+      // this.response === this.taskResponses.FORM7
+    ) {
+      return 'رقم ملف التحقيق:' + this.model.caseIdentifier;
+    }
+    return '';
+  }
+  get decisionNumberAndType() {
+    if (
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM7
+    ) {
+      return 'رقم القرار:((الرقم))';
+    }
+    // else if (this.response === this.taskResponses.FORM5) {
+    //   return 'رقم القرار السحب:((الرقم))';
+    // } else if (this.response === this.taskResponses.FORM6) {
+    //   return 'رقم القرار الاحالة:((الرقم))';
+    // }
+    return '';
+  }
+  get formDateAndType() {
+    if (this.response === this.taskResponses.TO_MANAGER) {
+      return 'تاريخ مسودة التحقيق: ((التاريخ))';
+    } else if (
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM7
+    ) {
+      return 'تاريخ القرار: ((التاريخ))';
+    }
+    // else if (this.response === this.taskResponses.FORM4) {
+    //   return 'تاريخ الطلب: ((التاريخ))';
+    // } else if (this.response === this.taskResponses.FORM5) {
+    //   return 'تاريخ القرار السحب: ((التاريخ))';
+    // } else if (this.response === this.taskResponses.FORM6) {
+    //   return 'تاريخ القرار الاحالة: ((التاريخ))';
+    // }
+    return '';
+  }
+  get formName() {
+    if (
+      this.response === this.taskResponses.TO_MANAGER
+      // ||
+      // this.response === this.taskResponses.FORM4 ||
+      // this.response === this.taskResponses.FORM5 ||
+      // this.response === this.taskResponses.FORM6
+    ) {
+      return 'اسم النموذج';
+    }
+    // else if (this.response === this.taskResponses.FORM2) {
+    //   return 'نوع القرار';
+    // }
+    else if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT || this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT) {
+      return 'طلب احالة';
+    }
+    return '';
+  }
+  get upperFixedText() {
+    if (
+      this.response === this.taskResponses.TO_MANAGER ||
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM4 ||
+      // this.response === this.taskResponses.FORM5 ||
+      // this.response === this.taskResponses.FORM6 ||
+      // this.response === this.taskResponses.FORM7
+    )
+      return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
+    return '';
+  }
+  get lowerFixedText() {
+    if (
+      this.response === this.taskResponses.TO_MANAGER ||
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM4 ||
+      // this.response === this.taskResponses.FORM5 ||
+      // this.response === this.taskResponses.FORM6 ||
+      // this.response === this.taskResponses.FORM7
+    )
+      return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
+    return '';
+  }
+  get signature() {
+    return 'صورة التوقيع';
+  }
+  get sendFromName() {
+    return 'اسم الموقع';
+  }
+  get sendFromJobTitle() {
+    return 'صفة الموقع';
+  }
+  offenders!: [{ name: string; jobTitle: string; violations: [{ name: 'مخالفة ١' }] }];
+  violations = [{ name: 'مخالفة ١' }, { name: 'مخالفة ٢' }];
+  violation = { name: 'مخالفة ١', date: '1/1/2021' };
+
+  get justifyEnd() {
+    return (
+      this.response === this.taskResponses.TO_MANAGER
+      // || this.response === this.taskResponses.FORM4 || this.response === this.taskResponses.FORM5
+    );
+  }
+  get justifyBetween() {
+    return (
+      // this.response === this.taskResponses.FORM2 ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESODENT || this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      // this.response === this.taskResponses.FORM6 ||
+      // this.response === this.taskResponses.FORM7
+    );
+  }
+  get isEmployee() {
+    return true;
+  }
+  get isBroker() {
+    return !this.isEmployee;
+  }
+  get copyToHumanResources() {
+    return 'نسخة الى الموارد البشرية';
+  }
+  get copyToLegalAffairs() {
+    return 'نسخة الى الشؤون القانونية';
   }
 }
