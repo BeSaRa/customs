@@ -60,6 +60,8 @@ export const AppIcons = {
   CHEVRON_UP: 'chevron-up',
   CHEVRON_DOWN: 'chevron-down',
   ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
+  REFERRAL_TO_PRESIDENT: 'book-refresh-outline',
+  REFERRAL_TO_PRESIDENT_ASSISTANT: 'book-refresh',
 };
 
 export type AppIconsType = typeof AppIcons;

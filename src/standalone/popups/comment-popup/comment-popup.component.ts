@@ -12,6 +12,7 @@ import { TaskResponses } from '@enums/task-responses';
 import { UserClick } from '@enums/user-click';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { CommonModule } from '@angular/common';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-comment-popup',
@@ -20,7 +21,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './comment-popup.component.html',
   styleUrls: ['./comment-popup.component.scss'],
 })
-export class CommentPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class CommentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
@@ -28,6 +29,7 @@ export class CommentPopupComponent extends OnDestroyMixin(class { }) implements 
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
+  offender: Offender = this.data && (this.data.offender as Offender);
   isPreviewForm = false;
   chiefToManager = false;
   referralToPresodent = false;
@@ -46,10 +48,10 @@ export class CommentPopupComponent extends OnDestroyMixin(class { }) implements 
     this.chiefToManager = this.response == TaskResponses.TO_MANAGER;
     this.referralToPresodent = this.response == TaskResponses.REFERRAL_TO_PRESODENT;
     this.referralToPresodentAssistant = this.response == TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT;
-    
+
     this.buildForm();
     this.listenToComment();
-    this.isPreviewForm = this.previewFormList.includes(this.response)
+    this.isPreviewForm = this.previewFormList.includes(this.response);
   }
   buildForm() {
     this.form = new UntypedFormGroup({
@@ -68,7 +70,7 @@ export class CommentPopupComponent extends OnDestroyMixin(class { }) implements 
           const completeBody = {
             selectedResponse: this.response,
             comment: this.form.value.comment,
-            // userId
+            userId: this.offender ? this.offender.id : undefined,
           };
           return this.model.getService().completeTask(this.model.taskDetails.tkiid, completeBody);
         })

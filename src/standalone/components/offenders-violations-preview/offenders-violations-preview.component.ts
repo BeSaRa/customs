@@ -10,7 +10,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { Subject, filter, switchMap } from 'rxjs';
+import { Subject, filter, switchMap, takeUntil } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -24,6 +24,9 @@ import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/
 import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
+import { TaskResponses } from '@enums/task-responses';
+import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -54,12 +57,26 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-
+  referralRequest$ = new Subject<{
+    referralTo: TaskResponses.REFERRAL_TO_PRESODENT | TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT;
+    offender: Offender;
+  }>();
+  get referralToPresidentLang() {
+    return this.lang.map.referral_request_to_presodent;
+  }
+  get referralToPresidentAssistantLang() {
+    return this.lang.map.referral_request_to_presodent_assistant;
+  }
+  taskResponses = TaskResponses;
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
   }
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
+  isReferralable(offender: Offender) {
+    let penaltyMap = this.penaltyMap;
+    return penaltyMap && penaltyMap[offender.id] && penaltyMap[offender.id].first === null;
+  }
   offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
   expandedElement!: Offender;
@@ -77,6 +94,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.listenToAttachments();
     this.listenToAssignmentToAttend();
     this.listenToSituationSearch();
+    this.listenToReferralRequest();
   }
   private loadPenalties() {
     this.investigationModel
@@ -174,6 +192,25 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
             .afterClosed()
         )
       )
+      .subscribe();
+  }
+  listenToReferralRequest() {
+    this.referralRequest$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(({ referralTo, offender }) => {
+          return this.dialog
+            .open(CommentPopupComponent, {
+              data: {
+                model: this.investigationModel,
+                response: referralTo,
+                offender: offender,
+              },
+            })
+            .afterOpened();
+        })
+      )
+      .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
 }

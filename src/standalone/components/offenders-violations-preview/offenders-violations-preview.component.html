@@ -51,10 +51,20 @@
         </div> -->
         <div [matTooltip]="lang.map.situation_search">
             <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:false })" icon="INFORMATION"></app-icon-button>
-          </div>
-          <div [matTooltip]="lang.map.situation_search_brokerage_company" *ngIf="isBroker(element)">
-            <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:true })" icon="BROKER_COMPANY"></app-icon-button>
-          </div>
+        </div>
+        <div [matTooltip]="lang.map.situation_search_brokerage_company" *ngIf="isBroker(element)">
+          <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:true })" icon="BROKER_COMPANY"></app-icon-button>
+        </div>
+        <div [matTooltip]="referralToPresidentLang" *ngIf="isReferralable(element)">
+          <app-icon-button (click)="referralRequest$.next(
+            {referralTo: taskResponses.REFERRAL_TO_PRESODENT, offender:element}
+            )" icon="REFERRAL_TO_PRESIDENT"></app-icon-button>
+        </div>
+        <div [matTooltip]="referralToPresidentAssistantLang" *ngIf="isReferralable(element)">
+          <app-icon-button (click)="referralRequest$.next(
+            {referralTo: taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT, offender:element}
+          )" icon="REFERRAL_TO_PRESIDENT_ASSISTANT"></app-icon-button>
+        </div>
       </div>
     </td>
   </ng-container>

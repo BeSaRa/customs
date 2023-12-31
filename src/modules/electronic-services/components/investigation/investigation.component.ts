@@ -76,7 +76,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
             .open(CommentPopupComponent, {
               data: {
                 model: this.model,
-                response
+                response,
               },
             })
             .afterOpened();
@@ -147,33 +147,34 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   }
   saveCase(e: Subject<TransformerAction<Investigation>>) {
     of(new Investigation().clone<Investigation>(this.form.value))
-    .pipe(
-      tap(_ => {
-        this.form.invalid && this.dialog.error(this.lang.map.msg_make_sure_all_required_fields_are_filled)
-      }),
-      filter(_ => this.form.valid),
-      switchMap((model) => {
-        return model.save();
-      })
-    ).subscribe((model: Investigation) => {
-      this.router.navigate([], {
-        relativeTo: this.activeRoute,
-        queryParams: {
-          ...this.activeRoute.snapshot.queryParams,
-          item: this.encrypt.encrypt<INavigatedItem>({
-            openFrom: OpenFrom.ADD_SCREEN,
-            taskId: model.id,
-            caseId: model.id,
-            caseType: model.caseType,
-          }),
-        },
+      .pipe(
+        tap(_ => {
+          this.form.invalid && this.dialog.error(this.lang.map.msg_make_sure_all_required_fields_are_filled);
+        }),
+        filter(_ => this.form.valid),
+        switchMap(model => {
+          return model.save();
+        })
+      )
+      .subscribe((model: Investigation) => {
+        this.router.navigate([], {
+          relativeTo: this.activeRoute,
+          queryParams: {
+            ...this.activeRoute.snapshot.queryParams,
+            item: this.encrypt.encrypt<INavigatedItem>({
+              openFrom: OpenFrom.ADD_SCREEN,
+              taskId: model.id,
+              caseId: model.id,
+              caseType: model.caseType,
+            }),
+          },
+        });
+        e.next({
+          action: 'done',
+          model,
+        });
+        this._updateForm(model);
       });
-      e.next({
-        action: 'done',
-        model,
-      });
-      this._updateForm(model);
-    });
   }
   loadCaseFolders(): void {
     if (!this.model) return;

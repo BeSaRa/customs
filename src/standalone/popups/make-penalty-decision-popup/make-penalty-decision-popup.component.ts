@@ -13,6 +13,7 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { SystemPenalties } from '@enums/system-penalties';
 
 @Component({
   selector: 'app-make-penalty-decision-popup',
@@ -39,6 +40,10 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) 
     super();
   }
   ngOnInit(): void {
+    this.penaltyList = this.penaltyList.filter(
+      penalty =>
+        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT && penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+    );
     this.listenToSave();
   }
   listenToSave() {
