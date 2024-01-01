@@ -29,12 +29,17 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
   taskResponses = TaskResponses;
-
+  previewFormList: TaskResponses[] = [
+    TaskResponses.TO_MANAGER,
+    TaskResponses.MANAGER_APPROVE,
+    TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT,
+    TaskResponses.REFERRAL_TO_PRESODENT,
+  ];
+  isPreviewForm = false;
   ngOnInit() {
     this.buildForm();
     this.listenToComment();
-    console.log(this.model);
-    console.log(this.response);
+    this.isPreviewForm = this.previewFormList.includes(this.response);
     this.model.offenderInfo.forEach(offender => {
       let newOffender = {
         name: offender.offenderInfo?.arName ? offender.offenderInfo.arName : '',

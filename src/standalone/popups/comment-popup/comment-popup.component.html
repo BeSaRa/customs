@@ -4,11 +4,10 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content max-w-[900px]">
-    <ng-container>
+    <ng-container *ngIf="isPreviewForm">
       <div dir="rtl">
         <div class="flex justify-between">
           <div>
-            {{response}}
             <strong>السيد {{sendToName + ' ' + sendToTitle}} المحترم</strong>
           </div>
           <div>
@@ -91,6 +90,9 @@
         </div>
       </div>
     </ng-container>
+    <form *ngIf="!isPreviewForm" class="mb-3" [formGroup]="form">
+      <app-textarea formControlName="comment" label="comment"></app-textarea>
+    </form>
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
