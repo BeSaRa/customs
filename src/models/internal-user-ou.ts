@@ -4,6 +4,7 @@ import { InternalUserOUInterceptor } from '@model-interceptors/internal-user-ou-
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
+import { NamesContract } from '@contracts/names-contract';
 
 const { send, receive } = new InternalUserOUInterceptor();
 
@@ -24,5 +25,14 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
       organizationUnitArray: controls ? [organizationUnitArray, [CustomValidators.required]] : organizationUnitArray,
       status: controls ? [status] : status,
     };
+  }
+  
+  override getNames(): string {
+    try {
+      console.log(this.internalUserInfo)
+      return this.internalUserInfo[(this.getLangService().getCurrent().code + 'Name') as keyof NamesContract];
+    } catch (e) {
+      return 'lang service not ready yet';
+    }
   }
 }

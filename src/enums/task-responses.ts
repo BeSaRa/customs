@@ -11,4 +11,7 @@ export enum TaskResponses {
   TO_PO = 'to_po',
   TERMINATE = 'terminate',
   PR_LAUNCH_LEAGL_AFFAIRS = 'pr_launch:legal_affairs',
+  COMPLETE = 'complete',
+  RETURN_TO_HR = 'return_to_hr',
+  HR_APPROVE = 'hr_approve'
 }

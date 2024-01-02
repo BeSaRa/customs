@@ -12,15 +12,19 @@ import { TaskResponses } from '@enums/task-responses';
 import { UserClick } from '@enums/user-click';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { CommonModule } from '@angular/common';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { EmployeeService } from '@services/employee.service';
+import { InternalUserOUService } from '@services/internal-user-ou.service';
+import { InternalUserOU } from '@models/internal-user-ou';
 
 @Component({
   selector: 'app-comment-popup',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent, IconButtonComponent, TextareaComponent, MatDialogModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ButtonComponent, SelectInputComponent, IconButtonComponent, TextareaComponent, MatDialogModule],
   templateUrl: './comment-popup.component.html',
   styleUrls: ['./comment-popup.component.scss'],
 })
-export class CommentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class CommentPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
@@ -29,6 +33,7 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
   taskResponses = TaskResponses;
+  usersList: InternalUserOU[] = [];
   previewFormList: TaskResponses[] = [
     TaskResponses.TO_MANAGER,
     TaskResponses.MANAGER_APPROVE,
@@ -36,9 +41,16 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
     TaskResponses.REFERRAL_TO_PRESODENT,
   ];
   isPreviewForm = false;
+  constructor(
+    private internalUserOUService: InternalUserOUService,
+    private employeeService: EmployeeService
+  ) {
+    super();
+  }
   ngOnInit() {
     this.buildForm();
     this.listenToComment();
+    this._loadUsersList();
     this.isPreviewForm = this.previewFormList.includes(this.response);
     this.model.offenderInfo.forEach(offender => {
       let newOffender = {
@@ -52,10 +64,27 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
       this.violations.push(newOffender);
     });
   }
+  get isSendToUser() {
+    return this.response == TaskResponses.TO_USER;
+  }
+  private _loadUsersList() {
+    if (this.isSendToUser) {
+      this.internalUserOUService.internalUserOUCriteria({
+        organizationUnitId: this.employeeService.getOrganizationUnit()?.id
+      }).subscribe((data) => {
+        this.usersList = data;
+      })
+    }
+  }
   buildForm() {
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [CustomValidators.required]),
+      userId: new UntypedFormControl(null, []),
     });
+    if (this.isSendToUser) {
+      this.form.get('userId')?.setValidators([CustomValidators.required]);
+      this.form.get('userId')?.updateValueAndValidity();
+    }
   }
   listenToComment() {
     this.comment$
@@ -66,8 +95,11 @@ export class CommentPopupComponent extends OnDestroyMixin(class {}) implements O
           const completeBody = {
             selectedResponse: this.response,
             comment: this.form.value.comment,
-            // userId
+            userId: this.form.value.userId
           };
+          if (!this.isSendToUser) {
+            delete completeBody.userId;
+          }
           return this.model.getService().completeTask(this.model.taskDetails.tkiid, completeBody);
         })
       )

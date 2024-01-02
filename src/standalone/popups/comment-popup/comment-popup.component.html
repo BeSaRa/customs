@@ -1,4 +1,4 @@
-<div class="dialog-container" >
+<div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.comment }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
@@ -32,7 +32,7 @@
            || response === taskResponses.REFERRAL_TO_PRESODENT
            || response === taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
            ">
-            <div  *ngFor="let offender of offenders">
+            <div *ngFor="let offender of offenders">
               <h5><strong>{{offender.name}}</strong></h5>
               <ul class="list-none">
                 <li>{{offender.jobTitle + ' ' + offender.name }}</li>
@@ -57,11 +57,8 @@
           </h5>
           </div> -->
           <form [formGroup]="form" class="mb-3">
-            <app-textarea 
-              formControlName="comment" 
-              label="الوصف والتعليقات الأخرى"
-              placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"
-            ></app-textarea>
+            <app-textarea formControlName="comment" label="الوصف والتعليقات الأخرى"
+              placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"></app-textarea>
           </form>
           <p class="mb-4">{{lowerFixedText}}
           </p>
@@ -70,7 +67,7 @@
             'justify-between': justifyBetween,
             'justify-end': justifyEnd
           }">
-            <div  *ngIf="justifyBetween">
+            <div *ngIf="justifyBetween">
               <ul class="list-none mt-5">
                 <li *ngIf="isEmployee">
                   {{copyToHumanResources}}
@@ -90,8 +87,14 @@
         </div>
       </div>
     </ng-container>
-    <form *ngIf="!isPreviewForm" class="mb-3" [formGroup]="form">
-      <app-textarea formControlName="comment" label="comment"></app-textarea>
+    <form *ngIf="!isPreviewForm" [formGroup]="form">
+      <div class="col-12 mb-3" *ngIf="isSendToUser">
+        <app-select-input formControlName="userId" [label]="lang.map.send_to_user_x" bindValue="id"
+          bindLabel="getNames" [options]="usersList" />
+      </div>
+      <div class="col-12 mb-3">
+        <app-textarea formControlName="comment" label="comment"></app-textarea>
+      </div>
     </form>
   </div>
   <div class="dialog-footer justify-end">

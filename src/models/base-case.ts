@@ -80,6 +80,9 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   isClaimed(): boolean {
     return this.canRelease();
   }
+  hasComplete(): boolean {
+    return this?.isClaimed() && (!this.getResponses().length || this.getResponses().includes(TaskResponses.COMPLETE)) && this.caseStatus != CommonCaseStatus.CANCELLED
+  }
   canCommit(): boolean {
     return this.caseStatus === CommonCaseStatus.DRAFT;
   }
