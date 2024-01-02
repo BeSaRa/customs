@@ -337,4 +337,9 @@ export interface LangKeysContract {
   referral_request_to_presodent_assistant: string;
   user_type: string;
   note: string;
+  send_to_user_x: string;
+  hr_employees: string;
+  hr_employee: string;
+  complete: string;
+  return_to_hr_department: string;
 }
