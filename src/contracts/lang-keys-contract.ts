@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_user_team: string;
   menu_investigation_drafts: string;
   search_for_investigation: string;
   menu_investigation_search: string;

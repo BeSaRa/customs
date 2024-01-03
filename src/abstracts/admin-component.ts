@@ -50,7 +50,7 @@ export abstract class AdminComponent<
   protected loadComposite = true;
 
   abstract service: S;
-  private paginate$ = new BehaviorSubject({
+  public paginate$ = new BehaviorSubject({
     offset: 0,
     limit: 50,
   });
@@ -60,7 +60,7 @@ export abstract class AdminComponent<
   sort$: ReplaySubject<SortOptionsContract | undefined> = new ReplaySubject<SortOptionsContract | undefined>(1);
 
   data$: Observable<M[]> = this._load();
-  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
 
   length = 50;
