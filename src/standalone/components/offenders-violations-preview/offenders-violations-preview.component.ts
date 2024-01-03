@@ -213,4 +213,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
+  canMakeDecision(): boolean {
+    return this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION');
+  }
 }
