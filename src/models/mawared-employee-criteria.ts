@@ -11,7 +11,7 @@ export class MawaredEmployeeCriteria extends MawaredEmployee {
       arName: controls ? [arName] : arName,
       enName: controls ? [enName] : enName,
       qid: controls ? [qid] : qid,
-      employeeDepartmentId: controls ? [{ value: employeeDepartmentId, disabled: true }] : employeeDepartmentId,
+      employeeDepartmentId: controls ? [employeeDepartmentId] : employeeDepartmentId,
       employeeQualification: controls ? [employeeQualification] : employeeQualification,
       employeeQualificationId: controls ? [employeeQualificationId] : employeeQualificationId,
     };
