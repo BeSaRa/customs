@@ -5,10 +5,12 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { INavigatedItem } from '@contracts/inavigated-item';
+import { OffenderTypes } from '@enums/offender-types';
 import { OpenFrom } from '@enums/open-from';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { Offender } from '@models/offender';
 import { EncryptionService } from '@services/encryption.service';
 import { InvestigationDraftsService } from '@services/investigation-drafts.service';
 import { LangService } from '@services/lang.service';
@@ -48,7 +50,7 @@ export class InvestigationDraftsComponent {
     new NoneFilterColumn('caseStatus'),
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
-    new NoneFilterColumn('description'),
+    new NoneFilterColumn('namesOfOffenders'),
     new NoneFilterColumn('actions')
   );
 
@@ -65,6 +67,30 @@ export class InvestigationDraftsComponent {
         })
       )
       .subscribe((data: Investigation[]) => {
+        data.forEach(investigation => {
+          let employeeCount: number = 0;
+          let brokerCount: number = 0;
+          let namesOfOffenders: string = '';
+
+          if (investigation.offenderInfo.length > 2) {
+            investigation.offenderInfo.forEach(element => {
+              if (element.type === OffenderTypes.BROKER) {
+                brokerCount += 1;
+              } else if (element.type === OffenderTypes.EMPLOYEE) {
+                employeeCount += 1;
+              }
+            });
+            namesOfOffenders = this.lang.map.employee_broker_numbers.change({ x: employeeCount, y: brokerCount });
+          } else {
+            investigation.offenderInfo.forEach((element, index) => {
+              namesOfOffenders += element.offenderInfo?.arName;
+              if (index + 1 != investigation.offenderInfo.length) {
+                namesOfOffenders += ', ';
+              }
+            });
+          }
+          investigation.namesOfOffenders = namesOfOffenders;
+        });
         this.displayedList = new MatTableDataSource(data);
       });
   }
