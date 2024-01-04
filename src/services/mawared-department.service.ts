@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MawaredDepartment } from '@models/mawared-department';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
 import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/mawared-department-popup/mawared-department-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
+import { Observable } from 'rxjs';
 
 @CastResponseContainer({
   $pagination: {
@@ -37,5 +38,10 @@ export class MawaredDepartmentService extends BaseCrudWithDialogService<MawaredD
 
   getUrlSegment(): string {
     return this.urlService.URLS.MAWARED_DEPARTMENT;
+  }
+
+  @CastResponse()
+  loadUserDepartments(): Observable<MawaredDepartment[]> {
+    return this.http.get<MawaredDepartment[]>(this.getUrlSegment() + '/user-departments');
   }
 }
