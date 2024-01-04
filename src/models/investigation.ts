@@ -27,6 +27,8 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
   limitedAccessInfo!: AdminResult;
+  namesOfOffenders?: string = '';
+
   buildForm(controls = false, disabled = false): object {
     const { description, createdOn, investigationFullSerial, draftFullSerial, limitedAccess } = this;
     return {

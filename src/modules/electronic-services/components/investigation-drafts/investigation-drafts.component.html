@@ -36,14 +36,14 @@
       </td>
     </ng-container>
     
-    <!-- description -->
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.description }}</th>
+    <!-- namesOfOffenders -->
+    <ng-container matColumnDef="namesOfOffenders">
+      <th mat-header-cell *matHeaderCellDef>{{ lang.map.offender_names }}</th>
       <td mat-cell *matCellDef="let element">
-        <span>{{ element.description }}</span>
+        <span>{{ element.namesOfOffenders }}</span>
       </td>
     </ng-container>
-
+    
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
