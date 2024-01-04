@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  ou_logo: string;
+  is_customs: string;
+  ou_manager_assistant: string;
+  assistant_ou: string;
+  mawared_dep_id: string;
   menu_user_team: string;
   menu_investigation_drafts: string;
   search_for_investigation: string;

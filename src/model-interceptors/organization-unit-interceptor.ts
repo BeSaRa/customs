@@ -19,6 +19,7 @@ export class OrganizationUnitInterceptor implements ModelInterceptorContract<Org
     model.typeInfo && (model.typeInfo = AdminResult.createInstance(model.typeInfo));
     model.parentInfo && (model.parentInfo = AdminResult.createInstance(model.parentInfo));
     model.mawaredDepInfo && (model.mawaredDepInfo = AdminResult.createInstance(model.mawaredDepInfo));
+    model.assistantInfo && (model.assistantInfo = AdminResult.createInstance(model.assistantInfo));
 
     return model;
   }
