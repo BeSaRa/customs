@@ -121,7 +121,7 @@
     *matRowDef="let element; columns: offenderDisplayedColumns"
     class="element-row"
     [class.example-expanded-row]="expandedElement === element"
-    (click)="expandedElement = element"></tr>
+    (click)="expandedElement == element ? expandedElement = null : expandedElement = element"></tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
   <!-- Row shown when there is no matching data. -->
   <tr class="mat-row" *matNoDataRow>

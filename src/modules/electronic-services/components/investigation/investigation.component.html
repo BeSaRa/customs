@@ -10,27 +10,30 @@
 <div class="relative">
   <mat-card>
     <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="tabChange($event)" mat-stretch-tabs="false">
-      <mat-tab [label]="!isApplicantManager() ? lang.map.lbl_basic_info : lang.map.basic_report_data_and_violations">
+      <mat-tab [label]="!isSummaryMode() ? lang.map.lbl_basic_info : lang.map.basic_report_data_and_violations">
         <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.violations">
+      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.violations">
         <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.offenders">
+      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.external_persons">
         <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!isApplicantManager()" [label]="lang.map.correspondence">
+      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.correspondence">
         <ng-container [ngTemplateOutlet]="correspondence_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="isApplicantManager()" [label]="lang.map.attachments">
+      <mat-tab *ngIf="isSummaryMode()" [label]="lang.map.attachments">
         <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
+<!-- 
 
+
+ -->
   <ng-template #basic_info_tab>
     <div [formGroup]="form" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
       <app-input formControlName="draftFullSerial" [label]="lang.map.report_draft_number" />
@@ -45,7 +48,7 @@
         bindValue="lookupKey"
         bindLabel="getNames"
         [options]="violationDegreeConfidentiality" />
-      <div class="group block relative mb-5" *ngIf="model && model.departmentInfo && isApplicantManager()">
+      <div class="group block relative mb-5" *ngIf="model && model.departmentInfo && isSummaryMode()">
         <span class="block font-medium text-slate-700">{{ lang.map.lbl_department }}</span>
         <div class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
           {{ model.departmentInfo.getNames() }}
@@ -55,9 +58,9 @@
         [label]="lang.map.general_explanation_of_violations" />
 
       <app-offenders-violations-preview [investigationModel]="model" [data]="model?.offenderInfo || []"
-        class="col-span-1 md:col-span-2 lg:col-span-4" *ngIf="isApplicantManager()" [isClaimed]="!!model?.isClaimed()" />
+        class="col-span-1 md:col-span-2 lg:col-span-4" *ngIf="isSummaryMode()" [isClaimed]="!!model?.isClaimed()" />
 
-      <app-case-attachments *ngIf="!isApplicantManager()" [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
+      <app-case-attachments *ngIf="!isSummaryMode()" [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
         [service]="service" [readonly]="readonly" [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
@@ -79,7 +82,7 @@
 
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list [violations]="violations" [readonly]="readonly || !!isApplicantManager()" [caseId]="model?.id" />
+      <app-witnesses-list [violations]="violations" [readonly]="readonly || !!isSummaryMode()" [caseId]="model?.id" />
     </div>
   </ng-template>
 
@@ -100,35 +103,51 @@
         class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
-  <div class="grid grid-cols-5 gap-4 mt-3">
+  <div class="grid grid-cols-6 gap-4 mt-3">
     <!-- save -->
-    <app-button [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!isSummaryMode()" [disabled]="!model?.canSave()" (click)="save$.next(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
 
     <!-- manager approve -->
     <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)"
       (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
+    <!-- hr manager approve -->
+    <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.HR_APPROVE)"
+      (click)="responseAction$.next(taskResponses.HR_APPROVE)">
+      {{ lang.map.manager_approve }}
+    </app-button>
 
+    <app-button buttonType="secondary" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_USER)"
+      (click)="responseAction$.next(taskResponses.TO_USER)">
+      {{ lang.map.send_to_user_x.change({ x: this.lang.map[getSendToUserLabel] }) }}
+    </app-button>
+    
+    <app-button buttonType="secondary" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.COMPLETE)"
+      (click)="responseAction$.next(taskResponses.COMPLETE)">
+      {{ lang.map[getCompleteLabel] }}
+    </app-button>
+    
     <!-- return -->
     <app-button *ngIf="
         model?.isClaimed() &&
-        (model?.hasResponse(taskResponses.TO_USER) ||
-          model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
+        ( model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
           model?.hasResponse(taskResponses.RETURN_TO_APP) ||
+          model?.hasResponse(taskResponses.RETURN_TO_HR) ||
           model?.hasResponse(taskResponses.RETURN_APP_MANAGER))
       " buttonType="secondary" mat-button [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
     <mat-menu #returnMenu="matMenu">
+      
       <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_APP_MANAGER)"
         (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
         {{ lang.map.return_to_manager }}
       </button>
-      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.TO_USER)"
-        (click)="responseAction$.next(taskResponses.TO_USER)">
-        {{ lang.map.return }}
+      <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_TO_HR)"
+        (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
+        {{ lang.map.return_to_hr_department }}
       </button>
       <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.RETURN_TO_SAME)"
         (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">

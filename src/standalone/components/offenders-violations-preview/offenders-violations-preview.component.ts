@@ -79,7 +79,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   }
   offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
-  expandedElement!: Offender;
+  expandedElement!: Offender | null;
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
       ...acc,
