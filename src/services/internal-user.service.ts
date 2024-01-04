@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { InternalUser } from '@models/internal-user';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
 import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
@@ -59,5 +59,10 @@ export class InternalUserService extends BaseCrudWithDialogService<InternalUserP
         fromObject: userSignature as never,
       }),
     });
+  }
+
+  @CastResponse()
+  getInternalUsersByOuId(ouId: number): Observable<InternalUser[]> {
+    return this.http.get<InternalUser[]>(this.getUrlSegment() + `/admin/${ouId}`);
   }
 }
