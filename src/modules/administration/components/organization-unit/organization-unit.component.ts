@@ -85,6 +85,8 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       'lookupKey',
       'getNames'
     ),
+    new TextFilterColumn('mawaredDepId'),
+    new SelectFilterColumn('assistantOuId', this.service.loadOUsByType(), 'id', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 }
