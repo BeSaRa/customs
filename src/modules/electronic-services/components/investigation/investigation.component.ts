@@ -28,6 +28,7 @@ import { UserClick } from '@enums/user-click';
 import { EmployeeService } from '@services/employee.service';
 import { LookupService } from '@services/lookup.service';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 @Component({
   selector: 'app-investigation',
@@ -85,8 +86,11 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
       .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
-  isApplicantManager() {
-    return this.employeeService.isApplicantManager();
+  isHrManager() {
+    return this.employeeService.isHrManager();
+  }
+  isSummaryMode() {
+    return this.openFrom !== OpenFrom.ADD_SCREEN && !!this.openFrom;
   }
   _buildForm(): void {
     this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
@@ -144,6 +148,14 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
         this.readonly = false;
       }
     }
+  }
+  get getSendToUserLabel(): keyof LangKeysContract {
+    if (this.isHrManager()) return 'hr_employee';
+    return 'creator';
+  }
+  get getCompleteLabel(): keyof LangKeysContract {
+    if (this.isHrManager()) return 'hr_employees';
+    return 'complete';
   }
   saveCase(e: Subject<TransformerAction<Investigation>>) {
     of(new Investigation().clone<Investigation>(this.form.value))

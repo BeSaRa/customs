@@ -89,7 +89,9 @@ export class EmployeeService {
   isApplicantManager() {
     return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager);
   }
-
+  isHrManager() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Human_Resources_Manager);
+  }
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;
   }
