@@ -345,6 +345,4 @@ export interface LangKeysContract {
   hr_employee: string;
   complete: string;
   return_to_hr_department: string;
-  employee_broker_numbers: string;
-  offender_names: string;
 }
