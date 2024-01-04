@@ -140,7 +140,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
 
   private loadDepartments(): void {
     this.mawaredDepartmentsService
-      .loadAsLookups()
+      .loadUserDepartments()
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.administrations = list;
