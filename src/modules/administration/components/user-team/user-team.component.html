@@ -10,7 +10,7 @@
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
     <ng-container matColumnDef="teamName">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.menu_team }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.teamInfo.getNames() }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.teamInfo?.getNames() }}</td>
     </ng-container>
 
     <!-- actions Column -->

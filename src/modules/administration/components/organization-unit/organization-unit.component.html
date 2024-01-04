@@ -55,6 +55,24 @@
       </td>
     </ng-container>
 
+    <!-- mawared deppartment Id -->
+    <ng-container matColumnDef="mawaredDepId">
+      <th mat-header-cell mat-sort-header="mawaredDepId" *matHeaderCellDef>{{ lang.map.mawared_dep_id }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span [innerHTML]="element.mawaredDepId | highlight : getFilterStringColumn('mawaredDepId')"></span>
+      </td>
+    </ng-container>
+
+    <!-- assistantOuId -->
+    <ng-container matColumnDef="assistantOuId">
+      <th mat-header-cell mat-sort-header="assistantOuId" *matHeaderCellDef>
+        {{ lang.map.assistant_ou }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.assistantInfo.getNames() }}
+      </td>
+    </ng-container>
+
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
