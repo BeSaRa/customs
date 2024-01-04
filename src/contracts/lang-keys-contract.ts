@@ -338,4 +338,6 @@ export interface LangKeysContract {
   referral_request_to_presodent_assistant: string;
   user_type: string;
   note: string;
+  employee_broker_numbers: string;
+  offender_names: string;
 }
