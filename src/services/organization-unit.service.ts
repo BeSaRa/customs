@@ -11,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
 import { HttpParams } from '@angular/common/http';
 import { OuLogo } from '@models/ou_logo';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 @CastResponseContainer({
   $pagination: {
@@ -45,7 +46,7 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<Organizat
   }
 
   @CastResponse()
-  loadOUsByType(type = 1): Observable<OrganizationUnit[]> {
+  loadOUsByType(type = OrganizationUnitType.SECTION): Observable<OrganizationUnit[]> {
     return this.http.get<OrganizationUnit[]>(this.getUrlSegment() + `/type/${type}`);
   }
 
