@@ -52,7 +52,7 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
       arName: controls ? [arName, CustomValidators.required] : arName,
       agentctLicenseNo: controls ? [agentctLicenseNo, CustomValidators.required] : agentctLicenseNo,
       agentLicenseIssueDate: controls ? [agentLicenseIssueDate, CustomValidators.required] : agentLicenseIssueDate,
-      AgentLicenseExpiryDate: controls ? [agentLicenseExpiryDate, CustomValidators.required] : agentLicenseExpiryDate,
+      agentLicenseExpiryDate: controls ? [agentLicenseExpiryDate, CustomValidators.required] : agentLicenseExpiryDate,
       agentCustomCode: controls ? [agentCustomCode, CustomValidators.required] : agentCustomCode,
       phoneNumber: controls ? [phoneNumber, CustomValidators.required] : phoneNumber,
       email: controls ? [email, CustomValidators.required] : email,
