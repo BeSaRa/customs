@@ -36,7 +36,7 @@ export class ClearingAgentComponent extends AdminComponent<ClearingAgentPopupCom
     new NoneFilterColumn('select'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('arName'),
-    new TextFilterColumn('agentQatarId'),
+    new TextFilterColumn('qid'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
