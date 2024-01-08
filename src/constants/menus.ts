@@ -74,13 +74,6 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
   },
   {
-    id: MenuIdes.BROKER_COMPANY,
-    langKey: 'menu_broker_company',
-    icon: AppIcons.BROKER_COMPANY,
-    path: AppFullRoutes.BROKER_COMPANY,
-    parent: MenuIdes.ADMINISTRATION,
-  },
-  {
     id: MenuIdes.ORGANIZATION_UNIT,
     langKey: 'menu_organization_unit',
     icon: AppIcons.SITE_MAP_OUTLINE,
@@ -92,13 +85,6 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_mawared_department',
     icon: AppIcons.MAWARED_DEPARTMENT,
     path: AppFullRoutes.MAWARED_DEPARTMENT,
-    parent: MenuIdes.ADMINISTRATION,
-  },
-  {
-    id: MenuIdes.BROKER,
-    langKey: 'menu_broker',
-    icon: AppIcons.BROKER,
-    path: AppFullRoutes.BROKER,
     parent: MenuIdes.ADMINISTRATION,
   },
   {
@@ -194,14 +180,14 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.CLEARING_AGENT,
     langKey: 'menu_clearing_agent',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.CLEARING_AGENT,
     path: AppFullRoutes.CLEARING_AGENT,
     parent: MenuIdes.ADMINISTRATION,
   },
   {
     id: MenuIdes.CLEARING_AGENCY,
     langKey: 'menu_clearing_agency',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.CLEARING_AGENCY,
     path: AppFullRoutes.CLEARING_AGENCY,
     parent: MenuIdes.ADMINISTRATION,
   },

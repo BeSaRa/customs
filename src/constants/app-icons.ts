@@ -25,13 +25,11 @@ export const AppIcons = {
   BOOK_CANCEL: 'book-cancel',
   BOOK_CANCEL_OUTLINE: 'book-cancel-outline',
   PERMISSIONS_LIST: 'format-list-checks',
-  BROKER_COMPANY: 'domain',
   HOME_GROUP: 'home-group',
   SITE_MAP: 'sitemap',
   SITE_MAP_OUTLINE: 'sitemap-outline',
   MAWARED_DEPARTMENT: 'select-group',
   RESOURCES_CASE: 'briefcase',
-  BROKER: 'account-tie-outline',
   SERVICES: 'face-agent',
   USER_PREFERENCES: 'account-star-outline',
   GLOBAL_SETTING: 'cogs',
@@ -62,6 +60,8 @@ export const AppIcons = {
   ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
   REFERRAL_TO_PRESIDENT: 'book-refresh-outline',
   REFERRAL_TO_PRESIDENT_ASSISTANT: 'book-refresh',
+  CLEARING_AGENT: 'account-tie-outline',
+  CLEARING_AGENCY: 'domain',
 };
 
 export type AppIconsType = typeof AppIcons;
