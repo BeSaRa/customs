@@ -49,16 +49,12 @@ import { PermissionRoleComponent } from '@modules/administration/components/perm
 import { PermissionRolePopupComponent } from '@modules/administration/popups/permission-role-popup/permission-role-popup.component';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
-import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
-import { BrokerCompanyPopupComponent } from '@modules/administration/popups/broker-company-popup/broker-company-popup.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { OrganizationUnitPopupComponent } from '@modules/administration/popups/organization-unit-popup/organization-unit-popup.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
 import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/mawared-department-popup/mawared-department-popup.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
-import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
-import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServicesPopupComponent } from '@modules/administration/popups/services-popup/services-popup.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
@@ -81,6 +77,10 @@ import { InternalUserOUComponent } from '@modules/administration/components/inte
 import { InternalUserOUPopupComponent } from '@modules/administration/popups/internal-user-ou-popup/internal-user-ou-popup.component';
 import { UserTeamComponent } from '@modules/administration/components/user-team/user-team.component';
 import { UserTeamPopupComponent } from '@modules/administration/popups/user-team-popup/user-team-popup.component';
+import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
+import { ClearingAgentPopupComponent } from '@modules/administration/popups/clearing-agent-popup/clearing-agent-popup.component';
+import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
+import { ClearingAgencyPopupComponent } from '@modules/administration/popups/clearing-agency-popup/clearing-agency-popup.component';
 
 @NgModule({
   declarations: [
@@ -101,16 +101,12 @@ import { UserTeamPopupComponent } from '@modules/administration/popups/user-team
     JobTitlePopupComponent,
     PermissionRoleComponent,
     PermissionRolePopupComponent,
-    BrokerCompanyComponent,
-    BrokerCompanyPopupComponent,
     OrganizationUnitComponent,
     OrganizationUnitPopupComponent,
     MawaredDepartmentComponent,
     MawaredDepartmentPopupComponent,
     MawaredEmployeeComponent,
     MawaredEmployeePopupComponent,
-    BrokerComponent,
-    BrokerPopupComponent,
     ServicesComponent,
     ServicesPopupComponent,
     ServiceStepsComponent,
@@ -130,6 +126,10 @@ import { UserTeamPopupComponent } from '@modules/administration/popups/user-team
     InternalUserOUPopupComponent,
     UserTeamComponent,
     UserTeamPopupComponent,
+    ClearingAgentComponent,
+    ClearingAgentPopupComponent,
+    ClearingAgencyComponent,
+    ClearingAgencyPopupComponent,
   ],
   imports: [
     CommonModule,

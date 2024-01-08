@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BrokerPopupComponent } from './broker-popup.component';
+import { ClearingAgentComponent } from './clearing-agent.component';
 
-describe('BrokerPopupComponent', () => {
-  let component: BrokerPopupComponent;
-  let fixture: ComponentFixture<BrokerPopupComponent>;
+describe('ClearingAgentComponent', () => {
+  let component: ClearingAgentComponent;
+  let fixture: ComponentFixture<ClearingAgentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BrokerPopupComponent],
+      declarations: [ClearingAgentComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BrokerPopupComponent);
+    fixture = TestBed.createComponent(ClearingAgentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

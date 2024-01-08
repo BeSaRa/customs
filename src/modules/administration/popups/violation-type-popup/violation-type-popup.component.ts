@@ -121,7 +121,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   }
   isBroker(): boolean {
     let isBroker = false;
-    if (this.offenderType?.value === OffenderTypes.BROKER) isBroker = true;
+    if (this.offenderType?.value === OffenderTypes.ClEARINGAGENT) isBroker = true;
     return isBroker;
   }
   onViolationClassificationChange() {
@@ -145,8 +145,8 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       const offenderOfClassification = this.violationClassifications.find(vc => vc.id == value)?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
         this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE);
-      } else if (offenderOfClassification === OffenderTypes.BROKER) {
-        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.BROKER);
+      } else if (offenderOfClassification === OffenderTypes.ClEARINGAGENT) {
+        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.ClEARINGAGENT);
       } else {
         this.filteredOffenderTypes = this.offenderTypes;
       }

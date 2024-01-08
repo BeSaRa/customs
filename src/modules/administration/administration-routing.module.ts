@@ -11,10 +11,8 @@ import { ViolationTypeComponent } from '@modules/administration/components/viola
 import { JobTitleComponent } from '@modules/administration/components/job-title/job-title.component';
 import { PermissionRoleComponent } from '@modules/administration/components/permission-role/permission-role.component';
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
-import { BrokerCompanyComponent } from '@modules/administration/components/broker-company/broker-company.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
-import { BrokerComponent } from '@modules/administration/components/broker/broker.component';
 import { ServicesComponent } from '@modules/administration/components/services/services.component';
 import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
@@ -22,6 +20,8 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
 import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
 import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
+import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
+import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -68,20 +68,12 @@ const routes: Routes = [
     component: MawaredEmployeeComponent,
   },
   {
-    path: AppRoutes.BROKER_COMPANY,
-    component: BrokerCompanyComponent,
-  },
-  {
     path: AppRoutes.ORGANIZATION_UNIT,
     component: OrganizationUnitComponent,
   },
   {
     path: AppRoutes.MAWARED_DEPARTMENT,
     component: MawaredDepartmentComponent,
-  },
-  {
-    path: AppRoutes.BROKER,
-    component: BrokerComponent,
   },
   {
     path: AppRoutes.SERVICES,
@@ -110,6 +102,14 @@ const routes: Routes = [
   {
     path: AppRoutes.ATTACHMENT_TYPE,
     component: AttachmentTypeComponent,
+  },
+  {
+    path: AppRoutes.CLEARING_AGENT,
+    component: ClearingAgentComponent,
+  },
+  {
+    path: AppRoutes.CLEARING_AGENCY,
+    component: ClearingAgencyComponent,
   },
 ];
 

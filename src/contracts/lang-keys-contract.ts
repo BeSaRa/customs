@@ -1,4 +1,6 @@
 export interface LangKeysContract {
+  menu_clearing_agency: string;
+  menu_clearing_agent: string;
   ou_logo: string;
   is_customs: string;
   ou_manager_assistant: string;
@@ -197,6 +199,7 @@ export interface LangKeysContract {
   total_exams: string;
   total_thanks_books: string;
   broker_code: string;
+  clearing_agent_code: string;
   broker_penalties: string;
   license_number: string;
   license_start_date: string;

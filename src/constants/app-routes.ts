@@ -10,11 +10,9 @@ export const AppRoutes = {
   TEAM: 'team',
   JOB_TITLE: 'job-title',
   PERMISSION_ROLE: 'permission-role',
-  BROKER_COMPANY: 'broker-company',
   ORGANIZATION_UNIT: 'organization-unit',
   MAWARED_DEPARTMENT: 'mawared-department',
   MAWARED_EMPLOYEE: 'mawared-employee',
-  BROKER: 'broker',
   SERVICES: 'services',
   SERVICE_STEPS: 'service-steps',
   EMAIL_TEMPLATE: 'email-template',
@@ -31,4 +29,6 @@ export const AppRoutes = {
   GUIDE_PANEL: 'guide-panel',
   INVESTIGATION_SEARCH: 'investigation-search',
   INVESTIGATION_DRAFTS: 'investigation-drafts',
+  CLEARING_AGENT: 'clearing-agent',
+  CLEARING_AGENCY: 'clearing-agency',
 };

@@ -190,6 +190,6 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.data.next([]);
   }
   isBroker(element: Offender) {
-    return element.type === OffenderTypes.BROKER;
+    return element.type === OffenderTypes.ClEARINGAGENT;
   }
 }

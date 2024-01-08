@@ -13,15 +13,15 @@ import { LangService } from '@services/lang.service';
 import { BehaviorSubject, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { LookupService } from '@services/lookup.service';
 import { MawaredEmployeeCriteria } from '@models/mawared-employee-criteria';
-import { BrokerCriteria } from '@models/broker-criteria';
+import { ClearingAgentCriteria } from '@models/clearing-agent-criteria';
 import { EmployeeService } from '@services/employee.service';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
-import { BrokerService } from '@services/broker.service';
+import { ClearingAgentService } from '@services/clearing-agent.service';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { MawaredEmployee } from '@models/mawared-employee';
-import { Broker } from '@models/broker';
+import { ClearingAgent } from '@models/clearing-agent';
 import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { ToastService } from '@services/toast.service';
@@ -65,7 +65,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   select$: Subject<void> = new Subject();
   mawaredDepartmentsService = inject(MawaredDepartmentService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
-  brokerService = inject(BrokerService);
+  brokerService = inject(ClearingAgentService);
   // lookups
   personTypes = this.lookupService.lookups.personType;
   witnessTypes = this.lookupService.lookups.witnessType;
@@ -82,12 +82,12 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   brokerFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
   employeeDatasource = new AppTableDataSource(this.employees$);
-  brokers$ = new BehaviorSubject<Broker[]>([]);
+  brokers$ = new BehaviorSubject<ClearingAgent[]>([]);
   brokersDatasource = new AppTableDataSource(this.brokers$);
   employeeDisplayedColumns = ['employee_number', 'arName', 'enName', 'department', 'qid', 'jobTitle', 'actions'];
   brokerDisplayedColumns = ['brokerCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
-  addBroker$: Subject<Broker> = new Subject<Broker>();
+  addBroker$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   toast = inject(ToastService);
   @ViewChild(MatTabGroup)
   tabComponent!: MatTabGroup;
@@ -95,7 +95,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   ngOnInit(): void {
     this.witnessFormGroup = this.fb.group(new Witness().buildForm(true));
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
-    this.brokerFormGroup = this.fb.group(new BrokerCriteria().buildForm(true));
+    this.brokerFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -113,7 +113,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   private listenToWitnessTypeChange() {
     this.witnessTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
-      this.isBroker = value === WitnessTypes.BROKER;
+      this.isBroker = value === WitnessTypes.ClEARINGAGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
     });
   }

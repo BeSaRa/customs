@@ -14,11 +14,9 @@ export const EndPoints = {
   VIOLATION_TYPE: '/entity/violation-type',
   JOB_TITLE: '/entity/job-title',
   PERMISSION_ROLE: '/entity/permission-role',
-  BROKER_COMPANY: '/entity/brokerage-company',
   ORGANIZATION_UNIT: '/entity/organization-unit',
   MAWARED_DEPARTMENT: '/entity/mawared-department',
   MAWARED_EMPLOYEE: '/entity/mawared-employee',
-  BROKER: '/entity/broker',
   SERVICES: '/entity/services',
   SERVICE_STEPS: '/entity/service-steps',
   EMAIL_TEMPLATE: '/entity/email-template',
@@ -40,6 +38,8 @@ export const EndPoints = {
   PENALTY_DECISION: '/entity/penalty-decision',
   SITUATION_SEARCH: '/entity/offender-violation/situation-search',
   USER_TEAM: '/entity/baw/team/user-teams',
+  CLEARING_AGENT: '/entity/clearing-agent',
+  CLEARING_AGENCY: '/entity/clearing-agency',
 };
 
 export type EndpointsType = typeof EndPoints;

@@ -9,10 +9,8 @@ export const AppFullRoutes = {
   JOB_TITLE: '/home/administration/job-title',
   PERMISSION_ROLE: '/home/administration/permission-role',
   MAWARED_EMPLOYEE: '/home/administration/mawared-employee',
-  BROKER_COMPANY: '/home/administration/broker-company',
   ORGANIZATION_UNIT: '/home/administration/organization-unit',
   MAWARED_DEPARTMENT: '/home/administration/mawared-department',
-  BROKER: '/home/administration/broker',
   SERVICES: '/home/administration/services',
   SERVICE_STEPS: '/home/administration/service-steps',
   EMAIL_TEMPLATE: '/home/administration/email-template',
@@ -28,4 +26,6 @@ export const AppFullRoutes = {
   GUIDE_PANEL: '/home/electronic-services/guide-panel',
   INVESTIGATION_SEARCH: '/home/electronic-services/investigation-search',
   INVESTIGATION_DRAFTS: '/home/electronic-services/investigation-drafts',
+  CLEARING_AGENT: '/home/administration/clearing-agent',
+  CLEARING_AGENCY: '/home/administration/clearing-agency',
 };

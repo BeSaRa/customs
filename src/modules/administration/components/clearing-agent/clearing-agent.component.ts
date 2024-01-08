@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
-import { Broker } from '@models/broker';
-import { BrokerService } from '@services/broker.service';
-import { BrokerPopupComponent } from '@modules/administration/popups/broker-popup/broker-popup.component';
+import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgentService } from '@services/clearing-agent.service';
+import { ClearingAgentPopupComponent } from '@modules/administration/popups/clearing-agent-popup/clearing-agent-popup.component';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
@@ -13,14 +13,14 @@ import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
 
 @Component({
-  selector: 'app-broker',
-  templateUrl: './broker.component.html',
-  styleUrls: ['./broker.component.scss'],
+  selector: 'app-clearing-agent',
+  templateUrl: './clearing-agent.component.html',
+  styleUrls: ['./clearing-agent.component.scss'],
 })
-export class BrokerComponent extends AdminComponent<BrokerPopupComponent, Broker, BrokerService> {
-  service = inject(BrokerService);
+export class ClearingAgentComponent extends AdminComponent<ClearingAgentPopupComponent, ClearingAgent, ClearingAgentService> {
+  service = inject(ClearingAgentService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
-  actions: ContextMenuActionContract<Broker>[] = [
+  actions: ContextMenuActionContract<ClearingAgent>[] = [
     {
       name: 'view',
       type: 'action',
@@ -32,11 +32,11 @@ export class BrokerComponent extends AdminComponent<BrokerPopupComponent, Broker
     },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
-  columnsWrapper: ColumnsWrapper<Broker> = new ColumnsWrapper(
+  columnsWrapper: ColumnsWrapper<ClearingAgent> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new TextFilterColumn('qid'),
+    new TextFilterColumn('arName'),
+    new TextFilterColumn('agentQatarId'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);

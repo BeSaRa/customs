@@ -74,7 +74,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
   isReferralable(offender: Offender) {
-    let penaltyMap = this.penaltyMap;
+    const penaltyMap = this.penaltyMap;
     return penaltyMap && penaltyMap[offender.id] && penaltyMap[offender.id].first === null;
   }
   offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
@@ -175,7 +175,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       .subscribe();
   }
   isBroker(element: Offender) {
-    return element.type === OffenderTypes.BROKER;
+    return element.type === OffenderTypes.ClEARINGAGENT;
   }
   listenToSituationSearch() {
     this.situationSearch$
