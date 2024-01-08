@@ -4,30 +4,24 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4">
-      <ng-container [formGroup]="form">
-        <div class="grid grid-cols-2 gap-4 items-center">
-          <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-          <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-          <app-input formControlName="email" [label]="lang.map.email"></app-input>
-          <app-input formControlName="licenseNo" [label]="lang.map.lbl_license_number"></app-input>
-          <app-input formControlName="customCode" [label]="lang.map.lbl_code"></app-input>
-          <app-input formControlName="crNo" [label]="lang.map.lbl_commercial_record"></app-input>
-          <app-input formControlName="telNo" [label]="lang.map.phone_number"></app-input>
-          <app-input formControlName="address" [label]="lang.map.lbl_address"></app-input>
-          <app-input formControlName="accountAdminFullName" [label]="lang.map.lbl_responsible_name"></app-input>
-          <app-input formControlName="licenseIssueDate" [label]="lang.map.lbl_license_start_date"></app-input>
-          <app-input formControlName="licenseExpiryDate" [label]="lang.map.lbl_license_end_date"></app-input>
-          <div class="flex flex-row pl-1 items-center justify-start">
-            <app-switch
-              [trueValue]="1"
-              [falseValue]="0"
-              formControlName="status"
-              [label]="lang.map.status"></app-switch>
-          </div>
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-2 gap-4 items-center">
+        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input formControlName="email" [label]="lang.map.email"></app-input>
+        <app-input formControlName="licenseNo" [label]="lang.map.lbl_license_number"></app-input>
+        <app-input formControlName="customCode" [label]="lang.map.lbl_code"></app-input>
+        <app-input formControlName="crNo" [label]="lang.map.lbl_commercial_record"></app-input>
+        <app-input formControlName="telNo" [label]="lang.map.phone_number"></app-input>
+        <app-input formControlName="address" [label]="lang.map.lbl_address"></app-input>
+        <app-input formControlName="accountAdminFullName" [label]="lang.map.lbl_responsible_name"></app-input>
+        <app-input formControlName="licenseIssueDate" [label]="lang.map.lbl_license_start_date"></app-input>
+        <app-input formControlName="licenseExpiryDate" [label]="lang.map.lbl_license_end_date"></app-input>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
