@@ -22,6 +22,8 @@ import { GlobalSettingComponent } from '@modules/administration/components/globa
 import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
 import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
+import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
+import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -110,6 +112,14 @@ const routes: Routes = [
   {
     path: AppRoutes.ATTACHMENT_TYPE,
     component: AttachmentTypeComponent,
+  },
+  {
+    path: AppRoutes.CLEARING_AGENT,
+    component: ClearingAgentComponent,
+  },
+  {
+    path: AppRoutes.CLEARING_AGENCY,
+    component: ClearingAgencyComponent,
   },
 ];
 

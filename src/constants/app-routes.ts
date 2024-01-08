@@ -31,4 +31,6 @@ export const AppRoutes = {
   GUIDE_PANEL: 'guide-panel',
   INVESTIGATION_SEARCH: 'investigation-search',
   INVESTIGATION_DRAFTS: 'investigation-drafts',
+  CLEARING_AGENT: 'clearing-agent',
+  CLEARING_AGENCY: 'clearing-agency',
 };

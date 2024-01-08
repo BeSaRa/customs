@@ -191,4 +191,18 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.INVESTIGATION_DRAFTS,
     parent: MenuIdes.ELECTRONIC_SERVICES,
   },
+  {
+    id: MenuIdes.CLEARING_AGENT,
+    langKey: 'menu_clearing_agent',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.CLEARING_AGENT,
+    parent: MenuIdes.ADMINISTRATION,
+  },
+  {
+    id: MenuIdes.CLEARING_AGENCY,
+    langKey: 'menu_clearing_agency',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.CLEARING_AGENCY,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

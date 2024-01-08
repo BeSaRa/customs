@@ -28,4 +28,6 @@ export const AppFullRoutes = {
   GUIDE_PANEL: '/home/electronic-services/guide-panel',
   INVESTIGATION_SEARCH: '/home/electronic-services/investigation-search',
   INVESTIGATION_DRAFTS: '/home/electronic-services/investigation-drafts',
+  CLEARING_AGENT: '/home/administration/clearing-agent',
+  CLEARING_AGENCY: '/home/administration/clearing-agency',
 };

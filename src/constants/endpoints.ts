@@ -40,6 +40,8 @@ export const EndPoints = {
   PENALTY_DECISION: '/entity/penalty-decision',
   SITUATION_SEARCH: '/entity/offender-violation/situation-search',
   USER_TEAM: '/entity/baw/team/user-teams',
+  CLEARING_AGENT: '/entity/clearing-agent',
+  CLEARING_AGENCY: '/entity/clearing-agency',
 };
 
 export type EndpointsType = typeof EndPoints;
