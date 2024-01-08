@@ -128,7 +128,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
-      this.isBroker = value === OffenderTypes.BROKER;
+      this.isBroker = value === OffenderTypes.ClEARINGAGENT;
       this.offenderViolationControl.reset();
       this.violations =
         this.data &&
@@ -196,7 +196,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       .pipe(
         map(pagination =>
           pagination.rs.filter(
-            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.BROKER)
+            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.ClEARINGAGENT)
           )
         )
       )

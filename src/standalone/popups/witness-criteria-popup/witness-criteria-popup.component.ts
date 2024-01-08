@@ -113,7 +113,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   private listenToWitnessTypeChange() {
     this.witnessTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
-      this.isBroker = value === WitnessTypes.BROKER;
+      this.isBroker = value === WitnessTypes.ClEARINGAGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
     });
   }

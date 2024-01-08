@@ -41,7 +41,7 @@ export class SituationSearchService extends BaseCrudService<SituationSearch> {
     let path = '';
     if (type === OffenderTypes.EMPLOYEE) {
       path = '/employee/departments';
-    } else if (type === OffenderTypes.BROKER) {
+    } else if (type === OffenderTypes.ClEARINGAGENT) {
       path = isCompany ? '/brokerage-company' : '/broker';
     }
     return this.http.get<SituationSearch[]>(this.getUrlSegment() + path, {

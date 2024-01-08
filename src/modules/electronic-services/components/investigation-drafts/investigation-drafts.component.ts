@@ -68,13 +68,13 @@ export class InvestigationDraftsComponent {
       )
       .subscribe((data: Investigation[]) => {
         data.forEach(investigation => {
-          let employeeCount: number = 0;
-          let brokerCount: number = 0;
-          let namesOfOffenders: string = '';
+          let employeeCount = 0;
+          let brokerCount = 0;
+          let namesOfOffenders = '';
 
           if (investigation.offenderInfo.length > 2) {
             investigation.offenderInfo.forEach(element => {
-              if (element.type === OffenderTypes.BROKER) {
+              if (element.type === OffenderTypes.ClEARINGAGENT) {
                 brokerCount += 1;
               } else if (element.type === OffenderTypes.EMPLOYEE) {
                 employeeCount += 1;

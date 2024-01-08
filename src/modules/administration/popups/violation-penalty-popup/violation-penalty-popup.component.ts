@@ -161,7 +161,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   setFilteredPenaltySigners() {
     const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
-    if (offenderTypeLookupKey === OffenderTypes.BROKER) {
+    if (offenderTypeLookupKey === OffenderTypes.ClEARINGAGENT) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
         lookupItem => lookupItem.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
       );
