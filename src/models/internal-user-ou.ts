@@ -26,7 +26,7 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
       status: controls ? [status] : status,
     };
   }
-  
+
   override getNames(): string {
     try {
       return this.internalUserInfo[(this.getLangService().getCurrent().code + 'Name') as keyof NamesContract];

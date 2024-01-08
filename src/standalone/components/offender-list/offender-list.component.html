@@ -54,7 +54,7 @@
               (click)="situationSearch$.next({ offender: element, isCompany: false })"
               icon="INFORMATION"></app-icon-button>
           </div>
-          <div [matTooltip]="lang.map.situation_search_brokerage_company" *ngIf="isBroker(element)">
+          <div [matTooltip]="lang.map.situation_search_clearing_agency" *ngIf="isClearingAgent(element)">
             <app-icon-button
               (click)="situationSearch$.next({ offender: element, isCompany: true })"
               icon="CLEARING_AGENCY"></app-icon-button>

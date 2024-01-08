@@ -62,14 +62,17 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
   }
 
   ngOnInit() {
-    this.violations = this.data && (this.data.violations || [])
-    .filter((v:Violation | OffenderViolation) => this.data.offender &&
-      ((v as Violation).offenderTypeInfo
-        ? ((v as Violation).offenderTypeInfo.lookupKey == this.data.offender.type || 
-          (v as Violation).offenderTypeInfo.lookupKey == OffenderTypes.BOTH)
-        : ((v as OffenderViolation).offenderInfo.typeInfo.lookupKey == this.data.offender.type ||
-          (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == OffenderTypes.BOTH)
-      ))
+    this.violations =
+      this.data &&
+      (this.data.violations || []).filter(
+        (v: Violation | OffenderViolation) =>
+          this.data.offender &&
+          ((v as Violation).offenderTypeInfo
+            ? (v as Violation).offenderTypeInfo.lookupKey == this.data.offender.type ||
+              (v as Violation).offenderTypeInfo.lookupKey == OffenderTypes.BOTH
+            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == this.data.offender.type ||
+              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == OffenderTypes.BOTH)
+      );
     this.listenToReload();
     this.listenToDelete();
     this.listenToAdd();

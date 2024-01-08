@@ -119,10 +119,10 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
     return isCustom;
   }
-  isBroker(): boolean {
-    let isBroker = false;
-    if (this.offenderType?.value === OffenderTypes.ClEARINGAGENT) isBroker = true;
-    return isBroker;
+  isClearingAgent(): boolean {
+    let isClearingAgent = false;
+    if (this.offenderType?.value === OffenderTypes.ClEARING_AGENT) isClearingAgent = true;
+    return isClearingAgent;
   }
   onViolationClassificationChange() {
     this.classificationId?.valueChanges.subscribe(value => {
@@ -145,8 +145,8 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       const offenderOfClassification = this.violationClassifications.find(vc => vc.id == value)?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
         this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE);
-      } else if (offenderOfClassification === OffenderTypes.ClEARINGAGENT) {
-        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.ClEARINGAGENT);
+      } else if (offenderOfClassification === OffenderTypes.ClEARING_AGENT) {
+        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.ClEARING_AGENT);
       } else {
         this.filteredOffenderTypes = this.offenderTypes;
       }

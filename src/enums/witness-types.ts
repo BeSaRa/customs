@@ -1,5 +1,5 @@
 export enum WitnessTypes {
   EMPLOYEE = 1,
-  ClEARINGAGENT = 2,
+  ClEARING_AGENT = 2,
   EXTERNAL = 3,
 }

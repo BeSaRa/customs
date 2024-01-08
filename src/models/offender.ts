@@ -14,7 +14,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   caseId!: string;
   offenderRefId!: number;
   type!: number;
-  brokerCompmanyId!: number;
+  clearingAgencyId!: number;
   customsViolationEffect!: number;
   penaltyId!: number;
   linkedPid!: number;
@@ -44,7 +44,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   violations: OffenderViolation[] = [];
   offenderOUInfo?: AdminResult;
   customsViolationEffectInfo?: AdminResult;
-  brokerCompmanyInfo!: AdminResult;
+  clearingAgencyInfo!: AdminResult;
   typeInfo!: AdminResult;
   penaltyInfo!: AdminResult;
 

@@ -174,8 +174,8 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       )
       .subscribe();
   }
-  isBroker(element: Offender) {
-    return element.type === OffenderTypes.ClEARINGAGENT;
+  isClearingAgent(element: Offender) {
+    return element.type === OffenderTypes.ClEARING_AGENT;
   }
   listenToSituationSearch() {
     this.situationSearch$

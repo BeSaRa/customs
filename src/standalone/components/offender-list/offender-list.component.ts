@@ -189,7 +189,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   resetDataList() {
     this.data.next([]);
   }
-  isBroker(element: Offender) {
-    return element.type === OffenderTypes.ClEARINGAGENT;
+  isClearingAgent(element: Offender) {
+    return element.type === OffenderTypes.ClEARING_AGENT;
   }
 }

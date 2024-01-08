@@ -8,7 +8,7 @@ describe('AssignmentToAttendPopupComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AssignmentToAttendPopupComponent]
+      imports: [AssignmentToAttendPopupComponent],
     });
     fixture = TestBed.createComponent(AssignmentToAttendPopupComponent);
     component = fixture.componentInstance;
