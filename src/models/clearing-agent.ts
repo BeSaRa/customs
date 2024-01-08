@@ -29,10 +29,9 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
   agentLicenseExpiryDate!: string;
   agentPreviousLicenseFeePenalty!: number;
   agencyInfo!: AdminResult;
-  agentName!: string;
-  agentQatarId!: string;
-  agentTelNo!: string;
-  agentEmail!: string;
+  qid!: string;
+  phoneNumber!: string;
+  email!: string;
 
   buildForm(controls = false): object {
     const {
@@ -43,9 +42,9 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
       agentLicenseIssueDate,
       agentCustomCode,
       agentLicenseExpiryDate,
-      agentTelNo,
-      agentEmail,
-      agentQatarId,
+      phoneNumber,
+      email,
+      qid,
       agencyId,
     } = this;
     return {
@@ -55,9 +54,9 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
       agentLicenseIssueDate: controls ? [agentLicenseIssueDate, CustomValidators.required] : agentLicenseIssueDate,
       AgentLicenseExpiryDate: controls ? [agentLicenseExpiryDate, CustomValidators.required] : agentLicenseExpiryDate,
       agentCustomCode: controls ? [agentCustomCode, CustomValidators.required] : agentCustomCode,
-      agentTelNo: controls ? [agentTelNo, CustomValidators.required] : agentTelNo,
-      agentEmail: controls ? [agentEmail, CustomValidators.required] : agentEmail,
-      agentQatarId: controls ? [agentQatarId, CustomValidators.required] : agentQatarId,
+      phoneNumber: controls ? [phoneNumber, CustomValidators.required] : phoneNumber,
+      email: controls ? [email, CustomValidators.required] : email,
+      qid: controls ? [qid, CustomValidators.required] : qid,
       agencyId: controls ? [agencyId, CustomValidators.required] : agencyId,
       status: controls ? [status] : status,
     };
