@@ -107,7 +107,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private getSignatureSafeURL() {
     if (this.inCreateMode()) return;
     this.internalUserService.downloadSignature(this.model.id, this.sanitizer).subscribe(blob => {
-      this.signatureSafeUrl = blob.safeUrl;
+      if (blob.blob.size !== 0) this.signatureSafeUrl = blob.safeUrl;
     });
   }
 

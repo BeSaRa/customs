@@ -8,10 +8,10 @@ export class ClearingAgencyInterceptor implements ModelInterceptorContract<Clear
   }
 
   receive(model: ClearingAgency): ClearingAgency {
-    model.enName = model.englishCompanyName;
-    model.arName = model.arabicCompanyName;
-    model.licenseIssueDate = model.licenseIssueDate.split('.')[0] ?? model.licenseIssueDate;
-    model.licenseExpiryDate = model.licenseExpiryDate.split('.')[0] ?? model.licenseExpiryDate;
+    model.enName = model.englishCompanyName ?? '';
+    model.arName = model.arabicCompanyName ?? '';
+    model.licenseIssueDate = model.licenseIssueDate?.split('.')[0] ?? model.licenseIssueDate;
+    model.licenseExpiryDate = model.licenseExpiryDate?.split('.')[0] ?? model.licenseExpiryDate;
     model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     return model;
   }
