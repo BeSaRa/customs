@@ -28,4 +28,5 @@ export const AppFullRoutes = {
   INVESTIGATION_DRAFTS: '/home/electronic-services/investigation-drafts',
   CLEARING_AGENT: '/home/administration/clearing-agent',
   CLEARING_AGENCY: '/home/administration/clearing-agency',
+  SUSPENDED_EMPLOYEE: '/home/administration/suspended-employee',
 };

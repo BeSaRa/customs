@@ -31,4 +31,5 @@ export const AppRoutes = {
   INVESTIGATION_DRAFTS: 'investigation-drafts',
   CLEARING_AGENT: 'clearing-agent',
   CLEARING_AGENCY: 'clearing-agency',
+  SUSPENDED_EMPLOYEE: 'suspended-employee',
 };

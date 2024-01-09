@@ -22,6 +22,7 @@ import { LegalRuleComponent } from '@modules/administration/components/legal-rul
 import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
 import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
 import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
+import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -110,6 +111,10 @@ const routes: Routes = [
   {
     path: AppRoutes.CLEARING_AGENCY,
     component: ClearingAgencyComponent,
+  },
+  {
+    path: AppRoutes.SUSPENDED_EMPLOYEE,
+    component: SuspendedEmployeeComponent,
   },
 ];
 
