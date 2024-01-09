@@ -191,4 +191,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.CLEARING_AGENCY,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.SUSPENDED_EMPLOYEE,
+    langKey: 'menu_suspended_employee',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.SUSPENDED_EMPLOYEE,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];

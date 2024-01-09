@@ -81,6 +81,8 @@ import { ClearingAgentComponent } from '@modules/administration/components/clear
 import { ClearingAgentPopupComponent } from '@modules/administration/popups/clearing-agent-popup/clearing-agent-popup.component';
 import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
 import { ClearingAgencyPopupComponent } from '@modules/administration/popups/clearing-agency-popup/clearing-agency-popup.component';
+import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
+import { SuspendedEmployeePopupComponent } from '@modules/administration/popups/suspended-employee-popup/suspended-employee-popup.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +132,8 @@ import { ClearingAgencyPopupComponent } from '@modules/administration/popups/cle
     ClearingAgentPopupComponent,
     ClearingAgencyComponent,
     ClearingAgencyPopupComponent,
+    SuspendedEmployeeComponent,
+    SuspendedEmployeePopupComponent,
   ],
   imports: [
     CommonModule,

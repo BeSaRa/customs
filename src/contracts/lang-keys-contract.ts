@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_suspended_employee: string;
   menu_clearing_agency: string;
   menu_clearing_agent: string;
   ou_logo: string;

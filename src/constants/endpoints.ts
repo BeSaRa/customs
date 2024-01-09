@@ -40,6 +40,7 @@ export const EndPoints = {
   USER_TEAM: '/entity/baw/team/user-teams',
   CLEARING_AGENT: '/entity/clearing-agent',
   CLEARING_AGENCY: '/entity/clearing-agency',
+  SUSPENDED_EMPLOYEE: '/entity/suspended-employee',
 };
 
 export type EndpointsType = typeof EndPoints;
