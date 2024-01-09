@@ -48,7 +48,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       ...this.model.buildForm(true),
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
     });
-    if (!this.inEditMode()) {
+    if (!this.inCreateMode()) {
       this.loadUserPermissions(this.model);
     }
   }

@@ -101,17 +101,17 @@
           </div>
         </ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.menu_internal_user_ou" *ngIf="inEditMode()">
+      <mat-tab [label]="lang.map.menu_internal_user_ou" *ngIf="!inCreateMode()">
         <div class="mt-4">
           <app-internal-user-ou [internalUser]="data.model"></app-internal-user-ou>
         </div>
       </mat-tab>
-      <mat-tab [label]="lang.map.menu_user_team" *ngIf="inEditMode()">
+      <mat-tab [label]="lang.map.menu_user_team" *ngIf="!inCreateMode()">
         <div class="mt-4">
           <app-user-team [internalUser]="data.model"></app-user-team>
         </div>
       </mat-tab>
-      <mat-tab *ngIf="!inCreateMode()" [label]="lang.map.lbl_user_signature">
+      <mat-tab [label]="lang.map.lbl_user_signature" *ngIf="!inCreateMode()">
         <div class="dialog-content">
           <div [formGroup]="form" class="flex flex-col">
             <div (drop)="filesDropped($event)" (dragover)="$event.preventDefault()" [ngClass]="getSignatureStyle()">
