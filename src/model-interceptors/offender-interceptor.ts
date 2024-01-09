@@ -15,7 +15,7 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
       model.offenderInfo.statusInfo &&
       (model.offenderInfo.statusInfo = AdminResult.createInstance(model.offenderInfo.statusInfo));
     model.typeInfo && (model.typeInfo = AdminResult.createInstance(model.typeInfo));
-
+    model.agencyInfo && (model.agencyInfo = AdminResult.createInstance(model.agencyInfo));
     return model;
   }
 }

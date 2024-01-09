@@ -62,8 +62,8 @@
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="qid" [label]="lang.map.qid" />
-            <app-input [label]="lang.map.clearing_agency_name" />
-            <app-input [label]="lang.map.clearing_agency_number" />
+            <app-input formControlName="agencyArabicCompanyName" [label]="lang.map.clearing_agency_name" />
+            <app-input formControlName="agencyLicenseNo" [label]="lang.map.clearing_agency_number" />
             <app-input [label]="lang.map.clearing_agency_cr_number" />
             <app-input [label]="lang.map.clearing_agency_er_number" />
           </div>
@@ -122,7 +122,7 @@
           <!-- arName -->
           <ng-container matColumnDef="clearingAgentCode">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agent_code }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.agentCustomCode }}</td>
           </ng-container>
           <ng-container matColumnDef="arName">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
@@ -134,7 +134,7 @@
           </ng-container>
           <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.companyInfo.getNames() }}</td>
+            <td mat-cell *matCellDef="let element">{{ element.agencyInfo.getNames() }}</td>
           </ng-container>
           <ng-container matColumnDef="companyNumber">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_number }}</th>
