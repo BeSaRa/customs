@@ -29,7 +29,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ignoreErrors } from '@utils/utils';
 import { WitnessTypes } from '@enums/witness-types';
 import { Witness } from '@models/witness';
-import { PersonTypes } from '@enums/person-Types';
+import { PersonTypes } from '@enums/person-types';
 
 @Component({
   selector: 'app-witness-criteria-popup',
@@ -65,29 +65,29 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   select$: Subject<void> = new Subject();
   mawaredDepartmentsService = inject(MawaredDepartmentService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
-  brokerService = inject(ClearingAgentService);
+  clearingAgentService = inject(ClearingAgentService);
   // lookups
   personTypes = this.lookupService.lookups.personType;
   witnessTypes = this.lookupService.lookups.witnessType;
   administrations: unknown[] = [];
   form!: UntypedFormGroup;
   isEmployee = true;
-  isBroker = false;
+  isClearingAgent = false;
   isExternal = false;
   witnessTypeControl = new FormControl(WitnessTypes.EMPLOYEE, { nonNullable: true });
   personTypeControl = new FormControl(PersonTypes.EXPERT, { nonNullable: true });
   depId = inject(EmployeeService).getOrganizationUnit()?.mawaredDepId;
   witnessFormGroup!: UntypedFormGroup;
   employeeFormGroup!: UntypedFormGroup;
-  brokerFormGroup!: UntypedFormGroup;
+  clearingAgentFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
   employeeDatasource = new AppTableDataSource(this.employees$);
-  brokers$ = new BehaviorSubject<ClearingAgent[]>([]);
-  brokersDatasource = new AppTableDataSource(this.brokers$);
+  clearingAgents$ = new BehaviorSubject<ClearingAgent[]>([]);
+  clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
   employeeDisplayedColumns = ['employee_number', 'arName', 'enName', 'department', 'qid', 'jobTitle', 'actions'];
-  brokerDisplayedColumns = ['brokerCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
+  clearingAgentDisplayedColumns = ['clearingAgentCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
-  addBroker$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
+  addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   toast = inject(ToastService);
   @ViewChild(MatTabGroup)
   tabComponent!: MatTabGroup;
@@ -95,7 +95,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   ngOnInit(): void {
     this.witnessFormGroup = this.fb.group(new Witness().buildForm(true));
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
-    this.brokerFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
+    this.clearingAgentFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -107,13 +107,13 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
     this.listenToAddWitness();
 
     this.listenToAddEmployee();
-    this.listenToAddBroker();
+    this.listenToAddClearingAgent();
   }
 
   private listenToWitnessTypeChange() {
     this.witnessTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
-      this.isBroker = value === WitnessTypes.ClEARINGAGENT;
+      this.isClearingAgent = value === WitnessTypes.ClEARING_AGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
     });
   }
@@ -129,7 +129,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
 
   private listenToSearch() {
     const mawaredSearch$ = this.search$.pipe(filter(() => this.isEmployee)).pipe(takeUntil(this.destroy$));
-    const brokerSearch$ = this.search$.pipe(filter(() => this.isBroker)).pipe(takeUntil(this.destroy$));
+    const clearingAgentSearch$ = this.search$.pipe(filter(() => this.isClearingAgent)).pipe(takeUntil(this.destroy$));
 
     mawaredSearch$
       .pipe(
@@ -145,17 +145,17 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
         this.employees$.next(result);
       });
 
-    brokerSearch$
+    clearingAgentSearch$
       .pipe(
-        map(() => this.brokerFormGroup.getRawValue()),
-        switchMap(value => this.brokerService.load(undefined, value))
+        map(() => this.clearingAgentFormGroup.getRawValue()),
+        switchMap(value => this.clearingAgentService.load(undefined, value))
       )
       .pipe(map(pagination => pagination.rs))
       .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }
-        this.brokers$.next(result);
+        this.clearingAgents$.next(result);
       });
   }
   private listenToAddWitness() {
@@ -218,8 +218,8 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
       });
   }
 
-  private listenToAddBroker() {
-    this.addBroker$
+  private listenToAddClearingAgent() {
+    this.addClearingAgent$
       .pipe(map(model => model.convertToWitness(this.data.caseId, this.personTypeControl.value)))
       .pipe(
         switchMap(witness => {

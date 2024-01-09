@@ -84,25 +84,25 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
   offenders: Offender[] = this.data && ((this.data.offenders || []) as Offender[]);
   form!: UntypedFormGroup;
   isEmployee = true;
-  isBroker = false;
+  isClearingAgent = false;
   offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, { nonNullable: true });
   offenderViolationControl = new FormControl<number[]>([], [CustomValidators.required]);
   employeeFormGroup!: UntypedFormGroup;
-  brokerFormGroup!: UntypedFormGroup;
+  clearingAgentFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
   employeeDatasource = new AppTableDataSource(this.employees$);
-  brokers$ = new BehaviorSubject<ClearingAgent[]>([]);
-  brokersDatasource = new AppTableDataSource(this.brokers$);
+  clearingAgents$ = new BehaviorSubject<ClearingAgent[]>([]);
+  clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
   employeeDisplayedColumns = ['employee_number', 'arName', 'enName', 'department', 'qid', 'jobTitle', 'actions'];
-  brokerDisplayedColumns = ['brokerCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
+  clearingAgentDisplayedColumns = ['clearingAgentCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
-  addBroker$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
+  addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   @ViewChild(MatTabGroup)
   tabComponent!: MatTabGroup;
 
   ngOnInit(): void {
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
-    this.brokerFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
+    this.clearingAgentFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
 
     this.violations =
       this.data &&
@@ -121,14 +121,14 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
     this.listenToSearch();
 
     this.listenToAddEmployee();
-    this.listenToAddBroker();
+    this.listenToAddClearingAgent();
     this.listenToAddViolation();
   }
 
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
-      this.isBroker = value === OffenderTypes.ClEARINGAGENT;
+      this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
       this.offenderViolationControl.reset();
       this.violations =
         this.data &&
@@ -163,8 +163,8 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
     const mawaredSearch$ = this.search$
       .pipe(filter(() => !!this.offenderViolationControl?.value?.length && this.isEmployee))
       .pipe(takeUntil(this.destroy$));
-    const brokerSearch$ = this.search$
-      .pipe(filter(() => !!this.offenderViolationControl?.value?.length && this.isBroker))
+    const clearingAgentSearch$ = this.search$
+      .pipe(filter(() => !!this.offenderViolationControl?.value?.length && this.isClearingAgent))
       .pipe(takeUntil(this.destroy$));
 
     mawaredSearch$
@@ -188,15 +188,15 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
         this.employees$.next(result);
       });
 
-    brokerSearch$
+    clearingAgentSearch$
       .pipe(
-        map(() => this.brokerFormGroup.getRawValue()),
+        map(() => this.clearingAgentFormGroup.getRawValue()),
         switchMap(value => this.clearingAgentService.load(undefined, value))
       )
       .pipe(
         map(pagination =>
           pagination.rs.filter(
-            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.ClEARINGAGENT)
+            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.ClEARING_AGENT)
           )
         )
       )
@@ -206,7 +206,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
         } else {
           this.dialog.warning(this.lang.map.no_records_to_display);
         }
-        this.brokers$.next(result);
+        this.clearingAgents$.next(result);
       });
   }
 
@@ -250,8 +250,8 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       });
   }
 
-  private listenToAddBroker() {
-    this.addBroker$
+  private listenToAddClearingAgent() {
+    this.addClearingAgent$
       .pipe(map(model => model.convertToOffender(this.data.caseId)))
       .pipe(
         switchMap(offender => {
@@ -278,11 +278,11 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
         })
       )
       .subscribe(model => {
-        this.brokersDatasource.data.splice(
-          this.brokersDatasource.data.findIndex(emp => emp.id == model.offenderRefId),
+        this.clearingAgentsDatasource.data.splice(
+          this.clearingAgentsDatasource.data.findIndex(emp => emp.id == model.offenderRefId),
           1
         );
-        this.brokers$.next(this.brokersDatasource.data);
+        this.clearingAgents$.next(this.clearingAgentsDatasource.data);
         this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
       });
   }

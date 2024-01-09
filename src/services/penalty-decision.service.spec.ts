@@ -6,7 +6,7 @@ import { PenaltyDecisionService } from './penalty-decision.service';
 describe('Service: PenaltyDecision', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PenaltyDecisionService]
+      providers: [PenaltyDecisionService],
     });
   });
 

@@ -1,5 +1,5 @@
 export enum OffenderTypes {
   EMPLOYEE = 1,
-  ClEARINGAGENT = 2,
+  ClEARING_AGENT = 2,
   BOTH = 3,
 }

@@ -29,11 +29,10 @@ export class InvestigationSearchComponent {
   router = inject(Router);
   encrypt = inject(EncryptionService);
   lookupService = inject(LookupService);
-  
-  
+
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
-  
+
   violationDegreeConfidentiality = this.lookupService.lookups.violationDegreeConfidentiality;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();

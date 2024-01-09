@@ -43,14 +43,13 @@ export class InternalUserOUService extends BaseCrudWithDialogService<InternalUse
 
   @CastResponse()
   internalUserOUCriteria(criteria: {
-    internalUserId?: number,
-    organizationUnitId?: number,
-    offset?: number,
-    limit?: number,
+    internalUserId?: number;
+    organizationUnitId?: number;
+    offset?: number;
+    limit?: number;
   }): Observable<InternalUserOU[]> {
     return this.http.get<InternalUserOU[]>(this.getUrlSegment() + '/criteria', {
-      params: new HttpParams({ fromObject: { ...criteria } })
+      params: new HttpParams({ fromObject: { ...criteria } }),
     });
   }
-
 }

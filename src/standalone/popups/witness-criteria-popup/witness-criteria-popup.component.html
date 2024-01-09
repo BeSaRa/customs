@@ -61,8 +61,8 @@
             <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
           </div>
         </ng-container>
-        <ng-container *ngIf="isBroker">
-          <div [formGroup]="brokerFormGroup" class="grid grid-cols-3 gap-4">
+        <ng-container *ngIf="isClearingAgent">
+          <div [formGroup]="clearingAgentFormGroup" class="grid grid-cols-3 gap-4">
             <app-select-input
               [formControl]="personTypeControl"
               [label]="lang.map.external_person_type"
@@ -75,14 +75,14 @@
               bindLabel="getNames"
               bindValue="lookupKey"
               [options]="witnessTypes" />
-            <app-input formControlName="code" [label]="lang.map.broker_code" />
+            <app-input formControlName="code" [label]="lang.map.clearing_agent_code" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="qid" [label]="lang.map.qid" />
-            <app-input [label]="lang.map.broker_company_name" />
-            <app-input [label]="lang.map.broker_company_number" />
-            <app-input [label]="lang.map.broker_company_cr_number" />
-            <app-input [label]="lang.map.broker_company_er_number" />
+            <app-input [label]="lang.map.clearing_agency_name" />
+            <app-input [label]="lang.map.clearing_agency_number" />
+            <app-input [label]="lang.map.clearing_agency_cr_number" />
+            <app-input [label]="lang.map.clearing_agency_er_number" />
           </div>
         </ng-container>
       </div>
@@ -135,11 +135,11 @@
           </tr>
         </table>
       </div>
-      <div *ngIf="isBroker" class="p-4">
-        <table mat-table class="table-style table-primary" [dataSource]="brokersDatasource">
+      <div *ngIf="isClearingAgent" class="p-4">
+        <table mat-table class="table-style table-primary" [dataSource]="clearingAgentsDatasource">
           <!-- arName -->
-          <ng-container matColumnDef="brokerCode">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.broker_code }}</th>
+          <ng-container matColumnDef="clearingAgentCode">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agent_code }}</th>
             <td mat-cell *matCellDef="let element">{{ element.code }}</td>
           </ng-container>
           <ng-container matColumnDef="arName">
@@ -151,26 +151,26 @@
             <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
           </ng-container>
           <ng-container matColumnDef="companyName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.broker_company_name }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_name }}</th>
             <td mat-cell *matCellDef="let element">--</td>
           </ng-container>
           <ng-container matColumnDef="companyNumber">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.broker_company_number }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_number }}</th>
             <td mat-cell *matCellDef="let element">--</td>
           </ng-container>
           <ng-container matColumnDef="qid">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.qid }}</th>
             <td mat-cell *matCellDef="let element">{{ element.qid }}</td>
           </ng-container>
-          <tr mat-header-row *matHeaderRowDef="brokerDisplayedColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: brokerDisplayedColumns"></tr>
+          <tr mat-header-row *matHeaderRowDef="clearingAgentDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let element; columns: clearingAgentDisplayedColumns"></tr>
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
             <td mat-cell *matCellDef="let element">
               <div class="flex">
                 <div [matTooltip]="lang.map.add_offender">
-                  <app-icon-button (click)="addBroker$.next(element)" icon="PLUS_BOX" />
+                  <app-icon-button (click)="addClearingAgent$.next(element)" icon="PLUS_BOX" />
                 </div>
               </div>
             </td>

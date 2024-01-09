@@ -3,7 +3,6 @@ import { OffenderService } from '@services/offender.service';
 import { AdminResult } from '@models/admin-result';
 import { InterceptModel } from 'cast-response';
 import { OffenderInterceptor } from '@model-interceptors/offender-interceptor';
-import { Violation } from './violation';
 import { OffenderViolation } from './offender-violation';
 
 const { send, receive } = new OffenderInterceptor();
@@ -14,12 +13,13 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   caseId!: string;
   offenderRefId!: number;
   type!: number;
-  brokerCompmanyId!: number;
+  clearingAgencyId!: number;
   customsViolationEffect!: number;
   penaltyId!: number;
   linkedPid!: number;
   statusDateModified?: Date | string;
   ouId!: number;
+  agentCustomCode!: string;
   offenderInfo?: {
     updatedBy: 0;
     updatedOn: '2023-10-16T20:15:23.434Z';
@@ -44,9 +44,10 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   violations: OffenderViolation[] = [];
   offenderOUInfo?: AdminResult;
   customsViolationEffectInfo?: AdminResult;
-  brokerCompmanyInfo!: AdminResult;
+  clearingAgencyInfo!: AdminResult;
   typeInfo!: AdminResult;
   penaltyInfo!: AdminResult;
+  agencyInfo!: AdminResult;
 
   override getNames(): string {
     return (

@@ -10,7 +10,7 @@
       <mat-tab [label]="lang.map.search_for_investigation">
         <ng-container [ngTemplateOutlet]="search_for_investigation"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.search_result + ' (' +this.lang.map.menu_investigation + ')'">
+      <mat-tab [label]="lang.map.search_result + ' (' + this.lang.map.menu_investigation + ')'">
         <ng-container [ngTemplateOutlet]="search_result"></ng-container>
       </mat-tab>
     </mat-tab-group>
@@ -44,10 +44,9 @@
     </div>
   </ng-template>
   <ng-template #search_result>
-   <div class="p-4 overflow-auto" style="height: 100%">
+    <div class="p-4 overflow-auto" style="height: 100%">
       <div class="shadow relative" style="max-height: 62vh">
         <table mat-table matSort class="table-style" [dataSource]="displayedList">
-          
           <!-- draft full serial -->
           <ng-container matColumnDef="draftFullSerial">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.serial_number }}</th>
@@ -76,7 +75,7 @@
               <span>{{ element.limitedAccessInfo?.getNames() }}</span>
             </td>
           </ng-container>
-         
+
           <!-- department -->
           <ng-container matColumnDef="department">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.department_company }}</th>
@@ -90,10 +89,7 @@
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
             <td mat-cell *matCellDef="let element">
               <div class="flex">
-                <app-icon-button
-                  [matTooltip]="lang.map.view"
-                  (click)="view(element)"
-                  icon="VIEW"></app-icon-button>
+                <app-icon-button [matTooltip]="lang.map.view" (click)="view(element)" icon="VIEW"></app-icon-button>
               </div>
             </td>
           </ng-container>

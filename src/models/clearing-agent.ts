@@ -68,7 +68,7 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
 
   convertToOffender(caseId: string) {
     return new Offender().clone<Offender>({
-      type: OffenderTypes.ClEARINGAGENT,
+      type: OffenderTypes.ClEARING_AGENT,
       caseId: caseId,
       arName: this.arName,
       enName: this.enName,
@@ -83,7 +83,7 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
       caseId: caseId,
       enName: this.arName,
       arName: this.arName,
-      witnessType: WitnessTypes.ClEARINGAGENT,
+      witnessType: WitnessTypes.ClEARING_AGENT,
       witnessRefId: this.agentId,
       status: 1,
     });

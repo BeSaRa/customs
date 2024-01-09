@@ -69,18 +69,18 @@ export class InvestigationDraftsComponent {
       .subscribe((data: Investigation[]) => {
         data.forEach(investigation => {
           let employeeCount = 0;
-          let brokerCount = 0;
+          let clearingAgentCount = 0;
           let namesOfOffenders = '';
 
           if (investigation.offenderInfo.length > 2) {
             investigation.offenderInfo.forEach(element => {
-              if (element.type === OffenderTypes.ClEARINGAGENT) {
-                brokerCount += 1;
+              if (element.type === OffenderTypes.ClEARING_AGENT) {
+                clearingAgentCount += 1;
               } else if (element.type === OffenderTypes.EMPLOYEE) {
                 employeeCount += 1;
               }
             });
-            namesOfOffenders = this.lang.map.employee_broker_numbers.change({ x: employeeCount, y: brokerCount });
+            namesOfOffenders = this.lang.map.employee_clearing_agent_numbers.change({ x: employeeCount, y: clearingAgentCount });
           } else {
             investigation.offenderInfo.forEach((element, index) => {
               namesOfOffenders += element.offenderInfo?.arName;

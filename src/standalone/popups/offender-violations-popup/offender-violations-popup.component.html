@@ -36,8 +36,8 @@
             {{ offender.offenderInfo?.jobTitleCode }}
           </div>
         </div>
-        <div class="group block relative mb-5" *ngIf="offender.offenderInfo?.type == offenderTypes.ClEARINGAGENT">
-          <span class="block font-medium text-slate-700">{{ lang.map.broker_code }}</span>
+        <div class="group block relative mb-5" *ngIf="offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT">
+          <span class="block font-medium text-slate-700">{{ lang.map.clearing_agent_code }}</span>
           <div class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
             {{ offender.offenderInfo?.code }}
           </div>
@@ -52,7 +52,7 @@
         </div>
         <div
           class="group block relative mb-5"
-          *ngIf="offender.offenderOUInfo && offender.offenderInfo?.type == offenderTypes.ClEARINGAGENT">
+          *ngIf="offender.offenderOUInfo && offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT">
           <span class="block font-medium text-slate-700">{{ lang.map.lbl_clearance_company }}</span>
           <div class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
             {{ offender.offenderOUInfo.getNames() }}

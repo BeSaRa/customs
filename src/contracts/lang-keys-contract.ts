@@ -15,11 +15,11 @@ export interface LangKeysContract {
   results: string;
   department_company: string;
   add_offender: string;
-  broker_company_er_number: string;
-  broker_company_cr_number: string;
-  broker_company_number: string;
-  broker_company_name: string;
-  broker_name: string;
+  clearing_agency_er_number: string;
+  clearing_agency_cr_number: string;
+  clearing_agency_number: string;
+  clearing_agency_name: string;
+  clearing_agent_name: string;
   job_title: string;
   administration: string;
   search_for_offender: string;
@@ -81,7 +81,6 @@ export interface LangKeysContract {
   system_en_name: string;
   menu_global_setting: string;
   ldap_limited_group_name: string;
-  menu_broker_company: string;
   parent_unit: string;
   main_team: string;
   manager: string;
@@ -90,7 +89,6 @@ export interface LangKeysContract {
   menu_organization_unit: string;
   menu_mawared_department: string;
   menu_mawared_employee: string;
-  menu_broker: string;
   menu_permission_role: string;
   menu_penalty: string;
   penalty_grace_period: string;
@@ -178,7 +176,7 @@ export interface LangKeysContract {
   lbl_being_established: string;
   lbl_address: string;
   lbl_responsible_name: string;
-  lbl_broker_company_penalties: string;
+  lbl_clearing_agency_penalties: string;
   lbl_license_start_date: string;
   lbl_license_end_date: string;
   ldap_code: string;
@@ -198,9 +196,8 @@ export interface LangKeysContract {
   last_penalties: string;
   total_exams: string;
   total_thanks_books: string;
-  broker_code: string;
   clearing_agent_code: string;
-  broker_penalties: string;
+  clearing_agent_penalties: string;
   license_number: string;
   license_start_date: string;
   license_end_date: string;
@@ -332,7 +329,7 @@ export interface LangKeysContract {
   transfer_report_to_staff_president_office: string;
   situation_search: string;
   is_proved: string;
-  situation_search_brokerage_company: string;
+  situation_search_clearing_agency: string;
   case_identifier: string;
   basic_report_data_and_violations: string;
   lbl_department: string;
@@ -346,7 +343,7 @@ export interface LangKeysContract {
   referral_request_to_presodent_assistant: string;
   user_type: string;
   note: string;
-  employee_broker_numbers: string;
+  employee_clearing_agent_numbers: string;
   offender_names: string;
   send_to_user_x: string;
   hr_employees: string;
