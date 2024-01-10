@@ -10,7 +10,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { Subject, filter, switchMap, takeUntil } from 'rxjs';
+import { Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -27,13 +27,16 @@ import { SituationSearchComponent } from '@modules/electronic-services/component
 import { TaskResponses } from '@enums/task-responses';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
 import { UserClick } from '@enums/user-click';
+import { MatMenuModule } from '@angular/material/menu';
+import { SusbendEmployeePopupComponent } from '@standalone/popups/susbend-employee-popup/susbend-employee-popup.component';
+import { SystemPenalties } from '@enums/system-penalties';
 
 @Component({
   selector: 'app-offenders-violations-preview',
   templateUrl: './offenders-violations-preview.component.html',
   styleUrls: ['./offenders-violations-preview.component.scss'],
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [CommonModule, IconButtonComponent, MatMenuModule, MatSortModule, MatTableModule, MatTooltipModule],
   animations: [
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
@@ -42,13 +45,15 @@ import { UserClick } from '@enums/user-click';
     ]),
   ],
 })
-export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-
+  offenderTypes = OffenderTypes;
+  taskResponses = TaskResponses;
+  systemPenalties = SystemPenalties;
   offenderDataSource = new AppTableDataSource<Offender>([]);
   reload$: Subject<void> = new Subject<void>();
   view$: Subject<Offender> = new Subject<Offender>();
@@ -57,29 +62,19 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-  referralRequest$ = new Subject<{
-    referralTo: TaskResponses.REFERRAL_TO_PRESODENT | TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT;
-    offender: Offender;
+  extendSuspendEmployee$ = new Subject<{ offender: Offender }>();
+  suspendEmployee$ = new Subject<{ offender: Offender }>();
+  referralOrTerminateDecission$ = new Subject<{
+    offender: Offender; penaltyId: number | undefined
   }>();
-  get referralToPresidentLang() {
-    return this.lang.map.referral_request_to_presodent;
-  }
-  get referralToPresidentAssistantLang() {
-    return this.lang.map.referral_request_to_presodent_assistant;
-  }
-  taskResponses = TaskResponses;
+
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
   }
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
-  isReferralable(offender: Offender) {
-    const penaltyMap = this.penaltyMap;
-    return penaltyMap && penaltyMap[offender.id] && penaltyMap[offender.id].first === null;
-  }
-  offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
+  offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'attachments', 'situationSearch', 'makeDecission', 'actions'];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
-  expandedElement!: Offender | null;
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
       ...acc,
@@ -95,6 +90,19 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.listenToAssignmentToAttend();
     this.listenToSituationSearch();
     this.listenToReferralRequest();
+    this.listenToSuspendEmployee();
+  }
+  getFilteredPenalties(offender: Offender) {
+    return ((this.penaltyMap && this.penaltyMap[offender.id]) ? this.penaltyMap[offender.id].second : [])
+      .filter(
+        penalty =>
+          penalty.penaltyKey !== SystemPenalties.TERMINATE &&
+          penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
+          penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+      )
+  }
+  getPenaltyIdByPenaltyKey(element: Offender, penaltyKey: SystemPenalties) {
+    return this.penaltyMap && this.penaltyMap[element.id].second.find(penalty => penalty.penaltyKey == penaltyKey)?.id
   }
   private loadPenalties() {
     this.investigationModel
@@ -141,7 +149,13 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
   }
   private listenToMakeDecision() {
     this.makeDecision$
-      .pipe(filter((offender: Offender) => !!this.penaltyMap[offender.id]))
+      .pipe(
+        tap((offender: Offender) => {
+          console.log(this.getFilteredPenalties(offender))
+          !this.getFilteredPenalties(offender).length && this.dialog.info(this.lang.map.no_records_to_display)
+        }),
+        filter((offender: Offender) => !!this.getFilteredPenalties(offender).length)
+      )
       .pipe(
         switchMap((offender: Offender) =>
           this.dialog
@@ -149,7 +163,8 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
               data: {
                 model: offender,
                 caseId: this.investigationModel?.id,
-                penalties: this.penaltyMap[offender.id],
+                penalties: this.getFilteredPenalties(offender),
+                penaltyImposedBySystem: this.penaltyMap[offender.id].first
               },
             })
             .afterClosed()
@@ -174,6 +189,19 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       )
       .subscribe();
   }
+  private listenToSuspendEmployee() {
+    this.suspendEmployee$
+      .pipe(switchMap((offender) => {
+        return this.dialog.open(SusbendEmployeePopupComponent, {
+          data: {
+            caseId: this.investigationModel?.id,
+            offender
+          }
+        })
+          .afterClosed()
+      }))
+      .subscribe();
+  }
   isClearingAgent(element: Offender) {
     return element.type === OffenderTypes.ClEARING_AGENT;
   }
@@ -195,15 +223,14 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       .subscribe();
   }
   listenToReferralRequest() {
-    this.referralRequest$
+    this.referralOrTerminateDecission$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(({ referralTo, offender }) => {
+        switchMap(({ offender }) => {
           return this.dialog
             .open(CommentPopupComponent, {
               data: {
                 model: this.investigationModel,
-                response: referralTo,
                 offender: offender,
               },
             })
@@ -213,7 +240,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
       .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
-  canMakeDecision(): boolean {
-    return this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION');
+  canMakeDecision(offender: Offender): boolean {
+    return this.penaltyMap && this.penaltyMap[offender.id] && !!this.getFilteredPenalties(offender).length && this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION');
   }
 }

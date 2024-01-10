@@ -13,7 +13,7 @@
     {{ lang.map.manager_approve }}
   </app-button>
   <!-- complete action -->
-  <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.COMPLETE)"
+  <app-button *ngIf="model?.hasComplete()"
     (click)="responseAction$.next(taskResponses.COMPLETE)">
     {{ lang.map.complete }}
   </app-button>
@@ -33,6 +33,11 @@
   <app-button buttonType="secondary" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_TO_PAE)"
     (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)">
     {{ lang.map.final_issuing_referral_decision_to_study_in_the_president_assistant_office}}
+  </app-button>
+  <!-- transfer report to staff president office -->
+  <app-button buttonType="secondary" *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)"
+    (click)="responseAction$.next(taskResponses.TO_PO)">
+    {{ lang.map.transfer_report_to_staff_president_office}}
   </app-button>
 
   <!-- return -->
@@ -87,19 +92,6 @@
     <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)"
       (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
       {{ lang.map.referral_request_to_presodent_assistant }}
-    </button>
-  </mat-menu>
-
-  <!-- transfer -->
-  <app-button *ngIf="model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)" buttonType="secondary" mat-button
-    [matMenuTriggerFor]="transferMenu">
-    {{ lang.map.transfer }}
-    <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
-  </app-button>
-  <mat-menu #transferMenu="matMenu">
-    <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.TO_PO)"
-      (click)="responseAction$.next(taskResponses.TO_PO)">
-      {{ lang.map.transfer_report_to_staff_president_office }}
     </button>
   </mat-menu>
 

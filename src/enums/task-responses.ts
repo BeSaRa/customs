@@ -8,9 +8,10 @@ export enum TaskResponses {
   REFERRAL_TO_PRESODENT_ASSISTANT = 'referral_to_president_assistant', // form 3
   CLOSE = 'close',
   RETURN_APP_MANAGER = 'return_app_manager',
+  PR_LAUNCH_LEGAL_AFFAIRS = 'pr_launch_legal_affairs',
   TO_PO = 'to_po',
   TERMINATE = 'terminate',
-  LAUNCH_LEAGL_AFFAIRS = 'launch:legal_affairs',
+  LAUNCH_LEAGL_AFFAIRS = 'launch_legal_affairs',
   COMPLETE = 'complete',
   RETURN_TO_HR = 'return_to_hr',
   HR_APPROVE = 'hr_approve',
@@ -19,7 +20,8 @@ export enum TaskResponses {
   PA_FNL_TO_PAE = 'pa_fnl_to_pae',
   PA_FNL_COMPLETE = 'pa_fnl_complete',
   PA_FNL_APPLY_AND_RETURN = 'pa_fnl_apply_and_return',
-  PA_FNL_LAUNCH_LEGAL_AFFAIRS = 'pa_fnl_launch:legal_affairs', // إلى الشؤون القانونية
-  PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL = 'pa_fnl_launch:disciplinary_council', // المجلس التأديبي
-  PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL = 'pa_fnl_launch:permanent_disciplinary_council', // المجلس التأديبي الدائم
+  PA_FNL_LAUNCH_LEGAL_AFFAIRS = 'pa_fnl_launch_legal_affairs', // إلى الشؤون القانونية
+  PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_disciplinary_council', // المجلس التأديبي
+  PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_permanent_disciplinary_council', // المجلس التأديبي الدائم
+
 }

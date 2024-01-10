@@ -27,7 +27,7 @@
           </app-input>
           <app-select-input
             formControlName="limitedAccess"
-            [label]="lang.map.access_degree"
+            [label]="lang.map.limited_access"
             bindValue="lookupKey"
             bindLabel="getNames"
             [options]="violationDegreeConfidentiality" />
@@ -70,7 +70,7 @@
           </ng-container>
           <!-- limited access -->
           <ng-container matColumnDef="limitedAccess">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.access_degree }}</th>
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.limited_access }}</th>
             <td mat-cell *matCellDef="let element">
               <span>{{ element.limitedAccessInfo?.getNames() }}</span>
             </td>

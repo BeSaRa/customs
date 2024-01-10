@@ -16,6 +16,7 @@ export class InvestigationInterceptor implements ModelInterceptorContract<Invest
     delete model.$$__service_name__$$;
     delete model.caseStatusInfo;
     delete model.departmentInfo;
+    delete model.limitedAccessInfo;
     delete model.ouInfo;
 
     model.offenderInfo = model.offenderInfo?.map(offender => new Offender().clone<Offender>(offenderInterceptor.send(offender)));
@@ -32,6 +33,7 @@ export class InvestigationInterceptor implements ModelInterceptorContract<Invest
     model.departmentInfo && (model.departmentInfo = AdminResult.createInstance(model.departmentInfo));
     model.ouInfo && (model.ouInfo = AdminResult.createInstance(model.ouInfo));
     model.creatorInfo && (model.creatorInfo = AdminResult.createInstance(model.creatorInfo));
+    model.limitedAccessInfo && (model.limitedAccessInfo = AdminResult.createInstance(model.limitedAccessInfo));
     model.offenderViolationInfo = model.offenderViolationInfo?.map(offenderViolation =>
       new OffenderViolation().clone<OffenderViolation>(offenderViolationInterceptor.receive(offenderViolation))
     );

@@ -12,6 +12,7 @@ import { BaseCaseContract } from '@contracts/base-case-contract';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
 import { ActionNames } from '@enums/action-names';
+import { TaskName } from '@enums/task-name';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -70,6 +71,12 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   canSave(): boolean {
     return true;
     // return !this.isCancelled && this.isReturned;
+  }
+  getTaskName() {
+    return this.taskDetails?.name;
+  }
+  isPresedentAssestantReview() {
+    this.getTaskName() == TaskName.PA_REV;
   }
   canClaim(): boolean {
     return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);

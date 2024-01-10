@@ -252,7 +252,7 @@ export class CommentPopupComponent extends OnDestroyMixin(class { }) implements 
   get isEmployee() {
     return true;
   }
-  get isBroker() {
+  get isClearingAgent() {
     return !this.isEmployee;
   }
   get copyToHumanResources() {

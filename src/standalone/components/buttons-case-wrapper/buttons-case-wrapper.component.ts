@@ -59,7 +59,6 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
       .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
-
   canLaunch() {
     return this.model?.canStart();
   }
