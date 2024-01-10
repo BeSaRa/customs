@@ -73,7 +73,7 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
       arName: this.arName,
       enName: this.enName,
       status: 1,
-      offenderRefId: this.agentId,
+      offenderRefId: this.id,
       ouId: this.agencyId,
     });
   }
