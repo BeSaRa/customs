@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElectronicServicesRoutingModule } from './electronic-services-routing.module';
 import { ElectronicServicesComponent } from './electronic-services.component';
-import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
 import { InvestigationComponent } from './components/investigation/investigation.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,6 +36,8 @@ import { SituationSearchComponent } from './components/situation-search/situatio
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 import { OffendersViolationsPreviewComponent } from '@standalone/components/offenders-violations-preview/offenders-violations-preview.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
+import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     SelectInputComponent,
     TextareaComponent,
     MatExpansionModule,
-    MatMenuModule,
     MatProgressSpinnerModule,
     MatTableModule,
     MatButtonToggleModule,
@@ -80,6 +80,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     WitnessesListComponent,
     OffendersViolationsPreviewComponent,
     MatDialogModule,
+    ButtonsCaseWrapperComponent
   ],
 })
 export class ElectronicServicesModule {}

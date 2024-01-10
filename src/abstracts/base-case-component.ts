@@ -1,5 +1,4 @@
 import { OpenFrom } from './../enums/open-from';
-import { TaskResponses } from './../enums/task-responses';
 import { Directive, EventEmitter, OnInit } from '@angular/core';
 import {
   catchError,
@@ -56,7 +55,6 @@ export abstract class BaseCaseComponent<Model extends BaseCase<BaseCaseService<M
     [SaveTypes.DRAFT_CONTINUE]: 'draft',
   };
   folderType = FolderType;
-  taskResponses = TaskResponses;
   ngOnInit(): void {
     of(true)
       .pipe(tap(() => this._init()))
