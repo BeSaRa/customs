@@ -325,7 +325,6 @@ export interface LangKeysContract {
   transfer: string;
   return_to_manager: string;
   terminate: string;
-  issuing_referral_decision_to_legal_affairs_manager: string;
   transfer_report_to_staff_president_office: string;
   situation_search: string;
   is_proved: string;
@@ -350,4 +349,14 @@ export interface LangKeysContract {
   hr_employee: string;
   complete: string;
   return_to_hr_department: string;
+  issuing_referral_decision: string;
+  to_legal_affairs_manager: string;
+  to_study_in_the_president_assistant_office: string;
+  final_issuing_referral_decision_to_study_in_the_president_assistant_office: string;
+  final_complete: string;
+  apply_and_return_remining: string;
+  launch_legal_affairs: string;
+  launch_disciplinary_council: string;
+  launch_permanent_disciplinary_council: string;
+  send_to: string;
 }

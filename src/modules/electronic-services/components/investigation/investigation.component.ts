@@ -19,16 +19,12 @@ import { OffenderListComponent } from '@standalone/components/offender-list/offe
 import { TransformerAction } from '@contracts/transformer-action';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { ToastService } from '@services/toast.service';
-import { SendTypes } from '@enums/send-types';
 import { OpenFrom } from '@enums/open-from';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { EncryptionService } from '@services/encryption.service';
-import { TaskResponses } from '@enums/task-responses';
-import { UserClick } from '@enums/user-click';
 import { EmployeeService } from '@services/employee.service';
 import { LookupService } from '@services/lookup.service';
-import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
-import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { SendTypes } from '@enums/send-types';
 
 @Component({
   selector: 'app-investigation',
@@ -49,13 +45,11 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   toast = inject(ToastService);
   encrypt = inject(EncryptionService);
   lookupService = inject(LookupService);
-  responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
   @ViewChild(ViolationListComponent) violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent) offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent) witnessestListComponent!: WitnessesListComponent;
   violationDegreeConfidentiality = this.lookupService.lookups.violationDegreeConfidentiality;
   caseFolders: CaseFolder[] = [];
-  sendTypes = SendTypes;
   caseFoldersMap?: Record<string, CaseFolder>;
 
   adapter = inject(DateAdapter);
@@ -66,25 +60,6 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   protected override _init() {
     super._init();
-    this.listenToResponseAction();
-  }
-  listenToResponseAction() {
-    this.responseAction$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        switchMap((response: TaskResponses) => {
-          return this.dialog
-            .open(CommentPopupComponent, {
-              data: {
-                model: this.model,
-                response,
-              },
-            })
-            .afterOpened();
-        })
-      )
-      .pipe(filter((click: any) => click == UserClick.YES))
-      .subscribe();
   }
   isHrManager() {
     return this.employeeService.isHrManager();
@@ -148,14 +123,6 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
         this.readonly = false;
       }
     }
-  }
-  get getSendToUserLabel(): keyof LangKeysContract {
-    if (this.isHrManager()) return 'hr_employee';
-    return 'creator';
-  }
-  get getCompleteLabel(): keyof LangKeysContract {
-    if (this.isHrManager()) return 'hr_employees';
-    return 'complete';
   }
   saveCase(e: Subject<TransformerAction<Investigation>>) {
     of(new Investigation().clone<Investigation>(this.form.value))
@@ -253,13 +220,5 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   resetOffendersAndExternalPersons() {
     this.offenderListComponent.deleteAllOffender();
     this.witnessestListComponent.deleteAllWitnesses();
-  }
-  canLaunch() {
-    return this.model?.canStart();
-  }
-  claim() {
-    this.model?.claim().subscribe((model: Investigation) => {
-      this._updateForm(model);
-    });
   }
 }
