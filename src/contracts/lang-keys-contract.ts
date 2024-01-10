@@ -336,7 +336,6 @@ export interface LangKeysContract {
   assignment_to_attend: string;
   msg_assignment_to_attend_x_success: string;
   selected_offender_related_to_another_department: string;
-  access_degree: string;
   referral_request: string;
   referral_request_to_presodent: string;
   referral_request_to_presodent_assistant: string;
@@ -359,4 +358,6 @@ export interface LangKeysContract {
   launch_disciplinary_council: string;
   launch_permanent_disciplinary_council: string;
   send_to: string;
+  extend_suspend_employee: string;
+  suspend_employee: string;
 }

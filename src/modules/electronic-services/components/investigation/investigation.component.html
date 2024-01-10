@@ -7,33 +7,82 @@
   <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
   <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
 </div>
-<div class="relative">
+<div [formGroup]="form" *ngIf="!isAddScreen()" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+  <div class="mb-3">
+    <span class="font-medium text-slate-700">{{ lang.map.report_draft_number }}</span>
+    <label class="input-form p-2 block">
+      {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
+    </label>
+  </div>
+  <div class="mb-3">
+    <span class="font-medium text-slate-700">{{ lang.map.investigation_file_number }}</span>
+    <label class="input-form p-2 block">
+      {{ model?.investigationFullSerial ? model?.investigationFullSerial : '---' }}
+    </label>
+  </div>
+  <div class="mb-3">
+    <span class="font-medium text-slate-700">{{ lang.map.report_entry_date }}</span>
+    <label class="input-form p-2 block">
+      {{ model?.createdOn ? (model?.createdOn|date) : '---' }}
+    </label>
+  </div>
+  <div class="mb-3">
+    <span class="font-medium text-slate-700">{{ lang.map.limited_access }}</span>
+    <label class="input-form p-2 block">
+      {{ model?.limitedAccessInfo ? model?.limitedAccessInfo?.getNames() : '---' }}
+    </label>
+  </div>
+</div>
+<div class="relative" [ngClass]="{
+  'investegation-tab-group': isAddScreen(),
+  'investegation-tab-group-preview': !isAddScreen()
+}">
   <mat-card>
     <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="tabChange($event)" mat-stretch-tabs="false">
-      <mat-tab [label]="!isSummaryMode() ? lang.map.lbl_basic_info : lang.map.basic_report_data_and_violations">
+      <mat-tab *ngIf="!isAddScreen()" [label]="lang.map.basic_report_data_and_violations">
+        <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
+      </mat-tab>
+      <mat-tab *ngIf="isAddScreen()" [label]="lang.map.lbl_basic_info">
         <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.violations">
-        <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
-      </mat-tab>
-      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.offenders">
+      <mat-tab [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.external_persons">
+      <mat-tab [label]="lang.map.violations">
+        <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
+      </mat-tab>
+      <mat-tab [label]="lang.map.external_persons" *ngIf="canViewExternalPersonsTab()">
         <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!isSummaryMode()" [label]="lang.map.correspondence">
-        <ng-container [ngTemplateOutlet]="correspondence_tab"></ng-container>
-      </mat-tab>
-      <mat-tab *ngIf="isSummaryMode()" [label]="lang.map.attachments">
+      <mat-tab [label]="lang.map.attachments">
         <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>
       </mat-tab>
     </mat-tab-group>
   </mat-card>
-  <!-- 
+  <app-buttons-case-wrapper [model]="model" (onSave)="save$.next($event)" (onLaunch)="launchCase($event)"
+    (onClaim)="_updateForm($event)"></app-buttons-case-wrapper>
+  <ng-template #summary_tab>
+    <div [formGroup]="form" class="px-3 grid gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+      <div class="col-span-1 md:col-span-2 lg:col-span-4">
+        <h1 class="mb-2 font-bold text-primary text-lg">{{ lang.map.lbl_basic_info }}</h1>
+        <div class="mb-1" *ngIf="model && model.departmentInfo">
+          <span class="font-medium text-slate-700">{{ lang.map.lbl_department }} :</span>
+          <small class="sm font-bold text-slate-600 py-2">
+            {{ model.departmentInfo.getNames() }}
+          </small>
+        </div>
+        <div class="mb-3">
+          <span class="font-medium text-slate-700">{{ lang.map.general_explanation_of_violations }}</span>
+          <label class="block">
+            {{ model?.description ? model?.description : 'No description' }}
+          </label>
+        </div>
+      </div>
+      <app-offenders-violations-preview [investigationModel]="model" [data]="model?.offenderInfo || []"
+        class="col-span-1 md:col-span-2 lg:col-span-4" [isClaimed]="!!model?.isClaimed()" />
+    </div>
+  </ng-template>
 
-
- -->
   <ng-template #basic_info_tab>
     <div [formGroup]="form" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
       <app-input formControlName="draftFullSerial" [label]="lang.map.report_draft_number" />
@@ -42,37 +91,10 @@
         <input appControl formControlName="createdOn" (click)="datepicker.open()" [matDatepicker]="datepicker" />
         <mat-datepicker touchUi #datepicker />
       </app-input>
-      <app-select-input
-        formControlName="limitedAccess"
-        [label]="lang.map.access_degree"
-        bindValue="lookupKey"
-        bindLabel="getNames"
-        [options]="violationDegreeConfidentiality" />
-      <div class="group block relative mb-5" *ngIf="model && model.departmentInfo && isSummaryMode()">
-        <span class="block font-medium text-slate-700">{{ lang.map.lbl_department }}</span>
-        <div class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-          {{ model.departmentInfo.getNames() }}
-        </div>
-      </div>
-      <app-textarea
-        formControlName="description"
-        class="col-span-1 md:col-span-2 lg:col-span-4"
+      <app-select-input formControlName="limitedAccess" [label]="lang.map.limited_access" bindValue="lookupKey"
+        bindLabel="getNames" [options]="violationDegreeConfidentiality" />
+      <app-textarea formControlName="description" [rows]="12" class="col-span-1 md:col-span-2 lg:col-span-4"
         [label]="lang.map.general_explanation_of_violations" />
-
-      <app-offenders-violations-preview
-        [investigationModel]="model"
-        [data]="model?.offenderInfo || []"
-        class="col-span-1 md:col-span-2 lg:col-span-4"
-        *ngIf="isSummaryMode()"
-        [isClaimed]="!!model?.isClaimed()" />
-
-      <app-case-attachments
-        *ngIf="!isSummaryMode()"
-        [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
-        [service]="service"
-        [readonly]="readonly"
-        [title]="lang.map.report_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
 
@@ -99,41 +121,16 @@
 
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list [violations]="violations" [readonly]="readonly || !!isSummaryMode()" [caseId]="model?.id" />
-    </div>
-  </ng-template>
-
-  <ng-template #correspondence_tab>
-    <div class="p-4">
-      <app-case-attachments
-        [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
-        [service]="service"
-        [readonly]="readonly"
-        [title]="lang.map.correspondence_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
+      <app-witnesses-list [violations]="violations" [readonly]="readonly" [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #attachments_tab>
     <div class="p-4">
-      <app-case-attachments
-        [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
-        [service]="service"
-        [readonly]="true"
-        [title]="lang.map.report_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
-      <app-case-attachments
-        [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
-        [service]="service"
-        [readonly]="true"
-        [title]="lang.map.correspondence_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
+      <app-case-attachments [caseId]="getCaseFolderIdByName(folderType.GENERAL)" [service]="service" [readonly]="true"
+        [title]="lang.map.report_attachments" class="col-span-1 md:col-span-2 lg:col-span-4" />
+      <app-case-attachments [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)" [service]="service" [readonly]="true"
+        [title]="lang.map.correspondence_attachments" class="col-span-1 md:col-span-2 lg:col-span-4" />
     </div>
   </ng-template>
-  <app-buttons-case-wrapper
-    [model]="model"
-    (onSave)="save$.next($event)"
-    (onLaunch)="launchCase($event)"
-    (onClaim)="_updateForm($event)"
-  ></app-buttons-case-wrapper>
 </div>

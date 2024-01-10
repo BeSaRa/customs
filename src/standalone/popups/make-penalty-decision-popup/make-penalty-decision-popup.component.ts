@@ -31,8 +31,8 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) 
   employeeService = inject(EmployeeService);
   model: Offender = this.data && (this.data.model as Offender);
   caseId: string = this.data && (this.data.caseId as string);
-  penaltyList: Penalty[] = this.data && (this.data.penalties.second || ([] as Penalty[]));
-  penaltyImposedBySystem: number | null = this.data && this.data.penalties.first;
+  penaltyList: Penalty[] = this.data && (this.data.penalties || ([] as Penalty[]));
+  penaltyImposedBySystem: number | null = this.data && this.data.penaltyImposedBySystem;
   form: FormGroup = new FormGroup({
     penalty: new FormControl(this.penaltyImposedBySystem ? this.penaltyList[this.penaltyImposedBySystem].id : null, [CustomValidators.required]),
   });
@@ -40,10 +40,6 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) 
     super();
   }
   ngOnInit(): void {
-    this.penaltyList = this.penaltyList.filter(
-      penalty =>
-        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT && penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
-    );
     this.listenToSave();
   }
   listenToSave() {

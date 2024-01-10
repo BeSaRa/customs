@@ -61,17 +61,21 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   protected override _init() {
     super._init();
   }
+
+  
   isHrManager() {
     return this.employeeService.isHrManager();
   }
-  isSummaryMode() {
-    return this.openFrom !== OpenFrom.ADD_SCREEN && !!this.openFrom;
+  isAddScreen() {
+    return this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom;
   }
   _buildForm(): void {
     this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
     this.listenToLocationChange();
   }
-
+  canViewExternalPersonsTab() {
+    return true;
+  }
   _afterBuildForm(): void {
     this.loadCaseFolders();
   }

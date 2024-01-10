@@ -1,6 +1,7 @@
 export const AppIcons = {
   RELOAD: 'reload',
   DOTS_CIRCLE: 'dots-circle',
+  DOTS_VERTICAL: 'dots-vertical',
   TRANSLATE: 'translate',
   SETTINGS: 'cog',
   PLUS: 'plus',
