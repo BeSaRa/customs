@@ -4,10 +4,27 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4">your dialog content here</div>
+    <div class="grid grid-cols-2 gap-4">
+      <ng-container [formGroup]="form">
+        <app-input formControlName="offenderId" hidden></app-input>
+        <app-input formControlName="mawaredEmployee" hidden></app-input>
+        <app-input formControlName="caseId" hidden></app-input>
+        <app-input formControlName="serial" hidden></app-input>
+        <app-input formControlName="decision" hidden></app-input>
+        <app-input formControlName="decisionDate" hidden></app-input>
+        <app-input formControlName="dateFrom" hidden></app-input>
+        <app-input formControlName="duration" hidden></app-input>
+        <app-input formControlName="type" hidden></app-input>
+        <app-input formControlName="signerId" hidden></app-input>
+        <app-input formControlName="status" hidden></app-input>
+        <app-input formControlName="dateTo" [label]="lang.map.date_to" type="datetime-local"></app-input>
+      </ng-container>
+    </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button *ngIf="!inViewMode()" (click)="saveExtendSuspension$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
     <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
     <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
   </div>

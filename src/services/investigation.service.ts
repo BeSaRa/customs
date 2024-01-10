@@ -8,10 +8,11 @@ import { CastResponse, CastResponseContainer } from 'cast-response';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
 import { ViolationService } from '@services/violation.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { TransformerAction } from '@contracts/transformer-action';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { SusbendEmployee } from '@models/susbend-employee';
+import { SuspendedEmployee } from '@models/suspended-employee';
 
 @CastResponseContainer({
   $default: {
@@ -46,10 +47,14 @@ export class InvestigationService extends BaseCaseService<Investigation> impleme
   }
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
   suspendEmployee(body: SusbendEmployee) {
-    return this.http.post(this.getUrlSegment() + '/suspend-employee', body)
+    return this.http.post(this.getUrlSegment() + '/suspend-employee', body);
   }
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
   extendSuspendEmployee(body: SusbendEmployee) {
-    return this.http.post(this.getUrlSegment() + '/extend-suspend-employee', body)
+    return this.http.post(this.getUrlSegment() + '/extend-suspend-employee', body);
+  }
+  @CastResponse(() => SuspendedEmployee)
+  saveExtendSuspension(suspendedEmployee: SuspendedEmployee): Observable<unknown> {
+    return this.http.post<SuspendedEmployee>(this.getUrlSegment() + '/extend-suspend-employee', suspendedEmployee);
   }
 }
