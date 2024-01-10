@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  extend_suspension: string;
+  decision_signer: string;
+  duration: string;
+  decision_date: string;
+  decision_number: string;
   menu_suspended_employee: string;
   menu_clearing_agency: string;
   menu_clearing_agent: string;
