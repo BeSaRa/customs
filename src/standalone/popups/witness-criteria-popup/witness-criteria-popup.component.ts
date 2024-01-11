@@ -138,7 +138,6 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
       )
       .pipe(map(pagination => pagination.rs))
       .subscribe(result => {
-        console.log(result);
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }

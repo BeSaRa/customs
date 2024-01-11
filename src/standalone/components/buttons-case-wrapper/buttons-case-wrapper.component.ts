@@ -14,6 +14,10 @@ import { AppIcons } from '@constants/app-icons';
 import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
 import { CommonModule } from '@angular/common';
+import { EmployeeService } from '@services/employee.service';
+import { OpenFrom } from '@enums/open-from';
+import { ActivatedRoute, Router } from '@angular/router';
+import { OpenedInfoContract } from '@contracts/opened-info-contract';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -25,6 +29,11 @@ import { CommonModule } from '@angular/common';
 export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
+  employeeService = inject(EmployeeService);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  info: OpenedInfoContract | null = null;
+  
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
   sendTypes = SendTypes;
@@ -38,6 +47,7 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
   @Output() onClaim = new EventEmitter<Investigation>();
   
   ngOnInit() {
+    this.info = this.route.snapshot.data['info'] as (OpenedInfoContract | null);
     this.listenToResponseAction();
   }
 
@@ -57,7 +67,33 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
         })
       )
       .pipe(filter((click: any) => click == UserClick.YES))
-      .subscribe();
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom();
+      });
+  }
+  
+  private navigateToSamePageThatUserCameFrom(): void {
+    if (this.info == null) {
+      return;
+    }
+    switch (this.info.openFrom) {
+      case OpenFrom.TEAM_INBOX:
+        this.router.navigate(['/home/team-inbox']).then();
+        break;
+      case OpenFrom.USER_INBOX:
+        this.router.navigate(['/home/user-inbox']).then();
+        break;
+      case OpenFrom.SEARCH:
+        this.router.navigate(['/home/electronic-services/investigation-search']).then();
+        break;
+    }
+
+  }
+  isApplicantChief() {
+    return this.employeeService.isApplicantChief()
+  }
+  isApplicantManager() {
+    return this.employeeService.isApplicantManager()
   }
   canLaunch() {
     return this.model?.canStart();

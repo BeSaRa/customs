@@ -36,6 +36,8 @@ import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
 import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
+import { TransformerAction } from '@contracts/transformer-action';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -59,7 +61,7 @@ import { MawaredDepartment } from '@models/mawared-department';
   templateUrl: './offender-criteria-popup.component.html',
   styleUrls: ['./offender-criteria-popup.component.scss'],
 })
-export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
   data = inject(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
   offenderViolationService = inject(OffenderViolationService);
@@ -99,7 +101,9 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   @ViewChild(MatTabGroup)
   tabComponent!: MatTabGroup;
-
+  transformer$ = this.data && (this.data.transformer$ as Subject<TransformerAction<Investigation>>);
+  caseId = this.data && (this.data.caseId as string);
+  selectedOffender!: MawaredEmployee | ClearingAgent;
   ngOnInit(): void {
     this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
     this.clearingAgentFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
@@ -123,6 +127,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
     this.listenToAddEmployee();
     this.listenToAddClearingAgent();
     this.listenToAddViolation();
+    this.listernToSaveCaseDone();
   }
 
   private listenToOffenderTypeChange() {
@@ -161,10 +166,10 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
 
   private listenToSearch() {
     const mawaredSearch$ = this.search$
-      .pipe(filter(() => !!this.offenderViolationControl?.value?.length && this.isEmployee))
+      .pipe(filter(() => this.isEmployee))
       .pipe(takeUntil(this.destroy$));
     const clearingAgentSearch$ = this.search$
-      .pipe(filter(() => !!this.offenderViolationControl?.value?.length && this.isClearingAgent))
+      .pipe(filter(() => this.isClearingAgent))
       .pipe(takeUntil(this.destroy$));
 
     mawaredSearch$
@@ -210,9 +215,29 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       });
   }
 
+  listernToSaveCaseDone() {
+    this.transformer$
+      ?.pipe(filter((data: TransformerAction<Investigation>) => data.action == 'done'))
+      .subscribe((data: TransformerAction<Investigation>) => {
+        this.caseId = data.model?.id;
+        if (this.isClearingAgent) {
+          this.addClearingAgent$.next(this.selectedOffender as ClearingAgent);
+        } else {
+          this.addEmployee$.next(this.selectedOffender as MawaredEmployee);
+        }
+      });
+  }
+  addEmployee(employee: MawaredEmployee) {
+    if (!this.caseId) {
+      this.selectedOffender = employee;
+      this.transformer$?.next({ action: 'save' });
+    } else {
+      this.addEmployee$.next(employee);
+    }
+  }
   private listenToAddEmployee() {
     this.addEmployee$
-      .pipe(map(model => model.convertToOffender(this.data.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId)))
       .pipe(
         switchMap(offender => {
           return offender.save();
@@ -224,7 +249,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
             (this.offenderViolationControl?.value || []).map((violationId: number) => {
               return this.offenderViolationService.create(
                 new OffenderViolation().clone<OffenderViolation>({
-                  caseId: this.data.caseId,
+                  caseId: this.caseId,
                   offenderId: model.id,
                   violationId: violationId,
                   status: 1,
@@ -250,9 +275,17 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
       });
   }
 
+  addClearingAgent(agent: ClearingAgent) {
+    if (!this.caseId) {
+      this.selectedOffender = agent;
+      this.transformer$?.next({ action: 'save' });
+    } else {
+      this.addClearingAgent$.next(agent);
+    }
+  }
   private listenToAddClearingAgent() {
     this.addClearingAgent$
-      .pipe(map(model => model.convertToOffender(this.data.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId)))
       .pipe(
         switchMap(offender => {
           return offender.save();
@@ -264,7 +297,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class {}) imp
             (this.offenderViolationControl?.value || []).map((violationId: number) => {
               return this.offenderViolationService.create(
                 new OffenderViolation().clone<OffenderViolation>({
-                  caseId: this.data.caseId,
+                  caseId: this.caseId,
                   offenderId: model.id,
                   violationId: violationId,
                   status: 1,

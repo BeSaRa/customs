@@ -34,10 +34,10 @@ import { InvestigationSearchComponent } from './components/investigation-search/
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
-import { OffendersViolationsPreviewComponent } from '@standalone/components/offenders-violations-preview/offenders-violations-preview.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
 import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
+import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 
 @NgModule({
   declarations: [
@@ -78,7 +78,7 @@ import { MenuItemListComponent } from '@standalone/components/menu-item-list/men
     ViolationListComponent,
     OffenderListComponent,
     WitnessesListComponent,
-    OffendersViolationsPreviewComponent,
+    SummaryTabComponent,
     MatDialogModule,
     ButtonsCaseWrapperComponent
   ],

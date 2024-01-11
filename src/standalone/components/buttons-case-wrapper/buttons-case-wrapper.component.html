@@ -154,11 +154,11 @@
 
   <!-- data entry actions -->
   <!-- send to manager -->
-  <app-button *ngIf="canLaunch()" (click)="onLaunch.emit(sendTypes.DIRECTOR_ADMIN)">{{
+  <app-button *ngIf="canLaunch() && !isApplicantManager()" (click)="onLaunch.emit(sendTypes.DIRECTOR_ADMIN)">{{
     lang.map.send_to_manager
     }}</app-button>
   <!-- send to chief -->
-  <app-button *ngIf="canLaunch()" (click)="onLaunch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
+  <app-button *ngIf="canLaunch() && !isApplicantChief() && !isApplicantManager()" (click)="onLaunch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
     lang.map.send_to_chief
     }}</app-button>
 
