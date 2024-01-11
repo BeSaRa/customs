@@ -102,6 +102,8 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
   bindFilter?: string | ((item: any) => any);
   @Input()
   enableFilter = false;
+  @Input()
+  nullable = true;
   @ContentChild(OptionTemplateDirective)
   optionTemplate?: OptionTemplateDirective;
 
