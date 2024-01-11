@@ -70,7 +70,7 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
       .pipe(
         switchMap(_ => {
           // if (!this.hasFilterCriteria()) {
-          return this.inboxService.loadTeamInbox(this.employeeService.getEmployeeTeams()[0].id!);
+          return this.inboxService.loadTeamInbox(this.employeeService.getEmployeeTeams()[0]?.id!);
           // } else {
           //   return this.inboxService.loadUserInbox(this.filterCriteria);
           // }

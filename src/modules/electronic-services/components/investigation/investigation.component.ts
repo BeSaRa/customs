@@ -25,6 +25,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { EmployeeService } from '@services/employee.service';
 import { LookupService } from '@services/lookup.service';
 import { SendTypes } from '@enums/send-types';
+import { CommonCaseStatus } from '@enums/common-case-status';
 
 @Component({
   selector: 'app-investigation',
@@ -55,7 +56,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   adapter = inject(DateAdapter);
   selectedTab = 0;
 
-  tabsArray = ['basic_info', 'violations', 'offenders', 'external_persons'];
+  tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   violations: Violation[] = [];
 
   protected override _init() {
@@ -66,8 +67,11 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   isHrManager() {
     return this.employeeService.isHrManager();
   }
-  isAddScreen() {
-    return this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom;
+  summaryMode() {
+    return (this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom) && !this.canEdit();
+  }
+  canEdit() {
+    return this.model?.getCaseStatus() == CommonCaseStatus.NEW || this.model?.getCaseStatus() == CommonCaseStatus.DRAFT || this.model?.getCaseStatus() == CommonCaseStatus.RETURNED; 
   }
   _buildForm(): void {
     this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
@@ -104,6 +108,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   _afterLaunch(): void {
     this.resetForm();
     this.toast.success(this.lang.map.request_has_been_sent_successfully);
+  }
+  managerLaunch() {
+    // TODO: add maager launch logic
   }
   _updateForm(model: Investigation): void {
     this.handleReadOnly();
@@ -206,9 +213,11 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.violationListComponent.resetDataList();
     this.offenderListComponent.resetDataList();
     this.witnessestListComponent.resetDataList();
+    this.tabChange(0);
     this.router.navigate([], {
       relativeTo: this.activeRoute,
-      queryParams: {},
+      queryParams: {
+      },
     });
   }
   private listenToLocationChange() {

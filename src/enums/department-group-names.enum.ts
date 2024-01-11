@@ -10,4 +10,6 @@ export enum DepartmentGroupNames {
   President_Office = 'President_Office',
   President_Assistant = 'President_Assistant', // مساعد الرئيس
   President_Assistant_Office = 'President_Assistant_Office',
+  Disciplinary_Committee = 'Disciplinary_Committee',
+  Permanent_Disciplinary_Committee = 'Permanent_Disciplinary_Committee'
 }

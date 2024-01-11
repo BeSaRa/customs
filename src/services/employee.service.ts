@@ -92,6 +92,12 @@ export class EmployeeService {
   isHrManager() {
     return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Human_Resources_Manager);
   }
+  isDisciplinaryCommittee() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Disciplinary_Committee);
+  }
+  isPermanentDisciplinaryCommittee() {
+    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Permanent_Disciplinary_Committee);
+  }
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;
   }

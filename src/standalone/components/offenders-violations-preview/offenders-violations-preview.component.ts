@@ -25,11 +25,11 @@ import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { TaskResponses } from '@enums/task-responses';
-import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
-import { UserClick } from '@enums/user-click';
 import { MatMenuModule } from '@angular/material/menu';
 import { SusbendEmployeePopupComponent } from '@standalone/popups/susbend-employee-popup/susbend-employee-popup.component';
 import { SystemPenalties } from '@enums/system-penalties';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -51,6 +51,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
+  penaltyDecisionService = inject(PenaltyDecisionService);
   offenderTypes = OffenderTypes;
   taskResponses = TaskResponses;
   systemPenalties = SystemPenalties;
@@ -73,7 +74,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   }
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
-  offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'attachments', 'situationSearch', 'makeDecission', 'actions'];
+  offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'attachments', 'situationSearch', 'actions'];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
@@ -83,7 +84,9 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     {}
   );
   ngOnInit(): void {
-    this.loadPenalties();
+    if(this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')) {
+      this.loadPenalties();
+    }
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
@@ -226,18 +229,27 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.referralOrTerminateDecission$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(({ offender }) => {
-          return this.dialog
-            .open(CommentPopupComponent, {
-              data: {
-                model: this.investigationModel,
-                offender: offender,
-              },
+        // preview form and confirm depend on form response
+        // exhaustMap((payload) => {
+          // return this.dialog.confirm(this.lang.map.confirm_take_penalty_decission)
+          //   .afterClosed()
+          //   .pipe(filter((click: any) => click == UserClick.YES))
+          //   .pipe(map(() => payload))
+        // })
+      )
+      .pipe(
+        switchMap(({ offender, penaltyId }) => {
+          return this.penaltyDecisionService.create(
+            new PenaltyDecision().clone<PenaltyDecision>({
+              caseId: this.investigationModel?.id,
+              offenderId: offender.id,
+              signerId: this.employeeService.getEmployee()?.id,
+              penaltyId: penaltyId,
+              status: 1,
             })
-            .afterOpened();
+          );
         })
       )
-      .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
   canMakeDecision(offender: Offender): boolean {

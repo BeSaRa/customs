@@ -76,7 +76,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.taskDetails?.name;
   }
   isPresedentAssestantReview() {
-    this.getTaskName() == TaskName.PA_REV;
+    return this.getTaskName() == TaskName.PA_REV;
   }
   canClaim(): boolean {
     return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);

@@ -1,6 +1,6 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { EmployeeService } from '@services/employee.service';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
@@ -24,6 +24,7 @@ import { Investigation } from '@models/investigation';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
+import { TransformerAction } from '@contracts/transformer-action';
 
 @Component({
   selector: 'app-offender-list',
@@ -50,13 +51,15 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   readonly = false;
   add$: Subject<void> = new Subject<void>();
   attachments$: Subject<Offender> = new Subject<Offender>();
+  transformer$ = new Subject<TransformerAction<Investigation>>();
+  @Output() saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-  displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'departmentCompany', 'actions'];
+  displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'actions'];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
@@ -65,7 +68,6 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     }),
     {}
   );
-
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -73,15 +75,20 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
     this.listenToAttachments();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
+    this.listernToSaveCase();
     this.reload$.next();
   }
 
+  listernToSaveCase() {
+    this.transformer$
+      .pipe(tap((data: TransformerAction<Investigation>) => data.action == 'done' && (this.caseId = data.model?.id || '')))
+      .pipe(filter((data: TransformerAction<Investigation>) => data.action == 'save'))
+      .subscribe(() => {
+        this.saveCase.emit(this.transformer$);
+      });
+  }
   private listenToAdd() {
     this.add$
-      .pipe(
-        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
-        filter(() => !!this.violations.length)
-      )
       .pipe(
         exhaustMap(() =>
           this.dialog
@@ -90,6 +97,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
                 caseId: this.caseId,
                 violations: this.violations,
                 offenders: this.dataSource.data,
+                transformer$: this.transformer$
               },
             })
             .afterClosed()
