@@ -44,6 +44,7 @@ import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import { enUS } from 'date-fns/locale';
 import { Config } from '@constants/config';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
+import { VersionComponent } from '@standalone/components/version/version.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -75,6 +76,7 @@ import { LoadingComponent } from '@standalone/components/loading/loading.compone
     NgProgressModule,
     MatDateFnsModule,
     LoadingComponent,
+    VersionComponent,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,

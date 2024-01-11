@@ -7,7 +7,7 @@
   <div class="flex flex-col-reverse lg:flex-row relative w-full z-1">
     <div id="form" class="z-10 justify-center flex flex-auto">
       <div class="flex flex-col w-1/2 lg:-mt-20">
-        <h1 class="text-center text-2xl border-b-4 p-4 border-secondary mb-4">{{lang.map.login_form}}</h1>
+        <h1 class="text-center text-2xl border-b-4 p-4 border-secondary mb-4">{{ lang.map.login_form }}</h1>
         <form [formGroup]="form" autocomplete="off">
           <app-input
             formControlName="userName"
@@ -32,6 +32,7 @@
             {{ lang.map.login }}
           </app-button>
         </form>
+        <app-version class="flex self-center mt-5" />
       </div>
     </div>
     <div id="logo" class="z-10 flex-auto flex flex-col items-center justify-center">
@@ -48,7 +49,7 @@
         ngSrc="assets/images/logo-text.png"
         width="267"
         height="39" />
-      <h1 class="text-2xl my-4">{{lang.map.customs_investigation_platform}}</h1>
+      <h1 class="text-2xl my-4">{{ lang.map.customs_investigation_platform }}</h1>
     </div>
   </div>
 </div>
