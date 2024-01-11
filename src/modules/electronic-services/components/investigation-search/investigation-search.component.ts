@@ -17,6 +17,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { OpenFrom } from '@enums/open-from';
 import { LookupService } from '@services/lookup.service';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -29,7 +30,7 @@ export class InvestigationSearchComponent {
   router = inject(Router);
   encrypt = inject(EncryptionService);
   lookupService = inject(LookupService);
-
+  dialog = inject(DialogService);
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
 
@@ -94,8 +95,10 @@ export class InvestigationSearchComponent {
       .subscribe((data: Investigation[]) => {
         if (data.length) {
           this.selectedTab = 1;
+          this.displayedList = new MatTableDataSource(data);
+        } else {
+          this.dialog.info(this.lang.map.no_records_to_display);
         }
-        this.displayedList = new MatTableDataSource(data);
       });
   }
 
