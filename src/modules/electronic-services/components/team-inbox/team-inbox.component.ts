@@ -14,6 +14,9 @@ import { AppIcons } from '@constants/app-icons';
 import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
 import { EmployeeService } from '@services/employee.service';
+import { Team } from '@models/team';
+import { FormControl } from '@angular/forms';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-team-inbox',
@@ -34,7 +37,8 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   reload$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
   view$: Subject<InboxResult> = new Subject<InboxResult>();
-
+  teams: Team[] = this.employeeService.getEmployeeTeams();
+  selectedTeamId = new FormControl(-1, [CustomValidators.required]);
   length = 50;
 
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
@@ -62,18 +66,15 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   ];
 
   ngOnInit(): void {
-    this.listenToReload();
+    this.listenToReload(this.employeeService.getEmployeeTeams()[0]?.id!);
+    this.listenToSelectedTeamIdChange();
   }
 
-  private listenToReload() {
+  private listenToReload(teamId: number) {
     this.reloadInbox$
       .pipe(
         switchMap(_ => {
-          // if (!this.hasFilterCriteria()) {
-          return this.inboxService.loadTeamInbox(this.employeeService.getEmployeeTeams()[0]?.id!);
-          // } else {
-          //   return this.inboxService.loadUserInbox(this.filterCriteria);
-          // }
+          return this.inboxService.loadTeamInbox(teamId);
         }),
         takeUntil(this.destroy$)
       )
@@ -97,5 +98,10 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
 
   view(item: InboxResult) {
     this.router.navigate([item.itemRoute], { queryParams: { item: item.itemDetails } }).then();
+  }
+  listenToSelectedTeamIdChange() {
+    this.selectedTeamId.valueChanges.subscribe(value => {
+      this.listenToReload(value!);
+    });
   }
 }
