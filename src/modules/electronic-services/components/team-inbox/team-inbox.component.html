@@ -5,13 +5,14 @@
   </h1>
   <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
   <app-select-input
-    [label]="lang.map.team_email"
+    label=""
     [formControl]="selectedTeamId"
     [options]="teams"
     bindLabel="arName"
     bindValue="id"
-    labelColor="text-white"
-    marginBottom="0"/>
+    marginBottom="0"
+    size="sm"
+    [nullable]="false"/>
   <div class="flex-auto"></div>
 </div>
 <div class="shadow relative overflow-auto">

@@ -38,7 +38,7 @@ export class TeamInboxComponent extends OnDestroyMixin(class {}) implements OnIn
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
   view$: Subject<InboxResult> = new Subject<InboxResult>();
   teams: Team[] = this.employeeService.getEmployeeTeams();
-  selectedTeamId = new FormControl(-1, [CustomValidators.required]);
+  selectedTeamId = new FormControl(-1);
   length = 50;
 
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
