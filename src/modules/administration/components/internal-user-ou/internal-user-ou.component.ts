@@ -10,6 +10,8 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InternalUser } from '@models/internal-user';
 import { map } from 'rxjs';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { InternalUserService } from '@services/internal-user.service';
 
 @Component({
   selector: 'app-internal-user-ou',
@@ -19,14 +21,17 @@ import { map } from 'rxjs';
 export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupComponent, InternalUserOU, InternalUserOUService> {
   @Input({ required: true }) internalUser!: InternalUser;
   organizationUnits: number[] = [];
+  defaultOUId!: number;
   override ngOnInit(): void {
     super.ngOnInit();
     this.data$
       .pipe(map(internalUsers => internalUsers.map(internalUserOu => internalUserOu.organizationUnitId)))
       .subscribe(organizationUnitIds => (this.organizationUnits = organizationUnitIds));
     this.filter$.next({ internalUserId: this.internalUser.id });
+    this.defaultOUId = this.internalUser.defaultOUId;
   }
   service = inject(InternalUserOUService);
+  internalUserService = inject(InternalUserService);
   actions: ContextMenuActionContract<InternalUserOU>[] = [
     {
       name: 'delete',
@@ -41,10 +46,29 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<InternalUserOU> = new ColumnsWrapper(
     new TextFilterColumn('organizationUnitId'),
+    new TextFilterColumn('default'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 
   override _getCreateExtras(): unknown {
     return { internalUserId: this.internalUser.id, organizationUnits: this.organizationUnits };
+  }
+
+  canNotToggleItOff(element: InternalUserOU): boolean {
+    return this.defaultOUId === element.organizationUnitId;
+  }
+  changeDefaultDepartment(element: InternalUserOU, slideToggle?: MatSlideToggle) {
+    if (this.canNotToggleItOff(element)) {
+      slideToggle && (slideToggle.checked = true);
+      return;
+    }
+    this.internalUserService.updateDefaultDepartment(this.internalUser.id, element.organizationUnitId).subscribe(() => {
+      this.defaultOUId = element.organizationUnitId;
+      this.internalUser.defaultOUId = element.organizationUnitId;
+      this.reload$.next();
+    });
+  }
+  isDefaultDepartment(element: InternalUserOU): boolean {
+    return element.organizationUnitId === this.defaultOUId;
   }
 }

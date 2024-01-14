@@ -16,6 +16,19 @@
       <td mat-cell *matCellDef="let element">{{ element.organizationUnitInfo.getNames() }}</td>
     </ng-container>
 
+    <!-- default -->
+    <ng-container matColumnDef="default">
+      <th mat-header-cell mat-sort-header="default" *matHeaderCellDef>{{ lang.map.default_department }}</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-slide-toggle
+          #slideToggle
+          class="cursor-no-drop"
+          (change)="changeDefaultDepartment(element, slideToggle)"
+          [checked]="isDefaultDepartment(element)">
+        </mat-slide-toggle>
+      </td>
+    </ng-container>
+
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
