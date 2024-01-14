@@ -103,11 +103,10 @@
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex">
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.extend_suspension"
-            (click)="extendSuspension$.next(element)"
-            icon="EDIT"></app-icon-button>
+          <ng-container
+            [ngTemplateOutlet]="canExtendSuspension() ? Edit : View"
+            [ngTemplateOutletContext]="{ element: element }">
+          </ng-container>
         </div>
       </td>
     </ng-container>
@@ -144,3 +143,20 @@
   [showFirstLastButtons]="showFirstLastButtons"
   [length]="length">
 </mat-paginator>
+
+<ng-template #View let-element="element">
+  <app-icon-button
+    [disabled]="(loading$ | async)!"
+    [matTooltip]="lang.map.view"
+    (click)="view$.next(element)"
+    icon="VIEW"></app-icon-button>
+</ng-template>
+
+<ng-template #Edit let-element=" element">
+  <app-icon-button
+    *ngIf="canExtendSuspension(); else View"
+    [disabled]="(loading$ | async)!"
+    [matTooltip]="lang.map.extend_suspension"
+    (click)="extendSuspension$.next(element)"
+    icon="EDIT"></app-icon-button>
+</ng-template>

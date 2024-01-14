@@ -1,22 +1,23 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.offender_violations }}</h1>
+    <h1>{{ lang.map.menu_suspended_employee }}</h1>
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content w-[900px] !p-0">
-    <div class="p-4 overflow-auto" style="height: 100%">
-      <mat-form-field class="example-form-field">
-        <mat-label>Enter a date range</mat-label>
-        <mat-date-range-input [rangePicker]="rangePicker">
-          <input matStartDate placeholder="Start date">
-          <input matEndDate placeholder="End date">
-        </mat-date-range-input>
-        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
-        <mat-date-range-picker #rangePicker></mat-date-range-picker>
-      </mat-form-field>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4">
+      <ng-container [formGroup]="form">
+        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
+        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+        <app-input formControlName="dateFrom" [label]="lang.map.date_from" type="datetime-local"></app-input>
+        <app-input formControlName="dateTo" [label]="lang.map.date_to" type="datetime-local"></app-input>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>
+        </div>
+      </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
   </div>
 </div>
