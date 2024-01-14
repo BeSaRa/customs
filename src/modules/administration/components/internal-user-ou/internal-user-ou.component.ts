@@ -46,7 +46,7 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<InternalUserOU> = new ColumnsWrapper(
     new TextFilterColumn('organizationUnitId'),
-    new TextFilterColumn('default'),
+    new NoneFilterColumn('default'),
     new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 
