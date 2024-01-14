@@ -25,11 +25,14 @@ import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { TaskResponses } from '@enums/task-responses';
+import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
+import { UserClick } from '@enums/user-click';
 import { MatMenuModule } from '@angular/material/menu';
 import { SusbendEmployeePopupComponent } from '@standalone/popups/susbend-employee-popup/susbend-employee-popup.component';
 import { SystemPenalties } from '@enums/system-penalties';
-import { PenaltyDecision } from '@models/penalty-decision';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { SuspendedEmployee } from '@models/suspended-employee';
+import { SusbendEmployee } from '@models/susbend-employee';
+import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -45,13 +48,13 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
     ]),
   ],
 })
-export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  penaltyDecisionService = inject(PenaltyDecisionService);
+  suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
   taskResponses = TaskResponses;
   systemPenalties = SystemPenalties;
@@ -66,7 +69,8 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   extendSuspendEmployee$ = new Subject<{ offender: Offender }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
   referralOrTerminateDecission$ = new Subject<{
-    offender: Offender; penaltyId: number | undefined
+    offender: Offender;
+    penaltyId: number | undefined;
   }>();
 
   @Input({ required: true }) set data(offenders: Offender[]) {
@@ -74,7 +78,18 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   }
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
-  offenderDisplayedColumns = ['arName', 'enName', 'offenderType', 'qid', 'jobTitle', 'departmentCompany', 'attachments', 'situationSearch', 'actions'];
+  offenderDisplayedColumns = [
+    'arName',
+    'enName',
+    'offenderType',
+    'qid',
+    'jobTitle',
+    'departmentCompany',
+    'attachments',
+    'situationSearch',
+    'makeDecission',
+    'actions',
+  ];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
@@ -84,9 +99,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     {}
   );
   ngOnInit(): void {
-    if(this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')) {
-      this.loadPenalties();
-    }
+    this.loadPenalties();
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
@@ -96,16 +109,15 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.listenToSuspendEmployee();
   }
   getFilteredPenalties(offender: Offender) {
-    return ((this.penaltyMap && this.penaltyMap[offender.id]) ? this.penaltyMap[offender.id].second : [])
-      .filter(
-        penalty =>
-          penalty.penaltyKey !== SystemPenalties.TERMINATE &&
-          penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
-          penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
-      )
+    return (this.penaltyMap && this.penaltyMap[offender.id] ? this.penaltyMap[offender.id].second : []).filter(
+      penalty =>
+        penalty.penaltyKey !== SystemPenalties.TERMINATE &&
+        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
+        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+    );
   }
   getPenaltyIdByPenaltyKey(element: Offender, penaltyKey: SystemPenalties) {
-    return this.penaltyMap && this.penaltyMap[element.id].second.find(penalty => penalty.penaltyKey == penaltyKey)?.id
+    return this.penaltyMap && this.penaltyMap[element.id].second.find(penalty => penalty.penaltyKey == penaltyKey)?.id;
   }
   private loadPenalties() {
     this.investigationModel
@@ -154,8 +166,8 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.makeDecision$
       .pipe(
         tap((offender: Offender) => {
-          console.log(this.getFilteredPenalties(offender))
-          !this.getFilteredPenalties(offender).length && this.dialog.info(this.lang.map.no_records_to_display)
+          console.log(this.getFilteredPenalties(offender));
+          !this.getFilteredPenalties(offender).length && this.dialog.info(this.lang.map.no_records_to_display);
         }),
         filter((offender: Offender) => !!this.getFilteredPenalties(offender).length)
       )
@@ -167,7 +179,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
                 model: offender,
                 caseId: this.investigationModel?.id,
                 penalties: this.getFilteredPenalties(offender),
-                penaltyImposedBySystem: this.penaltyMap[offender.id].first
+                penaltyImposedBySystem: this.penaltyMap[offender.id].first,
               },
             })
             .afterClosed()
@@ -194,15 +206,23 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   }
   private listenToSuspendEmployee() {
     this.suspendEmployee$
-      .pipe(switchMap((offender) => {
-        return this.dialog.open(SusbendEmployeePopupComponent, {
-          data: {
-            caseId: this.investigationModel?.id,
-            offender
-          }
+      .pipe(
+        switchMap(offender => {
+          const suspendedEmployee = this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
+            offender.offender,
+            this.investigationModel?.id as string
+          );
+          return this.dialog
+            .open(SusbendEmployeePopupComponent, {
+              data: suspendedEmployee,
+              // data: {
+              //   caseId: this.investigationModel?.id,
+              //   offender
+              // }
+            })
+            .afterClosed();
         })
-          .afterClosed()
-      }))
+      )
       .subscribe();
   }
   isClearingAgent(element: Offender) {
@@ -229,30 +249,26 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.referralOrTerminateDecission$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        // preview form and confirm depend on form response
-        // exhaustMap((payload) => {
-          // return this.dialog.confirm(this.lang.map.confirm_take_penalty_decission)
-          //   .afterClosed()
-          //   .pipe(filter((click: any) => click == UserClick.YES))
-          //   .pipe(map(() => payload))
-        // })
-      )
-      .pipe(
-        switchMap(({ offender, penaltyId }) => {
-          return this.penaltyDecisionService.create(
-            new PenaltyDecision().clone<PenaltyDecision>({
-              caseId: this.investigationModel?.id,
-              offenderId: offender.id,
-              signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: penaltyId,
-              status: 1,
+        switchMap(({ offender }) => {
+          return this.dialog
+            .open(CommentPopupComponent, {
+              data: {
+                model: this.investigationModel,
+                offender: offender,
+              },
             })
-          );
+            .afterOpened();
         })
       )
+      .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
   canMakeDecision(offender: Offender): boolean {
-    return this.penaltyMap && this.penaltyMap[offender.id] && !!this.getFilteredPenalties(offender).length && this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION');
+    return (
+      this.penaltyMap &&
+      this.penaltyMap[offender.id] &&
+      !!this.getFilteredPenalties(offender).length &&
+      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
+    );
   }
 }

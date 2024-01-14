@@ -3,7 +3,7 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
 import { Investigation } from '@models/investigation';
-import { CastResponse, CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer, HasInterception, InterceptParam } from 'cast-response';
 
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
@@ -52,9 +52,5 @@ export class InvestigationService extends BaseCaseService<Investigation> impleme
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
   extendSuspendEmployee(body: SusbendEmployee) {
     return this.http.post(this.getUrlSegment() + '/extend-suspend-employee', body);
-  }
-  @CastResponse(() => SuspendedEmployee)
-  saveExtendSuspension(suspendedEmployee: SuspendedEmployee): Observable<unknown> {
-    return this.http.post<SuspendedEmployee>(this.getUrlSegment() + '/extend-suspend-employee', suspendedEmployee);
   }
 }

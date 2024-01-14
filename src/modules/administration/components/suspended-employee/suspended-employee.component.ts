@@ -13,6 +13,7 @@ import { Lookup } from '@models/lookup';
 import { StatusTypes } from '@enums/status-types';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Subject, filter, switchMap, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-suspended-employee',
@@ -57,6 +58,9 @@ export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployee
       .subscribe(() => {
         this.reload$.next();
       });
+  }
+  canExtendSuspension(): boolean {
+    return this.employeeService.isDisciplinaryCommittee() !== undefined || this.employeeService.isPermanentDisciplinaryCommittee() !== undefined;
   }
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<SuspendedEmployee> = new ColumnsWrapper(

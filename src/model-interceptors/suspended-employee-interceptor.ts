@@ -7,6 +7,8 @@ export class SuspendedEmployeeInterceptor implements ModelInterceptorContract<Su
     delete model.typeInfo;
     delete model.signerInfo;
     delete model.statusInfo;
+    delete model.$$__lookupService__$$;
+    delete model.$$__service_name__$$;
     return model;
   }
 

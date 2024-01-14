@@ -26,8 +26,25 @@ export class SuspendedEmployee extends BaseModel<SuspendedEmployee, SuspendedEmp
   signerName: string = this.signerInfo?.getNames();
 
   buildForm(controls = false): object {
-    const { offenderId, mawaredEmployee, caseId, serial, decision, decisionDate, dateFrom, dateTo, duration, type, signerId, status } = this;
+    const {
+      arName,
+      enName,
+      offenderId,
+      mawaredEmployee,
+      caseId,
+      serial,
+      decision,
+      decisionDate,
+      dateFrom,
+      dateTo,
+      duration,
+      type,
+      signerId,
+      status,
+    } = this;
     return {
+      arName,
+      enName,
       offenderId,
       mawaredEmployee,
       caseId,
