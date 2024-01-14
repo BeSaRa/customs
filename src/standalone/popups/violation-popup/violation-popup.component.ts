@@ -99,9 +99,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
           })()
         : null;
     }
-    if (!this.caseId) this.listernToSaveCaseDone();
+    if (!this.caseId) this.listenToSaveCaseDone();
   }
-  listernToSaveCaseDone() {
+  listenToSaveCaseDone() {
     this.transformer$
       ?.pipe(filter((data: TransformerAction<Investigation>) => data.action == 'done'))
       .subscribe((data: TransformerAction<Investigation>) => {
@@ -127,7 +127,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
   }
   addViolation() {
-    if(this._beforeSave()) {
+    if (this._beforeSave()) {
       if (!this.caseId) {
         this.transformer$?.next({ action: 'save' });
       } else {
@@ -208,11 +208,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       ? (() => {
           this.controls.violationsDateFrom()?.setValidators(CustomValidators.required);
           this.controls.violationsDateTo()?.setValidators(CustomValidators.required);
-          this.controls.violationsDate()?.setValidators([]);
+          this.controls.violationsDate()?.clearValidators();
         })()
       : (() => {
-          this.controls.violationsDateFrom()?.setValidators([]);
-          this.controls.violationsDateTo()?.setValidators([]);
+          this.controls.violationsDateFrom()?.clearValidators();
+          this.controls.violationsDateTo()?.clearValidators();
           this.controls.violationsDate()?.setValidators(CustomValidators.required);
         })();
 
@@ -221,8 +221,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
           this.controls.customsDeclarationNumber()?.setValidators(CustomValidators.required);
         })()
       : (() => {
-          this.controls.customsDeclarationNumber()?.setValidators([]);
+          this.controls.customsDeclarationNumber()?.clearValidators();
         })();
+    this.form.updateValueAndValidity();
   }
 
   private loadClassifications(): void {
