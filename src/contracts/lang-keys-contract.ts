@@ -360,4 +360,5 @@ export interface LangKeysContract {
   send_to: string;
   extend_suspend_employee: string;
   suspend_employee: string;
+  default_department: string;
 }

@@ -9,7 +9,7 @@ import { Pagination } from '@models/pagination';
 import { HttpParams } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BlobModel } from '@models/blob-model';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { UserSignature } from '@models/user-signature';
 
 @CastResponseContainer({
@@ -51,18 +51,26 @@ export class InternalUserService extends BaseCrudWithDialogService<InternalUserP
   }
 
   uploadSignature(userSignature: UserSignature): Observable<unknown> {
-    const formData = new FormData();
-    userSignature.content ? formData.append('content', userSignature.content) : null;
-    delete userSignature.content;
-    return this.http.post(this.getUrlSegment() + '/signature', formData, {
-      params: new HttpParams({
-        fromObject: userSignature as never,
-      }),
-    });
+    if (userSignature) {
+      const formData = new FormData();
+      userSignature.content ? formData.append('content', userSignature.content) : null;
+      delete userSignature.content;
+      return this.http.post(this.getUrlSegment() + '/signature', formData, {
+        params: new HttpParams({
+          fromObject: userSignature as never,
+        }),
+      });
+    }
+    return of(null);
   }
 
   @CastResponse()
   getInternalUsersByOuId(ouId: number): Observable<InternalUser[]> {
     return this.http.get<InternalUser[]>(this.getUrlSegment() + `/admin/${ouId}`);
+  }
+
+  @CastResponse()
+  updateDefaultDepartment(id: number, defaultOUId: number): Observable<boolean> {
+    return this.http.put<boolean>(this.getUrlSegment() + '/admin/default-department/update', { id, defaultOUId });
   }
 }
