@@ -54,11 +54,8 @@ export class InternalUserOUComponent extends AdminComponent<InternalUserOUPopupC
     return { internalUserId: this.internalUser.id, organizationUnits: this.organizationUnits };
   }
 
-  canNotToggleItOff(element: InternalUserOU): boolean {
-    return this.defaultOUId === element.organizationUnitId;
-  }
   changeDefaultDepartment(element: InternalUserOU, slideToggle?: MatSlideToggle) {
-    if (this.canNotToggleItOff(element)) {
+    if (this.isDefaultDepartment(element)) {
       slideToggle && (slideToggle.checked = true);
       return;
     }
