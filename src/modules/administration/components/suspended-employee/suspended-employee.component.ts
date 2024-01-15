@@ -61,7 +61,7 @@ export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployee
       });
   }
   canExtendSuspension(): boolean {
-    return true; //this.employeeService.isDisciplinaryCommittee() !== undefined || this.employeeService.isPermanentDisciplinaryCommittee() !== undefined;
+    return this.employeeService.isDisciplinaryCommittee() !== undefined || this.employeeService.isPermanentDisciplinaryCommittee() !== undefined;
   }
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<SuspendedEmployee> = new ColumnsWrapper(
