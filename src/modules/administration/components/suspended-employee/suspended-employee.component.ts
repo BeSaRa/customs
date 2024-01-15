@@ -68,7 +68,7 @@ export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployee
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    //TODO Organization unit Info
+    new TextFilterColumn('OU'),
     new TextFilterColumn('employeeNo'),
     new TextFilterColumn('qid'),
     new TextFilterColumn('serial'),

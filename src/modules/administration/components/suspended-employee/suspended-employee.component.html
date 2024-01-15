@@ -42,6 +42,16 @@
         <span [innerHTML]="element.enName | highlight : getFilterStringColumn('enName')"></span>
       </td>
     </ng-container>
+    <!-- Organization unit -->
+    <ng-container matColumnDef="OU">
+      <th mat-header-cell mat-sort-header="OU" *matHeaderCellDef>{{ lang.map.organization_unit_singular }}</th>
+      <td mat-cell *matCellDef="let element">
+        <span
+          [innerHTML]="
+            element.mawaredEmployeeIdInfo.employeeDepartmentInfo.getNames() | highlight : getFilterStringColumn('OU')
+          "></span>
+      </td>
+    </ng-container>
     <!-- employeeNo -->
     <ng-container matColumnDef="employeeNo">
       <th mat-header-cell mat-sort-header="employeeNo" *matHeaderCellDef>{{ lang.map.employee_number }}</th>
