@@ -19,6 +19,7 @@ import { WitnessService } from '@services/witness.service';
 import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
 import { UserTypes } from '@enums/user-types';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-witnesses-list',
@@ -32,6 +33,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   toast = inject(ToastService);
   lang = inject(LangService);
   lookupService = inject(LookupService);
+  employeeService = inject(EmployeeService);
   @Input()
   violations!: Violation[];
   @Input()
@@ -48,7 +50,7 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   delete$ = new Subject<Witness>();
   assignmentToAttend$: Subject<Witness> = new Subject<Witness>();
   witnessService = inject(WitnessService);
-  displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'phoneNumber', 'email', 'actions'];
+  displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'phoneNumber', 'email'];
 
   personTypesMap: Record<number, Lookup> = this.lookupService.lookups.personType.reduce(
     (acc, item) => ({
@@ -72,6 +74,9 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
     this.listenToDelete();
     this.listenToAssignmentToAttend();
     this.reload$.next();
+    if (this.canManageWitness()) {
+      this.displayedColumns.push('actions');
+    }
   }
 
   private listenToAdd() {
@@ -145,5 +150,8 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
         )
       )
       .subscribe();
+  }
+  canManageWitness() {
+    return this.employeeService.hasPermissionTo('MANAGE_WITNESS');
   }
 }

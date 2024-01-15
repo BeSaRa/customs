@@ -63,7 +63,6 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     super._init();
   }
 
-  
   isHrManager() {
     return this.employeeService.isHrManager();
   }
@@ -71,14 +70,18 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     return (this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom) && !this.canEdit();
   }
   canEdit() {
-    return this.model?.getCaseStatus() == CommonCaseStatus.NEW || this.model?.getCaseStatus() == CommonCaseStatus.DRAFT || this.model?.getCaseStatus() == CommonCaseStatus.RETURNED; 
+    return (
+      this.model?.getCaseStatus() == CommonCaseStatus.NEW ||
+      this.model?.getCaseStatus() == CommonCaseStatus.DRAFT ||
+      this.model?.getCaseStatus() == CommonCaseStatus.RETURNED
+    );
   }
   _buildForm(): void {
     this.form = this.fb.group(this.model ? this.model.buildForm(true, this.readonly) : new Investigation().buildForm(true, this.readonly));
     this.listenToLocationChange();
   }
   canViewExternalPersonsTab() {
-    return true;
+    return this.employeeService.hasPermissionTo('VIEW_WITNESS');
   }
   _afterBuildForm(): void {
     this.loadCaseFolders();
@@ -216,8 +219,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
     this.tabChange(0);
     this.router.navigate([], {
       relativeTo: this.activeRoute,
-      queryParams: {
-      },
+      queryParams: {},
     });
   }
   private listenToLocationChange() {
