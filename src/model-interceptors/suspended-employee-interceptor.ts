@@ -18,12 +18,15 @@ export class SuspendedEmployeeInterceptor implements ModelInterceptorContract<Su
     model.arName = model.mawaredEmployeeIdInfo.arName ?? '';
     model.enName = model.mawaredEmployeeIdInfo.enName ?? '';
     model.mawaredEmployeeIdInfo && (model.mawaredEmployeeIdInfo = MawaredEmployee.createInstance(model.mawaredEmployeeIdInfo));
+    model.mawaredEmployeeIdInfo.employeeDepartmentInfo &&
+      (model.mawaredEmployeeIdInfo.employeeDepartmentInfo = AdminResult.createInstance(model.mawaredEmployeeIdInfo.employeeDepartmentInfo));
     model.typeInfo && (model.typeInfo = AdminResult.createInstance(model.typeInfo));
     model.signerInfo && (model.signerInfo = AdminResult.createInstance(model.signerInfo));
     model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.dateFrom = model.dateFrom?.split('.')[0] ?? '';
     model.dateTo = model.dateTo?.split('.')[0] ?? '';
     model.decisionDate = model.decisionDate?.split('.')[0] ?? '';
+    console.log('model: ', model);
     return model;
   }
 }

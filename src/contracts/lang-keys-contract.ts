@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  organization_unit_singular: string;
   suspension_type: string;
   extend_suspension: string;
   decision_signer: string;

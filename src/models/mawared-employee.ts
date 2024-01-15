@@ -21,6 +21,7 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
   qid!: string;
   adName!: string;
   employeeDepartmentId!: number;
+  employeeDepartmentInfo!: AdminResult;
   isDepMailManager!: boolean;
   subDepartmentId!: number;
   subDepartmentName!: string;
