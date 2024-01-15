@@ -1,6 +1,7 @@
 import { Lookup } from '@models/lookup';
 
 export interface LookupMapContract {
+  suspensionTypes: Lookup[];
   adminAuditOperation: Lookup[];
   adminLookupType: Lookup[];
   allRequestTypes: Lookup[];

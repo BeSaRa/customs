@@ -8,16 +8,7 @@
       <ng-container [formGroup]="form">
         <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
         <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-        <app-input formControlName="offenderId" hidden></app-input>
-        <app-input formControlName="mawaredEmployee" hidden></app-input>
-        <app-input formControlName="caseId" hidden></app-input>
-        <app-input formControlName="serial" hidden></app-input>
-        <app-input formControlName="decision" hidden></app-input>
-        <app-input formControlName="decisionDate" hidden></app-input>
         <app-input formControlName="dateFrom" [label]="lang.map.date_from" type="datetime-local"></app-input>
-        <app-input formControlName="duration" hidden></app-input>
-        <app-input formControlName="type" hidden></app-input>
-        <app-input formControlName="signerId" hidden></app-input>
         <app-input formControlName="dateTo" [label]="lang.map.date_to" type="datetime-local"></app-input>
         <div class="flex flex-row pl-1 items-center justify-start">
           <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>

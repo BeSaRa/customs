@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  suspension_type: string;
   extend_suspension: string;
   decision_signer: string;
   duration: string;

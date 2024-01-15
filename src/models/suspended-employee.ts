@@ -3,6 +3,7 @@ import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 import { SuspendedEmployeeInterceptor } from '@model-interceptors/suspended-employee-interceptor';
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
+import { MawaredEmployee } from './mawared-employee';
 
 const { send, receive } = new SuspendedEmployeeInterceptor();
 
@@ -11,51 +12,28 @@ export class SuspendedEmployee extends BaseModel<SuspendedEmployee, SuspendedEmp
   $$__service_name__$$ = 'SuspendedEmployeeService';
 
   offenderId!: number;
-  mawaredEmployee!: number;
+  mawaredEmployeeId!: number;
   caseId!: string;
   serial!: string;
   decision!: string;
   decisionDate!: string;
   dateFrom!: string;
   dateTo!: string;
-  duration!: number;
+  duration!: number; //TODO in hours. It should be transformed to ...?
   type!: number;
   signerId!: number;
   typeInfo!: AdminResult;
+  mawaredEmployeeIdInfo!: MawaredEmployee;
   signerInfo!: AdminResult;
   signerName: string = this.signerInfo?.getNames();
 
   buildForm(controls = false): object {
-    const {
-      arName,
-      enName,
-      offenderId,
-      mawaredEmployee,
-      caseId,
-      serial,
-      decision,
-      decisionDate,
-      dateFrom,
-      dateTo,
-      duration,
-      type,
-      signerId,
-      status,
-    } = this;
+    const { arName, enName, dateFrom, dateTo, status } = this;
     return {
       arName,
       enName,
-      offenderId,
-      mawaredEmployee,
-      caseId,
-      serial,
-      decision,
-      decisionDate,
       dateFrom,
       dateTo,
-      duration,
-      type,
-      signerId,
       status,
     };
   }
