@@ -23,6 +23,7 @@ import { CommonModule } from '@angular/common';
 export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployeePopupComponent, SuspendedEmployee, SuspendedEmployeeService> {
   service = inject(SuspendedEmployeeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  suspensionTypes: Lookup[] = this.lookupService.lookups.suspensionTypes;
   extendSuspension$: Subject<SuspendedEmployee> = new Subject<SuspendedEmployee>();
   actions: ContextMenuActionContract<SuspendedEmployee>[] = [
     {
@@ -60,7 +61,7 @@ export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployee
       });
   }
   canExtendSuspension(): boolean {
-    return this.employeeService.isDisciplinaryCommittee() !== undefined || this.employeeService.isPermanentDisciplinaryCommittee() !== undefined;
+    return true; //this.employeeService.isDisciplinaryCommittee() !== undefined || this.employeeService.isPermanentDisciplinaryCommittee() !== undefined;
   }
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<SuspendedEmployee> = new ColumnsWrapper(
@@ -68,15 +69,15 @@ export class SuspendedEmployeeComponent extends AdminComponent<SuspendedEmployee
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     //TODO Organization unit Info
-    //TODO employeeCode
-    //TODO qid
+    new TextFilterColumn('employeeNo'),
+    new TextFilterColumn('qid'),
     new TextFilterColumn('serial'),
     new TextFilterColumn('decision'),
     new DateFilterColumn('decisionDate'),
     new DateFilterColumn('dateFrom'),
     new DateFilterColumn('dateTo'),
     new TextFilterColumn('duration'),
-    //TODO suspension type
+    new SelectFilterColumn('type', this.suspensionTypes, 'lookupKey', 'getNames'),
     new TextFilterColumn('signerName'),
     new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
     new NoneFilterColumn('actions')

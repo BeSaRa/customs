@@ -114,4 +114,8 @@ export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeS
       status: 1,
     });
   }
+
+  static createInstance(model: Partial<MawaredEmployee>): MawaredEmployee {
+    return Object.assign(new MawaredEmployee(), model);
+  }
 }
