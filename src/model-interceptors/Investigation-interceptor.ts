@@ -18,6 +18,7 @@ export class InvestigationInterceptor implements ModelInterceptorContract<Invest
     delete model.departmentInfo;
     delete model.limitedAccessInfo;
     delete model.ouInfo;
+    delete model.namesOfOffenders;
 
     model.offenderInfo = model.offenderInfo?.map(offender => new Offender().clone<Offender>(offenderInterceptor.send(offender)));
     model.offenderViolationInfo = model.offenderViolationInfo?.map(offenderViolation =>

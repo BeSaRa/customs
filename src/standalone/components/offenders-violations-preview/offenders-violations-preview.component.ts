@@ -87,7 +87,6 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     'departmentCompany',
     'attachments',
     'situationSearch',
-    'makeDecission',
     'actions',
   ];
   ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
