@@ -38,6 +38,10 @@
             "varsIgnorePattern": "^_",
             "caughtErrorsIgnorePattern": "^_"
           }
+        ],
+        "quotes": [
+          "error",
+          "single"
         ]
       }
     },
@@ -59,7 +63,8 @@
         "@angular-eslint/template/interactive-supports-focus": [
           "off"
         ],
-        "@angular-eslint/template/prefer-control-flow": "error"
+        "@angular-eslint/template/prefer-control-flow": "error",
+        "@angular-eslint/template/elements-content": "off"
       }
     }
   ]
