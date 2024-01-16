@@ -36,7 +36,7 @@ import { SystemPenalties } from "@enums/system-penalties";
 import { SuspendedEmployeeService } from "@services/suspended-employee.service";
 import { PenaltyDecisionService } from "@services/penalty-decision.service";
 import { PenaltyDecision } from "@models/penalty-decision";
-import { SuspendEmployeePopupComponent } from "@standalone/popups/susحend-employee-popup/suspend-employee-popup.component";
+import { SuspendEmployeePopupComponent } from "@standalone/popups/suspend-employee-popup/suspend-employee-popup.component";
 
 @Component({
   selector: "app-offenders-violations-preview",

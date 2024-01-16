@@ -1,98 +1,130 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.lbl_user_preferences }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
-  <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+  <div class="dialog-content !p-0">
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+    >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <!-- user info -->
-        <div class="grid grid-cols-2 gap-4 items-center">
+        <div class="grid p-4 grid-cols-2 gap-4 items-center">
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.ar_name"
-            [placeholder]="arName"></app-input>
+            [placeholder]="arName"
+          ></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.en_name"
-            [placeholder]="enName"></app-input>
+            [placeholder]="enName"
+          ></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.employee_number"
-            [placeholder]="empNum"></app-input>
+            [placeholder]="empNum"
+          ></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.qid"
-            [placeholder]="qid"></app-input>
+            [placeholder]="qid"
+          ></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.phone_number"
-            [placeholder]="phoneNumber"></app-input>
+            [placeholder]="phoneNumber"
+          ></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.email"
-            [placeholder]="email"></app-input>
+            [placeholder]="email"
+          ></app-input>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 items-center">
+        <div class="grid p-4 grid-cols-2 gap-4 items-center">
           <ng-container [formGroup]="form">
             <app-select-input
               [label]="lang.map.default_language"
               formControlName="defaultLang"
               [options]="languages"
               bindLabel="name"
-              bindValue="id" />
+              bindValue="id"
+            />
             <!-- sms notifications -->
             <div class="flex items-center mr-4">
               <app-switch
+                id="isSMSNotificationEnabled"
                 formControlName="isSMSNotificationEnabled"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="isSMSNotificationEnabled">{{
-                lang.map.sms_notifications
-              }}</label>
+                [matTooltip]="lang.map.change_status"
+              ></app-switch>
+              <label
+                class="ml-2 block font-medium"
+                for="isSMSNotificationEnabled"
+                >{{ lang.map.sms_notifications }}</label
+              >
             </div>
             <!-- is private user -->
             <div class="flex items-center mr-4">
               <app-switch
+                id="isPrivateUser"
                 formControlName="isPrivateUser"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="isPrivateUser">{{ lang.map.private_user }}</label>
+                [matTooltip]="lang.map.change_status"
+              ></app-switch>
+              <label class="ml-2 block font-medium" for="isPrivateUser">{{
+                lang.map.private_user
+              }}</label>
             </div>
             <!-- limitedCirculation -->
             <div class="flex items-center mr-4">
               <app-switch
+                id="limitedCirculation"
                 formControlName="limitedCirculation"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="limitedCirculation">{{ lang.map.limited_circulation }}</label>
+                [matTooltip]="lang.map.change_status"
+              ></app-switch>
+              <label class="ml-2 block font-medium" for="limitedCirculation">{{
+                lang.map.limited_circulation
+              }}</label>
             </div>
             <!-- mail notifications -->
             <div class="flex items-center mr-4">
               <app-switch
+                id="isMailNotificationEnabled"
                 formControlName="isMailNotificationEnabled"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="isMailNotificationEnabled">{{
-                lang.map.mail_notifications
-              }}</label>
+                [matTooltip]="lang.map.change_status"
+              ></app-switch>
+              <label
+                class="ml-2 block font-medium"
+                for="isMailNotificationEnabled"
+                >{{ lang.map.mail_notifications }}</label
+              >
             </div>
           </ng-container>
         </div>
@@ -100,19 +132,25 @@
       <mat-tab [label]="lang.map.alt_emails">
         <div class="grid grid-cols-2 gap-2 items-center">
           <ng-container [formGroup]="form">
-            @for (email of alternateEmailListParsed.controls; track email; let i = $index) {
-            <ng-container formArrayName="alternateEmailListParsed" class="w-full">
+            @for (email of alternateEmailListParsed.controls; track email; let i
+            = $index) {
+            <ng-container
+              formArrayName="alternateEmailListParsed"
+              class="w-full"
+            >
               <div class="flex items-center justify-center">
                 <app-input
                   class="w-full"
                   [formControlName]="i"
                   type="text"
-                  [label]="lang.map.alt_email + ' ' + (i + 1)"></app-input>
+                  [label]="lang.map.alt_email + ' ' + (i + 1)"
+                ></app-input>
                 <app-icon-button
                   tabindex="-1"
                   icon="DELETE"
                   (click)="deleteEmail(i)"
-                  [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
+                  [matTooltip]="lang.map.delete + ' ' + lang.map.email"
+                />
               </div>
             </ng-container>
             }
@@ -121,7 +159,8 @@
                 class="bg-slate-300"
                 icon="PLUS"
                 (click)="addAltEmail()"
-                [matTooltip]="lang.map.add + ' ' + lang.map.email" />
+                [matTooltip]="lang.map.add + ' ' + lang.map.email"
+              />
             </div>
           </ng-container>
         </div>
@@ -130,11 +169,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="this.save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button (click)="this.save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
     } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
     } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>
