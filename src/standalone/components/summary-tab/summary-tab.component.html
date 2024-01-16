@@ -1,7 +1,6 @@
 
 <div [formGroup]="form" class="px-3 grid gap-3 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
   <div class="col-span-1 md:col-span-2 lg:col-span-4">
-    <h1 class="mb-2 font-bold text-primary text-lg">{{ lang.map.lbl_basic_info }}</h1>
     <div class="mb-1" *ngIf="model && model.departmentInfo">
       <span class="font-medium text-slate-700">{{ lang.map.lbl_department }} :</span>
       <small class="sm font-bold text-slate-600 py-2">

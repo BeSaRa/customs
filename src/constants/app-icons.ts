@@ -61,8 +61,9 @@ export const AppIcons = {
   ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
   REFERRAL_TO_PRESIDENT: 'book-refresh-outline',
   REFERRAL_TO_PRESIDENT_ASSISTANT: 'book-refresh',
-  CLEARING_AGENT: 'account-tie-outline',
+  CLEARING_AGENT: 'account-tie-hat-outline',
   CLEARING_AGENCY: 'domain',
+  EMPLOYEE: 'account-tie-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

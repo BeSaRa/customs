@@ -1,36 +1,37 @@
-<div
-  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
-  <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
-    {{ lang.map.draft }} {{ lang.map.menu_investigation }}
-  </h1>
-  <div class="flex-auto"></div>
-  <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
-  <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
-</div>
-<div [formGroup]="form" *ngIf="!summaryMode()" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-  <div class="mb-3">
-    <span class="font-medium text-slate-700">{{ lang.map.report_draft_number }}</span>
-    <label class="input-form p-2 block">
-      {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
-    </label>
+<div class="bg-gradient-to-br mb-5 from-primary to-primary-light px-3 rounded-lg py-2">
+  <div class="flex items-center justify-start text-white">
+    <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+      {{ lang.map.draft }} {{ lang.map.menu_investigation }}
+    </h1>
+    <div class="flex-auto"></div>
+    <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
+    <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
   </div>
-  <div class="mb-3">
-    <span class="font-medium text-slate-700">{{ lang.map.investigation_file_number }}</span>
-    <label class="input-form p-2 block">
-      {{ model?.investigationFullSerial ? model?.investigationFullSerial : '---' }}
-    </label>
-  </div>
-  <div class="mb-3">
-    <span class="font-medium text-slate-700">{{ lang.map.report_entry_date }}</span>
-    <label class="input-form p-2 block">
-      {{ model?.createdOn ? (model?.createdOn|date) : '---' }}
-    </label>
-  </div>
-  <div class="mb-3">
-    <span class="font-medium text-slate-700">{{ lang.map.limited_access }}</span>
-    <label class="input-form p-2 block">
-      {{ model?.limitedAccessInfo ? model?.limitedAccessInfo?.getNames() : '---' }}
-    </label>
+  <div [formGroup]="form" *ngIf="!summaryMode()" class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.report_draft_number }}</span>
+      <label class="input-form p-2 block">
+        {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
+      </label>
+    </div>
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.investigation_file_number }}</span>
+      <label class="input-form p-2 block">
+        {{ model?.investigationFullSerial ? model?.investigationFullSerial : '---' }}
+      </label>
+    </div>
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.report_entry_date }}</span>
+      <label class="input-form p-2 block">
+        {{ model?.createdOn ? (model?.createdOn|date) : '---' }}
+      </label>
+    </div>
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.limited_access }}</span>
+      <label class="input-form p-2 block">
+        {{ model?.limitedAccessInfo ? model?.limitedAccessInfo?.getNames() : '---' }}
+      </label>
+    </div>
   </div>
 </div>
 <div class="relative" [ngClass]="{
@@ -82,23 +83,15 @@
 
   <ng-template #violation_tab>
     <div class="p-4">
-      <app-violation-list
-        (empty)="resetOffendersAndExternalPersons()"
-        (violations)="violations = $event"
-        (saveCase)="saveCase($event)"
-        [readonly]="readonly"
-        [caseId]="model?.id" />
+      <app-violation-list (empty)="resetOffendersAndExternalPersons()" (violations)="violations = $event"
+        (saveCase)="saveCase($event)" [readonly]="readonly" [caseId]="model?.id" />
     </div>
   </ng-template>
 
   <ng-template #offenders_tab>
     <div class="p-4">
-      <app-offender-list
-        [investigationModel]="model"
-        [violations]="violations"
-        (saveCase)="saveCase($event)"
-        [readonly]="readonly"
-        [caseId]="model?.id" />
+      <app-offender-list [investigationModel]="model" [violations]="violations" (offenders)="offenders = $event"
+        (saveCase)="saveCase($event)" [readonly]="readonly" [caseId]="model?.id" />
     </div>
   </ng-template>
 

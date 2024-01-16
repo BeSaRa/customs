@@ -33,6 +33,8 @@ import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployee } from '@models/suspended-employee';
 import { SusbendEmployee } from '@models/susbend-employee';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyDecision } from '@models/penalty-decision';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -48,12 +50,13 @@ import { SuspendedEmployeeService } from '@services/suspended-employee.service';
     ]),
   ],
 })
-export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
+  penaltyDecisionService = inject(PenaltyDecisionService);
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
   taskResponses = TaskResponses;
@@ -72,24 +75,22 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     offender: Offender;
     penaltyId: number | undefined;
   }>();
+  selectedOffender!: Offender | null;
 
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
+    console.log(offenders);
   }
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
   offenderDisplayedColumns = [
-    'arName',
-    'enName',
-    'offenderType',
+    'offenderName',
     'qid',
-    'jobTitle',
     'departmentCompany',
-    'attachments',
+    'violations',
     'situationSearch',
     'actions',
   ];
-  ViolationsDisplayedColumns = ['violationClassification', 'violationType', 'violationData', 'repeat'];
   offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
     (acc, item) => ({
       ...acc,
@@ -98,7 +99,9 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     {}
   );
   ngOnInit(): void {
-    this.loadPenalties();
+    if (this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')) {
+      this.loadPenalties();
+    }
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
@@ -165,7 +168,6 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.makeDecision$
       .pipe(
         tap((offender: Offender) => {
-          console.log(this.getFilteredPenalties(offender));
           !this.getFilteredPenalties(offender).length && this.dialog.info(this.lang.map.no_records_to_display);
         }),
         filter((offender: Offender) => !!this.getFilteredPenalties(offender).length)
@@ -214,10 +216,6 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
           return this.dialog
             .open(SusbendEmployeePopupComponent, {
               data: suspendedEmployee,
-              // data: {
-              //   caseId: this.investigationModel?.id,
-              //   offender
-              // }
             })
             .afterClosed();
         })
@@ -248,18 +246,17 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class {}
     this.referralOrTerminateDecission$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(({ offender }) => {
-          return this.dialog
-            .open(CommentPopupComponent, {
-              data: {
-                model: this.investigationModel,
-                offender: offender,
-              },
-            })
-            .afterOpened();
+        switchMap(({ offender, penaltyId }) => {
+          const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
+            caseId: this.investigationModel?.id,
+            offenderId: offender.id,
+            signerId: this.employeeService.getEmployee()?.id,
+            penaltyId: penaltyId,
+            status: 1,
+          })
+          return penaltyDecision.save();
         })
       )
-      .pipe(filter((click: any) => click == UserClick.YES))
       .subscribe();
   }
   canMakeDecision(offender: Offender): boolean {

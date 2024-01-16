@@ -10,6 +10,9 @@ const offenderInterceptor = new OffenderInterceptor();
 const violationInterceptor = new ViolationInterceptor();
 export class OffenderViolationInterceptor implements ModelInterceptorContract<OffenderViolation> {
   send(model: Partial<OffenderViolation>): Partial<OffenderViolation> {
+    delete model.statusInfo;
+    delete model.offenderInfo;
+    delete model.violationInfo;
     return model;
   }
 

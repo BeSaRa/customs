@@ -226,5 +226,6 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
 
   resetDataList() {
     this.data.next([]);
+    this.violations.emit([]);
   }
 }

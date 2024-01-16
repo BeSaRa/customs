@@ -20,6 +20,7 @@ export interface LangKeysContract {
   menu_investigation_search: string;
   customs_investigation_platform: string;
   add_violation_first_to_take_this_action: string;
+  add_violation_or_offender_first_to_take_this_action: string;
   results: string;
   department_company: string;
   add_offender: string;
@@ -369,4 +370,9 @@ export interface LangKeysContract {
   extend_suspend_employee: string;
   suspend_employee: string;
   default_department: string;
+  competent_prosecutiond_decision: string;
+  court_decision: string;
+  drug_prosecution_decision: string;
+  forensic_lab_analysis: string;
+  security_admin_decision: string;
 }

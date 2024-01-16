@@ -5,6 +5,10 @@ import { Offender } from '@models/offender';
 export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
   send(model: Partial<Offender>): Partial<Offender> {
     delete model.violations;
+    delete model.offenderOUInfo;
+    delete model.offenderInfo;
+    delete model.typeInfo;
+    delete model.agencyInfo;
     return model;
   }
 
