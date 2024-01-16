@@ -153,7 +153,7 @@
     lang.map.send_to_manager
     }}</app-button>
   <!-- send to chief -->
-  <app-button *ngIf="canLaunch() && !isApplicantChief() && !isApplicantManager() && model?.sectionId"
+  <app-button *ngIf="canLaunch() && !isApplicantManager() && model?.sectionId"
     (click)="onLaunch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
     lang.map.send_to_chief
     }}</app-button>
