@@ -1,35 +1,43 @@
-import { Component, OnInit, ViewChildren, inject } from '@angular/core';
-import { GlobalSetting } from '@models/global-setting';
-import { GlobalSettingService } from '@services/global-setting.service';
-import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { Component, inject, OnInit } from "@angular/core";
+import { GlobalSetting } from "@models/global-setting";
+import { GlobalSettingService } from "@services/global-setting.service";
+import {
+  FormArray,
+  FormControl,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from "@angular/forms";
 import {
   BehaviorSubject,
+  catchError,
+  exhaustMap,
+  filter,
+  finalize,
+  isObservable,
   Observable,
+  of,
+  Subject,
   switchMap,
   takeUntil,
-  Subject,
-  isObservable,
-  of,
-  filter,
-  exhaustMap,
-  catchError,
-  throwError,
-  finalize,
   tap,
-} from 'rxjs';
-import { CustomValidators } from '@validators/custom-validators';
-import { FileType } from '@models/file-type';
-import { LangService } from '@services/lang.service';
-import { ToastService } from '@services/toast.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { ignoreErrors } from '@utils/utils';
+  throwError,
+} from "rxjs";
+import { CustomValidators } from "@validators/custom-validators";
+import { FileType } from "@models/file-type";
+import { LangService } from "@services/lang.service";
+import { ToastService } from "@services/toast.service";
+import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
+import { ignoreErrors } from "@utils/utils";
 
 @Component({
-  selector: 'app-global-setting',
-  templateUrl: './global-setting.component.html',
-  styleUrls: ['./global-setting.component.scss'],
+  selector: "app-global-setting",
+  templateUrl: "./global-setting.component.html",
+  styleUrls: ["./global-setting.component.scss"],
 })
-export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class GlobalSettingComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   service = inject(GlobalSettingService);
   model!: GlobalSetting;
   form!: UntypedFormGroup;
@@ -56,8 +64,13 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
       ...this.model.buildForm(true),
     });
     this.supportEmailListParsed.removeAt(0);
-    this.model.supportEmailListParsed.forEach(element => {
-      this.supportEmailListParsed.push(new FormControl(element, [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
+    this.model.supportEmailListParsed.forEach((element) => {
+      this.supportEmailListParsed.push(
+        new FormControl(element, [
+          CustomValidators.required,
+          CustomValidators.pattern("EMAIL"),
+        ])
+      );
     });
   }
   resetForm() {
@@ -72,7 +85,7 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
           return isObservable(result) ? result : of(result);
         })
       )
-      .pipe(filter(value => value))
+      .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -82,9 +95,9 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
         })
       )
       .pipe(
-        exhaustMap(model => {
+        exhaustMap((model) => {
           return model.save().pipe(
-            catchError(error => {
+            catchError((error) => {
               this._saveFail(error);
               this.loadingSubject.next(false);
 
@@ -94,7 +107,7 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
           );
         })
       )
-      .subscribe(model => {
+      .subscribe((model) => {
         this._afterSave(model);
       });
   }
@@ -119,11 +132,14 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors(),
-        tap(data => {
+        tap((data) => {
           this.supportEmailListParsed.removeAt(0);
-          data.supportEmailListParsed.forEach(element => {
+          data.supportEmailListParsed.forEach((element) => {
             this.supportEmailListParsed.push(
-              new FormControl({ value: element, disabled: true }, [CustomValidators.required, CustomValidators.pattern('EMAIL')])
+              new FormControl({ value: element, disabled: true }, [
+                CustomValidators.required,
+                CustomValidators.pattern("EMAIL"),
+              ])
             );
           });
           this.form.patchValue(data);
@@ -135,7 +151,7 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
       .subscribe();
   }
   get supportEmailListParsed() {
-    return this.form.controls['supportEmailListParsed'] as FormArray;
+    return this.form.controls["supportEmailListParsed"] as FormArray;
   }
 
   protected _getFileTypes() {
@@ -146,21 +162,30 @@ export class GlobalSettingComponent extends OnDestroyMixin(class {}) implements 
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors()
       )
-      .subscribe(data => {
+      .subscribe((data) => {
         this.fileTypes = data;
         this.loadingSubject.next(false);
       });
   }
 
-  protected _afterSave(model: GlobalSetting): void {
+  protected _afterSave(_model: GlobalSetting): void {
     this.loadingSubject.next(false);
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.menu_global_setting }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({
+        x: this.lang.map.menu_global_setting,
+      })
+    );
   }
 
   addEmail() {
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
-    this.supportEmailListParsed.push(new FormControl('', [CustomValidators.required, CustomValidators.pattern('EMAIL')]));
+    this.supportEmailListParsed.push(
+      new FormControl("", [
+        CustomValidators.required,
+        CustomValidators.pattern("EMAIL"),
+      ])
+    );
   }
 
   deleteEmail(emailIndex: number) {

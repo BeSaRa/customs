@@ -1,28 +1,37 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { InternalUser } from '@models/internal-user';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
-import { Observable, catchError, combineLatest, filter, map, of, takeUntil, tap } from 'rxjs';
-import { OperationType } from '@enums/operation-type';
-import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
-import { PermissionService } from '@services/permission.service';
-import { Permission } from '@models/permission';
-import { PermissionRoleService } from '@services/permission-role.service';
-import { PermissionRole } from '@models/permission-role';
-import { CheckGroup } from '@models/check-group';
-import { AppIcons } from '@constants/app-icons';
-import { InternalUserService } from '@services/internal-user.service';
-import { SafeResourceUrl } from '@angular/platform-browser';
-import { DomSanitizer } from '@angular/platform-browser';
-import { UserSignature } from '@models/user-signature';
+import { Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
+import { InternalUser } from "@models/internal-user";
+import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
+import { UntypedFormGroup } from "@angular/forms";
+import {
+  Observable,
+  catchError,
+  combineLatest,
+  filter,
+  map,
+  of,
+  takeUntil,
+  tap,
+} from "rxjs";
+import { OperationType } from "@enums/operation-type";
+import { Lookup } from "@models/lookup";
+import { LookupService } from "@services/lookup.service";
+import { PermissionService } from "@services/permission.service";
+import { Permission } from "@models/permission";
+import { PermissionRoleService } from "@services/permission-role.service";
+import { PermissionRole } from "@models/permission-role";
+import { CheckGroup } from "@models/check-group";
+import { AppIcons } from "@constants/app-icons";
+import { InternalUserService } from "@services/internal-user.service";
+import { SafeResourceUrl } from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
+import { UserSignature } from "@models/user-signature";
 
 @Component({
-  selector: 'app-internal-user-popup',
-  templateUrl: './internal-user-popup.component.html',
-  styleUrls: ['./internal-user-popup.component.scss'],
+  selector: "app-internal-user-popup",
+  templateUrl: "./internal-user-popup.component.html",
+  styleUrls: ["./internal-user-popup.component.scss"],
 })
 export class InternalUserPopupComponent extends AdminDialogComponent<InternalUser> {
   form!: UntypedFormGroup;
@@ -39,7 +48,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   permissionsRoles!: PermissionRole[];
   groups: CheckGroup<Permission>[] = [];
   selectedIds: number[] = [];
-  permissionsByGroup: Record<number, Permission[]> = {} as Record<number, Permission[]>;
+  permissionsByGroup: Record<number, Permission[]> = {} as Record<
+    number,
+    Permission[]
+  >;
 
   protected readonly AppIcons = AppIcons;
 
@@ -55,7 +67,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
 
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
-    const hasSelected = this.groups.some(group => group.getSelectedValue().length);
+    const hasSelected = this.groups.some(
+      (group) => group.getSelectedValue().length
+    );
     if (!hasSelected) {
       this.toast.error(
         this.lang.map.msg_select_one_at_least_x_to_proceed.change({
@@ -77,20 +91,22 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   protected _afterSave(model: InternalUser): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
-    const permissions = this.groups.map(g => g.getSelectedValue()).flat();
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+    );
+    const permissions = this.groups.map((g) => g.getSelectedValue()).flat();
     this.permissionService
       .savePermissions(model.id, permissions)
       .pipe(
         catchError(() => of(null)),
-        filter(response => response !== null)
+        filter((response) => response !== null)
       )
       .subscribe();
     this.internalUserService
       .uploadSignature(this.userSignature)
       .pipe(
         catchError(() => of(null)),
-        filter(response => response !== null)
+        filter((response) => response !== null)
       )
       .subscribe();
     // you can close the dialog after save here
@@ -106,9 +122,11 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
 
   private getSignatureSafeURL() {
     if (this.inCreateMode()) return;
-    this.internalUserService.downloadSignature(this.model.id, this.sanitizer).subscribe(blob => {
-      if (blob.blob.size !== 0) this.signatureSafeUrl = blob.safeUrl;
-    });
+    this.internalUserService
+      .downloadSignature(this.model.id, this.sanitizer)
+      .subscribe((blob) => {
+        if (blob.blob.size !== 0) this.signatureSafeUrl = blob.safeUrl;
+      });
   }
 
   private load(): Observable<CheckGroup<Permission>[]> {
@@ -120,13 +138,22 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         this.permissionsByGroup = permissions.reduce((acc, permission) => {
           return {
             ...acc,
-            [permission.groupId]: [...(acc[permission.groupId] ? acc[permission.groupId].concat(permission) : [permission])],
+            [permission.groupId]: [
+              ...(acc[permission.groupId]
+                ? acc[permission.groupId].concat(permission)
+                : [permission]),
+            ],
           };
         }, {} as Record<number, Permission[]>);
       }),
       map(({ groups }) => {
-        return groups.map(group => {
-          return new CheckGroup<Permission>(group, this.permissionsByGroup[group.lookupKey] || [], this.selectedIds, 3);
+        return groups.map((group) => {
+          return new CheckGroup<Permission>(
+            group,
+            this.permissionsByGroup[group.lookupKey] || [],
+            this.selectedIds,
+            3
+          );
         });
       })
     );
@@ -137,17 +164,17 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   get permissionRoleId() {
-    return this.form.get('permissionRoleId');
+    return this.form.get("permissionRoleId");
   }
 
   get userPreferences() {
-    return this.form.get('userPreferences');
+    return this.form.get("userPreferences");
   }
 
   private loadUserPermissions(model: InternalUser) {
-    this.permissionService.loadUserPermissions(model?.id).subscribe(val => {
+    this.permissionService.loadUserPermissions(model?.id).subscribe((val) => {
       const ids: number[] = [];
-      val.forEach(permission => {
+      val.forEach((permission) => {
         ids.push(permission.permissionId);
       });
       this.selectedIds = ids;
@@ -159,22 +186,26 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.permissionRoleService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(permissionsRoles => {
+      .subscribe((permissionsRoles) => {
         this.permissionsRoles = permissionsRoles;
       });
   }
 
   private listenToPermissionRoleChange() {
-    this.permissionRoleId?.valueChanges.subscribe(val => {
-      const selectedRoleId = this.permissionsRoles.find(permission => permission.id === val);
-      const ids = selectedRoleId!.permissionSet.map(permission => permission.permissionId);
+    this.permissionRoleId?.valueChanges.subscribe((val) => {
+      const selectedRoleId = this.permissionsRoles.find(
+        (permission) => permission.id === val
+      );
+      const ids = selectedRoleId!.permissionSet.map(
+        (permission) => permission.permissionId
+      );
       this.selectedIds = ids;
       this.loadGroups();
     });
   }
 
   loadGroups() {
-    this.load().subscribe(groups => {
+    this.load().subscribe((groups) => {
       this.groups = groups;
     });
   }
@@ -184,19 +215,25 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     if (!$event.dataTransfer) return;
     if (!$event.dataTransfer.files) return;
     if (!$event.dataTransfer.files[0]) return;
-    this.userSignature = new UserSignature(this.data.model.id, $event.dataTransfer.files[0]);
+    this.userSignature = new UserSignature(
+      this.data.model.id,
+      $event.dataTransfer.files[0]
+    );
     const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const blob = new Blob([e.target.result]);
+    reader.onload = (e) => {
+      const blob = new Blob([e.target!.result!]);
       const url = window.URL.createObjectURL(blob);
-      this.signatureSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      this.signatureSafeUrl =
+        this.sanitizer.bypassSecurityTrustResourceUrl(url);
     };
     reader.readAsArrayBuffer(this.userSignature.content as File);
   }
 
   getSignatureStyle(): string {
-    if (this.inEditMode()) return 'border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-96 bg-gray-200';
-    if (this.inViewMode()) return 'rounded w-full flex items-center justify-center h-96';
-    return '';
+    if (this.inEditMode())
+      return "border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-96 bg-gray-200";
+    if (this.inViewMode())
+      return "rounded w-full flex items-center justify-center h-96";
+    return "";
   }
 }

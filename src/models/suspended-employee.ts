@@ -1,15 +1,18 @@
-import { BaseModel } from '@abstracts/base-model';
-import { SuspendedEmployeeService } from '@services/suspended-employee.service';
-import { SuspendedEmployeeInterceptor } from '@model-interceptors/suspended-employee-interceptor';
-import { InterceptModel } from 'cast-response';
-import { AdminResult } from './admin-result';
-import { MawaredEmployee } from './mawared-employee';
+import { BaseModel } from "@abstracts/base-model";
+import { SuspendedEmployeeService } from "@services/suspended-employee.service";
+import { SuspendedEmployeeInterceptor } from "@model-interceptors/suspended-employee-interceptor";
+import { InterceptModel } from "cast-response";
+import { AdminResult } from "./admin-result";
+import { MawaredEmployee } from "./mawared-employee";
 
 const { send, receive } = new SuspendedEmployeeInterceptor();
 
 @InterceptModel({ send, receive })
-export class SuspendedEmployee extends BaseModel<SuspendedEmployee, SuspendedEmployeeService> {
-  $$__service_name__$$ = 'SuspendedEmployeeService';
+export class SuspendedEmployee extends BaseModel<
+  SuspendedEmployee,
+  SuspendedEmployeeService
+> {
+  $$__service_name__$$ = "SuspendedEmployeeService";
 
   offenderId!: number;
   mawaredEmployeeId!: number;
@@ -27,7 +30,7 @@ export class SuspendedEmployee extends BaseModel<SuspendedEmployee, SuspendedEmp
   signerInfo!: AdminResult;
   signerName: string = this.signerInfo?.getNames();
 
-  buildForm(controls = false): object {
+  buildForm(): object {
     const { arName, enName, dateFrom, dateTo, status } = this;
     return {
       arName,

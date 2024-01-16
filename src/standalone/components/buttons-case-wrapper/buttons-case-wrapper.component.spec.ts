@@ -1,19 +1,15 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ButtonsCaseWrapperComponent } from './buttons-case-wrapper.component';
+import { ButtonsCaseWrapperComponent } from "./buttons-case-wrapper.component";
 
-describe('ButtonsCaseWrapperComponent', () => {
+describe("ButtonsCaseWrapperComponent", () => {
   let component: ButtonsCaseWrapperComponent;
   let fixture: ComponentFixture<ButtonsCaseWrapperComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ButtonsCaseWrapperComponent ]
-    })
-    .compileComponents();
+      declarations: [ButtonsCaseWrapperComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +18,7 @@ describe('ButtonsCaseWrapperComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

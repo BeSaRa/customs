@@ -1,25 +1,55 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_internal_user }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+    >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 items-center">
-            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-            <app-input formControlName="domainName" [label]="lang.map.domain_name"></app-input>
+            <app-input
+              formControlName="arName"
+              [label]="lang.map.ar_name"
+            ></app-input>
+            <app-input
+              formControlName="enName"
+              [label]="lang.map.en_name"
+            ></app-input>
+            <app-input
+              formControlName="domainName"
+              [label]="lang.map.domain_name"
+            ></app-input>
             <app-input formControlName="qid" [label]="lang.map.qid"></app-input>
-            <app-input formControlName="empNum" type="number" [label]="lang.map.employee_number"></app-input>
-            <app-input formControlName="email" [label]="lang.map.email"></app-input>
-            <app-input formControlName="phoneNumber" type="number" [label]="lang.map.phone_number"></app-input>
+            <app-input
+              formControlName="empNum"
+              type="number"
+              [label]="lang.map.employee_number"
+            ></app-input>
+            <app-input
+              formControlName="email"
+              [label]="lang.map.email"
+            ></app-input>
+            <app-input
+              formControlName="phoneNumber"
+              type="number"
+              [label]="lang.map.phone_number"
+            ></app-input>
             <app-switch
               formControlName="status"
               [label]="lang.map.lbl_status"
               trueValue="1"
-              falseValue="0"></app-switch>
+              falseValue="0"
+            ></app-switch>
           </div>
         </ng-container>
       </mat-tab>
@@ -30,16 +60,26 @@
               <!-- mail notifications -->
               <app-switch
                 formControlName="isMailNotificationEnabled"
-                [label]="lang.map.mail_notifications"></app-switch>
+                [label]="lang.map.mail_notifications"
+              ></app-switch>
 
               <!-- sms notifications -->
-              <app-switch formControlName="isSMSNotificationEnabled" [label]="lang.map.sms_notifications"></app-switch>
+              <app-switch
+                formControlName="isSMSNotificationEnabled"
+                [label]="lang.map.sms_notifications"
+              ></app-switch>
 
               <!-- is private user -->
-              <app-switch formControlName="isPrivateUser" [label]="lang.map.private_user"></app-switch>
+              <app-switch
+                formControlName="isPrivateUser"
+                [label]="lang.map.private_user"
+              ></app-switch>
 
               <!-- limited circulation -->
-              <app-switch formControlName="limitedCirculation" [label]="lang.map.limited_circulation"></app-switch>
+              <app-switch
+                formControlName="limitedCirculation"
+                [label]="lang.map.limited_circulation"
+              ></app-switch>
             </div>
           </ng-container>
         </div>
@@ -53,29 +93,46 @@
               bindValue="id"
               bindLabel="getNames"
               [label]="lang.map.lbl_custom_role"
-              formControlName="permissionRoleId"></app-select-input>
+              formControlName="permissionRoleId"
+            ></app-select-input>
           </div>
 
           <div class="grid grid-cols-1 gap-4">
             @for (group of groups; track group) {
-            <div class="border-b flex items-center justify-between bg-slate-300">
+            <div
+              class="border-b flex items-center justify-between bg-slate-300"
+            >
               <mat-checkbox
-                [disabled]="!group.list.length || inViewMode() || !permissionRoleId?.valid"
+                [disabled]="
+                  !group.list.length || inViewMode() || !permissionRoleId?.valid
+                "
                 (change)="group.toggleSelection()"
                 [checked]="group.isFull()"
-                [indeterminate]="group.isIndeterminate()">
+                [indeterminate]="group.isIndeterminate()"
+              >
                 <div class="flex space-x-4 rtl:space-x-reverse">
                   <span class="inline-block">{{ group.getNames() }}</span>
                   <span class="inline-block">
                     {{
                       group.hasSelectedValue()
-                        ? "(" + group.getSelectedValue().length + "" + lang.map.selected + ")"
+                        ? "(" +
+                          group.getSelectedValue().length +
+                          "" +
+                          lang.map.selected +
+                          ")"
                         : ""
                     }}
                   </span>
                 </div>
               </mat-checkbox>
-              <app-input label="" #filter class="mx-3" [noMargin]="true" size="sm" [placeholder]="lang.map.filter">
+              <app-input
+                label=""
+                #filter
+                class="mx-3"
+                [noMargin]="true"
+                size="sm"
+                [placeholder]="lang.map.filter"
+              >
                 <mat-icon
                   (keydown.enter)="filter.control.setValue('')"
                   (keydown.space)="filter.control.setValue('')"
@@ -85,16 +142,31 @@
                   tabindex="0"
                   appInputSuffix
                   [matTooltip]="lang.map.clear_filter"
-                  [svgIcon]="filter.control.value ? AppIcons.FILTER_REMOVE : AppIcons.FILTER_OUTLINE"></mat-icon>
+                  [svgIcon]="
+                    filter.control.value
+                      ? AppIcons.FILTER_REMOVE
+                      : AppIcons.FILTER_OUTLINE
+                  "
+                ></mat-icon>
               </app-input>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-auto" style="height: 500px">
-              @for (permission of group.list | FilterArray : 'getNames' : filter.control.value; track permission) {
+            <div
+              class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-auto"
+              style="height: 500px"
+            >
+              @for (permission of group.list | FilterArray : 'getNames' :
+              filter.control.value; track permission) {
               <mat-checkbox
                 [disabled]="inViewMode() || !permissionRoleId?.valid"
                 [checked]="group.isSelected(permission.id)"
-                (change)="group.toggle(permission.id)">
-                <span [innerHTML]="permission.getNames() | highlight : filter.control.value || ''"></span>
+                (change)="group.toggle(permission.id)"
+              >
+                <span
+                  [innerHTML]="
+                    permission.getNames()
+                      | highlight : filter.control.value || ''
+                  "
+                ></span>
               </mat-checkbox>
               }
             </div>
@@ -105,7 +177,9 @@
       @if (!inCreateMode()) {
       <mat-tab [label]="lang.map.menu_internal_user_ou">
         <div class="mt-4">
-          <app-internal-user-ou [internalUser]="data.model"></app-internal-user-ou>
+          <app-internal-user-ou
+            [internalUser]="data.model"
+          ></app-internal-user-ou>
         </div>
       </mat-tab>
       } @if (!inCreateMode()) {
@@ -118,10 +192,18 @@
       <mat-tab [label]="lang.map.lbl_user_signature">
         <div class="dialog-content">
           <div [formGroup]="form" class="flex flex-col">
-            <div (drop)="filesDropped($event)" (dragover)="$event.preventDefault()" [ngClass]="getSignatureStyle()">
+            <div
+              (drop)="filesDropped($event)"
+              (dragover)="$event.preventDefault()"
+              [ngClass]="getSignatureStyle()"
+            >
               @if (signatureSafeUrl) {
               <div class="dialog-content !p-0 w-full h-full">
-                <img class="w-full h-full" [src]="signatureSafeUrl" />
+                <img
+                  class="w-full h-full"
+                  alt="signature"
+                  [src]="signatureSafeUrl"
+                />
               </div>
               } @else {
               <div class="flex flex-col items-center text-gray-500">
@@ -138,11 +220,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
     } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
     } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>

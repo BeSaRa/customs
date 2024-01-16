@@ -1,37 +1,51 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { AppIcons } from '@constants/app-icons';
-import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { OffenderTypes } from '@enums/offender-types';
-import { OperationType } from '@enums/operation-type';
-import { PenaltySignerTypes } from '@enums/penalty-signer-types';
-import { UserClick } from '@enums/user-click';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { ColumnsWrapper } from '@models/columns-wrapper';
-import { GuidePanel } from '@models/guide-panel';
-import { Lookup } from '@models/lookup';
-import { NoneFilterColumn } from '@models/none-filter-column';
-import { Penalty } from '@models/penalty';
-import { ViolationType } from '@models/violation-type';
-import { PenaltyPopupComponent } from '@modules/administration/popups/penalty-popup/penalty-popup.component';
-import { DialogService } from '@services/dialog.service';
-import { GuidePanelService } from '@services/guide-panel.service';
-import { LangService } from '@services/lang.service';
-import { LookupService } from '@services/lookup.service';
-import { ViolationTypeService } from '@services/violation-type.service';
-import { ignoreErrors } from '@utils/utils';
-import { CustomValidators } from '@validators/custom-validators';
-import { Observable, ReplaySubject, Subject, catchError, exhaustMap, filter, isObservable, of, switchMap, takeUntil, throwError } from 'rxjs';
+import { Component, inject, OnInit } from "@angular/core";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { MatDialogRef } from "@angular/material/dialog";
+import { MatTableDataSource } from "@angular/material/table";
+import { AppIcons } from "@constants/app-icons";
+import { ContextMenuActionContract } from "@contracts/context-menu-action-contract";
+import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
+import { OffenderTypes } from "@enums/offender-types";
+import { OperationType } from "@enums/operation-type";
+import { PenaltySignerTypes } from "@enums/penalty-signer-types";
+import { UserClick } from "@enums/user-click";
+import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
+import { ColumnsWrapper } from "@models/columns-wrapper";
+import { GuidePanel } from "@models/guide-panel";
+import { Lookup } from "@models/lookup";
+import { NoneFilterColumn } from "@models/none-filter-column";
+import { Penalty } from "@models/penalty";
+import { ViolationType } from "@models/violation-type";
+import { PenaltyPopupComponent } from "@modules/administration/popups/penalty-popup/penalty-popup.component";
+import { DialogService } from "@services/dialog.service";
+import { GuidePanelService } from "@services/guide-panel.service";
+import { LangService } from "@services/lang.service";
+import { LookupService } from "@services/lookup.service";
+import { ViolationTypeService } from "@services/violation-type.service";
+import { ignoreErrors } from "@utils/utils";
+import { CustomValidators } from "@validators/custom-validators";
+import {
+  catchError,
+  exhaustMap,
+  filter,
+  isObservable,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  throwError,
+} from "rxjs";
 
 @Component({
-  selector: 'app-guide-panel',
-  templateUrl: './guide-panel.component.html',
-  styleUrls: ['./guide-panel.component.scss'],
+  selector: "app-guide-panel",
+  templateUrl: "./guide-panel.component.html",
+  styleUrls: ["./guide-panel.component.scss"],
 })
-export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class GuidePanelComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   guidePanelService = inject(GuidePanelService);
   lookupService = inject(LookupService);
   lang = inject(LangService);
@@ -58,30 +72,30 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
 
   actions: ContextMenuActionContract<Penalty>[] = [
     {
-      name: 'more-details',
-      type: 'action',
-      label: 'more_details',
+      name: "more-details",
+      type: "action",
+      label: "more_details",
       icon: AppIcons.INFORMATION,
-      callback: item => {
+      callback: (item) => {
         this.viewRecord(item);
       },
     },
   ];
 
   columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
-    new NoneFilterColumn('violationType'),
-    new NoneFilterColumn('repeat'),
-    new NoneFilterColumn('penGuidance'),
-    new NoneFilterColumn('arName'),
-    new NoneFilterColumn('enName'),
-    new NoneFilterColumn('penaltyWeight'),
-    new NoneFilterColumn('erasureDuration'),
-    new NoneFilterColumn('isCash'),
-    new NoneFilterColumn('cashAmount'),
-    new NoneFilterColumn('isDeduction'),
-    new NoneFilterColumn('deductionDays'),
-    new NoneFilterColumn('status'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn("violationType"),
+    new NoneFilterColumn("repeat"),
+    new NoneFilterColumn("penGuidance"),
+    new NoneFilterColumn("arName"),
+    new NoneFilterColumn("enName"),
+    new NoneFilterColumn("penaltyWeight"),
+    new NoneFilterColumn("erasureDuration"),
+    new NoneFilterColumn("isCash"),
+    new NoneFilterColumn("cashAmount"),
+    new NoneFilterColumn("isDeduction"),
+    new NoneFilterColumn("deductionDays"),
+    new NoneFilterColumn("status"),
+    new NoneFilterColumn("actions")
   );
 
   protected _beforeSearch(): boolean | Observable<boolean> {
@@ -90,11 +104,11 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   }
 
   get offenderTypeField() {
-    return this.form.get('offenderType');
+    return this.form.get("offenderType");
   }
 
   get offenderLevelField() {
-    return this.form.get('offenderLevel');
+    return this.form.get("offenderLevel");
   }
 
   resetForm() {
@@ -102,7 +116,7 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   }
 
   protected getViolationTypes() {
-    this.violationTypeService.loadAsLookups().subscribe(data => {
+    this.violationTypeService.loadAsLookups().subscribe((data) => {
       this.violationTypes = data;
     });
   }
@@ -112,17 +126,21 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   }
 
   onOffenderTypeChange() {
-    this.offenderTypeField?.valueChanges.subscribe(value => {
+    this.offenderTypeField?.valueChanges.subscribe((value) => {
       if (value === OffenderTypes.EMPLOYEE) {
         this.offenderLevelField?.setValidators(CustomValidators.required);
         this.filteredPenaltySigners = this.penaltySigners.filter(
-          penaltySigner => penaltySigner.lookupKey !== PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+          (penaltySigner) =>
+            penaltySigner.lookupKey !==
+            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
         );
       } else {
         this.offenderLevelField?.setValue(null);
         this.offenderLevelField?.setValidators(null);
         this.filteredPenaltySigners = this.penaltySigners.filter(
-          penaltySigner => penaltySigner.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+          (penaltySigner) =>
+            penaltySigner.lookupKey ===
+            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
         );
       }
       this.offenderLevelField?.updateValueAndValidity();
@@ -138,15 +156,17 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
           return isObservable(result) ? result : of(result);
         })
       )
-      .pipe(filter(value => value))
+      .pipe(filter((value) => value))
       .pipe(
         exhaustMap(() => {
-          return this.guidePanelService.loadSearchResult(this.formValidValues()).pipe(
-            catchError(error => {
-              return throwError(error);
-            }),
-            ignoreErrors()
-          );
+          return this.guidePanelService
+            .loadSearchResult(this.formValidValues())
+            .pipe(
+              catchError((error) => {
+                return throwError(error);
+              }),
+              ignoreErrors()
+            );
         })
       )
       .subscribe((data: Penalty[]) => {
@@ -155,7 +175,10 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
         }
         data = data.sort((penalty1, penalty2) => {
           if (penalty1.penGuidance === null || penalty2.penGuidance === null) {
-            return +(penalty1.penGuidance === null) - +(penalty2.penGuidance === null);
+            return (
+              +(penalty1.penGuidance === null) -
+              +(penalty2.penGuidance === null)
+            );
           }
           return penalty1.penGuidance - penalty2.penGuidance;
         });
@@ -176,11 +199,17 @@ export class GuidePanelComponent extends OnDestroyMixin(class {}) implements OnI
   }
 
   getBooleanString(bool: boolean) {
-    return this.lang.getTranslate(bool ? 'yes' : 'no');
+    return this.lang.getTranslate(bool ? "yes" : "no");
   }
 
-  viewRecord(model: Penalty): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
-    return this.dialog.open<PenaltyPopupComponent, CrudDialogDataContract<Penalty>, UserClick.CLOSE>(PenaltyPopupComponent, {
+  viewRecord(
+    model: Penalty
+  ): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
+    return this.dialog.open<
+      PenaltyPopupComponent,
+      CrudDialogDataContract<Penalty>,
+      UserClick.CLOSE
+    >(PenaltyPopupComponent, {
       disableClose: true,
       data: {
         model,

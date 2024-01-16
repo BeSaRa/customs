@@ -1,23 +1,36 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_organization_unit }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+    >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 my-auto items-center">
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="email" [label]="lang.map.email" />
-            <app-input formControlName="mawaredDepId" [label]="lang.map.mawared_dep_id"></app-input>
+            <app-input
+              formControlName="mawaredDepId"
+              [label]="lang.map.mawared_dep_id"
+            ></app-input>
             <app-select-input
               formControlName="type"
               [options]="unitTypes"
               [label]="lang.map.unit_type"
               bindValue="lookupKey"
-              bindLabel="getNames" />
+              bindLabel="getNames"
+            />
             <app-select-input
               formControlName="managerId"
               [options]="internalUsers"
@@ -25,7 +38,8 @@
               bindValue="id"
               bindLabel="getNames"
               [enableFilter]="true"
-              bindFilter="getNames" />
+              bindFilter="getNames"
+            />
             <app-select-input
               formControlName="parent"
               [options]="organizationUnits"
@@ -33,7 +47,8 @@
               bindValue="id"
               bindLabel="getNames"
               [enableFilter]="true"
-              bindFilter="getNames" />
+              bindFilter="getNames"
+            />
             <app-select-input
               formControlName="assistantOuId"
               [options]="assistantOus"
@@ -41,7 +56,8 @@
               bindValue="id"
               bindLabel="getNames"
               [enableFilter]="true"
-              bindFilter="getNames" />
+              bindFilter="getNames"
+            />
             <app-select-input
               formControlName="managerAssistant"
               [options]="managerAssistants"
@@ -49,9 +65,20 @@
               bindValue="id"
               bindLabel="getNames"
               [enableFilter]="true"
-              bindFilter="getNames" />
-            <app-switch formControlName="isCustoms" [trueValue]="1" [falseValue]="0" [label]="lang.map.is_customs" />
-            <app-switch formControlName="status" [trueValue]="1" [falseValue]="0" [label]="lang.map.change_status" />
+              bindFilter="getNames"
+            />
+            <app-switch
+              formControlName="isCustoms"
+              [trueValue]="1"
+              [falseValue]="0"
+              [label]="lang.map.is_customs"
+            />
+            <app-switch
+              formControlName="status"
+              [trueValue]="1"
+              [falseValue]="0"
+              [label]="lang.map.change_status"
+            />
           </div>
         </ng-container>
       </mat-tab>
@@ -59,10 +86,14 @@
       <mat-tab [label]="lang.map.ou_logo">
         <div class="dialog-content">
           <div [formGroup]="form" class="flex flex-col">
-            <div (drop)="filesDropped($event)" (dragover)="$event.preventDefault()" [ngClass]="getOuLogoStyle()">
+            <div
+              (drop)="filesDropped($event)"
+              (dragover)="$event.preventDefault()"
+              [ngClass]="getOuLogoStyle()"
+            >
               @if (ouLogoSafeUrl) {
               <div class="dialog-content !p-0 w-full h-full">
-                <img class="w-full h-full" [src]="ouLogoSafeUrl" />
+                <img class="w-full h-full" alt="logo" [src]="ouLogoSafeUrl" />
               </div>
               } @else {
               <div class="flex flex-col items-center text-gray-500">
@@ -79,11 +110,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
     } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
     } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>

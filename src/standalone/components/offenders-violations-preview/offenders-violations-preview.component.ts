@@ -1,56 +1,74 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
-import { IconButtonComponent } from '../icon-button/icon-button.component';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { LangService } from '@services/lang.service';
-import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
-import { Offender } from '@models/offender';
-import { AppTableDataSource } from '@models/app-table-data-source';
-import { Subject, filter, switchMap, takeUntil, tap } from 'rxjs';
-import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
-import { DialogService } from '@services/dialog.service';
-import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
-import { Investigation } from '@models/investigation';
-import { EmployeeService } from '@services/employee.service';
-import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
-import { Penalty } from '@models/penalty';
-import { OffenderService } from '@services/offender.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
-import { UserTypes } from '@enums/user-types';
-import { OffenderTypes } from '@enums/offender-types';
-import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
-import { TaskResponses } from '@enums/task-responses';
-import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
-import { UserClick } from '@enums/user-click';
-import { MatMenuModule } from '@angular/material/menu';
-import { SusbendEmployeePopupComponent } from '@standalone/popups/susbend-employee-popup/susbend-employee-popup.component';
-import { SystemPenalties } from '@enums/system-penalties';
-import { SuspendedEmployee } from '@models/suspended-employee';
-import { SusbendEmployee } from '@models/susbend-employee';
-import { SuspendedEmployeeService } from '@services/suspended-employee.service';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { PenaltyDecision } from '@models/penalty-decision';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from "@angular/animations";
+import { CommonModule } from "@angular/common";
+import { Component, inject, Input, OnInit } from "@angular/core";
+import { IconButtonComponent } from "../icon-button/icon-button.component";
+import { MatSortModule } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { LangService } from "@services/lang.service";
+import { Lookup } from "@models/lookup";
+import { LookupService } from "@services/lookup.service";
+import { Offender } from "@models/offender";
+import { AppTableDataSource } from "@models/app-table-data-source";
+import { filter, Subject, switchMap, takeUntil, tap } from "rxjs";
+import { OffenderViolationsPopupComponent } from "@standalone/popups/offender-violations-popup/offender-violations-popup.component";
+import { DialogService } from "@services/dialog.service";
+import { OffenderAttachmentPopupComponent } from "@standalone/popups/offender-attachment-popup/offender-attachment-popup.component";
+import { Investigation } from "@models/investigation";
+import { EmployeeService } from "@services/employee.service";
+import { MakePenaltyDecisionPopupComponent } from "@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component";
+import { Penalty } from "@models/penalty";
+import { OffenderService } from "@services/offender.service";
+import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
+import { AssignmentToAttendPopupComponent } from "../assignment-to-attend-popup/assignment-to-attend-popup.component";
+import { UserTypes } from "@enums/user-types";
+import { OffenderTypes } from "@enums/offender-types";
+import { SituationSearchComponent } from "@modules/electronic-services/components/situation-search/situation-search.component";
+import { TaskResponses } from "@enums/task-responses";
+import { MatMenuModule } from "@angular/material/menu";
+import { SystemPenalties } from "@enums/system-penalties";
+import { SuspendedEmployeeService } from "@services/suspended-employee.service";
+import { PenaltyDecisionService } from "@services/penalty-decision.service";
+import { PenaltyDecision } from "@models/penalty-decision";
+import { SuspendEmployeePopupComponent } from "@standalone/popups/susحend-employee-popup/suspend-employee-popup.component";
 
 @Component({
-  selector: 'app-offenders-violations-preview',
-  templateUrl: './offenders-violations-preview.component.html',
-  styleUrls: ['./offenders-violations-preview.component.scss'],
+  selector: "app-offenders-violations-preview",
+  templateUrl: "./offenders-violations-preview.component.html",
+  styleUrls: ["./offenders-violations-preview.component.scss"],
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatMenuModule, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    IconButtonComponent,
+    MatMenuModule,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
+  ],
   animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0', display: 'none' })),
-      state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    trigger("detailExpand", [
+      state(
+        "collapsed",
+        style({ height: "0px", minHeight: "0", display: "none" })
+      ),
+      state("expanded", style({ height: "*" })),
+      transition(
+        "expanded <=> collapsed",
+        animate("225ms cubic-bezier(0.4, 0.0, 0.2, 1)")
+      ),
     ]),
   ],
 })
-export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffendersViolationsPreviewComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
@@ -71,7 +89,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   extendSuspendEmployee$ = new Subject<{ offender: Offender }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
-  referralOrTerminateDecission$ = new Subject<{
+  referralOrTerminateDecision$ = new Subject<{
     offender: Offender;
     penaltyId: number | undefined;
   }>();
@@ -81,25 +99,28 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.offenderDataSource = new AppTableDataSource(offenders);
     console.log(offenders);
   }
+
   @Input() investigationModel?: Investigation;
   @Input() isClaimed = false;
   offenderDisplayedColumns = [
-    'offenderName',
-    'qid',
-    'departmentCompany',
-    'violations',
-    'situationSearch',
-    'actions',
+    "offenderName",
+    "qid",
+    "departmentCompany",
+    "violations",
+    "situationSearch",
+    "actions",
   ];
-  offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.lookupKey]: item,
-    }),
-    {}
-  );
+  offenderTypesMap: Record<number, Lookup> =
+    this.lookupService.lookups.offenderType.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.lookupKey]: item,
+      }),
+      {}
+    );
+
   ngOnInit(): void {
-    if (this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')) {
+    if (this.employeeService.hasPermissionTo("MANAGE_OFFENDER_VIOLATION")) {
       this.loadPenalties();
     }
     this.listenToView();
@@ -110,25 +131,38 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
   }
+
   getFilteredPenalties(offender: Offender) {
-    return (this.penaltyMap && this.penaltyMap[offender.id] ? this.penaltyMap[offender.id].second : []).filter(
-      penalty =>
+    return (
+      this.penaltyMap && this.penaltyMap[offender.id]
+        ? this.penaltyMap[offender.id].second
+        : []
+    ).filter(
+      (penalty) =>
         penalty.penaltyKey !== SystemPenalties.TERMINATE &&
         penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
         penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
     );
   }
+
   getPenaltyIdByPenaltyKey(element: Offender, penaltyKey: SystemPenalties) {
-    return this.penaltyMap && this.penaltyMap[element.id].second.find(penalty => penalty.penaltyKey == penaltyKey)?.id;
+    return (
+      this.penaltyMap &&
+      this.penaltyMap[element.id].second.find(
+        (penalty) => penalty.penaltyKey == penaltyKey
+      )?.id
+    );
   }
+
   private loadPenalties() {
     this.investigationModel
       ?.getService()
       .getCasePenalty(this.investigationModel?.id as string)
-      .subscribe(data => {
+      .subscribe((data) => {
         this.penaltyMap = data;
       });
   }
+
   private listenToView() {
     this.view$
       .pipe(
@@ -147,10 +181,11 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap(model =>
+        switchMap((model) =>
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
@@ -164,13 +199,17 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   private listenToMakeDecision() {
     this.makeDecision$
       .pipe(
         tap((offender: Offender) => {
-          !this.getFilteredPenalties(offender).length && this.dialog.info(this.lang.map.no_records_to_display);
+          !this.getFilteredPenalties(offender).length &&
+            this.dialog.info(this.lang.map.no_records_to_display);
         }),
-        filter((offender: Offender) => !!this.getFilteredPenalties(offender).length)
+        filter(
+          (offender: Offender) => !!this.getFilteredPenalties(offender).length
+        )
       )
       .pipe(
         switchMap((offender: Offender) =>
@@ -188,6 +227,7 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   private listenToAssignmentToAttend() {
     this.assignmentToAttend$
       .pipe(
@@ -205,16 +245,18 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   private listenToSuspendEmployee() {
     this.suspendEmployee$
       .pipe(
-        switchMap(offender => {
-          const suspendedEmployee = this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
-            offender.offender,
-            this.investigationModel?.id as string
-          );
+        switchMap((offender) => {
+          const suspendedEmployee =
+            this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
+              offender.offender,
+              this.investigationModel?.id as string
+            );
           return this.dialog
-            .open(SusbendEmployeePopupComponent, {
+            .open(SuspendEmployeePopupComponent, {
               data: suspendedEmployee,
             })
             .afterClosed();
@@ -222,9 +264,11 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   isClearingAgent(element: Offender) {
     return element.type === OffenderTypes.ClEARING_AGENT;
   }
+
   listenToSituationSearch() {
     this.situationSearch$
       .pipe(
@@ -242,8 +286,9 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
       )
       .subscribe();
   }
+
   listenToReferralRequest() {
-    this.referralOrTerminateDecission$
+    this.referralOrTerminateDecision$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(({ offender, penaltyId }) => {
@@ -253,18 +298,19 @@ export class OffendersViolationsPreviewComponent extends OnDestroyMixin(class { 
             signerId: this.employeeService.getEmployee()?.id,
             penaltyId: penaltyId,
             status: 1,
-          })
+          });
           return penaltyDecision.save();
         })
       )
       .subscribe();
   }
+
   canMakeDecision(offender: Offender): boolean {
     return (
       this.penaltyMap &&
       this.penaltyMap[offender.id] &&
       !!this.getFilteredPenalties(offender).length &&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
+      this.employeeService.hasPermissionTo("MANAGE_OFFENDER_VIOLATION")
     );
   }
 }

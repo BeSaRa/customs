@@ -2,19 +2,33 @@
   class="fixed pointer-events-none"
   [style.top.px]="top"
   [style.left.px]="left"
-  [matMenuTriggerFor]="menu"></button>
+  [matMenuTriggerFor]="menu"
+></button>
 <mat-menu #menu="matMenu">
-  @for (action of filteredActions; track action) { @if (hasChildren(action)) { @if (subMenu.childMenu) {
-  <button [disabled]="isDisabled(action)" mat-menu-item [matMenuTriggerFor]="subMenu.childMenu">
+  @for (action of filteredActions; track action) { @if (hasChildren(action)) {
+  @if (subMenu.childMenu) {
+  <button
+    [disabled]="isDisabled(action)"
+    mat-menu-item
+    [matMenuTriggerFor]="subMenu.childMenu"
+  >
     @if (action.icon) {
     <mat-icon [svgIcon]="action.icon"></mat-icon>
     }
     <span>{{ getActionLabel(action) }}</span>
   </button>
   }
-  <app-context-menu-item [item]="item" [actions]="action.children!" #subMenu></app-context-menu-item>
+  <app-context-menu-item
+    [item]="item"
+    [actions]="action.children!"
+    #subMenu
+  ></app-context-menu-item>
   } @if (!hasChildren(action)) {
-  <button [disabled]="isDisabled(action)" (click)="callback(action)" mat-menu-item>
+  <button
+    [disabled]="isDisabled(action)"
+    (click)="callback(action)"
+    mat-menu-item
+  >
     @if (action.icon) {
     <mat-icon [svgIcon]="action.icon"></mat-icon>
     }

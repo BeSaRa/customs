@@ -1,29 +1,39 @@
-import { LangService } from '@services/lang.service';
-import { Component, OnInit, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { AppTableDataSource } from '@models/app-table-data-source';
-import { Subject, filter, switchMap, takeUntil, BehaviorSubject, exhaustMap, map, combineLatest, tap } from 'rxjs';
-import { OffenderViolation } from '@models/offender-violation';
-import { OffenderViolationService } from '@services/offender-violation.service';
-import { ignoreErrors } from '@utils/utils';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { MatTableModule } from '@angular/material/table';
-import { UserClick } from '@enums/user-click';
-import { DialogService } from '@services/dialog.service';
-import { ToastService } from '@services/toast.service';
-import { Violation } from '@models/violation';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CustomValidators } from '@validators/custom-validators';
-import { CommonModule, DatePipe } from '@angular/common';
-import { Offender } from '@models/offender';
-import { OffenderTypes } from '@enums/offender-types';
+import { LangService } from "@services/lang.service";
+import { Component, OnInit, inject } from "@angular/core";
+import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
+import { ButtonComponent } from "@standalone/components/button/button.component";
+import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { AppTableDataSource } from "@models/app-table-data-source";
+import {
+  Subject,
+  filter,
+  switchMap,
+  takeUntil,
+  BehaviorSubject,
+  exhaustMap,
+  map,
+  combineLatest,
+  tap,
+} from "rxjs";
+import { OffenderViolation } from "@models/offender-violation";
+import { OffenderViolationService } from "@services/offender-violation.service";
+import { ignoreErrors } from "@utils/utils";
+import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
+import { MatTableModule } from "@angular/material/table";
+import { UserClick } from "@enums/user-click";
+import { DialogService } from "@services/dialog.service";
+import { ToastService } from "@services/toast.service";
+import { Violation } from "@models/violation";
+import { SelectInputComponent } from "@standalone/components/select-input/select-input.component";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { CustomValidators } from "@validators/custom-validators";
+import { CommonModule, DatePipe } from "@angular/common";
+import { Offender } from "@models/offender";
+import { OffenderTypes } from "@enums/offender-types";
 
 @Component({
-  selector: 'app-offender-violations-popup',
+  selector: "app-offender-violations-popup",
   standalone: true,
   imports: [
     CommonModule,
@@ -36,10 +46,13 @@ import { OffenderTypes } from '@enums/offender-types';
     IconButtonComponent,
     MatDialogModule,
   ],
-  templateUrl: './offender-violations-popup.component.html',
-  styleUrls: ['./offender-violations-popup.component.scss'],
+  templateUrl: "./offender-violations-popup.component.html",
+  styleUrls: ["./offender-violations-popup.component.scss"],
 })
-export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffenderViolationsPopupComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   offenderViolationService = inject(OffenderViolationService);
@@ -51,7 +64,14 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   delete$ = new Subject<OffenderViolation>();
   addViolation$: Subject<void> = new Subject<void>();
-  displayedColumns = ['violationClassification', 'violationType', 'violationData', 'description', 'repeat', 'actions'];
+  displayedColumns = [
+    "violationClassification",
+    "violationType",
+    "violationData",
+    "description",
+    "repeat",
+    "actions",
+  ];
   control = new FormControl<number[]>([], [CustomValidators.required]);
   violations: Violation[] = [];
   readonly = this.data && this.data.readonly;
@@ -68,10 +88,13 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
         (v: Violation | OffenderViolation) =>
           this.data.offender &&
           ((v as Violation).offenderTypeInfo
-            ? (v as Violation).offenderTypeInfo.lookupKey == this.data.offender.type ||
+            ? (v as Violation).offenderTypeInfo.lookupKey ==
+                this.data.offender.type ||
               (v as Violation).offenderTypeInfo.lookupKey == OffenderTypes.BOTH
-            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == this.data.offender.type ||
-              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey == OffenderTypes.BOTH)
+            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
+                this.data.offender.type ||
+              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
+                OffenderTypes.BOTH)
       );
     this.listenToReload();
     this.listenToDelete();
@@ -93,10 +116,13 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
             .pipe(ignoreErrors())
         )
       )
-      .subscribe(pagination => {
+      .subscribe((pagination) => {
         this.offenderViolations.next(pagination.rs);
         this.violations = this.violations.filter(
-          v => !this.dataSource.data.find(offenderViolation => offenderViolation.violationId == v.id)
+          (v) =>
+            !this.dataSource.data.find(
+              (offenderViolation) => offenderViolation.violationId == v.id
+            )
           // TODO: add filter by violation offender type
         );
       });
@@ -129,20 +155,29 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
   private listenToDelete() {
     this.delete$
       .pipe(
-        tap(_ => this.dataSource.data.length == 1 && this.dialog.error(this.lang.map.can_not_delete_offender_must_has_at_least_one_violation)),
-        filter(_ => this.dataSource.data.length !== 1)
+        tap(
+          () =>
+            this.dataSource.data.length == 1 &&
+            this.dialog.error(
+              this.lang.map
+                .can_not_delete_offender_must_has_at_least_one_violation
+            )
+        ),
+        filter(() => this.dataSource.data.length !== 1)
       )
       .pipe(
-        exhaustMap(model =>
+        exhaustMap((model) =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_link_with_x_confirm.change({
-                x: this.violations.find(v => v.id == model.violationId)?.getOffenderViolationSelectNames(),
+                x: this.violations
+                  .find((v) => v.id == model.violationId)
+                  ?.getOffenderViolationSelectNames(),
               })
             )
             .afterClosed()
             .pipe(
-              map(userClick => ({
+              map((userClick) => ({
                 model,
                 userClick,
               }))
@@ -151,9 +186,13 @@ export class OffenderViolationsPopupComponent extends OnDestroyMixin(class {}) i
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe(model => {
+      .subscribe((model) => {
         this.toast.success(
-          this.lang.map.msg_delete_x_success.change({ x: this.violations.find(v => v.id == model.violationId)?.getOffenderViolationSelectNames() })
+          this.lang.map.msg_delete_x_success.change({
+            x: this.violations
+              .find((v) => v.id == model.violationId)
+              ?.getOffenderViolationSelectNames(),
+          })
         );
         this.reload$.next(null);
       });

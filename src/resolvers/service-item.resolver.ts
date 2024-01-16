@@ -1,13 +1,12 @@
-import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from '@angular/router';
-import { INavigatedItem } from '@contracts/inavigated-item';
-import { InboxService } from '@services/inbox.services';
-import { iif, Observable, of, switchMap, map } from 'rxjs';
-import { OpenFrom } from '@enums/open-from';
-import { OpenedInfoContract } from '@contracts/opened-info-contract';
-import { ConfigService } from '@services/config.service';
-import { BaseCase } from '@models/base-case';
-import { EncryptionService } from '@services/encryption.service';
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
+import { INavigatedItem } from "@contracts/inavigated-item";
+import { InboxService } from "@services/inbox.services";
+import { iif, map, Observable, of, switchMap } from "rxjs";
+import { OpenFrom } from "@enums/open-from";
+import { OpenedInfoContract } from "@contracts/opened-info-contract";
+import { ConfigService } from "@services/config.service";
+import { EncryptionService } from "@services/encryption.service";
 
 export class ServiceItemResolver {
   private static data: {
@@ -17,7 +16,7 @@ export class ServiceItemResolver {
     userInboxService: InboxService;
     configService: ConfigService;
     encryptionService: EncryptionService;
-  } = {} as any;
+  } = {} as never;
 
   private static _init(route: ActivatedRouteSnapshot): void {
     this.data.userInboxService = inject(InboxService);
@@ -29,8 +28,7 @@ export class ServiceItemResolver {
   }
 
   static resolve: ResolveFn<OpenedInfoContract | null> = (
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    route: ActivatedRouteSnapshot
   ): Observable<OpenedInfoContract | null> => {
     this._init(route);
     const item = this.getItem();
@@ -39,28 +37,35 @@ export class ServiceItemResolver {
     }
     // decrypt information
     try {
-      this.data.info = this.data.encryptionService.decrypt<INavigatedItem>(item);
+      this.data.info =
+        this.data.encryptionService.decrypt<INavigatedItem>(item);
     } catch (e) {
       // if there is error in decryption return null
-      console.log('error in decryption');
+      console.log("error in decryption");
       return of(null);
     }
-    const { caseId, caseType, openFrom, taskId } = this.data.info as INavigatedItem;
+    const { caseId, caseType, openFrom, taskId } = this.data
+      .info as INavigatedItem;
     if (!caseId || !caseType) {
       // if we have missing needed properties while decrypt the info return null
-      console.log('missing info');
+      console.log("missing info");
       return of(null);
     }
     const service = this.data.userInboxService.getService(caseType);
     return of(openFrom)
       .pipe(
         switchMap(() =>
-          iif(() => openFrom === OpenFrom.SEARCH || openFrom === OpenFrom.ADD_SCREEN, service.getDetails(caseId), service.getTask(taskId!))
+          iif(
+            () =>
+              openFrom === OpenFrom.SEARCH || openFrom === OpenFrom.ADD_SCREEN,
+            service.getDetails(caseId),
+            service.getTask(taskId!)
+          )
         )
       )
       .pipe(
-        map((model: BaseCase<any, any>) => {
-          return { model, ...this.data.info } as OpenedInfoContract;
+        map((model) => {
+          return { model, ...this.data.info } as unknown as OpenedInfoContract;
         })
       );
   };

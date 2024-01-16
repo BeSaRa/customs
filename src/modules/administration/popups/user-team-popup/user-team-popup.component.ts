@@ -1,20 +1,33 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { UserTeam } from '@models/user-team';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
-import { Observable, Subject, catchError, exhaustMap, filter, forkJoin, isObservable, map, of, switchMap, takeUntil, throwError } from 'rxjs';
-import { OperationType } from '@enums/operation-type';
-import { TeamService } from '@services/team.service';
-import { Team } from '@models/team';
-import { ignoreErrors } from '@utils/utils';
-import { UserTeamService } from '@services/user-team.service';
+import { Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
+import { UserTeam } from "@models/user-team";
+import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
+import { UntypedFormGroup } from "@angular/forms";
+import {
+  catchError,
+  exhaustMap,
+  filter,
+  forkJoin,
+  isObservable,
+  map,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  throwError,
+} from "rxjs";
+import { OperationType } from "@enums/operation-type";
+import { TeamService } from "@services/team.service";
+import { Team } from "@models/team";
+import { ignoreErrors } from "@utils/utils";
+import { UserTeamService } from "@services/user-team.service";
 
 @Component({
-  selector: 'app-user-team-popup',
-  templateUrl: './user-team-popup.component.html',
-  styleUrls: ['./user-team-popup.component.scss'],
+  selector: "app-user-team-popup",
+  templateUrl: "./user-team-popup.component.html",
+  styleUrls: ["./user-team-popup.component.scss"],
 })
 export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   private teamsService = inject(TeamService);
@@ -28,8 +41,17 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
     this.listenToSaveUserTeams();
     this.teamsService
       .loadAsLookups()
-      .pipe(map(teams => teams.filter(team => !(this.data.extras?.mappedUserTeamsIds as number[]).includes(team.id))))
-      .subscribe(filteredTeams => {
+      .pipe(
+        map((teams) =>
+          teams.filter(
+            (team) =>
+              !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
+                team.id
+              )
+          )
+        )
+      )
+      .subscribe((filteredTeams) => {
         this.teams = filteredTeams;
       });
   }
@@ -53,18 +75,28 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
 
   protected _afterSave(): void {
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+    );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
 
-  private saveUserTeam(userTeam: { internalUserId: number; teamId: number; status: number }): Observable<unknown> {
+  private saveUserTeam(userTeam: {
+    internalUserId: number;
+    teamId: number;
+    status: number;
+  }): Observable<unknown> {
     return this.userTeamService.saveUserTeam(userTeam);
   }
 
   private saveUserTeams(userTeam: UserTeam): Observable<unknown[]> {
-    const requests$ = userTeam.selectedTeams.map(teamId =>
-      this.saveUserTeam({ internalUserId: userTeam.internalUserId, teamId: teamId, status: userTeam.status })
+    const requests$ = userTeam.selectedTeams.map((teamId) =>
+      this.saveUserTeam({
+        internalUserId: userTeam.internalUserId,
+        teamId: teamId,
+        status: userTeam.status,
+      })
     );
     return forkJoin(requests$);
   }
@@ -78,7 +110,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
           return isObservable(result) ? result : of(result);
         })
       )
-      .pipe(filter(value => value))
+      .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -86,9 +118,9 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
         })
       )
       .pipe(
-        exhaustMap(userTeam => {
+        exhaustMap((userTeam) => {
           return this.saveUserTeams(userTeam).pipe(
-            catchError(error => {
+            catchError((error) => {
               this._saveFail(error);
               return throwError(error);
             }),
@@ -96,7 +128,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
           );
         })
       )
-      .subscribe(res => {
+      .subscribe(() => {
         this._afterSave();
       });
   }

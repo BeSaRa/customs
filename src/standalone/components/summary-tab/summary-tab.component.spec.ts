@@ -1,19 +1,15 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { SummaryTabComponent } from './summary-tab.component';
+import { SummaryTabComponent } from "./summary-tab.component";
 
-describe('SummaryTabComponent', () => {
+describe("SummaryTabComponent", () => {
   let component: SummaryTabComponent;
   let fixture: ComponentFixture<SummaryTabComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SummaryTabComponent ]
-    })
-    .compileComponents();
+      declarations: [SummaryTabComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +18,7 @@ describe('SummaryTabComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

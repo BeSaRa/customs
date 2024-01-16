@@ -1,19 +1,15 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { MakePenaltyDecisionPopupComponent } from './make-penalty-decision-popup.component';
+import { MakePenaltyDecisionPopupComponent } from "./make-penalty-decision-popup.component";
 
-describe('MakePenaltyDecisionPopupComponent', () => {
+describe("MakePenaltyDecisionPopupComponent", () => {
   let component: MakePenaltyDecisionPopupComponent;
   let fixture: ComponentFixture<MakePenaltyDecisionPopupComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MakePenaltyDecisionPopupComponent ]
-    })
-    .compileComponents();
+      declarations: [MakePenaltyDecisionPopupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +18,7 @@ describe('MakePenaltyDecisionPopupComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,16 +1,15 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { MawaredDepartment } from '@models/mawared-department';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { OperationType } from '@enums/operation-type';
+import { Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
+import { MawaredDepartment } from "@models/mawared-department";
+import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
+import { UntypedFormGroup } from "@angular/forms";
+import { Observable } from "rxjs";
 
 @Component({
-  selector: 'app-mawared-department-popup',
-  templateUrl: './mawared-department-popup.component.html',
-  styleUrls: ['./mawared-department-popup.component.scss'],
+  selector: "app-mawared-department-popup",
+  templateUrl: "./mawared-department-popup.component.html",
+  styleUrls: ["./mawared-department-popup.component.scss"],
 })
 export class MawaredDepartmentPopupComponent extends AdminDialogComponent<MawaredDepartment> {
   form!: UntypedFormGroup;
@@ -30,7 +29,7 @@ export class MawaredDepartmentPopupComponent extends AdminDialogComponent<Maware
     });
   }
 
-  protected _afterSave(model: MawaredDepartment): void {
+  protected _afterSave(_model: MawaredDepartment): void {
     return;
   }
 }

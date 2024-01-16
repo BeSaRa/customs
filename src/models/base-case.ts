@@ -1,18 +1,17 @@
-import { EmployeeService } from '@services/employee.service';
-import { TaskDetails } from './task-details';
-import { AdminResult } from '@models/admin-result';
-import { BaseCaseService } from '@abstracts/base-case.service';
-import { HasServiceMixin } from '@mixins/has-service-mixin';
-import { HasServiceNameContract } from '@contracts/has-service-name-contract';
-import { ClonerMixin } from '@mixins/cloner-mixin';
-import { CloneContract } from '@contracts/clone-contract';
-import { Observable } from 'rxjs';
-import { CaseTypes } from '@enums/case-types';
-import { BaseCaseContract } from '@contracts/base-case-contract';
-import { CommonCaseStatus } from '@enums/common-case-status';
-import { TaskResponses } from '@enums/task-responses';
-import { ActionNames } from '@enums/action-names';
-import { TaskName } from '@enums/task-name';
+import { TaskDetails } from "./task-details";
+import { AdminResult } from "@models/admin-result";
+import { BaseCaseService } from "@abstracts/base-case.service";
+import { HasServiceMixin } from "@mixins/has-service-mixin";
+import { HasServiceNameContract } from "@contracts/has-service-name-contract";
+import { ClonerMixin } from "@mixins/cloner-mixin";
+import { CloneContract } from "@contracts/clone-contract";
+import { Observable } from "rxjs";
+import { CaseTypes } from "@enums/case-types";
+import { BaseCaseContract } from "@contracts/base-case-contract";
+import { CommonCaseStatus } from "@enums/common-case-status";
+import { TaskResponses } from "@enums/task-responses";
+import { ActionNames } from "@enums/action-names";
+import { TaskName } from "@enums/task-name";
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -79,10 +78,16 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.getTaskName() == TaskName.PA_REV;
   }
   canClaim(): boolean {
-    return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM);
+    return (
+      this.taskDetails &&
+      this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM)
+    );
   }
   canRelease(): boolean {
-    return this.taskDetails && this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM);
+    return (
+      this.taskDetails &&
+      this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM)
+    );
   }
   isClaimed(): boolean {
     return this.canRelease();
@@ -90,7 +95,8 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   hasComplete(): boolean {
     return (
       this?.isClaimed() &&
-      (!this.getResponses().length || this.getResponses().includes(TaskResponses.COMPLETE)) &&
+      (!this.getResponses().length ||
+        this.getResponses().includes(TaskResponses.COMPLETE)) &&
       this.caseStatus != CommonCaseStatus.CANCELLED
     );
   }
@@ -105,7 +111,9 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.getService().claimTask(this.taskDetails.tkiid);
   }
   save(): Observable<Model> {
-    return this.id ? this.getService().update(this as unknown as Model) : this.getService().create(this as unknown as Model);
+    return this.id
+      ? this.getService().update(this as unknown as Model)
+      : this.getService().create(this as unknown as Model);
   }
 
   draft(): Observable<Model> {

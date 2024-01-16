@@ -1,29 +1,51 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatSortModule, Sort } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { AppTableDataSource } from '@models/app-table-data-source';
-import { CaseAttachment } from '@models/case-attachment';
-import { combineLatest, delay, exhaustMap, filter, map, Observable, of, ReplaySubject, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { BaseCaseService } from '@abstracts/base-case.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { LangService } from '@services/lang.service';
-import { MatCardModule } from '@angular/material/card';
-import { DialogService } from '@services/dialog.service';
-import { UserClick } from '@enums/user-click';
-import { ToastService } from '@services/toast.service';
-import { ignoreErrors } from '@utils/utils';
-import { Config } from '@constants/config';
+import { Component, inject, Input, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
+import { MatSortModule, Sort } from "@angular/material/sort";
+import { MatTableModule } from "@angular/material/table";
+import { AppTableDataSource } from "@models/app-table-data-source";
+import { CaseAttachment } from "@models/case-attachment";
+import {
+  combineLatest,
+  delay,
+  exhaustMap,
+  filter,
+  map,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs";
+import { BaseCaseService } from "@abstracts/base-case.service";
+import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
+import { LangService } from "@services/lang.service";
+import { MatCardModule } from "@angular/material/card";
+import { DialogService } from "@services/dialog.service";
+import { UserClick } from "@enums/user-click";
+import { ToastService } from "@services/toast.service";
+import { ignoreErrors } from "@utils/utils";
+import { Config } from "@constants/config";
 
 @Component({
-  selector: 'app-case-attachments',
+  selector: "app-case-attachments",
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatSortModule, MatTableModule, MatCardModule],
-  templateUrl: './case-attachments.component.html',
-  styleUrls: ['./case-attachments.component.scss'],
+  imports: [
+    CommonModule,
+    IconButtonComponent,
+    MatSortModule,
+    MatTableModule,
+    MatCardModule,
+  ],
+  templateUrl: "./case-attachments.component.html",
+  styleUrls: ["./case-attachments.component.scss"],
 })
-export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class CaseAttachmentsComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   protected readonly Config = Config;
   view$ = new Subject<CaseAttachment>();
   reload$ = new ReplaySubject<void>(1);
@@ -31,7 +53,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   dialog = inject(DialogService);
   toast = inject(ToastService);
   @Input()
-  type: 'folder' | 'offender' = 'folder';
+  type: "folder" | "offender" = "folder";
   @Input()
   entityId!: number;
   @Input()
@@ -47,9 +69,16 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
 
   lang = inject(LangService);
 
-  dataSource: AppTableDataSource<CaseAttachment> = new AppTableDataSource<CaseAttachment>(this._load());
+  dataSource: AppTableDataSource<CaseAttachment> =
+    new AppTableDataSource<CaseAttachment>(this._load());
 
-  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'creationDate', 'creator', 'actions'];
+  displayedColumns: string[] = [
+    "documentTitle",
+    "attachmentType",
+    "creationDate",
+    "creator",
+    "actions",
+  ];
 
   ngOnInit(): void {
     this.reload$.next();
@@ -66,10 +95,14 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
               switch (this.type) {
-                case 'folder':
-                  return this.caseId ? this.service.loadFolderAttachments(this.caseId) : of([]);
-                case 'offender':
-                  return this.entityId ? this.service.getOffenderAttachments(this.entityId) : of([]);
+                case "folder":
+                  return this.caseId
+                    ? this.service.loadFolderAttachments(this.caseId)
+                    : of([]);
+                case "offender":
+                  return this.entityId
+                    ? this.service.getOffenderAttachments(this.entityId)
+                    : of([]);
                 default:
                   return of([]);
               }
@@ -81,7 +114,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
   }
 
   sort($event: Sort) {
-    console.log('SORT');
+    console.log("SORT", $event);
   }
 
   openAddDialog() {
@@ -90,7 +123,12 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
       return;
     }
     this.service
-      .openAddAttachmentDialog(this.caseId as string, this.service, this.type, this.entityId)
+      .openAddAttachmentDialog(
+        this.caseId as string,
+        this.service,
+        this.type,
+        this.entityId
+      )
       .afterClosed()
       .subscribe(() => {
         this.reload$.next();
@@ -101,7 +139,7 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap(item => {
+        exhaustMap((item) => {
           return item.view(this.service);
         })
       )
@@ -112,27 +150,37 @@ export class CaseAttachmentsComponent extends OnDestroyMixin(class {}) implement
     this.delete$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap(item => {
+        exhaustMap((item) => {
           return this.dialog
-            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: item.documentTitle }))
+            .confirm(
+              this.lang.map.msg_delete_x_confirm.change({
+                x: item.documentTitle,
+              })
+            )
             .afterClosed()
             .pipe(
-              map(userClick => {
+              map((userClick) => {
                 return { userClick: userClick, item };
               })
             );
         })
       )
-      .pipe(filter(response => response.userClick === UserClick.YES))
+      .pipe(filter((response) => response.userClick === UserClick.YES))
       .pipe(
-        exhaustMap(response =>
+        exhaustMap((response) =>
           response.item
             .delete(this.service)
             .pipe(ignoreErrors())
             .pipe(map(() => response.item))
         )
       )
-      .pipe(tap(item => this.toast.success(this.lang.map.msg_delete_x_success.change({ x: item.documentTitle }))))
+      .pipe(
+        tap((item) =>
+          this.toast.success(
+            this.lang.map.msg_delete_x_success.change({ x: item.documentTitle })
+          )
+        )
+      )
       .subscribe(() => this.reload$.next());
   }
 }

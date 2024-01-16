@@ -1,7 +1,12 @@
-import { ValidationErrors } from '@angular/forms';
+import { ValidationErrors } from "@angular/forms";
 
 export type ValidationReturnType = null | ValidationErrors;
 
-export type searchFunctionType<T = any> = (text: string, model: T) => boolean;
+export type searchFunctionType<T = unknown> = (
+  text: string,
+  model: T
+) => boolean;
 
-export type ISearchFieldsMap<T = any> = { [key: string]: string | searchFunctionType<T> };
+export type ISearchFieldsMap<T = unknown> = {
+  [key: string]: string | searchFunctionType<T>;
+};

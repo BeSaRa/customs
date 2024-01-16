@@ -1,20 +1,32 @@
-import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { InternalUserOU } from '@models/internal-user-ou';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
-import { Observable, Subject, catchError, exhaustMap, filter, isObservable, map, of, switchMap, takeUntil, throwError } from 'rxjs';
-import { OperationType } from '@enums/operation-type';
-import { OrganizationUnit } from '@models/organization-unit';
-import { OrganizationUnitService } from '@services/organization-unit.service';
-import { InternalUserOUService } from '@services/internal-user-ou.service';
-import { ignoreErrors } from '@utils/utils';
+import { Component, inject } from "@angular/core";
+import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
+import { InternalUserOU } from "@models/internal-user-ou";
+import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
+import { UntypedFormGroup } from "@angular/forms";
+import {
+  Observable,
+  Subject,
+  catchError,
+  exhaustMap,
+  filter,
+  isObservable,
+  map,
+  of,
+  switchMap,
+  takeUntil,
+  throwError,
+} from "rxjs";
+import { OperationType } from "@enums/operation-type";
+import { OrganizationUnit } from "@models/organization-unit";
+import { OrganizationUnitService } from "@services/organization-unit.service";
+import { InternalUserOUService } from "@services/internal-user-ou.service";
+import { ignoreErrors } from "@utils/utils";
 
 @Component({
-  selector: 'app-internal-user-ou-popup',
-  templateUrl: './internal-user-ou-popup.component.html',
-  styleUrls: ['./internal-user-ou-popup.component.scss'],
+  selector: "app-internal-user-ou-popup",
+  templateUrl: "./internal-user-ou-popup.component.html",
+  styleUrls: ["./internal-user-ou-popup.component.scss"],
 })
 export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalUserOU> {
   saveBulk$: Subject<void> = new Subject<void>();
@@ -28,8 +40,15 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.listenToSaveBulk();
     this.organizationUnitService
       .loadAsLookups()
-      .pipe(map(data => data.filter(ou => !(this.data.extras?.organizationUnits as number[]).includes(ou.id))))
-      .subscribe(filteredData => {
+      .pipe(
+        map((data) =>
+          data.filter(
+            (ou) =>
+              !(this.data.extras?.organizationUnits as number[]).includes(ou.id)
+          )
+        )
+      )
+      .subscribe((filteredData) => {
         this.organizationUnits = filteredData;
       });
   }
@@ -53,22 +72,26 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
 
   protected _afterSave(): void {
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+    );
     this.dialogRef.close(this.model);
   }
   get internalUserId() {
-    return this.form.get('internalUserId');
+    return this.form.get("internalUserId");
   }
   get organizationUnitArray() {
-    return this.form.get('organizationUnitArray');
+    return this.form.get("organizationUnitArray");
   }
 
   createBulk(): Observable<InternalUserOU[]> {
-    const payloadArr: any[] = [];
+    const payloadArr: InternalUserOU[] = [];
     this.organizationUnitArray?.value.forEach((value: number) => {
       payloadArr.push({ ...this.form.value, organizationUnitId: value });
     });
-    return this.service.createBulkFull(payloadArr as unknown as InternalUserOU[]);
+    return this.service.createBulkFull(
+      payloadArr as unknown as InternalUserOU[]
+    );
   }
 
   protected listenToSaveBulk() {
@@ -80,7 +103,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
           return isObservable(result) ? result : of(result);
         })
       )
-      .pipe(filter(value => value))
+      .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -90,7 +113,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
       .pipe(
         exhaustMap(() => {
           return this.createBulk().pipe(
-            catchError(error => {
+            catchError((error) => {
               this._saveFail(error);
               return throwError(error);
             }),

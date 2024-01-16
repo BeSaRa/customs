@@ -1,19 +1,15 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OffenderDecissionFormComponent } from './offender-decission-form.component';
+import { OffenderDecissionFormComponent } from "./offender-decission-form.component";
 
-describe('OffenderDecissionFormComponent', () => {
+describe("OffenderDecissionFormComponent", () => {
   let component: OffenderDecissionFormComponent;
   let fixture: ComponentFixture<OffenderDecissionFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ OffenderDecissionFormComponent ]
-    })
-    .compileComponents();
+      declarations: [OffenderDecissionFormComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -22,7 +18,7 @@ describe('OffenderDecissionFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
