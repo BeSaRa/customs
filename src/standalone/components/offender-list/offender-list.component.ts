@@ -25,6 +25,7 @@ import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-vi
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
 import { TransformerAction } from '@contracts/transformer-action';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-offender-list',
@@ -33,7 +34,7 @@ import { TransformerAction } from '@contracts/transformer-action';
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffenderListComponent extends OnDestroyMixin(class { }) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -53,6 +54,8 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   attachments$: Subject<Offender> = new Subject<Offender>();
   transformer$ = new Subject<TransformerAction<Investigation>>();
   @Output() saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
+  @Output()
+  offenders = new EventEmitter<Offender[]>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -108,12 +111,22 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
 
   private listenToReload() {
     this.reload$
-      .pipe(filter(() => !!this.caseId))
-      .pipe(switchMap(() => this.offenderService.load(undefined, { caseId: this.caseId })))
       .pipe(takeUntil(this.destroy$))
-      .subscribe(list => {
-        this.data.next(list.rs);
-      });
+      .pipe(filter(() => !!this.caseId))
+      .pipe(
+        switchMap(() =>
+          this.offenderService
+            .load(undefined, { caseId: this.caseId })
+            .pipe(
+              map(pagination => {
+                this.data.next(pagination.rs);
+                return pagination;
+              })
+            )
+            .pipe(ignoreErrors())
+        )
+      )
+      .subscribe(pagination => this.offenders.next(pagination.rs || []));
   }
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
@@ -196,6 +209,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   }
   resetDataList() {
     this.data.next([]);
+    this.offenders.emit([]);
   }
   isClearingAgent(element: Offender) {
     return element.type === OffenderTypes.ClEARING_AGENT;

@@ -22,7 +22,7 @@ import { SystemPenalties } from '@enums/system-penalties';
   templateUrl: './make-penalty-decision-popup.component.html',
   styleUrls: ['./make-penalty-decision-popup.component.scss'],
 })
-export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
   data = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dilogRef = inject(MatDialogRef);
@@ -49,15 +49,14 @@ export class MakePenaltyDecisionPopupComponent extends OnDestroyMixin(class {}) 
       .pipe(filter(() => !!this.form.valid))
       .pipe(
         switchMap(() => {
-          return this.penaltyDecisionService.create(
-            new PenaltyDecision().clone<PenaltyDecision>({
-              caseId: this.caseId,
-              offenderId: this.model.id,
-              signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: this.form.value.penalty,
-              status: 1,
-            })
-          );
+          const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
+            caseId: this.caseId,
+            offenderId: this.model.id,
+            signerId: this.employeeService.getEmployee()?.id,
+            penaltyId: this.form.value.penalty,
+            status: 1,
+          })
+          return penaltyDecision.save();
         })
       )
       .subscribe(() => this.dilogRef.close());

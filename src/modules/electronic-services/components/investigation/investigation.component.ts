@@ -26,6 +26,7 @@ import { EmployeeService } from '@services/employee.service';
 import { LookupService } from '@services/lookup.service';
 import { SendTypes } from '@enums/send-types';
 import { CommonCaseStatus } from '@enums/common-case-status';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-investigation',
@@ -58,6 +59,7 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
 
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   violations: Violation[] = [];
+  offenders: Offender[] = [];
 
   protected override _init() {
     super._init();
@@ -85,8 +87,9 @@ export class InvestigationComponent extends BaseCaseComponent<Investigation, Inv
   }
 
   _beforeSave(saveType: SaveTypes): boolean | Observable<boolean> {
-    !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
-    return !!this.violations.length;
+    (!this.violations.length && !this.offenders.length)
+      && this.dialog.error(this.lang.map.add_violation_or_offender_first_to_take_this_action);
+    return !!this.violations.length || !!this.offenders.length;
   }
 
   _prepareModel(): Investigation | Observable<Investigation> {

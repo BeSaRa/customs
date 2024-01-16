@@ -18,6 +18,9 @@ export class InvestigationInterceptor implements ModelInterceptorContract<Invest
     delete model.departmentInfo;
     delete model.limitedAccessInfo;
     delete model.ouInfo;
+    delete model.caseStatusInfo;
+    delete model.creatorInfo;
+    delete model.sectionInfo;
 
     model.offenderInfo = model.offenderInfo?.map(offender => new Offender().clone<Offender>(offenderInterceptor.send(offender)));
     model.offenderViolationInfo = model.offenderViolationInfo?.map(offenderViolation =>
@@ -42,7 +45,7 @@ export class InvestigationInterceptor implements ModelInterceptorContract<Invest
         ...offenderInterceptor.receive(offender),
         violations: model.offenderViolationInfo
           .filter(offenderViolation => offenderViolation.offenderId == offender.id)
-          .map(violation => new OffenderViolation().clone<OffenderViolation>(offenderViolationInterceptor.send(violation))),
+          .map(violation => new OffenderViolation().clone<OffenderViolation>(offenderViolationInterceptor.receive(violation))),
       })
     );
     model.violationInfo = model.violationInfo?.map(violation => new Violation().clone<Violation>(violationInterceptor.receive(violation)));

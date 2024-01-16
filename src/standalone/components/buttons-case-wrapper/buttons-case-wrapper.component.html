@@ -13,8 +13,7 @@
     {{ lang.map.manager_approve }}
   </app-button>
   <!-- complete action -->
-  <app-button *ngIf="model?.hasComplete()"
-    (click)="responseAction$.next(taskResponses.COMPLETE)">
+  <app-button *ngIf="model?.hasComplete()" (click)="responseAction$.next(taskResponses.COMPLETE)">
     {{ lang.map.complete }}
   </app-button>
   <!-- final complete action -->
@@ -96,31 +95,26 @@
   </mat-menu>
 
   <!-- send to -->
-  <app-button
-    *ngIf="model?.isClaimed() && (
+  <app-button *ngIf="model?.isClaimed() && (
         model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS) ||
         model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL) ||
         model?.hasResponse(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)
-      )" buttonType="secondary" mat-button
-      [matMenuTriggerFor]="sendToMenu"> {{ lang.map.send_to }}
+      )" buttonType="secondary" mat-button [matMenuTriggerFor]="sendToMenu"> {{ lang.map.send_to }}
     <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
   </app-button>
   <mat-menu #sendToMenu="matMenu">
     <!-- launch legal affairs -->
-    <button mat-menu-item
-      *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)"
+    <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)"
       (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)">
       {{ lang.map.launch_legal_affairs }}
     </button>
     <!-- launch disciplinary council -->
-    <button mat-menu-item
-      *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)"
+    <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)"
       (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)">
       {{ lang.map.launch_disciplinary_council }}
     </button>
     <!-- launch disciplinary council -->
-    <button mat-menu-item
-      *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)"
+    <button mat-menu-item *ngIf="model?.hasResponse(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)"
       (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)">
       {{ lang.map.launch_permanent_disciplinary_council }}
     </button>
@@ -154,11 +148,13 @@
 
   <!-- data entry actions -->
   <!-- send to manager -->
-  <app-button *ngIf="canLaunch() && !isApplicantManager()" (click)="onLaunch.emit(sendTypes.DIRECTOR_ADMIN)">{{
+  <app-button *ngIf="canLaunch() && !isApplicantManager()"
+    (click)="onLaunch.emit(isApplicantChief() ? sendTypes.CHIEF_TO_MANAGER : sendTypes.DIRECTOR_ADMIN)">{{
     lang.map.send_to_manager
     }}</app-button>
   <!-- send to chief -->
-  <app-button *ngIf="canLaunch() && !isApplicantChief() && !isApplicantManager()" (click)="onLaunch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
+  <app-button *ngIf="canLaunch() && !isApplicantChief() && !isApplicantManager() && model?.sectionId"
+    (click)="onLaunch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
     lang.map.send_to_chief
     }}</app-button>
 
