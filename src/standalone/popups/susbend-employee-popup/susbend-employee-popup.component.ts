@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +27,6 @@ import { Observable, Subject, catchError, exhaustMap, filter, isObservable, of, 
     MatButtonModule,
     ButtonComponent,
     IconButtonComponent,
-    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     InputComponent,
@@ -83,7 +81,7 @@ export class SusbendEmployeePopupComponent extends OnDestroyMixin(class {}) impl
           );
         })
       )
-      .subscribe(res => {
+      .subscribe(() => {
         this._afterSave();
       });
   }

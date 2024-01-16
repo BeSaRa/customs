@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MenuItemService } from '@services/menu-item.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MenuItemContract } from '@contracts/menu-item-contract';
@@ -14,7 +14,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-menu-item-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MenuItemIconComponent, InputComponent, ReactiveFormsModule, FilterSidebarMenuItemPipe],
+  imports: [MatIconModule, MenuItemIconComponent, InputComponent, ReactiveFormsModule, FilterSidebarMenuItemPipe],
   templateUrl: './menu-item-list.component.html',
   styleUrls: ['./menu-item-list.component.scss'],
   animations: [

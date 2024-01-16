@@ -6,22 +6,25 @@
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4 items-center">
-        <app-input *ngIf="!isInternal()" [label]="lang.map.en_name" formControlName="enName"></app-input>
-        <app-input *ngIf="!isInternal()" [label]="lang.map.ar_name" formControlName="arName"></app-input>
+        @if (!isInternal()) {
+        <app-input [label]="lang.map.en_name" formControlName="enName"></app-input>
+        } @if (!isInternal()) {
+        <app-input [label]="lang.map.ar_name" formControlName="arName"></app-input>
+        } @if (!isInternal()) {
         <app-select-input
-          *ngIf="!isInternal()"
           [label]="lang.map.witness_type"
           formControlName="summonedType"
           [options]="personTypes"
           bindLabel="getNames"
           bindValue="lookupKey" />
+        } @if (isInternal()) {
         <app-select-input
-          *ngIf="isInternal()"
           [label]="lang.map.offender_type"
           formControlName="summonedType"
           [options]="offenderTypes"
           bindLabel="getNames"
           bindValue="lookupKey" />
+        }
         <app-select-input
           [label]="lang.map.user_type"
           formControlName="type"

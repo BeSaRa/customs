@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ValidationErrors } from '@angular/forms';
 import { ValidationMessages, ValidationMessagesType } from '@constants/validation-messages';
 import { LangService } from '@services/lang.service';
@@ -8,7 +8,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 @Component({
   selector: 'app-validation-errors',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './validation-errors.component.html',
   styleUrls: ['./validation-errors.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

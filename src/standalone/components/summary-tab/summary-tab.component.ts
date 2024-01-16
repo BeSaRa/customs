@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Investigation } from '@models/investigation';
 import { OffendersViolationsPreviewComponent } from '../offenders-violations-preview/offenders-violations-preview.component';
@@ -10,22 +9,11 @@ import { LangService } from '@services/lang.service';
   templateUrl: './summary-tab.component.html',
   styleUrls: ['./summary-tab.component.scss'],
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    OffendersViolationsPreviewComponent,
-  ]
+  imports: [ReactiveFormsModule, FormsModule, OffendersViolationsPreviewComponent],
 })
-export class SummaryTabComponent implements OnInit {
+export class SummaryTabComponent {
   lang = inject(LangService);
 
   @Input() form!: FormGroup;
   @Input() model?: Investigation;
-  
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

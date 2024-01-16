@@ -1,10 +1,10 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
@@ -24,7 +24,7 @@ import { EmployeeService } from '@services/employee.service';
 @Component({
   selector: 'app-witnesses-list',
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })

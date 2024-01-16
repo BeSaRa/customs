@@ -72,15 +72,15 @@
     </ng-container>
 
     <!-- Filter Columns -->
-    <ng-container *ngFor="let filter of columnsWrapper.filteredColumns">
-      <ng-container [matColumnDef]="filter">
-        <th mat-header-cell *matHeaderCellDef>
-          <app-filter-column
-            (filterChange)="filterChange($event)"
-            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
-        </th>
-      </ng-container>
+    @for (filter of columnsWrapper.filteredColumns; track filter) {
+    <ng-container [matColumnDef]="filter">
+      <th mat-header-cell *matHeaderCellDef>
+        <app-filter-column
+          (filterChange)="filterChange($event)"
+          [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
+      </th>
     </ng-container>
+    }
 
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>

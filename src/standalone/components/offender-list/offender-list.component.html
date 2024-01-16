@@ -1,6 +1,8 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ lang.map.offenders }}</h1>
-  <app-icon-button (click)="add$.next()" *ngIf="!readonly" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+  @if (!readonly) {
+  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+  }
   <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
 </div>
 <div>
@@ -41,19 +43,23 @@
           <div [matTooltip]="lang.map.offender_attachments">
             <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
           </div>
-          <div [matTooltip]="lang.map.delete" *ngIf="!readonly">
+          @if (!readonly) {
+          <div [matTooltip]="lang.map.delete">
             <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
+          }
           <div [matTooltip]="lang.map.situation_search">
             <app-icon-button
               (click)="situationSearch$.next({ offender: element, isCompany: false })"
               icon="INFORMATION"></app-icon-button>
           </div>
-          <div [matTooltip]="lang.map.situation_search_clearing_agency" *ngIf="isClearingAgent(element)">
+          @if (isClearingAgent(element)) {
+          <div [matTooltip]="lang.map.situation_search_clearing_agency">
             <app-icon-button
               (click)="situationSearch$.next({ offender: element, isCompany: true })"
               icon="CLEARING_AGENCY"></app-icon-button>
           </div>
+          }
         </div>
       </td>
     </ng-container>

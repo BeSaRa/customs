@@ -1,5 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -14,7 +14,6 @@ import { BlobModel } from '@models/blob-model';
   selector: 'app-view-attachment-popup',
   standalone: true,
   imports: [
-    CommonModule,
     ButtonComponent,
     FormsModule,
     IconButtonComponent,

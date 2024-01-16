@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { ButtonComponent } from '../button/button.component';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -22,7 +22,6 @@ import { ignoreErrors } from '@utils/utils';
   selector: 'app-assignment-to-attend',
   standalone: true,
   imports: [
-    CommonModule,
     IconButtonComponent,
     ButtonComponent,
     MatDialogModule,

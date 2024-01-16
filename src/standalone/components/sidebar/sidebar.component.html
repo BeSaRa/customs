@@ -10,7 +10,8 @@
       <img ngSrc="assets/images/logo-text.png" alt="logo text" priority="" height="78" width="535" />
     </a>
   </div>
-  <div class="relative h-[55px] flex justify-center py-2" *ngIf="!isClosingOrClosed()">
+  @if (!isClosingOrClosed()) {
+  <div class="relative h-[55px] flex justify-center py-2">
     <div [@scaleInOut]="!isClosingOrClosed()" class="flex-none items-center justify-center pb-0 px-2 absolute w-full">
       <app-input
         (keydown.arrowDown)="moveFocus()"
@@ -23,6 +24,7 @@
       </app-input>
     </div>
   </div>
+  }
   <div class="flex-auto px-2">
     <ng-scrollbar viewClass="pt-4" visibility="hover" [dir]="direction">
       <app-sidebar-menu [shrinkMode]="isClosingOrClosed()" [searchText]="control.value" [level]="1" [items]="items" />

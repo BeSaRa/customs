@@ -29,45 +29,44 @@
         </div>
         <hr class="mb-5" />
         <h4 class="mb-4 text-primary">{{ lang.map.search_criteria }}</h4>
-        <ng-container *ngIf="isEmployee && employeeFormGroup">
-          <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
-            <app-select-input
-              [formControl]="offenderTypeControl"
-              [label]="lang.map.offender_type"
-              bindLabel="getNames"
-              bindValue="lookupKey"
-              [options]="offenderTypes" />
-            <app-select-input
-              formControlName="employeeDepartmentId"
-              [label]="lang.map.administration"
-              bindValue="id"
-              bindLabel="getNames"
-              [options]="administrations" />
-            <app-input formControlName="employeeQualificationId" [label]="lang.map.employee_number" />
-            <app-input formControlName="arName" [label]="lang.map.ar_name" />
-            <app-input formControlName="enName" [label]="lang.map.en_name" />
-            <app-input formControlName="qid" [label]="lang.map.qid" />
-            <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
-          </div>
-        </ng-container>
-        <ng-container *ngIf="isClearingAgent">
-          <div [formGroup]="clearingAgentFormGroup" class="grid grid-cols-3 gap-4">
-            <app-select-input
-              [formControl]="offenderTypeControl"
-              [label]="lang.map.offender_type"
-              bindLabel="getNames"
-              bindValue="lookupKey"
-              [options]="offenderTypes" />
-            <app-input formControlName="code" [label]="lang.map.clearing_agent_code" />
-            <app-input formControlName="arName" [label]="lang.map.ar_name" />
-            <app-input formControlName="enName" [label]="lang.map.en_name" />
-            <app-input formControlName="qid" [label]="lang.map.qid" />
-            <app-input formControlName="agencyArabicCompanyName" [label]="lang.map.clearing_agency_name" />
-            <app-input formControlName="agencyLicenseNo" [label]="lang.map.clearing_agency_number" />
-            <app-input [label]="lang.map.clearing_agency_cr_number" />
-            <app-input [label]="lang.map.clearing_agency_er_number" />
-          </div>
-        </ng-container>
+        @if (isEmployee && employeeFormGroup) {
+        <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
+          <app-select-input
+            [formControl]="offenderTypeControl"
+            [label]="lang.map.offender_type"
+            bindLabel="getNames"
+            bindValue="lookupKey"
+            [options]="offenderTypes" />
+          <app-select-input
+            formControlName="employeeDepartmentId"
+            [label]="lang.map.administration"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="administrations" />
+          <app-input formControlName="employeeQualificationId" [label]="lang.map.employee_number" />
+          <app-input formControlName="arName" [label]="lang.map.ar_name" />
+          <app-input formControlName="enName" [label]="lang.map.en_name" />
+          <app-input formControlName="qid" [label]="lang.map.qid" />
+          <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
+        </div>
+        } @if (isClearingAgent) {
+        <div [formGroup]="clearingAgentFormGroup" class="grid grid-cols-3 gap-4">
+          <app-select-input
+            [formControl]="offenderTypeControl"
+            [label]="lang.map.offender_type"
+            bindLabel="getNames"
+            bindValue="lookupKey"
+            [options]="offenderTypes" />
+          <app-input formControlName="code" [label]="lang.map.clearing_agent_code" />
+          <app-input formControlName="arName" [label]="lang.map.ar_name" />
+          <app-input formControlName="enName" [label]="lang.map.en_name" />
+          <app-input formControlName="qid" [label]="lang.map.qid" />
+          <app-input formControlName="agencyArabicCompanyName" [label]="lang.map.clearing_agency_name" />
+          <app-input formControlName="agencyLicenseNo" [label]="lang.map.clearing_agency_number" />
+          <app-input [label]="lang.map.clearing_agency_cr_number" />
+          <app-input [label]="lang.map.clearing_agency_er_number" />
+        </div>
+        }
       </div>
     </ng-template>
     <ng-template #searchResult>
@@ -166,9 +165,7 @@
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="search$.next()" buttonType="primary">{{
-      lang.map.search
-    }}</app-button>
+    <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
   </div>
 </div>

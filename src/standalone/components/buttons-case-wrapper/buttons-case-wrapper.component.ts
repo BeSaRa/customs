@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
 import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
-import { CommonModule } from '@angular/common';
+
 import { EmployeeService } from '@services/employee.service';
 import { OpenFrom } from '@enums/open-from';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,9 +22,9 @@ import { OpenedInfoContract } from '@contracts/opened-info-contract';
 @Component({
   selector: 'app-buttons-case-wrapper',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, MatIconModule, MatMenuModule],
+  imports: [ButtonComponent, MatIconModule, MatMenuModule],
   templateUrl: './buttons-case-wrapper.component.html',
-  styleUrls: ['./buttons-case-wrapper.component.scss']
+  styleUrls: ['./buttons-case-wrapper.component.scss'],
 })
 export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
@@ -33,21 +33,21 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
   route = inject(ActivatedRoute);
   router = inject(Router);
   info: OpenedInfoContract | null = null;
-  
+
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
   sendTypes = SendTypes;
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
-  
+
   @Input() model?: Investigation;
 
-  @Output() onSave = new EventEmitter<SaveTypes>();
-  @Output() onLaunch = new EventEmitter<SendTypes>();
-  @Output() onClaim = new EventEmitter<Investigation>();
-  
+  @Output() save = new EventEmitter<SaveTypes>();
+  @Output() launch = new EventEmitter<SendTypes>();
+  @Output() claim = new EventEmitter<Investigation>();
+
   ngOnInit() {
-    this.info = this.route.snapshot.data['info'] as (OpenedInfoContract | null);
+    this.info = this.route.snapshot.data['info'] as OpenedInfoContract | null;
     this.listenToResponseAction();
   }
 
@@ -63,15 +63,15 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
                 response,
               },
             })
-            .afterOpened();
+            .afterClosed();
         })
       )
-      .pipe(filter((click: any) => click == UserClick.YES))
+      .pipe(filter((click: unknown) => click == UserClick.YES))
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom();
       });
   }
-  
+
   private navigateToSamePageThatUserCameFrom(): void {
     if (this.info == null) {
       return;
@@ -87,20 +87,23 @@ export class ButtonsCaseWrapperComponent extends OnDestroyMixin(class {}) implem
         this.router.navigate(['/home/electronic-services/investigation-search']).then();
         break;
     }
+  }
 
-  }
   isApplicantChief() {
-    return this.employeeService.isApplicantChief()
+    return this.employeeService.isApplicantChief();
   }
+
   isApplicantManager() {
-    return this.employeeService.isApplicantManager()
+    return this.employeeService.isApplicantManager();
   }
+
   canLaunch() {
     return this.model?.canStart();
   }
-  claim() {
+
+  claimItem() {
     this.model?.claim().subscribe((model: Investigation) => {
-      this.onClaim.emit(model);
+      this.claim.emit(model);
     });
   }
 }

@@ -1,6 +1,6 @@
 import { Investigation } from './../../../models/investigation';
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
@@ -34,7 +34,6 @@ import { DialogService } from '@services/dialog.service';
   selector: 'app-violation-popup',
   standalone: true,
   imports: [
-    CommonModule,
     ButtonComponent,
     IconButtonComponent,
     MatDialogModule,

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LangService } from '@services/lang.service';
@@ -31,7 +31,6 @@ import { CustomValidators } from '@validators/custom-validators';
   selector: 'app-case-attachment-popup',
   standalone: true,
   imports: [
-    CommonModule,
     ButtonComponent,
     IconButtonComponent,
     InputComponent,
@@ -47,12 +46,12 @@ import { CustomValidators } from '@validators/custom-validators';
   templateUrl: './case-attachment-popup.component.html',
   styleUrls: ['./case-attachment-popup.component.scss'],
 })
-export class CaseAttachmentPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class CaseAttachmentPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialogRef = inject(MatDialogRef);
   fb = inject(UntypedFormBuilder);
   dialog = inject(DialogService);
   toast = inject(ToastService);
-  data: { caseId: string; service: BaseCaseService<unknown>; type: 'folder' | 'offender'; entityId: number; } = inject(MAT_DIALOG_DATA);
+  data: { caseId: string; service: BaseCaseService<unknown>; type: 'folder' | 'offender'; entityId: number } = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   view$ = new Subject<CaseAttachment>();
   delete$ = new Subject<CaseAttachment>();
@@ -97,7 +96,8 @@ export class CaseAttachmentPopupComponent extends OnDestroyMixin(class { }) impl
     });
   }
 
-  validFile(file: File): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  validFile(_file: File): boolean {
     return true;
   }
 

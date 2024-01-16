@@ -1,17 +1,19 @@
 <mat-menu #menu="matMenu" [overlapTrigger]="false">
-  <ng-container *ngFor="let action of actions">
-    <ng-container *ngIf="hasChildren(action)">
-      <button *ngIf="subMenu.childMenu" mat-menu-item [matMenuTriggerFor]="subMenu.childMenu">
-        <mat-icon *ngIf="action.icon" [svgIcon]="action.icon"></mat-icon>
-        <span>{{ getActionLabel(action) }}</span>
-      </button>
-      <app-context-menu-item [item]="item" [actions]="action.children!" #subMenu></app-context-menu-item>
-    </ng-container>
-    <ng-container *ngIf="!hasChildren(action)">
-      <button mat-menu-item (click)="callback(action)">
-        <mat-icon *ngIf="action.icon" [svgIcon]="action.icon"></mat-icon>
-        <span>{{ getActionLabel(action) }}</span>
-      </button>
-    </ng-container>
-  </ng-container>
+  @for (action of actions; track action) { @if (hasChildren(action)) { @if (subMenu.childMenu) {
+  <button mat-menu-item [matMenuTriggerFor]="subMenu.childMenu">
+    @if (action.icon) {
+    <mat-icon [svgIcon]="action.icon"></mat-icon>
+    }
+    <span>{{ getActionLabel(action) }}</span>
+  </button>
+  }
+  <app-context-menu-item [item]="item" [actions]="action.children!" #subMenu></app-context-menu-item>
+  } @if (!hasChildren(action)) {
+  <button mat-menu-item (click)="callback(action)">
+    @if (action.icon) {
+    <mat-icon [svgIcon]="action.icon"></mat-icon>
+    }
+    <span>{{ getActionLabel(action) }}</span>
+  </button>
+  } }
 </mat-menu>

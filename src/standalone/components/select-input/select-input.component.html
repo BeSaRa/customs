@@ -3,8 +3,11 @@
   [for]="name"
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
-  <span [ngClass]="labelColor" class="block font-medium">{{ label }} 
-    <span *ngIf="isRequired" class="text-amber-700">*</span>
+  <span [ngClass]="labelColor" class="block font-medium"
+    >{{ label }}
+    @if (isRequired) {
+    <span class="text-amber-700">*</span>
+    }
   </span>
   <div [ngClass]="size" class="group/input-wrapper input-form {{ inputColor }} flex items-center justify-start">
     <ng-content select="[appInputPrefix]"></ng-content>
@@ -18,29 +21,33 @@
       (blur)="inputTouch()"
       [id]="name"
       [ngClass]="tailwindClass"
-      [multiple]="isMultiple">   
-      <div class="px-2 pb-2" *ngIf="enableFilter">
+      [multiple]="isMultiple">
+      @if (enableFilter) {
+      <div class="px-2 pb-2">
         <app-input
-        [formControl]="filterControl"
-        label=""
-        [displayErrors]="false"
-        [noMargin]="true"
-        [placeholder]="lang.map.filter"
-        ><mat-icon appInputSuffix class="mx-1 !h-10" svgIcon="magnify"></mat-icon
-          ></app-input>
-        </div>
-        <ng-container
-        *ngFor="let option of options | FilterArray : bindFilter : (filterTxt$ | async)"
+          [formControl]="filterControl"
+          label=""
+          [displayErrors]="false"
+          [noMargin]="true"
+          [placeholder]="lang.map.filter"
+          ><mat-icon appInputSuffix class="mx-1 !h-10" svgIcon="magnify"></mat-icon
+        ></app-input>
+      </div>
+      } @for (option of options | FilterArray : bindFilter : (filterTxt$ | async); track option) {
+      <ng-container
         [ngTemplateOutlet]="optionTemplate?.templateRef || defaultTemplate"
         [ngTemplateOutletContext]="{ $implicit: option }"></ng-container>
-        <ng-template #defaultTemplate let-option>
-          <mat-option [value]="getBindValue(option)">{{ getBindLabel(option) }}</mat-option>
-        </ng-template>
-      </mat-select>
-      <mat-icon class="me-2" (click)="delete($event, control.value)" *ngIf="!isRequired && control.value && nullable" svgIcon="close"></mat-icon>
-      <ng-content select="[appInputSuffix]"></ng-content>
-    </div>
-  <ng-container *ngIf="displayErrors">
-    <app-validation-errors [errors]="errors | async"></app-validation-errors>
-  </ng-container>
+      }
+      <ng-template #defaultTemplate let-option>
+        <mat-option [value]="getBindValue(option)">{{ getBindLabel(option) }}</mat-option>
+      </ng-template>
+    </mat-select>
+    @if (!isRequired && control.value && nullable) {
+    <mat-icon class="me-2" (click)="delete($event, control.value)" svgIcon="close"></mat-icon>
+    }
+    <ng-content select="[appInputSuffix]"></ng-content>
+  </div>
+  @if (displayErrors) {
+  <app-validation-errors [errors]="errors | async"></app-validation-errors>
+  }
 </label>

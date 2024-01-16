@@ -5,9 +5,11 @@
   </div>
   <div class="dialog-content">
     <div class="shadow relative">
-      <div *ngIf="loading$ | async" class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
+      @if (loading$ | async) {
+      <div class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
         <mat-spinner style="margin-top: 120px" [diameter]="75"></mat-spinner>
       </div>
+      }
 
       <table mat-table matSort class="table-style" [dataSource]="dataSource">
         <!-- ip -->
@@ -42,7 +44,9 @@
         <tr mat-row *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
-          <td *ngIf="(loading$ | async)!" class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+          @if ((loading$ | async)!) {
+          <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+          }
         </tr>
       </table>
       <mat-paginator

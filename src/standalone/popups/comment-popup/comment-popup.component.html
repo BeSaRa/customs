@@ -4,98 +4,121 @@
     <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content max-w-[900px]">
-    <ng-container *ngIf="isPreviewForm">
-      <div dir="rtl">
-        <div class="flex justify-between">
-          <div>
-            <strong>السيد {{sendToName + ' ' + sendToTitle}} المحترم</strong>
-          </div>
-          <div>
-            <label class="pb-3 block">
-              {{formNumberAndType}}
-            </label>
-            <label class="pb-3 block">
-              {{decisionNumberAndType}}
-            </label>
-            <label class="pb-3 block">
-              {{formDateAndType}}
-            </label>
-          </div>
+    @if (isPreviewForm) {
+    <div dir="rtl">
+      <div class="flex justify-between">
+        <div>
+          <strong>السيد {{ sendToName + " " + sendToTitle }} المحترم</strong>
         </div>
-        <h4 class="text-center py-5"> <strong>{{formName}}</strong></h4>
-        <div class="px-8">
-          <p class="mb-4">
-            {{upperFixedText}}
-          </p>
-          <div class="mb-4" *ngIf="
-              response === taskResponses.TO_MANAGER
-           || response === taskResponses.REFERRAL_TO_PRESODENT
-           || response === taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
-           ">
-            <div *ngFor="let offender of offenders">
-              <h5><strong>{{offender.name}}</strong></h5>
-              <ul class="list-none">
-                <li>{{offender.jobTitle + ' ' + offender.name }}</li>
-                <li *ngFor="let violation of offender.violations">
-                  {{violation.name}}
-                </li>
-              </ul>
-            </div>
-          </div>
-          <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM2">
-            <h5 *ngFor="let violation of violations">
-              <strong>
-                {{violation.name}}
-              </strong>
-            </h5>
-          </div> -->
-          <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM7">
+        <div>
+          <label class="pb-3 block">
+            {{ formNumberAndType }}
+          </label>
+          <label class="pb-3 block">
+            {{ decisionNumberAndType }}
+          </label>
+          <label class="pb-3 block">
+            {{ formDateAndType }}
+          </label>
+        </div>
+      </div>
+      <h4 class="text-center py-5">
+        <strong>{{ formName }}</strong>
+      </h4>
+      <div class="px-8">
+        <p class="mb-4">
+          {{ upperFixedText }}
+        </p>
+        @if ( response === taskResponses.TO_MANAGER || response === taskResponses.REFERRAL_TO_PRESODENT || response ===
+        taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT ) {
+        <div class="mb-4">
+          @for (offender of offenders; track offender) {
+          <div>
             <h5>
-              <strong>
-              {{violation.name + ' ' + violation.date}}
+              <strong>{{ offender.name }}</strong>
+            </h5>
+            <ul class="list-none">
+              <li>{{ offender.jobTitle + " " + offender.name }}</li>
+              @for (violation of offender.violations; track violation) {
+              <li>
+                {{ violation.name }}
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </div>
+        }
+        <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM2">
+          <h5 *ngFor="let violation of violations">
+            <strong>
+              {{violation.name}}
             </strong>
           </h5>
-          </div> -->
-          <form [formGroup]="form" class="mb-3">
-            <app-textarea formControlName="comment" label="الوصف والتعليقات الأخرى"
-              placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"></app-textarea>
-          </form>
-          <p class="mb-4">{{lowerFixedText}}
-          </p>
-
-          <div class="flex" [ngClass]="{
+        </div> -->
+        <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM7">
+        <h5>
+          <strong>
+            {{violation.name + ' ' + violation.date}}
+          </strong>
+        </h5>
+      </div> -->
+        <form [formGroup]="form" class="mb-3">
+          <app-textarea
+            formControlName="comment"
+            label="الوصف والتعليقات الأخرى"
+            placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"></app-textarea>
+        </form>
+        <p class="mb-4">{{ lowerFixedText }}</p>
+        <div
+          class="flex"
+          [ngClass]="{
             'justify-between': justifyBetween,
             'justify-end': justifyEnd
           }">
-            <div *ngIf="justifyBetween">
-              <ul class="list-none mt-5">
-                <li *ngIf="isEmployee">
-                  {{copyToHumanResources}}
-                </li>
-                <li *ngIf="isClearingAgent">
-                  {{copyToLegalAffairs}}
-                </li>
-              </ul>
-            </div>
-            <div style="width: 240px;">
-              <h6 class="mb-4 text-center"><strong>{{signature}}</strong></h6>
-              <label class="pb-3 block">{{sendFromName}}</label>
-              <label class="pb-3 block">{{sendFromJobTitle}}</label>
-              <br>
-            </div>
+          @if (justifyBetween) {
+          <div>
+            <ul class="list-none mt-5">
+              @if (isEmployee) {
+              <li>
+                {{ copyToHumanResources }}
+              </li>
+              } @if (isClearingAgent) {
+              <li>
+                {{ copyToLegalAffairs }}
+              </li>
+              }
+            </ul>
+          </div>
+          }
+          <div style="width: 240px">
+            <h6 class="mb-4 text-center">
+              <strong>{{ signature }}</strong>
+            </h6>
+            <label class="pb-3 block">{{ sendFromName }}</label>
+            <label class="pb-3 block">{{ sendFromJobTitle }}</label>
+            <br />
           </div>
         </div>
       </div>
-    </ng-container>
-    <form *ngIf="!isPreviewForm" [formGroup]="form">
-      <div class="col-12 mb-3" *ngIf="isSendToUser">
-        <app-select-input formControlName="userId" [label]="lang.map.send_to_user_x" bindValue="id"
-          bindLabel="getNames" [options]="usersList" />
+    </div>
+    } @if (!isPreviewForm) {
+    <form [formGroup]="form">
+      @if (isSendToUser) {
+      <div class="col-12 mb-3">
+        <app-select-input
+          formControlName="userId"
+          [label]="lang.map.send_to_user_x"
+          bindValue="id"
+          bindLabel="getNames"
+          [options]="usersList" />
       </div>
+      }
       <div class="col-12 mb-3">
         <app-textarea formControlName="comment" label="comment"></app-textarea>
       </div>
     </form>
+    }
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary">{{ lang.map.save }}</app-button>

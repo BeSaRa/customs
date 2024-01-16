@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { InputComponent } from '@standalone/components/input/input.component';
@@ -23,7 +23,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule, InputComponent, NgOptimizedImage, MatMenuModule, IconButtonComponent, MatTooltipModule],
+  imports: [MatButtonModule, MatIconModule, InputComponent, NgOptimizedImage, MatMenuModule, IconButtonComponent, MatTooltipModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
@@ -103,7 +103,7 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
     dialog
       .afterClosed()
       .pipe(filter(value => value === UserClick.YES))
-      .subscribe(result => {
+      .subscribe(() => {
         this.lang.toggleLang();
       });
   }

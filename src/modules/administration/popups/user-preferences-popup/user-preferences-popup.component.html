@@ -100,17 +100,14 @@
       <mat-tab [label]="lang.map.alt_emails">
         <div class="grid grid-cols-2 gap-2 items-center">
           <ng-container [formGroup]="form">
-            <ng-container
-              *ngFor="let email of alternateEmailListParsed.controls; let i = index"
-              formArrayName="alternateEmailListParsed"
-              class="w-full">
+            @for (email of alternateEmailListParsed.controls; track email; let i = $index) {
+            <ng-container formArrayName="alternateEmailListParsed" class="w-full">
               <div class="flex items-center justify-center">
                 <app-input
                   class="w-full"
                   [formControlName]="i"
                   type="text"
                   [label]="lang.map.alt_email + ' ' + (i + 1)"></app-input>
-
                 <app-icon-button
                   tabindex="-1"
                   icon="DELETE"
@@ -118,6 +115,7 @@
                   [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
               </div>
             </ng-container>
+            }
             <div class="w-full flex items-center justify-start">
               <app-icon-button
                 class="bg-slate-300"
@@ -131,8 +129,12 @@
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="this.save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+    <app-button (click)="this.save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    }
   </div>
 </div>

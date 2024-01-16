@@ -55,28 +55,35 @@
           </div>
         </ng-container>
       </mat-tab>
-      <mat-tab *ngIf="!inCreateMode()" [label]="lang.map.ou_logo">
+      @if (!inCreateMode()) {
+      <mat-tab [label]="lang.map.ou_logo">
         <div class="dialog-content">
           <div [formGroup]="form" class="flex flex-col">
             <div (drop)="filesDropped($event)" (dragover)="$event.preventDefault()" [ngClass]="getOuLogoStyle()">
-              <div *ngIf="ouLogoSafeUrl; else dragAndDrop" class="dialog-content !p-0 w-full h-full">
+              @if (ouLogoSafeUrl) {
+              <div class="dialog-content !p-0 w-full h-full">
                 <img class="w-full h-full" [src]="ouLogoSafeUrl" />
               </div>
+              } @else {
+              <div class="flex flex-col items-center text-gray-500">
+                <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
+                <span>{{ lang.map.drag_and_drop_files }}</span>
+              </div>
+              }
             </div>
           </div>
         </div>
       </mat-tab>
+      }
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    }
   </div>
 </div>
-<ng-template #dragAndDrop>
-  <div class="flex flex-col items-center text-gray-500">
-    <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
-    <span>{{ lang.map.drag_and_drop_files }}</span>
-  </div>
-</ng-template>

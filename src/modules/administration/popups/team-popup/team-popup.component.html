@@ -15,8 +15,12 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    }
   </div>
 </div>

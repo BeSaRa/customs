@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, Input, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
@@ -13,7 +13,7 @@ import { MatListModule } from '@angular/material/list';
 @Component({
   selector: 'app-context-menu',
   standalone: true,
-  imports: [CommonModule, MatMenuModule, MatIconModule, ContextMenuItemComponent, MatListModule],
+  imports: [MatMenuModule, MatIconModule, ContextMenuItemComponent, MatListModule],
   templateUrl: './context-menu.component.html',
   styleUrls: ['./context-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -12,7 +11,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 @Component({
   selector: 'app-offender-attachment-popup',
   standalone: true,
-  imports: [CommonModule, CaseAttachmentsComponent, MatDialogModule, ButtonComponent, IconButtonComponent],
+  imports: [CaseAttachmentsComponent, MatDialogModule, ButtonComponent, IconButtonComponent],
   templateUrl: './offender-attachment-popup.component.html',
   styleUrls: ['./offender-attachment-popup.component.scss'],
 })

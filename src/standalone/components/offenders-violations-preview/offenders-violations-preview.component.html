@@ -4,7 +4,8 @@
     <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>{{ lang.map.offender_names }}</th>
     <td mat-cell *matCellDef="let element">
       <span class="flex justify-start items-center">
-        <app-icon-button [matTooltip]="offenderTypesMap[element.type].getNames()"
+        <app-icon-button
+          [matTooltip]="offenderTypesMap[element.type].getNames()"
           [icon]="element.type == offenderTypes.EMPLOYEE ? 'EMPLOYEE' : 'CLEARING_AGENT'">
         </app-icon-button>
         {{ element.getNames() }}
@@ -27,12 +28,15 @@
     <td mat-cell *matCellDef="let element">
       <div class="flex items-center">
         <div class="flex flex-column">
-          <span *ngFor="let violation of element.violations.slice(0, 2)"
+          @for (violation of element.violations.slice(0, 2); track violation) {
+          <span
             class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
             {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
           </span>
+          }
         </div>
-        <span (click)="selectedOffender === element ? (selectedOffender = null) : (selectedOffender = element)"
+        <span
+          (click)="selectedOffender === element ? (selectedOffender = null) : (selectedOffender = element)"
           class="cursor-pointer inline-flex items-center rounded-[12px] bg-pink-50 ms-2 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
           {{ element.violations.length }}
         </span>
@@ -42,28 +46,32 @@
 
   <!-- attachments -->
   <!-- <ng-container matColumnDef="attachments">
-    <th mat-header-cell mat-sort-header="attachments" *matHeaderCellDef>{{ lang.map.attachments }}</th>
-    <td mat-cell *matCellDef="let element">
-      <div class="flex justify-center ap-2" *ngIf="isClaimed">
-        <div [matTooltip]="lang.map.offender_attachments">
-          <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
-        </div>
+  <th mat-header-cell mat-sort-header="attachments" *matHeaderCellDef>{{ lang.map.attachments }}</th>
+  <td mat-cell *matCellDef="let element">
+    <div class="flex justify-center ap-2" *ngIf="isClaimed">
+      <div [matTooltip]="lang.map.offender_attachments">
+        <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
       </div>
-    </td>
-  </ng-container> -->
+    </div>
+  </td>
+</ng-container> -->
   <!-- situationSearch -->
   <ng-container matColumnDef="situationSearch">
     <th mat-header-cell mat-sort-header="situationSearch" *matHeaderCellDef>{{ lang.map.situation_search }}</th>
     <td mat-cell *matCellDef="let element">
       <div class="flex justify-center gap-2">
         <div [matTooltip]="lang.map.situation_search">
-          <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:false })"
+          <app-icon-button
+            (click)="situationSearch$.next({ offender: element, isCompany: false })"
             icon="INFORMATION"></app-icon-button>
         </div>
-        <div [matTooltip]="lang.map.situation_search_clearing_agency" *ngIf="isClearingAgent(element)">
-          <app-icon-button (click)="situationSearch$.next({offender:element,isCompany:true })"
+        @if (isClearingAgent(element)) {
+        <div [matTooltip]="lang.map.situation_search_clearing_agency">
+          <app-icon-button
+            (click)="situationSearch$.next({ offender: element, isCompany: true })"
             icon="CLEARING_AGENCY"></app-icon-button>
         </div>
+        }
       </div>
     </td>
   </ng-container>
@@ -71,166 +79,219 @@
   <ng-container matColumnDef="actions">
     <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
     <td mat-cell *matCellDef="let element">
-      <div class="flex justify-center gap-2" *ngIf="isClaimed">
+      @if (isClaimed) {
+      <div class="flex justify-center gap-2">
         <div [matTooltip]="lang.map.view">
           <app-icon-button (click)="view$.next(element)" icon="VIEW" />
         </div>
         <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-            <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" />
-        </div> -->
-        <div class="flex justify-center gap-2" *ngIf="isClaimed">
-          <div *ngIf="canMakeDecision(element)">
+        <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" />
+      </div> -->
+        @if (isClaimed) {
+        <div class="flex justify-center gap-2">
+          @if (canMakeDecision(element)) {
+          <div>
             <app-icon-button (click)="makeDecision$.next(element)" icon="ACCOUNT_MAKE_DECISION" />
           </div>
+          }
         </div>
+        }
         <div [matTooltip]="lang.map.actions">
           <app-icon-button icon="DOTS_VERTICAL" mat-button [matMenuTriggerFor]="actionsMenu"></app-icon-button>
           <mat-menu #actionsMenu="matMenu">
-            <button mat-menu-item
-              *ngIf="element.type == offenderTypes.EMPLOYEE && investigationModel?.isPresedentAssestantReview()"
-              (click)="suspendEmployee$.next({ offender: element })">
+            @if (element.type == offenderTypes.EMPLOYEE && investigationModel?.isPresedentAssestantReview()) {
+            <button mat-menu-item (click)="suspendEmployee$.next({ offender: element })">
               {{ lang.map.suspend_employee }}
             </button>
-            <button mat-menu-item *ngIf="getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT)"
-              (click)="referralOrTerminateDecission$
-                .next({
+            } @if (getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT)) {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecission$.next({
                   offender: element,
                   penaltyId: getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT)
-                })">
+                })
+              ">
               {{ lang.map.referral_request_to_presodent }}
             </button>
-            <button mat-menu-item
-              *ngIf="getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT)" (click)="referralOrTerminateDecission$
-                .next({
+            } @if (getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT)) {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecission$.next({
                   offender: element,
                   penaltyId: getPenaltyIdByPenaltyKey(element, systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT)
-                })">
+                })
+              ">
               {{ lang.map.referral_request_to_presodent_assistant }}
             </button>
-            <button mat-menu-item *ngIf="getPenaltyIdByPenaltyKey(element, systemPenalties.TERMINATE)" (click)="referralOrTerminateDecission$
-                .next({
+            } @if (getPenaltyIdByPenaltyKey(element, systemPenalties.TERMINATE)) {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecission$.next({
                   offender: element,
                   penaltyId: getPenaltyIdByPenaltyKey(element, systemPenalties.TERMINATE)
-                })">
+                })
+              ">
               {{ lang.map.terminate }}
             </button>
+            }
           </mat-menu>
         </div>
       </div>
+      }
     </td>
   </ng-container>
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
   <ng-container matColumnDef="expandedDetail">
     <td mat-cell *matCellDef="let element" class="p-0" [attr.colspan]="offenderDisplayedColumns.length">
-      <div [@detailExpand]="selectedOffender === element ? 'expanded' : 'collapsed'" class="px-1 divide-y divide-dashed">
-        <div class="p-3 border-bottom" *ngFor="let violation of element.violations">
+      <div
+        [@detailExpand]="selectedOffender === element ? 'expanded' : 'collapsed'"
+        class="px-1 divide-y divide-dashed">
+        @for (violation of element.violations; track violation) {
+        <div class="p-3 border-bottom">
           <h5 class="text-lg font-medium mb-1">{{ violation.violationInfo?.violationTypeInfo?.getNames() }}</h5>
           <!-- classificationInfo -->
           <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.violation_classification}} : </label>
+            <label class="font-medium">{{ lang.map.violation_classification }} : </label>
             <label>{{ violation.violationInfo?.classificationInfo?.getNames() }}</label>
           </span>
           <!-- competentProsecutionDecisionInfo -->
-          <span *ngIf="violation.violationInfo?.competentProsecutionDecision"
+          @if (violation.violationInfo?.competentProsecutionDecision) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.competent_prosecutiond_decision}} : </label>
+            <label class="font-medium">{{ lang.map.competent_prosecutiond_decision }} : </label>
             <label>{{ violation.violationInfo?.competentProsecutionDecisionInfo?.getNames() }}</label>
           </span>
+          }
           <!-- courtDecision -->
-          <span *ngIf="violation.violationInfo?.courtDecision"
+          @if (violation.violationInfo?.courtDecision) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.court_decision}} : </label>
+            <label class="font-medium">{{ lang.map.court_decision }} : </label>
             <label>{{ violation.violationInfo?.courtDecisionInfo?.getNames() }}</label>
           </span>
+          }
           <!-- drugProsecutionDecision -->
-          <span *ngIf="violation.violationInfo?.drugProsecutionDecision"
+          @if (violation.violationInfo?.drugProsecutionDecision) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.drug_prosecution_decision}} : </label>
+            <label class="font-medium">{{ lang.map.drug_prosecution_decision }} : </label>
             <label>{{ violation.violationInfo?.drugProsecutionDecisionInfo?.getNames() }}</label>
           </span>
+          }
           <!-- forensicLabAnalysis -->
-          <span *ngIf="violation.violationInfo?.forensicLabAnalysis"
+          @if (violation.violationInfo?.forensicLabAnalysis) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.forensic_lab_analysis}} : </label>
+            <label class="font-medium">{{ lang.map.forensic_lab_analysis }} : </label>
             <label>{{ violation.violationInfo?.forensicLabAnalysisInfo?.getNames() }}</label>
           </span>
+          }
           <!-- securityAdminDecision -->
-          <span *ngIf="violation.violationInfo?.securityAdminDecision"
+          @if (violation.violationInfo?.securityAdminDecision) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.security_admin_decision}} : </label>
+            <label class="font-medium">{{ lang.map.security_admin_decision }} : </label>
             <label>{{ violation.violationInfo?.securityAdminDecisionInfo?.getNames() }}</label>
           </span>
+          }
           <!-- is preived -->
           <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.is_proved}} : </label>
-            <span class="text-secondary" *ngIf="!violation.isProved">
+            <label class="font-medium">{{ lang.map.is_proved }} : </label>
+            @if (!violation.isProved) {
+            <span class="text-secondary">
               {{ lang.map.no }}
             </span>
-            <span class="text-red-500" *ngIf="violation.isProved">{{ lang.map.yes }}</span>
+            } @if (violation.isProved) {
+            <span class="text-red-500">{{ lang.map.yes }}</span>
+            }
           </span>
           <!-- customsDeclarationNumber -->
-          <span *ngIf="violation.violationInfo?.customsDeclarationNumber"
+          @if (violation.violationInfo?.customsDeclarationNumber) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.customs_declaration_number}} : </label>
+            <label class="font-medium">{{ lang.map.customs_declaration_number }} : </label>
             <label>{{ violation.violationInfo?.customsDeclarationNumber }}</label>
           </span>
+          }
           <!-- controlReportNumber -->
-          <span *ngIf="violation.violationInfo?.controlReportNumber"
+          @if (violation.violationInfo?.controlReportNumber) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.control_report_number}} : </label>
+            <label class="font-medium">{{ lang.map.control_report_number }} : </label>
             <label>{{ violation.violationInfo?.controlReportNumber }}</label>
           </span>
+          }
           <!-- reportNumber -->
-          <span *ngIf="violation.violationInfo?.reportNumber"
+          @if (violation.violationInfo?.reportNumber) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.report_number}} : </label>
+            <label class="font-medium">{{ lang.map.report_number }} : </label>
             <label>{{ violation.violationInfo?.reportNumber }}</label>
           </span>
+          }
           <!-- reportNumber -->
-          <span *ngIf="violation.violationInfo?.reportYear"
+          @if (violation.violationInfo?.reportYear) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.report_year}} : </label>
+            <label class="font-medium">{{ lang.map.report_year }} : </label>
             <label>{{ violation.violationInfo?.reportYear }}</label>
           </span>
+          }
           <!-- repeat -->
           <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.repeatation}} : </label>
+            <label class="font-medium">{{ lang.map.repeatation }} : </label>
             <label>{{ violation.repeat }}</label>
           </span>
           <!-- date -->
-          <span *ngIf="violation.violationInfo?.violationsDate"
+          @if (violation.violationInfo?.violationsDate) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.violation_date}} : </label>
-            <label>{{ violation.violationInfo?.violationsDate| date:'YYYY/MM/dd' }}</label>
+            <label class="font-medium">{{ lang.map.violation_date }} : </label>
+            <label>{{ violation.violationInfo?.violationsDate | date : "YYYY/MM/dd" }}</label>
           </span>
+          }
           <!-- date -->
-          <span *ngIf="violation.violationInfo?.violationsDateTo || violation.violationInfo?.violationsDateFrom"
+          @if (violation.violationInfo?.violationsDateTo || violation.violationInfo?.violationsDateFrom) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <span *ngIf="violation.violationInfo?.violationsDateFrom">
-              <label class="font-medium">{{lang.map.date_from}} : </label>
-              <label>{{ violation.violationInfo?.violationsDateFrom| date:'YYYY/MM/dd' }}</label>
+            @if (violation.violationInfo?.violationsDateFrom) {
+            <span>
+              <label class="font-medium">{{ lang.map.date_from }} : </label>
+              <label>{{ violation.violationInfo?.violationsDateFrom | date : "YYYY/MM/dd" }}</label>
             </span>
-            <span *ngIf="violation.violationInfo?.violationsDateTo">
-              <label class="font-medium"> - {{lang.map.date_to}} : </label>
-              <label>{{ violation.violationInfo?.violationsDateTo| date:'YYYY/MM/d' }}</label>
+            } @if (violation.violationInfo?.violationsDateTo) {
+            <span>
+              <label class="font-medium"> - {{ lang.map.date_to }} : </label>
+              <label>{{ violation.violationInfo?.violationsDateTo | date : "YYYY/MM/d" }}</label>
             </span>
+            }
           </span>
+          }
           <!-- description -->
-          <span *ngIf="violation.violationInfo?.description"
+          @if (violation.violationInfo?.description) {
+          <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-            <label class="font-medium">{{lang.map.description}} : </label>
+            <label class="font-medium">{{ lang.map.description }} : </label>
             <label>{{ violation.violationInfo?.description }}</label>
           </span>
+          }
         </div>
+        }
       </div>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="offenderDisplayedColumns"></tr>
-  <tr mat-row *matRowDef="let element; columns: offenderDisplayedColumns" class="element-row"
+  <tr
+    mat-row
+    *matRowDef="let element; columns: offenderDisplayedColumns"
+    class="element-row"
     [class.example-expanded-row]="selectedOffender === element"></tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
   <!-- Row shown when there is no matching data. -->

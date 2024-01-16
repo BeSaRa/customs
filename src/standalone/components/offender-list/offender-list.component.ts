@@ -1,7 +1,7 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { EmployeeService } from '@services/employee.service';
 import { Component, inject, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -30,11 +30,11 @@ import { ignoreErrors } from '@utils/utils';
 @Component({
   selector: 'app-offender-list',
   standalone: true,
-  imports: [CommonModule, IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffenderListComponent extends OnDestroyMixin(class {}) implements OnInit {
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -100,7 +100,7 @@ export class OffenderListComponent extends OnDestroyMixin(class { }) implements 
                 caseId: this.caseId,
                 violations: this.violations,
                 offenders: this.dataSource.data,
-                transformer$: this.transformer$
+                transformer$: this.transformer$,
               },
             })
             .afterClosed()
