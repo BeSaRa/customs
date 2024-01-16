@@ -58,7 +58,8 @@
         ],
         "@angular-eslint/template/interactive-supports-focus": [
           "off"
-        ]
+        ],
+        "@angular-eslint/template/prefer-control-flow": "error"
       }
     }
   ]
