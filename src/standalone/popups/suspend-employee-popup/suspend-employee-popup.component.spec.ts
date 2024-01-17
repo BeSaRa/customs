@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SuspendEmployeePopupComponent } from './susbend-employee-popup.component';
+import { SuspendEmployeePopupComponent } from './suspend-employee-popup.component';
 
 describe('SuspendEmployeePopupComponent', () => {
   let component: SuspendEmployeePopupComponent;
