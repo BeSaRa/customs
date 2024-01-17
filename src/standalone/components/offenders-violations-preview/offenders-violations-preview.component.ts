@@ -87,7 +87,6 @@ export class OffendersViolationsPreviewComponent
   penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-  extendSuspendEmployee$ = new Subject<{ offender: Offender }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
   referralOrTerminateDecision$ = new Subject<{
     offender: Offender;
@@ -97,7 +96,6 @@ export class OffendersViolationsPreviewComponent
 
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
-    console.log(offenders);
   }
 
   @Input() investigationModel?: Investigation;

@@ -375,4 +375,6 @@ export interface LangKeysContract {
   drug_prosecution_decision: string;
   forensic_lab_analysis: string;
   security_admin_decision: string;
+  offender_name: string;
+  unlinked_violations_to_offenders: string;
 }
