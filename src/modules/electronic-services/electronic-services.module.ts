@@ -37,6 +37,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
 import { MenuItemListComponent } from '@standalone/components/menu-item-list/menu-item-list.component';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
+import { OffenderAttachmentsComponent } from '@standalone/components/offender-attachments/offender-attachments.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-
     SummaryTabComponent,
     MatDialogModule,
     ButtonsCaseWrapperComponent,
+    OffenderAttachmentsComponent,
   ],
 })
 export class ElectronicServicesModule {}

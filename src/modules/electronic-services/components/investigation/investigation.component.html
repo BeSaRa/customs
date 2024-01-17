@@ -134,15 +134,20 @@
       <app-case-attachments
         [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
         [service]="service"
-        [readonly]="true"
+        [readonly]="readonly"
         [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-case-attachments
         [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
         [service]="service"
-        [readonly]="true"
+        [readonly]="readonly"
         [title]="lang.map.correspondence_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
+      <app-offender-attachments
+        [investigationModel]="model"
+        [data]="model?.offenderInfo || []"
+        class="col-span-1 md:col-span-2 lg:col-span-4"
+        [readOnly]="readonly"/>
     </div>
   </ng-template>
 </div>

@@ -377,4 +377,5 @@ export interface LangKeysContract {
   security_admin_decision: string;
   offender_name: string;
   unlinked_violations_to_offenders: string;
+  offenders_attachment: string;
 }
