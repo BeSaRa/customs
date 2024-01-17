@@ -1,7 +1,7 @@
-import { inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { UrlService } from "@services/url.service";
-import { CredentialsContract } from "@contracts/credentials-contract";
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { UrlService } from '@services/url.service';
+import { CredentialsContract } from '@contracts/credentials-contract';
 import {
   catchError,
   iif,
@@ -11,23 +11,23 @@ import {
   OperatorFunction,
   switchMap,
   tap,
-} from "rxjs";
-import { EmployeeService } from "@services/employee.service";
-import { LoginDataContract } from "@contracts/login-data-contract";
-import { CastResponse } from "cast-response";
-import { RegisterServiceMixin } from "@mixins/register-service-mixin";
-import { TokenService } from "@services/token.service";
-import { MenuItemService } from "@services/menu-item.service";
-import { ServiceContract } from "@contracts/service-contract";
+} from 'rxjs';
+import { EmployeeService } from '@services/employee.service';
+import { LoginDataContract } from '@contracts/login-data-contract';
+import { CastResponse } from 'cast-response';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { TokenService } from '@services/token.service';
+import { MenuItemService } from '@services/menu-item.service';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class AuthService
   extends RegisterServiceMixin(class {})
   implements ServiceContract
 {
-  serviceName = "AuthService";
+  serviceName = 'AuthService';
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private readonly employeeService = inject(EmployeeService);

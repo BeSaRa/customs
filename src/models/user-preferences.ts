@@ -1,9 +1,9 @@
-import { BaseModel } from "@abstracts/base-model";
-import { UserPreferencesService } from "@services/user-preferences.service";
-import { CustomValidators } from "@validators/custom-validators";
-import { Observable } from "rxjs";
-import { InterceptModel } from "cast-response";
-import { UserPreferencesInterceptor } from "@model-interceptors/user-preferences-interceptor";
+import { BaseModel } from '@abstracts/base-model';
+import { UserPreferencesService } from '@services/user-preferences.service';
+import { CustomValidators } from '@validators/custom-validators';
+import { Observable } from 'rxjs';
+import { InterceptModel } from 'cast-response';
+import { UserPreferencesInterceptor } from '@model-interceptors/user-preferences-interceptor';
 
 const { send, receive } = new UserPreferencesInterceptor();
 
@@ -12,7 +12,7 @@ export class UserPreferences extends BaseModel<
   UserPreferences,
   UserPreferencesService
 > {
-  $$__service_name__$$ = "UserPreferencesService";
+  $$__service_name__$$ = 'UserPreferencesService';
 
   //alternateEmailList!: string;
   phoneNumber!: number;

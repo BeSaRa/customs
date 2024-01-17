@@ -1,6 +1,6 @@
-import { ModelInterceptorContract } from "cast-response";
-import { InboxResult } from "@models/inbox-result";
-import { AdminResult } from "@models/admin-result";
+import { ModelInterceptorContract } from 'cast-response';
+import { InboxResult } from '@models/inbox-result';
+import { AdminResult } from '@models/admin-result';
 
 export class InboxInterceptor implements ModelInterceptorContract<InboxResult> {
   send(model: Partial<InboxResult>): Partial<InboxResult> {

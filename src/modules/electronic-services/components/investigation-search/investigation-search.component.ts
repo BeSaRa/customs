@@ -1,15 +1,15 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
-import { MatTableDataSource } from "@angular/material/table";
-import { AppIcons } from "@constants/app-icons";
-import { ContextMenuActionContract } from "@contracts/context-menu-action-contract";
-import { ColumnsWrapper } from "@models/columns-wrapper";
-import { Investigation } from "@models/investigation";
-import { NoneFilterColumn } from "@models/none-filter-column";
-import { InvestigationSearchService } from "@services/investigation-search.service";
-import { InvestigationService } from "@services/investigation.service";
-import { LangService } from "@services/lang.service";
-import { ignoreErrors } from "@utils/utils";
+import { Component, inject, OnInit } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { AppIcons } from '@constants/app-icons';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { Investigation } from '@models/investigation';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { InvestigationSearchService } from '@services/investigation-search.service';
+import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { ignoreErrors } from '@utils/utils';
 import {
   catchError,
   exhaustMap,
@@ -20,19 +20,19 @@ import {
   Subject,
   switchMap,
   throwError,
-} from "rxjs";
-import { Router } from "@angular/router";
-import { AppFullRoutes } from "@constants/app-full-routes";
-import { EncryptionService } from "@services/encryption.service";
-import { INavigatedItem } from "@contracts/inavigated-item";
-import { OpenFrom } from "@enums/open-from";
-import { LookupService } from "@services/lookup.service";
-import { DialogService } from "@services/dialog.service";
+} from 'rxjs';
+import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
+import { EncryptionService } from '@services/encryption.service';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OpenFrom } from '@enums/open-from';
+import { LookupService } from '@services/lookup.service';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
-  selector: "app-investigation-search",
-  templateUrl: "./investigation-search.component.html",
-  styleUrls: ["./investigation-search.component.scss"],
+  selector: 'app-investigation-search',
+  templateUrl: './investigation-search.component.html',
+  styleUrls: ['./investigation-search.component.scss'],
 })
 export class InvestigationSearchComponent implements OnInit {
   investigationService = inject(InvestigationService);
@@ -58,9 +58,9 @@ export class InvestigationSearchComponent implements OnInit {
 
   actions: ContextMenuActionContract<Investigation>[] = [
     {
-      name: "view",
-      type: "action",
-      label: "view",
+      name: 'view',
+      type: 'action',
+      label: 'view',
       icon: AppIcons.VIEW,
       callback: (item) => {
         this.view(item);
@@ -68,12 +68,12 @@ export class InvestigationSearchComponent implements OnInit {
     },
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
-    new NoneFilterColumn("draftFullSerial"),
-    new NoneFilterColumn("caseStatus"),
-    new NoneFilterColumn("limitedAccess"),
-    new NoneFilterColumn("creator"),
-    new NoneFilterColumn("department"),
-    new NoneFilterColumn("actions")
+    new NoneFilterColumn('draftFullSerial'),
+    new NoneFilterColumn('caseStatus'),
+    new NoneFilterColumn('limitedAccess'),
+    new NoneFilterColumn('creator'),
+    new NoneFilterColumn('department'),
+    new NoneFilterColumn('actions')
   );
 
   protected _beforeSearch(): boolean | Observable<boolean> {

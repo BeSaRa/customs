@@ -1,9 +1,9 @@
-import { BaseModel } from "@abstracts/base-model";
-import { GlobalSettingService } from "@services/global-setting.service";
-import { GlobalSettingInterceptor } from "@model-interceptors/global-setting-interceptor";
-import { InterceptModel } from "cast-response";
-import { CustomValidators } from "@validators/custom-validators";
-import { FormBuilder } from "@angular/forms";
+import { BaseModel } from '@abstracts/base-model';
+import { GlobalSettingService } from '@services/global-setting.service';
+import { GlobalSettingInterceptor } from '@model-interceptors/global-setting-interceptor';
+import { InterceptModel } from 'cast-response';
+import { CustomValidators } from '@validators/custom-validators';
+import { FormBuilder } from '@angular/forms';
 
 const { send, receive } = new GlobalSettingInterceptor();
 
@@ -12,7 +12,7 @@ export class GlobalSetting extends BaseModel<
   GlobalSetting,
   GlobalSettingService
 > {
-  $$__service_name__$$ = "GlobalSettingService";
+  $$__service_name__$$ = 'GlobalSettingService';
   systemArabicName!: string;
   systemEnglishName!: string;
   sessionTimeout!: number;
@@ -48,20 +48,20 @@ export class GlobalSetting extends BaseModel<
             [
               CustomValidators.required,
               CustomValidators.maxLength(50),
-              CustomValidators.pattern("AR_ONLY"),
+              CustomValidators.pattern('AR_ONLY'),
             ],
           ]
-        : "",
+        : '',
       systemEnglishName: controls
         ? [
             systemEnglishName,
             [
               CustomValidators.required,
               CustomValidators.maxLength(50),
-              CustomValidators.pattern("ENG_ONLY"),
+              CustomValidators.pattern('ENG_ONLY'),
             ],
           ]
-        : "",
+        : '',
       sessionTimeout: controls
         ? [sessionTimeout, [CustomValidators.required, CustomValidators.number]]
         : null,
@@ -70,14 +70,14 @@ export class GlobalSetting extends BaseModel<
         : null,
       fileTypeParsed: controls
         ? [fileTypeParsed, CustomValidators.required]
-        : "",
+        : '',
       inboxRefreshInterval: controls
         ? [inboxRefreshInterval, CustomValidators.required]
         : null,
       supportEmailListParsed: new FormBuilder().array([
         [
-          controls ? supportEmailListParsed : "",
-          [CustomValidators.required, CustomValidators.pattern("EMAIL")],
+          controls ? supportEmailListParsed : '',
+          [CustomValidators.required, CustomValidators.pattern('EMAIL')],
         ],
       ]),
       enableMailNotification: controls
@@ -92,7 +92,7 @@ export class GlobalSetting extends BaseModel<
     };
   }
   getApplicationName(): string {
-    return this.getLangService().getCurrent().code === "ar"
+    return this.getLangService().getCurrent().code === 'ar'
       ? this.systemArabicName
       : this.systemEnglishName;
   }

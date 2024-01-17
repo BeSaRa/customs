@@ -1,12 +1,12 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { GlobalSetting } from "@models/global-setting";
-import { GlobalSettingService } from "@services/global-setting.service";
+import { Component, inject, OnInit } from '@angular/core';
+import { GlobalSetting } from '@models/global-setting';
+import { GlobalSettingService } from '@services/global-setting.service';
 import {
   FormArray,
   FormControl,
   UntypedFormBuilder,
   UntypedFormGroup,
-} from "@angular/forms";
+} from '@angular/forms';
 import {
   BehaviorSubject,
   catchError,
@@ -21,18 +21,18 @@ import {
   takeUntil,
   tap,
   throwError,
-} from "rxjs";
-import { CustomValidators } from "@validators/custom-validators";
-import { FileType } from "@models/file-type";
-import { LangService } from "@services/lang.service";
-import { ToastService } from "@services/toast.service";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { ignoreErrors } from "@utils/utils";
+} from 'rxjs';
+import { CustomValidators } from '@validators/custom-validators';
+import { FileType } from '@models/file-type';
+import { LangService } from '@services/lang.service';
+import { ToastService } from '@services/toast.service';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
-  selector: "app-global-setting",
-  templateUrl: "./global-setting.component.html",
-  styleUrls: ["./global-setting.component.scss"],
+  selector: 'app-global-setting',
+  templateUrl: './global-setting.component.html',
+  styleUrls: ['./global-setting.component.scss'],
 })
 export class GlobalSettingComponent
   extends OnDestroyMixin(class {})
@@ -68,7 +68,7 @@ export class GlobalSettingComponent
       this.supportEmailListParsed.push(
         new FormControl(element, [
           CustomValidators.required,
-          CustomValidators.pattern("EMAIL"),
+          CustomValidators.pattern('EMAIL'),
         ])
       );
     });
@@ -138,7 +138,7 @@ export class GlobalSettingComponent
             this.supportEmailListParsed.push(
               new FormControl({ value: element, disabled: true }, [
                 CustomValidators.required,
-                CustomValidators.pattern("EMAIL"),
+                CustomValidators.pattern('EMAIL'),
               ])
             );
           });
@@ -151,7 +151,7 @@ export class GlobalSettingComponent
       .subscribe();
   }
   get supportEmailListParsed() {
-    return this.form.controls["supportEmailListParsed"] as FormArray;
+    return this.form.controls['supportEmailListParsed'] as FormArray;
   }
 
   protected _getFileTypes() {
@@ -181,9 +181,9 @@ export class GlobalSettingComponent
     this.form.markAllAsTouched();
     if (this.form.invalid) return;
     this.supportEmailListParsed.push(
-      new FormControl("", [
+      new FormControl('', [
         CustomValidators.required,
-        CustomValidators.pattern("EMAIL"),
+        CustomValidators.pattern('EMAIL'),
       ])
     );
   }

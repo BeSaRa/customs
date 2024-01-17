@@ -1,8 +1,8 @@
-import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OffenderDecissionFormComponent } from "./offender-decission-form.component";
+import { OffenderDecissionFormComponent } from './offender-decission-form.component';
 
-describe("OffenderDecissionFormComponent", () => {
+describe('OffenderDecissionFormComponent', () => {
   let component: OffenderDecissionFormComponent;
   let fixture: ComponentFixture<OffenderDecissionFormComponent>;
 
@@ -18,7 +18,7 @@ describe("OffenderDecissionFormComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,17 +1,17 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { JobTitle } from "@models/job-title";
-import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
-import { AbstractControl, UntypedFormGroup } from "@angular/forms";
-import { Observable } from "rxjs";
-import { OperationType } from "@enums/operation-type";
-import { LookupService } from "@services/lookup.service";
+import { Component, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { JobTitle } from '@models/job-title';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { AbstractControl, UntypedFormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { OperationType } from '@enums/operation-type';
+import { LookupService } from '@services/lookup.service';
 
 @Component({
-  selector: "app-job-title-popup",
-  templateUrl: "./job-title-popup.component.html",
-  styleUrls: ["./job-title-popup.component.scss"],
+  selector: 'app-job-title-popup',
+  templateUrl: './job-title-popup.component.html',
+  styleUrls: ['./job-title-popup.component.scss'],
 })
 export class JobTitlePopupComponent
   extends AdminDialogComponent<JobTitle>
@@ -23,7 +23,7 @@ export class JobTitlePopupComponent
   lookupService = inject(LookupService);
 
   get status(): AbstractControl {
-    return this.form.get("status")!;
+    return this.form.get('status')!;
   }
 
   _buildForm(): void {

@@ -1,4 +1,4 @@
-import { ClearingAgent } from "@models/clearing-agent";
+import { ClearingAgent } from '@models/clearing-agent';
 
 export class ClearingAgentCriteria extends ClearingAgent {
   override buildForm(controls = false): object {

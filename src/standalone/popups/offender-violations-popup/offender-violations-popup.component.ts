@@ -1,10 +1,10 @@
-import { LangService } from "@services/lang.service";
-import { Component, OnInit, inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
-import { ButtonComponent } from "@standalone/components/button/button.component";
-import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { AppTableDataSource } from "@models/app-table-data-source";
+import { LangService } from '@services/lang.service';
+import { Component, OnInit, inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { AppTableDataSource } from '@models/app-table-data-source';
 import {
   Subject,
   filter,
@@ -15,25 +15,25 @@ import {
   map,
   combineLatest,
   tap,
-} from "rxjs";
-import { OffenderViolation } from "@models/offender-violation";
-import { OffenderViolationService } from "@services/offender-violation.service";
-import { ignoreErrors } from "@utils/utils";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { MatTableModule } from "@angular/material/table";
-import { UserClick } from "@enums/user-click";
-import { DialogService } from "@services/dialog.service";
-import { ToastService } from "@services/toast.service";
-import { Violation } from "@models/violation";
-import { SelectInputComponent } from "@standalone/components/select-input/select-input.component";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { CustomValidators } from "@validators/custom-validators";
-import { CommonModule, DatePipe } from "@angular/common";
-import { Offender } from "@models/offender";
-import { OffenderTypes } from "@enums/offender-types";
+} from 'rxjs';
+import { OffenderViolation } from '@models/offender-violation';
+import { OffenderViolationService } from '@services/offender-violation.service';
+import { ignoreErrors } from '@utils/utils';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { MatTableModule } from '@angular/material/table';
+import { UserClick } from '@enums/user-click';
+import { DialogService } from '@services/dialog.service';
+import { ToastService } from '@services/toast.service';
+import { Violation } from '@models/violation';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { CustomValidators } from '@validators/custom-validators';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Offender } from '@models/offender';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
-  selector: "app-offender-violations-popup",
+  selector: 'app-offender-violations-popup',
   standalone: true,
   imports: [
     CommonModule,
@@ -46,8 +46,8 @@ import { OffenderTypes } from "@enums/offender-types";
     IconButtonComponent,
     MatDialogModule,
   ],
-  templateUrl: "./offender-violations-popup.component.html",
-  styleUrls: ["./offender-violations-popup.component.scss"],
+  templateUrl: './offender-violations-popup.component.html',
+  styleUrls: ['./offender-violations-popup.component.scss'],
 })
 export class OffenderViolationsPopupComponent
   extends OnDestroyMixin(class {})
@@ -65,12 +65,12 @@ export class OffenderViolationsPopupComponent
   delete$ = new Subject<OffenderViolation>();
   addViolation$: Subject<void> = new Subject<void>();
   displayedColumns = [
-    "violationClassification",
-    "violationType",
-    "violationData",
-    "description",
-    "repeat",
-    "actions",
+    'violationClassification',
+    'violationType',
+    'violationData',
+    'description',
+    'repeat',
+    'actions',
   ];
   control = new FormControl<number[]>([], [CustomValidators.required]);
   violations: Violation[] = [];

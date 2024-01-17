@@ -5,22 +5,22 @@ import {
   OnInit,
   Output,
   inject,
-} from "@angular/core";
-import { PenaltyDetails } from "@models/penalty-details";
-import { PenaltyDetailsService } from "@services/penalty-details.service";
-import { ContextMenuActionContract } from "@contracts/context-menu-action-contract";
-import { AppIcons } from "@constants/app-icons";
-import { LangService } from "@services/lang.service";
-import { DialogService } from "@services/dialog.service";
-import { filter } from "rxjs";
-import { MatTableDataSource } from "@angular/material/table";
-import { UserClick } from "@enums/user-click";
-import { LegalRuleService } from "@services/legal-rule.service";
-import { LegalRule } from "@models/legal-rule";
+} from '@angular/core';
+import { PenaltyDetails } from '@models/penalty-details';
+import { PenaltyDetailsService } from '@services/penalty-details.service';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { AppIcons } from '@constants/app-icons';
+import { LangService } from '@services/lang.service';
+import { DialogService } from '@services/dialog.service';
+import { filter } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
+import { UserClick } from '@enums/user-click';
+import { LegalRuleService } from '@services/legal-rule.service';
+import { LegalRule } from '@models/legal-rule';
 
 @Component({
-  selector: "app-penalty-details",
-  templateUrl: "./penalty-details.component.html",
+  selector: 'app-penalty-details',
+  templateUrl: './penalty-details.component.html',
 })
 export class PenaltyDetailsComponent implements OnInit {
   dialog = inject(DialogService);
@@ -37,11 +37,11 @@ export class PenaltyDetailsComponent implements OnInit {
   displayedList: MatTableDataSource<PenaltyDetails> =
     new MatTableDataSource<PenaltyDetails>(this.list);
   displayedColumns = [
-    "penaltySigner",
-    "offenderLevel",
-    "legalRule",
-    "legalTextArabic",
-    "actions",
+    'penaltySigner',
+    'offenderLevel',
+    'legalRule',
+    'legalTextArabic',
+    'actions',
   ];
 
   ngOnInit(): void {
@@ -55,7 +55,7 @@ export class PenaltyDetailsComponent implements OnInit {
       const legalTextArabic = this.legalRules.find(
         (item) => item.id === listItem.legalRule
       )?.legalTextArabic;
-      listItem.legalTextArabic = legalTextArabic || "";
+      listItem.legalTextArabic = legalTextArabic || '';
       return listItem;
     });
     this.displayedList = new MatTableDataSource<PenaltyDetails>(this.list);
@@ -64,27 +64,27 @@ export class PenaltyDetailsComponent implements OnInit {
   actions: ContextMenuActionContract<PenaltyDetails>[] = this.viewMode
     ? [
         {
-          name: "view",
-          type: "action",
-          label: "view",
+          name: 'view',
+          type: 'action',
+          label: 'view',
           icon: AppIcons.VIEW,
           callback: (item) => {
             this.viewDetails(item);
           },
         },
         {
-          name: "edit",
-          type: "action",
-          label: "edit",
+          name: 'edit',
+          type: 'action',
+          label: 'edit',
           callback: (item) => {
             this.editDetails(item);
           },
           icon: AppIcons.EDIT,
         },
         {
-          name: "delete",
-          type: "action",
-          label: "delete",
+          name: 'delete',
+          type: 'action',
+          label: 'delete',
           icon: AppIcons.DELETE,
           callback: (item) => {
             this.deleteDetails(item);
@@ -93,9 +93,9 @@ export class PenaltyDetailsComponent implements OnInit {
       ]
     : [
         {
-          name: "view",
-          type: "action",
-          label: "view",
+          name: 'view',
+          type: 'action',
+          label: 'view',
           icon: AppIcons.VIEW,
           callback: (item) => {
             this.viewDetails(item);

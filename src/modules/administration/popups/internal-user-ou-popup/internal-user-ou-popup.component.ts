@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { InternalUserOU } from "@models/internal-user-ou";
-import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
-import { UntypedFormGroup } from "@angular/forms";
+import { Component, inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { InternalUserOU } from '@models/internal-user-ou';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { UntypedFormGroup } from '@angular/forms';
 import {
   Observable,
   Subject,
@@ -16,17 +16,17 @@ import {
   switchMap,
   takeUntil,
   throwError,
-} from "rxjs";
-import { OperationType } from "@enums/operation-type";
-import { OrganizationUnit } from "@models/organization-unit";
-import { OrganizationUnitService } from "@services/organization-unit.service";
-import { InternalUserOUService } from "@services/internal-user-ou.service";
-import { ignoreErrors } from "@utils/utils";
+} from 'rxjs';
+import { OperationType } from '@enums/operation-type';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { InternalUserOUService } from '@services/internal-user-ou.service';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
-  selector: "app-internal-user-ou-popup",
-  templateUrl: "./internal-user-ou-popup.component.html",
-  styleUrls: ["./internal-user-ou-popup.component.scss"],
+  selector: 'app-internal-user-ou-popup',
+  templateUrl: './internal-user-ou-popup.component.html',
+  styleUrls: ['./internal-user-ou-popup.component.scss'],
 })
 export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalUserOU> {
   saveBulk$: Subject<void> = new Subject<void>();
@@ -78,10 +78,10 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.dialogRef.close(this.model);
   }
   get internalUserId() {
-    return this.form.get("internalUserId");
+    return this.form.get('internalUserId');
   }
   get organizationUnitArray() {
-    return this.form.get("organizationUnitArray");
+    return this.form.get('organizationUnitArray');
   }
 
   createBulk(): Observable<InternalUserOU[]> {

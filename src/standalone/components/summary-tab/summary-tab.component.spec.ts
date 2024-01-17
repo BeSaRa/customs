@@ -1,8 +1,8 @@
-import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SummaryTabComponent } from "./summary-tab.component";
+import { SummaryTabComponent } from './summary-tab.component';
 
-describe("SummaryTabComponent", () => {
+describe('SummaryTabComponent', () => {
   let component: SummaryTabComponent;
   let fixture: ComponentFixture<SummaryTabComponent>;
 
@@ -18,7 +18,7 @@ describe("SummaryTabComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

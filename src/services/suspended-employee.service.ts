@@ -1,30 +1,30 @@
-import { inject, Injectable } from "@angular/core";
-import { SuspendedEmployee } from "@models/suspended-employee";
+import { inject, Injectable } from '@angular/core';
+import { SuspendedEmployee } from '@models/suspended-employee';
 import {
   CastResponseContainer,
   HasInterception,
   InterceptParam,
-} from "cast-response";
-import { BaseCrudWithDialogService } from "@abstracts/base-crud-with-dialog-service";
-import { ComponentType } from "@angular/cdk/portal";
-import { SuspendedEmployeePopupComponent } from "@modules/administration/popups/suspended-employee-popup/suspended-employee-popup.component";
-import { Constructor } from "@app-types/constructors";
-import { Pagination } from "@models/pagination";
-import { MatDialogConfig, MatDialogRef } from "@angular/material/dialog";
-import { UserClick } from "@enums/user-click";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { OperationType } from "@enums/operation-type";
-import { InvestigationService } from "./investigation.service";
-import { Observable } from "rxjs";
-import { Offender } from "@models/offender";
-import { SuspensionTypes } from "@enums/suspension-types";
-import { EmployeeService } from "./employee.service";
+} from 'cast-response';
+import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
+import { ComponentType } from '@angular/cdk/portal';
+import { SuspendedEmployeePopupComponent } from '@modules/administration/popups/suspended-employee-popup/suspended-employee-popup.component';
+import { Constructor } from '@app-types/constructors';
+import { Pagination } from '@models/pagination';
+import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { UserClick } from '@enums/user-click';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { OperationType } from '@enums/operation-type';
+import { InvestigationService } from './investigation.service';
+import { Observable } from 'rxjs';
+import { Offender } from '@models/offender';
+import { SuspensionTypes } from '@enums/suspension-types';
+import { EmployeeService } from './employee.service';
 
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
     shape: {
-      "rs.*": () => SuspendedEmployee,
+      'rs.*': () => SuspendedEmployee,
     },
   },
   $default: {
@@ -32,13 +32,13 @@ import { EmployeeService } from "./employee.service";
   },
 })
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   SuspendedEmployeePopupComponent,
   SuspendedEmployee
 > {
-  serviceName = "SuspendedEmployeeService";
+  serviceName = 'SuspendedEmployeeService';
   investigationService = inject(InvestigationService);
   employeeService = inject(EmployeeService);
   protected getModelClass(): Constructor<SuspendedEmployee> {
@@ -60,7 +60,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   openExtendSuspensionDialog(
     model: SuspendedEmployee,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, "data"> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
   ): MatDialogRef<
     SuspendedEmployeePopupComponent,
     SuspendedEmployee | UserClick.CLOSE
@@ -97,7 +97,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
     @InterceptParam() model: SuspendedEmployee
   ): Observable<unknown> {
     return this.http.post(
-      this.investigationService.getUrlSegment() + "/suspend-employee",
+      this.investigationService.getUrlSegment() + '/suspend-employee',
       model
     );
   }
@@ -106,7 +106,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
     @InterceptParam() suspendedEmployee: SuspendedEmployee
   ): Observable<unknown> {
     return this.http.post<SuspendedEmployee>(
-      this.investigationService.getUrlSegment() + "/extend-suspend-employee",
+      this.investigationService.getUrlSegment() + '/extend-suspend-employee',
       suspendedEmployee
     );
   }

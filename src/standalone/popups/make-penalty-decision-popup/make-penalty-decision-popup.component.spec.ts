@@ -1,8 +1,8 @@
-import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MakePenaltyDecisionPopupComponent } from "./make-penalty-decision-popup.component";
+import { MakePenaltyDecisionPopupComponent } from './make-penalty-decision-popup.component';
 
-describe("MakePenaltyDecisionPopupComponent", () => {
+describe('MakePenaltyDecisionPopupComponent', () => {
   let component: MakePenaltyDecisionPopupComponent;
   let fixture: ComponentFixture<MakePenaltyDecisionPopupComponent>;
 
@@ -18,7 +18,7 @@ describe("MakePenaltyDecisionPopupComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

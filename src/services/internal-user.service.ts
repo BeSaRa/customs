@@ -1,22 +1,22 @@
-import { Injectable } from "@angular/core";
-import { InternalUser } from "@models/internal-user";
-import { CastResponse, CastResponseContainer } from "cast-response";
-import { BaseCrudWithDialogService } from "@abstracts/base-crud-with-dialog-service";
-import { ComponentType } from "@angular/cdk/portal";
-import { InternalUserPopupComponent } from "@modules/administration/popups/internal-user-popup/internal-user-popup.component";
-import { Constructor } from "@app-types/constructors";
-import { Pagination } from "@models/pagination";
-import { HttpParams } from "@angular/common/http";
-import { DomSanitizer } from "@angular/platform-browser";
-import { BlobModel } from "@models/blob-model";
-import { map, Observable, of } from "rxjs";
-import { UserSignature } from "@models/user-signature";
+import { Injectable } from '@angular/core';
+import { InternalUser } from '@models/internal-user';
+import { CastResponse, CastResponseContainer } from 'cast-response';
+import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
+import { ComponentType } from '@angular/cdk/portal';
+import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
+import { Constructor } from '@app-types/constructors';
+import { Pagination } from '@models/pagination';
+import { HttpParams } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BlobModel } from '@models/blob-model';
+import { map, Observable, of } from 'rxjs';
+import { UserSignature } from '@models/user-signature';
 
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
     shape: {
-      "rs.*": () => InternalUser,
+      'rs.*': () => InternalUser,
     },
   },
   $default: {
@@ -24,13 +24,13 @@ import { UserSignature } from "@models/user-signature";
   },
 })
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class InternalUserService extends BaseCrudWithDialogService<
   InternalUserPopupComponent,
   InternalUser
 > {
-  override serviceName = "InternalUserService";
+  override serviceName = 'InternalUserService';
   protected getModelClass(): Constructor<InternalUser> {
     return InternalUser;
   }
@@ -52,9 +52,9 @@ export class InternalUserService extends BaseCrudWithDialogService<
     domSanitizer: DomSanitizer
   ): Observable<BlobModel> {
     return this.http
-      .get(this.getUrlSegment() + "/signature/content", {
+      .get(this.getUrlSegment() + '/signature/content', {
         params: new HttpParams({ fromObject: { internalUserId: id } }),
-        responseType: "blob",
+        responseType: 'blob',
       })
       .pipe(map((blob) => new BlobModel(blob, domSanitizer)));
   }
@@ -63,10 +63,10 @@ export class InternalUserService extends BaseCrudWithDialogService<
     if (userSignature) {
       const formData = new FormData();
       userSignature.content
-        ? formData.append("content", userSignature.content)
+        ? formData.append('content', userSignature.content)
         : null;
       delete userSignature.content;
-      return this.http.post(this.getUrlSegment() + "/signature", formData, {
+      return this.http.post(this.getUrlSegment() + '/signature', formData, {
         params: new HttpParams({
           fromObject: userSignature as never,
         }),
@@ -88,7 +88,7 @@ export class InternalUserService extends BaseCrudWithDialogService<
     defaultOUId: number
   ): Observable<boolean> {
     return this.http.put<boolean>(
-      this.getUrlSegment() + "/admin/default-department/update",
+      this.getUrlSegment() + '/admin/default-department/update',
       { id, defaultOUId }
     );
   }

@@ -10,9 +10,9 @@ export class PaginatorLocal extends OnDestroyMixin(MatPaginatorIntl) implements 
 
   lang = inject(LangService);
 
-  override firstPageLabel = `First page`;
-  override itemsPerPageLabel = `Items per page:`;
-  override lastPageLabel = `Last page`;
+  override firstPageLabel = 'First page';
+  override itemsPerPageLabel = 'Items per page:';
+  override lastPageLabel = 'Last page';
 
   override nextPageLabel = 'Next page';
   override previousPageLabel = 'Previous page';

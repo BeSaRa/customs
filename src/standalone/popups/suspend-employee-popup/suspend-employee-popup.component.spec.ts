@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SuspendEmployeePopupComponent } from "./susbend-employee-popup.component";
+import { SuspendEmployeePopupComponent } from './susbend-employee-popup.component';
 
-describe("SuspendEmployeePopupComponent", () => {
+describe('SuspendEmployeePopupComponent', () => {
   let component: SuspendEmployeePopupComponent;
   let fixture: ComponentFixture<SuspendEmployeePopupComponent>;
 
@@ -18,7 +18,7 @@ describe("SuspendEmployeePopupComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

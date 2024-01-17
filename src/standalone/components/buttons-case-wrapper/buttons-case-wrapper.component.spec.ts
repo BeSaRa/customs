@@ -1,8 +1,8 @@
-import { waitForAsync, ComponentFixture, TestBed } from "@angular/core/testing";
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ButtonsCaseWrapperComponent } from "./buttons-case-wrapper.component";
+import { ButtonsCaseWrapperComponent } from './buttons-case-wrapper.component';
 
-describe("ButtonsCaseWrapperComponent", () => {
+describe('ButtonsCaseWrapperComponent', () => {
   let component: ButtonsCaseWrapperComponent;
   let fixture: ComponentFixture<ButtonsCaseWrapperComponent>;
 
@@ -18,7 +18,7 @@ describe("ButtonsCaseWrapperComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

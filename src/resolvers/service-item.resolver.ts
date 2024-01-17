@@ -1,12 +1,12 @@
-import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { INavigatedItem } from "@contracts/inavigated-item";
-import { InboxService } from "@services/inbox.services";
-import { iif, map, Observable, of, switchMap } from "rxjs";
-import { OpenFrom } from "@enums/open-from";
-import { OpenedInfoContract } from "@contracts/opened-info-contract";
-import { ConfigService } from "@services/config.service";
-import { EncryptionService } from "@services/encryption.service";
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { InboxService } from '@services/inbox.services';
+import { iif, map, Observable, of, switchMap } from 'rxjs';
+import { OpenFrom } from '@enums/open-from';
+import { OpenedInfoContract } from '@contracts/opened-info-contract';
+import { ConfigService } from '@services/config.service';
+import { EncryptionService } from '@services/encryption.service';
 
 export class ServiceItemResolver {
   private static data: {
@@ -41,14 +41,14 @@ export class ServiceItemResolver {
         this.data.encryptionService.decrypt<INavigatedItem>(item);
     } catch (e) {
       // if there is error in decryption return null
-      console.log("error in decryption");
+      console.log('error in decryption');
       return of(null);
     }
     const { caseId, caseType, openFrom, taskId } = this.data
       .info as INavigatedItem;
     if (!caseId || !caseType) {
       // if we have missing needed properties while decrypt the info return null
-      console.log("missing info");
+      console.log('missing info');
       return of(null);
     }
     const service = this.data.userInboxService.getService(caseType);

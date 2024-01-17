@@ -1,26 +1,26 @@
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { InboxResult } from "@models/inbox-result";
-import { BehaviorSubject, Subject, switchMap, takeUntil } from "rxjs";
-import { LangService } from "@services/lang.service";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { InboxService } from "@services/inbox.services";
-import { ColumnsWrapper } from "@models/columns-wrapper";
-import { NoneFilterColumn } from "@models/none-filter-column";
-import { SelectFilterColumn } from "@models/select-filter-column";
-import { Lookup } from "@models/lookup";
-import { LookupService } from "@services/lookup.service";
-import { ContextMenuActionContract } from "@contracts/context-menu-action-contract";
-import { AppIcons } from "@constants/app-icons";
-import { Router } from "@angular/router";
-import { QueryResultSet } from "@models/query-result-set";
-import { EmployeeService } from "@services/employee.service";
-import { Team } from "@models/team";
-import { FormControl } from "@angular/forms";
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { InboxResult } from '@models/inbox-result';
+import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { LangService } from '@services/lang.service';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { InboxService } from '@services/inbox.services';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Lookup } from '@models/lookup';
+import { LookupService } from '@services/lookup.service';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { AppIcons } from '@constants/app-icons';
+import { Router } from '@angular/router';
+import { QueryResultSet } from '@models/query-result-set';
+import { EmployeeService } from '@services/employee.service';
+import { Team } from '@models/team';
+import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: "app-team-inbox",
-  templateUrl: "./team-inbox.component.html",
-  styleUrls: ["./team-inbox.component.scss"],
+  selector: 'app-team-inbox',
+  templateUrl: './team-inbox.component.html',
+  styleUrls: ['./team-inbox.component.scss'],
 })
 export class TeamInboxComponent
   extends OnDestroyMixin(class {})
@@ -44,30 +44,30 @@ export class TeamInboxComponent
   length = 50;
 
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
-    new NoneFilterColumn("BD_DRAFT_FULL_SERIAL"),
-    new NoneFilterColumn("BD_SUBJECT"),
-    new NoneFilterColumn("BD_CASE_TYPE"),
-    new NoneFilterColumn("PI_CREATE"),
-    new NoneFilterColumn("ACTIVATED"),
-    new NoneFilterColumn("PI_DUE"),
-    new NoneFilterColumn("BD_FROM_USER"),
+    new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
+    new NoneFilterColumn('BD_SUBJECT'),
+    new NoneFilterColumn('BD_CASE_TYPE'),
+    new NoneFilterColumn('PI_CREATE'),
+    new NoneFilterColumn('ACTIVATED'),
+    new NoneFilterColumn('PI_DUE'),
+    new NoneFilterColumn('BD_FROM_USER'),
     new SelectFilterColumn(
-      "RISK_STATUS",
+      'RISK_STATUS',
       this.riskStatus,
-      "lookupKey",
-      "getNames"
+      'lookupKey',
+      'getNames'
     ),
-    new NoneFilterColumn("actions")
+    new NoneFilterColumn('actions')
   ).attacheFilter(this.filter$);
 
   actions: ContextMenuActionContract<InboxResult>[] = [
     {
-      name: "view",
-      type: "action",
-      label: "view",
+      name: 'view',
+      type: 'action',
+      label: 'view',
       icon: AppIcons.VIEW,
       callback: () => {
-        console.log("navigate to view the case");
+        console.log('navigate to view the case');
       },
     },
   ];
@@ -95,7 +95,7 @@ export class TeamInboxComponent
     if (
       $event.value === null ||
       $event.value === undefined ||
-      $event.value === ""
+      $event.value === ''
     ) {
       delete this.filter$.value[$event.key as keyof InboxResult];
       this.filter$.next({ ...this.filter$.value });

@@ -1,5 +1,5 @@
-import { OpenFrom } from "./../enums/open-from";
-import { Directive, EventEmitter, OnInit } from "@angular/core";
+import { OpenFrom } from './../enums/open-from';
+import { Directive, EventEmitter, OnInit } from '@angular/core';
 import {
   catchError,
   delay,
@@ -16,19 +16,19 @@ import {
   takeUntil,
   tap,
   withLatestFrom,
-} from "rxjs";
-import { UntypedFormGroup } from "@angular/forms";
-import { SaveTypes } from "@enums/save-types";
-import { BaseCase } from "@models/base-case";
-import { BaseCaseService } from "@abstracts/base-case.service";
-import { BaseCaseContract } from "@contracts/base-case-contract";
-import { ignoreErrors } from "@utils/utils";
-import { OperationType } from "@enums/operation-type";
-import { AppIcons } from "@constants/app-icons";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { ActivatedRoute } from "@angular/router";
-import { CommonCaseStatus } from "@enums/common-case-status";
-import { FolderType } from "@enums/folder-type.enum";
+} from 'rxjs';
+import { UntypedFormGroup } from '@angular/forms';
+import { SaveTypes } from '@enums/save-types';
+import { BaseCase } from '@models/base-case';
+import { BaseCaseService } from '@abstracts/base-case.service';
+import { BaseCaseContract } from '@contracts/base-case-contract';
+import { ignoreErrors } from '@utils/utils';
+import { OperationType } from '@enums/operation-type';
+import { AppIcons } from '@constants/app-icons';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ActivatedRoute } from '@angular/router';
+import { CommonCaseStatus } from '@enums/common-case-status';
+import { FolderType } from '@enums/folder-type.enum';
 
 @Directive({})
 export abstract class BaseCaseComponent<
@@ -52,10 +52,10 @@ export abstract class BaseCaseComponent<
   afterSave$ = new EventEmitter<{ model: Model; saveType: SaveTypes }>();
   operation = OperationType.CREATE;
   private saveMap: Record<SaveTypes, keyof BaseCaseContract<Model>> = {
-    [SaveTypes.COMMIT]: "commit",
-    [SaveTypes.DRAFT]: "draft",
-    [SaveTypes.FINAL]: "save",
-    [SaveTypes.DRAFT_CONTINUE]: "draft",
+    [SaveTypes.COMMIT]: 'commit',
+    [SaveTypes.DRAFT]: 'draft',
+    [SaveTypes.FINAL]: 'save',
+    [SaveTypes.DRAFT_CONTINUE]: 'draft',
   };
   folderType = FolderType;
 
@@ -190,10 +190,10 @@ export abstract class BaseCaseComponent<
   abstract _updateForm(model: Model): void;
 
   protected _saveFail(error: Error): void {
-    console.log("SAVE_ERROR", error);
+    console.log('SAVE_ERROR', error);
   }
 
   protected _launchFail(error: Error): void {
-    console.log("LAUNCH_ERROR", error);
+    console.log('LAUNCH_ERROR', error);
   }
 }
