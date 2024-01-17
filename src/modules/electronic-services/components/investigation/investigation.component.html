@@ -1,4 +1,6 @@
-<div class="bg-gradient-to-br mb-5 from-primary to-primary-light px-3 rounded-lg py-2">
+<div
+  class="bg-gradient-to-br mb-5 from-primary to-primary-light px-3 rounded-lg py-2"
+>
   <div class="flex items-center justify-start text-white">
     <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
@@ -8,29 +10,46 @@
     <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
   </div>
   @if (!summaryMode()) {
-  <div [formGroup]="form" class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+  <div
+    [formGroup]="form"
+    class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
+  >
     <div class="mb-3">
-      <span class="font-medium text-white">{{ lang.map.report_draft_number }}</span>
+      <span class="font-medium text-white">{{
+        lang.map.report_draft_number
+      }}</span>
       <label class="input-form p-2 block">
-        {{ model?.draftFullSerial ? model?.draftFullSerial : "---" }}
+        {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
       </label>
     </div>
     <div class="mb-3">
-      <span class="font-medium text-white">{{ lang.map.investigation_file_number }}</span>
+      <span class="font-medium text-white">{{
+        lang.map.investigation_file_number
+      }}</span>
       <label class="input-form p-2 block">
-        {{ model?.investigationFullSerial ? model?.investigationFullSerial : "---" }}
+        {{
+          model?.investigationFullSerial
+            ? model?.investigationFullSerial
+            : '---'
+        }}
       </label>
     </div>
     <div class="mb-3">
-      <span class="font-medium text-white">{{ lang.map.report_entry_date }}</span>
+      <span class="font-medium text-white">{{
+        lang.map.report_entry_date
+      }}</span>
       <label class="input-form p-2 block">
-        {{ model?.createdOn ? (model?.createdOn | date) : "---" }}
+        {{ model?.createdOn ? (model?.createdOn | date) : '---' }}
       </label>
     </div>
     <div class="mb-3">
       <span class="font-medium text-white">{{ lang.map.limited_access }}</span>
       <label class="input-form p-2 block">
-        {{ model?.limitedAccessInfo ? model?.limitedAccessInfo?.getNames() : "---" }}
+        {{
+          model?.limitedAccessInfo
+            ? model?.limitedAccessInfo?.getNames()
+            : '---'
+        }}
       </label>
     </div>
   </div>
@@ -41,9 +60,14 @@
   [ngClass]="{
     'investegation-tab-group': summaryMode(),
     'investegation-tab-group-preview': !summaryMode()
-  }">
+  }"
+>
   <mat-card>
-    <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="tabChange($event)" mat-stretch-tabs="false">
+    <mat-tab-group
+      [selectedIndex]="selectedTab"
+      (selectedIndexChange)="tabChange($event)"
+      mat-stretch-tabs="false"
+    >
       @if (!summaryMode()) {
       <mat-tab [label]="lang.map.basic_report_data_and_violations">
         <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
@@ -73,17 +97,41 @@
     [model]="model"
     (save)="save$.next($event)"
     (launch)="launchCase($event)"
-    (claim)="_updateForm($event)"></app-buttons-case-wrapper>
+    (claim)="_updateForm($event)"
+    (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()"
+  ></app-buttons-case-wrapper>
   <ng-template #summary_tab>
-    <app-summary-tab [model]="model" [form]="form" />
+    <app-summary-tab
+      [model]="model"
+      [offenders]="offendersMappedWIthViolations"
+      [violations]="violations"
+      [form]="form"
+    />
   </ng-template>
 
   <ng-template #basic_info_tab>
-    <div [formGroup]="form" class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-      <app-input formControlName="draftFullSerial" [label]="lang.map.report_draft_number" />
-      <app-input formControlName="investigationFullSerial" [label]="lang.map.investigation_file_number" />
-      <app-input formControlName="createdOn" [label]="lang.map.report_entry_date">
-        <input appControl formControlName="createdOn" (click)="datepicker.open()" [matDatepicker]="datepicker" />
+    <div
+      [formGroup]="form"
+      class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
+    >
+      <app-input
+        formControlName="draftFullSerial"
+        [label]="lang.map.report_draft_number"
+      />
+      <app-input
+        formControlName="investigationFullSerial"
+        [label]="lang.map.investigation_file_number"
+      />
+      <app-input
+        formControlName="createdOn"
+        [label]="lang.map.report_entry_date"
+      >
+        <input
+          appControl
+          formControlName="createdOn"
+          (click)="datepicker.open()"
+          [matDatepicker]="datepicker"
+        />
         <mat-datepicker touchUi #datepicker />
       </app-input>
       <app-select-input
@@ -91,12 +139,14 @@
         [label]="lang.map.limited_access"
         bindValue="lookupKey"
         bindLabel="getNames"
-        [options]="violationDegreeConfidentiality" />
+        [options]="violationDegreeConfidentiality"
+      />
       <app-textarea
         formControlName="description"
         [rows]="12"
         class="col-span-1 md:col-span-2 lg:col-span-4"
-        [label]="lang.map.general_explanation_of_violations" />
+        [label]="lang.map.general_explanation_of_violations"
+      />
     </div>
   </ng-template>
 
@@ -107,7 +157,8 @@
         (violations)="violations = $event"
         (saveCase)="saveCase($event)"
         [readonly]="readonly"
-        [caseId]="model?.id" />
+        [caseId]="model?.id"
+      />
     </div>
   </ng-template>
 
@@ -119,13 +170,19 @@
         (offenders)="offenders = $event"
         (saveCase)="saveCase($event)"
         [readonly]="readonly"
-        [caseId]="model?.id" />
+        [caseId]="model?.id"
+        (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)"
+      />
     </div>
   </ng-template>
 
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list [violations]="violations" [readonly]="readonly" [caseId]="model?.id" />
+      <app-witnesses-list
+        [violations]="violations"
+        [readonly]="readonly"
+        [caseId]="model?.id"
+      />
     </div>
   </ng-template>
 
@@ -136,18 +193,21 @@
         [service]="service"
         [readonly]="readonly"
         [title]="lang.map.report_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
+        class="col-span-1 md:col-span-2 lg:col-span-4"
+      />
       <app-case-attachments
         [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
         [service]="service"
         [readonly]="readonly"
         [title]="lang.map.correspondence_attachments"
-        class="col-span-1 md:col-span-2 lg:col-span-4" />
+        class="col-span-1 md:col-span-2 lg:col-span-4"
+      />
       <app-offender-attachments
         [investigationModel]="model"
-        [data]="model?.offenderInfo || []"
+        [data]="offenders"
         class="col-span-1 md:col-span-2 lg:col-span-4"
-        [readOnly]="readonly"/>
+        [readOnly]="readonly"
+      />
     </div>
   </ng-template>
 </div>

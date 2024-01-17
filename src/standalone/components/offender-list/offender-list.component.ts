@@ -1,4 +1,3 @@
-import { OffenderViolationService } from '@services/offender-violation.service';
 import { EmployeeService } from '@services/employee.service';
 import {
   Component,
@@ -64,7 +63,6 @@ export class OffenderListComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  offenderViolationService = inject(OffenderViolationService);
   @Input()
   violations!: Violation[];
   @Input()
@@ -81,6 +79,8 @@ export class OffenderListComponent
   >();
   @Output()
   offenders = new EventEmitter<Offender[]>();
+  @Output()
+  linkOffenderWithViolation = new EventEmitter<void>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -105,11 +105,11 @@ export class OffenderListComponent
     this.listenToAttachments();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
-    this.listernToSaveCase();
+    this.listenToSaveCase();
     this.reload$.next();
   }
 
-  listernToSaveCase() {
+  listenToSaveCase() {
     this.transformer$
       .pipe(
         tap(
@@ -142,7 +142,10 @@ export class OffenderListComponent
             .afterClosed()
         )
       )
-      .subscribe(() => this.reload$.next());
+      .subscribe(() => {
+        this.reload$.next();
+        this.linkOffenderWithViolation.emit();
+      });
   }
 
   private listenToReload() {
@@ -230,7 +233,7 @@ export class OffenderListComponent
             .afterClosed()
         )
       )
-      .subscribe();
+      .subscribe(() => this.linkOffenderWithViolation.emit());
   }
   listenToSituationSearch() {
     this.situationSearch$

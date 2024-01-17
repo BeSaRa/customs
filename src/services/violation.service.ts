@@ -22,7 +22,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class ViolationService extends BaseCrudWithDialogService<ViolationPopupComponent, Violation> {
+export class ViolationService extends BaseCrudWithDialogService<
+  ViolationPopupComponent,
+  Violation
+> {
   lang = inject(LangService);
   serviceName = 'ViolationService';
 
@@ -47,7 +50,7 @@ export class ViolationService extends BaseCrudWithDialogService<ViolationPopupCo
       ' - ' +
       (model.violationsDate
         ? new Date(model.violationsDate).toLocaleDateString('en-GB')
-        : this.lang.map.date_to +
+        : this.lang.map.date_from +
           ' ' +
           new Date(model.violationsDateFrom).toLocaleDateString('en-GB') +
           ' ' +
