@@ -30,11 +30,9 @@ import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/
 import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
-import { TaskResponses } from '@enums/task-responses';
 import { MatMenuModule } from '@angular/material/menu';
 import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employee-popup/suspend-employee-popup.component';
 
@@ -74,10 +72,8 @@ export class OffendersViolationsPreviewComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  penaltyDecisionService = inject(PenaltyDecisionService);
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
-  taskResponses = TaskResponses;
   systemPenalties = SystemPenalties;
   offenderDataSource = new AppTableDataSource<Offender>([]);
   reload$: Subject<void> = new Subject<void>();
@@ -129,7 +125,9 @@ export class OffendersViolationsPreviewComponent
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
   }
-
+  assertType(item: Offender): Offender {
+    return item;
+  }
   getFilteredPenalties(offender: Offender) {
     return (
       this.penaltyMap && this.penaltyMap[offender.id]

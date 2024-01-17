@@ -5,11 +5,11 @@ import { InternalUser } from '@models/internal-user';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import {
-  Observable,
   catchError,
   combineLatest,
   filter,
   map,
+  Observable,
   of,
   takeUntil,
   tap,
@@ -24,8 +24,7 @@ import { PermissionRole } from '@models/permission-role';
 import { CheckGroup } from '@models/check-group';
 import { AppIcons } from '@constants/app-icons';
 import { InternalUserService } from '@services/internal-user.service';
-import { SafeResourceUrl } from '@angular/platform-browser';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserSignature } from '@models/user-signature';
 
 @Component({
@@ -196,10 +195,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       const selectedRoleId = this.permissionsRoles.find(
         (permission) => permission.id === val
       );
-      const ids = selectedRoleId!.permissionSet.map(
+      this.selectedIds = selectedRoleId!.permissionSet.map(
         (permission) => permission.permissionId
       );
-      this.selectedIds = ids;
       this.loadGroups();
     });
   }
