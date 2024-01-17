@@ -55,7 +55,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   @ViewChild(OffenderListComponent)
   offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent)
-  witnessestListComponent!: WitnessesListComponent;
+  witnessesListComponent!: WitnessesListComponent;
   violationDegreeConfidentiality =
     this.lookupService.lookups.violationDegreeConfidentiality;
   caseFolders: CaseFolder[] = [];
@@ -260,7 +260,7 @@ export class InvestigationComponent extends BaseCaseComponent<
     this.form.reset();
     this.violationListComponent.resetDataList();
     this.offenderListComponent.resetDataList();
-    this.witnessestListComponent.resetDataList();
+    this.witnessesListComponent.resetDataList();
     this.tabChange(0);
     this.router.navigate([], {
       relativeTo: this.activeRoute,
@@ -281,6 +281,6 @@ export class InvestigationComponent extends BaseCaseComponent<
 
   resetOffendersAndExternalPersons() {
     this.offenderListComponent.deleteAllOffender();
-    this.witnessestListComponent.deleteAllWitnesses();
+    this.witnessesListComponent.deleteAllWitnesses();
   }
 }

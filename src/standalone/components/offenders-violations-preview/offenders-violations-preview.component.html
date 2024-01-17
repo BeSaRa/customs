@@ -8,7 +8,7 @@
   <!-- offender name -->
   <ng-container matColumnDef="offenderName">
     <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
-      {{ lang.map.offender_names }}
+      {{ lang.map.offender_name }}
     </th>
     <td mat-cell *matCellDef="let element">
       <span class="flex justify-start items-center">
@@ -360,7 +360,7 @@
           <span
             class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
           >
-            <label class="font-medium">{{ lang.map.repeatation }} : </label>
+            <label class="font-medium">{{ lang.map.reputation }} : </label>
             <label>{{ violation.repeat }}</label>
           </span>
           <!-- date -->
@@ -370,7 +370,7 @@
           >
             <label class="font-medium">{{ lang.map.violation_date }} : </label>
             <label>{{
-              violation.violationInfo?.violationsDate | date : "YYYY/MM/dd"
+              violation.violationInfo?.violationsDate | date : 'YYYY/MM/dd'
             }}</label>
           </span>
           }
@@ -385,14 +385,14 @@
               <label class="font-medium">{{ lang.map.date_from }} : </label>
               <label>{{
                 violation.violationInfo?.violationsDateFrom
-                  | date : "YYYY/MM/dd"
+                  | date : 'YYYY/MM/dd'
               }}</label>
             </span>
             } @if (violation.violationInfo?.violationsDateTo) {
             <span>
               <label class="font-medium"> - {{ lang.map.date_to }} : </label>
               <label>{{
-                violation.violationInfo?.violationsDateTo | date : "YYYY/MM/d"
+                violation.violationInfo?.violationsDateTo | date : 'YYYY/MM/d'
               }}</label>
             </span>
             }
