@@ -4,7 +4,13 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -12,7 +18,16 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { LangService } from '@services/lang.service';
-import { BehaviorSubject, combineLatest, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { LookupService } from '@services/lookup.service';
 import { MawaredEmployeeCriteria } from '@models/mawared-employee-criteria';
 import { ClearingAgentCriteria } from '@models/clearing-agent-criteria';
@@ -61,7 +76,10 @@ import { Investigation } from '@models/investigation';
   templateUrl: './offender-criteria-popup.component.html',
   styleUrls: ['./offender-criteria-popup.component.scss'],
 })
-export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) implements OnInit {
+export class OffenderCriteriaPopupComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   data = inject(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
   offenderViolationService = inject(OffenderViolationService);
@@ -76,45 +94,74 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
   depId = inject(EmployeeService).getOrganizationUnit()?.mawaredDepId;
   toast = inject(ToastService);
   search$: Subject<void> = new Subject();
-  select$: Subject<void> = new Subject();
   addViolation$: Subject<void> = new Subject<void>();
-
+  fromOffender: boolean = true;
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
   administrations: MawaredDepartment[] = [];
+  _Violations: Violation[] = [];
   violations: Violation[] = [];
-  offenders: Offender[] = this.data && ((this.data.offenders || []) as Offender[]);
+  offenders: Offender[] =
+    this.data && ((this.data.offenders || []) as Offender[]);
   form!: UntypedFormGroup;
   isEmployee = true;
   isClearingAgent = false;
-  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, { nonNullable: true });
-  offenderViolationControl = new FormControl<number[]>([], [CustomValidators.required]);
+  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, {
+    nonNullable: true,
+  });
+  offenderViolationControl = new FormControl<number[]>(
+    [],
+    [CustomValidators.required]
+  );
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
   employeeDatasource = new AppTableDataSource(this.employees$);
   clearingAgents$ = new BehaviorSubject<ClearingAgent[]>([]);
   clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
-  employeeDisplayedColumns = ['employee_number', 'arName', 'enName', 'department', 'qid', 'jobTitle', 'actions'];
-  clearingAgentDisplayedColumns = ['clearingAgentCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
+  employeeDisplayedColumns = [
+    'employee_number',
+    'arName',
+    'enName',
+    'department',
+    'qid',
+    'jobTitle',
+    'actions',
+  ];
+  clearingAgentDisplayedColumns = [
+    'clearingAgentCode',
+    'arName',
+    'enName',
+    'qid',
+    'companyName',
+    'companyNumber',
+    'actions',
+  ];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   @ViewChild(MatTabGroup)
   tabComponent!: MatTabGroup;
-  transformer$ = this.data && (this.data.transformer$ as Subject<TransformerAction<Investigation>>);
+  transformer$ =
+    this.data &&
+    (this.data.transformer$ as Subject<TransformerAction<Investigation>>);
   caseId = this.data && (this.data.caseId as string);
   selectedOffender!: MawaredEmployee | ClearingAgent;
-  ngOnInit(): void {
-    this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
-    this.clearingAgentFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
 
-    this.violations =
-      this.data &&
-      ((this.data.violations || []) as Violation[]).filter(
-        v =>
-          this.offenderTypeControl &&
-          (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value || v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH)
-      );
+  ngOnInit(): void {
+    this.employeeFormGroup = this.fb.group(
+      new MawaredEmployeeCriteria().buildForm(true)
+    );
+    this.clearingAgentFormGroup = this.fb.group(
+      new ClearingAgentCriteria().buildForm(true)
+    );
+    this._Violations =
+      this.data && ((this.data.violations || []) as Violation[]);
+    this.violations = this._Violations.filter(
+      (v) =>
+        this.offenderTypeControl &&
+        (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value ||
+          v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH)
+    );
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -127,19 +174,19 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
     this.listenToAddEmployee();
     this.listenToAddClearingAgent();
     this.listenToAddViolation();
-    this.listernToSaveCaseDone();
+    if (!this.caseId) this.listenToSaveCaseDone();
   }
 
   private listenToOffenderTypeChange() {
-    this.offenderTypeControl.valueChanges.subscribe(value => {
+    this.offenderTypeControl.valueChanges.subscribe((value) => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
       this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
       this.offenderViolationControl.reset();
-      this.violations =
-        this.data &&
-        ((this.data.violations || []) as Violation[]).filter(
-          v => this.offenderTypeControl && v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value
-        );
+      this.violations = this._Violations.filter(
+        (v) =>
+          this.offenderTypeControl &&
+          v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value
+      );
     });
   }
 
@@ -147,7 +194,7 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
     this.mawaredDepartmentsService
       .loadUserDepartments()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(list => {
+      .subscribe((list) => {
         this.administrations = list;
       });
   }
@@ -155,12 +202,29 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
   private listenToAddViolation() {
     this.addViolation$
       .pipe(takeUntil(this.destroy$))
-      .pipe(switchMap(() => this.service.openAddViolation(this.data.caseId as string, new Subject()).afterClosed()))
-      .subscribe((violation: Violation) => {
-        (this.data.violations as Violation[]).unshift(new Violation().clone<Violation>({ ...violation }));
-        this.offenderViolationControl.patchValue(
-          this.offenderViolationControl.value ? [...this.offenderViolationControl.value, violation.id] : [violation.id]
+      .pipe(tap(() => (this.fromOffender = false)))
+      .pipe(
+        switchMap(() =>
+          this.service
+            .openAddViolation(this.caseId as string, this.transformer$)
+            .afterClosed()
+        )
+      )
+      .subscribe((violation) => {
+        this.violations.unshift(
+          new Violation().clone<Violation>({ ...violation })
         );
+        if (
+          violation.offenderTypeInfo?.lookupKey ==
+          this.offenderTypeControl.value
+        ) {
+          this.offenderViolationControl.patchValue(
+            this.offenderViolationControl.value
+              ? [...this.offenderViolationControl.value, violation.id]
+              : [violation.id]
+          );
+        }
+        this.fromOffender = false;
       });
   }
 
@@ -175,16 +239,21 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap(value => this.mawaredEmployeeService.load(undefined, value))
+        switchMap((value) => this.mawaredEmployeeService.load(undefined, value))
       )
       .pipe(
-        map(pagination =>
+        map((pagination) =>
           pagination.rs.filter(
-            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.EMPLOYEE)
+            (emp) =>
+              !this.offenders.find(
+                (offender: Offender) =>
+                  offender.offenderRefId == emp.id &&
+                  offender.type == OffenderTypes.EMPLOYEE
+              )
           )
         )
       )
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
@@ -196,16 +265,21 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap(value => this.clearingAgentService.load(undefined, value))
+        switchMap((value) => this.clearingAgentService.load(undefined, value))
       )
       .pipe(
-        map(pagination =>
+        map((pagination) =>
           pagination.rs.filter(
-            emp => !this.offenders.find((offender: Offender) => offender.offenderRefId == emp.id && offender.type == OffenderTypes.ClEARING_AGENT)
+            (emp) =>
+              !this.offenders.find(
+                (offender: Offender) =>
+                  offender.offenderRefId == emp.id &&
+                  offender.type == OffenderTypes.ClEARING_AGENT
+              )
           )
         )
       )
-      .subscribe(result => {
+      .subscribe((result) => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
@@ -215,18 +289,25 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
       });
   }
 
-  listernToSaveCaseDone() {
+  listenToSaveCaseDone() {
     this.transformer$
-      ?.pipe(filter((data: TransformerAction<Investigation>) => data.action == 'done'))
+      ?.pipe(
+        filter(
+          (data: TransformerAction<Investigation>) => data.action == 'done'
+        )
+      )
       .subscribe((data: TransformerAction<Investigation>) => {
         this.caseId = data.model?.id;
-        if (this.isClearingAgent) {
+
+        if (this.isClearingAgent && this.fromOffender) {
           this.addClearingAgent$.next(this.selectedOffender as ClearingAgent);
-        } else {
+        } else if (this.fromOffender) {
           this.addEmployee$.next(this.selectedOffender as MawaredEmployee);
         }
+        this.transformer$.unsubscribe();
       });
   }
+
   addEmployee(employee: MawaredEmployee) {
     if (!this.caseId) {
       this.selectedOffender = employee;
@@ -235,43 +316,55 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
       this.addEmployee$.next(employee);
     }
   }
+
   private listenToAddEmployee() {
     this.addEmployee$
-      .pipe(map(model => model.convertToOffender(this.caseId)))
+      .pipe(map((model) => model.convertToOffender(this.caseId)))
       .pipe(
-        switchMap(offender => {
+        switchMap((offender) => {
           return offender.save();
         })
       )
       .pipe(
         switchMap((model: Offender) => {
           return combineLatest(
-            (this.offenderViolationControl?.value || []).map((violationId: number) => {
-              return this.offenderViolationService.create(
-                new OffenderViolation().clone<OffenderViolation>({
-                  caseId: this.caseId,
-                  offenderId: model.id,
-                  violationId: violationId,
-                  status: 1,
-                  isProved: true,
-                })
-              );
-            })
+            (this.offenderViolationControl?.value || []).map(
+              (violationId: number) => {
+                return this.offenderViolationService.create(
+                  new OffenderViolation().clone<OffenderViolation>({
+                    caseId: this.caseId,
+                    offenderId: model.id,
+                    violationId: violationId,
+                    status: 1,
+                    isProved: true,
+                  })
+                );
+              }
+            )
           )
             .pipe(ignoreErrors())
             .pipe(map(() => model));
         })
       )
-      .subscribe(model => {
+      .subscribe((model) => {
         this.employeeDatasource.data.splice(
-          this.employeeDatasource.data.findIndex(emp => emp.id == model.offenderRefId),
+          this.employeeDatasource.data.findIndex(
+            (emp) => emp.id == model.offenderRefId
+          ),
           1
         );
-        if (this.employeeService.getEmployee()?.defaultOUId !== model?.offenderInfo?.employeeDepartmentId) {
-          this.toast.info(this.lang.map.selected_offender_related_to_another_department);
+        if (
+          this.employeeService.getEmployee()?.defaultOUId !==
+          model?.offenderInfo?.employeeDepartmentId
+        ) {
+          this.toast.info(
+            this.lang.map.selected_offender_related_to_another_department
+          );
         }
         this.employees$.next(this.employeeDatasource.data);
-        this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
+        this.toast.success(
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+        );
       });
   }
 
@@ -283,40 +376,47 @@ export class OffenderCriteriaPopupComponent extends OnDestroyMixin(class { }) im
       this.addClearingAgent$.next(agent);
     }
   }
+
   private listenToAddClearingAgent() {
     this.addClearingAgent$
-      .pipe(map(model => model.convertToOffender(this.caseId)))
+      .pipe(map((model) => model.convertToOffender(this.caseId)))
       .pipe(
-        switchMap(offender => {
+        switchMap((offender) => {
           return offender.save();
         })
       )
       .pipe(
         switchMap((model: Offender) => {
           return combineLatest(
-            (this.offenderViolationControl?.value || []).map((violationId: number) => {
-              return this.offenderViolationService.create(
-                new OffenderViolation().clone<OffenderViolation>({
-                  caseId: this.caseId,
-                  offenderId: model.id,
-                  violationId: violationId,
-                  status: 1,
-                  isProved: true,
-                })
-              );
-            })
+            (this.offenderViolationControl?.value || []).map(
+              (violationId: number) => {
+                return this.offenderViolationService.create(
+                  new OffenderViolation().clone<OffenderViolation>({
+                    caseId: this.caseId,
+                    offenderId: model.id,
+                    violationId: violationId,
+                    status: 1,
+                    isProved: true,
+                  })
+                );
+              }
+            )
           )
             .pipe(ignoreErrors())
             .pipe(map(() => model));
         })
       )
-      .subscribe(model => {
+      .subscribe((model) => {
         this.clearingAgentsDatasource.data.splice(
-          this.clearingAgentsDatasource.data.findIndex(emp => emp.id == model.offenderRefId),
+          this.clearingAgentsDatasource.data.findIndex(
+            (emp) => emp.id == model.offenderRefId
+          ),
           1
         );
         this.clearingAgents$.next(this.clearingAgentsDatasource.data);
-        this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
+        this.toast.success(
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+        );
       });
   }
 }
