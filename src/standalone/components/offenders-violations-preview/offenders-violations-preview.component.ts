@@ -53,12 +53,12 @@ import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employ
     trigger('detailExpand', [
       state(
         'collapsed',
-        style({ height: '0px', minHeight: '0', display: 'none' })
+        style({ height: '0px', minHeight: '0', display: 'none' }),
       ),
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
       ),
     ]),
   ],
@@ -110,7 +110,7 @@ export class OffendersViolationsPreviewComponent
         ...acc,
         [item.lookupKey]: item,
       }),
-      {}
+      {},
     );
 
   ngOnInit(): void {
@@ -125,9 +125,11 @@ export class OffendersViolationsPreviewComponent
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
   }
+
   assertType(item: Offender): Offender {
     return item;
   }
+
   getFilteredPenalties(offender: Offender) {
     return (
       this.penaltyMap && this.penaltyMap[offender.id]
@@ -137,7 +139,7 @@ export class OffendersViolationsPreviewComponent
       (penalty) =>
         penalty.penaltyKey !== SystemPenalties.TERMINATE &&
         penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
-        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
     );
   }
 
@@ -145,7 +147,7 @@ export class OffendersViolationsPreviewComponent
     return (
       this.penaltyMap &&
       this.penaltyMap[element.id].second.find(
-        (penalty) => penalty.penaltyKey == penaltyKey
+        (penalty) => penalty.penaltyKey == penaltyKey,
       )?.id
     );
   }
@@ -172,8 +174,8 @@ export class OffendersViolationsPreviewComponent
                 readonly: true,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -190,8 +192,8 @@ export class OffendersViolationsPreviewComponent
                 readonly: true,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -204,8 +206,8 @@ export class OffendersViolationsPreviewComponent
             this.dialog.info(this.lang.map.no_records_to_display);
         }),
         filter(
-          (offender: Offender) => !!this.getFilteredPenalties(offender).length
-        )
+          (offender: Offender) => !!this.getFilteredPenalties(offender).length,
+        ),
       )
       .pipe(
         switchMap((offender: Offender) =>
@@ -218,8 +220,8 @@ export class OffendersViolationsPreviewComponent
                 penaltyImposedBySystem: this.penaltyMap[offender.id].first,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -236,8 +238,8 @@ export class OffendersViolationsPreviewComponent
                 type: UserTypes.INTERNAL,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -249,14 +251,14 @@ export class OffendersViolationsPreviewComponent
           const suspendedEmployee =
             this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
               offender.offender,
-              this.investigationModel?.id as string
+              this.investigationModel?.id as string,
             );
           return this.dialog
             .open(SuspendEmployeePopupComponent, {
               data: suspendedEmployee,
             })
             .afterClosed();
-        })
+        }),
       )
       .subscribe();
   }
@@ -277,8 +279,8 @@ export class OffendersViolationsPreviewComponent
                 isCompany: data.isCompany,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -296,7 +298,7 @@ export class OffendersViolationsPreviewComponent
             status: 1,
           });
           return penaltyDecision.save();
-        })
+        }),
       )
       .subscribe();
   }
