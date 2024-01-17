@@ -1,4 +1,4 @@
-import { OpenFrom } from './../enums/open-from';
+import { OpenFrom } from '@enums/open-from';
 import { Directive, EventEmitter, OnInit } from '@angular/core';
 import {
   catchError,

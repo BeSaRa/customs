@@ -112,7 +112,7 @@ export class CommentPopupComponent
   listenToComment() {
     this.comment$
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter(() => !!this.form.valid))
+      .pipe(filter(() => this.form.valid))
       .pipe(
         switchMap(() => {
           const completeBody = {

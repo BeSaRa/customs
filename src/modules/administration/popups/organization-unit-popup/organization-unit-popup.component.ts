@@ -1,4 +1,4 @@
-import { OrganizationUnitService } from './../../../../services/organization-unit.service';
+import { OrganizationUnitService } from '@services/organization-unit.service';
 import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
