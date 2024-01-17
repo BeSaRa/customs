@@ -7,21 +7,26 @@
 </div>
 <div>
   <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
-    <!-- offenderType -->
-    <ng-container matColumnDef="offenderType">
-      <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>{{ lang.map.offender_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ offenderTypesMap[element.type].getNames() }}</td>
-    </ng-container>
-    <!-- arName -->
-    <ng-container matColumnDef="arName">
-      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.arName }}</td>
-    </ng-container>
-    <!-- enName -->
-    <ng-container matColumnDef="enName">
-      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderInfo && element.offenderInfo.enName }}</td>
-    </ng-container>
+    <!-- offender name -->
+  <ng-container matColumnDef="offenderName">
+    <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
+      {{ lang.map.offender_names }}
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <span class="flex justify-start items-center">
+        <app-icon-button
+          [matTooltip]="offenderTypesMap[element.type].getNames()"
+          [icon]="
+            element.type === offenderTypes.EMPLOYEE
+              ? 'EMPLOYEE'
+              : 'CLEARING_AGENT'
+          "
+        >
+        </app-icon-button>
+        {{ element.getNames() }}
+      </span>
+    </td>
+  </ng-container>
     <!-- qid -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>{{ lang.map.qid }}</th>
@@ -37,11 +42,8 @@
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <div [matTooltip]="lang.map.violations">
+                    <div [matTooltip]="lang.map.violations">
             <app-icon-button (click)="offenderViolation$.next(element)" icon="VIOLATION_OUTLINE" />
-          </div>
-          <div [matTooltip]="lang.map.offender_attachments">
-            <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
           </div>
           @if (!readonly) {
           <div [matTooltip]="lang.map.delete">
@@ -60,7 +62,7 @@
               icon="CLEARING_AGENCY"></app-icon-button>
           </div>
           }
-        </div>
+                  </div>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

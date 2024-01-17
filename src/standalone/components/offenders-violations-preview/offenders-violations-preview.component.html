@@ -74,17 +74,6 @@
     </td>
   </ng-container>
 
-  <!-- attachments -->
-  <!-- <ng-container matColumnDef="attachments">
-  <th mat-header-cell mat-sort-header="attachments" *matHeaderCellDef>{{ lang.map.attachments }}</th>
-  <td mat-cell *matCellDef="let element">
-    <div class="flex justify-center ap-2" *ngIf="isClaimed">
-      <div [matTooltip]="lang.map.offender_attachments">
-        <app-icon-button (click)="attachments$.next(element)" icon="ATTACHMENT" />
-      </div>
-    </div>
-  </td>
-</ng-container> -->
   <!-- situationSearch -->
   <ng-container matColumnDef="situationSearch">
     <th mat-header-cell mat-sort-header="situationSearch" *matHeaderCellDef>
@@ -210,210 +199,210 @@
     </td>
   </ng-container>
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
-  <ng-container matColumnDef="expandedDetail">
-    <td
-      mat-cell
-      *matCellDef="let element"
-      class="p-0"
-      [attr.colspan]="offenderDisplayedColumns.length"
-    >
-      <div
-        [@detailExpand]="
-          selectedOffender === element ? 'expanded' : 'collapsed'
-        "
-        class="px-1 divide-y divide-dashed"
+      <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        class="p-0"
+        [attr.colspan]="offenderDisplayedColumns.length"
       >
-        @for (violation of assertType(element).violations; track violation) {
-        <div class="p-3 border-bottom">
-          <h5 class="text-lg font-medium mb-1">
-            {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
-          </h5>
-          <!-- classificationInfo -->
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.violation_classification }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.classificationInfo?.getNames()
-            }}</label>
-          </span>
-          <!-- competentProsecutionDecisionInfo -->
-          @if (violation.violationInfo?.competentProsecutionDecision) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.competent_prosecutiond_decision }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.competentProsecutionDecisionInfo?.getNames()
-            }}</label>
-          </span>
-          }
-          <!-- courtDecision -->
-          @if (violation.violationInfo?.courtDecision) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.court_decision }} : </label>
-            <label>{{
-              violation.violationInfo?.courtDecisionInfo?.getNames()
-            }}</label>
-          </span>
-          }
-          <!-- drugProsecutionDecision -->
-          @if (violation.violationInfo?.drugProsecutionDecision) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.drug_prosecution_decision }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.drugProsecutionDecisionInfo?.getNames()
-            }}</label>
-          </span>
-          }
-          <!-- forensicLabAnalysis -->
-          @if (violation.violationInfo?.forensicLabAnalysis) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.forensic_lab_analysis }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.forensicLabAnalysisInfo?.getNames()
-            }}</label>
-          </span>
-          }
-          <!-- securityAdminDecision -->
-          @if (violation.violationInfo?.securityAdminDecision) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.security_admin_decision }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.securityAdminDecisionInfo?.getNames()
-            }}</label>
-          </span>
-          }
-          <!-- is proved -->
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.is_proved }} : </label>
-            @if (!violation.isProved) {
-            <span class="text-secondary">
-              {{ lang.map.no }}
-            </span>
-            } @if (violation.isProved) {
-            <span class="text-red-500">{{ lang.map.yes }}</span>
-            }
-          </span>
-          <!-- customsDeclarationNumber -->
-          @if (violation.violationInfo?.customsDeclarationNumber) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.customs_declaration_number }} :
-            </label>
-            <label>{{
-              violation.violationInfo?.customsDeclarationNumber
-            }}</label>
-          </span>
-          }
-          <!-- controlReportNumber -->
-          @if (violation.violationInfo?.controlReportNumber) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium"
-              >{{ lang.map.control_report_number }} :
-            </label>
-            <label>{{ violation.violationInfo?.controlReportNumber }}</label>
-          </span>
-          }
-          <!-- reportNumber -->
-          @if (violation.violationInfo?.reportNumber) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.report_number }} : </label>
-            <label>{{ violation.violationInfo?.reportNumber }}</label>
-          </span>
-          }
-          <!-- reportNumber -->
-          @if (violation.violationInfo?.reportYear) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.report_year }} : </label>
-            <label>{{ violation.violationInfo?.reportYear }}</label>
-          </span>
-          }
-          <!-- repeat -->
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.repeatation }} : </label>
-            <label>{{ violation.repeat }}</label>
-          </span>
-          <!-- date -->
-          @if (violation.violationInfo?.violationsDate) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.violation_date }} : </label>
-            <label>{{
-              violation.violationInfo?.violationsDate | date : 'YYYY/MM/dd'
-            }}</label>
-          </span>
-          }
-          <!-- date -->
-          @if (violation.violationInfo?.violationsDateTo ||
-          violation.violationInfo?.violationsDateFrom) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            @if (violation.violationInfo?.violationsDateFrom) {
-            <span>
-              <label class="font-medium">{{ lang.map.date_from }} : </label>
+        <div
+          [@detailExpand]="
+            selectedOffender === element ? 'expanded' : 'collapsed'
+          "
+          class="px-1 divide-y divide-dashed"
+        >
+          @for (violation of element.violations; track violation) {
+          <div class="p-3 border-bottom">
+            <h5 class="text-lg font-medium mb-1">
+              {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
+            </h5>
+            <!-- classificationInfo -->
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.violation_classification }} :
+              </label>
               <label>{{
-                violation.violationInfo?.violationsDateFrom
-                  | date : 'YYYY/MM/dd'
+                violation.violationInfo?.classificationInfo?.getNames()
               }}</label>
             </span>
-            } @if (violation.violationInfo?.violationsDateTo) {
-            <span>
-              <label class="font-medium"> - {{ lang.map.date_to }} : </label>
+            <!-- competentProsecutionDecisionInfo -->
+            @if (violation.violationInfo?.competentProsecutionDecision) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.competent_prosecutiond_decision }} :
+              </label>
               <label>{{
-                violation.violationInfo?.violationsDateTo | date : 'YYYY/MM/d'
+                violation.violationInfo?.competentProsecutionDecisionInfo?.getNames()
               }}</label>
             </span>
             }
-          </span>
-          }
-          <!-- description -->
-          @if (violation.violationInfo?.description) {
-          <span
-            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-          >
-            <label class="font-medium">{{ lang.map.description }} : </label>
-            <label>{{ violation.violationInfo?.description }}</label>
-          </span>
+            <!-- courtDecision -->
+            @if (violation.violationInfo?.courtDecision) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.court_decision }} : </label>
+              <label>{{
+                violation.violationInfo?.courtDecisionInfo?.getNames()
+              }}</label>
+            </span>
+            }
+            <!-- drugProsecutionDecision -->
+            @if (violation.violationInfo?.drugProsecutionDecision) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.drug_prosecution_decision }} :
+              </label>
+              <label>{{
+                violation.violationInfo?.drugProsecutionDecisionInfo?.getNames()
+              }}</label>
+            </span>
+            }
+            <!-- forensicLabAnalysis -->
+            @if (violation.violationInfo?.forensicLabAnalysis) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.forensic_lab_analysis }} :
+              </label>
+              <label>{{
+                violation.violationInfo?.forensicLabAnalysisInfo?.getNames()
+              }}</label>
+            </span>
+            }
+            <!-- securityAdminDecision -->
+            @if (violation.violationInfo?.securityAdminDecision) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.security_admin_decision }} :
+              </label>
+              <label>{{
+                violation.violationInfo?.securityAdminDecisionInfo?.getNames()
+              }}</label>
+            </span>
+            }
+            <!-- is preived -->
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.is_proved }} : </label>
+              @if (!violation.isProved) {
+              <span class="text-secondary">
+                {{ lang.map.no }}
+              </span>
+              } @if (violation.isProved) {
+              <span class="text-red-500">{{ lang.map.yes }}</span>
+              }
+            </span>
+            <!-- customsDeclarationNumber -->
+            @if (violation.violationInfo?.customsDeclarationNumber) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.customs_declaration_number }} :
+              </label>
+              <label>{{
+                violation.violationInfo?.customsDeclarationNumber
+              }}</label>
+            </span>
+            }
+            <!-- controlReportNumber -->
+            @if (violation.violationInfo?.controlReportNumber) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium"
+                >{{ lang.map.control_report_number }} :
+              </label>
+              <label>{{ violation.violationInfo?.controlReportNumber }}</label>
+            </span>
+            }
+            <!-- reportNumber -->
+            @if (violation.violationInfo?.reportNumber) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.report_number }} : </label>
+              <label>{{ violation.violationInfo?.reportNumber }}</label>
+            </span>
+            }
+            <!-- reportNumber -->
+            @if (violation.violationInfo?.reportYear) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.report_year }} : </label>
+              <label>{{ violation.violationInfo?.reportYear }}</label>
+            </span>
+            }
+            <!-- repeat -->
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.repeatation }} : </label>
+              <label>{{ violation.repeat }}</label>
+            </span>
+            <!-- date -->
+            @if (violation.violationInfo?.violationsDate) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.violation_date }} : </label>
+              <label>{{
+                violation.violationInfo?.violationsDate | date : "YYYY/MM/dd"
+              }}</label>
+            </span>
+            }
+            <!-- date -->
+            @if (violation.violationInfo?.violationsDateTo ||
+            violation.violationInfo?.violationsDateFrom) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              @if (violation.violationInfo?.violationsDateFrom) {
+              <span>
+                <label class="font-medium">{{ lang.map.date_from }} : </label>
+                <label>{{
+                  violation.violationInfo?.violationsDateFrom
+                    | date : "YYYY/MM/dd"
+                }}</label>
+              </span>
+              } @if (violation.violationInfo?.violationsDateTo) {
+              <span>
+                <label class="font-medium"> - {{ lang.map.date_to }} : </label>
+                <label>{{
+                  violation.violationInfo?.violationsDateTo | date : "YYYY/MM/d"
+                }}</label>
+              </span>
+              }
+            </span>
+            }
+            <!-- description -->
+            @if (violation.violationInfo?.description) {
+            <span
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+            >
+              <label class="font-medium">{{ lang.map.description }} : </label>
+              <label>{{ violation.violationInfo?.description }}</label>
+            </span>
+            }
+          </div>
           }
         </div>
-        }
-      </div>
-    </td>
-  </ng-container>
-
+      </td>
+    </ng-container>
+  
   <tr mat-header-row *matHeaderRowDef="offenderDisplayedColumns"></tr>
   <tr
     mat-row

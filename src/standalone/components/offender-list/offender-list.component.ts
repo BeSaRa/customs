@@ -1,12 +1,27 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { EmployeeService } from '@services/employee.service';
-import { Component, inject, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  Output,
+  OnInit,
+  EventEmitter,
+} from '@angular/core';
 
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -30,11 +45,19 @@ import { ignoreErrors } from '@utils/utils';
 @Component({
   selector: 'app-offender-list',
   standalone: true,
-  imports: [IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [
+    IconButtonComponent,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
+  ],
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
 })
-export class OffenderListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class OffenderListComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -53,7 +76,9 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   add$: Subject<void> = new Subject<void>();
   attachments$: Subject<Offender> = new Subject<Offender>();
   transformer$ = new Subject<TransformerAction<Investigation>>();
-  @Output() saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
+  @Output() saveCase = new EventEmitter<
+    Subject<TransformerAction<Investigation>>
+  >();
   @Output()
   offenders = new EventEmitter<Offender[]>();
   data = new Subject<Offender[]>();
@@ -62,15 +87,17 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-  displayedColumns = ['offenderType', 'arName', 'enName', 'qid', 'jobTitle', 'actions'];
+  displayedColumns = ['offenderName', 'qid', 'jobTitle', 'actions'];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
-  offenderTypesMap: Record<number, Lookup> = this.lookupService.lookups.offenderType.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.lookupKey]: item,
-    }),
-    {}
-  );
+  offenderTypes = OffenderTypes;
+  offenderTypesMap: Record<number, Lookup> =
+    this.lookupService.lookups.offenderType.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.lookupKey]: item,
+      }),
+      {}
+    );
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -84,8 +111,17 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
 
   listernToSaveCase() {
     this.transformer$
-      .pipe(tap((data: TransformerAction<Investigation>) => data.action == 'done' && (this.caseId = data.model?.id || '')))
-      .pipe(filter((data: TransformerAction<Investigation>) => data.action == 'save'))
+      .pipe(
+        tap(
+          (data: TransformerAction<Investigation>) =>
+            data.action == 'done' && (this.caseId = data.model?.id || '')
+        )
+      )
+      .pipe(
+        filter(
+          (data: TransformerAction<Investigation>) => data.action == 'save'
+        )
+      )
       .subscribe(() => {
         this.saveCase.emit(this.transformer$);
       });
@@ -118,7 +154,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
           this.offenderService
             .load(undefined, { caseId: this.caseId })
             .pipe(
-              map(pagination => {
+              map((pagination) => {
                 this.data.next(pagination.rs);
                 return pagination;
               })
@@ -126,7 +162,7 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
             .pipe(ignoreErrors())
         )
       )
-      .subscribe(pagination => this.offenders.next(pagination.rs || []));
+      .subscribe((pagination) => this.offenders.next(pagination.rs || []));
   }
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
@@ -135,30 +171,36 @@ export class OffenderListComponent extends OnDestroyMixin(class {}) implements O
   private listenToDelete() {
     this.delete$
       .pipe(
-        switchMap(model =>
+        switchMap((model) =>
           this.dialog
-            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() }))
+            .confirm(
+              this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() })
+            )
             .afterClosed()
-            .pipe(map(userClick => ({ userClick, model })))
+            .pipe(map((userClick) => ({ userClick, model })))
         )
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(switchMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_delete_x_success.change({ x: model.getNames() }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_delete_x_success.change({ x: model.getNames() })
+        );
         this.reload$.next();
       });
   }
 
   deleteAllOffender() {
-    this.offenderService.deleteBulk(this.dataSource.data.map((offender: Offender) => offender.id)).subscribe(() => {
-      this.reload$.next();
-    });
+    this.offenderService
+      .deleteBulk(this.dataSource.data.map((offender: Offender) => offender.id))
+      .subscribe(() => {
+        this.reload$.next();
+      });
   }
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap(model =>
+        switchMap((model) =>
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
