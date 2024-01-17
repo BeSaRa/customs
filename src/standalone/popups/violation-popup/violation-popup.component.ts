@@ -1,4 +1,4 @@
-import { Investigation } from './../../../models/investigation';
+import { Investigation } from '@models/investigation';
 import { Component, inject } from '@angular/core';
 
 import { ViolationTypeService } from '@services/violation-type.service';
@@ -26,7 +26,7 @@ import { LookupService } from '@services/lookup.service';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { CustomValidators } from '@validators/custom-validators';
 import { OperationType } from '@enums/operation-type';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TransformerAction } from '@contracts/transformer-action';
 import { DialogService } from '@services/dialog.service';
 
@@ -55,7 +55,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   lookupService = inject(LookupService);
   router = inject(Router);
   dialog = inject(DialogService);
-  activeRoute = inject(ActivatedRoute);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
   types: ViolationType[] = [];
@@ -72,11 +71,15 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   config = inject(ConfigService);
 
-  years: string[] = range(new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR, new Date().getFullYear()).map(i =>
-    i.toString()
-  );
+  years: string[] = range(
+    new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
+    new Date().getFullYear()
+  ).map((i) => i.toString());
 
-  classificationsMap: Record<number, ViolationClassification> = {} as Record<number, ViolationClassification>;
+  classificationsMap: Record<number, ViolationClassification> = {} as Record<
+    number,
+    ViolationClassification
+  >;
   typesMap: Record<number, ViolationType> = {} as Record<number, ViolationType>;
 
   isCriminal = false;
@@ -85,15 +88,23 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   securityManagement = this.lookupService.lookups.securityManagement;
 
-  transformer$ = this.data.extras && (this.data.extras.transformer$ as Subject<TransformerAction<Investigation>>);
+  transformer$ =
+    this.data.extras &&
+    (this.data.extras.transformer$ as Subject<
+      TransformerAction<Investigation>
+    >);
   caseId = this.data.extras && (this.data.extras.caseId as string);
   protected override _init() {
     super._init();
     this.loadClassifications();
-    if (this.operation === OperationType.UPDATE || this.operation === OperationType.VIEW) {
+    if (
+      this.operation === OperationType.UPDATE ||
+      this.operation === OperationType.VIEW
+    ) {
       this.data.extras
         ? (() => {
-            this.classifications = this.data.extras.classifciations as ViolationClassification[];
+            this.classifications = this.data.extras
+              .classifciations as ViolationClassification[];
             this.types = this.data.extras.types as ViolationType[];
           })()
         : null;
@@ -102,7 +113,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
   listenToSaveCaseDone() {
     this.transformer$
-      ?.pipe(filter((data: TransformerAction<Investigation>) => data.action == 'done'))
+      ?.pipe(
+        filter(
+          (data: TransformerAction<Investigation>) => data.action == 'done'
+        )
+      )
       .subscribe((data: TransformerAction<Investigation>) => {
         this.caseId = data.model?.id;
         this.save$.next();
@@ -118,8 +133,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.listenToClassificationChange();
     this.listenToViolationTypeChange();
 
-    if (this.operation === OperationType.UPDATE || this.operation === OperationType.VIEW) {
-      this.data.extras && this.controls.classification()?.patchValue(this.data.extras.classificationId, { emitEvent: false });
+    if (
+      this.operation === OperationType.UPDATE ||
+      this.operation === OperationType.VIEW
+    ) {
+      this.data.extras &&
+        this.controls
+          .classification()
+          ?.patchValue(this.data.extras.classificationId, { emitEvent: false });
       this.checkClassification();
       this.checkViolationType();
       this.checkRequiredField();
@@ -135,7 +156,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
   }
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.invalid && this.dialog.error(this.lang.map.msg_make_sure_all_required_fields_are_filled);
+    this.form.invalid &&
+      this.dialog.error(
+        this.lang.map.msg_make_sure_all_required_fields_are_filled
+      );
     return this.form.valid;
   }
 
@@ -150,7 +174,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   protected _afterSave(model: Violation): void {
     this.model = model;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations })
+    );
     this.dialogRef.close(model);
   }
 
@@ -171,14 +197,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       .classification()
       ?.valueChanges.pipe(
         tap(() => this.checkClassification()),
-        switchMap(value =>
+        switchMap((value) =>
           this.violationTypeService.load(undefined, {
             classificationId: value,
           })
         )
       )
-      .pipe(map(pagination => pagination.rs))
-      .subscribe(value => {
+      .pipe(map((pagination) => pagination.rs))
+      .subscribe((value) => {
         this.controls.violationType()?.setValue(null);
         this.types = value;
         this.prepareTypeMap();
@@ -193,31 +219,41 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
 
   private checkClassification(): void {
-    this.isCriminal = this.controls.classification()?.value === ClassificationTypes.criminal;
-    this.isCustoms = this.controls.classification()?.value === ClassificationTypes.custom;
+    this.isCriminal =
+      this.controls.classification()?.value === ClassificationTypes.criminal;
+    this.isCustoms =
+      this.controls.classification()?.value === ClassificationTypes.custom;
   }
 
   private checkViolationType(): void {
     const selectedType = this.typesMap[this.controls.violationType()?.value];
-    this.isAbsenceType = selectedType && !!selectedType.isAbsence;
+    this.isAbsenceType = selectedType && selectedType.isAbsence;
   }
 
   private checkRequiredField(): void {
     this.isAbsenceType
       ? (() => {
-          this.controls.violationsDateFrom()?.setValidators(CustomValidators.required);
-          this.controls.violationsDateTo()?.setValidators(CustomValidators.required);
+          this.controls
+            .violationsDateFrom()
+            ?.setValidators(CustomValidators.required);
+          this.controls
+            .violationsDateTo()
+            ?.setValidators(CustomValidators.required);
           this.controls.violationsDate()?.clearValidators();
         })()
       : (() => {
           this.controls.violationsDateFrom()?.clearValidators();
           this.controls.violationsDateTo()?.clearValidators();
-          this.controls.violationsDate()?.setValidators(CustomValidators.required);
+          this.controls
+            .violationsDate()
+            ?.setValidators(CustomValidators.required);
         })();
 
     this.isCustoms
       ? (() => {
-          this.controls.customsDeclarationNumber()?.setValidators(CustomValidators.required);
+          this.controls
+            .customsDeclarationNumber()
+            ?.setValidators(CustomValidators.required);
         })()
       : (() => {
           this.controls.customsDeclarationNumber()?.clearValidators();
@@ -226,7 +262,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
 
   private loadClassifications(): void {
-    this.violationClassificationService.loadAsLookups().subscribe(list => {
+    this.violationClassificationService.loadAsLookups().subscribe((list) => {
       this.classifications = list;
       this.prepareClassificationMap();
     });

@@ -46,32 +46,25 @@
   <!-- violations -->
   <ng-container matColumnDef="violations">
     <th mat-header-cell mat-sort-header="violations" *matHeaderCellDef>
-      {{ lang.map.department_company }}
+      {{ lang.map.violations }}
     </th>
     <td mat-cell *matCellDef="let element">
       <div class="flex items-center">
+        <span
+          class="cursor-pointer inline-flex items-center rounded-[12px] bg-pink-50 me-2 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10"
+        >
+          {{ element.violations?.length }}
+        </span>
         <div class="flex flex-column">
-          @for (
-            violation of assertType(element).violations.slice(0, 2);
-            track violation
-          ) {
-            <span
-              class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20"
-            >
-              {{ violation.violationInfo.violationTypeInfo.getNames() }}
-            </span>
+          @for ( violation of assertType(element).violations.slice(0, 2); track
+          violation ) {
+          <span
+            class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20"
+          >
+            {{ violation.violationInfo.violationTypeInfo.getNames() }}
+          </span>
           }
         </div>
-        <span
-          (click)="
-            selectedOffender === element
-              ? (selectedOffender = null)
-              : (selectedOffender = element)
-          "
-          class="cursor-pointer inline-flex items-center rounded-[12px] bg-pink-50 ms-2 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10"
-        >
-          {{ element.violations.length }}
-        </span>
       </div>
     </td>
   </ng-container>
@@ -83,23 +76,21 @@
     </th>
     <td mat-cell *matCellDef="let element">
       <div class="flex justify-center gap-2">
-        <div [matTooltip]="lang.map.situation_search">
-          <app-icon-button
-            (click)="
-              situationSearch$.next({ offender: element, isCompany: false })
-            "
-            icon="INFORMATION"
-          ></app-icon-button>
-        </div>
+        <app-icon-button
+          [matTooltip]="lang.map.situation_search"
+          (click)="
+            situationSearch$.next({ offender: element, isCompany: false })
+          "
+          icon="INFORMATION"
+        ></app-icon-button>
         @if (isClearingAgent(element)) {
-          <div [matTooltip]="lang.map.situation_search_clearing_agency">
-            <app-icon-button
-              (click)="
-                situationSearch$.next({ offender: element, isCompany: true })
-              "
-              icon="CLEARING_AGENCY"
-            ></app-icon-button>
-          </div>
+        <app-icon-button
+          [matTooltip]="lang.map.situation_search_clearing_agency"
+          (click)="
+            situationSearch$.next({ offender: element, isCompany: true })
+          "
+          icon="CLEARING_AGENCY"
+        ></app-icon-button>
         }
       </div>
     </td>
@@ -111,106 +102,92 @@
     </th>
     <td mat-cell *matCellDef="let element">
       @if (isClaimed) {
-        <div class="flex justify-center gap-2">
-          <div [matTooltip]="lang.map.view">
-            <app-icon-button (click)="view$.next(element)" icon="VIEW" />
-          </div>
-          <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-        <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" />
-      </div> -->
-          @if (isClaimed) {
-            <div class="flex justify-center gap-2">
-              @if (canMakeDecision(element)) {
-                <div>
-                  <app-icon-button
-                    (click)="makeDecision$.next(element)"
-                    icon="ACCOUNT_MAKE_DECISION"
-                  />
-                </div>
-              }
-            </div>
-          }
-          <div [matTooltip]="lang.map.actions">
-            <app-icon-button
-              icon="DOTS_VERTICAL"
-              mat-button
-              [matMenuTriggerFor]="actionsMenu"
-            ></app-icon-button>
-            <mat-menu #actionsMenu="matMenu">
-              @if (
-                element.type == offenderTypes.EMPLOYEE &&
-                investigationModel?.isPresedentAssestantReview()
-              ) {
-                <button
-                  mat-menu-item
-                  (click)="suspendEmployee$.next({ offender: element })"
-                >
-                  {{ lang.map.suspend_employee }}
-                </button>
-              }
-              @if (
-                getPenaltyIdByPenaltyKey(
-                  element,
-                  systemPenalties.REFERRAL_TO_PRESIDENT
-                )
-              ) {
-                <button
-                  mat-menu-item
-                  (click)="
-                    referralOrTerminateDecision$.next({
-                      offender: element,
-                      penaltyId: getPenaltyIdByPenaltyKey(
-                        element,
-                        systemPenalties.REFERRAL_TO_PRESIDENT
-                      )
-                    })
-                  "
-                >
-                  {{ lang.map.referral_request_to_presodent }}
-                </button>
-              }
-              @if (
-                getPenaltyIdByPenaltyKey(
-                  element,
-                  systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
-                )
-              ) {
-                <button
-                  mat-menu-item
-                  (click)="
-                    referralOrTerminateDecision$.next({
-                      offender: element,
-                      penaltyId: getPenaltyIdByPenaltyKey(
-                        element,
-                        systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
-                      )
-                    })
-                  "
-                >
-                  {{ lang.map.referral_request_to_presodent_assistant }}
-                </button>
-              }
-              @if (
-                getPenaltyIdByPenaltyKey(element, systemPenalties.TERMINATE)
-              ) {
-                <button
-                  mat-menu-item
-                  (click)="
-                    referralOrTerminateDecision$.next({
-                      offender: element,
-                      penaltyId: getPenaltyIdByPenaltyKey(
-                        element,
-                        systemPenalties.TERMINATE
-                      )
-                    })
-                  "
-                >
-                  {{ lang.map.terminate }}
-                </button>
-              }
-            </mat-menu>
-          </div>
+      <div class="flex justify-center gap-2">
+        <div [matTooltip]="lang.map.view">
+          <app-icon-button (click)="view$.next(element)" icon="VIEW" />
         </div>
+        <!-- <div [matTooltip]="lang.map.assignment_to_attend">
+        <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
+      </div> -->
+        @if (isClaimed) {
+        <div class="flex justify-center gap-2">
+          @if (canMakeDecision(element)) {
+          <div>
+            <app-icon-button
+              (click)="makeDecision$.next(element)"
+              icon="ACCOUNT_MAKE_DECISION"
+            />
+          </div>
+          }
+        </div>
+        }
+        <div [matTooltip]="lang.map.actions">
+          <app-icon-button
+            icon="DOTS_VERTICAL"
+            mat-button
+            [matMenuTriggerFor]="actionsMenu"
+          ></app-icon-button>
+          <mat-menu #actionsMenu="matMenu">
+            @if (element.type == offenderTypes.EMPLOYEE &&
+            investigationModel?.isPresedentAssestantReview()) {
+            <button
+              mat-menu-item
+              (click)="suspendEmployee$.next({ offender: element })"
+            >
+              {{ lang.map.suspend_employee }}
+            </button>
+            } @if (getPenaltyIdByPenaltyKey(element,
+            systemPenalties.REFERRAL_TO_PRESIDENT)) {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecision$.next({
+                  offender: element,
+                  penaltyId: getPenaltyIdByPenaltyKey(
+                    element,
+                    systemPenalties.REFERRAL_TO_PRESIDENT
+                  )
+                })
+              "
+            >
+              {{ lang.map.referral_request_to_presodent }}
+            </button>
+            } @if (getPenaltyIdByPenaltyKey(element,
+            systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT)) {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecision$.next({
+                  offender: element,
+                  penaltyId: getPenaltyIdByPenaltyKey(
+                    element,
+                    systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+                  )
+                })
+              "
+            >
+              {{ lang.map.referral_request_to_presodent_assistant }}
+            </button>
+            } @if (getPenaltyIdByPenaltyKey(element, systemPenalties.TERMINATE))
+            {
+            <button
+              mat-menu-item
+              (click)="
+                referralOrTerminateDecision$.next({
+                  offender: element,
+                  penaltyId: getPenaltyIdByPenaltyKey(
+                    element,
+                    systemPenalties.TERMINATE
+                  )
+                })
+              "
+            >
+              {{ lang.map.terminate }}
+            </button>
+            }
+          </mat-menu>
+        </div>
+      </div>
       }
     </td>
   </ng-container>
@@ -226,211 +203,194 @@
         [@detailExpand]="
           selectedOffender === element ? 'expanded' : 'collapsed'
         "
-        class="px-1 divide-y divide-dashed"
+        class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100"
       >
-        @for (violation of element.violations; track violation) {
-          <div class="p-3 border-bottom">
-            <h5 class="text-lg font-medium mb-1">
-              {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
-            </h5>
-            <!-- classificationInfo -->
-            <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
-              <label class="font-medium"
-                >{{ lang.map.violation_classification }} :
-              </label>
+        @for (violation of assertType(element).violations; track violation) {
+        <div class="p-3 border-bottom">
+          <h5 class="text-lg font-medium mb-1">
+            {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
+          </h5>
+          <!-- classificationInfo -->
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.violation_classification }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.classificationInfo?.getNames()
+            }}</label>
+          </span>
+          <!-- competentProsecutionDecisionInfo -->
+          @if (violation.violationInfo?.competentProsecutionDecision) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.competent_prosecutiond_decision }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.competentProsecutionDecisionInfo?.getNames()
+            }}</label>
+          </span>
+          }
+          <!-- courtDecision -->
+          @if (violation.violationInfo?.courtDecision) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.court_decision }} : </label>
+            <label>{{
+              violation.violationInfo?.courtDecisionInfo?.getNames()
+            }}</label>
+          </span>
+          }
+          <!-- drugProsecutionDecision -->
+          @if (violation.violationInfo?.drugProsecutionDecision) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.drug_prosecution_decision }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.drugProsecutionDecisionInfo?.getNames()
+            }}</label>
+          </span>
+          }
+          <!-- forensicLabAnalysis -->
+          @if (violation.violationInfo?.forensicLabAnalysis) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.forensic_lab_analysis }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.forensicLabAnalysisInfo?.getNames()
+            }}</label>
+          </span>
+          }
+          <!-- securityAdminDecision -->
+          @if (violation.violationInfo?.securityAdminDecision) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.security_admin_decision }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.securityAdminDecisionInfo?.getNames()
+            }}</label>
+          </span>
+          }
+          <!-- is preived -->
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.is_proved }} : </label>
+            @if (!violation.isProved) {
+            <span class="text-secondary">
+              {{ lang.map.no }}
+            </span>
+            } @if (violation.isProved) {
+            <span class="text-red-500">{{ lang.map.yes }}</span>
+            }
+          </span>
+          <!-- customsDeclarationNumber -->
+          @if (violation.violationInfo?.customsDeclarationNumber) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.customs_declaration_number }} :
+            </label>
+            <label>{{
+              violation.violationInfo?.customsDeclarationNumber
+            }}</label>
+          </span>
+          }
+          <!-- controlReportNumber -->
+          @if (violation.violationInfo?.controlReportNumber) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium"
+              >{{ lang.map.control_report_number }} :
+            </label>
+            <label>{{ violation.violationInfo?.controlReportNumber }}</label>
+          </span>
+          }
+          <!-- reportNumber -->
+          @if (violation.violationInfo?.reportNumber) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.report_number }} : </label>
+            <label>{{ violation.violationInfo?.reportNumber }}</label>
+          </span>
+          }
+          <!-- reportNumber -->
+          @if (violation.violationInfo?.reportYear) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.report_year }} : </label>
+            <label>{{ violation.violationInfo?.reportYear }}</label>
+          </span>
+          }
+          <!-- repeat -->
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.repeatation }} : </label>
+            <label>{{ violation.repeat }}</label>
+          </span>
+          <!-- date -->
+          @if (violation.violationInfo?.violationsDate) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.violation_date }} : </label>
+            <label>{{
+              violation.violationInfo?.violationsDate | date : 'YYYY/MM/dd'
+            }}</label>
+          </span>
+          }
+          <!-- date -->
+          @if (violation.violationInfo?.violationsDateTo ||
+          violation.violationInfo?.violationsDateFrom) {
+          <span
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            @if (violation.violationInfo?.violationsDateFrom) {
+            <span>
+              <label class="font-medium">{{ lang.map.date_from }} : </label>
               <label>{{
-                violation.violationInfo?.classificationInfo?.getNames()
+                violation.violationInfo?.violationsDateFrom
+                  | date : 'YYYY/MM/dd'
               }}</label>
             </span>
-            <!-- competentProsecutionDecisionInfo -->
-            @if (violation.violationInfo?.competentProsecutionDecision) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.competent_prosecutiond_decision }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.competentProsecutionDecisionInfo?.getNames()
-                }}</label>
-              </span>
-            }
-            <!-- courtDecision -->
-            @if (violation.violationInfo?.courtDecision) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.court_decision }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.courtDecisionInfo?.getNames()
-                }}</label>
-              </span>
-            }
-            <!-- drugProsecutionDecision -->
-            @if (violation.violationInfo?.drugProsecutionDecision) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.drug_prosecution_decision }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.drugProsecutionDecisionInfo?.getNames()
-                }}</label>
-              </span>
-            }
-            <!-- forensicLabAnalysis -->
-            @if (violation.violationInfo?.forensicLabAnalysis) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.forensic_lab_analysis }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.forensicLabAnalysisInfo?.getNames()
-                }}</label>
-              </span>
-            }
-            <!-- securityAdminDecision -->
-            @if (violation.violationInfo?.securityAdminDecision) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.security_admin_decision }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.securityAdminDecisionInfo?.getNames()
-                }}</label>
-              </span>
-            }
-            <!-- is preived -->
-            <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
-              <label class="font-medium">{{ lang.map.is_proved }} : </label>
-              @if (!violation.isProved) {
-                <span class="text-secondary">
-                  {{ lang.map.no }}
-                </span>
-              }
-              @if (violation.isProved) {
-                <span class="text-red-500">{{ lang.map.yes }}</span>
-              }
+            } @if (violation.violationInfo?.violationsDateTo) {
+            <span>
+              <label class="font-medium"> - {{ lang.map.date_to }} : </label>
+              <label>{{
+                violation.violationInfo?.violationsDateTo | date : 'YYYY/MM/d'
+              }}</label>
             </span>
-            <!-- customsDeclarationNumber -->
-            @if (violation.violationInfo?.customsDeclarationNumber) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.customs_declaration_number }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.customsDeclarationNumber
-                }}</label>
-              </span>
             }
-            <!-- controlReportNumber -->
-            @if (violation.violationInfo?.controlReportNumber) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.control_report_number }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.controlReportNumber
-                }}</label>
-              </span>
-            }
-            <!-- reportNumber -->
-            @if (violation.violationInfo?.reportNumber) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.report_number }} :
-                </label>
-                <label>{{ violation.violationInfo?.reportNumber }}</label>
-              </span>
-            }
-            <!-- reportNumber -->
-            @if (violation.violationInfo?.reportYear) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium">{{ lang.map.report_year }} : </label>
-                <label>{{ violation.violationInfo?.reportYear }}</label>
-              </span>
-            }
-            <!-- repeat -->
-            <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
-              <label class="font-medium">{{ lang.map.repeatation }} : </label>
-              <label>{{ violation.repeat }}</label>
-            </span>
-            <!-- date -->
-            @if (violation.violationInfo?.violationsDate) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium"
-                  >{{ lang.map.violation_date }} :
-                </label>
-                <label>{{
-                  violation.violationInfo?.violationsDate | date: 'YYYY/MM/dd'
-                }}</label>
-              </span>
-            }
-            <!-- date -->
-            @if (
-              violation.violationInfo?.violationsDateTo ||
-              violation.violationInfo?.violationsDateFrom
-            ) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                @if (violation.violationInfo?.violationsDateFrom) {
-                  <span>
-                    <label class="font-medium"
-                      >{{ lang.map.date_from }} :
-                    </label>
-                    <label>{{
-                      violation.violationInfo?.violationsDateFrom
-                        | date: 'YYYY/MM/dd'
-                    }}</label>
-                  </span>
-                }
-                @if (violation.violationInfo?.violationsDateTo) {
-                  <span>
-                    <label class="font-medium">
-                      - {{ lang.map.date_to }} :
-                    </label>
-                    <label>{{
-                      violation.violationInfo?.violationsDateTo
-                        | date: 'YYYY/MM/d'
-                    }}</label>
-                  </span>
-                }
-              </span>
-            }
-            <!-- description -->
-            @if (violation.violationInfo?.description) {
-              <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
-                <label class="font-medium">{{ lang.map.description }} : </label>
-                <label>{{ violation.violationInfo?.description }}</label>
-              </span>
-            }
+          </span>
+          }
+          <!-- description -->
+          @if (violation.violationInfo?.description) {
+          <div
+            class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
+          >
+            <label class="font-medium">{{ lang.map.description }} : </label>
+            <label>{{ violation.violationInfo?.description }}</label>
           </div>
+          }
+        </div>
         }
       </div>
     </td>
@@ -442,6 +402,11 @@
     *matRowDef="let element; columns: offenderDisplayedColumns"
     class="element-row"
     [class.example-expanded-row]="selectedOffender === element"
+    (click)="
+      selectedOffender === element
+        ? (selectedOffender = null)
+        : (selectedOffender = element)
+    "
   ></tr>
   <tr
     mat-row

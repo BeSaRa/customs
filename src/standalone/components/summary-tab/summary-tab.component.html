@@ -24,14 +24,14 @@
   </div>
   <app-offenders-violations-preview
     [investigationModel]="model"
-    [data]="model?.offenderInfo || []"
+    [data]="offenders"
     class="col-span-1 md:col-span-2 lg:col-span-4 mb-3"
     [isClaimed]="!!model?.isClaimed()"
   />
 
   <app-unlinked-violations
-    [investigationModel]="model"
-    [data]="model?.violationInfo || []"
+    [offenders]="offenders"
+    [data]="violations"
     class="col-span-1 md:col-span-2 lg:col-span-4 mb-3"
   />
 </div>
