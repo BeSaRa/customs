@@ -2,15 +2,32 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { LangService } from '@services/lang.service';
-import { BehaviorSubject, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { LookupService } from '@services/lookup.service';
 import { MawaredEmployeeCriteria } from '@models/mawared-employee-criteria';
 import { ClearingAgentCriteria } from '@models/clearing-agent-criteria';
@@ -53,7 +70,10 @@ import { PersonTypes } from '@enums/person-types';
   templateUrl: './witness-criteria-popup.component.html',
   styleUrls: ['./witness-criteria-popup.component.scss'],
 })
-export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class WitnessCriteriaPopupComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   data = inject(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
   fb = inject(UntypedFormBuilder);
@@ -62,7 +82,6 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   matDialogRef = inject(MatDialogRef);
   search$: Subject<void> = new Subject();
   addWitness$: Subject<void> = new Subject();
-  select$: Subject<void> = new Subject();
   mawaredDepartmentsService = inject(MawaredDepartmentService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
   clearingAgentService = inject(ClearingAgentService);
@@ -74,8 +93,12 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   isEmployee = true;
   isClearingAgent = false;
   isExternal = false;
-  witnessTypeControl = new FormControl(WitnessTypes.EMPLOYEE, { nonNullable: true });
-  personTypeControl = new FormControl(PersonTypes.EXPERT, { nonNullable: true });
+  witnessTypeControl = new FormControl(WitnessTypes.EMPLOYEE, {
+    nonNullable: true,
+  });
+  personTypeControl = new FormControl(PersonTypes.EXPERT, {
+    nonNullable: true,
+  });
   depId = inject(EmployeeService).getOrganizationUnit()?.mawaredDepId;
   witnessFormGroup!: UntypedFormGroup;
   employeeFormGroup!: UntypedFormGroup;
@@ -84,8 +107,24 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   employeeDatasource = new AppTableDataSource(this.employees$);
   clearingAgents$ = new BehaviorSubject<ClearingAgent[]>([]);
   clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
-  employeeDisplayedColumns = ['employee_number', 'arName', 'enName', 'department', 'qid', 'jobTitle', 'actions'];
-  clearingAgentDisplayedColumns = ['clearingAgentCode', 'arName', 'enName', 'qid', 'companyName', 'companyNumber', 'actions'];
+  employeeDisplayedColumns = [
+    'employee_number',
+    'arName',
+    'enName',
+    'department',
+    'qid',
+    'jobTitle',
+    'actions',
+  ];
+  clearingAgentDisplayedColumns = [
+    'clearingAgentCode',
+    'arName',
+    'enName',
+    'qid',
+    'companyName',
+    'companyNumber',
+    'actions',
+  ];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   toast = inject(ToastService);
@@ -94,8 +133,12 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
 
   ngOnInit(): void {
     this.witnessFormGroup = this.fb.group(new Witness().buildForm(true));
-    this.employeeFormGroup = this.fb.group(new MawaredEmployeeCriteria().buildForm(true));
-    this.clearingAgentFormGroup = this.fb.group(new ClearingAgentCriteria().buildForm(true));
+    this.employeeFormGroup = this.fb.group(
+      new MawaredEmployeeCriteria().buildForm(true)
+    );
+    this.clearingAgentFormGroup = this.fb.group(
+      new ClearingAgentCriteria().buildForm(true)
+    );
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -111,7 +154,7 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
   }
 
   private listenToWitnessTypeChange() {
-    this.witnessTypeControl.valueChanges.subscribe(value => {
+    this.witnessTypeControl.valueChanges.subscribe((value) => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
       this.isClearingAgent = value === WitnessTypes.ClEARING_AGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
@@ -122,22 +165,26 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
     this.mawaredDepartmentsService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(list => {
+      .subscribe((list) => {
         this.administrations = list;
       });
   }
 
   private listenToSearch() {
-    const mawaredSearch$ = this.search$.pipe(filter(() => this.isEmployee)).pipe(takeUntil(this.destroy$));
-    const clearingAgentSearch$ = this.search$.pipe(filter(() => this.isClearingAgent)).pipe(takeUntil(this.destroy$));
+    const mawaredSearch$ = this.search$
+      .pipe(filter(() => this.isEmployee))
+      .pipe(takeUntil(this.destroy$));
+    const clearingAgentSearch$ = this.search$
+      .pipe(filter(() => this.isClearingAgent))
+      .pipe(takeUntil(this.destroy$));
 
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap(value => this.mawaredEmployeeService.load(undefined, value))
+        switchMap((value) => this.mawaredEmployeeService.load(undefined, value))
       )
-      .pipe(map(pagination => pagination.rs))
-      .subscribe(result => {
+      .pipe(map((pagination) => pagination.rs))
+      .subscribe((result) => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }
@@ -147,10 +194,10 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap(value => this.clearingAgentService.load(undefined, value))
+        switchMap((value) => this.clearingAgentService.load(undefined, value))
       )
-      .pipe(map(pagination => pagination.rs))
-      .subscribe(result => {
+      .pipe(map((pagination) => pagination.rs))
+      .subscribe((result) => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }
@@ -171,11 +218,11 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
         )
       )
       .pipe(
-        switchMap(witness => {
+        switchMap((witness) => {
           return witness
             .save()
             .pipe(
-              map(model => {
+              map((model) => {
                 return {
                   ...model,
                   ...witness,
@@ -187,20 +234,26 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
             .pipe(map(() => witness));
         })
       )
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+        );
         this.matDialogRef.close();
       });
   }
   private listenToAddEmployee() {
     this.addEmployee$
-      .pipe(map(model => model.convertToWitness(this.data.caseId, this.personTypeControl.value)))
       .pipe(
-        switchMap(witness => {
+        map((model) =>
+          model.convertToWitness(this.data.caseId, this.personTypeControl.value)
+        )
+      )
+      .pipe(
+        switchMap((witness) => {
           return witness
             .save()
             .pipe(
-              map(model => {
+              map((model) => {
                 return {
                   ...model,
                   ...witness,
@@ -212,20 +265,26 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
             .pipe(map(() => witness));
         })
       )
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+        );
       });
   }
 
   private listenToAddClearingAgent() {
     this.addClearingAgent$
-      .pipe(map(model => model.convertToWitness(this.data.caseId, this.personTypeControl.value)))
       .pipe(
-        switchMap(witness => {
+        map((model) =>
+          model.convertToWitness(this.data.caseId, this.personTypeControl.value)
+        )
+      )
+      .pipe(
+        switchMap((witness) => {
           return witness
             .save()
             .pipe(
-              map(model => {
+              map((model) => {
                 return {
                   ...model,
                   ...witness,
@@ -237,8 +296,10 @@ export class WitnessCriteriaPopupComponent extends OnDestroyMixin(class {}) impl
             .pipe(map(() => witness));
         })
       )
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_add_x_success.change({ x: model.getNames() }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+        );
       });
   }
 }

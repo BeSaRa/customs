@@ -4,6 +4,8 @@ import { Investigation } from '@models/investigation';
 import { OffendersViolationsPreviewComponent } from '../offenders-violations-preview/offenders-violations-preview.component';
 import { LangService } from '@services/lang.service';
 import { UnlinkedViolationsComponent } from '@standalone/components/unlinked-violations/unlinked-violations.component';
+import { Violation } from '@models/violation';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-summary-tab',
@@ -20,6 +22,8 @@ import { UnlinkedViolationsComponent } from '@standalone/components/unlinked-vio
 export class SummaryTabComponent {
   lang = inject(LangService);
 
+  @Input() offenders: Offender[] = [];
+  @Input() violations: Violation[] = [];
   @Input() form!: FormGroup;
   @Input() model?: Investigation;
 }

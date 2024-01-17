@@ -7,7 +7,8 @@ import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
 import { Violation } from '@models/violation';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { Investigation } from '@models/investigation';
+import { Offender } from '@models/offender';
+import { OffenderViolation } from '@models/offender-violation';
 
 @Component({
   selector: 'app-unlinked-violations',
@@ -28,16 +29,20 @@ export class UnlinkedViolationsComponent {
   dataSource = new AppTableDataSource<Violation>([]);
   columns: string[] = ['violationName', 'classification', 'description'];
 
+  @Input() offenders: Offender[] = [];
+
   @Input({ required: true }) set data(violations: Violation[]) {
     this.dataSource = new AppTableDataSource(
       violations.filter(
         (violation) =>
-          !this.investigationModel?.offenderViolationInfo.filter(
-            (offenderVioliation) =>
-              offenderVioliation.violationId == violation.id
-          ).length
+          !this.offenders
+            .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
+              return [...prev, ...curr.violations];
+            }, [])
+            .filter((offenderViolation) => {
+              return offenderViolation.violationId == violation.id;
+            }).length
       )
     );
   }
-  @Input() investigationModel?: Investigation;
 }

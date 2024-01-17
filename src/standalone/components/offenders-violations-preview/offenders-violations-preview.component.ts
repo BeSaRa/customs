@@ -24,7 +24,6 @@ import { Investigation } from '@models/investigation';
 import { EmployeeService } from '@services/employee.service';
 import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
 import { Penalty } from '@models/penalty';
-import { OffenderService } from '@services/offender.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
 import { UserTypes } from '@enums/user-types';
@@ -71,7 +70,6 @@ export class OffendersViolationsPreviewComponent
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
-  offenderService = inject(OffenderService);
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
   systemPenalties = SystemPenalties;
@@ -114,7 +112,7 @@ export class OffendersViolationsPreviewComponent
     );
 
   ngOnInit(): void {
-    if (this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')) {
+    if (this.offenderDataSource.data.length) {
       this.loadPenalties();
     }
     this.listenToView();
