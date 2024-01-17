@@ -1,25 +1,25 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { MatTableDataSource } from "@angular/material/table";
-import { Router } from "@angular/router";
-import { AppFullRoutes } from "@constants/app-full-routes";
-import { AppIcons } from "@constants/app-icons";
-import { ContextMenuActionContract } from "@contracts/context-menu-action-contract";
-import { INavigatedItem } from "@contracts/inavigated-item";
-import { OffenderTypes } from "@enums/offender-types";
-import { OpenFrom } from "@enums/open-from";
-import { ColumnsWrapper } from "@models/columns-wrapper";
-import { Investigation } from "@models/investigation";
-import { NoneFilterColumn } from "@models/none-filter-column";
-import { EncryptionService } from "@services/encryption.service";
-import { InvestigationDraftsService } from "@services/investigation-drafts.service";
-import { LangService } from "@services/lang.service";
-import { ignoreErrors } from "@utils/utils";
-import { catchError, exhaustMap, of, throwError } from "rxjs";
+import { Component, inject, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
+import { AppIcons } from '@constants/app-icons';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OffenderTypes } from '@enums/offender-types';
+import { OpenFrom } from '@enums/open-from';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { Investigation } from '@models/investigation';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { EncryptionService } from '@services/encryption.service';
+import { InvestigationDraftsService } from '@services/investigation-drafts.service';
+import { LangService } from '@services/lang.service';
+import { ignoreErrors } from '@utils/utils';
+import { catchError, exhaustMap, of, throwError } from 'rxjs';
 
 @Component({
-  selector: "app-investigation-drafts",
-  templateUrl: "./investigation-drafts.component.html",
-  styleUrls: ["./investigation-drafts.component.scss"],
+  selector: 'app-investigation-drafts',
+  templateUrl: './investigation-drafts.component.html',
+  styleUrls: ['./investigation-drafts.component.scss'],
 })
 export class InvestigationDraftsComponent implements OnInit {
   router = inject(Router);
@@ -35,9 +35,9 @@ export class InvestigationDraftsComponent implements OnInit {
 
   actions: ContextMenuActionContract<Investigation>[] = [
     {
-      name: "view",
-      type: "action",
-      label: "view",
+      name: 'view',
+      type: 'action',
+      label: 'view',
       icon: AppIcons.VIEW,
       callback: (item) => {
         this.view(item);
@@ -45,12 +45,12 @@ export class InvestigationDraftsComponent implements OnInit {
     },
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
-    new NoneFilterColumn("caseIdentifier"),
-    new NoneFilterColumn("caseStatus"),
-    new NoneFilterColumn("creator"),
-    new NoneFilterColumn("department"),
-    new NoneFilterColumn("namesOfOffenders"),
-    new NoneFilterColumn("actions")
+    new NoneFilterColumn('caseIdentifier'),
+    new NoneFilterColumn('caseStatus'),
+    new NoneFilterColumn('creator'),
+    new NoneFilterColumn('department'),
+    new NoneFilterColumn('namesOfOffenders'),
+    new NoneFilterColumn('actions')
   );
 
   private load() {
@@ -69,7 +69,7 @@ export class InvestigationDraftsComponent implements OnInit {
         data.forEach((investigation) => {
           let employeeCount = 0;
           let clearingAgentCount = 0;
-          let namesOfOffenders = "";
+          let namesOfOffenders = '';
 
           if (investigation.offenderInfo.length > 2) {
             investigation.offenderInfo.forEach((element) => {
@@ -88,7 +88,7 @@ export class InvestigationDraftsComponent implements OnInit {
             investigation.offenderInfo.forEach((element, index) => {
               namesOfOffenders += element.offenderInfo?.arName;
               if (index + 1 != investigation.offenderInfo.length) {
-                namesOfOffenders += ", ";
+                namesOfOffenders += ', ';
               }
             });
           }

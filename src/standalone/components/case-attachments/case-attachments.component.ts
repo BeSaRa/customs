@@ -1,10 +1,10 @@
-import { Component, inject, Input, OnInit } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
-import { MatSortModule, Sort } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
-import { AppTableDataSource } from "@models/app-table-data-source";
-import { CaseAttachment } from "@models/case-attachment";
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { AppTableDataSource } from '@models/app-table-data-source';
+import { CaseAttachment } from '@models/case-attachment';
 import {
   combineLatest,
   delay,
@@ -18,19 +18,19 @@ import {
   switchMap,
   takeUntil,
   tap,
-} from "rxjs";
-import { BaseCaseService } from "@abstracts/base-case.service";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { LangService } from "@services/lang.service";
-import { MatCardModule } from "@angular/material/card";
-import { DialogService } from "@services/dialog.service";
-import { UserClick } from "@enums/user-click";
-import { ToastService } from "@services/toast.service";
-import { ignoreErrors } from "@utils/utils";
-import { Config } from "@constants/config";
+} from 'rxjs';
+import { BaseCaseService } from '@abstracts/base-case.service';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { LangService } from '@services/lang.service';
+import { MatCardModule } from '@angular/material/card';
+import { DialogService } from '@services/dialog.service';
+import { UserClick } from '@enums/user-click';
+import { ToastService } from '@services/toast.service';
+import { ignoreErrors } from '@utils/utils';
+import { Config } from '@constants/config';
 
 @Component({
-  selector: "app-case-attachments",
+  selector: 'app-case-attachments',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,8 +39,8 @@ import { Config } from "@constants/config";
     MatTableModule,
     MatCardModule,
   ],
-  templateUrl: "./case-attachments.component.html",
-  styleUrls: ["./case-attachments.component.scss"],
+  templateUrl: './case-attachments.component.html',
+  styleUrls: ['./case-attachments.component.scss'],
 })
 export class CaseAttachmentsComponent
   extends OnDestroyMixin(class {})
@@ -53,7 +53,7 @@ export class CaseAttachmentsComponent
   dialog = inject(DialogService);
   toast = inject(ToastService);
   @Input()
-  type: "folder" | "offender" = "folder";
+  type: 'folder' | 'offender' = 'folder';
   @Input()
   entityId!: number;
   @Input()
@@ -73,11 +73,11 @@ export class CaseAttachmentsComponent
     new AppTableDataSource<CaseAttachment>(this._load());
 
   displayedColumns: string[] = [
-    "documentTitle",
-    "attachmentType",
-    "creationDate",
-    "creator",
-    "actions",
+    'documentTitle',
+    'attachmentType',
+    'creationDate',
+    'creator',
+    'actions',
   ];
 
   ngOnInit(): void {
@@ -95,11 +95,11 @@ export class CaseAttachmentsComponent
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
               switch (this.type) {
-                case "folder":
+                case 'folder':
                   return this.caseId
                     ? this.service.loadFolderAttachments(this.caseId)
                     : of([]);
-                case "offender":
+                case 'offender':
                   return this.entityId
                     ? this.service.getOffenderAttachments(this.entityId)
                     : of([]);
@@ -114,7 +114,7 @@ export class CaseAttachmentsComponent
   }
 
   sort($event: Sort) {
-    console.log("SORT", $event);
+    console.log('SORT', $event);
   }
 
   openAddDialog() {

@@ -1,9 +1,9 @@
-import { BaseModel } from "@abstracts/base-model";
-import { SuspendedEmployeeService } from "@services/suspended-employee.service";
-import { SuspendedEmployeeInterceptor } from "@model-interceptors/suspended-employee-interceptor";
-import { InterceptModel } from "cast-response";
-import { AdminResult } from "./admin-result";
-import { MawaredEmployee } from "./mawared-employee";
+import { BaseModel } from '@abstracts/base-model';
+import { SuspendedEmployeeService } from '@services/suspended-employee.service';
+import { SuspendedEmployeeInterceptor } from '@model-interceptors/suspended-employee-interceptor';
+import { InterceptModel } from 'cast-response';
+import { AdminResult } from './admin-result';
+import { MawaredEmployee } from './mawared-employee';
 
 const { send, receive } = new SuspendedEmployeeInterceptor();
 
@@ -12,7 +12,7 @@ export class SuspendedEmployee extends BaseModel<
   SuspendedEmployee,
   SuspendedEmployeeService
 > {
-  $$__service_name__$$ = "SuspendedEmployeeService";
+  $$__service_name__$$ = 'SuspendedEmployeeService';
 
   offenderId!: number;
   mawaredEmployeeId!: number;

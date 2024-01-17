@@ -1,25 +1,25 @@
-import { CustomValidators } from "@validators/custom-validators";
-import { EmployeeService } from "@services/employee.service";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { Component, inject, OnInit } from "@angular/core";
+import { CustomValidators } from '@validators/custom-validators';
+import { EmployeeService } from '@services/employee.service';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
-} from "@angular/material/dialog";
-import { Offender } from "@models/offender";
-import { Penalty } from "@models/penalty";
-import { LangService } from "@services/lang.service";
-import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
-import { ButtonComponent } from "@standalone/components/button/button.component";
-import { filter, Subject, switchMap, takeUntil } from "rxjs";
-import { PenaltyDecisionService } from "@services/penalty-decision.service";
-import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { SelectInputComponent } from "@standalone/components/select-input/select-input.component";
-import { PenaltyDecision } from "@models/penalty-decision";
+} from '@angular/material/dialog';
+import { Offender } from '@models/offender';
+import { Penalty } from '@models/penalty';
+import { LangService } from '@services/lang.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { PenaltyDecision } from '@models/penalty-decision';
 
 @Component({
-  selector: "app-make-penalty-decision-popup",
+  selector: 'app-make-penalty-decision-popup',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -28,8 +28,8 @@ import { PenaltyDecision } from "@models/penalty-decision";
     ButtonComponent,
     MatDialogModule,
   ],
-  templateUrl: "./make-penalty-decision-popup.component.html",
-  styleUrls: ["./make-penalty-decision-popup.component.scss"],
+  templateUrl: './make-penalty-decision-popup.component.html',
+  styleUrls: ['./make-penalty-decision-popup.component.scss'],
 })
 export class MakePenaltyDecisionPopupComponent
   extends OnDestroyMixin(class {})

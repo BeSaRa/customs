@@ -1,37 +1,37 @@
-import { DialogService } from "@services/dialog.service";
-import { WitnessesListComponent } from "@standalone/components/witnesses-list/witnesses-list.component";
-import { Component, inject, ViewChild } from "@angular/core";
-import { LangService } from "@services/lang.service";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
-import { InvestigationService } from "@services/investigation.service";
-import { Investigation } from "@models/investigation";
-import { BaseCaseComponent } from "@abstracts/base-case-component";
-import { SaveTypes } from "@enums/save-types";
-import { OperationType } from "@enums/operation-type";
-import { Subject, Observable, of } from "rxjs";
-import { filter, map, take, takeUntil, switchMap, tap } from "rxjs/operators";
-import { CaseFolder } from "@models/case-folder";
-import { DateAdapter } from "@angular/material/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Location } from "@angular/common";
-import { Violation } from "@models/violation";
-import { OffenderListComponent } from "@standalone/components/offender-list/offender-list.component";
-import { TransformerAction } from "@contracts/transformer-action";
-import { ViolationListComponent } from "@standalone/components/violation-list/violation-list.component";
-import { ToastService } from "@services/toast.service";
-import { OpenFrom } from "@enums/open-from";
-import { INavigatedItem } from "@contracts/inavigated-item";
-import { EncryptionService } from "@services/encryption.service";
-import { EmployeeService } from "@services/employee.service";
-import { LookupService } from "@services/lookup.service";
-import { SendTypes } from "@enums/send-types";
-import { CommonCaseStatus } from "@enums/common-case-status";
-import { Offender } from "@models/offender";
+import { DialogService } from '@services/dialog.service';
+import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
+import { Component, inject, ViewChild } from '@angular/core';
+import { LangService } from '@services/lang.service';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { InvestigationService } from '@services/investigation.service';
+import { Investigation } from '@models/investigation';
+import { BaseCaseComponent } from '@abstracts/base-case-component';
+import { SaveTypes } from '@enums/save-types';
+import { OperationType } from '@enums/operation-type';
+import { Subject, Observable, of } from 'rxjs';
+import { filter, map, take, takeUntil, switchMap, tap } from 'rxjs/operators';
+import { CaseFolder } from '@models/case-folder';
+import { DateAdapter } from '@angular/material/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { Violation } from '@models/violation';
+import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
+import { TransformerAction } from '@contracts/transformer-action';
+import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
+import { ToastService } from '@services/toast.service';
+import { OpenFrom } from '@enums/open-from';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { EncryptionService } from '@services/encryption.service';
+import { EmployeeService } from '@services/employee.service';
+import { LookupService } from '@services/lookup.service';
+import { SendTypes } from '@enums/send-types';
+import { CommonCaseStatus } from '@enums/common-case-status';
+import { Offender } from '@models/offender';
 
 @Component({
-  selector: "app-investigation",
-  templateUrl: "./investigation.component.html",
-  styleUrls: ["./investigation.component.scss"],
+  selector: 'app-investigation',
+  templateUrl: './investigation.component.html',
+  styleUrls: ['./investigation.component.scss'],
 })
 export class InvestigationComponent extends BaseCaseComponent<
   Investigation,
@@ -64,7 +64,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   adapter = inject(DateAdapter);
   selectedTab = 0;
 
-  tabsArray = ["basic_info", "offenders", "violations", "external_persons"];
+  tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   violations: Violation[] = [];
   offenders: Offender[] = [];
 
@@ -101,7 +101,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   }
 
   canViewExternalPersonsTab() {
-    return this.employeeService.hasPermissionTo("VIEW_WITNESS");
+    return this.employeeService.hasPermissionTo('VIEW_WITNESS');
   }
 
   _afterBuildForm(): void {
@@ -202,7 +202,7 @@ export class InvestigationComponent extends BaseCaseComponent<
           },
         });
         e.next({
-          action: "done",
+          action: 'done',
           model,
         });
         this._updateForm(model);
@@ -272,8 +272,8 @@ export class InvestigationComponent extends BaseCaseComponent<
     this.activeRoute.queryParams
       .pipe(takeUntil(this.destroy$))
       .pipe(take(1))
-      .pipe(filter((value) => !!value["tab"]))
-      .pipe(map((val) => this.tabsArray.indexOf(val["tab"] as string)))
+      .pipe(filter((value) => !!value['tab']))
+      .pipe(map((val) => this.tabsArray.indexOf(val['tab'] as string)))
       .subscribe((index) => {
         this.selectedTab = index === -1 ? 1 : index;
       });

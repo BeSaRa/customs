@@ -1,8 +1,8 @@
-import { Component, DestroyRef, inject, OnInit } from "@angular/core";
-import { AsyncPipe } from "@angular/common";
-import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
-import { BaseModel } from "@abstracts/base-model";
-import { BaseCrudService } from "@abstracts/base-crud-service";
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { BaseModel } from '@abstracts/base-model';
+import { BaseCrudService } from '@abstracts/base-crud-service';
 import {
   BehaviorSubject,
   combineLatest,
@@ -14,29 +14,29 @@ import {
   Subject,
   switchMap,
   tap,
-} from "rxjs";
-import { Audit } from "@models/audit";
-import { AppTableDataSource } from "@models/app-table-data-source";
-import { ContextMenuComponent } from "@standalone/components/context-menu/context-menu.component";
-import { FilterColumnComponent } from "@standalone/components/filter-column/filter-column.component";
-import { HighlightPipe } from "@standalone/directives/highlight.pipe";
-import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
-import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatSortModule } from "@angular/material/sort";
-import { MatTableModule } from "@angular/material/table";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { LangService } from "@services/lang.service";
-import { ColumnsWrapper } from "@models/columns-wrapper";
-import { ButtonComponent } from "@standalone/components/button/button.component";
-import { NoneFilterColumn } from "@models/none-filter-column";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ignoreErrors } from "@utils/utils";
+} from 'rxjs';
+import { Audit } from '@models/audit';
+import { AppTableDataSource } from '@models/app-table-data-source';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
+import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { LangService } from '@services/lang.service';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
-  selector: "app-audit-popup",
+  selector: 'app-audit-popup',
   standalone: true,
   imports: [
     ContextMenuComponent,
@@ -54,8 +54,8 @@ import { ignoreErrors } from "@utils/utils";
     ButtonComponent,
     AsyncPipe,
   ],
-  templateUrl: "./audit-popup.component.html",
-  styleUrls: ["./audit-popup.component.scss"],
+  templateUrl: './audit-popup.component.html',
+  styleUrls: ['./audit-popup.component.scss'],
 })
 export class AuditPopupComponent implements OnInit {
   ngOnInit(): void {
@@ -83,10 +83,10 @@ export class AuditPopupComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   columnsWrapper: ColumnsWrapper<Audit> = new ColumnsWrapper<Audit>(
-    new NoneFilterColumn("ip"),
-    new NoneFilterColumn("user"),
-    new NoneFilterColumn("operation"),
-    new NoneFilterColumn("actions")
+    new NoneFilterColumn('ip'),
+    new NoneFilterColumn('user'),
+    new NoneFilterColumn('operation'),
+    new NoneFilterColumn('actions')
   );
 
   get limit(): number {

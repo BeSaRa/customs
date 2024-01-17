@@ -1,5 +1,5 @@
-import { ModelInterceptorContract } from "cast-response";
-import { GuidePanel } from "@models/guide-panel";
+import { ModelInterceptorContract } from 'cast-response';
+import { GuidePanel } from '@models/guide-panel';
 
 export class GuidePanelInterceptor
   implements ModelInterceptorContract<GuidePanel>

@@ -1,9 +1,9 @@
-import { Component, inject, OnInit } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { SuspendedEmployee } from "@models/suspended-employee";
-import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
-import { UntypedFormGroup } from "@angular/forms";
+import { Component, inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { SuspendedEmployee } from '@models/suspended-employee';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { UntypedFormGroup } from '@angular/forms';
 import {
   catchError,
   exhaustMap,
@@ -15,17 +15,17 @@ import {
   switchMap,
   takeUntil,
   throwError,
-} from "rxjs";
-import { OperationType } from "@enums/operation-type";
-import { ignoreErrors } from "@utils/utils";
-import { InvestigationService } from "@services/investigation.service";
-import { SuspendedEmployeeService } from "@services/suspended-employee.service";
-import { EmployeeService } from "@services/employee.service";
+} from 'rxjs';
+import { OperationType } from '@enums/operation-type';
+import { ignoreErrors } from '@utils/utils';
+import { InvestigationService } from '@services/investigation.service';
+import { SuspendedEmployeeService } from '@services/suspended-employee.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
-  selector: "app-suspended-employee-popup",
-  templateUrl: "./suspended-employee-popup.component.html",
-  styleUrls: ["./suspended-employee-popup.component.scss"],
+  selector: 'app-suspended-employee-popup',
+  templateUrl: './suspended-employee-popup.component.html',
+  styleUrls: ['./suspended-employee-popup.component.scss'],
 })
 export class SuspendedEmployeePopupComponent
   extends AdminDialogComponent<SuspendedEmployee>
@@ -45,8 +45,8 @@ export class SuspendedEmployeePopupComponent
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm());
-    this.form.controls["arName"].disable();
-    this.form.controls["enName"].disable();
+    this.form.controls['arName'].disable();
+    this.form.controls['enName'].disable();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {

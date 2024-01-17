@@ -1,5 +1,5 @@
-import { Investigation } from "./investigation";
+import { Investigation } from './investigation';
 
 export class InvestigationSearchCriteria extends Investigation {
-  override $$__service_name__$$: string = "InvestigationSearchCriteria";
+  override $$__service_name__$$: string = 'InvestigationSearchCriteria';
 }

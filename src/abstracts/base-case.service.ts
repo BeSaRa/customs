@@ -1,24 +1,24 @@
-import { EmployeeService } from "@services/employee.service";
-import { RegisterServiceMixin } from "@mixins/register-service-mixin";
-import { Constructor } from "@app-types/constructors";
-import { BaseCaseServiceContract } from "@contracts/base-case-service-contract";
-import { map, Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
-import { inject } from "@angular/core";
-import { UrlService } from "@services/url.service";
-import { CastResponse } from "cast-response";
-import { CaseFolder } from "@models/case-folder";
-import { CaseAttachment } from "@models/case-attachment";
-import { MatDialogRef } from "@angular/material/dialog";
-import { CaseAttachmentPopupComponent } from "@standalone/popups/case-attachment-popup/case-attachment-popup.component";
-import { DialogService } from "@services/dialog.service";
-import { ViewAttachmentPopupComponent } from "@standalone/popups/view-attachment-popup/view-attachment-popup.component";
-import { DomSanitizer } from "@angular/platform-browser";
-import { BlobModel } from "@models/blob-model";
-import { LangKeysContract } from "@contracts/lang-keys-contract";
-import { MenuItemContract } from "@contracts/menu-item-contract";
-import { MenuItemService } from "@services/menu-item.service";
-import { Penalty } from "@models/penalty";
+import { EmployeeService } from '@services/employee.service';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { Constructor } from '@app-types/constructors';
+import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
+import { map, Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { UrlService } from '@services/url.service';
+import { CastResponse } from 'cast-response';
+import { CaseFolder } from '@models/case-folder';
+import { CaseAttachment } from '@models/case-attachment';
+import { MatDialogRef } from '@angular/material/dialog';
+import { CaseAttachmentPopupComponent } from '@standalone/popups/case-attachment-popup/case-attachment-popup.component';
+import { DialogService } from '@services/dialog.service';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { DomSanitizer } from '@angular/platform-browser';
+import { BlobModel } from '@models/blob-model';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { MenuItemContract } from '@contracts/menu-item-contract';
+import { MenuItemService } from '@services/menu-item.service';
+import { Penalty } from '@models/penalty';
 
 export abstract class BaseCaseService<M>
   extends RegisterServiceMixin(class {})
@@ -50,12 +50,12 @@ export abstract class BaseCaseService<M>
 
   @CastResponse()
   commit(model: M): Observable<M> {
-    return this.http.post<M>(this.getUrlSegment() + "/commit", model);
+    return this.http.post<M>(this.getUrlSegment() + '/commit', model);
   }
 
   @CastResponse()
   draft(model: M): Observable<M> {
-    return this.http.post<M>(this.getUrlSegment() + "/draft", model);
+    return this.http.post<M>(this.getUrlSegment() + '/draft', model);
   }
 
   getActions(criteria: {
@@ -64,7 +64,7 @@ export abstract class BaseCaseService<M>
     limit: number;
   }): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + "/" + criteria.caseId + "/actions",
+      this.getUrlSegment() + '/' + criteria.caseId + '/actions',
       {
         params: new HttpParams({
           fromObject: { offset: criteria.offset, limit: criteria.limit },
@@ -79,7 +79,7 @@ export abstract class BaseCaseService<M>
     limit: number;
   }): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + "/" + criteria.caseId + "/actions/export",
+      this.getUrlSegment() + '/' + criteria.caseId + '/actions/export',
       {
         params: new HttpParams({
           fromObject: { offset: criteria.offset, limit: criteria.limit },
@@ -90,18 +90,18 @@ export abstract class BaseCaseService<M>
 
   getAssignedTo(caseId: string): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + "/" + caseId + "/assigned-to"
+      this.getUrlSegment() + '/' + caseId + '/assigned-to'
     );
   }
 
   @CastResponse()
   getDetails(caseId: string): Observable<M> {
-    return this.http.get<M>(this.getUrlSegment() + "/" + caseId + "/details");
+    return this.http.get<M>(this.getUrlSegment() + '/' + caseId + '/details');
   }
 
   insertDocument(caseId: string, document: object): Observable<unknown> {
     return this.http.post<unknown>(
-      this.getUrlSegment() + "/" + caseId + "/document",
+      this.getUrlSegment() + '/' + caseId + '/document',
       {},
       {
         params: new HttpParams({
@@ -114,7 +114,7 @@ export abstract class BaseCaseService<M>
   insertBulkDocuments(caseId: string, document: object[]): Observable<unknown> {
     // TODO: check with the backend team if there is case to use bulk insert document
     return this.http.post<unknown>(
-      this.getUrlSegment() + "/" + caseId + "/document/bulk",
+      this.getUrlSegment() + '/' + caseId + '/document/bulk',
       {},
       {
         params: new HttpParams({
@@ -126,37 +126,37 @@ export abstract class BaseCaseService<M>
 
   getDocuments(caseId: string): Observable<unknown> {
     return this.http.get(
-      this.getUrlSegment() + "/" + caseId + "/folder/contained-documents"
+      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents'
     );
   }
 
   getDocumentsItems(caseId: string): Observable<unknown> {
     return this.http.get(
-      this.getUrlSegment() + "/" + caseId + "/folder/contained-documents-item"
+      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents-item'
     );
   }
 
   start(caseId: string): Observable<boolean> {
     return this.http.post<boolean>(
-      this.getUrlSegment() + "/" + caseId + "/start",
+      this.getUrlSegment() + '/' + caseId + '/start',
       {}
     );
   }
 
   deleteDocument(docId: string): Observable<unknown> {
     return this.http.delete<unknown>(
-      this.getUrlSegment() + "/document/" + docId
+      this.getUrlSegment() + '/document/' + docId
     );
   }
 
   downloadDocumentAsPDF(docId: string): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + "/document/" + docId + "/download"
+      this.getUrlSegment() + '/document/' + docId + '/download'
     );
   }
 
   deleteDocuments(docIds: string[]): Observable<unknown> {
-    return this.http.delete<unknown>(this.getUrlSegment() + "/document/bulk", {
+    return this.http.delete<unknown>(this.getUrlSegment() + '/document/bulk', {
       params: new HttpParams({
         fromObject: { docIds: docIds },
       }),
@@ -164,19 +164,19 @@ export abstract class BaseCaseService<M>
   }
 
   validateDraft(model: M): Observable<M> {
-    return this.http.post<M>(this.getUrlSegment() + "/draft/validate", model);
+    return this.http.post<M>(this.getUrlSegment() + '/draft/validate', model);
   }
 
   getActiveLicense(_caseId: string): Observable<M[]> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   getHoldLicense(_caseId: string): Observable<M[]> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   exportCase(_caseId: string): Observable<M[]> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   // search(_caseId: string): Observable<M[]> {
@@ -184,19 +184,19 @@ export abstract class BaseCaseService<M>
   // }
 
   exportSearchResult(_caseId: string): Observable<M[]> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   startTask(_caseId: string): Observable<M> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   @CastResponse(undefined, {
-    unwrap: "rs",
-    fallback: "$default",
+    unwrap: 'rs',
+    fallback: '$default',
   })
   private _getTask(taskId: string): Observable<M> {
-    return this.http.get<M>(this.getUrlSegment() + "/task/" + taskId);
+    return this.http.get<M>(this.getUrlSegment() + '/task/' + taskId);
   }
 
   getTask(taskId: string): Observable<M> {
@@ -204,24 +204,24 @@ export abstract class BaseCaseService<M>
   }
 
   @CastResponse(undefined, {
-    unwrap: "rs",
-    fallback: "$default",
+    unwrap: 'rs',
+    fallback: '$default',
   })
   claimTask(taskId: string): Observable<M> {
     return this.http.get<M>(
-      this.getUrlSegment() + "/task/" + taskId + "/claim"
+      this.getUrlSegment() + '/task/' + taskId + '/claim'
     );
   }
 
   @CastResponse(undefined, {
-    unwrap: "rs",
+    unwrap: 'rs',
   })
   private _getCasePenalty(
     caseId: string
   ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
     return this.http.get<{
       [key: string]: { first: unknown; second: Penalty[] };
-    }>(this.getUrlSegment() + "/" + caseId + "/penalty");
+    }>(this.getUrlSegment() + '/' + caseId + '/penalty');
   }
   getCasePenalty(
     caseId: string
@@ -251,14 +251,14 @@ export abstract class BaseCaseService<M>
     }
   ): Observable<M> {
     return this.http.post<M>(
-      this.getUrlSegment() + "/task/" + taskId + "/complete",
+      this.getUrlSegment() + '/task/' + taskId + '/complete',
       body
     );
   }
 
   terminate(taskId: string): Observable<M> {
     return this.http.post<M>(
-      this.getUrlSegment() + "/task/" + taskId + "/terminate",
+      this.getUrlSegment() + '/task/' + taskId + '/terminate',
       {}
     );
   }
@@ -269,7 +269,7 @@ export abstract class BaseCaseService<M>
     attachment: CaseAttachment
   ): Observable<unknown> {
     const formData = new FormData();
-    attachment.content ? formData.append("content", attachment.content) : null;
+    attachment.content ? formData.append('content', attachment.content) : null;
     delete attachment.content;
     return this.http.post(
       this.getUrlSegment() + `/offender/${offenderId}/attachment`,
@@ -295,7 +295,7 @@ export abstract class BaseCaseService<M>
     attachment: CaseAttachment
   ): Observable<unknown> {
     const formData = new FormData();
-    attachment.content ? formData.append("content", attachment.content) : null;
+    attachment.content ? formData.append('content', attachment.content) : null;
     delete attachment.content;
     return this.http.post(
       this.getUrlSegment() + `/${caseId}/document`,
@@ -316,13 +316,13 @@ export abstract class BaseCaseService<M>
     const formData = new FormData();
     attachments.forEach((attachment) => {
       attachment.content
-        ? formData.append("content", attachment.content)
+        ? formData.append('content', attachment.content)
         : null;
       delete attachment.content;
     });
     formData.append(
-      "attachments",
-      new Blob([JSON.stringify(attachments)], { type: "application/json" })
+      'attachments',
+      new Blob([JSON.stringify(attachments)], { type: 'application/json' })
     );
     return this.http.post(
       this.getUrlSegment() + `/${caseId}/document/bulk`,
@@ -333,7 +333,7 @@ export abstract class BaseCaseService<M>
   @CastResponse(() => CaseFolder)
   loadCaseFolders(caseId: string): Observable<CaseFolder[]> {
     return this.http.get<CaseFolder[]>(
-      this.getUrlSegment() + "/folder/custom/" + caseId
+      this.getUrlSegment() + '/folder/custom/' + caseId
     );
   }
 
@@ -347,7 +347,7 @@ export abstract class BaseCaseService<M>
   openAddAttachmentDialog(
     caseId: string,
     service: BaseCaseService<unknown>,
-    type: "folder" | "offender",
+    type: 'folder' | 'offender',
     entityId: number
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
@@ -363,15 +363,15 @@ export abstract class BaseCaseService<M>
 
   downloadAttachment(attachmentId: string): Observable<BlobModel> {
     return this.http
-      .get(this.getUrlSegment() + "/document/" + attachmentId + "/download", {
-        responseType: "blob",
+      .get(this.getUrlSegment() + '/document/' + attachmentId + '/download', {
+        responseType: 'blob',
       })
       .pipe(map((blob) => new BlobModel(blob, this.domSanitizer)));
   }
 
   viewAttachment(
     attachmentId: string,
-    title = "Document"
+    title = 'Document'
   ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return this.downloadAttachment(attachmentId).pipe(
       map((blob) => {

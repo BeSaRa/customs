@@ -1,28 +1,28 @@
-import { Component, OnInit, inject } from "@angular/core";
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormsModule,
   ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
-} from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDatepickerModule } from "@angular/material/datepicker";
+} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
-} from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { OnDestroyMixin } from "@mixins/on-destroy-mixin";
-import { SuspendedEmployee } from "@models/suspended-employee";
-import { LangService } from "@services/lang.service";
-import { SuspendedEmployeeService } from "@services/suspended-employee.service";
-import { ToastService } from "@services/toast.service";
-import { ButtonComponent } from "@standalone/components/button/button.component";
-import { IconButtonComponent } from "@standalone/components/icon-button/icon-button.component";
-import { InputComponent } from "@standalone/components/input/input.component";
-import { SwitchComponent } from "@standalone/components/switch/switch.component";
-import { ignoreErrors } from "@utils/utils";
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { SuspendedEmployee } from '@models/suspended-employee';
+import { LangService } from '@services/lang.service';
+import { SuspendedEmployeeService } from '@services/suspended-employee.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
+import { ignoreErrors } from '@utils/utils';
 import {
   Observable,
   Subject,
@@ -34,12 +34,12 @@ import {
   switchMap,
   takeUntil,
   throwError,
-} from "rxjs";
+} from 'rxjs';
 
 @Component({
-  selector: "app-suspend-employee-popup",
-  templateUrl: "./suspend-employee-popup.component.html",
-  styleUrls: ["./suspend-employee-popup.component.scss"],
+  selector: 'app-suspend-employee-popup',
+  templateUrl: './suspend-employee-popup.component.html',
+  styleUrls: ['./suspend-employee-popup.component.scss'],
   standalone: true,
   imports: [
     MatFormFieldModule,
@@ -69,8 +69,8 @@ export class SuspendEmployeePopupComponent
 
   protected _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm());
-    this.form.controls["arName"].disable();
-    this.form.controls["enName"].disable();
+    this.form.controls['arName'].disable();
+    this.form.controls['enName'].disable();
   }
 
   ngOnInit() {

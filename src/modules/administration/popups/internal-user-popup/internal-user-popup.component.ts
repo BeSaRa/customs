@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { InternalUser } from "@models/internal-user";
-import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
-import { UntypedFormGroup } from "@angular/forms";
+import { Component, inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { InternalUser } from '@models/internal-user';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { UntypedFormGroup } from '@angular/forms';
 import {
   Observable,
   catchError,
@@ -13,25 +13,25 @@ import {
   of,
   takeUntil,
   tap,
-} from "rxjs";
-import { OperationType } from "@enums/operation-type";
-import { Lookup } from "@models/lookup";
-import { LookupService } from "@services/lookup.service";
-import { PermissionService } from "@services/permission.service";
-import { Permission } from "@models/permission";
-import { PermissionRoleService } from "@services/permission-role.service";
-import { PermissionRole } from "@models/permission-role";
-import { CheckGroup } from "@models/check-group";
-import { AppIcons } from "@constants/app-icons";
-import { InternalUserService } from "@services/internal-user.service";
-import { SafeResourceUrl } from "@angular/platform-browser";
-import { DomSanitizer } from "@angular/platform-browser";
-import { UserSignature } from "@models/user-signature";
+} from 'rxjs';
+import { OperationType } from '@enums/operation-type';
+import { Lookup } from '@models/lookup';
+import { LookupService } from '@services/lookup.service';
+import { PermissionService } from '@services/permission.service';
+import { Permission } from '@models/permission';
+import { PermissionRoleService } from '@services/permission-role.service';
+import { PermissionRole } from '@models/permission-role';
+import { CheckGroup } from '@models/check-group';
+import { AppIcons } from '@constants/app-icons';
+import { InternalUserService } from '@services/internal-user.service';
+import { SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UserSignature } from '@models/user-signature';
 
 @Component({
-  selector: "app-internal-user-popup",
-  templateUrl: "./internal-user-popup.component.html",
-  styleUrls: ["./internal-user-popup.component.scss"],
+  selector: 'app-internal-user-popup',
+  templateUrl: './internal-user-popup.component.html',
+  styleUrls: ['./internal-user-popup.component.scss'],
 })
 export class InternalUserPopupComponent extends AdminDialogComponent<InternalUser> {
   form!: UntypedFormGroup;
@@ -164,11 +164,11 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   get permissionRoleId() {
-    return this.form.get("permissionRoleId");
+    return this.form.get('permissionRoleId');
   }
 
   get userPreferences() {
-    return this.form.get("userPreferences");
+    return this.form.get('userPreferences');
   }
 
   private loadUserPermissions(model: InternalUser) {
@@ -231,9 +231,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
 
   getSignatureStyle(): string {
     if (this.inEditMode())
-      return "border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-96 bg-gray-200";
+      return 'border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-96 bg-gray-200';
     if (this.inViewMode())
-      return "rounded w-full flex items-center justify-center h-96";
-    return "";
+      return 'rounded w-full flex items-center justify-center h-96';
+    return '';
   }
 }

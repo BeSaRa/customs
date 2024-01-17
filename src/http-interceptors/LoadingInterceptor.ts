@@ -1,14 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-} from "@angular/common/http";
-import { Observable } from "rxjs";
-import { finalize } from "rxjs/operators";
-import { LoadingService } from "@services/loading.service";
-import { NO_LOADER_TOKEN } from "@http-contexts/tokens";
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import { LoadingService } from '@services/loading.service';
+import { NO_LOADER_TOKEN } from '@http-contexts/tokens';
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {

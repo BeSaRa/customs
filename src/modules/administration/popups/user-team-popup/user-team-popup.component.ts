@@ -1,9 +1,9 @@
-import { Component, inject } from "@angular/core";
-import { MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { CrudDialogDataContract } from "@contracts/crud-dialog-data-contract";
-import { UserTeam } from "@models/user-team";
-import { AdminDialogComponent } from "@abstracts/admin-dialog-component";
-import { UntypedFormGroup } from "@angular/forms";
+import { Component, inject } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { UserTeam } from '@models/user-team';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { UntypedFormGroup } from '@angular/forms';
 import {
   catchError,
   exhaustMap,
@@ -17,17 +17,17 @@ import {
   switchMap,
   takeUntil,
   throwError,
-} from "rxjs";
-import { OperationType } from "@enums/operation-type";
-import { TeamService } from "@services/team.service";
-import { Team } from "@models/team";
-import { ignoreErrors } from "@utils/utils";
-import { UserTeamService } from "@services/user-team.service";
+} from 'rxjs';
+import { OperationType } from '@enums/operation-type';
+import { TeamService } from '@services/team.service';
+import { Team } from '@models/team';
+import { ignoreErrors } from '@utils/utils';
+import { UserTeamService } from '@services/user-team.service';
 
 @Component({
-  selector: "app-user-team-popup",
-  templateUrl: "./user-team-popup.component.html",
-  styleUrls: ["./user-team-popup.component.scss"],
+  selector: 'app-user-team-popup',
+  templateUrl: './user-team-popup.component.html',
+  styleUrls: ['./user-team-popup.component.scss'],
 })
 export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   private teamsService = inject(TeamService);

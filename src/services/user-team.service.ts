@@ -1,21 +1,21 @@
-import { Injectable, inject } from "@angular/core";
-import { UserTeam } from "@models/user-team";
-import { CastResponse, CastResponseContainer } from "cast-response";
-import { BaseCrudWithDialogService } from "@abstracts/base-crud-with-dialog-service";
-import { ComponentType } from "@angular/cdk/portal";
-import { UserTeamPopupComponent } from "@modules/administration/popups/user-team-popup/user-team-popup.component";
-import { Constructor } from "@app-types/constructors";
-import { Pagination } from "@models/pagination";
-import { FetchOptionsContract } from "@contracts/fetch-options-contract";
-import { Observable } from "rxjs";
-import { HttpParams } from "@angular/common/http";
-import { TeamService } from "./team.service";
+import { Injectable, inject } from '@angular/core';
+import { UserTeam } from '@models/user-team';
+import { CastResponse, CastResponseContainer } from 'cast-response';
+import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
+import { ComponentType } from '@angular/cdk/portal';
+import { UserTeamPopupComponent } from '@modules/administration/popups/user-team-popup/user-team-popup.component';
+import { Constructor } from '@app-types/constructors';
+import { Pagination } from '@models/pagination';
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
+import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { TeamService } from './team.service';
 
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
     shape: {
-      "rs.*": () => UserTeam,
+      'rs.*': () => UserTeam,
     },
   },
   $default: {
@@ -23,13 +23,13 @@ import { TeamService } from "./team.service";
   },
 })
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class UserTeamService extends BaseCrudWithDialogService<
   UserTeamPopupComponent,
   UserTeam
 > {
-  serviceName = "UserTeamService";
+  serviceName = 'UserTeamService';
   teamService = inject(TeamService);
 
   protected getModelClass(): Constructor<UserTeam> {
@@ -49,8 +49,8 @@ export class UserTeamService extends BaseCrudWithDialogService<
   }
 
   @CastResponse(undefined, {
-    unwrap: "",
-    fallback: "$pagination",
+    unwrap: '',
+    fallback: '$pagination',
   })
   loadUserTeams(
     userId: number,
@@ -75,14 +75,14 @@ export class UserTeamService extends BaseCrudWithDialogService<
     status: number;
   }): Observable<unknown> {
     return this.http.post(
-      this.teamService.getUrlSegment() + "/admin/add-user",
+      this.teamService.getUrlSegment() + '/admin/add-user',
       userTeam
     );
   }
 
   override delete(id: number): Observable<UserTeam> {
     return this.http.delete<UserTeam>(
-      this.teamService.getUrlSegment() + "/admin/remove-users/bulk",
+      this.teamService.getUrlSegment() + '/admin/remove-users/bulk',
       { body: [id] }
     );
   }
