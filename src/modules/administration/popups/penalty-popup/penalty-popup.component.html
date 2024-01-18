@@ -8,7 +8,7 @@
       icon="CLOSE"
     ></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       [(selectedIndex)]="activeTab"
       mat-stretch-tabs="false"
@@ -17,7 +17,7 @@
     >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4 pb-0">
             <app-select-input
               [label]="lang.map.offender_type"
               formControlName="offenderType"
@@ -36,21 +36,20 @@
               type="number"
             ></app-input>
             @if (isDeduction?.value) {
-              <app-input
-                formControlName="deductionDays"
-                [label]="lang.map.deduction_days"
-                type="number"
-              ></app-input>
-            }
-            @if (isCash?.value) {
-              <app-input
-                formControlName="cashAmount"
-                [label]="lang.map.cash_amount"
-                type="number"
-              ></app-input>
+            <app-input
+              formControlName="deductionDays"
+              [label]="lang.map.deduction_days"
+              type="number"
+            ></app-input>
+            } @if (isCash?.value) {
+            <app-input
+              formControlName="cashAmount"
+              [label]="lang.map.cash_amount"
+              type="number"
+            ></app-input>
             }
           </div>
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center px-4">
             <app-input
               formControlName="arName"
               [label]="lang.map.ar_name"
@@ -60,7 +59,7 @@
               [label]="lang.map.en_name"
             ></app-input>
           </div>
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4 pt-0">
             <app-switch
               formControlName="status"
               [trueValue]="1"
@@ -69,38 +68,39 @@
               [matTooltip]="statusTooltipText"
             ></app-switch>
             @if (!isEmployee) {
-              <app-switch
-                formControlName="isCash"
-                [label]="lang.map.is_cash"
-              ></app-switch>
-            }
-            @if (isEmployee) {
-              <app-switch
-                formControlName="isDeduction"
-                [label]="lang.map.is_deduction"
-              ></app-switch>
+            <app-switch
+              formControlName="isCash"
+              [label]="lang.map.is_cash"
+            ></app-switch>
+            } @if (isEmployee) {
+            <app-switch
+              formControlName="isDeduction"
+              [label]="lang.map.is_deduction"
+            ></app-switch>
             }
           </div>
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.more_details">
-        <app-penalty-details
-          [(list)]="penaltyDetailsList"
-          [viewMode]="inViewMode()"
-          (listIsEmpty)="checkDetailsListValidity($event)"
-          [isEmployee]="isEmployee"
-        ></app-penalty-details>
+        <div class="p-4">
+          <app-penalty-details
+            [(list)]="penaltyDetailsList"
+            [viewMode]="inViewMode()"
+            (listIsEmpty)="checkDetailsListValidity($event)"
+            [isEmployee]="isEmployee"
+          ></app-penalty-details>
+        </div>
         <label class="group block relative">
           @if (penaltyDetailsListIsEmpty) {
-            <span
-              class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500"
-            >
-              {{
-                this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({
-                  x: this.lang.map.menu_penalty_details
-                })
-              }}
-            </span>
+          <span
+            class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500"
+          >
+            {{
+              this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({
+                x: this.lang.map.menu_penalty_details
+              })
+            }}
+          </span>
           }
         </label>
       </mat-tab>
@@ -108,19 +108,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
-    }
-    @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
-    }
-    @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>

@@ -8,7 +8,7 @@
       icon="CLOSE"
     ></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
@@ -16,7 +16,7 @@
     >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 my-auto items-center">
+          <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="email" [label]="lang.map.email" />
@@ -83,52 +83,44 @@
         </ng-container>
       </mat-tab>
       @if (!inCreateMode()) {
-        <mat-tab [label]="lang.map.ou_logo">
-          <div class="dialog-content">
-            <div [formGroup]="form" class="flex flex-col">
-              <div
-                (drop)="filesDropped($event)"
-                (dragover)="$event.preventDefault()"
-                [ngClass]="getOuLogoStyle()"
-              >
-                @if (ouLogoSafeUrl) {
-                  <div class="dialog-content !p-0 w-full h-full">
-                    <img
-                      class="w-full h-full"
-                      alt="logo"
-                      [src]="ouLogoSafeUrl"
-                    />
-                  </div>
-                } @else {
-                  <div class="flex flex-col items-center text-gray-500">
-                    <mat-icon
-                      [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"
-                    ></mat-icon>
-                    <span>{{ lang.map.drag_and_drop_files }}</span>
-                  </div>
-                }
+      <mat-tab [label]="lang.map.ou_logo">
+        <div class="p-4">
+          <div [formGroup]="form" class="flex flex-col">
+            <div
+              (drop)="filesDropped($event)"
+              (dragover)="$event.preventDefault()"
+              [ngClass]="getOuLogoStyle()"
+            >
+              @if (ouLogoSafeUrl) {
+              <div class="w-full h-full">
+                <img class="w-full h-full" alt="logo" [src]="ouLogoSafeUrl" />
               </div>
+              } @else {
+              <div class="flex flex-col items-center text-gray-500">
+                <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
+                <span>{{ lang.map.drag_and_drop_files }}</span>
+              </div>
+              }
             </div>
           </div>
-        </mat-tab>
+        </div>
+      </mat-tab>
       }
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
-    }
-    @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
-    }
-    @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>

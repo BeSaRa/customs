@@ -8,7 +8,7 @@
       icon="CLOSE"
     ></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
@@ -16,7 +16,7 @@
     >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4 p-4">
             <app-input
               [disabled]="true"
               formControlName="arName"
@@ -75,7 +75,7 @@
       </mat-tab>
       <mat-tab [label]="lang.map.lbl_job_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4 p-4">
             <app-input
               [disabled]="true"
               formControlName="subDepartmentName"
@@ -137,19 +137,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
-    }
-    @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
-    }
-    @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    } @if (!inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+    } @if (inViewMode()) {
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
     }
   </div>
 </div>
