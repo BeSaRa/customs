@@ -1,6 +1,14 @@
 {
-  "singleQuote": true,
-  "bracketSameLine": false,
-  "useTabs": false,
-  "bracketSpacing": true
+  "overrides": [
+    {
+      "files": ["*.html"],
+      "options": {
+        "parser": "angular",
+        "singleQuote": true,
+        "bracketSameLine": false,
+        "useTabs": false,
+        "bracketSpacing": true
+      }
+    }
+  ]
 }

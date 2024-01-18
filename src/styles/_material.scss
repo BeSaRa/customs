@@ -1,6 +1,6 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -90,7 +90,7 @@ $customs-theme: mat.define-light-theme(
 
 :root {
   // text color for primary theme
-  --mdc-theme-text-primary-on-background: theme('textColor.slate.700');
+  --mdc-theme-text-primary-on-background: theme("textColor.slate.700");
 }
 
 .mat-mdc-paginator {
@@ -101,14 +101,14 @@ $customs-theme: mat.define-light-theme(
   width: 40px;
 }
 
-html[dir='ltr'] {
+html[dir="ltr"] {
   .cdk-column-select {
     padding-right: 0 !important;
     width: 40px;
   }
 }
 
-html[dir='rtl'] {
+html[dir="rtl"] {
   .cdk-column-select {
     padding-left: 0 !important;
   }
@@ -121,12 +121,12 @@ html[dir='rtl'] {
 
   .mat-expansion-panel
     .mat-expansion-panel-header.cdk-keyboard-focused:not(
-      [aria-disabled='true']
+      [aria-disabled="true"]
     ),
   .mat-expansion-panel
-    .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled='true']),
+    .mat-expansion-panel-header.cdk-program-focused:not([aria-disabled="true"]),
   .mat-expansion-panel:not(.mat-expanded)
-    .mat-expansion-panel-header:hover:not([aria-disabled='true']),
+    .mat-expansion-panel-header:hover:not([aria-disabled="true"]),
   .mat-expansion-panel-header.mat-expanded:focus,
   .mat-expansion-panel-header.mat-expanded:hover {
     @apply bg-primary;
@@ -150,4 +150,7 @@ html[dir='rtl'] {
     --tw-bg-opacity: 0.8 !important;
     background-color: rgb(0 80 136 / var(--tw-bg-opacity)) !important;
   }
+}
+
+.mat-mdc-header-row {
 }
