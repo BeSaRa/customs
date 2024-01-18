@@ -42,129 +42,113 @@
           </div>
         </div>
         @if (offender.typeInfo) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.offender_type
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.typeInfo.getNames() }}
-            </div>
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.offender_type
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.typeInfo.getNames() }}
           </div>
-        }
-        @if (offender.offenderInfo?.type == offenderTypes.EMPLOYEE) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.employee_number
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderInfo?.jobTitleCode }}
-            </div>
+        </div>
+        } @if (offender.offenderInfo?.type == offenderTypes.EMPLOYEE) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.employee_number
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderInfo?.jobTitleCode }}
           </div>
-        }
-        @if (offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.clearing_agent_code
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderInfo?.code }}
-            </div>
+        </div>
+        } @if (offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.clearing_agent_code
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderInfo?.code }}
           </div>
-        }
-        @if (
-          offender.offenderOUInfo &&
-          offender.offenderInfo?.type == offenderTypes.EMPLOYEE
-        ) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.lbl_department
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderOUInfo.getNames() }}
-            </div>
+        </div>
+        } @if ( offender.offenderOUInfo && offender.offenderInfo?.type ==
+        offenderTypes.EMPLOYEE ) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.lbl_department
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderOUInfo.getNames() }}
           </div>
-        }
-        @if (
-          offender.offenderOUInfo &&
-          offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT
-        ) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.lbl_clearance_company
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderOUInfo.getNames() }}
-            </div>
+        </div>
+        } @if ( offender.offenderOUInfo && offender.offenderInfo?.type ==
+        offenderTypes.ClEARING_AGENT ) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.lbl_clearance_company
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderOUInfo.getNames() }}
           </div>
-        }
-        @if (offender.offenderInfo) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.email
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderInfo.email }}
-            </div>
+        </div>
+        } @if (offender.offenderInfo) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.email
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderInfo.email }}
           </div>
-        }
-        @if (offender.offenderInfo) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.phone
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{
-                offender.offenderInfo.phone || offender.offenderInfo.phoneNumber
-              }}
-            </div>
+        </div>
+        } @if (offender.offenderInfo) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.phone
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{
+              offender.offenderInfo.phone || offender.offenderInfo.phoneNumber
+            }}
           </div>
-        }
-        @if (offender.offenderInfo) {
-          <div class="group block relative mb-5">
-            <span class="block font-medium text-slate-700">{{
-              lang.map.lbl_address
-            }}</span>
-            <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
-              {{ offender.offenderInfo.address || '---' }}
-            </div>
+        </div>
+        } @if (offender.offenderInfo) {
+        <div class="group block relative mb-5">
+          <span class="block font-medium text-slate-700">{{
+            lang.map.lbl_address
+          }}</span>
+          <div
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
+          >
+            {{ offender.offenderInfo.address || '---' }}
           </div>
+        </div>
         }
       </div>
       <div class="mb-4">
         @if (!readonly) {
-          <app-select-input
-            [formControl]="control"
-            [label]="lang.map.violations"
-            bindLabel="getOffenderViolationSelectNames"
-            bindValue="id"
-            [isMultiple]="true"
-            [options]="violations"
-          >
-            <span appInputSuffix>
-              <app-icon-button
-                (click)="addViolation$.next()"
-                [matTooltip]="lang.map.add_selected"
-                class="text-primary"
-                icon="PLUS_BOX"
-              ></app-icon-button>
-            </span>
-          </app-select-input>
+        <app-select-input
+          [formControl]="control"
+          [label]="lang.map.violations"
+          bindLabel="getOffenderViolationSelectNames"
+          bindValue="id"
+          [isMultiple]="true"
+          [options]="violations"
+        >
+          <app-button appInputSuffix (click)="addViolation$.next()">
+            {{ lang.map.select }}
+          </app-button>
+        </app-select-input>
         }
       </div>
       <table
@@ -211,17 +195,16 @@
           </th>
           <td mat-cell *matCellDef="let element">
             @if (element.violationInfo?.violationsDate) {
-              <span>
-                {{ element.violationInfo?.violationsDate | date }}
-              </span>
-            }
-            @if (!element.violationInfo?.violationsDate) {
-              <span>
-                {{ lang.map.date_from }}
-                {{ element.violationInfo?.violationsDateFrom | date }}
-                {{ lang.map.date_to }}
-                {{ element.violationInfo?.violationsDateTo | date }}
-              </span>
+            <span>
+              {{ element.violationInfo?.violationsDate | date }}
+            </span>
+            } @if (!element.violationInfo?.violationsDate) {
+            <span>
+              {{ lang.map.date_from }}
+              {{ element.violationInfo?.violationsDateFrom | date }}
+              {{ lang.map.date_to }}
+              {{ element.violationInfo?.violationsDateTo | date }}
+            </span>
             }
           </td>
         </ng-container>
@@ -240,12 +223,12 @@
           <td mat-cell *matCellDef="let element">
             <div class="flex gap-2">
               @if (!readonly) {
-                <div [matTooltip]="lang.map.delete">
-                  <app-icon-button
-                    (click)="delete$.next(element)"
-                    icon="DELETE"
-                  />
-                </div>
+              <div [matTooltip]="lang.map.delete">
+                <app-icon-button
+                  (click)="delete$.next(element)"
+                  icon="DELETE"
+                />
+              </div>
               }
             </div>
           </td>
