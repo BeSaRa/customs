@@ -4,22 +4,19 @@
     <app-icon-button
       (click)="add$.next()"
       class="text-primary"
-      icon="PLUS_BOX"
-    ></app-icon-button>
+      icon="PLUS_BOX"></app-icon-button>
   }
   <app-icon-button
     (click)="reload$.next()"
     class="text-primary"
-    icon="RELOAD"
-  ></app-icon-button>
+    icon="RELOAD"></app-icon-button>
 </div>
 <div>
   <table
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource"
-  >
+    [dataSource]="dataSource">
     <!-- violationType -->
     <ng-container matColumnDef="violationType">
       <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>
@@ -67,8 +64,7 @@
             <div [matTooltip]="lang.map.view">
               <app-icon-button
                 (click)="view$.next(element)"
-                icon="VIEW"
-              ></app-icon-button>
+                icon="VIEW"></app-icon-button>
             </div>
           }
           @if (!readonly) {

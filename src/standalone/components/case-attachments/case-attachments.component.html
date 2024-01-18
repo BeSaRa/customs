@@ -6,22 +6,19 @@
     <app-icon-button
       class="text-primary"
       (click)="openAddDialog()"
-      icon="PLUS_BOX"
-    ></app-icon-button>
+      icon="PLUS_BOX"></app-icon-button>
   }
   <app-icon-button
     class="text-primary"
     (click)="reload$.next()"
-    icon="RELOAD"
-  ></app-icon-button>
+    icon="RELOAD"></app-icon-button>
 </div>
 <div class="flex">
   <table
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource"
-  >
+    [dataSource]="dataSource">
     <!-- documentTitle -->
     <ng-container matColumnDef="documentTitle">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.document_name }}</th>
@@ -55,13 +52,11 @@
         <div class="flex">
           <app-icon-button
             (click)="view$.next(element)"
-            icon="VIEW"
-          ></app-icon-button>
+            icon="VIEW"></app-icon-button>
           @if (!readonly) {
             <app-icon-button
               (click)="delete$.next(element)"
-              icon="DELETE"
-            ></app-icon-button>
+              icon="DELETE"></app-icon-button>
           }
         </div>
       </td>

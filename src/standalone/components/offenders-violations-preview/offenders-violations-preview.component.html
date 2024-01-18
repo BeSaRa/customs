@@ -3,8 +3,7 @@
   matSort
   class="table-style table-primary"
   multiTemplateDataRows=""
-  [dataSource]="offenderDataSource"
->
+  [dataSource]="offenderDataSource">
   <!-- offender name -->
   <ng-container matColumnDef="offenderName">
     <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
@@ -18,8 +17,7 @@
             element.type === offenderTypes.EMPLOYEE
               ? 'EMPLOYEE'
               : 'CLEARING_AGENT'
-          "
-        >
+          ">
         </app-icon-button>
         {{ element.getNames() }}
       </span>
@@ -51,8 +49,7 @@
     <td mat-cell *matCellDef="let element">
       <div class="flex items-center">
         <span
-          class="cursor-pointer inline-flex items-center rounded-[12px] bg-pink-50 me-2 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10"
-        >
+          class="cursor-pointer inline-flex items-center rounded-[12px] bg-pink-50 me-2 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
           {{ element.violations?.length }}
         </span>
         <div class="flex flex-column">
@@ -61,8 +58,7 @@
             track violation
           ) {
             <span
-              class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20"
-            >
+              class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
               {{ violation.violationInfo.violationTypeInfo.getNames() }}
             </span>
           }
@@ -81,14 +77,12 @@
         <app-icon-button
           [matTooltip]="lang.map.situation_search"
           (click)="situationClick($event, element, false)"
-          icon="INFORMATION"
-        ></app-icon-button>
+          icon="INFORMATION"></app-icon-button>
         @if (isClearingAgent(element)) {
           <app-icon-button
             [matTooltip]="lang.map.situation_search_clearing_agency"
             (click)="situationClick($event, element, true)"
-            icon="CLEARING_AGENCY"
-          ></app-icon-button>
+            icon="CLEARING_AGENCY"></app-icon-button>
         }
       </div>
     </td>
@@ -113,8 +107,7 @@
                 <div>
                   <app-icon-button
                     (click)="makeDecision$.next(element)"
-                    icon="ACCOUNT_MAKE_DECISION"
-                  />
+                    icon="ACCOUNT_MAKE_DECISION" />
                 </div>
               }
             </div>
@@ -123,8 +116,7 @@
             <app-icon-button
               icon="DOTS_VERTICAL"
               mat-button
-              [matMenuTriggerFor]="actionsMenu"
-            ></app-icon-button>
+              [matMenuTriggerFor]="actionsMenu"></app-icon-button>
             <mat-menu #actionsMenu="matMenu">
               @if (
                 element.type == offenderTypes.EMPLOYEE &&
@@ -132,8 +124,7 @@
               ) {
                 <button
                   mat-menu-item
-                  (click)="suspendEmployee$.next({ offender: element })"
-                >
+                  (click)="suspendEmployee$.next({ offender: element })">
                   {{ lang.map.suspend_employee }}
                 </button>
               }
@@ -153,8 +144,7 @@
                         systemPenalties.REFERRAL_TO_PRESIDENT
                       )
                     })
-                  "
-                >
+                  ">
                   {{ lang.map.referral_request_to_presodent }}
                 </button>
               }
@@ -174,8 +164,7 @@
                         systemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
                       )
                     })
-                  "
-                >
+                  ">
                   {{ lang.map.referral_request_to_presodent_assistant }}
                 </button>
               }
@@ -192,8 +181,7 @@
                         systemPenalties.TERMINATE
                       )
                     })
-                  "
-                >
+                  ">
                   {{ lang.map.terminate }}
                 </button>
               }
@@ -209,14 +197,12 @@
       mat-cell
       *matCellDef="let element"
       class="p-0"
-      [attr.colspan]="offenderDisplayedColumns.length"
-    >
+      [attr.colspan]="offenderDisplayedColumns.length">
       <div
         [@detailExpand]="
           selectedOffender === element ? 'expanded' : 'collapsed'
         "
-        class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100"
-      >
+        class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100">
         @for (violation of assertType(element).violations; track violation) {
           <div class="p-3 border-bottom">
             <h5 class="text-lg font-medium mb-1">
@@ -224,8 +210,7 @@
             </h5>
             <!-- classificationInfo -->
             <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
               <label class="font-medium"
                 >{{ lang.map.violation_classification }} :
               </label>
@@ -236,8 +221,7 @@
             <!-- competentProsecutionDecisionInfo -->
             @if (violation.violationInfo?.competentProsecutionDecision) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.competent_prosecutiond_decision }} :
                 </label>
@@ -249,8 +233,7 @@
             <!-- courtDecision -->
             @if (violation.violationInfo?.courtDecision) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.court_decision }} :
                 </label>
@@ -262,8 +245,7 @@
             <!-- drugProsecutionDecision -->
             @if (violation.violationInfo?.drugProsecutionDecision) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.drug_prosecution_decision }} :
                 </label>
@@ -275,8 +257,7 @@
             <!-- forensicLabAnalysis -->
             @if (violation.violationInfo?.forensicLabAnalysis) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.forensic_lab_analysis }} :
                 </label>
@@ -288,8 +269,7 @@
             <!-- securityAdminDecision -->
             @if (violation.violationInfo?.securityAdminDecision) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.security_admin_decision }} :
                 </label>
@@ -300,8 +280,7 @@
             }
             <!-- is proved -->
             <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
               <label class="font-medium">{{ lang.map.is_proved }} : </label>
               @if (!violation.isProved) {
                 <span class="text-secondary">
@@ -315,8 +294,7 @@
             <!-- customsDeclarationNumber -->
             @if (violation.violationInfo?.customsDeclarationNumber) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.customs_declaration_number }} :
                 </label>
@@ -328,8 +306,7 @@
             <!-- controlReportNumber -->
             @if (violation.violationInfo?.controlReportNumber) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.control_report_number }} :
                 </label>
@@ -341,8 +318,7 @@
             <!-- reportNumber -->
             @if (violation.violationInfo?.reportNumber) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.report_number }} :
                 </label>
@@ -352,24 +328,21 @@
             <!-- reportNumber -->
             @if (violation.violationInfo?.reportYear) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium">{{ lang.map.report_year }} : </label>
                 <label>{{ violation.violationInfo?.reportYear }}</label>
               </span>
             }
             <!-- repeat -->
             <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-            >
+              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
               <label class="font-medium">{{ lang.map.repeatation }} : </label>
               <label>{{ violation.repeat }}</label>
             </span>
             <!-- date -->
             @if (violation.violationInfo?.violationsDate) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.violation_date }} :
                 </label>
@@ -384,8 +357,7 @@
               violation.violationInfo?.violationsDateFrom
             ) {
               <span
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 @if (violation.violationInfo?.violationsDateFrom) {
                   <span>
                     <label class="font-medium"
@@ -413,8 +385,7 @@
             <!-- description -->
             @if (violation.violationInfo?.description) {
               <div
-                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10"
-              >
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium">{{ lang.map.description }} : </label>
                 <label>{{ violation.violationInfo?.description }}</label>
               </div>
@@ -435,13 +406,11 @@
       selectedOffender === element
         ? (selectedOffender = null)
         : (selectedOffender = element)
-    "
-  ></tr>
+    "></tr>
   <tr
     mat-row
     *matRowDef="let row; columns: ['expandedDetail']"
-    class="detail-row"
-  ></tr>
+    class="detail-row"></tr>
   <!-- Row shown when there is no matching data. -->
   <tr class="mat-row" *matNoDataRow>
     <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>

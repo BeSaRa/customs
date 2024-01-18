@@ -34,7 +34,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
     const alternateEmailListParsed = (
       (formObj.alternateEmailListParsed as string[]) ?? []
     ).map(
-      (email) =>
+      email =>
         new FormControl(email, [
           CustomValidators.required,
           CustomValidators.pattern('EMAIL'),

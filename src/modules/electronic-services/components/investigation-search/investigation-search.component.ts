@@ -62,7 +62,7 @@ export class InvestigationSearchComponent implements OnInit {
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view(item);
       },
     },
@@ -92,11 +92,11 @@ export class InvestigationSearchComponent implements OnInit {
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         exhaustMap(() => {
           return this.investigationSearchService.search(this.form.value).pipe(
-            catchError((error) => {
+            catchError(error => {
               return throwError(error);
             }),
             ignoreErrors(),

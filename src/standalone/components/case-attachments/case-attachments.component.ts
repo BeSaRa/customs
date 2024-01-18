@@ -139,7 +139,7 @@ export class CaseAttachmentsComponent
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((item) => {
+        exhaustMap(item => {
           return item.view(this.service);
         }),
       )
@@ -150,7 +150,7 @@ export class CaseAttachmentsComponent
     this.delete$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((item) => {
+        exhaustMap(item => {
           return this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
@@ -159,15 +159,15 @@ export class CaseAttachmentsComponent
             )
             .afterClosed()
             .pipe(
-              map((userClick) => {
+              map(userClick => {
                 return { userClick: userClick, item };
               }),
             );
         }),
       )
-      .pipe(filter((response) => response.userClick === UserClick.YES))
+      .pipe(filter(response => response.userClick === UserClick.YES))
       .pipe(
-        exhaustMap((response) =>
+        exhaustMap(response =>
           response.item
             .delete(this.service)
             .pipe(ignoreErrors())
@@ -175,7 +175,7 @@ export class CaseAttachmentsComponent
         ),
       )
       .pipe(
-        tap((item) =>
+        tap(item =>
           this.toast.success(
             this.lang.map.msg_delete_x_success.change({
               x: item.documentTitle,

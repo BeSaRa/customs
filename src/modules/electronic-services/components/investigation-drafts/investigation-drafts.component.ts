@@ -39,7 +39,7 @@ export class InvestigationDraftsComponent implements OnInit {
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view(item);
       },
     },
@@ -58,7 +58,7 @@ export class InvestigationDraftsComponent implements OnInit {
       .pipe(
         exhaustMap(() => {
           return this.investigationDraftsService.search().pipe(
-            catchError((error) => {
+            catchError(error => {
               return throwError(() => error);
             }),
             ignoreErrors(),
@@ -66,13 +66,13 @@ export class InvestigationDraftsComponent implements OnInit {
         }),
       )
       .subscribe((data: Investigation[]) => {
-        data.forEach((investigation) => {
+        data.forEach(investigation => {
           let employeeCount = 0;
           let clearingAgentCount = 0;
           let namesOfOffenders = '';
 
           if (investigation.offenderInfo.length > 2) {
-            investigation.offenderInfo.forEach((element) => {
+            investigation.offenderInfo.forEach(element => {
               if (element.type === OffenderTypes.ClEARING_AGENT) {
                 clearingAgentCount += 1;
               } else if (element.type === OffenderTypes.EMPLOYEE) {

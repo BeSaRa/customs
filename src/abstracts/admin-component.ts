@@ -124,7 +124,7 @@ export abstract class AdminComponent<
               this.length = count;
               this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map((response) => response.rs),
+            map(response => response.rs),
           );
         }),
       );
@@ -189,7 +189,7 @@ export abstract class AdminComponent<
     this.edit$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.service
             .openEditDialog(model, this._getEditExtras() as object)
             .afterClosed()
@@ -213,7 +213,7 @@ export abstract class AdminComponent<
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.service
             .openViewDialog(model, this._getViewExtras() as object)
             .afterClosed()
@@ -231,7 +231,7 @@ export abstract class AdminComponent<
     this.delete$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
@@ -239,7 +239,7 @@ export abstract class AdminComponent<
               }),
             )
             .afterClosed()
-            .pipe(filter((value) => value === UserClick.YES))
+            .pipe(filter(value => value === UserClick.YES))
             .pipe(
               switchMap(() => {
                 this.loadingSubject.next(true);
@@ -254,7 +254,7 @@ export abstract class AdminComponent<
             ),
         ),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );
@@ -266,7 +266,7 @@ export abstract class AdminComponent<
     this.viewAudit$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.service
             .openViewAuditDialog(model)
             .afterClosed()
@@ -280,7 +280,7 @@ export abstract class AdminComponent<
     this.status$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           this.loadingSubject.next(true);
           return model.toggleStatus().pipe(
             // Updating statusInfo is done in baseModel and no need for it here
@@ -289,7 +289,7 @@ export abstract class AdminComponent<
           );
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_status_x_changed_success.change({
             x: model.getNames(),
@@ -343,7 +343,7 @@ export abstract class AdminComponent<
   toggleAllRows() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+      : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   filterChange($event: { key: string; value: string | null }) {

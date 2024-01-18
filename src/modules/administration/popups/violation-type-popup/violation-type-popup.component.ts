@@ -75,7 +75,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   }
 
   protected loadViolationClassifications() {
-    this.violationClassificationService.loadAsLookups().subscribe((data) => {
+    this.violationClassificationService.loadAsLookups().subscribe(data => {
       this.violationClassifications = data;
     });
   }
@@ -111,7 +111,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   isCriminal(): boolean {
     if (this.violationClassifications === undefined) return false;
     let isCriminal = false;
-    this.violationClassifications.forEach((classification) => {
+    this.violationClassifications.forEach(classification => {
       if (
         classification.id === this.classificationId?.value &&
         classification.key === 'criminal'
@@ -123,7 +123,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   isCustom(): boolean {
     if (this.violationClassifications === undefined) return false;
     let isCustom = false;
-    this.violationClassifications.forEach((classification) => {
+    this.violationClassifications.forEach(classification => {
       if (
         classification.id === this.classificationId?.value &&
         classification.key === 'custom'
@@ -139,7 +139,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     return isClearingAgent;
   }
   onViolationClassificationChange() {
-    this.classificationId?.valueChanges.subscribe((value) => {
+    this.classificationId?.valueChanges.subscribe(value => {
       if (!this.isCriminal()) {
         this.criminalType?.setValue(null);
         this.criminalType?.clearValidators();
@@ -159,15 +159,15 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       }
 
       const offenderOfClassification = this.violationClassifications.find(
-        (vc) => vc.id == value,
+        vc => vc.id == value,
       )?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
         this.filteredOffenderTypes = this.offenderTypes.filter(
-          (offenderType) => offenderType.lookupKey === OffenderTypes.EMPLOYEE,
+          offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE,
         );
       } else if (offenderOfClassification === OffenderTypes.ClEARING_AGENT) {
         this.filteredOffenderTypes = this.offenderTypes.filter(
-          (offenderType) =>
+          offenderType =>
             offenderType.lookupKey === OffenderTypes.ClEARING_AGENT,
         );
       } else {
@@ -202,27 +202,27 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       this.filteredManagerDecisions = this.managerDecisions;
 
       const violationLevel = this.violationLevels.find(
-        (violationLevel) =>
+        violationLevel =>
           violationLevel.lookupKey === this.violationLevel?.value,
       )?.lookupKey;
 
       if (violationLevel === ViolationLevels.SIMPLE) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          (managerDecision) =>
+          managerDecision =>
             managerDecision.lookupKey ===
               ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY ||
             managerDecision.lookupKey === ManagerDecisions.GUIDANCE,
         );
       } else if (violationLevel === ViolationLevels.SERIOUS) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          (managerDecision) =>
+          managerDecision =>
             managerDecision.lookupKey ===
               ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL ||
             managerDecision.lookupKey === ManagerDecisions.GUIDANCE,
         );
       } else if (violationLevel === ViolationLevels.VERY_SERIOUS) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          (managerDecision) =>
+          managerDecision =>
             managerDecision.lookupKey ===
             ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL,
         );

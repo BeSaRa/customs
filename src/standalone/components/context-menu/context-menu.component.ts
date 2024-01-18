@@ -89,7 +89,7 @@ export class ContextMenuComponent {
 
   private buildHierarchy(): void {
     this.children = {} as Record<string, ContextMenuActionContract<never>[]>;
-    this._actions.forEach((item) => {
+    this._actions.forEach(item => {
       if (!item.parent) {
         this.parents.push(item);
       } else {
@@ -104,7 +104,7 @@ export class ContextMenuComponent {
         this.children[item.parent].push(item);
       }
     });
-    this.parents.forEach((item) => {
+    this.parents.forEach(item => {
       item.children = this.getChildrenItems(item);
     });
     this.filteredActions = this.parents.slice();
@@ -115,7 +115,7 @@ export class ContextMenuComponent {
   ): ContextMenuActionContract<never>[] {
     const children: ContextMenuActionContract<never>[] =
       this.children[item.name];
-    (children ?? []).forEach((item) => {
+    (children ?? []).forEach(item => {
       item.children = this.getChildrenItems(item);
     });
     return children;

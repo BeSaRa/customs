@@ -47,7 +47,7 @@ export class SituationSearchComponent
           return this.situationSearchService
             .loadSituation(this.id, this.type, this.isCompany)
             .pipe(
-              catchError((error) => {
+              catchError(error => {
                 return throwError(error);
               }),
               ignoreErrors(),

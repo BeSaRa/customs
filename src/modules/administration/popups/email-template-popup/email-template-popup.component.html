@@ -5,48 +5,40 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <mat-tab-group
       [(selectedIndex)]="activeTab"
       mat-stretch-tabs="false"
       mat-align-tabs="start"
-      [dynamicHeight]="!inViewMode()"
-    >
+      [dynamicHeight]="!inViewMode()">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4">
             <app-input
               formControlName="arName"
-              [label]="lang.map.ar_name"
-            ></app-input>
+              [label]="lang.map.ar_name"></app-input>
             <app-input
               formControlName="enName"
-              [label]="lang.map.en_name"
-            ></app-input>
+              [label]="lang.map.en_name"></app-input>
             <app-input
               formControlName="arSubjectTemplate"
-              [label]="lang.map.ar_subject_template"
-            ></app-input>
+              [label]="lang.map.ar_subject_template"></app-input>
             <app-input
               formControlName="enSubjectTemplate"
-              [label]="lang.map.en_subject_template"
-            ></app-input>
+              [label]="lang.map.en_subject_template"></app-input>
             <div class="flex flex-row pl-1 items-center justify-start">
               <app-switch
                 [trueValue]="1"
                 [falseValue]="0"
                 formControlName="status"
-                [label]="lang.map.status"
-              ></app-switch>
+                [label]="lang.map.status"></app-switch>
             </div>
             <div class="flex flex-row pl-1 items-center justify-start">
               <app-switch
                 formControlName="isGlobal"
-                [label]="lang.map.is_global"
-              ></app-switch>
+                [label]="lang.map.is_global"></app-switch>
             </div>
           </div>
         </ng-container>
@@ -57,15 +49,17 @@
             <app-html-editor
               [id]="'arBodyEditor'"
               formControlName="arBodyTemplate"
-              [placeHolder]="lang.map.mail_template_placeholder"
-            ></app-html-editor>
+              [placeHolder]="
+                lang.map.mail_template_placeholder
+              "></app-html-editor>
           }
           @if (inViewMode()) {
             <div class="!w-fit">
               <div
                 class="prose"
-                [innerHTML]="form.get('arBodyTemplate')?.value | txtToHtml"
-              ></div>
+                [innerHTML]="
+                  form.get('arBodyTemplate')?.value | txtToHtml
+                "></div>
             </div>
           }
         </ng-container>
@@ -76,15 +70,17 @@
             <app-html-editor
               [id]="'enBodyEditor'"
               formControlName="enBodyTemplate"
-              [placeHolder]="lang.map.mail_template_placeholder"
-            ></app-html-editor>
+              [placeHolder]="
+                lang.map.mail_template_placeholder
+              "></app-html-editor>
           }
           @if (inViewMode()) {
             <div>
               <div
                 class="prose"
-                [innerHTML]="form.get('enBodyTemplate')?.value | txtToHtml"
-              ></div>
+                [innerHTML]="
+                  form.get('enBodyTemplate')?.value | txtToHtml
+                "></div>
             </div>
           }
         </ng-container>

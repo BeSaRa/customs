@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div [formGroup]="form" class="dialog-content w-[700px]">
     <div class="grid gap-4 grid-cols-2">
@@ -15,91 +14,77 @@
         bindLabel="getNames"
         formControlName="violationClassificationId"
         bindValue="id"
-        [options]="classifications"
-      />
+        [options]="classifications" />
       <app-select-input
         [label]="lang.map.violation_type"
         bindLabel="getNames"
         bindValue="id"
         formControlName="violationTypeId"
-        [options]="types"
-      />
+        [options]="types" />
       <app-textarea
         formControlName="description"
         [label]="lang.map.description"
-        class="col-span-2"
-      />
+        class="col-span-2" />
       @if (!isAbsenceType) {
         <app-input
           formControlName="violationsDate"
-          [label]="lang.map.violation_date"
-        >
+          [label]="lang.map.violation_date">
           <input
             appControl
             formControlName="violationsDate"
             [max]="todayDate"
             (click)="datepicker.open()"
-            [matDatepicker]="datepicker"
-          />
+            [matDatepicker]="datepicker" />
           <mat-datepicker touchUi #datepicker />
         </app-input>
       }
       @if (isAbsenceType) {
         <app-input
           formControlName="violationsDateFrom"
-          [label]="lang.map.date_from"
-        >
+          [label]="lang.map.date_from">
           <input
             appControl
             formControlName="violationsDateFrom"
             (click)="violationDateFrom.open()"
             [max]="controls.violationsDateTo()?.value || todayDate"
-            [matDatepicker]="violationDateFrom"
-          />
+            [matDatepicker]="violationDateFrom" />
           <mat-datepicker touchUi #violationDateFrom />
         </app-input>
         <app-input
           formControlName="violationsDateTo"
-          [label]="lang.map.date_to"
-        >
+          [label]="lang.map.date_to">
           <input
             appControl
             [min]="controls.violationsDateFrom()?.value"
             [max]="todayDate"
             formControlName="violationsDateTo"
             (click)="violationsDateTo.open()"
-            [matDatepicker]="violationsDateTo"
-          />
+            [matDatepicker]="violationsDateTo" />
           <mat-datepicker touchUi #violationsDateTo />
         </app-input>
       }
       @if (isCriminal) {
         <app-input
           [label]="lang.map.report_number"
-          formControlName="reportNumber"
-        />
+          formControlName="reportNumber" />
         <app-select-input
           formControlName="reportYear"
           [label]="lang.map.report_year"
-          [options]="years"
-        />
+          [options]="years" />
         <app-select-input
           formControlName="securityAdminDecision"
           [label]="lang.map.security_management"
           bindLabel="getNames"
           bindValue="lookupKey"
-          [options]="securityManagement"
-        />
+          [options]="securityManagement" />
       }
       @if (isCustoms) {
         <app-input
           [label]="lang.map.customs_declaration_number"
-          formControlName="customsDeclarationNumber"
-        />
+          formControlName="customsDeclarationNumber" />
         <app-input
           [label]="lang.map.control_report_number"
-          formControlName="controlReportNumber"
-        />
+          formControlName="controlReportNumber" />
       }
     </div>
   </div>

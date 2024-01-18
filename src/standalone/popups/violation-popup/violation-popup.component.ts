@@ -74,7 +74,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   years: string[] = range(
     new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
     new Date().getFullYear(),
-  ).map((i) => i.toString());
+  ).map(i => i.toString());
 
   classificationsMap: Record<number, ViolationClassification> = {} as Record<
     number,
@@ -197,14 +197,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       .classification()
       ?.valueChanges.pipe(
         tap(() => this.checkClassification()),
-        switchMap((value) =>
+        switchMap(value =>
           this.violationTypeService.load(undefined, {
             classificationId: value,
           }),
         ),
       )
-      .pipe(map((pagination) => pagination.rs))
-      .subscribe((value) => {
+      .pipe(map(pagination => pagination.rs))
+      .subscribe(value => {
         this.controls.violationType()?.setValue(null);
         this.types = value;
         this.prepareTypeMap();
@@ -262,7 +262,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
 
   private loadClassifications(): void {
-    this.violationClassificationService.loadAsLookups().subscribe((list) => {
+    this.violationClassificationService.loadAsLookups().subscribe(list => {
       this.classifications = list;
       this.prepareClassificationMap();
     });

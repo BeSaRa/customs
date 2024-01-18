@@ -1,19 +1,16 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2"
->
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_user_team }}
   </h1>
   <app-icon-button
     [matTooltip]="lang.map.reload"
     (click)="reload$.next()"
-    icon="RELOAD"
-  ></app-icon-button>
+    icon="RELOAD"></app-icon-button>
   <app-icon-button
     [matTooltip]="lang.map.add"
     (click)="create$.next()"
-    icon="PLUS"
-  ></app-icon-button>
+    icon="PLUS"></app-icon-button>
 </div>
 <div class="shadow relative overflow-y-auto h-80">
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
@@ -33,8 +30,7 @@
             [disabled]="(loading$ | async)!"
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"
-            icon="DELETE"
-          ></app-icon-button>
+            icon="DELETE"></app-icon-button>
         </div>
       </td>
     </ng-container>
@@ -43,8 +39,7 @@
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"
-      *matRowDef="let element; columns: columnsWrapper.displayedColumns"
-    ></tr>
+      *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
@@ -56,8 +51,7 @@
     [pageSizeOptions]="pageSizeOptions"
     [pageSize]="limit"
     [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length"
-  >
+    [length]="length">
   </mat-paginator>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>

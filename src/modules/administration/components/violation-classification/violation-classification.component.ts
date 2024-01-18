@@ -29,7 +29,7 @@ export class ViolationClassificationComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -38,7 +38,7 @@ export class ViolationClassificationComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -47,7 +47,7 @@ export class ViolationClassificationComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },
@@ -56,7 +56,7 @@ export class ViolationClassificationComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },
@@ -75,7 +75,7 @@ export class ViolationClassificationComponent extends AdminComponent<
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED,
+        item => item.lookupKey !== StatusTypes.DELETED,
       ),
       'lookupKey',
       'getNames',

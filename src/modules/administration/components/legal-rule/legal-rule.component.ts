@@ -28,7 +28,7 @@ export class LegalRuleComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -37,7 +37,7 @@ export class LegalRuleComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +46,7 @@ export class LegalRuleComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },
@@ -59,14 +59,13 @@ export class LegalRuleComponent extends AdminComponent<
     {
       name: 'law-start-date',
       type: 'info',
-      label: (item) => `${this.lang.map.law_start_date} : ${item.lawStartDate}`,
+      label: item => `${this.lang.map.law_start_date} : ${item.lawStartDate}`,
       parent: 'more-details',
     },
     {
       name: 'article-number',
       type: 'info',
-      label: (item) =>
-        `${this.lang.map.article_number} : ${item.articleNumber}`,
+      label: item => `${this.lang.map.article_number} : ${item.articleNumber}`,
       parent: 'more-details',
     },
   ];
@@ -81,7 +80,7 @@ export class LegalRuleComponent extends AdminComponent<
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED,
+        item => item.lookupKey !== StatusTypes.DELETED,
       ),
       'lookupKey',
       'getNames',

@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content max-w-[900px]">
     @if (isPreviewForm) {
@@ -75,8 +74,7 @@
             <app-textarea
               formControlName="comment"
               label="الوصف والتعليقات الأخرى"
-              placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"
-            ></app-textarea>
+              placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"></app-textarea>
           </form>
           <p class="mb-4">{{ lowerFixedText }}</p>
           <div
@@ -84,8 +82,7 @@
             [ngClass]="{
               'justify-between': justifyBetween,
               'justify-end': justifyEnd
-            }"
-          >
+            }">
             @if (justifyBetween) {
               <div>
                 <ul class="list-none mt-5">
@@ -123,15 +120,13 @@
               [label]="lang.map.send_to_user_x"
               bindValue="id"
               bindLabel="getNames"
-              [options]="usersList"
-            />
+              [options]="usersList" />
           </div>
         }
         <div class="col-12 mb-3">
           <app-textarea
             formControlName="comment"
-            label="comment"
-          ></app-textarea>
+            label="comment"></app-textarea>
         </div>
       </form>
     }

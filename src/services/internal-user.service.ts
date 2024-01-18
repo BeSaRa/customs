@@ -56,7 +56,7 @@ export class InternalUserService extends BaseCrudWithDialogService<
         params: new HttpParams({ fromObject: { internalUserId: id } }),
         responseType: 'blob',
       })
-      .pipe(map((blob) => new BlobModel(blob, domSanitizer)));
+      .pipe(map(blob => new BlobModel(blob, domSanitizer)));
   }
 
   uploadSignature(userSignature: UserSignature): Observable<unknown> {

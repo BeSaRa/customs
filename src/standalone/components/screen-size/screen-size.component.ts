@@ -104,15 +104,15 @@ export class ScreenSizeComponent implements OnInit, MediaQueriesContract {
     this.resize$
       .pipe(debounceTime(200))
       .pipe(startWith(window.innerWidth))
-      .pipe(map((value) => this.checkCorrespondentSize(value)))
+      .pipe(map(value => this.checkCorrespondentSize(value)))
       .pipe(filter((size): size is SizeContract => !!size))
-      .subscribe((val) => {
+      .subscribe(val => {
         this[val.name].next({ width: window.innerWidth, name: val.name });
       });
   }
 
   private checkCorrespondentSize(val: number): SizeContract | undefined {
-    return this.sizes.find((item) => item.callback(val, item));
+    return this.sizes.find(item => item.callback(val, item));
   }
 
   private checkSize(

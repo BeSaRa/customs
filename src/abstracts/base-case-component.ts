@@ -75,7 +75,7 @@ export abstract class BaseCaseComponent<
     saveType: SaveTypes,
   ): Observable<{ model: Model; saveType: SaveTypes }> {
     return model[this.saveMap[saveType]]().pipe(
-      map((model) => ({
+      map(model => ({
         model,
         saveType,
       })),
@@ -85,12 +85,12 @@ export abstract class BaseCaseComponent<
   private _listenToSave(): void {
     this.save$
       .pipe(
-        switchMap((saveType) => {
+        switchMap(saveType => {
           const beforeSave = this._beforeSave(saveType);
           return isObservable(beforeSave) ? beforeSave : of(beforeSave);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const model = this._prepareModel();
@@ -102,7 +102,7 @@ export abstract class BaseCaseComponent<
         exhaustMap(([model, saveType]) => {
           return this._saveModel(model, saveType)
             .pipe(
-              catchError((error) => {
+              catchError(error => {
                 this._saveFail(error);
                 return error;
               }),
@@ -126,14 +126,14 @@ export abstract class BaseCaseComponent<
   private _listenToLaunch() {
     this.launch$
       .pipe(
-        switchMap((_) => {
+        switchMap(_ => {
           const result = this._beforeLaunch();
           return isObservable(result) ? result : of(result);
         }),
-        exhaustMap((_) => {
+        exhaustMap(_ => {
           const model = this.model as unknown as BaseCase<never, never>;
           return model.start().pipe(
-            catchError((error) => {
+            catchError(error => {
               this._launchFail(error);
               return of(false);
             }),
@@ -158,8 +158,8 @@ export abstract class BaseCaseComponent<
         .pipe(takeUntil(this.destroy$))
         .pipe(take(1))
         .pipe(startWith(false))
-        .pipe(tap((value) => !value && this.launch$.next(null)))
-        .pipe(filter((value) => value));
+        .pipe(tap(value => !value && this.launch$.next(null)))
+        .pipe(filter(value => value));
     })();
   }
 

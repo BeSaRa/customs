@@ -76,7 +76,7 @@ export class GuidePanelComponent
       type: 'action',
       label: 'more_details',
       icon: AppIcons.INFORMATION,
-      callback: (item) => {
+      callback: item => {
         this.viewRecord(item);
       },
     },
@@ -116,7 +116,7 @@ export class GuidePanelComponent
   }
 
   protected getViolationTypes() {
-    this.violationTypeService.loadAsLookups().subscribe((data) => {
+    this.violationTypeService.loadAsLookups().subscribe(data => {
       this.violationTypes = data;
     });
   }
@@ -126,11 +126,11 @@ export class GuidePanelComponent
   }
 
   onOffenderTypeChange() {
-    this.offenderTypeField?.valueChanges.subscribe((value) => {
+    this.offenderTypeField?.valueChanges.subscribe(value => {
       if (value === OffenderTypes.EMPLOYEE) {
         this.offenderLevelField?.setValidators(CustomValidators.required);
         this.filteredPenaltySigners = this.penaltySigners.filter(
-          (penaltySigner) =>
+          penaltySigner =>
             penaltySigner.lookupKey !==
             PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
         );
@@ -138,7 +138,7 @@ export class GuidePanelComponent
         this.offenderLevelField?.setValue(null);
         this.offenderLevelField?.setValidators(null);
         this.filteredPenaltySigners = this.penaltySigners.filter(
-          (penaltySigner) =>
+          penaltySigner =>
             penaltySigner.lookupKey ===
             PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
         );
@@ -156,13 +156,13 @@ export class GuidePanelComponent
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         exhaustMap(() => {
           return this.guidePanelService
             .loadSearchResult(this.formValidValues())
             .pipe(
-              catchError((error) => {
+              catchError(error => {
                 return throwError(error);
               }),
               ignoreErrors(),

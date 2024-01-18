@@ -24,7 +24,7 @@ export class ClearingAgencyComponent extends AdminComponent<
 > {
   service = inject(ClearingAgencyService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<ClearingAgency>[] = [
     {
@@ -32,7 +32,7 @@ export class ClearingAgencyComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -41,7 +41,7 @@ export class ClearingAgencyComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },
@@ -54,7 +54,7 @@ export class ClearingAgencyComponent extends AdminComponent<
     {
       name: 'email',
       type: 'info',
-      label: (item) => `${this.lang.map.email} : ${item.email}`,
+      label: item => `${this.lang.map.email} : ${item.email}`,
       parent: 'more-details',
     },
   ];

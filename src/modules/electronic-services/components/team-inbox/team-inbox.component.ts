@@ -114,7 +114,7 @@ export class TeamInboxComponent
   }
 
   listenToSelectedTeamIdChange() {
-    this.selectedTeamId.valueChanges.subscribe((value) => {
+    this.selectedTeamId.valueChanges.subscribe(value => {
       this.listenToReload(value!);
     });
   }

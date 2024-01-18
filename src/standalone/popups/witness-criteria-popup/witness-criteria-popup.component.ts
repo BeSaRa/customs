@@ -154,7 +154,7 @@ export class WitnessCriteriaPopupComponent
   }
 
   private listenToWitnessTypeChange() {
-    this.witnessTypeControl.valueChanges.subscribe((value) => {
+    this.witnessTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
       this.isClearingAgent = value === WitnessTypes.ClEARING_AGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
@@ -165,7 +165,7 @@ export class WitnessCriteriaPopupComponent
     this.mawaredDepartmentsService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((list) => {
+      .subscribe(list => {
         this.administrations = list;
       });
   }
@@ -181,12 +181,10 @@ export class WitnessCriteriaPopupComponent
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap((value) =>
-          this.mawaredEmployeeService.load(undefined, value),
-        ),
+        switchMap(value => this.mawaredEmployeeService.load(undefined, value)),
       )
-      .pipe(map((pagination) => pagination.rs))
-      .subscribe((result) => {
+      .pipe(map(pagination => pagination.rs))
+      .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }
@@ -196,10 +194,10 @@ export class WitnessCriteriaPopupComponent
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap((value) => this.clearingAgentService.load(undefined, value)),
+        switchMap(value => this.clearingAgentService.load(undefined, value)),
       )
-      .pipe(map((pagination) => pagination.rs))
-      .subscribe((result) => {
+      .pipe(map(pagination => pagination.rs))
+      .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         }
@@ -220,11 +218,11 @@ export class WitnessCriteriaPopupComponent
         ),
       )
       .pipe(
-        switchMap((witness) => {
+        switchMap(witness => {
           return witness
             .save()
             .pipe(
-              map((model) => {
+              map(model => {
                 return {
                   ...model,
                   ...witness,
@@ -236,7 +234,7 @@ export class WitnessCriteriaPopupComponent
             .pipe(map(() => witness));
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
@@ -246,7 +244,7 @@ export class WitnessCriteriaPopupComponent
   private listenToAddEmployee() {
     this.addEmployee$
       .pipe(
-        map((model) =>
+        map(model =>
           model.convertToWitness(
             this.data.caseId,
             this.personTypeControl.value,
@@ -254,11 +252,11 @@ export class WitnessCriteriaPopupComponent
         ),
       )
       .pipe(
-        switchMap((witness) => {
+        switchMap(witness => {
           return witness
             .save()
             .pipe(
-              map((model) => {
+              map(model => {
                 return {
                   ...model,
                   ...witness,
@@ -270,7 +268,7 @@ export class WitnessCriteriaPopupComponent
             .pipe(map(() => witness));
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
@@ -280,7 +278,7 @@ export class WitnessCriteriaPopupComponent
   private listenToAddClearingAgent() {
     this.addClearingAgent$
       .pipe(
-        map((model) =>
+        map(model =>
           model.convertToWitness(
             this.data.caseId,
             this.personTypeControl.value,
@@ -288,11 +286,11 @@ export class WitnessCriteriaPopupComponent
         ),
       )
       .pipe(
-        switchMap((witness) => {
+        switchMap(witness => {
           return witness
             .save()
             .pipe(
-              map((model) => {
+              map(model => {
                 return {
                   ...model,
                   ...witness,
@@ -304,7 +302,7 @@ export class WitnessCriteriaPopupComponent
             .pipe(map(() => witness));
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );

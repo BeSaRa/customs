@@ -5,15 +5,13 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
-      dynamicHeight
-    >
+      dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <div class="grid grid-cols-2 gap-4" [formGroup]="form">
           <app-input formControlName="arName" [label]="lang.map.ar_name" />
@@ -21,28 +19,24 @@
           <app-textarea
             class="col-span-2"
             formControlName="description"
-            [label]="lang.map.description"
-          />
+            [label]="lang.map.description" />
           <app-switch
             formControlName="status"
             [trueValue]="1"
             [falseValue]="0"
-            [label]="lang.map.status"
-          />
+            [label]="lang.map.status" />
         </div>
       </mat-tab>
       <mat-tab [label]="lang.map.lbl_permissions">
         <div class="grid grid-cols-1 gap-4" style="height: 60vh">
           @for (group of groups; track group) {
             <div
-              class="border-b flex items-center justify-between bg-slate-300"
-            >
+              class="border-b flex items-center justify-between bg-slate-300">
               <mat-checkbox
                 [disabled]="!group.list.length || inViewMode()"
                 (change)="group.toggleSelection()"
                 [checked]="group.isFull()"
-                [indeterminate]="group.isIndeterminate()"
-              >
+                [indeterminate]="group.isIndeterminate()">
                 <div class="flex space-x-4 rtl:space-x-reverse">
                   <span class="inline-block">{{ group.getNames() }}</span>
                   <span class="inline-block">
@@ -64,8 +58,7 @@
                 class="mx-3"
                 [noMargin]="true"
                 size="sm"
-                [placeholder]="lang.map.filter"
-              >
+                [placeholder]="lang.map.filter">
                 <mat-icon
                   (keydown.enter)="filter.control.setValue('')"
                   (keydown.space)="filter.control.setValue('')"
@@ -79,8 +72,7 @@
                     filter.control.value
                       ? AppIcons.FILTER_REMOVE
                       : AppIcons.FILTER_OUTLINE
-                  "
-                ></mat-icon>
+                  "></mat-icon>
               </app-input>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-auto">
@@ -92,14 +84,12 @@
                 <mat-checkbox
                   [disabled]="inViewMode()"
                   [checked]="group.isSelected(permission.id)"
-                  (change)="group.toggle(permission.id)"
-                >
+                  (change)="group.toggle(permission.id)">
                   <span
                     [innerHTML]="
                       permission.getNames()
                         | highlight: filter.control.value || ''
-                    "
-                  ></span>
+                    "></span>
                 </mat-checkbox>
               }
             </div>

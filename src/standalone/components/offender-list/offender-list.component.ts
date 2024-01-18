@@ -157,7 +157,7 @@ export class OffenderListComponent
           this.offenderService
             .load(undefined, { caseId: this.caseId })
             .pipe(
-              map((pagination) => {
+              map(pagination => {
                 this.data.next(pagination.rs);
                 return pagination;
               }),
@@ -165,7 +165,7 @@ export class OffenderListComponent
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe((pagination) => this.offenders.next(pagination.rs || []));
+      .subscribe(pagination => this.offenders.next(pagination.rs || []));
   }
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
@@ -174,7 +174,7 @@ export class OffenderListComponent
   private listenToDelete() {
     this.delete$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
@@ -182,12 +182,12 @@ export class OffenderListComponent
               }),
             )
             .afterClosed()
-            .pipe(map((userClick) => ({ userClick, model }))),
+            .pipe(map(userClick => ({ userClick, model }))),
         ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(switchMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );
@@ -205,7 +205,7 @@ export class OffenderListComponent
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {

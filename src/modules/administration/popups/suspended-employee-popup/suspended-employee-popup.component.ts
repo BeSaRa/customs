@@ -80,7 +80,7 @@ export class SuspendedEmployeePopupComponent
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -88,9 +88,9 @@ export class SuspendedEmployeePopupComponent
         }),
       )
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           return this.suspendedEmployeeService.saveExtendSuspension(model).pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               return throwError(error);
             }),

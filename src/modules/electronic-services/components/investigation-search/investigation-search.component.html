@@ -1,6 +1,5 @@
 <div
-  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2"
->
+  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
     {{ lang.map.menu_investigation_search }}
   </h1>
@@ -10,18 +9,15 @@
     <mat-tab-group
       [(selectedIndex)]="selectedTab"
       mat-stretch-tabs="false"
-      dynamicHeight
-    >
+      dynamicHeight>
       <mat-tab [label]="lang.map.search_for_investigation">
         <ng-container
-          [ngTemplateOutlet]="search_for_investigation"
-        ></ng-container>
+          [ngTemplateOutlet]="search_for_investigation"></ng-container>
       </mat-tab>
       <mat-tab
         [label]="
           lang.map.search_result + ' (' + this.lang.map.menu_investigation + ')'
-        "
-      >
+        ">
         <ng-container [ngTemplateOutlet]="search_result"></ng-container>
       </mat-tab>
     </mat-tab-group>
@@ -32,22 +28,18 @@
         <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           <app-input
             formControlName="draftFullSerial"
-            [label]="lang.map.report_draft_number"
-          />
+            [label]="lang.map.report_draft_number" />
           <app-input
             formControlName="investigationFullSerial"
-            [label]="lang.map.investigation_file_number"
-          />
+            [label]="lang.map.investigation_file_number" />
           <app-input
             formControlName="createdOn"
-            [label]="lang.map.report_entry_date"
-          >
+            [label]="lang.map.report_entry_date">
             <input
               appControl
               formControlName="createdOn"
               (click)="datepicker.open()"
-              [matDatepicker]="datepicker"
-            />
+              [matDatepicker]="datepicker" />
             <mat-datepicker touchUi #datepicker />
           </app-input>
           <app-select-input
@@ -55,13 +47,11 @@
             [label]="lang.map.limited_access"
             bindValue="lookupKey"
             bindLabel="getNames"
-            [options]="violationDegreeConfidentiality"
-          />
+            [options]="violationDegreeConfidentiality" />
           <app-textarea
             formControlName="description"
             class="col-span-1 md:col-span-2 lg:col-span-4"
-            [label]="lang.map.general_explanation_of_violations"
-          />
+            [label]="lang.map.general_explanation_of_violations" />
         </div>
       </ng-container>
       <div class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
@@ -81,8 +71,7 @@
           mat-table
           matSort
           class="table-style"
-          [dataSource]="displayedList"
-        >
+          [dataSource]="displayedList">
           <!-- draft full serial -->
           <ng-container matColumnDef="draftFullSerial">
             <th mat-header-cell *matHeaderCellDef>
@@ -134,20 +123,20 @@
                 <app-icon-button
                   [matTooltip]="lang.map.view"
                   (click)="view(element)"
-                  icon="VIEW"
-                ></app-icon-button>
+                  icon="VIEW"></app-icon-button>
               </div>
             </td>
           </ng-container>
           <tr
             mat-header-row
-            *matHeaderRowDef="columnsWrapper.displayedColumns"
-          ></tr>
+            *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
           <tr
             mat-row
             (contextmenu)="contextMenu.open($event, element)"
-            *matRowDef="let element; columns: columnsWrapper.displayedColumns"
-          ></tr>
+            *matRowDef="
+              let element;
+              columns: columnsWrapper.displayedColumns
+            "></tr>
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="p-4" colspan="100">

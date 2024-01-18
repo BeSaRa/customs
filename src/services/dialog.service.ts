@@ -132,7 +132,7 @@ export class DialogService implements DialogContract {
   }
 
   private listenToLanguageChanges() {
-    this.lang.change$.subscribe((current) => {
+    this.lang.change$.subscribe(current => {
       const overlayWrapper = document.querySelectorAll<HTMLDivElement>(
         '.cdk-global-overlay-wrapper',
       );

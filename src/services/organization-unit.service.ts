@@ -67,7 +67,7 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<
         { departmentId: id },
         { responseType: 'blob' },
       )
-      .pipe(map((blob) => new BlobModel(blob, domSanitizer)));
+      .pipe(map(blob => new BlobModel(blob, domSanitizer)));
   }
 
   uploadOuLogo(ouLogo: OuLogo): Observable<unknown> {

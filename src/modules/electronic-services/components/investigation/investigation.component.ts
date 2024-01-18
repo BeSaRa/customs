@@ -202,7 +202,7 @@ export class InvestigationComponent extends BaseCaseComponent<
         map(({ rs }) => {
           return rs.reduce((prev: Offender[], curr: OffenderViolation) => {
             const offender = prev.find(
-              (offender) => offender.id == curr.offenderId,
+              offender => offender.id == curr.offenderId,
             );
             if (offender) {
               offender.violations.push(curr);
@@ -219,7 +219,7 @@ export class InvestigationComponent extends BaseCaseComponent<
           }, []);
         }),
       )
-      .subscribe((data) => {
+      .subscribe(data => {
         this.offendersMappedWIthViolations = data;
       });
   }
@@ -227,14 +227,14 @@ export class InvestigationComponent extends BaseCaseComponent<
   saveCase(e: Subject<TransformerAction<Investigation>>) {
     of(new Investigation().clone<Investigation>(this.form.value))
       .pipe(
-        tap((_) => {
+        tap(_ => {
           this.form.invalid &&
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
             );
         }),
         filter(() => this.form.valid),
-        switchMap((model) => {
+        switchMap(model => {
           return model.save();
         }),
       )
@@ -283,8 +283,8 @@ export class InvestigationComponent extends BaseCaseComponent<
       this.model
         .getService()
         .loadCaseFolders(this.model.id)
-        .pipe(map((folders) => (this.caseFolders = folders)))
-        .subscribe((folders) => {
+        .pipe(map(folders => (this.caseFolders = folders)))
+        .subscribe(folders => {
           this.caseFoldersMap = folders.reduce(
             (acc, item) => {
               return { ...acc, [item.name.toLowerCase()]: item };
@@ -341,9 +341,9 @@ export class InvestigationComponent extends BaseCaseComponent<
     this.activeRoute.queryParams
       .pipe(takeUntil(this.destroy$))
       .pipe(take(1))
-      .pipe(filter((value) => !!value['tab']))
-      .pipe(map((val) => this.tabsArray.indexOf(val['tab'] as string)))
-      .subscribe((index) => {
+      .pipe(filter(value => !!value['tab']))
+      .pipe(map(val => this.tabsArray.indexOf(val['tab'] as string)))
+      .subscribe(index => {
         this.selectedTab = index === -1 ? 1 : index;
       });
   }

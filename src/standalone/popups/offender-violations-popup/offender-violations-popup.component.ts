@@ -116,12 +116,12 @@ export class OffenderViolationsPopupComponent
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe((pagination) => {
+      .subscribe(pagination => {
         this.offenderViolations.next(pagination.rs);
         this.violations = this.violations.filter(
-          (v) =>
+          v =>
             !this.dataSource.data.find(
-              (offenderViolation) => offenderViolation.violationId == v.id,
+              offenderViolation => offenderViolation.violationId == v.id,
             ),
           // TODO: add filter by violation offender type
         );
@@ -166,18 +166,18 @@ export class OffenderViolationsPopupComponent
         filter(() => this.dataSource.data.length !== 1),
       )
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_link_with_x_confirm.change({
                 x: this.violations
-                  .find((v) => v.id == model.violationId)
+                  .find(v => v.id == model.violationId)
                   ?.getOffenderViolationSelectNames(),
               }),
             )
             .afterClosed()
             .pipe(
-              map((userClick) => ({
+              map(userClick => ({
                 model,
                 userClick,
               })),
@@ -186,11 +186,11 @@ export class OffenderViolationsPopupComponent
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({
             x: this.violations
-              .find((v) => v.id == model.violationId)
+              .find(v => v.id == model.violationId)
               ?.getOffenderViolationSelectNames(),
           }),
         );

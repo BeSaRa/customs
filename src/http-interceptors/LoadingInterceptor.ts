@@ -27,7 +27,7 @@ export class LoadingInterceptor implements HttpInterceptor {
     LoadingInterceptor.requests.set(req.urlWithParams, req.clone());
     return next.handle(req).pipe(
       finalize(
-        ((req) => {
+        (req => {
           return () => {
             if (LoadingInterceptor.requests.has(req.urlWithParams)) {
               LoadingInterceptor.requests.delete(req.urlWithParams);

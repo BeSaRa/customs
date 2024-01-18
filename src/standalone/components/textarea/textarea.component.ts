@@ -104,7 +104,7 @@ export class TextareaComponent
   // noinspection JSUnusedLocalSymbols
   private values = this.control.valueChanges
     .pipe(takeUntil(this.destroy$))
-    .subscribe((value) => this.onChange && this.onChange(value));
+    .subscribe(value => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {

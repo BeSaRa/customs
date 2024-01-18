@@ -51,7 +51,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
     if (criteria) {
-      Object.keys(criteria as unknown as object).forEach((key) => {
+      Object.keys(criteria as unknown as object).forEach(key => {
         if (
           criteria &&
           (criteria[key as keyof Partial<M>] === null ||
@@ -109,7 +109,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
     if (criteria) {
-      Object.keys(criteria as unknown as object).forEach((key) => {
+      Object.keys(criteria as unknown as object).forEach(key => {
         if (
           criteria &&
           (criteria[key as keyof Partial<M>] === null ||

@@ -42,8 +42,7 @@
   ) {
     <app-button
       buttonType="secondary"
-      (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)"
-    >
+      (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)">
       {{ lang.map.apply_and_return_remining }}
     </app-button>
   }
@@ -51,8 +50,7 @@
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_TO_PAE)) {
     <app-button
       buttonType="secondary"
-      (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)"
-    >
+      (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)">
       {{
         lang.map
           .final_issuing_referral_decision_to_study_in_the_president_assistant_office
@@ -63,8 +61,7 @@
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)) {
     <app-button
       buttonType="secondary"
-      (click)="responseAction$.next(taskResponses.TO_PO)"
-    >
+      (click)="responseAction$.next(taskResponses.TO_PO)">
       {{ lang.map.transfer_report_to_staff_president_office }}
     </app-button>
   }
@@ -81,8 +78,7 @@
     <app-button
       buttonType="secondary"
       mat-button
-      [matMenuTriggerFor]="returnMenu"
-    >
+      [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -91,40 +87,35 @@
     @if (model?.hasResponse(taskResponses.RETURN_APP_MANAGER)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)"
-      >
+        (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
         {{ lang.map.return_to_manager }}
       </button>
     }
     @if (model?.hasResponse(taskResponses.RETURN_TO_HR)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_HR)"
-      >
+        (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
         {{ lang.map.return_to_hr_department }}
       </button>
     }
     @if (model?.hasResponse(taskResponses.TO_USER)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.TO_USER)"
-      >
+        (click)="responseAction$.next(taskResponses.TO_USER)">
         {{ lang.map.return }}
       </button>
     }
     @if (model?.hasResponse(taskResponses.RETURN_TO_SAME)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)"
-      >
+        (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
         {{ lang.map.return_to_same }}
       </button>
     }
     @if (model?.hasResponse(taskResponses.RETURN_TO_APP)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_APP)"
-      >
+        (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
         {{ lang.map.return_to_applicant_department }}
       </button>
     }
@@ -139,8 +130,7 @@
     <app-button
       buttonType="secondary"
       mat-button
-      [matMenuTriggerFor]="referralMenu"
-    >
+      [matMenuTriggerFor]="referralMenu">
       {{ lang.map.referral_request }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -149,8 +139,7 @@
     @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)"
-      >
+        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
         {{ lang.map.referral_request_to_presodent }}
       </button>
     }
@@ -159,8 +148,7 @@
         mat-menu-item
         (click)="
           responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)
-        "
-      >
+        ">
         {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
     }
@@ -178,8 +166,7 @@
     <app-button
       buttonType="secondary"
       mat-button
-      [matMenuTriggerFor]="sendToMenu"
-    >
+      [matMenuTriggerFor]="sendToMenu">
       {{ lang.map.send_to }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -191,8 +178,7 @@
         mat-menu-item
         (click)="
           responseAction$.next(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)
-        "
-      >
+        ">
         {{ lang.map.launch_legal_affairs }}
       </button>
     }
@@ -202,8 +188,7 @@
         mat-menu-item
         (click)="
           responseAction$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
-        "
-      >
+        ">
         {{ lang.map.launch_disciplinary_council }}
       </button>
     }
@@ -219,8 +204,7 @@
           responseAction$.next(
             taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
           )
-        "
-      >
+        ">
         {{ lang.map.launch_permanent_disciplinary_council }}
       </button>
     }
@@ -236,8 +220,7 @@
     <app-button
       buttonType="secondary"
       mat-button
-      [matMenuTriggerFor]="issuingMenu"
-    >
+      [matMenuTriggerFor]="issuingMenu">
       {{ lang.map.issuing_referral_decision }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -247,8 +230,7 @@
     @if (model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)"
-      >
+        (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)">
         {{ lang.map.to_legal_affairs_manager }}
       </button>
     }
@@ -256,8 +238,7 @@
     @if (model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.LAUNCH_LEAGL_AFFAIRS)"
-      >
+        (click)="responseAction$.next(taskResponses.LAUNCH_LEAGL_AFFAIRS)">
         {{ lang.map.to_legal_affairs_manager }}
       </button>
     }
@@ -265,8 +246,7 @@
     @if (model?.hasResponse(taskResponses.TO_PAE)) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.TO_PAE)"
-      >
+        (click)="responseAction$.next(taskResponses.TO_PAE)">
         {{ lang.map.to_study_in_the_president_assistant_office }}
       </button>
     }
@@ -312,8 +292,7 @@
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)) {
     <app-button
       buttonType="error"
-      (click)="responseAction$.next(taskResponses.CLOSE)"
-    >
+      (click)="responseAction$.next(taskResponses.CLOSE)">
       {{ lang.map.close }}
     </app-button>
   }
@@ -322,8 +301,7 @@
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)) {
     <app-button
       buttonType="error"
-      (click)="responseAction$.next(taskResponses.TERMINATE)"
-    >
+      (click)="responseAction$.next(taskResponses.TERMINATE)">
       {{ lang.map.terminate }}
     </app-button>
   }

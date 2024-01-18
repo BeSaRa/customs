@@ -67,7 +67,7 @@ export class FilterColumnComponent
   private listenToControl() {
     if (!this.column || !this.column.filter) return;
 
-    this.control.valueChanges.pipe(debounceTime(250)).subscribe((value) => {
+    this.control.valueChanges.pipe(debounceTime(250)).subscribe(value => {
       this.column &&
         this.filterChange.emit({
           key: this.column.config.bindKey,

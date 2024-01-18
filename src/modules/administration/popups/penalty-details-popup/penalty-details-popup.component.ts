@@ -56,16 +56,16 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
     | Observable<PenaltyDetails> {
     this.model.penaltySignerInfo = new AdminResult().clone<AdminResult>(
       this.penaltySigners.find(
-        (ps) => ps.lookupKey === this.penaltySigner?.value,
+        ps => ps.lookupKey === this.penaltySigner?.value,
       ),
     );
     this.model.offenderLevelInfo = new AdminResult().clone<AdminResult>(
       this.offenderLevels.find(
-        (ol) => ol.lookupKey === this.offenderLevel?.value,
+        ol => ol.lookupKey === this.offenderLevel?.value,
       ),
     );
     this.model.legalRuleInfo = new AdminResult().clone<AdminResult>(
-      this.legalRules.find((lr) => lr.id === this.legalRule?.value),
+      this.legalRules.find(lr => lr.id === this.legalRule?.value),
     );
 
     return new PenaltyDetails().clone<PenaltyDetails>({
@@ -81,7 +81,7 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
   }
 
   protected getLegalRules() {
-    this.legalRuleService.loadAsLookups().subscribe((data) => {
+    this.legalRuleService.loadAsLookups().subscribe(data => {
       this.legalRules = data;
     });
   }
@@ -95,14 +95,14 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
           return isObservable(result) ? result : of(result);
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this._afterSave(model);
       });
   }

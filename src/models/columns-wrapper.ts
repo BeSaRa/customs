@@ -14,7 +14,7 @@ export class ColumnsWrapper<M> {
   private filter$!: BehaviorSubject<Partial<M>>;
   constructor(...args: FilterColumnContract[]) {
     this.list = args;
-    this.list.forEach((colum) => {
+    this.list.forEach(colum => {
       this.displayedColumns.push(colum.name);
       this.filteredColumns.push(colum.filterName);
       this.columnsMap[colum.filterName] = {} as ColumnMapContract<M>;

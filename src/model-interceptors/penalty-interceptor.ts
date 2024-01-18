@@ -22,7 +22,7 @@ export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
       model.penGuidanceInfo,
     );
     model.detailsList = model.detailsList
-      ? model.detailsList.map((detail) => {
+      ? model.detailsList.map(detail => {
           detail.penaltySignerInfo = new AdminResult().clone<AdminResult>(
             detail.penaltySignerInfo,
           );

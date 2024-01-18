@@ -35,7 +35,7 @@ export class MenuItemService {
   }
 
   filterStaticMenu(): void {
-    this.filteredStaticMenu = this.staticMenus.filter((item) => {
+    this.filteredStaticMenu = this.staticMenus.filter(item => {
       return (
         !item.permission ||
         (item.permission &&
@@ -46,7 +46,7 @@ export class MenuItemService {
 
   buildHierarchy() {
     this.clearMenu();
-    this.filteredStaticMenu.forEach((item) => {
+    this.filteredStaticMenu.forEach(item => {
       if (!item.parent) {
         this.parents.push(item);
         return;
@@ -59,7 +59,7 @@ export class MenuItemService {
       this.children[item.parent].push(item);
     });
 
-    this.parents.forEach((item) => {
+    this.parents.forEach(item => {
       item.children = this.getItemChildren(item);
       const arabic: string[] = [];
       const english: string[] = [];
@@ -76,7 +76,7 @@ export class MenuItemService {
   }
 
   private getItemChildren(item: MenuItemContract) {
-    return (this.children[item.id] ?? []).map((item) => {
+    return (this.children[item.id] ?? []).map(item => {
       item.children = this.getItemChildren(item);
       return item;
     });
@@ -96,7 +96,7 @@ export class MenuItemService {
     englishChildren.push(enName);
     item.arabicSearchText = arabicSearchText + '󰜈' + arName;
     item.englishSearchText = englishSearchText + '󰜈' + enName;
-    (item.children ?? []).forEach((child) => {
+    (item.children ?? []).forEach(child => {
       this.getSearchText(
         child,
         item.arabicSearchText || '',
@@ -116,13 +116,13 @@ export class MenuItemService {
       ? item.arabicSearchText
       : item.englishSearchText;
 
-    item.children?.forEach((item) => {
+    item.children?.forEach(item => {
       this.translateMenu(item);
     });
   }
 
   private translateMenuItems(): void {
-    this.parents.forEach((item) => {
+    this.parents.forEach(item => {
       this.translateMenu(item);
     });
   }
@@ -137,7 +137,7 @@ export class MenuItemService {
     langKey: keyof LangKeysContract,
   ): MenuItemContract | undefined {
     return this.getChildren(MenuIdes.ELECTRONIC_SERVICES).find(
-      (item) => item.langKey === langKey,
+      item => item.langKey === langKey,
     );
   }
 }

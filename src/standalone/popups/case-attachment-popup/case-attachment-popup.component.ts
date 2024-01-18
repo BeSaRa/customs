@@ -107,7 +107,7 @@ export class CaseAttachmentPopupComponent
 
     if (!$event.dataTransfer) return;
     if (!$event.dataTransfer.files) return;
-    Array.from($event.dataTransfer.files).forEach((item) => {
+    Array.from($event.dataTransfer.files).forEach(item => {
       if (!this.validFile(item)) {
         return;
       }
@@ -139,7 +139,7 @@ export class CaseAttachmentPopupComponent
             );
           } else if (this.data.type == 'offender') {
             return combineLatest(
-              this.attachments.map((attachment) => {
+              this.attachments.map(attachment => {
                 return this.data.service.addOffenderAttachment(
                   this.data.entityId,
                   attachment,
@@ -148,7 +148,7 @@ export class CaseAttachmentPopupComponent
             );
           } else {
             return combineLatest(
-              this.attachments.map((attachment) => {
+              this.attachments.map(attachment => {
                 return this.data.service.addCaseAttachment(
                   this.data.caseId,
                   attachment,
@@ -172,7 +172,7 @@ export class CaseAttachmentPopupComponent
     this.attachmentTypeService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((list) => {
+      .subscribe(list => {
         this.attachmentTypes = list;
       });
   }
@@ -180,7 +180,7 @@ export class CaseAttachmentPopupComponent
   private listenToDelete() {
     this.delete$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
@@ -189,7 +189,7 @@ export class CaseAttachmentPopupComponent
             )
             .afterClosed()
             .pipe(
-              map((userClick) => {
+              map(userClick => {
                 return {
                   userClick,
                   model,
@@ -198,7 +198,7 @@ export class CaseAttachmentPopupComponent
             ),
         ),
       )
-      .pipe(filter((result) => result.userClick === UserClick.YES))
+      .pipe(filter(result => result.userClick === UserClick.YES))
       .pipe(
         map(({ model }) => {
           return {
@@ -220,7 +220,7 @@ export class CaseAttachmentPopupComponent
   private listenToView() {
     this.view$
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.dialog
             .open(ViewAttachmentPopupComponent, {
               data: {
@@ -251,19 +251,19 @@ export class CaseAttachmentPopupComponent
           attachmentTypeId: [item.attachmentTypeId, CustomValidators.required],
         }),
       );
-      ((i) => {
+      (i => {
         (
           list.controls.at(index) as UntypedFormGroup
         ).controls.attachmentTypeId.valueChanges
           .pipe(takeUntil(this.destroy$))
-          .subscribe((value) => {
+          .subscribe(value => {
             this.attachments[i].attachmentTypeId = value;
           });
         (
           list.controls.at(index) as UntypedFormGroup
         ).controls.documentTitle.valueChanges
           .pipe(takeUntil(this.destroy$))
-          .subscribe((value) => {
+          .subscribe(value => {
             this.attachments[i].documentTitle = value;
           });
       })(index);

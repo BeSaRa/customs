@@ -29,7 +29,7 @@ export class SuspendedEmployeeComponent
 {
   service = inject(SuspendedEmployeeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
   suspensionTypes: Lookup[] = this.lookupService.lookups.suspensionTypes;
   extendSuspension$: Subject<SuspendedEmployee> =
@@ -40,7 +40,7 @@ export class SuspendedEmployeeComponent
       type: 'action',
       label: 'extend_suspension',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.extendSuspension$.next(item);
       },
     },
@@ -54,7 +54,7 @@ export class SuspendedEmployeeComponent
     this.extendSuspension$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.service
             .openExtendSuspensionDialog(model, this._getEditExtras() as object)
             .afterClosed()

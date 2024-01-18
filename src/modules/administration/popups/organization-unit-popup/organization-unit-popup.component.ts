@@ -72,7 +72,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       .uploadOuLogo(this.ouLogo)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null),
+        filter(response => response !== null),
       )
       .subscribe();
     // you can close the dialog after save here
@@ -80,13 +80,13 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   protected getInternalUsers() {
-    this.internalUserService.loadAsLookups().subscribe((data) => {
+    this.internalUserService.loadAsLookups().subscribe(data => {
       this.internalUsers = data;
     });
   }
 
   protected getOrganizationUnits() {
-    this.organizationUnitService.loadAsLookups().subscribe((data) => {
+    this.organizationUnitService.loadAsLookups().subscribe(data => {
       this.organizationUnits = data;
     });
   }
@@ -94,13 +94,13 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   protected loadAssistantOus() {
     this.organizationUnitService
       .loadOUsByType()
-      .subscribe((ous) => (this.assistantOus = ous));
+      .subscribe(ous => (this.assistantOus = ous));
   }
 
   protected loadManagerAssistants(ouId: number) {
     this.internalUserService
       .getInternalUsersByOuId(ouId)
-      .subscribe((internalUsers) => (this.managerAssistants = internalUsers));
+      .subscribe(internalUsers => (this.managerAssistants = internalUsers));
   }
 
   filesDropped($event: DragEvent) {
@@ -110,7 +110,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     if (!$event.dataTransfer.files[0]) return;
     this.ouLogo = new OuLogo(this.data.model.id, $event.dataTransfer.files[0]);
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       const blob = new Blob([e.target!.result!]);
       const url = window.URL.createObjectURL(blob);
       this.ouLogoSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
@@ -130,7 +130,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     if (this.inCreateMode()) return;
     this.organizationUnitService
       .downloadOuLogo(this.model.id, this.sanitizer)
-      .subscribe((blob) => {
+      .subscribe(blob => {
         if (blob.blob.size !== 0) this.ouLogoSafeUrl = blob.safeUrl;
       });
   }

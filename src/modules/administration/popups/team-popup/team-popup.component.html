@@ -5,32 +5,26 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4 items-center">
         <app-input
           formControlName="arName"
-          [label]="lang.map.ar_name"
-        ></app-input>
+          [label]="lang.map.ar_name"></app-input>
         <app-input
           formControlName="enName"
-          [label]="lang.map.en_name"
-        ></app-input
+          [label]="lang.map.en_name"></app-input
         ><app-input
           formControlName="ldapGroupName"
-          [label]="lang.map.ldap_group_name"
-        ></app-input>
+          [label]="lang.map.ldap_group_name"></app-input>
         <app-input
           formControlName="teamEmail"
-          [label]="lang.map.team_email"
-        ></app-input>
+          [label]="lang.map.team_email"></app-input>
         <app-switch
           formControlName="autoClaim"
-          [label]="lang.map.auto_claim"
-        ></app-switch>
+          [label]="lang.map.auto_claim"></app-switch>
       </div>
     </ng-container>
   </div>

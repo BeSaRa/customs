@@ -24,7 +24,7 @@ export class ClearingAgentComponent extends AdminComponent<
 > {
   service = inject(ClearingAgentService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<ClearingAgent>[] = [
     {
@@ -32,7 +32,7 @@ export class ClearingAgentComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },

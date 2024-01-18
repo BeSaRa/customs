@@ -64,7 +64,7 @@ export class ServiceItemResolver {
         ),
       )
       .pipe(
-        map((model) => {
+        map(model => {
           return { model, ...this.data.info } as unknown as OpenedInfoContract;
         }),
       );

@@ -1,13 +1,24 @@
 {
   "overrides": [
     {
+      "files": ["*.ts"],
+      "options": {
+        "singleQuote": true,
+        "useTabs": false,
+        "printWidth": 80,
+        "semi": true,
+        "bracketSpacing": true,
+        "bracketSameLine": true,
+        "arrowParens": "avoid"
+      }
+    },
+    {
       "files": ["*.html"],
       "options": {
         "parser": "angular",
-        "singleQuote": true,
-        "bracketSameLine": false,
-        "useTabs": false,
-        "bracketSpacing": true
+        "bracketSpacing": true,
+        "bracketSameLine": true,
+        "singleQuote": true
       }
     }
   ]

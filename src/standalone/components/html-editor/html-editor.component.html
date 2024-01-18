@@ -5,8 +5,7 @@
   (click)="switchTouch()"
   [id]="editorId"
   [formControl]="control"
-  [config]="config"
->
+  [config]="config">
   <ng-template #customButtons let-executeCommandFn="executeCommandFn">
     <ae-toolbar-set>
       @if (isTableWithTitle) {
@@ -14,8 +13,7 @@
           type="color"
           class="editor-input"
           [formControl]="headerBgColor"
-          title="header background color"
-        />
+          title="header background color" />
       }
 
       <ae-button
@@ -23,8 +21,7 @@
           'fa fa-' + (isTableWithTitle ? 'check-square-o' : 'square-o')
         "
         title="table header"
-        (buttonClick)="isTableHeader()"
-      >
+        (buttonClick)="isTableHeader()">
       </ae-button>
       <input
         class="editor-input select-font-size"
@@ -32,29 +29,25 @@
         max="99"
         type="number"
         [formControl]="tabelCols"
-        title="table number of columns"
-      />
+        title="table number of columns" />
       <input
         class="editor-input select-font-size"
         min="1"
         max="99"
         type="number"
         [formControl]="tabelRows"
-        title="table number of rows"
-      />
+        title="table number of rows" />
       <ae-button
         #ctBtn
         iconClass="fa fa-table"
         title="add table"
         [id]="'createTable_' + editorId"
-        (buttonClick)="executeCommandFn('insertHtml', createTable())"
-      >
+        (buttonClick)="executeCommandFn('insertHtml', createTable())">
       </ae-button>
     </ae-toolbar-set> </ng-template
 ></angular-editor>
 @if (displayErrors) {
   <app-validation-errors
     class="block relative"
-    [errors]="errors | async"
-  ></app-validation-errors>
+    [errors]="errors | async"></app-validation-errors>
 }

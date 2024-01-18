@@ -44,7 +44,7 @@ export function ignoreErrors<T>(debug = false): MonoTypeOperatorFunction<T> {
   return (source: Observable<T>) => {
     return source
       .pipe(
-        catchError((error) => {
+        catchError(error => {
           debug && console.log(error);
           return of('CUSTOM_ERROR' as T);
         }),
@@ -161,7 +161,7 @@ export function isEmptyObject(objectToCheck: object): boolean {
  * Object to check for property values
  */
 export function objectHasValue(objectToCheck: object): boolean {
-  return Object.values(objectToCheck).some((value) => isValidValue(value));
+  return Object.values(objectToCheck).some(value => isValidValue(value));
 }
 
 /**

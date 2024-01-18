@@ -42,7 +42,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
     this.penaltyDetailsList = this.penaltyDetails ?? [];
-    this.tempList = this.penaltyDetailsList.map((detail) =>
+    this.tempList = this.penaltyDetailsList.map(detail =>
       new PenaltyDetails().clone<PenaltyDetails>(detail),
     );
     this.listenToStatusChange();
@@ -91,7 +91,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   protected listenToStatusChange() {
-    this.status?.valueChanges.subscribe((value) => {
+    this.status?.valueChanges.subscribe(value => {
       this.statusTooltipText = value
         ? this.lang.map.active
         : this.lang.map.in_active;
@@ -99,7 +99,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToIsCash() {
-    this.form.get('isCash')?.valueChanges.subscribe((value) => {
+    this.form.get('isCash')?.valueChanges.subscribe(value => {
       if (value) {
         this.cashAmount?.addValidators([
           CustomValidators.required,
@@ -120,7 +120,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToIsDeduction() {
-    this.form.get('isDeduction')?.valueChanges.subscribe((value) => {
+    this.form.get('isDeduction')?.valueChanges.subscribe(value => {
       if (value) {
         this.deductionDays?.addValidators([
           CustomValidators.required,
@@ -141,7 +141,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToOffenderTypeChange() {
-    this.form.get('offenderType')?.valueChanges.subscribe((value) => {
+    this.form.get('offenderType')?.valueChanges.subscribe(value => {
       this.deductionDays?.setValue(null);
       this.cashAmount?.setValue(null);
       this.isDeduction?.setValue(false);

@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
@@ -14,14 +13,12 @@
         @if (!isInternal()) {
           <app-input
             [label]="lang.map.en_name"
-            formControlName="enName"
-          ></app-input>
+            formControlName="enName"></app-input>
         }
         @if (!isInternal()) {
           <app-input
             [label]="lang.map.ar_name"
-            formControlName="arName"
-          ></app-input>
+            formControlName="arName"></app-input>
         }
         @if (!isInternal()) {
           <app-select-input
@@ -29,8 +26,7 @@
             formControlName="summonedType"
             [options]="personTypes"
             bindLabel="getNames"
-            bindValue="lookupKey"
-          />
+            bindValue="lookupKey" />
         }
         @if (isInternal()) {
           <app-select-input
@@ -38,23 +34,20 @@
             formControlName="summonedType"
             [options]="offenderTypes"
             bindLabel="getNames"
-            bindValue="lookupKey"
-          />
+            bindValue="lookupKey" />
         }
         <app-select-input
           [label]="lang.map.user_type"
           formControlName="type"
           [options]="userTypes"
           bindLabel="getNames"
-          bindValue="lookupKey"
-        />
+          bindValue="lookupKey" />
       </div>
       <div class="grid grid-cols-1 gap-4 items-center">
         <app-textarea
           app-input
           formControlName="note"
-          [label]="lang.map.note"
-        ></app-textarea>
+          [label]="lang.map.note"></app-textarea>
       </div>
     </ng-container>
   </div>

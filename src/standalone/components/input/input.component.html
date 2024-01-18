@@ -1,7 +1,6 @@
 <label
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
-  class="group block relative {{ !noMargin ? marginBottom : '' }}"
->
+  class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium"
     >{{ label }}
     @if (isRequired) {
@@ -12,13 +11,11 @@
     [ngClass]="size"
     class="group/input-wrapper input-form {{
       inputColor
-    }} flex items-center justify-start"
-  >
+    }} flex items-center justify-start">
     <ng-content select="[appInputPrefix]"></ng-content>
     <span
       [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
-      class="peer absolute hidden pointer-events-none"
-    ></span>
+      class="peer absolute hidden pointer-events-none"></span>
     @if (!hasCustomControl) {
       <input
         [readonly]="disabled"
@@ -28,8 +25,7 @@
         (blur)="inputTouch()"
         [name]="name"
         [placeholder]="placeholder"
-        [formControl]="control"
-      />
+        [formControl]="control" />
     }
     @if (hasCustomControl) {
       <ng-content select="[appControl]"></ng-content>

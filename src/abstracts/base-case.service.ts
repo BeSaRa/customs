@@ -227,13 +227,13 @@ export abstract class BaseCaseService<M>
     caseId: string,
   ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
     return this._getCasePenalty(caseId).pipe(
-      map((rs) => {
+      map(rs => {
         const obj: { [key: string]: { first: unknown; second: Penalty[] } } =
           {};
         Object.keys(rs).map((key: string) => {
           obj[key] = {
             ...rs[key],
-            second: rs[key].second.map((o) =>
+            second: rs[key].second.map(o =>
               new Penalty().clone<Penalty>({ ...o }),
             ),
           };
@@ -314,7 +314,7 @@ export abstract class BaseCaseService<M>
     attachments: CaseAttachment[],
   ): Observable<unknown> {
     const formData = new FormData();
-    attachments.forEach((attachment) => {
+    attachments.forEach(attachment => {
       attachment.content
         ? formData.append('content', attachment.content)
         : null;
@@ -366,7 +366,7 @@ export abstract class BaseCaseService<M>
       .get(this.getUrlSegment() + '/document/' + attachmentId + '/download', {
         responseType: 'blob',
       })
-      .pipe(map((blob) => new BlobModel(blob, this.domSanitizer)));
+      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
   }
 
   viewAttachment(
@@ -374,7 +374,7 @@ export abstract class BaseCaseService<M>
     title = 'Document',
   ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return this.downloadAttachment(attachmentId).pipe(
-      map((blob) => {
+      map(blob => {
         return this.dialog.open(ViewAttachmentPopupComponent, {
           disableClose: true,
           data: {

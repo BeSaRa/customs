@@ -5,48 +5,40 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4 items-center">
         <app-input
           formControlName="arName"
-          [label]="lang.map.ar_name"
-        ></app-input>
+          [label]="lang.map.ar_name"></app-input>
         <app-input
           formControlName="enName"
-          [label]="lang.map.en_name"
-        ></app-input>
+          [label]="lang.map.en_name"></app-input>
       </div>
       <div class="grid grid-cols-1 gap-4 items-center">
         <app-textarea
           [disabled]="true"
           formControlName="arDesc"
-          [label]="lang.map.ar_desc"
-        ></app-textarea>
+          [label]="lang.map.ar_desc"></app-textarea>
         <app-textarea
           [disabled]="true"
           formControlName="enDesc"
-          [label]="lang.map.en_desc"
-        ></app-textarea>
+          [label]="lang.map.en_desc"></app-textarea>
       </div>
       <div class="grid grid-cols-2 gap-4 items-center">
         <app-input
           [disabled]="true"
           formControlName="stepName"
-          [label]="lang.map.step_name"
-        ></app-input>
+          [label]="lang.map.step_name"></app-input>
         <app-input
           [disabled]="true"
           formControlName="activityName"
-          [label]="lang.map.activity_name"
-        ></app-input>
+          [label]="lang.map.activity_name"></app-input>
         <app-input
           formControlName="stepSLA"
-          [label]="lang.map.step_sla"
-        ></app-input>
+          [label]="lang.map.step_sla"></app-input>
       </div>
     </ng-container>
   </div>

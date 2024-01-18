@@ -24,7 +24,7 @@ export class InternalUserComponent extends AdminComponent<
 > {
   service = inject(InternalUserService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
 
   actions: ContextMenuActionContract<InternalUser>[] = [
@@ -33,7 +33,7 @@ export class InternalUserComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -42,7 +42,7 @@ export class InternalUserComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -51,7 +51,7 @@ export class InternalUserComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },
@@ -64,20 +64,20 @@ export class InternalUserComponent extends AdminComponent<
     {
       name: 'email',
       type: 'info',
-      label: (item) => `${this.lang.map.email} : ${item.email}`,
+      label: item => `${this.lang.map.email} : ${item.email}`,
       parent: 'more-details',
     },
     {
       name: 'job-title-info',
       type: 'info',
-      label: (item) =>
+      label: item =>
         `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
       parent: 'more-details',
     },
     {
       name: 'phone-number',
       type: 'info',
-      label: (item) => `${this.lang.map.phone_number} : ${item.phoneNumber}`,
+      label: item => `${this.lang.map.phone_number} : ${item.phoneNumber}`,
       parent: 'more-details',
     },
   ];

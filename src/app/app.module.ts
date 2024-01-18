@@ -150,7 +150,7 @@ export class AppModule {
         .pipe(tap(() => url.setConfigService(config)))
         .pipe(tap(() => url.prepareUrls()))
         .pipe(switchMap(() => info.load()))
-        .pipe(tap((info) => lookup.setLookups(info.lookupMap)))
+        .pipe(tap(info => lookup.setLookups(info.lookupMap)))
         .pipe(switchMap(() => auth.validateToken()));
   }
 }

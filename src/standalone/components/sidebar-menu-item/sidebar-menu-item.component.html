@@ -2,16 +2,14 @@
 <div
   [attr.aria-expanded]="menuStatus === 'opened'"
   [ngClass]="menuStatus"
-  [style.--level]="level"
->
+  [style.--level]="level">
   @if (!hasChildren) {
     <a
       [routerLink]="item.path"
       routerLinkActive="active"
       class="flex hover:bg-secondary [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] py-2 px-1 menu-item-link mb-1 level-{{
         level
-      }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2"
-    >
+      }} items-center outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
       <ng-container [ngTemplateOutlet]="itemContent"> </ng-container>
     </a>
   }
@@ -20,8 +18,7 @@
       (click)="toggleMenu()"
       class="flex  hover:bg-secondary w-full has-children  [&.active:not(.has-children)]:bg-secondary rtl:rounded-tl-[20px] rtl:rounded-bl-[20px] ltr:rounded-tr-[20px] ltr:rounded-br-[20px] py-2 px-1 menu-item-link mb-1 level-{{
         level
-      }} items-center text-start outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2"
-    >
+      }} items-center text-start outline-none justify-start space-x-2 relative rtl:space-x-reverse focus:ring-inset focus:ring-primary-light focus:ring-2">
       <a [routerLink]="item.path" class="hidden">item</a>
       <ng-container [ngTemplateOutlet]="itemContent"></ng-container>
     </button>
@@ -32,17 +29,14 @@
     }
     <div
       [@shrink]="shrinkMode"
-      class="flex-auto flex items-center justify-start"
-    >
+      class="flex-auto flex items-center justify-start">
       <span
         [innerHTML]="item.translate! | highlight: searchText"
-        class="flex-auto item-label"
-      ></span>
+        class="flex-auto item-label"></span>
       @if (hasChildren) {
         <mat-icon
           class="flex-none size-18 transition-transform children-indicator"
-          svgIcon="menu-right"
-        ></mat-icon>
+          svgIcon="menu-right"></mat-icon>
       }
     </div>
   </ng-template>
@@ -53,8 +47,7 @@
       [attr.aria-expanded]="menuStatus === 'opened'"
       [ngClass]="menuStatus"
       tabindex="-1"
-      class="children-wrapper [&.closed]:hidden"
-    >
+      class="children-wrapper [&.closed]:hidden">
       @for (
         childItem of item.children | filterSidebarMenuItem: searchText;
         track trackByLangKey($index, childItem)
@@ -64,8 +57,7 @@
           [item]="childItem"
           [searchText]="searchText"
           [level]="level + 1"
-          [shrinkMode]="shrinkMode"
-        ></app-sidebar-menu-item>
+          [shrinkMode]="shrinkMode"></app-sidebar-menu-item>
       }
     </div>
   }

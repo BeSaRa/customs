@@ -42,16 +42,16 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
     this.teamsService
       .loadAsLookups()
       .pipe(
-        map((teams) =>
+        map(teams =>
           teams.filter(
-            (team) =>
+            team =>
               !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
                 team.id,
               ),
           ),
         ),
       )
-      .subscribe((filteredTeams) => {
+      .subscribe(filteredTeams => {
         this.teams = filteredTeams;
       });
   }
@@ -91,7 +91,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   }
 
   private saveUserTeams(userTeam: UserTeam): Observable<unknown[]> {
-    const requests$ = userTeam.selectedTeams.map((teamId) =>
+    const requests$ = userTeam.selectedTeams.map(teamId =>
       this.saveUserTeam({
         internalUserId: userTeam.internalUserId,
         teamId: teamId,
@@ -110,7 +110,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -118,9 +118,9 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
         }),
       )
       .pipe(
-        exhaustMap((userTeam) => {
+        exhaustMap(userTeam => {
           return this.saveUserTeams(userTeam).pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               return throwError(error);
             }),

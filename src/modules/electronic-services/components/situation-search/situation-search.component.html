@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <div class="p-4 overflow-auto" style="height: 100%">
@@ -15,8 +14,7 @@
           mat-table
           matSort
           class="table-style table-primary"
-          [dataSource]="displayedList"
-        >
+          [dataSource]="displayedList">
           <!-- violationType -->
           <ng-container matColumnDef="violationType">
             <th mat-header-cell *matHeaderCellDef>
@@ -74,20 +72,20 @@
               <div class="flex">
                 <app-icon-button
                   [matTooltip]="lang.map.more_details"
-                  icon="MORE_DETAILS"
-                ></app-icon-button>
+                  icon="MORE_DETAILS"></app-icon-button>
               </div>
             </td>
           </ng-container>
           <tr
             mat-header-row
-            *matHeaderRowDef="columnsWrapper.displayedColumns"
-          ></tr>
+            *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
           <tr
             mat-row
             (contextmenu)="contextMenu.open($event, element)"
-            *matRowDef="let element; columns: columnsWrapper.displayedColumns"
-          ></tr>
+            *matRowDef="
+              let element;
+              columns: columnsWrapper.displayedColumns
+            "></tr>
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="p-4" colspan="100">

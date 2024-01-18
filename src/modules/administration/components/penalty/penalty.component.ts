@@ -25,7 +25,7 @@ export class PenaltyComponent extends AdminComponent<
   service = inject(PenaltyService);
 
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 
@@ -35,7 +35,7 @@ export class PenaltyComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -44,7 +44,7 @@ export class PenaltyComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -53,7 +53,7 @@ export class PenaltyComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },
@@ -62,7 +62,7 @@ export class PenaltyComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },

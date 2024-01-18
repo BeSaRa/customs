@@ -59,7 +59,7 @@ export class AssignmentToAttendPopupComponent
     this.form = this.fb.group(new AssignmentToAttend().buildForm());
     this.mawaredEmployeeService
       .loadAsLookups()
-      .subscribe((emp) => (this.mawaredEmployee = emp));
+      .subscribe(emp => (this.mawaredEmployee = emp));
     this.caseId?.setValue(this.data.caseId);
     if (this.isInternal()) {
       this.summonedId?.setValue(this.data?.offender?.id);
@@ -109,7 +109,7 @@ export class AssignmentToAttendPopupComponent
           return this.assignmentToAttendService
             .assignToAttend(this.form.value)
             .pipe(
-              catchError((error) => {
+              catchError(error => {
                 return throwError(error);
               }),
               ignoreErrors(),

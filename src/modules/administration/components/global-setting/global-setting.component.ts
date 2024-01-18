@@ -64,7 +64,7 @@ export class GlobalSettingComponent
       ...this.model.buildForm(true),
     });
     this.supportEmailListParsed.removeAt(0);
-    this.model.supportEmailListParsed.forEach((element) => {
+    this.model.supportEmailListParsed.forEach(element => {
       this.supportEmailListParsed.push(
         new FormControl(element, [
           CustomValidators.required,
@@ -85,7 +85,7 @@ export class GlobalSettingComponent
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -95,9 +95,9 @@ export class GlobalSettingComponent
         }),
       )
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           return model.save().pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               this.loadingSubject.next(false);
 
@@ -107,7 +107,7 @@ export class GlobalSettingComponent
           );
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this._afterSave(model);
       });
   }
@@ -132,9 +132,9 @@ export class GlobalSettingComponent
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors(),
-        tap((data) => {
+        tap(data => {
           this.supportEmailListParsed.removeAt(0);
-          data.supportEmailListParsed.forEach((element) => {
+          data.supportEmailListParsed.forEach(element => {
             this.supportEmailListParsed.push(
               new FormControl({ value: element, disabled: true }, [
                 CustomValidators.required,
@@ -162,7 +162,7 @@ export class GlobalSettingComponent
         finalize(() => this.loadingSubject.next(false)),
         ignoreErrors(),
       )
-      .subscribe((data) => {
+      .subscribe(data => {
         this.fileTypes = data;
         this.loadingSubject.next(false);
       });

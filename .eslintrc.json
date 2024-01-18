@@ -8,9 +8,16 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
       ],
       "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "singleQuote": true
+          }
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
@@ -34,17 +41,27 @@
             "varsIgnorePattern": "^_",
             "caughtErrorsIgnorePattern": "^_"
           }
-        ],
-        "quotes": ["error", "single"]
+        ]
       }
     },
     {
       "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
-        "plugin:@angular-eslint/template/accessibility"
+        "plugin:@angular-eslint/template/accessibility",
+        "plugin:prettier/recommended"
       ],
       "rules": {
+        "prettier/prettier": [
+          "error",
+          {
+            "parser": "angular",
+            "useTabs": false,
+            "bracketSpacing": true,
+            "bracketSameLine": true,
+            "singleQuote": true
+          }
+        ],
         "@angular-eslint/template/label-has-associated-control": ["off"],
         "@angular-eslint/template/click-events-have-key-events": ["off"],
         "@angular-eslint/template/interactive-supports-focus": ["off"],

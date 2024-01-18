@@ -41,16 +41,16 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.organizationUnitService
       .loadAsLookups()
       .pipe(
-        map((data) =>
+        map(data =>
           data.filter(
-            (ou) =>
+            ou =>
               !(this.data.extras?.organizationUnits as number[]).includes(
                 ou.id,
               ),
           ),
         ),
       )
-      .subscribe((filteredData) => {
+      .subscribe(filteredData => {
         this.organizationUnits = filteredData;
       });
   }
@@ -105,7 +105,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -115,7 +115,7 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
       .pipe(
         exhaustMap(() => {
           return this.createBulk().pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               return throwError(error);
             }),

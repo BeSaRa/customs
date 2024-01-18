@@ -7,7 +7,7 @@ export class UserPreferencesInterceptor
 {
   send(model: Partial<UserPreferences>): Partial<UserPreferences> {
     model.alternateEmailList = JSON.stringify(
-      (model.alternateEmailListParsed ?? []).filter((email) => {
+      (model.alternateEmailListParsed ?? []).filter(email => {
         return email.trim() !== '';
       }),
     );

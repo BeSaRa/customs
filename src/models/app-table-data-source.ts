@@ -38,12 +38,12 @@ export class AppTableDataSource<M> extends DataSource<M> {
   private listenToDataChanges(items: Observable<M[]>) {
     items
       .pipe(takeUntil(this._destroy$))
-      .pipe(tap((data) => this._data.next(data)))
+      .pipe(tap(data => this._data.next(data)))
       .subscribe({
         next: () => {
           //
         },
-        error: (e) => {
+        error: e => {
           console.log(e);
         },
         complete: () => {

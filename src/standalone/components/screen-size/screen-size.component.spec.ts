@@ -37,7 +37,7 @@ describe('ScreenSizeComponent', () => {
     function ({ width, expected }, done) {
       // noinspection JSConstantReassignment
       window.innerWidth = width;
-      component[expected as keyof MediaQueriesContract].subscribe((v) => {
+      component[expected as keyof MediaQueriesContract].subscribe(v => {
         expect(width).toBe(v.width);
         expect(expected).toBe(v.name);
         (done as unknown as jest.DoneCallback)();

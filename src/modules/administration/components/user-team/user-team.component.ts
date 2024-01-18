@@ -39,7 +39,7 @@ export class UserTeamComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },
@@ -64,7 +64,7 @@ export class UserTeamComponent extends AdminComponent<
               this.length = count;
               this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map((response) => response.rs),
+            map(response => response.rs),
           );
         }),
       );
@@ -81,7 +81,7 @@ export class UserTeamComponent extends AdminComponent<
     internalUserId: number;
   } {
     return {
-      mappedUserTeamsIds: this.dataSource.data.map((team) => team.teamInfo.id),
+      mappedUserTeamsIds: this.dataSource.data.map(team => team.teamInfo.id),
       internalUserId: this.internalUser.id,
     };
   }

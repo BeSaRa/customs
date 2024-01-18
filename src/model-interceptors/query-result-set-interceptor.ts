@@ -9,7 +9,7 @@ export class QueryResultSetInterceptor
   implements ModelInterceptorContract<QueryResultSet>
 {
   receive(model: QueryResultSet): QueryResultSet {
-    model.items = model.items.map((item) => {
+    model.items = model.items.map(item => {
       return inboxInterceptor.receive(new InboxResult().clone(item));
     });
     return model;

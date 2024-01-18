@@ -1,6 +1,5 @@
 <div
-  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2"
->
+  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
     {{ lang.map.menu_guide_panel }}
   </h1>
@@ -15,16 +14,14 @@
             formControlName="offenderType"
             [options]="offenderTypes"
             bindLabel="getNames"
-            bindValue="lookupKey"
-          />
+            bindValue="lookupKey" />
           @if (isEmployee()) {
             <app-select-input
               [label]="lang.map.offender_level"
               formControlName="offenderLevel"
               [options]="offenderLevels"
               bindLabel="getNames"
-              bindValue="lookupKey"
-            />
+              bindValue="lookupKey" />
           }
           @if (hasFilteredPenaltySigners()) {
             <app-select-input
@@ -32,8 +29,7 @@
               formControlName="penaltySigner"
               [options]="filteredPenaltySigners"
               bindLabel="getNames"
-              bindValue="lookupKey"
-            />
+              bindValue="lookupKey" />
           }
           <app-select-input
             formControlName="violationTypeIdsList"
@@ -43,13 +39,11 @@
             bindLabel="getNames"
             [enableFilter]="true"
             bindFilter="getNames"
-            [isMultiple]="true"
-          />
+            [isMultiple]="true" />
           <app-input
             formControlName="repeat"
             [label]="lang.map.repeat"
-            type="number"
-          ></app-input>
+            type="number"></app-input>
         </div>
         <div class="pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
           <app-button (click)="search$.next()" buttonType="primary">{{
@@ -71,8 +65,7 @@
               mat-table
               matSort
               class="table-style"
-              [dataSource]="displayedList"
-            >
+              [dataSource]="displayedList">
               <!-- violationTypeInfo -->
               <ng-container matColumnDef="violationType">
                 <th mat-header-cell *matHeaderCellDef>
@@ -198,23 +191,20 @@
                     <app-icon-button
                       [matTooltip]="lang.map.more_details"
                       (click)="viewRecord(element)"
-                      icon="MORE_DETAILS"
-                    ></app-icon-button>
+                      icon="MORE_DETAILS"></app-icon-button>
                   </div>
                 </td>
               </ng-container>
               <tr
                 mat-header-row
-                *matHeaderRowDef="columnsWrapper.displayedColumns"
-              ></tr>
+                *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
               <tr
                 mat-row
                 (contextmenu)="contextMenu.open($event, element)"
                 *matRowDef="
                   let element;
                   columns: columnsWrapper.displayedColumns
-                "
-              ></tr>
+                "></tr>
               <!-- Row shown when there is no matching data. -->
               <tr class="mat-row" *matNoDataRow>
                 <td class="p-4" colspan="100">
@@ -224,8 +214,7 @@
             </table>
             <app-context-menu
               #contextMenu
-              [actions]="actions"
-            ></app-context-menu>
+              [actions]="actions"></app-context-menu>
           </div>
         </div>
       }

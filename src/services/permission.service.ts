@@ -59,7 +59,7 @@ export class PermissionService extends BaseCrudService<Permission> {
    */
   generateAppPermission(): Observable<Record<string, string>> {
     return this.loadAsLookups().pipe(
-      map((items) => {
+      map(items => {
         return items.reduce(
           (acc, permission) => {
             return {
@@ -70,9 +70,9 @@ export class PermissionService extends BaseCrudService<Permission> {
           {} as Record<string, string>,
         );
       }),
-      tap((values) => {
+      tap(values => {
         let content = '';
-        Object.keys(values).forEach((item) => {
+        Object.keys(values).forEach(item => {
           content += `\n${item}:'${item}',`;
         });
         console.log(content);

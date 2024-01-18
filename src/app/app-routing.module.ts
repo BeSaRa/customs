@@ -21,7 +21,7 @@ const routes: Routes = [
         path: AppRoutes.ADMINISTRATION,
         loadChildren: () =>
           import('@modules/administration/administration.module').then(
-            (m) => m.AdministrationModule,
+            m => m.AdministrationModule,
           ),
       },
       {
@@ -29,7 +29,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '@modules/electronic-services/electronic-services.module'
-          ).then((m) => m.ElectronicServicesModule),
+          ).then(m => m.ElectronicServicesModule),
       },
     ],
   },

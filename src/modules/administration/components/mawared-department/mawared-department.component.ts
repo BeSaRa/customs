@@ -28,7 +28,7 @@ export class MawaredDepartmentComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -42,7 +42,7 @@ export class MawaredDepartmentComponent extends AdminComponent<
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED,
+        item => item.lookupKey !== StatusTypes.DELETED,
       ),
       'lookupKey',
       'getNames',

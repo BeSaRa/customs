@@ -103,7 +103,7 @@ export class LangService
   }
 
   prepareLanguages(localizations: Localization[]): void {
-    localizations.forEach((local) => {
+    localizations.forEach(local => {
       const key = local.localizationKey as keyof LangKeysContract;
       this.arabic[key] = local.arName;
       this.english[key] = local.enName;

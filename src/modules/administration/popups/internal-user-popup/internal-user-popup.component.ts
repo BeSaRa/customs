@@ -67,7 +67,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     const hasSelected = this.groups.some(
-      (group) => group.getSelectedValue().length,
+      group => group.getSelectedValue().length,
     );
     if (!hasSelected) {
       this.toast.error(
@@ -93,19 +93,19 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    const permissions = this.groups.map((g) => g.getSelectedValue()).flat();
+    const permissions = this.groups.map(g => g.getSelectedValue()).flat();
     this.permissionService
       .savePermissions(model.id, permissions)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null),
+        filter(response => response !== null),
       )
       .subscribe();
     this.internalUserService
       .uploadSignature(this.userSignature)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null),
+        filter(response => response !== null),
       )
       .subscribe();
     // you can close the dialog after save here
@@ -123,7 +123,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     if (this.inCreateMode()) return;
     this.internalUserService
       .downloadSignature(this.model.id, this.sanitizer)
-      .subscribe((blob) => {
+      .subscribe(blob => {
         if (blob.blob.size !== 0) this.signatureSafeUrl = blob.safeUrl;
       });
   }
@@ -149,7 +149,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         );
       }),
       map(({ groups }) => {
-        return groups.map((group) => {
+        return groups.map(group => {
           return new CheckGroup<Permission>(
             group,
             this.permissionsByGroup[group.lookupKey] || [],
@@ -174,9 +174,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   private loadUserPermissions(model: InternalUser) {
-    this.permissionService.loadUserPermissions(model?.id).subscribe((val) => {
+    this.permissionService.loadUserPermissions(model?.id).subscribe(val => {
       const ids: number[] = [];
-      val.forEach((permission) => {
+      val.forEach(permission => {
         ids.push(permission.permissionId);
       });
       this.selectedIds = ids;
@@ -188,25 +188,25 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.permissionRoleService
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((permissionsRoles) => {
+      .subscribe(permissionsRoles => {
         this.permissionsRoles = permissionsRoles;
       });
   }
 
   private listenToPermissionRoleChange() {
-    this.permissionRoleId?.valueChanges.subscribe((val) => {
+    this.permissionRoleId?.valueChanges.subscribe(val => {
       const selectedRoleId = this.permissionsRoles.find(
-        (permission) => permission.id === val,
+        permission => permission.id === val,
       );
       this.selectedIds = selectedRoleId!.permissionSet.map(
-        (permission) => permission.permissionId,
+        permission => permission.permissionId,
       );
       this.loadGroups();
     });
   }
 
   loadGroups() {
-    this.load().subscribe((groups) => {
+    this.load().subscribe(groups => {
       this.groups = groups;
     });
   }
@@ -221,7 +221,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       $event.dataTransfer.files[0],
     );
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       const blob = new Blob([e.target!.result!]);
       const url = window.URL.createObjectURL(blob);
       this.signatureSafeUrl =

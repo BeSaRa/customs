@@ -73,13 +73,13 @@ export class CommentPopupComponent
     this.listenToComment();
     this._loadUsersList();
     this.isPreviewForm = this.previewFormList.includes(this.response);
-    this.model.offenderInfo.forEach((offender) => {
+    this.model.offenderInfo.forEach(offender => {
       const newOffender = {
         name: offender.offenderInfo?.arName ? offender.offenderInfo.arName : '',
         jobTitle: offender.typeInfo.arName ? offender.typeInfo.arName : '',
         violations: [{}],
       };
-      offender.violations.forEach((violation) => {
+      offender.violations.forEach(violation => {
         newOffender.violations.push({ name: violation.violationId });
       });
       this.violations.push(newOffender);
@@ -94,7 +94,7 @@ export class CommentPopupComponent
         .internalUserOUCriteria({
           organizationUnitId: this.employeeService.getOrganizationUnit()?.id,
         })
-        .subscribe((data) => {
+        .subscribe(data => {
           this.usersList = data;
         });
     }

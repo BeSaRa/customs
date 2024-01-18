@@ -18,8 +18,8 @@ export class InfoService {
   load(): Observable<InfoContract> {
     return this.http
       .get<ResponseContract<InfoContract>>(this.urlService.URLS.INFO)
-      .pipe(map((res) => res.rs))
-      .pipe(tap((res) => (this.info = res)))
-      .pipe(tap((res) => this.lang.prepareLanguages(res.localizationSet)));
+      .pipe(map(res => res.rs))
+      .pipe(tap(res => (this.info = res)))
+      .pipe(tap(res => this.lang.prepareLanguages(res.localizationSet)));
   }
 }

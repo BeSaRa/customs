@@ -74,7 +74,7 @@ export class SwitchComponent
     this.control.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        (isChecked) =>
+        isChecked =>
           this.onChange &&
           this.onChange(isChecked ? this.trueValue : this.falseValue),
       );

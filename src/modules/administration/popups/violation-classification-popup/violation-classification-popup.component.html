@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    />
+      icon="CLOSE" />
   </div>
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4 my-auto items-center">
@@ -18,14 +17,12 @@
           [options]="offenderTypes"
           [label]="lang.map.offender_type"
           bindValue="lookupKey"
-          bindLabel="getNames"
-        />
+          bindLabel="getNames" />
         <app-switch
           formControlName="status"
           [trueValue]="1"
           [falseValue]="0"
-          [label]="lang.map.change_status"
-        />
+          [label]="lang.map.change_status" />
       </ng-container>
     </div>
   </div>

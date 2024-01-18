@@ -139,7 +139,7 @@ export class WitnessesListComponent
         ),
       )
       .pipe(takeUntil(this.destroy$))
-      .subscribe((list) => {
+      .subscribe(list => {
         this.data.next(list.rs);
       });
   }
@@ -147,7 +147,7 @@ export class WitnessesListComponent
   private listenToDelete() {
     this.delete$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
@@ -155,12 +155,12 @@ export class WitnessesListComponent
               }),
             )
             .afterClosed()
-            .pipe(map((userClick) => ({ userClick, model }))),
+            .pipe(map(userClick => ({ userClick, model }))),
         ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(switchMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );

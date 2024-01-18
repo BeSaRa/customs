@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
     <div class="p-4 overflow-auto" style="height: 100%">
@@ -16,8 +15,7 @@
             lang.map.qid
           }}</span>
           <div
-            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-          >
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
             {{ offender.offenderInfo?.qid }}
           </div>
         </div>
@@ -26,8 +24,7 @@
             lang.map.ar_name
           }}</span>
           <div
-            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-          >
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
             {{ offender.offenderInfo?.arName }}
           </div>
         </div>
@@ -36,8 +33,7 @@
             lang.map.en_name
           }}</span>
           <div
-            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-          >
+            class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
             {{ offender.offenderInfo?.enName }}
           </div>
         </div>
@@ -47,8 +43,7 @@
               lang.map.offender_type
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.typeInfo.getNames() }}
             </div>
           </div>
@@ -59,8 +54,7 @@
               lang.map.employee_number
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderInfo?.jobTitleCode }}
             </div>
           </div>
@@ -71,8 +65,7 @@
               lang.map.clearing_agent_code
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderInfo?.code }}
             </div>
           </div>
@@ -86,8 +79,7 @@
               lang.map.lbl_department
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderOUInfo.getNames() }}
             </div>
           </div>
@@ -101,8 +93,7 @@
               lang.map.lbl_clearance_company
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderOUInfo.getNames() }}
             </div>
           </div>
@@ -113,8 +104,7 @@
               lang.map.email
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderInfo.email }}
             </div>
           </div>
@@ -125,8 +115,7 @@
               lang.map.phone
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{
                 offender.offenderInfo.phone || offender.offenderInfo.phoneNumber
               }}
@@ -139,8 +128,7 @@
               lang.map.lbl_address
             }}</span>
             <div
-              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start"
-            >
+              class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
               {{ offender.offenderInfo.address || '---' }}
             </div>
           </div>
@@ -154,15 +142,13 @@
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
-            [options]="violations"
-          >
+            [options]="violations">
             <span appInputSuffix>
               <app-icon-button
                 (click)="addViolation$.next()"
                 [matTooltip]="lang.map.add_selected"
                 class="text-primary"
-                icon="PLUS_BOX"
-              ></app-icon-button>
+                icon="PLUS_BOX"></app-icon-button>
             </span>
           </app-select-input>
         }
@@ -171,15 +157,13 @@
         mat-table
         matSort
         class="table-style table-primary"
-        [dataSource]="dataSource"
-      >
+        [dataSource]="dataSource">
         <!-- violationClassification -->
         <ng-container matColumnDef="violationClassification">
           <th
             mat-header-cell
             mat-sort-header="violationClassification"
-            *matHeaderCellDef
-          >
+            *matHeaderCellDef>
             {{ lang.map.violation_classification }}
           </th>
           <td mat-cell *matCellDef="let element">
@@ -243,8 +227,7 @@
                 <div [matTooltip]="lang.map.delete">
                   <app-icon-button
                     (click)="delete$.next(element)"
-                    icon="DELETE"
-                  />
+                    icon="DELETE" />
                 </div>
               }
             </div>

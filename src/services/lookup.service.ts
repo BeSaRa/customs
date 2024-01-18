@@ -19,9 +19,9 @@ export class LookupService
   setLookups(lookups: LookupMapContract) {
     this.statusMap.clear();
     const keys = Object.keys(lookups);
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const realKey = key as keyof LookupMapContract;
-      this.lookups[realKey] = lookups[realKey].map((item) => {
+      this.lookups[realKey] = lookups[realKey].map(item => {
         const lookup = new Lookup().clone(item);
         if (realKey === 'commonStatus') {
           this.statusMap.set(

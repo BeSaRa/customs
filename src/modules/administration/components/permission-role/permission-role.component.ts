@@ -28,7 +28,7 @@ export class PermissionRoleComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -37,7 +37,7 @@ export class PermissionRoleComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -51,7 +51,7 @@ export class PermissionRoleComponent extends AdminComponent<
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
-        (i) => i.lookupKey !== StatusTypes.DELETED,
+        i => i.lookupKey !== StatusTypes.DELETED,
       ),
       'lookupKey',
       'getNames',

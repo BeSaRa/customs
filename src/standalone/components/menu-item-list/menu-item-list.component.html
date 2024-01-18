@@ -3,13 +3,11 @@
     class="w-80"
     label=""
     [formControl]="control"
-    [placeholder]="lang.map.search"
-  ></app-input>
+    [placeholder]="lang.map.search"></app-input>
 </div>
 <div
   [@listAnimation]="items.length"
-  class="flex justify-center gap-5 flex-wrap"
->
+  class="flex justify-center gap-5 flex-wrap">
   @for (
     item of items | filterSidebarMenuItem: control.value : true;
     track item

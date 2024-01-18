@@ -73,7 +73,7 @@ export class AuthService
       )
       .pipe(map(() => true))
       .pipe(
-        catchError((e) => {
+        catchError(e => {
           console.log(e);
           return of(false);
         }),
@@ -90,10 +90,10 @@ export class AuthService
     LoginDataContract,
     LoginDataContract
   > {
-    return (source) => {
+    return source => {
       return source.pipe(
-        map((data) => this.employeeService.setLoginData(data)),
-        tap((data) => this.tokenService.setToken(data.token)),
+        map(data => this.employeeService.setLoginData(data)),
+        tap(data => this.tokenService.setToken(data.token)),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
         tap(() => this.menuItemService.buildHierarchy()),

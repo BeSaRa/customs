@@ -30,9 +30,8 @@ export class PermissionRolePopupComponent extends AdminDialogComponent<Permissio
   selectedIds: number[] = [];
 
   protected override _init() {
-    this.selectedIds =
-      this.model.permissionSet.map((i) => i.permissionId) || [];
-    this.load().subscribe((groups) => {
+    this.selectedIds = this.model.permissionSet.map(i => i.permissionId) || [];
+    this.load().subscribe(groups => {
       this.groups = groups;
     });
   }
@@ -58,7 +57,7 @@ export class PermissionRolePopupComponent extends AdminDialogComponent<Permissio
         );
       }),
       map(({ groups }) => {
-        return groups.map((group) => {
+        return groups.map(group => {
           return new CheckGroup<Permission>(
             group,
             this.permissionsByGroup[group.lookupKey] || [],
@@ -77,7 +76,7 @@ export class PermissionRolePopupComponent extends AdminDialogComponent<Permissio
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     const hasSelected = this.groups.some(
-      (group) => group.getSelectedValue().length,
+      group => group.getSelectedValue().length,
     );
     if (!hasSelected) {
       this.toast.error(
@@ -95,9 +94,9 @@ export class PermissionRolePopupComponent extends AdminDialogComponent<Permissio
       ...this.model,
       ...this.form.value,
       permissionSet: this.groups
-        .map((g) => g.getSelectedValue())
+        .map(g => g.getSelectedValue())
         .flat()
-        .map((i) => ({ permissionId: i })),
+        .map(i => ({ permissionId: i })),
     });
   }
 

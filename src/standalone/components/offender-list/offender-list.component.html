@@ -4,22 +4,19 @@
     <app-icon-button
       (click)="add$.next()"
       class="text-primary"
-      icon="PLUS_BOX"
-    ></app-icon-button>
+      icon="PLUS_BOX"></app-icon-button>
   }
   <app-icon-button
     (click)="reload$.next()"
     class="text-primary"
-    icon="RELOAD"
-  ></app-icon-button>
+    icon="RELOAD"></app-icon-button>
 </div>
 <div>
   <table
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource"
-  >
+    [dataSource]="dataSource">
     <!-- offender name -->
     <ng-container matColumnDef="offenderName">
       <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
@@ -33,8 +30,7 @@
               element.type === offenderTypes.EMPLOYEE
                 ? 'EMPLOYEE'
                 : 'CLEARING_AGENT'
-            "
-          >
+            ">
           </app-icon-button>
           {{ element.getNames() }}
         </span>
@@ -68,8 +64,7 @@
           <div [matTooltip]="lang.map.violations">
             <app-icon-button
               (click)="offenderViolation$.next(element)"
-              icon="VIOLATION_OUTLINE"
-            />
+              icon="VIOLATION_OUTLINE" />
           </div>
           @if (!readonly) {
             <div [matTooltip]="lang.map.delete">
@@ -81,8 +76,7 @@
               (click)="
                 situationSearch$.next({ offender: element, isCompany: false })
               "
-              icon="INFORMATION"
-            ></app-icon-button>
+              icon="INFORMATION"></app-icon-button>
           </div>
           @if (isClearingAgent(element)) {
             <div [matTooltip]="lang.map.situation_search_clearing_agency">
@@ -90,8 +84,7 @@
                 (click)="
                   situationSearch$.next({ offender: element, isCompany: true })
                 "
-                icon="CLEARING_AGENCY"
-              ></app-icon-button>
+                icon="CLEARING_AGENCY"></app-icon-button>
             </div>
           }
         </div>

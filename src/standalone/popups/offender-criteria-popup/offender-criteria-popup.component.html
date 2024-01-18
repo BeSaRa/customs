@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
     <mat-tab-group mat-stretch-tabs="false">
@@ -21,22 +20,19 @@
       <div class="p-4">
         <div
           [formGroup]="clearingAgentFormGroup"
-          class="grid grid-cols-1 gap-4"
-        >
+          class="grid grid-cols-1 gap-4">
           <app-select-input
             [formControl]="offenderViolationControl"
             [label]="lang.map.violations"
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
-            [options]="violations"
-          >
+            [options]="violations">
             <span appInputSuffix>
               <app-icon-button
                 (click)="addViolation$.next()"
                 class="text-primary"
-                icon="PLUS_BOX"
-              ></app-icon-button>
+                icon="PLUS_BOX"></app-icon-button>
             </span>
           </app-select-input>
         </div>
@@ -49,55 +45,46 @@
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
-              [options]="offenderTypes"
-            />
+              [options]="offenderTypes" />
             <app-select-input
               formControlName="employeeDepartmentId"
               [label]="lang.map.administration"
               bindValue="id"
               bindLabel="getNames"
-              [options]="administrations"
-            />
+              [options]="administrations" />
             <app-input
               formControlName="employeeQualificationId"
-              [label]="lang.map.employee_number"
-            />
+              [label]="lang.map.employee_number" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="qid" [label]="lang.map.qid" />
             <app-input
               formControlName="employeeQualification"
-              [label]="lang.map.job_title"
-            />
+              [label]="lang.map.job_title" />
           </div>
         }
         @if (isClearingAgent) {
           <div
             [formGroup]="clearingAgentFormGroup"
-            class="grid grid-cols-3 gap-4"
-          >
+            class="grid grid-cols-3 gap-4">
             <app-select-input
               [formControl]="offenderTypeControl"
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
-              [options]="offenderTypes"
-            />
+              [options]="offenderTypes" />
             <app-input
               formControlName="code"
-              [label]="lang.map.clearing_agent_code"
-            />
+              [label]="lang.map.clearing_agent_code" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="qid" [label]="lang.map.qid" />
             <app-input
               formControlName="agencyArabicCompanyName"
-              [label]="lang.map.clearing_agency_name"
-            />
+              [label]="lang.map.clearing_agency_name" />
             <app-input
               formControlName="agencyLicenseNo"
-              [label]="lang.map.clearing_agency_number"
-            />
+              [label]="lang.map.clearing_agency_number" />
             <app-input [label]="lang.map.clearing_agency_cr_number" />
             <app-input [label]="lang.map.clearing_agency_er_number" />
           </div>
@@ -109,8 +96,7 @@
         <table
           mat-table
           class="table-style table-primary"
-          [dataSource]="employeeDatasource"
-        >
+          [dataSource]="employeeDatasource">
           <!-- arName -->
           <ng-container matColumnDef="employee_number">
             <th mat-header-cell *matHeaderCellDef>
@@ -143,8 +129,7 @@
           <tr mat-header-row *matHeaderRowDef="employeeDisplayedColumns"></tr>
           <tr
             mat-row
-            *matRowDef="let element; columns: employeeDisplayedColumns"
-          ></tr>
+            *matRowDef="let element; columns: employeeDisplayedColumns"></tr>
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
@@ -153,8 +138,7 @@
                 <div [matTooltip]="lang.map.add_offender">
                   <app-icon-button
                     (click)="addEmployee(element)"
-                    icon="PLUS_BOX"
-                  />
+                    icon="PLUS_BOX" />
                 </div>
               </div>
             </td>
@@ -171,8 +155,7 @@
         <table
           mat-table
           class="table-style table-primary"
-          [dataSource]="clearingAgentsDatasource"
-        >
+          [dataSource]="clearingAgentsDatasource">
           <!-- arName -->
           <ng-container matColumnDef="clearingAgentCode">
             <th mat-header-cell *matHeaderCellDef>
@@ -210,12 +193,13 @@
           </ng-container>
           <tr
             mat-header-row
-            *matHeaderRowDef="clearingAgentDisplayedColumns"
-          ></tr>
+            *matHeaderRowDef="clearingAgentDisplayedColumns"></tr>
           <tr
             mat-row
-            *matRowDef="let element; columns: clearingAgentDisplayedColumns"
-          ></tr>
+            *matRowDef="
+              let element;
+              columns: clearingAgentDisplayedColumns
+            "></tr>
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
@@ -224,8 +208,7 @@
                 <div [matTooltip]="lang.map.add_offender">
                   <app-icon-button
                     (click)="addClearingAgent(element)"
-                    icon="PLUS_BOX"
-                  />
+                    icon="PLUS_BOX" />
                 </div>
               </div>
             </td>

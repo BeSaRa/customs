@@ -33,14 +33,14 @@ export class InternalUserOUComponent
     super.ngOnInit();
     this.data$
       .pipe(
-        map((internalUsers) =>
+        map(internalUsers =>
           internalUsers.map(
-            (internalUserOu) => internalUserOu.organizationUnitId,
+            internalUserOu => internalUserOu.organizationUnitId,
           ),
         ),
       )
       .subscribe(
-        (organizationUnitIds) => (this.organizationUnits = organizationUnitIds),
+        organizationUnitIds => (this.organizationUnits = organizationUnitIds),
       );
     this.filter$.next({ internalUserId: this.internalUser.id });
     this.defaultOUId = this.internalUser.defaultOUId;
@@ -53,7 +53,7 @@ export class InternalUserOUComponent
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },

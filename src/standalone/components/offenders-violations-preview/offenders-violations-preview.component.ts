@@ -144,7 +144,7 @@ export class OffendersViolationsPreviewComponent
         ? this.penaltyMap[offender.id].second
         : []
     ).filter(
-      (penalty) =>
+      penalty =>
         penalty.penaltyKey !== SystemPenalties.TERMINATE &&
         penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
         penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
@@ -155,7 +155,7 @@ export class OffendersViolationsPreviewComponent
     return (
       this.penaltyMap &&
       this.penaltyMap[element.id].second.find(
-        (penalty) => penalty.penaltyKey == penaltyKey,
+        penalty => penalty.penaltyKey == penaltyKey,
       )?.id
     );
   }
@@ -164,7 +164,7 @@ export class OffendersViolationsPreviewComponent
     this.investigationModel
       ?.getService()
       .getCasePenalty(this.investigationModel?.id as string)
-      .subscribe((data) => {
+      .subscribe(data => {
         this.penaltyMap = data;
       });
   }
@@ -191,7 +191,7 @@ export class OffendersViolationsPreviewComponent
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
@@ -255,7 +255,7 @@ export class OffendersViolationsPreviewComponent
   private listenToSuspendEmployee() {
     this.suspendEmployee$
       .pipe(
-        switchMap((offender) => {
+        switchMap(offender => {
           const suspendedEmployee =
             this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
               offender.offender,

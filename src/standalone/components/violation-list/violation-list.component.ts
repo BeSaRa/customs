@@ -139,7 +139,7 @@ export class ViolationListComponent
           this.violationService
             .load(undefined, { caseId: this.caseId })
             .pipe(
-              map((pagination) => {
+              map(pagination => {
                 this.data.next(pagination.rs);
                 return pagination;
               }),
@@ -147,17 +147,17 @@ export class ViolationListComponent
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe((pagination) => this.violations.next(pagination.rs || []));
+      .subscribe(pagination => this.violations.next(pagination.rs || []));
   }
 
   private listenToView() {
     this.view$
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.violationTypeService
             .loadById(model.violationTypeId)
             .pipe(
-              map((type) => ({
+              map(type => ({
                 type,
                 model,
               })),
@@ -170,7 +170,7 @@ export class ViolationListComponent
           this.violationClassificationService
             .loadById(type.classificationId)
             .pipe(
-              map((classification) => {
+              map(classification => {
                 return {
                   classification,
                   model,
@@ -199,11 +199,11 @@ export class ViolationListComponent
   private listenToEdit() {
     this.edit$
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.violationTypeService
             .loadById(model.violationTypeId)
             .pipe(
-              map((type) => ({
+              map(type => ({
                 type,
                 model,
               })),
@@ -216,7 +216,7 @@ export class ViolationListComponent
           this.violationClassificationService
             .loadById(type.classificationId)
             .pipe(
-              map((classification) => {
+              map(classification => {
                 return {
                   classification,
                   model,
@@ -245,7 +245,7 @@ export class ViolationListComponent
   private listenToDelete() {
     this.delete$
       .pipe(
-        exhaustMap((model) =>
+        exhaustMap(model =>
           this.dialog
             .confirm(
               this.dataSource.data.length == 1
@@ -257,7 +257,7 @@ export class ViolationListComponent
             )
             .afterClosed()
             .pipe(
-              map((userClick) => ({
+              map(userClick => ({
                 model,
                 userClick,
               })),
@@ -266,7 +266,7 @@ export class ViolationListComponent
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe((model) => {
+      .subscribe(model => {
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.description }),
         );

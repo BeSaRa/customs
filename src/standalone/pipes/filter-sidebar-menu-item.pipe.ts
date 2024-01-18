@@ -11,7 +11,7 @@ export class FilterSidebarMenuItemPipe implements PipeTransform {
     searchText: string,
     onlyTranslation = false,
   ): MenuItemContract[] {
-    return (items ?? []).filter((item) => {
+    return (items ?? []).filter(item => {
       return ((onlyTranslation ? item.translate : item.searchText) ?? '')
         .toLowerCase()
         .includes(searchText.toLowerCase());

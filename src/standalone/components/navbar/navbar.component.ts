@@ -68,7 +68,7 @@ export class NavbarComponent
         no: this.lang.map.no,
       })
       .afterClosed()
-      .pipe(filter((value) => value === UserClick.YES))
+      .pipe(filter(value => value === UserClick.YES))
       .subscribe(() => {
         this.authService.logout();
         this.toast.success(this.lang.map.logged_out_successfully);
@@ -91,7 +91,7 @@ export class NavbarComponent
         ),
       )
       .pipe(
-        switchMap((model) => {
+        switchMap(model => {
           return this.userPreferencesService
             .openEditDialog(model as UserPreferences, {
               //extras
@@ -122,7 +122,7 @@ export class NavbarComponent
     );
     dialog
       .afterClosed()
-      .pipe(filter((value) => value === UserClick.YES))
+      .pipe(filter(value => value === UserClick.YES))
       .subscribe(() => {
         this.lang.toggleLang();
       });

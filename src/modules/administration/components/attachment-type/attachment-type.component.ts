@@ -24,7 +24,7 @@ export class AttachmentTypeComponent extends AdminComponent<
 > {
   service = inject(AttachmentTypeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey != StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<AttachmentType>[] = [
     {
@@ -32,7 +32,7 @@ export class AttachmentTypeComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -41,7 +41,7 @@ export class AttachmentTypeComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -50,7 +50,7 @@ export class AttachmentTypeComponent extends AdminComponent<
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: (item) => {
+      callback: item => {
         this.delete$.next(item);
       },
     },

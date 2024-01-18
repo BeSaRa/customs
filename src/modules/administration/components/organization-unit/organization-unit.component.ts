@@ -31,7 +31,7 @@ export class OrganizationUnitComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -40,7 +40,7 @@ export class OrganizationUnitComponent extends AdminComponent<
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: (item) => {
+      callback: item => {
         this.edit$.next(item);
       },
     },
@@ -49,7 +49,7 @@ export class OrganizationUnitComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },
@@ -62,20 +62,19 @@ export class OrganizationUnitComponent extends AdminComponent<
     {
       name: 'email',
       type: 'info',
-      label: (item) => `${this.lang.map.email} : ${item.email}`,
+      label: item => `${this.lang.map.email} : ${item.email}`,
       parent: 'more-details',
     },
     {
       name: 'ldap_group_name',
       type: 'info',
-      label: (item) =>
-        `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
+      label: item => `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
       parent: 'more-details',
     },
     {
       name: 'ldap_limited_group_name',
       type: 'info',
-      label: (item) =>
+      label: item =>
         `${this.lang.map.ldap_limited_group_name} : ${item.ldapLimitedGroupName}`,
       parent: 'more-details',
     },
@@ -88,7 +87,7 @@ export class OrganizationUnitComponent extends AdminComponent<
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
-        (item) => item.lookupKey !== StatusTypes.DELETED,
+        item => item.lookupKey !== StatusTypes.DELETED,
       ),
       'lookupKey',
       'getNames',

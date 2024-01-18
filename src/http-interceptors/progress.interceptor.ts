@@ -23,12 +23,12 @@ export class ProgressInterceptor implements HttpInterceptor {
       !this.progress.ref().isStarted &&
       this.progress.ref().start();
     return next.handle(request).pipe(
-      filter((value) => value.type === HttpEventType.Response),
+      filter(value => value.type === HttpEventType.Response),
       tap(() => {
         this.inProgress.delete(request.url);
         !this.inProgress.size && this.progress.ref().complete();
       }),
-      catchError((err) => {
+      catchError(err => {
         this.inProgress.delete(request.url);
         !this.inProgress.size && this.progress.ref().complete();
         return throwError(err);

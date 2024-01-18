@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
@@ -16,22 +15,19 @@
           formControlName="legalRule"
           [options]="legalRules"
           bindLabel="getNames"
-          bindValue="id"
-        />
+          bindValue="id" />
         <app-select-input
           [label]="lang.map.penalty_signer"
           formControlName="penaltySigner"
           [options]="penaltySigners"
           bindLabel="getNames"
-          bindValue="lookupKey"
-        />
+          bindValue="lookupKey" />
         <app-select-input
           [label]="lang.map.offender_level"
           formControlName="offenderLevel"
           [options]="offenderLevels"
           bindLabel="getNames"
-          bindValue="lookupKey"
-        />
+          bindValue="lookupKey" />
       </div>
     </ng-container>
   </div>

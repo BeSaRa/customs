@@ -25,7 +25,7 @@ export class MawaredEmployeeComponent extends AdminComponent<
 > {
   service = inject(MawaredEmployeeService);
   commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
-    (lookupItem) => lookupItem.lookupKey !== StatusTypes.DELETED,
+    lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<MawaredEmployee>[] = [
     {
@@ -33,7 +33,7 @@ export class MawaredEmployeeComponent extends AdminComponent<
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: (item) => {
+      callback: item => {
         this.view$.next(item);
       },
     },
@@ -42,7 +42,7 @@ export class MawaredEmployeeComponent extends AdminComponent<
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: (item) => {
+      callback: item => {
         this.viewAudit$.next(item);
       },
     },

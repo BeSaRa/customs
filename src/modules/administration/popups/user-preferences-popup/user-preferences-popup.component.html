@@ -5,15 +5,13 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content !p-0">
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
-      dynamicHeight
-    >
+      dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <!-- user info -->
         <div class="grid p-4 grid-cols-2 gap-4 items-center">
@@ -22,43 +20,37 @@
             [displayErrors]="false"
             size="md"
             [label]="lang.map.ar_name"
-            [placeholder]="arName"
-          ></app-input>
+            [placeholder]="arName"></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.en_name"
-            [placeholder]="enName"
-          ></app-input>
+            [placeholder]="enName"></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.employee_number"
-            [placeholder]="empNum"
-          ></app-input>
+            [placeholder]="empNum"></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.qid"
-            [placeholder]="qid"
-          ></app-input>
+            [placeholder]="qid"></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.phone_number"
-            [placeholder]="phoneNumber"
-          ></app-input>
+            [placeholder]="phoneNumber"></app-input>
           <app-input
             [disabled]="true"
             [displayErrors]="false"
             size="md"
             [label]="lang.map.email"
-            [placeholder]="email"
-          ></app-input>
+            [placeholder]="email"></app-input>
         </div>
 
         <div class="grid p-4 grid-cols-2 gap-4 items-center">
@@ -68,8 +60,7 @@
               formControlName="defaultLang"
               [options]="languages"
               bindLabel="name"
-              bindValue="id"
-            />
+              bindValue="id" />
             <!-- sms notifications -->
             <div class="flex items-center mr-4">
               <app-switch
@@ -77,8 +68,7 @@
                 formControlName="isSMSNotificationEnabled"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"
-              ></app-switch>
+                [matTooltip]="lang.map.change_status"></app-switch>
               <label
                 class="ml-2 block font-medium"
                 for="isSMSNotificationEnabled"
@@ -92,8 +82,7 @@
                 formControlName="isPrivateUser"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"
-              ></app-switch>
+                [matTooltip]="lang.map.change_status"></app-switch>
               <label class="ml-2 block font-medium" for="isPrivateUser">{{
                 lang.map.private_user
               }}</label>
@@ -105,8 +94,7 @@
                 formControlName="limitedCirculation"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"
-              ></app-switch>
+                [matTooltip]="lang.map.change_status"></app-switch>
               <label class="ml-2 block font-medium" for="limitedCirculation">{{
                 lang.map.limited_circulation
               }}</label>
@@ -118,8 +106,7 @@
                 formControlName="isMailNotificationEnabled"
                 [trueValue]="1"
                 [falseValue]="0"
-                [matTooltip]="lang.map.change_status"
-              ></app-switch>
+                [matTooltip]="lang.map.change_status"></app-switch>
               <label
                 class="ml-2 block font-medium"
                 for="isMailNotificationEnabled"
@@ -139,21 +126,18 @@
             ) {
               <ng-container
                 formArrayName="alternateEmailListParsed"
-                class="w-full"
-              >
+                class="w-full">
                 <div class="flex items-center justify-center">
                   <app-input
                     class="w-full"
                     [formControlName]="i"
                     type="text"
-                    [label]="lang.map.alt_email + ' ' + (i + 1)"
-                  ></app-input>
+                    [label]="lang.map.alt_email + ' ' + (i + 1)"></app-input>
                   <app-icon-button
                     tabindex="-1"
                     icon="DELETE"
                     (click)="deleteEmail(i)"
-                    [matTooltip]="lang.map.delete + ' ' + lang.map.email"
-                  />
+                    [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
                 </div>
               </ng-container>
             }
@@ -162,8 +146,7 @@
                 class="bg-slate-300"
                 icon="PLUS"
                 (click)="addAltEmail()"
-                [matTooltip]="lang.map.add + ' ' + lang.map.email"
-              />
+                [matTooltip]="lang.map.add + ' ' + lang.map.email" />
             </div>
           </ng-container>
         </div>

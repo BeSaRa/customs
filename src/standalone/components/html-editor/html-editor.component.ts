@@ -122,7 +122,7 @@ export class HtmlEditorComponent
 
     this.control.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe((value) => this.onChange && this.onChange(value));
+      .subscribe(value => this.onChange && this.onChange(value));
     this.config.placeholder = this.placeHolder;
   }
 

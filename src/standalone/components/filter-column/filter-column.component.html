@@ -4,8 +4,7 @@
     tabindex="-1"
     [noMargin]="true"
     label=""
-    [formControl]="control"
-  >
+    [formControl]="control">
     <mat-icon
       (keydown.enter)="clear()"
       (keydown.space)="clear()"
@@ -15,8 +14,7 @@
       tabindex="0"
       appInputSuffix
       [matTooltip]="lang.map.clear_filter"
-      [svgIcon]="getFilterIcon()"
-    ></mat-icon>
+      [svgIcon]="getFilterIcon()"></mat-icon>
   </app-input>
 }
 @if (isActions()) {
@@ -25,8 +23,7 @@
     [matTooltip]="lang.map.clear_all_filters"
     [disabled]="noFilteredColumns()"
     (click)="clearAllFilters()"
-    icon="FILTER_REMOVE"
-  ></app-icon-button>
+    icon="FILTER_REMOVE"></app-icon-button>
 }
 @if (isSelect()) {
   <app-select-input
@@ -37,8 +34,7 @@
     tabindex="-1"
     [noMargin]="true"
     label=""
-    [formControl]="control"
-  >
+    [formControl]="control">
     <mat-icon
       (keydown.enter)="clear()"
       (keydown.space)="clear()"
@@ -48,7 +44,6 @@
       tabindex="0"
       appInputSuffix
       [matTooltip]="lang.map.clear_filter"
-      [svgIcon]="getFilterIcon()"
-    ></mat-icon>
+      [svgIcon]="getFilterIcon()"></mat-icon>
   </app-select-input>
 }

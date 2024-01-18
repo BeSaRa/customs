@@ -34,12 +34,12 @@ export class UnlinkedViolationsComponent {
   @Input({ required: true }) set data(violations: Violation[]) {
     this.dataSource = new AppTableDataSource(
       violations.filter(
-        (violation) =>
+        violation =>
           !this.offenders
             .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
               return [...prev, ...curr.violations];
             }, [])
-            .filter((offenderViolation) => {
+            .filter(offenderViolation => {
               return offenderViolation.violationId == violation.id;
             }).length,
       ),

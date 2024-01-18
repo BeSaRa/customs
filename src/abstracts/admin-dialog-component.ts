@@ -75,7 +75,7 @@ export abstract class AdminDialogComponent<
           return isObservable(result) ? result : of(result);
         }),
       )
-      .pipe(filter((value) => value))
+      .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
@@ -83,9 +83,9 @@ export abstract class AdminDialogComponent<
         }),
       )
       .pipe(
-        exhaustMap((model) => {
+        exhaustMap(model => {
           return model.save().pipe(
-            catchError((error) => {
+            catchError(error => {
               this._saveFail(error);
               return throwError(error);
             }),
@@ -93,7 +93,7 @@ export abstract class AdminDialogComponent<
           );
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this._afterSave(model);
       });
   }

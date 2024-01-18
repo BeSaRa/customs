@@ -157,7 +157,7 @@ export class OffenderCriteriaPopupComponent
     this._Violations =
       this.data && ((this.data.violations || []) as Violation[]);
     this.violations = this._Violations.filter(
-      (v) =>
+      v =>
         this.offenderTypeControl &&
         (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value ||
           v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH),
@@ -178,12 +178,12 @@ export class OffenderCriteriaPopupComponent
   }
 
   private listenToOffenderTypeChange() {
-    this.offenderTypeControl.valueChanges.subscribe((value) => {
+    this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
       this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
       this.offenderViolationControl.reset();
       this.violations = this._Violations.filter(
-        (v) =>
+        v =>
           this.offenderTypeControl &&
           v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value,
       );
@@ -194,7 +194,7 @@ export class OffenderCriteriaPopupComponent
     this.mawaredDepartmentsService
       .loadUserDepartments()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((list) => {
+      .subscribe(list => {
         this.administrations = list;
       });
   }
@@ -210,7 +210,7 @@ export class OffenderCriteriaPopupComponent
             .afterClosed(),
         ),
       )
-      .subscribe((violation) => {
+      .subscribe(violation => {
         this.violations.unshift(
           new Violation().clone<Violation>({ ...violation }),
         );
@@ -239,14 +239,12 @@ export class OffenderCriteriaPopupComponent
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap((value) =>
-          this.mawaredEmployeeService.load(undefined, value),
-        ),
+        switchMap(value => this.mawaredEmployeeService.load(undefined, value)),
       )
       .pipe(
-        map((pagination) =>
+        map(pagination =>
           pagination.rs.filter(
-            (emp) =>
+            emp =>
               !this.offenders.find(
                 (offender: Offender) =>
                   offender.offenderRefId == emp.id &&
@@ -255,7 +253,7 @@ export class OffenderCriteriaPopupComponent
           ),
         ),
       )
-      .subscribe((result) => {
+      .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
@@ -267,12 +265,12 @@ export class OffenderCriteriaPopupComponent
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap((value) => this.clearingAgentService.load(undefined, value)),
+        switchMap(value => this.clearingAgentService.load(undefined, value)),
       )
       .pipe(
-        map((pagination) =>
+        map(pagination =>
           pagination.rs.filter(
-            (emp) =>
+            emp =>
               !this.offenders.find(
                 (offender: Offender) =>
                   offender.offenderRefId == emp.id &&
@@ -281,7 +279,7 @@ export class OffenderCriteriaPopupComponent
           ),
         ),
       )
-      .subscribe((result) => {
+      .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
@@ -321,9 +319,9 @@ export class OffenderCriteriaPopupComponent
 
   private listenToAddEmployee() {
     this.addEmployee$
-      .pipe(map((model) => model.convertToOffender(this.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId)))
       .pipe(
-        switchMap((offender) => {
+        switchMap(offender => {
           return offender.save();
         }),
       )
@@ -348,10 +346,10 @@ export class OffenderCriteriaPopupComponent
             .pipe(map(() => model));
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.employeeDatasource.data.splice(
           this.employeeDatasource.data.findIndex(
-            (emp) => emp.id == model.offenderRefId,
+            emp => emp.id == model.offenderRefId,
           ),
           1,
         );
@@ -381,9 +379,9 @@ export class OffenderCriteriaPopupComponent
 
   private listenToAddClearingAgent() {
     this.addClearingAgent$
-      .pipe(map((model) => model.convertToOffender(this.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId)))
       .pipe(
-        switchMap((offender) => {
+        switchMap(offender => {
           return offender.save();
         }),
       )
@@ -408,10 +406,10 @@ export class OffenderCriteriaPopupComponent
             .pipe(map(() => model));
         }),
       )
-      .subscribe((model) => {
+      .subscribe(model => {
         this.clearingAgentsDatasource.data.splice(
           this.clearingAgentsDatasource.data.findIndex(
-            (emp) => emp.id == model.offenderRefId,
+            emp => emp.id == model.offenderRefId,
           ),
           1,
         );

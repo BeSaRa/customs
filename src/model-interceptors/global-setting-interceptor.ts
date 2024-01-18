@@ -19,7 +19,7 @@ export class GlobalSettingInterceptor
   }
   private static stringifyFileTypes(model: Partial<GlobalSetting>): void {
     model.fileType = JSON.stringify(
-      (model.fileTypeParsed ?? []).filter((fileType) => isValidValue(fileType)),
+      (model.fileTypeParsed ?? []).filter(fileType => isValidValue(fileType)),
     );
   }
   private static parseFileTypes(model: GlobalSetting): void {
@@ -31,9 +31,7 @@ export class GlobalSettingInterceptor
   }
   private static stringifyEmailList(model: Partial<GlobalSetting>) {
     model.supportEmailList = JSON.stringify(
-      (model.supportEmailListParsed ?? []).filter((email) =>
-        isValidValue(email),
-      ),
+      (model.supportEmailListParsed ?? []).filter(email => isValidValue(email)),
     );
   }
   private static parseEmailList(model: GlobalSetting): void {

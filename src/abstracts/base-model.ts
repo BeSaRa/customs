@@ -61,7 +61,7 @@ export abstract class BaseModel<
       .activate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.ACTIVE))
       .pipe(
-        map((status) => {
+        map(status => {
           this.status = status;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;
@@ -79,7 +79,7 @@ export abstract class BaseModel<
       .deactivate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.INACTIVE))
       .pipe(
-        map((status) => {
+        map(status => {
           this.status = status;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;

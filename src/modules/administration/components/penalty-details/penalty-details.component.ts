@@ -45,15 +45,15 @@ export class PenaltyDetailsComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.legalRuleService.loadAsLookups().subscribe((data) => {
+    this.legalRuleService.loadAsLookups().subscribe(data => {
       this.legalRules = data;
       this.setDisplayedList();
     });
   }
   setDisplayedList() {
-    this.list = this.list.map((listItem) => {
+    this.list = this.list.map(listItem => {
       const legalTextArabic = this.legalRules.find(
-        (item) => item.id === listItem.legalRule,
+        item => item.id === listItem.legalRule,
       )?.legalTextArabic;
       listItem.legalTextArabic = legalTextArabic || '';
       return listItem;
@@ -68,7 +68,7 @@ export class PenaltyDetailsComponent implements OnInit {
           type: 'action',
           label: 'view',
           icon: AppIcons.VIEW,
-          callback: (item) => {
+          callback: item => {
             this.viewDetails(item);
           },
         },
@@ -76,7 +76,7 @@ export class PenaltyDetailsComponent implements OnInit {
           name: 'edit',
           type: 'action',
           label: 'edit',
-          callback: (item) => {
+          callback: item => {
             this.editDetails(item);
           },
           icon: AppIcons.EDIT,
@@ -86,7 +86,7 @@ export class PenaltyDetailsComponent implements OnInit {
           type: 'action',
           label: 'delete',
           icon: AppIcons.DELETE,
-          callback: (item) => {
+          callback: item => {
             this.deleteDetails(item);
           },
         },
@@ -97,7 +97,7 @@ export class PenaltyDetailsComponent implements OnInit {
           type: 'action',
           label: 'view',
           icon: AppIcons.VIEW,
-          callback: (item) => {
+          callback: item => {
             this.viewDetails(item);
           },
         },
@@ -116,7 +116,7 @@ export class PenaltyDetailsComponent implements OnInit {
           return this.service.isInstanceOf(model);
         }),
       )
-      .subscribe((result) => {
+      .subscribe(result => {
         // if (!result) return;
         this.list = this.list.concat(result);
         this.reloadDataSource();
@@ -132,7 +132,7 @@ export class PenaltyDetailsComponent implements OnInit {
           return this.service.isInstanceOf(model);
         }),
       )
-      .subscribe((result) => {
+      .subscribe(result => {
         const index = this.list.indexOf(penaltyDetails);
         this.list[index] = result;
         this.reloadDataSource();
@@ -148,7 +148,7 @@ export class PenaltyDetailsComponent implements OnInit {
       )
       .afterClosed()
       .pipe(
-        filter((value) => {
+        filter(value => {
           return value === UserClick.YES;
         }),
       )

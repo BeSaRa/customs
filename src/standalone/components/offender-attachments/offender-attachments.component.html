@@ -7,8 +7,7 @@
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource"
-  >
+    [dataSource]="dataSource">
     <!-- offender name -->
     <ng-container matColumnDef="offenderName">
       <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
@@ -22,8 +21,7 @@
               element.type === offenderTypes.EMPLOYEE
                 ? 'EMPLOYEE'
                 : 'CLEARING_AGENT'
-            "
-          >
+            ">
           </app-icon-button>
           {{ element.getNames() }}
         </span>
@@ -57,8 +55,7 @@
           <div [matTooltip]="lang.map.offender_attachments">
             <app-icon-button
               (click)="attachments$.next(element)"
-              icon="ATTACHMENT"
-            />
+              icon="ATTACHMENT" />
           </div>
         </div>
       </td>

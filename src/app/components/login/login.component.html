@@ -1,11 +1,9 @@
 <div
-  class="text-white h-full w-full relative items-center justify-center flex flex-col rtl:bg-gradient-to-br ltr:bg-gradient-to-bl from-primary to-primary-dark overflow-hidden"
->
+  class="text-white h-full w-full relative items-center justify-center flex flex-col rtl:bg-gradient-to-br ltr:bg-gradient-to-bl from-primary to-primary-dark overflow-hidden">
   <div class="rotated-background z-0"></div>
   <object
     data="assets/images/bg.svg"
-    class="absolute pointer-events-none bottom-0 w-screen object-cover mix-blend-color-dodge opacity-30"
-  >
+    class="absolute pointer-events-none bottom-0 w-screen object-cover mix-blend-color-dodge opacity-30">
     image
   </object>
   <div class="flex flex-col-reverse lg:flex-row relative w-full z-1">
@@ -20,28 +18,24 @@
             labelColor="text-white"
             class="mt-4"
             placeholder="username"
-            [label]="lang.map.user_name"
-          />
+            [label]="lang.map.user_name" />
           <app-input
             formControlName="userPassword"
             labelColor="text-white"
             placeholder="password"
             [type]="selectedPasswordOptions.inputType"
-            [label]="lang.map.password"
-          >
+            [label]="lang.map.password">
             <button
               appInputSuffix
               (click)="toggleEye()"
-              class="mx-2 outline-offset-4 outline-primary flex items-center justify-center"
-            >
+              class="mx-2 outline-offset-4 outline-primary flex items-center justify-center">
               <mat-icon [svgIcon]="selectedPasswordOptions.icon"></mat-icon>
             </button>
           </app-input>
           <app-button
             (click)="login$.next()"
             buttonType="secondary"
-            class="block mt-8"
-          >
+            class="block mt-8">
             {{ lang.map.login }}
           </app-button>
         </form>
@@ -50,23 +44,20 @@
     </div>
     <div
       id="logo"
-      class="z-10 flex-auto flex flex-col items-center justify-center"
-    >
+      class="z-10 flex-auto flex flex-col items-center justify-center">
       <!--suppress CheckImageSize -->
       <img
         alt="General Authority of Customs logo"
         priority="priority"
         ngSrc="assets/images/main-logo.png"
         width="133"
-        height="75"
-      />
+        height="75" />
       <img
         alt="General Authority of Customs logo Text"
         priority="priority"
         ngSrc="assets/images/logo-text.png"
         width="267"
-        height="39"
-      />
+        height="39" />
       <h1 class="text-2xl my-4">
         {{ lang.map.customs_investigation_platform }}
       </h1>

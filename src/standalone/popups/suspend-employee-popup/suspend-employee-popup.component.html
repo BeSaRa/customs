@@ -5,37 +5,31 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4">
       <ng-container [formGroup]="form">
         <app-input
           formControlName="arName"
-          [label]="lang.map.ar_name"
-        ></app-input>
+          [label]="lang.map.ar_name"></app-input>
         <app-input
           formControlName="enName"
-          [label]="lang.map.en_name"
-        ></app-input>
+          [label]="lang.map.en_name"></app-input>
         <app-input
           formControlName="dateFrom"
           [label]="lang.map.date_from"
-          type="datetime-local"
-        ></app-input>
+          type="datetime-local"></app-input>
         <app-input
           formControlName="dateTo"
           [label]="lang.map.date_to"
-          type="datetime-local"
-        ></app-input>
+          type="datetime-local"></app-input>
         <div class="flex flex-row pl-1 items-center justify-start">
           <app-switch
             [trueValue]="1"
             [falseValue]="0"
             formControlName="status"
-            [label]="lang.map.status"
-          ></app-switch>
+            [label]="lang.map.status"></app-switch>
         </div>
       </ng-container>
     </div>

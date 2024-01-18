@@ -12,8 +12,7 @@
       <app-context-menu-item
         [item]="item"
         [actions]="action.children!"
-        #subMenu
-      ></app-context-menu-item>
+        #subMenu></app-context-menu-item>
     }
     @if (!hasChildren(action)) {
       <button mat-menu-item (click)="callback(action)">

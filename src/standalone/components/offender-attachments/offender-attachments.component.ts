@@ -70,7 +70,7 @@ export class OffenderAttachmentsComponent
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap((model) =>
+        switchMap(model =>
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {

@@ -5,8 +5,7 @@
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
-      icon="CLOSE"
-    ></app-icon-button>
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <div [formGroup]="form" class="flex flex-col">
@@ -19,16 +18,14 @@
           <td
             mat-cell
             formArrayName="list"
-            *matCellDef="let element; let i = index"
-          >
+            *matCellDef="let element; let i = index">
             @if (!createControlsInProgress) {
               <div [formGroupName]="i" class="p-2">
                 <app-input
                   formControlName="documentTitle"
                   noMargin="true"
                   label=""
-                  size="sm"
-                />
+                  size="sm" />
               </div>
             }
           </td>
@@ -41,8 +38,7 @@
           <td
             mat-cell
             formArrayName="list"
-            *matCellDef="let element; let i = index"
-          >
+            *matCellDef="let element; let i = index">
             @if (!createControlsInProgress) {
               <div [formGroupName]="i" class="p-2">
                 <app-select-input
@@ -52,8 +48,7 @@
                   size="sm"
                   bindLabel="getNames"
                   bindValue="id"
-                  [options]="attachmentTypes"
-                />
+                  [options]="attachmentTypes" />
               </div>
             }
           </td>
@@ -66,13 +61,11 @@
               <app-icon-button
                 [matTooltip]="lang.map.view"
                 (click)="view$.next(element)"
-                icon="VIEW"
-              ></app-icon-button>
+                icon="VIEW"></app-icon-button>
               <app-icon-button
                 [matTooltip]="lang.map.delete"
                 (click)="delete$.next(element)"
-                icon="DELETE"
-              ></app-icon-button>
+                icon="DELETE"></app-icon-button>
             </div>
           </td>
         </ng-container>
@@ -89,8 +82,7 @@
       <div
         (drop)="filesDropped($event)"
         (dragover)="$event.preventDefault()"
-        class="border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-80 bg-gray-200"
-      >
+        class="border-dashed border-primary/20 rounded border-4 w-full flex items-center justify-center h-80 bg-gray-200">
         <div class="flex flex-col items-center text-gray-500">
           <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
           <span>{{ lang.map.drag_and_drop_files }}</span>
