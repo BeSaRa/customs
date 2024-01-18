@@ -1,33 +1,61 @@
 <div
   id="sidebar-wrapper"
   [ngClass]="status"
-  class="overflow-hidden group min-w-[75px] max-w-[300px] w-full flex flex-col h-full bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
-  <div class="flex-none flex px-2 py-2 items-center justify-start space-x-2 rtl:space-x-reverse">
+  class="overflow-hidden group min-w-[75px] max-w-[300px] w-full flex flex-col h-full bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark"
+>
+  <div
+    class="flex-none flex px-2 py-2 items-center justify-start space-x-2 rtl:space-x-reverse"
+  >
     <a routerLink="/home/main" class="flex-none w-12">
-      <img ngSrc="assets/images/main-logo.png" alt="logo" priority="" height="271" width="288" />
+      <img
+        ngSrc="assets/images/main-logo.png"
+        alt="logo"
+        priority=""
+        height="271"
+        width="288"
+      />
     </a>
     <a routerLink="/home/main" class="flex-auto">
-      <img ngSrc="assets/images/logo-text.png" alt="logo text" priority="" height="78" width="535" />
+      <img
+        ngSrc="assets/images/logo-text.png"
+        alt="logo text"
+        priority=""
+        height="78"
+        width="535"
+      />
     </a>
   </div>
   @if (!isClosingOrClosed()) {
-  <div class="relative h-[55px] flex justify-center py-2">
-    <div [@scaleInOut]="!isClosingOrClosed()" class="flex-none items-center justify-center pb-0 px-2 absolute w-full">
-      <app-input
-        (keydown.arrowDown)="moveFocus()"
-        [formControl]="control"
-        [noMargin]="true"
-        [displayErrors]="false"
-        label=""
-        placeholder="search here">
-        <mat-icon appInputPrefix class="mx-1 !h-10" svgIcon="magnify"></mat-icon>
-      </app-input>
+    <div class="relative h-[55px] flex justify-center py-2">
+      <div
+        [@scaleInOut]="!isClosingOrClosed()"
+        class="flex-none items-center justify-center pb-0 px-2 absolute w-full"
+      >
+        <app-input
+          (keydown.arrowDown)="moveFocus()"
+          [formControl]="control"
+          [noMargin]="true"
+          [displayErrors]="false"
+          label=""
+          placeholder="search here"
+        >
+          <mat-icon
+            appInputPrefix
+            class="mx-1 !h-10"
+            svgIcon="magnify"
+          ></mat-icon>
+        </app-input>
+      </div>
     </div>
-  </div>
   }
   <div class="flex-auto px-2">
     <ng-scrollbar viewClass="pt-4" visibility="hover" [dir]="direction">
-      <app-sidebar-menu [shrinkMode]="isClosingOrClosed()" [searchText]="control.value" [level]="1" [items]="items" />
+      <app-sidebar-menu
+        [shrinkMode]="isClosingOrClosed()"
+        [searchText]="control.value"
+        [level]="1"
+        [items]="items"
+      />
     </ng-scrollbar>
   </div>
 </div>

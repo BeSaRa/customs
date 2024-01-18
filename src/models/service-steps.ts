@@ -22,15 +22,46 @@ export class ServiceSteps extends BaseModel<ServiceSteps, ServiceStepsService> {
   }
 
   buildForm(controls?: boolean) {
-    const { arName, enName, arDesc, enDesc, stepName, activityName, stepSLA } = this;
+    const { arName, enName, arDesc, enDesc, stepName, activityName, stepSLA } =
+      this;
 
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
-      arDesc: controls ? [{ value: arDesc, disabled: true }, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : arDesc,
-      enDesc: controls ? [{ value: enDesc, disabled: true }, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : enDesc,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
+      arDesc: controls
+        ? [
+            { value: arDesc, disabled: true },
+            [CustomValidators.required, CustomValidators.pattern('AR_NUM')],
+          ]
+        : arDesc,
+      enDesc: controls
+        ? [
+            { value: enDesc, disabled: true },
+            [CustomValidators.required, CustomValidators.pattern('ENG_NUM')],
+          ]
+        : enDesc,
       stepName: controls ? [{ value: stepName, disabled: true }] : stepName,
-      activityName: controls ? [{ value: activityName, disabled: true }] : activityName,
+      activityName: controls
+        ? [{ value: activityName, disabled: true }]
+        : activityName,
       stepSLA: controls ? [stepSLA] : stepSLA,
     };
   }

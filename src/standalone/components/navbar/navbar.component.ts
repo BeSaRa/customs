@@ -23,11 +23,22 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, InputComponent, NgOptimizedImage, MatMenuModule, IconButtonComponent, MatTooltipModule],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    InputComponent,
+    NgOptimizedImage,
+    MatMenuModule,
+    IconButtonComponent,
+    MatTooltipModule,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class NavbarComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   @Output()
   menuClick = new EventEmitter<MouseEvent | undefined>();
   lang = inject(LangService);
@@ -57,7 +68,7 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
         no: this.lang.map.no,
       })
       .afterClosed()
-      .pipe(filter(value => value === UserClick.YES))
+      .pipe(filter((value) => value === UserClick.YES))
       .subscribe(() => {
         this.authService.logout();
         this.toast.success(this.lang.map.logged_out_successfully);
@@ -72,9 +83,15 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
   protected _listenToEditUserPreferences() {
     this.editUserPreferences$
       .pipe(takeUntil(this.destroy$))
-      .pipe(map(() => new UserPreferences().clone<UserPreferences>(this.employee?.userPreferences)))
       .pipe(
-        switchMap(model => {
+        map(() =>
+          new UserPreferences().clone<UserPreferences>(
+            this.employee?.userPreferences,
+          ),
+        ),
+      )
+      .pipe(
+        switchMap((model) => {
           return this.userPreferencesService
             .openEditDialog(model as UserPreferences, {
               //extras
@@ -89,9 +106,9 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
             .pipe(
               filter((model): model is UserPreferences => {
                 return this.userPreferencesService.isInstanceOf(model);
-              })
+              }),
             );
-        })
+        }),
       )
       .subscribe(() => {
         //this.reload$.next();
@@ -99,10 +116,13 @@ export class NavbarComponent extends OnDestroyMixin(class {}) implements OnInit 
   }
 
   openLangChangeConfirmDialog() {
-    const dialog = this.dialog.confirm(this.lang.map.are_you_sure_you_want_to_change_lang, '');
+    const dialog = this.dialog.confirm(
+      this.lang.map.are_you_sure_you_want_to_change_lang,
+      '',
+    );
     dialog
       .afterClosed()
-      .pipe(filter(value => value === UserClick.YES))
+      .pipe(filter((value) => value === UserClick.YES))
       .subscribe(() => {
         this.lang.toggleLang();
       });

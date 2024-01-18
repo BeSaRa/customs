@@ -28,7 +28,7 @@ export class ServiceItemResolver {
   }
 
   static resolve: ResolveFn<OpenedInfoContract | null> = (
-    route: ActivatedRouteSnapshot
+    route: ActivatedRouteSnapshot,
   ): Observable<OpenedInfoContract | null> => {
     this._init(route);
     const item = this.getItem();
@@ -59,14 +59,14 @@ export class ServiceItemResolver {
             () =>
               openFrom === OpenFrom.SEARCH || openFrom === OpenFrom.ADD_SCREEN,
             service.getDetails(caseId),
-            service.getTask(taskId!)
-          )
-        )
+            service.getTask(taskId!),
+          ),
+        ),
       )
       .pipe(
         map((model) => {
           return { model, ...this.data.info } as unknown as OpenedInfoContract;
-        })
+        }),
       );
   };
 

@@ -34,7 +34,7 @@ export class SituationSearchComponent
     new NoneFilterColumn('violationType'),
     new NoneFilterColumn('offender'),
     new NoneFilterColumn('isProved'),
-    new NoneFilterColumn('status')
+    new NoneFilterColumn('status'),
   );
   displayedList = new MatTableDataSource<SituationSearch>();
 
@@ -50,9 +50,9 @@ export class SituationSearchComponent
               catchError((error) => {
                 return throwError(error);
               }),
-              ignoreErrors()
+              ignoreErrors(),
             );
-        })
+        }),
       )
       .subscribe((data: SituationSearch[]) => {
         this.displayedList = new MatTableDataSource(data);

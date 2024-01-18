@@ -1,16 +1,16 @@
 :host ::ng-deep .investegation-tab-group .mat-mdc-tab-body-wrapper {
-    height: calc(100vh - 296px);
-    min-height: 400px;
-    mat-tab-body {
-        max-height: 100%;
-        min-height: 0;
-    }
+  height: calc(100vh - 296px);
+  min-height: 400px;
+  mat-tab-body {
+    max-height: 100%;
+    min-height: 0;
+  }
 }
 :host ::ng-deep .investegation-tab-group-preview .mat-mdc-tab-body-wrapper {
-    height: calc(100vh - 414px);
-    min-height: 400px;
-    mat-tab-body {
-        max-height: 100%;
-        min-height: 0;
-    }
+  height: calc(100vh - 414px);
+  min-height: 400px;
+  mat-tab-body {
+    max-height: 100%;
+    min-height: 0;
+  }
 }

@@ -23,7 +23,10 @@ import { HttpParams } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
-export class InternalUserOUService extends BaseCrudWithDialogService<InternalUserOUPopupComponent, InternalUserOU> {
+export class InternalUserOUService extends BaseCrudWithDialogService<
+  InternalUserOUPopupComponent,
+  InternalUserOU
+> {
   serviceName = 'InternalUserOUService';
   protected getModelClass(): Constructor<InternalUserOU> {
     return InternalUserOU;

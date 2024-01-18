@@ -111,7 +111,7 @@ export class OffenderCriteriaPopupComponent
   });
   offenderViolationControl = new FormControl<number[]>(
     [],
-    [CustomValidators.required]
+    [CustomValidators.required],
   );
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
@@ -149,10 +149,10 @@ export class OffenderCriteriaPopupComponent
 
   ngOnInit(): void {
     this.employeeFormGroup = this.fb.group(
-      new MawaredEmployeeCriteria().buildForm(true)
+      new MawaredEmployeeCriteria().buildForm(true),
     );
     this.clearingAgentFormGroup = this.fb.group(
-      new ClearingAgentCriteria().buildForm(true)
+      new ClearingAgentCriteria().buildForm(true),
     );
     this._Violations =
       this.data && ((this.data.violations || []) as Violation[]);
@@ -160,7 +160,7 @@ export class OffenderCriteriaPopupComponent
       (v) =>
         this.offenderTypeControl &&
         (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value ||
-          v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH)
+          v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH),
     );
 
     this.employeeFormGroup.patchValue({
@@ -185,7 +185,7 @@ export class OffenderCriteriaPopupComponent
       this.violations = this._Violations.filter(
         (v) =>
           this.offenderTypeControl &&
-          v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value
+          v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value,
       );
     });
   }
@@ -207,12 +207,12 @@ export class OffenderCriteriaPopupComponent
         switchMap(() =>
           this.service
             .openAddViolation(this.caseId as string, this.transformer$)
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe((violation) => {
         this.violations.unshift(
-          new Violation().clone<Violation>({ ...violation })
+          new Violation().clone<Violation>({ ...violation }),
         );
         if (
           violation.offenderTypeInfo?.lookupKey ==
@@ -221,7 +221,7 @@ export class OffenderCriteriaPopupComponent
           this.offenderViolationControl.patchValue(
             this.offenderViolationControl.value
               ? [...this.offenderViolationControl.value, violation.id]
-              : [violation.id]
+              : [violation.id],
           );
         }
         this.fromOffender = false;
@@ -239,7 +239,9 @@ export class OffenderCriteriaPopupComponent
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap((value) => this.mawaredEmployeeService.load(undefined, value))
+        switchMap((value) =>
+          this.mawaredEmployeeService.load(undefined, value),
+        ),
       )
       .pipe(
         map((pagination) =>
@@ -248,10 +250,10 @@ export class OffenderCriteriaPopupComponent
               !this.offenders.find(
                 (offender: Offender) =>
                   offender.offenderRefId == emp.id &&
-                  offender.type == OffenderTypes.EMPLOYEE
-              )
-          )
-        )
+                  offender.type == OffenderTypes.EMPLOYEE,
+              ),
+          ),
+        ),
       )
       .subscribe((result) => {
         if (result.length) {
@@ -265,7 +267,7 @@ export class OffenderCriteriaPopupComponent
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap((value) => this.clearingAgentService.load(undefined, value))
+        switchMap((value) => this.clearingAgentService.load(undefined, value)),
       )
       .pipe(
         map((pagination) =>
@@ -274,10 +276,10 @@ export class OffenderCriteriaPopupComponent
               !this.offenders.find(
                 (offender: Offender) =>
                   offender.offenderRefId == emp.id &&
-                  offender.type == OffenderTypes.ClEARING_AGENT
-              )
-          )
-        )
+                  offender.type == OffenderTypes.ClEARING_AGENT,
+              ),
+          ),
+        ),
       )
       .subscribe((result) => {
         if (result.length) {
@@ -293,8 +295,8 @@ export class OffenderCriteriaPopupComponent
     this.transformer$
       ?.pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'done'
-        )
+          (data: TransformerAction<Investigation>) => data.action == 'done',
+        ),
       )
       .subscribe((data: TransformerAction<Investigation>) => {
         this.caseId = data.model?.id;
@@ -323,7 +325,7 @@ export class OffenderCriteriaPopupComponent
       .pipe(
         switchMap((offender) => {
           return offender.save();
-        })
+        }),
       )
       .pipe(
         switchMap((model: Offender) => {
@@ -337,33 +339,33 @@ export class OffenderCriteriaPopupComponent
                     violationId: violationId,
                     status: 1,
                     isProved: true,
-                  })
+                  }),
                 );
-              }
-            )
+              },
+            ),
           )
             .pipe(ignoreErrors())
             .pipe(map(() => model));
-        })
+        }),
       )
       .subscribe((model) => {
         this.employeeDatasource.data.splice(
           this.employeeDatasource.data.findIndex(
-            (emp) => emp.id == model.offenderRefId
+            (emp) => emp.id == model.offenderRefId,
           ),
-          1
+          1,
         );
         if (
           this.employeeService.getEmployee()?.defaultOUId !==
           model?.offenderInfo?.employeeDepartmentId
         ) {
           this.toast.info(
-            this.lang.map.selected_offender_related_to_another_department
+            this.lang.map.selected_offender_related_to_another_department,
           );
         }
         this.employees$.next(this.employeeDatasource.data);
         this.toast.success(
-          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
       });
   }
@@ -383,7 +385,7 @@ export class OffenderCriteriaPopupComponent
       .pipe(
         switchMap((offender) => {
           return offender.save();
-        })
+        }),
       )
       .pipe(
         switchMap((model: Offender) => {
@@ -397,25 +399,25 @@ export class OffenderCriteriaPopupComponent
                     violationId: violationId,
                     status: 1,
                     isProved: true,
-                  })
+                  }),
                 );
-              }
-            )
+              },
+            ),
           )
             .pipe(ignoreErrors())
             .pipe(map(() => model));
-        })
+        }),
       )
       .subscribe((model) => {
         this.clearingAgentsDatasource.data.splice(
           this.clearingAgentsDatasource.data.findIndex(
-            (emp) => emp.id == model.offenderRefId
+            (emp) => emp.id == model.offenderRefId,
           ),
-          1
+          1,
         );
         this.clearingAgents$.next(this.clearingAgentsDatasource.data);
         this.toast.success(
-          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
       });
   }

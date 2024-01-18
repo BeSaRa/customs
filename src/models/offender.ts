@@ -52,7 +52,10 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   override getNames(): string {
     return (
       (this.offenderInfo &&
-        (this.offenderInfo[(this.getLangService().getCurrent().code + 'Name') as keyof typeof this.offenderInfo] as unknown as string)) ||
+        (this.offenderInfo[
+          (this.getLangService().getCurrent().code +
+            'Name') as keyof typeof this.offenderInfo
+        ] as unknown as string)) ||
       ''
     );
   }

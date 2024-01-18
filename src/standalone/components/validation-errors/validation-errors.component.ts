@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+} from '@angular/core';
 
 import { ValidationErrors } from '@angular/forms';
-import { ValidationMessages, ValidationMessagesType } from '@constants/validation-messages';
+import {
+  ValidationMessages,
+  ValidationMessagesType,
+} from '@constants/validation-messages';
 import { LangService } from '@services/lang.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 
@@ -53,7 +61,10 @@ export class ValidationErrorsComponent {
     const languageKey = validation.key as keyof LangKeysContract;
     this.currentError = this.lang.map[languageKey];
     if (validation.replace) {
-      this.currentError = validation.replace(this.currentError, validationReplace);
+      this.currentError = validation.replace(
+        this.currentError,
+        validationReplace,
+      );
     }
   }
 }

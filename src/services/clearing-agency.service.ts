@@ -21,7 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class ClearingAgencyService extends BaseCrudWithDialogService<ClearingAgencyPopupComponent, ClearingAgency> {
+export class ClearingAgencyService extends BaseCrudWithDialogService<
+  ClearingAgencyPopupComponent,
+  ClearingAgency
+> {
   serviceName = 'ClearingAgencyService';
   protected getModelClass(): Constructor<ClearingAgency> {
     return ClearingAgency;

@@ -18,7 +18,7 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<unknown>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     if (req.context.get(NO_LOADER_TOKEN)) {
       return next.handle(req);
@@ -36,8 +36,8 @@ export class LoadingInterceptor implements HttpInterceptor {
               ? this.loadingService.hide()
               : null;
           };
-        })(req)
-      )
+        })(req),
+      ),
     );
   }
 }

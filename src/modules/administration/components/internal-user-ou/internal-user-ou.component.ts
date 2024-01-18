@@ -35,12 +35,12 @@ export class InternalUserOUComponent
       .pipe(
         map((internalUsers) =>
           internalUsers.map(
-            (internalUserOu) => internalUserOu.organizationUnitId
-          )
-        )
+            (internalUserOu) => internalUserOu.organizationUnitId,
+          ),
+        ),
       )
       .subscribe(
-        (organizationUnitIds) => (this.organizationUnits = organizationUnitIds)
+        (organizationUnitIds) => (this.organizationUnits = organizationUnitIds),
       );
     this.filter$.next({ internalUserId: this.internalUser.id });
     this.defaultOUId = this.internalUser.defaultOUId;
@@ -62,7 +62,7 @@ export class InternalUserOUComponent
   columnsWrapper: ColumnsWrapper<InternalUserOU> = new ColumnsWrapper(
     new TextFilterColumn('organizationUnitId'),
     new NoneFilterColumn('default'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
   override _getCreateExtras(): unknown {
@@ -74,7 +74,7 @@ export class InternalUserOUComponent
 
   changeDefaultDepartment(
     element: InternalUserOU,
-    slideToggle?: MatSlideToggle
+    slideToggle?: MatSlideToggle,
   ) {
     if (this.isDefaultDepartment(element)) {
       slideToggle && (slideToggle.checked = true);

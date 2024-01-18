@@ -22,8 +22,26 @@ export class JobTitle extends BaseModel<JobTitle, JobTitleService> {
   buildForm(controls = false): object {
     const { arName, enName, status } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }

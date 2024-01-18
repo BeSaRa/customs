@@ -69,7 +69,7 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: { offset: criteria.offset, limit: criteria.limit },
         }),
-      }
+      },
     );
   }
 
@@ -84,13 +84,13 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: { offset: criteria.offset, limit: criteria.limit },
         }),
-      }
+      },
     );
   }
 
   getAssignedTo(caseId: string): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + '/' + caseId + '/assigned-to'
+      this.getUrlSegment() + '/' + caseId + '/assigned-to',
     );
   }
 
@@ -107,7 +107,7 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: { ...document },
         }),
-      }
+      },
     );
   }
 
@@ -120,38 +120,38 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: { ...document[0] },
         }),
-      }
+      },
     );
   }
 
   getDocuments(caseId: string): Observable<unknown> {
     return this.http.get(
-      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents'
+      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents',
     );
   }
 
   getDocumentsItems(caseId: string): Observable<unknown> {
     return this.http.get(
-      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents-item'
+      this.getUrlSegment() + '/' + caseId + '/folder/contained-documents-item',
     );
   }
 
   start(caseId: string): Observable<boolean> {
     return this.http.post<boolean>(
       this.getUrlSegment() + '/' + caseId + '/start',
-      {}
+      {},
     );
   }
 
   deleteDocument(docId: string): Observable<unknown> {
     return this.http.delete<unknown>(
-      this.getUrlSegment() + '/document/' + docId
+      this.getUrlSegment() + '/document/' + docId,
     );
   }
 
   downloadDocumentAsPDF(docId: string): Observable<unknown> {
     return this.http.get<unknown>(
-      this.getUrlSegment() + '/document/' + docId + '/download'
+      this.getUrlSegment() + '/document/' + docId + '/download',
     );
   }
 
@@ -209,7 +209,7 @@ export abstract class BaseCaseService<M>
   })
   claimTask(taskId: string): Observable<M> {
     return this.http.get<M>(
-      this.getUrlSegment() + '/task/' + taskId + '/claim'
+      this.getUrlSegment() + '/task/' + taskId + '/claim',
     );
   }
 
@@ -217,14 +217,14 @@ export abstract class BaseCaseService<M>
     unwrap: 'rs',
   })
   private _getCasePenalty(
-    caseId: string
+    caseId: string,
   ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
     return this.http.get<{
       [key: string]: { first: unknown; second: Penalty[] };
     }>(this.getUrlSegment() + '/' + caseId + '/penalty');
   }
   getCasePenalty(
-    caseId: string
+    caseId: string,
   ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
     return this._getCasePenalty(caseId).pipe(
       map((rs) => {
@@ -234,12 +234,12 @@ export abstract class BaseCaseService<M>
           obj[key] = {
             ...rs[key],
             second: rs[key].second.map((o) =>
-              new Penalty().clone<Penalty>({ ...o })
+              new Penalty().clone<Penalty>({ ...o }),
             ),
           };
         });
         return obj;
-      })
+      }),
     );
   }
   completeTask(
@@ -248,25 +248,25 @@ export abstract class BaseCaseService<M>
       selectedResponse: string;
       userId?: number;
       comment: string;
-    }
+    },
   ): Observable<M> {
     return this.http.post<M>(
       this.getUrlSegment() + '/task/' + taskId + '/complete',
-      body
+      body,
     );
   }
 
   terminate(taskId: string): Observable<M> {
     return this.http.post<M>(
       this.getUrlSegment() + '/task/' + taskId + '/terminate',
-      {}
+      {},
     );
   }
 
   @CastResponse(() => CaseAttachment)
   addOffenderAttachment(
     offenderId: number,
-    attachment: CaseAttachment
+    attachment: CaseAttachment,
   ): Observable<unknown> {
     const formData = new FormData();
     attachment.content ? formData.append('content', attachment.content) : null;
@@ -278,21 +278,21 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: attachment as never,
         }),
-      }
+      },
     );
   }
 
   @CastResponse(() => CaseAttachment)
   getOffenderAttachments(offenderId: number): Observable<CaseAttachment[]> {
     return this.http.get<CaseAttachment[]>(
-      this.getUrlSegment() + `/offender/${offenderId}/contained-attachments`
+      this.getUrlSegment() + `/offender/${offenderId}/contained-attachments`,
     );
   }
 
   @CastResponse(() => CaseAttachment)
   addCaseAttachment(
     caseId: string,
-    attachment: CaseAttachment
+    attachment: CaseAttachment,
   ): Observable<unknown> {
     const formData = new FormData();
     attachment.content ? formData.append('content', attachment.content) : null;
@@ -304,14 +304,14 @@ export abstract class BaseCaseService<M>
         params: new HttpParams({
           fromObject: attachment as never,
         }),
-      }
+      },
     );
   }
 
   @CastResponse(() => CaseAttachment)
   addBulkCaseAttachments(
     caseId: string,
-    attachments: CaseAttachment[]
+    attachments: CaseAttachment[],
   ): Observable<unknown> {
     const formData = new FormData();
     attachments.forEach((attachment) => {
@@ -322,25 +322,25 @@ export abstract class BaseCaseService<M>
     });
     formData.append(
       'attachments',
-      new Blob([JSON.stringify(attachments)], { type: 'application/json' })
+      new Blob([JSON.stringify(attachments)], { type: 'application/json' }),
     );
     return this.http.post(
       this.getUrlSegment() + `/${caseId}/document/bulk`,
-      formData
+      formData,
     );
   }
 
   @CastResponse(() => CaseFolder)
   loadCaseFolders(caseId: string): Observable<CaseFolder[]> {
     return this.http.get<CaseFolder[]>(
-      this.getUrlSegment() + '/folder/custom/' + caseId
+      this.getUrlSegment() + '/folder/custom/' + caseId,
     );
   }
 
   @CastResponse(() => CaseAttachment)
   loadFolderAttachments(caseId: string): Observable<CaseAttachment[]> {
     return this.http.get<CaseAttachment[]>(
-      this.getUrlSegment() + `/${caseId}/folder/contained-documents`
+      this.getUrlSegment() + `/${caseId}/folder/contained-documents`,
     );
   }
 
@@ -348,7 +348,7 @@ export abstract class BaseCaseService<M>
     caseId: string,
     service: BaseCaseService<unknown>,
     type: 'folder' | 'offender',
-    entityId: number
+    entityId: number,
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
       disableClose: true,
@@ -371,7 +371,7 @@ export abstract class BaseCaseService<M>
 
   viewAttachment(
     attachmentId: string,
-    title = 'Document'
+    title = 'Document',
   ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return this.downloadAttachment(attachmentId).pipe(
       map((blob) => {
@@ -382,7 +382,7 @@ export abstract class BaseCaseService<M>
             title: title,
           },
         });
-      })
+      }),
     );
   }
 

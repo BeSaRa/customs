@@ -104,7 +104,7 @@ export class InvestigationComponent extends BaseCaseComponent<
     this.form = this.fb.group(
       this.model
         ? this.model.buildForm(true, this.readonly)
-        : new Investigation().buildForm(true, this.readonly)
+        : new Investigation().buildForm(true, this.readonly),
     );
     this.listenToLocationChange();
   }
@@ -121,7 +121,7 @@ export class InvestigationComponent extends BaseCaseComponent<
     !this.violations.length &&
       !this.offenders.length &&
       this.dialog.error(
-        this.lang.map.add_violation_or_offender_first_to_take_this_action
+        this.lang.map.add_violation_or_offender_first_to_take_this_action,
       );
     return !!this.violations.length || !!this.offenders.length;
   }
@@ -136,7 +136,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   _afterSave(
     model: Investigation,
     _saveType: SaveTypes,
-    _operation: OperationType
+    _operation: OperationType,
   ): void {
     this.model = model;
     // display success message based on operation and save type
@@ -194,15 +194,15 @@ export class InvestigationComponent extends BaseCaseComponent<
             {},
             {
               caseId: this.model?.id,
-            }
+            },
           );
-        })
+        }),
       )
       .pipe(
         map(({ rs }) => {
           return rs.reduce((prev: Offender[], curr: OffenderViolation) => {
             const offender = prev.find(
-              (offender) => offender.id == curr.offenderId
+              (offender) => offender.id == curr.offenderId,
             );
             if (offender) {
               offender.violations.push(curr);
@@ -217,7 +217,7 @@ export class InvestigationComponent extends BaseCaseComponent<
               ];
             }
           }, []);
-        })
+        }),
       )
       .subscribe((data) => {
         this.offendersMappedWIthViolations = data;
@@ -230,13 +230,13 @@ export class InvestigationComponent extends BaseCaseComponent<
         tap((_) => {
           this.form.invalid &&
             this.dialog.error(
-              this.lang.map.msg_make_sure_all_required_fields_are_filled
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
             );
         }),
         filter(() => this.form.valid),
         switchMap((model) => {
           return model.save();
-        })
+        }),
       )
       .subscribe((model: Investigation) => {
         this.router.navigate([], {
@@ -285,9 +285,12 @@ export class InvestigationComponent extends BaseCaseComponent<
         .loadCaseFolders(this.model.id)
         .pipe(map((folders) => (this.caseFolders = folders)))
         .subscribe((folders) => {
-          this.caseFoldersMap = folders.reduce((acc, item) => {
-            return { ...acc, [item.name.toLowerCase()]: item };
-          }, {} as Record<string, CaseFolder>);
+          this.caseFoldersMap = folders.reduce(
+            (acc, item) => {
+              return { ...acc, [item.name.toLowerCase()]: item };
+            },
+            {} as Record<string, CaseFolder>,
+          );
         });
     }
   }
@@ -304,7 +307,7 @@ export class InvestigationComponent extends BaseCaseComponent<
       .pipe(
         switchMap(() => {
           return this.launch();
-        })
+        }),
       )
       .subscribe();
   }

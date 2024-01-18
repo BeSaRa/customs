@@ -4,7 +4,10 @@ import { GetNamesContract } from '@contracts/get-names-contract';
 import { CloneContract } from '@contracts/clone-contract';
 import { AppPermissionsType } from '@constants/app-permissions';
 
-export class Permission extends GetNamesMixin(ClonerMixin(class {})) implements GetNamesContract, CloneContract {
+export class Permission
+  extends GetNamesMixin(ClonerMixin(class {}))
+  implements GetNamesContract, CloneContract
+{
   id!: number;
   permissionId!: number;
   override arName!: string;

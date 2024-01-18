@@ -29,10 +29,13 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   filteredOffenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   criminalTypes: Lookup[] = this.lookupService.lookups.criminalType;
-  responsibilityRepeatViolations: Lookup[] = this.lookupService.lookups.responsibilityRepeatViolations;
+  responsibilityRepeatViolations: Lookup[] =
+    this.lookupService.lookups.responsibilityRepeatViolations;
   violationLevels: Lookup[] = this.lookupService.lookups.violationLevel;
-  managerDecisions: Lookup[] = this.lookupService.lookups.managerDecisionControl;
-  filteredManagerDecisions: Lookup[] = this.lookupService.lookups.managerDecisionControl;
+  managerDecisions: Lookup[] =
+    this.lookupService.lookups.managerDecisionControl;
+  filteredManagerDecisions: Lookup[] =
+    this.lookupService.lookups.managerDecisionControl;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -65,12 +68,14 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   protected _afterSave(model: ViolationType): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     this.dialogRef.close(this.model);
   }
 
   protected loadViolationClassifications() {
-    this.violationClassificationService.loadAsLookups().subscribe(data => {
+    this.violationClassificationService.loadAsLookups().subscribe((data) => {
       this.violationClassifications = data;
     });
   }
@@ -106,26 +111,35 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   isCriminal(): boolean {
     if (this.violationClassifications === undefined) return false;
     let isCriminal = false;
-    this.violationClassifications.forEach(classification => {
-      if (classification.id === this.classificationId?.value && classification.key === 'criminal') isCriminal = true;
+    this.violationClassifications.forEach((classification) => {
+      if (
+        classification.id === this.classificationId?.value &&
+        classification.key === 'criminal'
+      )
+        isCriminal = true;
     });
     return isCriminal;
   }
   isCustom(): boolean {
     if (this.violationClassifications === undefined) return false;
     let isCustom = false;
-    this.violationClassifications.forEach(classification => {
-      if (classification.id === this.classificationId?.value && classification.key === 'custom') isCustom = true;
+    this.violationClassifications.forEach((classification) => {
+      if (
+        classification.id === this.classificationId?.value &&
+        classification.key === 'custom'
+      )
+        isCustom = true;
     });
     return isCustom;
   }
   isClearingAgent(): boolean {
     let isClearingAgent = false;
-    if (this.offenderType?.value === OffenderTypes.ClEARING_AGENT) isClearingAgent = true;
+    if (this.offenderType?.value === OffenderTypes.ClEARING_AGENT)
+      isClearingAgent = true;
     return isClearingAgent;
   }
   onViolationClassificationChange() {
-    this.classificationId?.valueChanges.subscribe(value => {
+    this.classificationId?.valueChanges.subscribe((value) => {
       if (!this.isCriminal()) {
         this.criminalType?.setValue(null);
         this.criminalType?.clearValidators();
@@ -139,14 +153,23 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.responsibilityRepeatViolation?.clearValidators();
         this.responsibilityRepeatViolation?.updateValueAndValidity();
       } else {
-        this.responsibilityRepeatViolation?.setValidators(CustomValidators.required);
+        this.responsibilityRepeatViolation?.setValidators(
+          CustomValidators.required,
+        );
       }
 
-      const offenderOfClassification = this.violationClassifications.find(vc => vc.id == value)?.offenderType;
+      const offenderOfClassification = this.violationClassifications.find(
+        (vc) => vc.id == value,
+      )?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
-        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE);
+        this.filteredOffenderTypes = this.offenderTypes.filter(
+          (offenderType) => offenderType.lookupKey === OffenderTypes.EMPLOYEE,
+        );
       } else if (offenderOfClassification === OffenderTypes.ClEARING_AGENT) {
-        this.filteredOffenderTypes = this.offenderTypes.filter(offenderType => offenderType.lookupKey === OffenderTypes.ClEARING_AGENT);
+        this.filteredOffenderTypes = this.offenderTypes.filter(
+          (offenderType) =>
+            offenderType.lookupKey === OffenderTypes.ClEARING_AGENT,
+        );
       } else {
         this.filteredOffenderTypes = this.offenderTypes;
       }
@@ -163,8 +186,14 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.numericFrom?.updateValueAndValidity();
         this.numericTo?.updateValueAndValidity();
       } else {
-        this.numericFrom?.setValidators([CustomValidators.required, Validators.min(0)]);
-        this.numericTo?.setValidators([CustomValidators.required, Validators.min(0)]);
+        this.numericFrom?.setValidators([
+          CustomValidators.required,
+          Validators.min(0),
+        ]);
+        this.numericTo?.setValidators([
+          CustomValidators.required,
+          Validators.min(0),
+        ]);
       }
     });
   }
@@ -172,23 +201,30 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.violationLevel?.valueChanges.subscribe(() => {
       this.filteredManagerDecisions = this.managerDecisions;
 
-      const violationLevel = this.violationLevels.find(violationLevel => violationLevel.lookupKey === this.violationLevel?.value)?.lookupKey;
+      const violationLevel = this.violationLevels.find(
+        (violationLevel) =>
+          violationLevel.lookupKey === this.violationLevel?.value,
+      )?.lookupKey;
 
       if (violationLevel === ViolationLevels.SIMPLE) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          managerDecision =>
-            managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY ||
-            managerDecision.lookupKey === ManagerDecisions.GUIDANCE
+          (managerDecision) =>
+            managerDecision.lookupKey ===
+              ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY ||
+            managerDecision.lookupKey === ManagerDecisions.GUIDANCE,
         );
       } else if (violationLevel === ViolationLevels.SERIOUS) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          managerDecision =>
-            managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL ||
-            managerDecision.lookupKey === ManagerDecisions.GUIDANCE
+          (managerDecision) =>
+            managerDecision.lookupKey ===
+              ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL ||
+            managerDecision.lookupKey === ManagerDecisions.GUIDANCE,
         );
       } else if (violationLevel === ViolationLevels.VERY_SERIOUS) {
         this.filteredManagerDecisions = this.managerDecisions.filter(
-          managerDecision => managerDecision.lookupKey === ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL
+          (managerDecision) =>
+            managerDecision.lookupKey ===
+            ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL,
         );
       }
     });

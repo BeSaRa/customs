@@ -1,4 +1,10 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 
 export const ShrinkAnimation = trigger('shrink', [
   state('true', style({ height: 0, width: 0, opacity: 0 })),

@@ -18,7 +18,11 @@ import { PenaltyService } from '@services/penalty.service';
   templateUrl: './violation-penalty.component.html',
   styleUrls: ['./violation-penalty.component.scss'],
 })
-export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPopupComponent, ViolationPenalty, ViolationPenaltyService> {
+export class ViolationPenaltyComponent extends AdminComponent<
+  ViolationPenaltyPopupComponent,
+  ViolationPenalty,
+  ViolationPenaltyService
+> {
   service = inject(ViolationPenaltyService);
   penaltyService = inject(PenaltyService);
   violationTypeService = inject(ViolationTypeService);
@@ -28,7 +32,7 @@ export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPo
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -37,7 +41,7 @@ export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPo
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +50,7 @@ export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPo
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -54,19 +58,51 @@ export class ViolationPenaltyComponent extends AdminComponent<ViolationPenaltyPo
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ViolationPenalty> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new SelectFilterColumn('violationType', this.violationTypeService.loadAsLookups(), 'id', 'getNames'),
-    new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
+    new SelectFilterColumn(
+      'violationType',
+      this.violationTypeService.loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'offenderType',
+      this.lookupService.lookups.offenderType,
+      'lookupKey',
+      'getNames',
+    ),
     new TextFilterColumn('repeat'),
-    new SelectFilterColumn('offenderLevel', this.lookupService.lookups.offenderLevel, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('penalty', this.penaltyService.loadAsLookups(), 'id', 'getNames'),
-    new SelectFilterColumn('penaltySigner', this.lookupService.lookups.penaltySigner, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('penaltyGuidance', this.lookupService.lookups.penaltyGuidance, 'lookupKey', 'getNames'),
+    new SelectFilterColumn(
+      'offenderLevel',
+      this.lookupService.lookups.offenderLevel,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'penalty',
+      this.penaltyService.loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'penaltySigner',
+      this.lookupService.lookups.penaltySigner,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'penaltyGuidance',
+      this.lookupService.lookups.penaltyGuidance,
+      'lookupKey',
+      'getNames',
+    ),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
+      this.lookupService.lookups.commonStatus.filter(
+        (item) => item.lookupKey !== StatusTypes.DELETED,
+      ),
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

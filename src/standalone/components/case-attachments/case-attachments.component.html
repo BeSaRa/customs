@@ -1,13 +1,27 @@
 <div class="flex items-center">
   @if (title) {
-  <h1 class="text-primary text-xl">{{ title }}</h1>
-  } @if (!readonly) {
-  <app-icon-button class="text-primary" (click)="openAddDialog()" icon="PLUS_BOX"></app-icon-button>
+    <h1 class="text-primary text-xl">{{ title }}</h1>
   }
-  <app-icon-button class="text-primary" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
+  @if (!readonly) {
+    <app-icon-button
+      class="text-primary"
+      (click)="openAddDialog()"
+      icon="PLUS_BOX"
+    ></app-icon-button>
+  }
+  <app-icon-button
+    class="text-primary"
+    (click)="reload$.next()"
+    icon="RELOAD"
+  ></app-icon-button>
 </div>
 <div class="flex">
-  <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
+  <table
+    mat-table
+    matSort
+    class="table-style table-primary"
+    [dataSource]="dataSource"
+  >
     <!-- documentTitle -->
     <ng-container matColumnDef="documentTitle">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.document_name }}</th>
@@ -16,26 +30,38 @@
     <!-- attachmentType -->
     <ng-container matColumnDef="attachmentType">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.attachment_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.attachmentTypeInfo.getNames() }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.attachmentTypeInfo.getNames() }}
+      </td>
     </ng-container>
     <!-- creationDate -->
     <ng-container matColumnDef="creationDate">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.creation_date }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.createdOn | date : Config.DATE_FORMAT }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.createdOn | date: Config.DATE_FORMAT }}
+      </td>
     </ng-container>
     <!-- creator -->
     <ng-container matColumnDef="creator">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.creator }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.creatorInfo.getNames() }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ element.creatorInfo.getNames() }}
+      </td>
     </ng-container>
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex">
-          <app-icon-button (click)="view$.next(element)" icon="VIEW"></app-icon-button>
+          <app-icon-button
+            (click)="view$.next(element)"
+            icon="VIEW"
+          ></app-icon-button>
           @if (!readonly) {
-          <app-icon-button (click)="delete$.next(element)" icon="DELETE"></app-icon-button>
+            <app-icon-button
+              (click)="delete$.next(element)"
+              icon="DELETE"
+            ></app-icon-button>
           }
         </div>
       </td>

@@ -1,15 +1,22 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2"
+>
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_global_setting }}
   </h1>
-  <app-icon-button [matTooltip]="lang.map.reset" (click)="resetForm()" icon="RELOAD"></app-icon-button>
+  <app-icon-button
+    [matTooltip]="lang.map.reset"
+    (click)="resetForm()"
+    icon="RELOAD"
+  ></app-icon-button>
 </div>
 <div class="bg-white shadow relative p-2 h-max">
   @if (loading$ | async) {
-  <div class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-    <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
-  </div>
+    <div
+      class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center"
+    >
+      <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
+    </div>
   }
   <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
     <!-- first tab -->
@@ -19,33 +26,41 @@
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="systemArabicName"
-            [label]="lang.map.system_ar_name" />
+            [label]="lang.map.system_ar_name"
+          />
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="systemEnglishName"
-            [label]="lang.map.system_en_name" />
+            [label]="lang.map.system_en_name"
+          />
 
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="sessionTimeout"
             type="number"
-            [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ')'" />
+            [label]="lang.map.session_time_out + ' (' + lang.map.minutes + ')'"
+          />
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="fileSize"
             type="number"
-            [label]="lang.map.file_size + ' (' + 'MB' + ')'" />
+            [label]="lang.map.file_size + ' (' + 'MB' + ')'"
+          />
 
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="inboxRefreshInterval"
             type="number"
-            [label]="lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ')'" />
+            [label]="
+              lang.map.inbox_refresh_interval + ' (' + lang.map.minutes + ')'
+            "
+          />
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="maxDeductionRatio"
             type="number"
-            [label]="lang.map.max_deduction_ratio + ' (' + '%' + ')'" />
+            [label]="lang.map.max_deduction_ratio + ' (' + '%' + ')'"
+          />
           <app-select-input
             class="col-span-2"
             [disabled]="(loading$ | async)!"
@@ -54,7 +69,8 @@
             [label]="lang.map.file_type"
             bindValue="id"
             [isMultiple]="true"
-            bindLabel="getNames" />
+            bindLabel="getNames"
+          />
 
           <app-switch
             [disabled]="(loading$ | async)! || form.invalid"
@@ -62,7 +78,8 @@
             [falseValue]="0"
             formControlName="enableMailNotification"
             [label]="lang.map.mail_notifications"
-            (changed)="save$.next()"></app-switch>
+            (changed)="save$.next()"
+          ></app-switch>
 
           <app-switch
             [disabled]="(loading$ | async)! || form.invalid"
@@ -70,7 +87,8 @@
             [falseValue]="0"
             formControlName="enableSMSNotification"
             [label]="lang.map.sms_notifications"
-            (changed)="save$.next()"></app-switch>
+            (changed)="save$.next()"
+          ></app-switch>
         </div>
         <!-- <div class="flex flex-row items-center justify-start px-4">
         <span class="block font-medium text-slate-700">{{ lang.map.support_email_list }}</span>
@@ -102,14 +120,21 @@
       <ng-container [formGroup]="form">
         <div class="grid grid-cols-4 gap-4 p-4">
           <ng-container formArrayName="supportEmailListParsed">
-            @for (emailInput of supportEmailListParsed.controls; track emailInput; let i = $index) {
-            <app-input [disabled]="(loading$ | async)!" [formControlName]="i" [label]="lang.map.email + ' ' + (i + 1)"
-              ><app-icon-button
-                appInputPrefix
-                icon="DELETE"
-                (click)="deleteEmail(i)"
-                [matTooltip]="lang.map.delete + ' ' + lang.map.email"
-            /></app-input>
+            @for (
+              emailInput of supportEmailListParsed.controls;
+              track emailInput;
+              let i = $index
+            ) {
+              <app-input
+                [disabled]="(loading$ | async)!"
+                [formControlName]="i"
+                [label]="lang.map.email + ' ' + (i + 1)"
+                ><app-icon-button
+                  appInputPrefix
+                  icon="DELETE"
+                  (click)="deleteEmail(i)"
+                  [matTooltip]="lang.map.delete + ' ' + lang.map.email"
+              /></app-input>
             }
           </ng-container>
           <div class="w-full flex items-center justify-start">
@@ -118,13 +143,16 @@
               [disabled]="(loading$ | async)!"
               icon="PLUS"
               (click)="addEmail()"
-              [matTooltip]="lang.map.add + ' ' + lang.map.alt_email" />
+              [matTooltip]="lang.map.add + ' ' + lang.map.alt_email"
+            />
           </div>
         </div>
       </ng-container>
     </mat-tab>
   </mat-tab-group>
   <div class="flex justify-end">
-    <app-button size="lg" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
+    <app-button size="lg" (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
   </div>
 </div>

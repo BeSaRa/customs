@@ -56,7 +56,9 @@ export class Violation extends BaseModel<Violation, ViolationService> {
     } = this;
     return {
       violationTypeId: controls ? [violationTypeId] : violationTypeId,
-      violationClassificationId: controls ? [violationClassification] : violationClassification,
+      violationClassificationId: controls
+        ? [violationClassification]
+        : violationClassification,
       violationsDate: controls ? [violationsDate] : violationsDate,
       violationsDateFrom: controls ? [violationsDateFrom] : violationsDateFrom,
       violationsDateTo: controls ? [violationsDateTo] : violationsDateTo,
@@ -64,13 +66,21 @@ export class Violation extends BaseModel<Violation, ViolationService> {
       enName: controls ? [enName] : enName,
       reportNumber: controls ? [reportNumber] : reportNumber,
       reportYear: controls ? [reportYear] : reportYear,
-      securityAdminDecision: controls ? [securityAdminDecision] : securityAdminDecision,
+      securityAdminDecision: controls
+        ? [securityAdminDecision]
+        : securityAdminDecision,
       description: controls ? [description] : description,
-      customsDeclarationNumber: controls ? [customsDeclarationNumber] : customsDeclarationNumber,
-      controlReportNumber: controls ? [controlReportNumber] : controlReportNumber,
+      customsDeclarationNumber: controls
+        ? [customsDeclarationNumber]
+        : customsDeclarationNumber,
+      controlReportNumber: controls
+        ? [controlReportNumber]
+        : controlReportNumber,
     };
   }
   getOffenderViolationSelectNames() {
-    return this.$$getService$$<ViolationService>().getViolationWithDateLabel(this);
+    return this.$$getService$$<ViolationService>().getViolationWithDateLabel(
+      this,
+    );
   }
 }

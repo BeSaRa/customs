@@ -60,7 +60,7 @@ export class OffenderAttachmentsComponent
         ...acc,
         [item.lookupKey]: item,
       }),
-      {}
+      {},
     );
 
   ngOnInit(): void {
@@ -79,8 +79,8 @@ export class OffenderAttachmentsComponent
                 readonly: this.readOnly,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }

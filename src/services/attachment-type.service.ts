@@ -21,7 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class AttachmentTypeService extends BaseCrudWithDialogService<AttachmentTypePopupComponent, AttachmentType> {
+export class AttachmentTypeService extends BaseCrudWithDialogService<
+  AttachmentTypePopupComponent,
+  AttachmentType
+> {
   serviceName = 'AttachmentTypeService';
   protected getModelClass(): Constructor<AttachmentType> {
     return AttachmentType;

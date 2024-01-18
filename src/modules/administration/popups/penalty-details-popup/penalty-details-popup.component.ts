@@ -4,7 +4,14 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { PenaltyDetails } from '@models/penalty-details';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
-import { Observable, filter, isObservable, of, switchMap, takeUntil } from 'rxjs';
+import {
+  Observable,
+  filter,
+  isObservable,
+  of,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -35,7 +42,8 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
-    if (this.isEmployee) this.form.get('offenderLevel')?.setValidators(CustomValidators.required);
+    if (this.isEmployee)
+      this.form.get('offenderLevel')?.setValidators(CustomValidators.required);
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -43,10 +51,22 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
     return this.form.valid;
   }
 
-  protected override _prepareModel(): PenaltyDetails | Observable<PenaltyDetails> {
-    this.model.penaltySignerInfo = new AdminResult().clone<AdminResult>(this.penaltySigners.find(ps => ps.lookupKey === this.penaltySigner?.value));
-    this.model.offenderLevelInfo = new AdminResult().clone<AdminResult>(this.offenderLevels.find(ol => ol.lookupKey === this.offenderLevel?.value));
-    this.model.legalRuleInfo = new AdminResult().clone<AdminResult>(this.legalRules.find(lr => lr.id === this.legalRule?.value));
+  protected override _prepareModel():
+    | PenaltyDetails
+    | Observable<PenaltyDetails> {
+    this.model.penaltySignerInfo = new AdminResult().clone<AdminResult>(
+      this.penaltySigners.find(
+        (ps) => ps.lookupKey === this.penaltySigner?.value,
+      ),
+    );
+    this.model.offenderLevelInfo = new AdminResult().clone<AdminResult>(
+      this.offenderLevels.find(
+        (ol) => ol.lookupKey === this.offenderLevel?.value,
+      ),
+    );
+    this.model.legalRuleInfo = new AdminResult().clone<AdminResult>(
+      this.legalRules.find((lr) => lr.id === this.legalRule?.value),
+    );
 
     return new PenaltyDetails().clone<PenaltyDetails>({
       ...this.model,
@@ -61,7 +81,7 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
   }
 
   protected getLegalRules() {
-    this.legalRuleService.loadAsLookups().subscribe(data => {
+    this.legalRuleService.loadAsLookups().subscribe((data) => {
       this.legalRules = data;
     });
   }
@@ -73,16 +93,16 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
         switchMap(() => {
           const result = this._beforeSave();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
-      .pipe(filter(value => value))
+      .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
-      .subscribe(model => {
+      .subscribe((model) => {
         this._afterSave(model);
       });
   }

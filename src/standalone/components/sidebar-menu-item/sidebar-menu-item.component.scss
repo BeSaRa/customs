@@ -1,4 +1,4 @@
-:host-context(html[dir="ltr"]) {
+:host-context(html[dir='ltr']) {
   a.menu-item-link:not(.level-1) {
     padding-left: calc((var(--level) - 1) * 20px);
     min-width: 58px;
@@ -14,7 +14,7 @@
   }
 }
 
-:host-context(html[dir="rtl"]) {
+:host-context(html[dir='rtl']) {
   a.menu-item-link:not(.level-1) {
     padding-right: calc((var(--level) - 1) * 20px);
     min-width: 58px;

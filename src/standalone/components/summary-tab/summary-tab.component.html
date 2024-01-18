@@ -4,14 +4,14 @@
 >
   <div class="col-span-1 md:col-span-2 lg:col-span-4">
     @if (model && model.departmentInfo) {
-    <div class="mb-1">
-      <span class="font-medium text-slate-700"
-        >{{ lang.map.lbl_department }} :</span
-      >
-      <small class="sm font-bold text-slate-600 py-2">
-        {{ model.departmentInfo.getNames() }}
-      </small>
-    </div>
+      <div class="mb-1">
+        <span class="font-medium text-slate-700"
+          >{{ lang.map.lbl_department }} :</span
+        >
+        <small class="sm font-bold text-slate-600 py-2">
+          {{ model.departmentInfo.getNames() }}
+        </small>
+      </div>
     }
     <div class="mb-3">
       <span class="font-medium text-slate-700">{{

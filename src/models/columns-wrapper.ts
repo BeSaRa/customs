@@ -7,11 +7,14 @@ export class ColumnsWrapper<M> {
   public displayedColumns: string[] = [];
   public filteredColumns: string[] = [];
   private clear$ = new Subject<void>();
-  public columnsMap: Record<string, ColumnMapContract<M>> = {} as Record<string, ColumnMapContract<M>>;
+  public columnsMap: Record<string, ColumnMapContract<M>> = {} as Record<
+    string,
+    ColumnMapContract<M>
+  >;
   private filter$!: BehaviorSubject<Partial<M>>;
   constructor(...args: FilterColumnContract[]) {
     this.list = args;
-    this.list.forEach(colum => {
+    this.list.forEach((colum) => {
       this.displayedColumns.push(colum.name);
       this.filteredColumns.push(colum.filterName);
       this.columnsMap[colum.filterName] = {} as ColumnMapContract<M>;

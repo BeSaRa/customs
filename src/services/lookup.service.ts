@@ -8,7 +8,10 @@ import { ServiceContract } from '@contracts/service-contract';
 @Injectable({
   providedIn: 'root',
 })
-export class LookupService extends RegisterServiceMixin(class {}) implements ServiceContract {
+export class LookupService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
   serviceName = 'LookupService';
   lookups: LookupMapContract = {} as LookupMapContract;
   statusMap: Map<number, AdminResult> = new Map<number, AdminResult>();
@@ -16,12 +19,15 @@ export class LookupService extends RegisterServiceMixin(class {}) implements Ser
   setLookups(lookups: LookupMapContract) {
     this.statusMap.clear();
     const keys = Object.keys(lookups);
-    keys.forEach(key => {
+    keys.forEach((key) => {
       const realKey = key as keyof LookupMapContract;
-      this.lookups[realKey] = lookups[realKey].map(item => {
+      this.lookups[realKey] = lookups[realKey].map((item) => {
         const lookup = new Lookup().clone(item);
         if (realKey === 'commonStatus') {
-          this.statusMap.set(item.lookupKey, new AdminResult().clone<AdminResult>({ ...item }));
+          this.statusMap.set(
+            item.lookupKey,
+            new AdminResult().clone<AdminResult>({ ...item }),
+          );
         }
         return lookup;
       });

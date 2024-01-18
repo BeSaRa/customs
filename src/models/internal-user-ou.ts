@@ -9,7 +9,10 @@ import { NamesContract } from '@contracts/names-contract';
 const { send, receive } = new InternalUserOUInterceptor();
 
 @InterceptModel({ send, receive })
-export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUService> {
+export class InternalUserOU extends BaseModel<
+  InternalUserOU,
+  InternalUserOUService
+> {
   $$__service_name__$$ = 'InternalUserOUService';
   internalUserId!: number;
   internalUserInfo!: AdminResult;
@@ -21,15 +24,22 @@ export class InternalUserOU extends BaseModel<InternalUserOU, InternalUserOUServ
   buildForm(controls = false): object {
     const { internalUserId, organizationUnitArray, status } = this;
     return {
-      internalUserId: controls ? [internalUserId, [CustomValidators.required]] : internalUserId,
-      organizationUnitArray: controls ? [organizationUnitArray, [CustomValidators.required]] : organizationUnitArray,
+      internalUserId: controls
+        ? [internalUserId, [CustomValidators.required]]
+        : internalUserId,
+      organizationUnitArray: controls
+        ? [organizationUnitArray, [CustomValidators.required]]
+        : organizationUnitArray,
       status: controls ? [status] : status,
     };
   }
 
   override getNames(): string {
     try {
-      return this.internalUserInfo[(this.getLangService().getCurrent().code + 'Name') as keyof NamesContract];
+      return this.internalUserInfo[
+        (this.getLangService().getCurrent().code +
+          'Name') as keyof NamesContract
+      ];
     } catch (e) {
       return 'lang service not ready yet';
     }

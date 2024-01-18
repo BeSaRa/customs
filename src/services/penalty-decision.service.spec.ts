@@ -12,6 +12,6 @@ describe('Service: PenaltyDecision', () => {
     [PenaltyDecisionService],
     (service: PenaltyDecisionService) => {
       expect(service).toBeTruthy();
-    }
+    },
   ));
 });

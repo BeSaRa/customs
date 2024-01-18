@@ -69,7 +69,7 @@ export class GlobalSettingComponent
         new FormControl(element, [
           CustomValidators.required,
           CustomValidators.pattern('EMAIL'),
-        ])
+        ]),
       );
     });
   }
@@ -83,7 +83,7 @@ export class GlobalSettingComponent
         switchMap(() => {
           const result = this._beforeSave();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
@@ -92,7 +92,7 @@ export class GlobalSettingComponent
           this.loadingSubject.next(true);
 
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(
         exhaustMap((model) => {
@@ -103,9 +103,9 @@ export class GlobalSettingComponent
 
               return throwError(() => new Error(error));
             }),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .subscribe((model) => {
         this._afterSave(model);
@@ -139,14 +139,14 @@ export class GlobalSettingComponent
               new FormControl({ value: element, disabled: true }, [
                 CustomValidators.required,
                 CustomValidators.pattern('EMAIL'),
-              ])
+              ]),
             );
           });
           this.form.patchValue(data);
           this.model = data;
           this.model = data;
           this._buildForm();
-        })
+        }),
       )
       .subscribe();
   }
@@ -160,7 +160,7 @@ export class GlobalSettingComponent
       .loadAllFileTypes()
       .pipe(
         finalize(() => this.loadingSubject.next(false)),
-        ignoreErrors()
+        ignoreErrors(),
       )
       .subscribe((data) => {
         this.fileTypes = data;
@@ -173,7 +173,7 @@ export class GlobalSettingComponent
     this.toast.success(
       this.lang.map.msg_save_x_success.change({
         x: this.lang.map.menu_global_setting,
-      })
+      }),
     );
   }
 
@@ -184,7 +184,7 @@ export class GlobalSettingComponent
       new FormControl('', [
         CustomValidators.required,
         CustomValidators.pattern('EMAIL'),
-      ])
+      ]),
     );
   }
 

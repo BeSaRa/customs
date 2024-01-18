@@ -17,10 +17,16 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './penalty.component.html',
   styleUrls: ['./penalty.component.scss'],
 })
-export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Penalty, PenaltyService> {
+export class PenaltyComponent extends AdminComponent<
+  PenaltyPopupComponent,
+  Penalty,
+  PenaltyService
+> {
   service = inject(PenaltyService);
 
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED,
+  );
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 
   actions: ContextMenuActionContract<Penalty>[] = [
@@ -29,7 +35,7 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -38,7 +44,7 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -47,7 +53,7 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -56,7 +62,7 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -66,9 +72,19 @@ export class PenaltyComponent extends AdminComponent<PenaltyPopupComponent, Pena
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('offenderType', this.offenderTypes, 'lookupKey', 'getNames'),
+    new SelectFilterColumn(
+      'offenderType',
+      this.offenderTypes,
+      'lookupKey',
+      'getNames',
+    ),
     new TextFilterColumn('erasureDuration'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

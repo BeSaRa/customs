@@ -7,7 +7,9 @@ import { delay, distinctUntilChanged } from 'rxjs/operators';
 })
 export class LoadingService {
   private state$ = new BehaviorSubject<boolean>(false);
-  loading$: Observable<boolean> = this.state$.asObservable().pipe(delay(0), distinctUntilChanged());
+  loading$: Observable<boolean> = this.state$
+    .asObservable()
+    .pipe(delay(0), distinctUntilChanged());
 
   constructor() {}
 

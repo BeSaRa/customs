@@ -1,5 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { Investigation } from '@models/investigation';
 import { DialogService } from '@services/dialog.service';
@@ -11,7 +15,12 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 @Component({
   selector: 'app-offender-attachment-popup',
   standalone: true,
-  imports: [CaseAttachmentsComponent, MatDialogModule, ButtonComponent, IconButtonComponent],
+  imports: [
+    CaseAttachmentsComponent,
+    MatDialogModule,
+    ButtonComponent,
+    IconButtonComponent,
+  ],
   templateUrl: './offender-attachment-popup.component.html',
   styleUrls: ['./offender-attachment-popup.component.scss'],
 })

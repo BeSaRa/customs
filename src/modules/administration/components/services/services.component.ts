@@ -17,9 +17,15 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './services.component.html',
   styleUrls: ['./services.component.scss'],
 })
-export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Services, ServicesService> {
+export class ServicesComponent extends AdminComponent<
+  ServicesPopupComponent,
+  Services,
+  ServicesService
+> {
   service = inject(ServicesService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED,
+  );
 
   actions: ContextMenuActionContract<Services>[] = [
     {
@@ -27,7 +33,7 @@ export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Se
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -36,7 +42,7 @@ export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Se
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -45,7 +51,7 @@ export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Se
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -58,7 +64,12 @@ export class ServicesComponent extends AdminComponent<ServicesPopupComponent, Se
     new TextFilterColumn('enName'),
     new TextFilterColumn('updatedOnString'),
     new TextFilterColumn('updatedByInfo'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

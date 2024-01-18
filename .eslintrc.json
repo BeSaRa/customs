@@ -1,13 +1,9 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -39,30 +35,19 @@
             "caughtErrorsIgnorePattern": "^_"
           }
         ],
-        "quotes": [
-          "error",
-          "single"
-        ]
+        "quotes": ["error", "single"]
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "extends": [
         "plugin:@angular-eslint/template/recommended",
         "plugin:@angular-eslint/template/accessibility"
       ],
       "rules": {
-        "@angular-eslint/template/label-has-associated-control": [
-          "off"
-        ],
-        "@angular-eslint/template/click-events-have-key-events": [
-          "off"
-        ],
-        "@angular-eslint/template/interactive-supports-focus": [
-          "off"
-        ],
+        "@angular-eslint/template/label-has-associated-control": ["off"],
+        "@angular-eslint/template/click-events-have-key-events": ["off"],
+        "@angular-eslint/template/interactive-supports-focus": ["off"],
         "@angular-eslint/template/prefer-control-flow": "error",
         "@angular-eslint/template/elements-content": "off"
       }

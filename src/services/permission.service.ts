@@ -28,14 +28,25 @@ export class PermissionService extends BaseCrudService<Permission> {
 
   @CastResponse(() => Permission)
   private _loadUserPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.getUrlSegmentUserPermission() + '/internal/' + userId);
+    return this.http.get<Permission[]>(
+      this.getUrlSegmentUserPermission() + '/internal/' + userId,
+    );
   }
 
-  private _savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
-    return this.http.post<ResponseContract<number>>(this.getUrlSegmentUserPermission() + '/' + userId + '/bulk', permissions);
+  private _savePermissions(
+    userId: number,
+    permissions: number[],
+  ): Observable<ResponseContract<number>> {
+    return this.http.post<ResponseContract<number>>(
+      this.getUrlSegmentUserPermission() + '/' + userId + '/bulk',
+      permissions,
+    );
   }
 
-  savePermissions(userId: number, permissions: number[]): Observable<ResponseContract<number>> {
+  savePermissions(
+    userId: number,
+    permissions: number[],
+  ): Observable<ResponseContract<number>> {
     return this._savePermissions(userId, permissions);
   }
 
@@ -48,21 +59,24 @@ export class PermissionService extends BaseCrudService<Permission> {
    */
   generateAppPermission(): Observable<Record<string, string>> {
     return this.loadAsLookups().pipe(
-      map(items => {
-        return items.reduce((acc, permission) => {
-          return {
-            ...acc,
-            [permission.permissionKey]: permission.permissionKey,
-          };
-        }, {} as Record<string, string>);
+      map((items) => {
+        return items.reduce(
+          (acc, permission) => {
+            return {
+              ...acc,
+              [permission.permissionKey]: permission.permissionKey,
+            };
+          },
+          {} as Record<string, string>,
+        );
       }),
-      tap(values => {
+      tap((values) => {
         let content = '';
-        Object.keys(values).forEach(item => {
+        Object.keys(values).forEach((item) => {
           content += `\n${item}:'${item}',`;
         });
         console.log(content);
-      })
+      }),
     );
   }
 

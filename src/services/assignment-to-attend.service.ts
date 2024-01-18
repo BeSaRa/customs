@@ -35,7 +35,7 @@ export class AssignmentToAttendService extends BaseCrudWithDialogService<
       `${this.getUrlSegment()}/${criteria.caseId}/obligation-to-attend`,
       {
         ...criteria,
-      }
+      },
     );
   }
 }

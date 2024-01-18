@@ -9,7 +9,10 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new ViolationClassificationInterceptor();
 
 @InterceptModel({ send, receive })
-export class ViolationClassification extends BaseModel<ViolationClassification, ViolationClassificationService> {
+export class ViolationClassification extends BaseModel<
+  ViolationClassification,
+  ViolationClassificationService
+> {
   $$__service_name__$$ = 'ViolationClassificationService';
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
@@ -20,11 +23,37 @@ export class ViolationClassification extends BaseModel<ViolationClassification, 
     const { arName, enName, offenderType, isSystem, status } = this;
 
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_ONLY')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_ONLY')]] : enName,
-      offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_ONLY'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_ONLY'),
+            ],
+          ]
+        : enName,
+      offenderType: controls
+        ? [offenderType, CustomValidators.required]
+        : offenderType,
       status: status,
-      isSystem: controls ? (isSystem ? [isSystem] : [false]) : isSystem ? isSystem : false,
+      isSystem: controls
+        ? isSystem
+          ? [isSystem]
+          : [false]
+        : isSystem
+          ? isSystem
+          : false,
     };
   }
 }

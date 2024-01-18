@@ -1,4 +1,7 @@
-String.prototype.change = function (this: string, param?: IChangeParams): string {
+String.prototype.change = function (
+  this: string,
+  param?: IChangeParams,
+): string {
   if (!param) {
     return this;
   }

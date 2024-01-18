@@ -1,55 +1,85 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ lang.map.violations }}</h1>
   @if (!readonly) {
-  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+    <app-icon-button
+      (click)="add$.next()"
+      class="text-primary"
+      icon="PLUS_BOX"
+    ></app-icon-button>
   }
-  <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
+  <app-icon-button
+    (click)="reload$.next()"
+    class="text-primary"
+    icon="RELOAD"
+  ></app-icon-button>
 </div>
 <div>
-  <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
+  <table
+    mat-table
+    matSort
+    class="table-style table-primary"
+    [dataSource]="dataSource"
+  >
     <!-- violationType -->
     <ng-container matColumnDef="violationType">
-      <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>{{ lang.map.violation_type }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.violationTypeInfo.getNames() }}</td>
+      <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>
+        {{ lang.map.violation_type }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.violationTypeInfo.getNames() }}
+      </td>
     </ng-container>
     <!-- classification -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell mat-sort-header="description" *matHeaderCellDef>{{ lang.map.description }}</th>
+      <th mat-header-cell mat-sort-header="description" *matHeaderCellDef>
+        {{ lang.map.description }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.description }}</td>
     </ng-container>
     <!-- violation data -->
     <ng-container matColumnDef="violationData">
-      <th mat-header-cell mat-sort-header="violationData" *matHeaderCellDef>{{ lang.map.violation_date }}</th>
+      <th mat-header-cell mat-sort-header="violationData" *matHeaderCellDef>
+        {{ lang.map.violation_date }}
+      </th>
       <td mat-cell *matCellDef="let element">
         @if (element.violationsDate) {
-        <span>
-          {{ element.violationsDate | date }}
-        </span>
-        } @if (!element.violationsDate) {
-        <span>
-          {{ lang.map.date_from }} {{ element.violationsDateFrom | date }} {{ lang.map.date_to }}
-          {{ element.violationsDateTo | date }}
-        </span>
+          <span>
+            {{ element.violationsDate | date }}
+          </span>
+        }
+        @if (!element.violationsDate) {
+          <span>
+            {{ lang.map.date_from }} {{ element.violationsDateFrom | date }}
+            {{ lang.map.date_to }}
+            {{ element.violationsDateTo | date }}
+          </span>
         }
       </td>
     </ng-container>
     <!-- actions -->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
+      <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
+        {{ lang.map.actions }}
+      </th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
           @if (readonly) {
-          <div [matTooltip]="lang.map.view">
-            <app-icon-button (click)="view$.next(element)" icon="VIEW"></app-icon-button>
-          </div>
-          } @if (!readonly) {
-          <div [matTooltip]="lang.map.edit">
-            <app-icon-button (click)="edit$.next(element)" icon="EDIT" />
-          </div>
-          } @if (!readonly) {
-          <div [matTooltip]="lang.map.delete">
-            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
-          </div>
+            <div [matTooltip]="lang.map.view">
+              <app-icon-button
+                (click)="view$.next(element)"
+                icon="VIEW"
+              ></app-icon-button>
+            </div>
+          }
+          @if (!readonly) {
+            <div [matTooltip]="lang.map.edit">
+              <app-icon-button (click)="edit$.next(element)" icon="EDIT" />
+            </div>
+          }
+          @if (!readonly) {
+            <div [matTooltip]="lang.map.delete">
+              <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
+            </div>
           }
         </div>
       </td>

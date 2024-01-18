@@ -17,8 +17,26 @@ export class Team extends BaseModel<Team, TeamService> {
     const { ldapGroupName, arName, enName, teamEmail, autoClaim } = this;
     return {
       ldapGroupName: ldapGroupName,
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
       teamEmail: [teamEmail, [CustomValidators.pattern('EMAIL')]],
       autoClaim: controls ? [autoClaim, CustomValidators.required] : autoClaim,
     };

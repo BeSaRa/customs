@@ -36,7 +36,9 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
   protected _afterSave(model: Team): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     this.dialogRef.close(this.model);
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);

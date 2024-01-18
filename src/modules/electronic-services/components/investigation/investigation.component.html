@@ -10,49 +10,51 @@
     <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
   </div>
   @if (!summaryMode()) {
-  <div
-    [formGroup]="form"
-    class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
-  >
-    <div class="mb-3">
-      <span class="font-medium text-white">{{
-        lang.map.report_draft_number
-      }}</span>
-      <label class="input-form p-2 block">
-        {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
-      </label>
+    <div
+      [formGroup]="form"
+      class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
+    >
+      <div class="mb-3">
+        <span class="font-medium text-white">{{
+          lang.map.report_draft_number
+        }}</span>
+        <label class="input-form p-2 block">
+          {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
+        </label>
+      </div>
+      <div class="mb-3">
+        <span class="font-medium text-white">{{
+          lang.map.investigation_file_number
+        }}</span>
+        <label class="input-form p-2 block">
+          {{
+            model?.investigationFullSerial
+              ? model?.investigationFullSerial
+              : '---'
+          }}
+        </label>
+      </div>
+      <div class="mb-3">
+        <span class="font-medium text-white">{{
+          lang.map.report_entry_date
+        }}</span>
+        <label class="input-form p-2 block">
+          {{ model?.createdOn ? (model?.createdOn | date) : '---' }}
+        </label>
+      </div>
+      <div class="mb-3">
+        <span class="font-medium text-white">{{
+          lang.map.limited_access
+        }}</span>
+        <label class="input-form p-2 block">
+          {{
+            model?.limitedAccessInfo
+              ? model?.limitedAccessInfo?.getNames()
+              : '---'
+          }}
+        </label>
+      </div>
     </div>
-    <div class="mb-3">
-      <span class="font-medium text-white">{{
-        lang.map.investigation_file_number
-      }}</span>
-      <label class="input-form p-2 block">
-        {{
-          model?.investigationFullSerial
-            ? model?.investigationFullSerial
-            : '---'
-        }}
-      </label>
-    </div>
-    <div class="mb-3">
-      <span class="font-medium text-white">{{
-        lang.map.report_entry_date
-      }}</span>
-      <label class="input-form p-2 block">
-        {{ model?.createdOn ? (model?.createdOn | date) : '---' }}
-      </label>
-    </div>
-    <div class="mb-3">
-      <span class="font-medium text-white">{{ lang.map.limited_access }}</span>
-      <label class="input-form p-2 block">
-        {{
-          model?.limitedAccessInfo
-            ? model?.limitedAccessInfo?.getNames()
-            : '---'
-        }}
-      </label>
-    </div>
-  </div>
   }
 </div>
 <div
@@ -69,13 +71,14 @@
       mat-stretch-tabs="false"
     >
       @if (!summaryMode()) {
-      <mat-tab [label]="lang.map.basic_report_data_and_violations">
-        <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
-      </mat-tab>
-      } @if (summaryMode()) {
-      <mat-tab [label]="lang.map.lbl_basic_info">
-        <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
-      </mat-tab>
+        <mat-tab [label]="lang.map.basic_report_data_and_violations">
+          <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
+        </mat-tab>
+      }
+      @if (summaryMode()) {
+        <mat-tab [label]="lang.map.lbl_basic_info">
+          <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
+        </mat-tab>
       }
       <mat-tab [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
@@ -84,9 +87,11 @@
         <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
       </mat-tab>
       @if (canViewExternalPersonsTab()) {
-      <mat-tab [label]="lang.map.external_persons">
-        <ng-container [ngTemplateOutlet]="external_persons_tab"></ng-container>
-      </mat-tab>
+        <mat-tab [label]="lang.map.external_persons">
+          <ng-container
+            [ngTemplateOutlet]="external_persons_tab"
+          ></ng-container>
+        </mat-tab>
       }
       <mat-tab [label]="lang.map.attachments">
         <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>

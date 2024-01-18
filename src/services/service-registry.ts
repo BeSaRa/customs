@@ -7,7 +7,9 @@ export class ServiceRegistry {
 
   static get<T>(name: string): T {
     if (!ServiceRegistry.services.has(name)) {
-      throw Error(`${name} not registered, please provide it to Ioc.set method before asking for it`);
+      throw Error(
+        `${name} not registered, please provide it to Ioc.set method before asking for it`,
+      );
     }
     return ServiceRegistry.services.get(name) as T;
   }

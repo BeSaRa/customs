@@ -1,8 +1,23 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InvestigationService } from '@services/investigation.service';
 import { MatTableModule } from '@angular/material/table';
@@ -25,11 +40,21 @@ import { ButtonComponent } from '../button/button.component';
 @Component({
   selector: 'app-violation-list',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, IconButtonComponent, MatTableModule, MatSortModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    IconButtonComponent,
+    MatTableModule,
+    MatSortModule,
+    MatTooltipModule,
+  ],
   templateUrl: './violation-list.component.html',
   styleUrls: ['./violation-list.component.scss'],
 })
-export class ViolationListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class ViolationListComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -41,7 +66,12 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   service = inject(InvestigationService);
   data = new Subject<Violation[]>();
   dataSource = new AppTableDataSource(this.data);
-  displayedColumns = ['violationType', 'description', 'violationData', 'actions'];
+  displayedColumns = [
+    'violationType',
+    'description',
+    'violationData',
+    'actions',
+  ];
   reload$: Subject<void> = new Subject<void>();
   view$ = new Subject<Violation>();
   edit$ = new Subject<Violation>();
@@ -72,8 +102,17 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   }
   listernToSaveCase() {
     this.transformer$
-      .pipe(tap((data: TransformerAction<Investigation>) => data.action == 'done' && (this.caseId = data.model?.id || '')))
-      .pipe(filter((data: TransformerAction<Investigation>) => data.action == 'save'))
+      .pipe(
+        tap(
+          (data: TransformerAction<Investigation>) =>
+            data.action == 'done' && (this.caseId = data.model?.id || ''),
+        ),
+      )
+      .pipe(
+        filter(
+          (data: TransformerAction<Investigation>) => data.action == 'save',
+        ),
+      )
       .subscribe(() => {
         this.saveCase.emit(this.transformer$);
       });
@@ -81,7 +120,13 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   private listenToAdd() {
     this.add$
       .pipe(takeUntil(this.destroy$))
-      .pipe(switchMap(() => this.service.openAddViolation(this.caseId as string, this.transformer$).afterClosed()))
+      .pipe(
+        switchMap(() =>
+          this.service
+            .openAddViolation(this.caseId as string, this.transformer$)
+            .afterClosed(),
+        ),
+      )
       .subscribe(() => this.reload$.next());
   }
 
@@ -94,47 +139,47 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
           this.violationService
             .load(undefined, { caseId: this.caseId })
             .pipe(
-              map(pagination => {
+              map((pagination) => {
                 this.data.next(pagination.rs);
                 return pagination;
-              })
+              }),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
-      .subscribe(pagination => this.violations.next(pagination.rs || []));
+      .subscribe((pagination) => this.violations.next(pagination.rs || []));
   }
 
   private listenToView() {
     this.view$
       .pipe(
-        exhaustMap(model =>
+        exhaustMap((model) =>
           this.violationTypeService
             .loadById(model.violationTypeId)
             .pipe(
-              map(type => ({
+              map((type) => ({
                 type,
                 model,
-              }))
+              })),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .pipe(
         exhaustMap(({ type, model }) =>
           this.violationClassificationService
             .loadById(type.classificationId)
             .pipe(
-              map(classification => {
+              map((classification) => {
                 return {
                   classification,
                   model,
                   type,
                 };
-              })
+              }),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .pipe(
         exhaustMap(({ model, type, classification }) =>
@@ -145,8 +190,8 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
               classifications: [classification],
               types: [type],
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe(() => this.reload$.next());
   }
@@ -154,33 +199,33 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   private listenToEdit() {
     this.edit$
       .pipe(
-        exhaustMap(model =>
+        exhaustMap((model) =>
           this.violationTypeService
             .loadById(model.violationTypeId)
             .pipe(
-              map(type => ({
+              map((type) => ({
                 type,
                 model,
-              }))
+              })),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .pipe(
         exhaustMap(({ type, model }) =>
           this.violationClassificationService
             .loadById(type.classificationId)
             .pipe(
-              map(classification => {
+              map((classification) => {
                 return {
                   classification,
                   model,
                   type,
                 };
-              })
+              }),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .pipe(
         exhaustMap(({ model, type, classification }) =>
@@ -191,8 +236,8 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
               classifications: [classification],
               types: [type],
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe(() => this.reload$.next());
   }
@@ -200,25 +245,31 @@ export class ViolationListComponent extends OnDestroyMixin(class {}) implements 
   private listenToDelete() {
     this.delete$
       .pipe(
-        exhaustMap(model =>
+        exhaustMap((model) =>
           this.dialog
             .confirm(
-              this.dataSource.data.length == 1 ? this.lang.map.reset_violations_effects_msg : '',
-              this.lang.map.msg_delete_x_confirm.change({ x: model.description })
+              this.dataSource.data.length == 1
+                ? this.lang.map.reset_violations_effects_msg
+                : '',
+              this.lang.map.msg_delete_x_confirm.change({
+                x: model.description,
+              }),
             )
             .afterClosed()
             .pipe(
-              map(userClick => ({
+              map((userClick) => ({
                 model,
                 userClick,
-              }))
-            )
-        )
+              })),
+            ),
+        ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_delete_x_success.change({ x: model.description }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_delete_x_success.change({ x: model.description }),
+        );
         this.empty.emit();
         this.reload$.next();
       });

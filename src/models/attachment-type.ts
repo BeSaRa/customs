@@ -7,16 +7,41 @@ import { CustomValidators } from '@validators/custom-validators';
 const { send, receive } = new AttachmentTypeInterceptor();
 
 @InterceptModel({ send, receive })
-export class AttachmentType extends BaseModel<AttachmentType, AttachmentTypeService> {
+export class AttachmentType extends BaseModel<
+  AttachmentType,
+  AttachmentTypeService
+> {
   $$__service_name__$$ = 'AttachmentTypeService';
   isSystem = false;
 
   buildForm(controls = false): object {
     const { arName, enName, status } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
-      status: controls ? [status ? status : 1, CustomValidators.required] : status ? status : 1,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
+      status: controls
+        ? [status ? status : 1, CustomValidators.required]
+        : status
+          ? status
+          : 1,
     };
   }
 }

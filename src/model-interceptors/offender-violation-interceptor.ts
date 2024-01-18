@@ -8,7 +8,9 @@ import { Offender } from '@models/offender';
 
 const offenderInterceptor = new OffenderInterceptor();
 const violationInterceptor = new ViolationInterceptor();
-export class OffenderViolationInterceptor implements ModelInterceptorContract<OffenderViolation> {
+export class OffenderViolationInterceptor
+  implements ModelInterceptorContract<OffenderViolation>
+{
   send(model: Partial<OffenderViolation>): Partial<OffenderViolation> {
     delete model.statusInfo;
     delete model.offenderInfo;
@@ -17,9 +19,16 @@ export class OffenderViolationInterceptor implements ModelInterceptorContract<Of
   }
 
   receive(model: OffenderViolation): OffenderViolation {
-    model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
-    model.offenderInfo && (model.offenderInfo = new Offender().clone<Offender>(offenderInterceptor.receive(model.offenderInfo)));
-    model.violationInfo && (model.violationInfo = new Violation().clone<Violation>(violationInterceptor.receive(model.violationInfo)));
+    model.statusInfo &&
+      (model.statusInfo = AdminResult.createInstance(model.statusInfo));
+    model.offenderInfo &&
+      (model.offenderInfo = new Offender().clone<Offender>(
+        offenderInterceptor.receive(model.offenderInfo),
+      ));
+    model.violationInfo &&
+      (model.violationInfo = new Violation().clone<Violation>(
+        violationInterceptor.receive(model.violationInfo),
+      ));
 
     return model;
   }

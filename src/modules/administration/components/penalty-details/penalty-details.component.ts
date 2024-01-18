@@ -53,7 +53,7 @@ export class PenaltyDetailsComponent implements OnInit {
   setDisplayedList() {
     this.list = this.list.map((listItem) => {
       const legalTextArabic = this.legalRules.find(
-        (item) => item.id === listItem.legalRule
+        (item) => item.id === listItem.legalRule,
       )?.legalTextArabic;
       listItem.legalTextArabic = legalTextArabic || '';
       return listItem;
@@ -114,7 +114,7 @@ export class PenaltyDetailsComponent implements OnInit {
       .pipe(
         filter((model): model is PenaltyDetails => {
           return this.service.isInstanceOf(model);
-        })
+        }),
       )
       .subscribe((result) => {
         // if (!result) return;
@@ -130,7 +130,7 @@ export class PenaltyDetailsComponent implements OnInit {
       .pipe(
         filter((model): model is PenaltyDetails => {
           return this.service.isInstanceOf(model);
-        })
+        }),
       )
       .subscribe((result) => {
         const index = this.list.indexOf(penaltyDetails);
@@ -144,13 +144,13 @@ export class PenaltyDetailsComponent implements OnInit {
       .confirm(
         this.lang.map.msg_delete_x_confirm.change({
           x: this.lang.map.menu_penalty_details,
-        })
+        }),
       )
       .afterClosed()
       .pipe(
         filter((value) => {
           return value === UserClick.YES;
-        })
+        }),
       )
       .subscribe(() => {
         const index = this.list.indexOf(penaltyDetails);

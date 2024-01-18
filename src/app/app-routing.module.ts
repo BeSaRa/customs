@@ -14,15 +14,22 @@ const routes: Routes = [
     children: [
       {
         path: AppRoutes.MAIN,
-        loadComponent: () => import('@standalone/components/main/main.component'),
+        loadComponent: () =>
+          import('@standalone/components/main/main.component'),
       },
       {
         path: AppRoutes.ADMINISTRATION,
-        loadChildren: () => import('@modules/administration/administration.module').then(m => m.AdministrationModule),
+        loadChildren: () =>
+          import('@modules/administration/administration.module').then(
+            (m) => m.AdministrationModule,
+          ),
       },
       {
         path: AppRoutes.ELECTRONIC_SERVICES,
-        loadChildren: () => import('@modules/electronic-services/electronic-services.module').then(m => m.ElectronicServicesModule),
+        loadChildren: () =>
+          import(
+            '@modules/electronic-services/electronic-services.module'
+          ).then((m) => m.ElectronicServicesModule),
       },
     ],
   },

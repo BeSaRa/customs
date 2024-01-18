@@ -17,16 +17,22 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './attachment-type.component.html',
   styleUrls: ['./attachment-type.component.scss'],
 })
-export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupComponent, AttachmentType, AttachmentTypeService> {
+export class AttachmentTypeComponent extends AdminComponent<
+  AttachmentTypePopupComponent,
+  AttachmentType,
+  AttachmentTypeService
+> {
   service = inject(AttachmentTypeService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED,
+  );
   actions: ContextMenuActionContract<AttachmentType>[] = [
     {
       name: 'view',
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -35,7 +41,7 @@ export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupC
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -44,7 +50,7 @@ export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupC
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -54,7 +60,12 @@ export class AttachmentTypeComponent extends AdminComponent<AttachmentTypePopupC
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

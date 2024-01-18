@@ -21,7 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class PermissionRoleService extends BaseCrudWithDialogService<PermissionRolePopupComponent, PermissionRole> {
+export class PermissionRoleService extends BaseCrudWithDialogService<
+  PermissionRolePopupComponent,
+  PermissionRole
+> {
   serviceName = 'PermissionRoleService';
 
   protected getModelClass(): Constructor<PermissionRole> {

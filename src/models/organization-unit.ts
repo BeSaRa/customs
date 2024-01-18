@@ -9,7 +9,10 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new OrganizationUnitInterceptor();
 
 @InterceptModel({ send, receive })
-export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUnitService> {
+export class OrganizationUnit extends BaseModel<
+  OrganizationUnit,
+  OrganizationUnitService
+> {
   $$__service_name__$$ = 'OrganizationUnitService';
   override status = StatusTypes.ACTIVE;
 
@@ -31,17 +34,53 @@ export class OrganizationUnit extends BaseModel<OrganizationUnit, OrganizationUn
   isCustoms!: number;
 
   buildForm(controls = false): object {
-    const { arName, enName, email, type, managerId, mawaredDepId, assistantOuId, managerAssistant, parent, isCustoms, status } = this;
+    const {
+      arName,
+      enName,
+      email,
+      type,
+      managerId,
+      mawaredDepId,
+      assistantOuId,
+      managerAssistant,
+      parent,
+      isCustoms,
+      status,
+    } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
       type: controls ? [type, CustomValidators.required] : type,
       managerId: controls ? [managerId, CustomValidators.required] : managerId,
       parent: controls ? [parent, CustomValidators.required] : parent,
       email: controls ? [email, CustomValidators.required] : email,
-      mawaredDepId: controls ? [mawaredDepId, CustomValidators.required] : mawaredDepId,
-      assistantOuId: controls ? [assistantOuId, CustomValidators.required] : assistantOuId,
-      managerAssistant: controls ? [managerAssistant, CustomValidators.required] : managerAssistant,
+      mawaredDepId: controls
+        ? [mawaredDepId, CustomValidators.required]
+        : mawaredDepId,
+      assistantOuId: controls
+        ? [assistantOuId, CustomValidators.required]
+        : assistantOuId,
+      managerAssistant: controls
+        ? [managerAssistant, CustomValidators.required]
+        : managerAssistant,
       isCustoms: controls ? [isCustoms, CustomValidators.required] : isCustoms,
 
       status: status,

@@ -14,7 +14,11 @@ import { NoneFilterColumn } from '@models/none-filter-column';
   templateUrl: './localization.component.html',
   styleUrls: ['./localization.component.scss'],
 })
-export class LocalizationComponent extends AdminComponent<LocalizationPopupComponent, Localization, LocalizationService> {
+export class LocalizationComponent extends AdminComponent<
+  LocalizationPopupComponent,
+  Localization,
+  LocalizationService
+> {
   service = inject(LocalizationService);
   actions: ContextMenuActionContract<Localization>[] = [
     {
@@ -22,7 +26,7 @@ export class LocalizationComponent extends AdminComponent<LocalizationPopupCompo
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -31,7 +35,7 @@ export class LocalizationComponent extends AdminComponent<LocalizationPopupCompo
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -40,7 +44,7 @@ export class LocalizationComponent extends AdminComponent<LocalizationPopupCompo
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -51,6 +55,6 @@ export class LocalizationComponent extends AdminComponent<LocalizationPopupCompo
     new TextFilterColumn('localizationKey'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

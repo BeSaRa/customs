@@ -60,7 +60,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   openExtendSuspensionDialog(
     model: SuspendedEmployee,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<
     SuspendedEmployeePopupComponent,
     SuspendedEmployee | UserClick.CLOSE
@@ -81,7 +81,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   }
   ConvertOffenderToSuspendedEmployee(
     offender: Offender,
-    caseId: string
+    caseId: string,
   ): SuspendedEmployee {
     const suspendedEmp = new SuspendedEmployee();
     suspendedEmp.arName = offender.offenderInfo?.arName as string;
@@ -94,20 +94,20 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   }
   @HasInterception
   saveSuspension(
-    @InterceptParam() model: SuspendedEmployee
+    @InterceptParam() model: SuspendedEmployee,
   ): Observable<unknown> {
     return this.http.post(
       this.investigationService.getUrlSegment() + '/suspend-employee',
-      model
+      model,
     );
   }
   @HasInterception
   saveExtendSuspension(
-    @InterceptParam() suspendedEmployee: SuspendedEmployee
+    @InterceptParam() suspendedEmployee: SuspendedEmployee,
   ): Observable<unknown> {
     return this.http.post<SuspendedEmployee>(
       this.investigationService.getUrlSegment() + '/extend-suspend-employee',
-      suspendedEmployee
+      suspendedEmployee,
     );
   }
 }

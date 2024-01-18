@@ -14,7 +14,13 @@ import { animate, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-menu-item-list',
   standalone: true,
-  imports: [MatIconModule, MenuItemIconComponent, InputComponent, ReactiveFormsModule, FilterSidebarMenuItemPipe],
+  imports: [
+    MatIconModule,
+    MenuItemIconComponent,
+    InputComponent,
+    ReactiveFormsModule,
+    FilterSidebarMenuItemPipe,
+  ],
   templateUrl: './menu-item-list.component.html',
   styleUrls: ['./menu-item-list.component.scss'],
   animations: [
@@ -26,7 +32,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             transform: 'scale(0)',
             opacity: 0,
-          })
+          }),
         ),
       ]),
       transition(':enter', [
@@ -39,7 +45,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
           style({
             transform: 'scale(1)',
             opacity: 1,
-          })
+          }),
         ),
       ]),
     ]),
@@ -56,6 +62,8 @@ export class MenuItemListComponent implements OnInit {
   control = new FormControl('', { nonNullable: true });
 
   ngOnInit(): void {
-    this.items = this.parent ? this.menuItemService.getChildren(this.parent) : this.menuItemService.getMenu();
+    this.items = this.parent
+      ? this.menuItemService.getChildren(this.parent)
+      : this.menuItemService.getMenu();
   }
 }

@@ -134,10 +134,10 @@ export class WitnessCriteriaPopupComponent
   ngOnInit(): void {
     this.witnessFormGroup = this.fb.group(new Witness().buildForm(true));
     this.employeeFormGroup = this.fb.group(
-      new MawaredEmployeeCriteria().buildForm(true)
+      new MawaredEmployeeCriteria().buildForm(true),
     );
     this.clearingAgentFormGroup = this.fb.group(
-      new ClearingAgentCriteria().buildForm(true)
+      new ClearingAgentCriteria().buildForm(true),
     );
 
     this.employeeFormGroup.patchValue({
@@ -181,7 +181,9 @@ export class WitnessCriteriaPopupComponent
     mawaredSearch$
       .pipe(
         map(() => this.employeeFormGroup.getRawValue()),
-        switchMap((value) => this.mawaredEmployeeService.load(undefined, value))
+        switchMap((value) =>
+          this.mawaredEmployeeService.load(undefined, value),
+        ),
       )
       .pipe(map((pagination) => pagination.rs))
       .subscribe((result) => {
@@ -194,7 +196,7 @@ export class WitnessCriteriaPopupComponent
     clearingAgentSearch$
       .pipe(
         map(() => this.clearingAgentFormGroup.getRawValue()),
-        switchMap((value) => this.clearingAgentService.load(undefined, value))
+        switchMap((value) => this.clearingAgentService.load(undefined, value)),
       )
       .pipe(map((pagination) => pagination.rs))
       .subscribe((result) => {
@@ -214,8 +216,8 @@ export class WitnessCriteriaPopupComponent
             personType: this.personTypeControl.value,
             witnessType: WitnessTypes.EXTERNAL,
             status: 1,
-          })
-        )
+          }),
+        ),
       )
       .pipe(
         switchMap((witness) => {
@@ -228,15 +230,15 @@ export class WitnessCriteriaPopupComponent
                   ...witness,
                   id: model.id,
                 };
-              })
+              }),
             )
             .pipe(ignoreErrors())
             .pipe(map(() => witness));
-        })
+        }),
       )
       .subscribe((model) => {
         this.toast.success(
-          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
         this.matDialogRef.close();
       });
@@ -245,8 +247,11 @@ export class WitnessCriteriaPopupComponent
     this.addEmployee$
       .pipe(
         map((model) =>
-          model.convertToWitness(this.data.caseId, this.personTypeControl.value)
-        )
+          model.convertToWitness(
+            this.data.caseId,
+            this.personTypeControl.value,
+          ),
+        ),
       )
       .pipe(
         switchMap((witness) => {
@@ -259,15 +264,15 @@ export class WitnessCriteriaPopupComponent
                   ...witness,
                   id: model.id,
                 };
-              })
+              }),
             )
             .pipe(ignoreErrors())
             .pipe(map(() => witness));
-        })
+        }),
       )
       .subscribe((model) => {
         this.toast.success(
-          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
       });
   }
@@ -276,8 +281,11 @@ export class WitnessCriteriaPopupComponent
     this.addClearingAgent$
       .pipe(
         map((model) =>
-          model.convertToWitness(this.data.caseId, this.personTypeControl.value)
-        )
+          model.convertToWitness(
+            this.data.caseId,
+            this.personTypeControl.value,
+          ),
+        ),
       )
       .pipe(
         switchMap((witness) => {
@@ -290,15 +298,15 @@ export class WitnessCriteriaPopupComponent
                   ...witness,
                   id: model.id,
                 };
-              })
+              }),
             )
             .pipe(ignoreErrors())
             .pipe(map(() => witness));
-        })
+        }),
       )
       .subscribe((model) => {
         this.toast.success(
-          this.lang.map.msg_add_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
       });
   }

@@ -10,7 +10,11 @@ import { OperationType } from '@enums/operation-type';
 import { BaseModel } from '@abstracts/base-model';
 import { AuditPopupComponent } from '@standalone/components/audit-popup/audit-popup.component';
 
-export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>, PrimaryType = number>
+export abstract class BaseCrudWithDialogService<
+    C,
+    M extends BaseModel<M, BaseCrudWithDialogServiceContract<C, M>>,
+    PrimaryType = number,
+  >
   extends BaseCrudService<M, PrimaryType>
   implements BaseCrudWithDialogServiceContract<C, M, PrimaryType>
 {
@@ -21,73 +25,89 @@ export abstract class BaseCrudWithDialogService<C, M extends BaseModel<M, BaseCr
   openCreateDialog(
     model?: M | undefined,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
-      ...config,
-      disableClose: true,
-      data: {
-        model: model || this.getModelInstance(),
-        extras: { ...extras },
-        operation: OperationType.CREATE,
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
+      this.getDialogComponent(),
+      {
+        ...config,
+        disableClose: true,
+        data: {
+          model: model || this.getModelInstance(),
+          extras: { ...extras },
+          operation: OperationType.CREATE,
+        },
       },
-    });
+    );
   }
 
   openEditDialog(
     model: M,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
-      ...config,
-      disableClose: true,
-      data: {
-        model,
-        extras: { ...extras },
-        operation: OperationType.UPDATE,
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
+      this.getDialogComponent(),
+      {
+        ...config,
+        disableClose: true,
+        data: {
+          model,
+          extras: { ...extras },
+          operation: OperationType.UPDATE,
+        },
       },
-    });
+    );
   }
 
   openEditDialogWithComposite(
     model: M,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<C, M | UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(this.getDialogComponent(), {
-      ...config,
-      disableClose: true,
-      data: {
-        model,
-        extras: { ...extras },
-        operation: OperationType.UPDATE,
+    return this.dialog.open<C, CrudDialogDataContract<M>, M | UserClick.CLOSE>(
+      this.getDialogComponent(),
+      {
+        ...config,
+        disableClose: true,
+        data: {
+          model,
+          extras: { ...extras },
+          operation: OperationType.UPDATE,
+        },
       },
-    });
+    );
   }
 
   openViewDialog(
     model: M,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<C, UserClick.CLOSE> {
-    return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(this.getDialogComponent(), {
-      ...config,
-      disableClose: true,
-      data: {
-        model,
-        extras: { ...extras },
-        operation: OperationType.VIEW,
+    return this.dialog.open<C, CrudDialogDataContract<M>, UserClick.CLOSE>(
+      this.getDialogComponent(),
+      {
+        ...config,
+        disableClose: true,
+        data: {
+          model,
+          extras: { ...extras },
+          operation: OperationType.VIEW,
+        },
       },
-    });
+    );
   }
 
   openViewAuditDialog(
     model: M,
     extras?: object | undefined,
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
   ): MatDialogRef<AuditPopupComponent, UserClick.CLOSE> {
-    return this.dialog.open<AuditPopupComponent, CrudDialogDataContract<M>, UserClick.CLOSE>(AuditPopupComponent, {
+    return this.dialog.open<
+      AuditPopupComponent,
+      CrudDialogDataContract<M>,
+      UserClick.CLOSE
+    >(AuditPopupComponent, {
       ...config,
       disableClose: true,
       data: {

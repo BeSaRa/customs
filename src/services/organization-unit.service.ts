@@ -27,7 +27,10 @@ import { OrganizationUnitType } from '@enums/organization-unit-type';
 @Injectable({
   providedIn: 'root',
 })
-export class OrganizationUnitService extends BaseCrudWithDialogService<OrganizationUnitPopupComponent, OrganizationUnit> {
+export class OrganizationUnitService extends BaseCrudWithDialogService<
+  OrganizationUnitPopupComponent,
+  OrganizationUnit
+> {
   override serviceName = 'OrganizationUnitService';
   protected getModelClass(): Constructor<OrganizationUnit> {
     return OrganizationUnit;
@@ -46,14 +49,25 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<Organizat
   }
 
   @CastResponse()
-  loadOUsByType(type = OrganizationUnitType.SECTION): Observable<OrganizationUnit[]> {
-    return this.http.get<OrganizationUnit[]>(this.getUrlSegment() + `/type/${type}`);
+  loadOUsByType(
+    type = OrganizationUnitType.SECTION,
+  ): Observable<OrganizationUnit[]> {
+    return this.http.get<OrganizationUnit[]>(
+      this.getUrlSegment() + `/type/${type}`,
+    );
   }
 
-  downloadOuLogo(id: number, domSanitizer: DomSanitizer): Observable<BlobModel> {
+  downloadOuLogo(
+    id: number,
+    domSanitizer: DomSanitizer,
+  ): Observable<BlobModel> {
     return this.http
-      .post(this.getUrlSegment() + '/stamp/content', { departmentId: id }, { responseType: 'blob' })
-      .pipe(map(blob => new BlobModel(blob, domSanitizer)));
+      .post(
+        this.getUrlSegment() + '/stamp/content',
+        { departmentId: id },
+        { responseType: 'blob' },
+      )
+      .pipe(map((blob) => new BlobModel(blob, domSanitizer)));
   }
 
   uploadOuLogo(ouLogo: OuLogo): Observable<unknown> {

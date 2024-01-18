@@ -14,7 +14,13 @@ export class GuidePanel {
   repeat!: number;
   penaltySigner!: number;
   buildForm(): object {
-    const { offenderType, offenderLevel, violationTypeIdsList, repeat, penaltySigner } = this;
+    const {
+      offenderType,
+      offenderLevel,
+      violationTypeIdsList,
+      repeat,
+      penaltySigner,
+    } = this;
     return {
       offenderType: [offenderType, [CustomValidators.required]],
       offenderLevel: [offenderLevel],

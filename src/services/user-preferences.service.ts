@@ -5,7 +5,12 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { UserPreferences } from '@models/user-preferences';
 import { UserPreferencesPopupComponent } from '@modules/administration/popups/user-preferences-popup/user-preferences-popup.component';
-import { CastResponse, CastResponseContainer, HasInterception, InterceptParam } from 'cast-response';
+import {
+  CastResponse,
+  CastResponseContainer,
+  HasInterception,
+  InterceptParam,
+} from 'cast-response';
 import { EmployeeService } from './employee.service';
 import { Observable } from 'rxjs';
 
@@ -23,7 +28,10 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class UserPreferencesService extends BaseCrudWithDialogService<UserPreferencesPopupComponent, UserPreferences> {
+export class UserPreferencesService extends BaseCrudWithDialogService<
+  UserPreferencesPopupComponent,
+  UserPreferences
+> {
   override serviceName = 'UserPreferencesService';
 
   protected employee = inject(EmployeeService).getEmployee();
@@ -44,6 +52,9 @@ export class UserPreferencesService extends BaseCrudWithDialogService<UserPrefer
   @HasInterception
   @CastResponse()
   save(@InterceptParam() model: UserPreferences): Observable<UserPreferences> {
-    return this.http.post<UserPreferences>(this.urlService.URLS.USER_PREFERENCES + `/${this.employee?.id}`, model);
+    return this.http.post<UserPreferences>(
+      this.urlService.URLS.USER_PREFERENCES + `/${this.employee?.id}`,
+      model,
+    );
   }
 }

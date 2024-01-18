@@ -1,7 +1,12 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_penalty_details }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
@@ -11,29 +16,40 @@
           formControlName="legalRule"
           [options]="legalRules"
           bindLabel="getNames"
-          bindValue="id" />
+          bindValue="id"
+        />
         <app-select-input
           [label]="lang.map.penalty_signer"
           formControlName="penaltySigner"
           [options]="penaltySigners"
           bindLabel="getNames"
-          bindValue="lookupKey" />
+          bindValue="lookupKey"
+        />
         <app-select-input
           [label]="lang.map.offender_level"
           formControlName="offenderLevel"
           [options]="offenderLevels"
           bindLabel="getNames"
-          bindValue="lookupKey" />
+          bindValue="lookupKey"
+        />
       </div>
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="this.save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="this.save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

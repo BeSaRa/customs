@@ -13,7 +13,10 @@ import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confiden
 const { send, receive } = new InvestigationInterceptor();
 
 @InterceptModel({ send, receive })
-export class Investigation extends BaseCase<InvestigationService, Investigation> {
+export class Investigation extends BaseCase<
+  InvestigationService,
+  Investigation
+> {
   $$__service_name__$$ = 'InvestigationService';
   limitedAccess: number = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
   investigationFullSerial!: string;
@@ -30,13 +33,32 @@ export class Investigation extends BaseCase<InvestigationService, Investigation>
   namesOfOffenders?: string = '';
 
   buildForm(controls = false, disabled = false): object {
-    const { description, createdOn, investigationFullSerial, draftFullSerial, limitedAccess } = this;
+    const {
+      description,
+      createdOn,
+      investigationFullSerial,
+      draftFullSerial,
+      limitedAccess,
+    } = this;
     return {
-      draftFullSerial: controls ? [{ value: draftFullSerial, disabled: true }] : draftFullSerial,
-      investigationFullSerial: controls ? [{ value: investigationFullSerial, disabled: true }] : investigationFullSerial,
-      createdOn: controls ? [{ value: createdOn, disabled: disabled }] : createdOn,
-      description: controls ? [{ value: description, disabled: disabled }] : description,
-      limitedAccess: controls ? [{ value: limitedAccess, disabled: disabled }, CustomValidators.required] : limitedAccess,
+      draftFullSerial: controls
+        ? [{ value: draftFullSerial, disabled: true }]
+        : draftFullSerial,
+      investigationFullSerial: controls
+        ? [{ value: investigationFullSerial, disabled: true }]
+        : investigationFullSerial,
+      createdOn: controls
+        ? [{ value: createdOn, disabled: disabled }]
+        : createdOn,
+      description: controls
+        ? [{ value: description, disabled: disabled }]
+        : description,
+      limitedAccess: controls
+        ? [
+            { value: limitedAccess, disabled: disabled },
+            CustomValidators.required,
+          ]
+        : limitedAccess,
     };
   }
 }

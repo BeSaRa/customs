@@ -50,7 +50,7 @@ export class InvestigationDraftsComponent implements OnInit {
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
     new NoneFilterColumn('namesOfOffenders'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   );
 
   private load() {
@@ -61,9 +61,9 @@ export class InvestigationDraftsComponent implements OnInit {
             catchError((error) => {
               return throwError(() => error);
             }),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .subscribe((data: Investigation[]) => {
         data.forEach((investigation) => {

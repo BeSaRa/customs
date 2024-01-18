@@ -17,7 +17,11 @@ import { InternalUserService } from '@services/internal-user.service';
   templateUrl: './organization-unit.component.html',
   styleUrls: ['./organization-unit.component.scss'],
 })
-export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPopupComponent, OrganizationUnit, OrganizationUnitService> {
+export class OrganizationUnitComponent extends AdminComponent<
+  OrganizationUnitPopupComponent,
+  OrganizationUnit,
+  OrganizationUnitService
+> {
   service = inject(OrganizationUnitService);
 
   internalUserService = inject(InternalUserService);
@@ -27,7 +31,7 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -36,7 +40,7 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -45,7 +49,7 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -58,19 +62,21 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
     {
       name: 'email',
       type: 'info',
-      label: item => `${this.lang.map.email} : ${item.email}`,
+      label: (item) => `${this.lang.map.email} : ${item.email}`,
       parent: 'more-details',
     },
     {
       name: 'ldap_group_name',
       type: 'info',
-      label: item => `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
+      label: (item) =>
+        `${this.lang.map.ldap_group_name} : ${item.ldapGroupName}`,
       parent: 'more-details',
     },
     {
       name: 'ldap_limited_group_name',
       type: 'info',
-      label: item => `${this.lang.map.ldap_limited_group_name} : ${item.ldapLimitedGroupName}`,
+      label: (item) =>
+        `${this.lang.map.ldap_limited_group_name} : ${item.ldapLimitedGroupName}`,
       parent: 'more-details',
     },
   ];
@@ -81,12 +87,19 @@ export class OrganizationUnitComponent extends AdminComponent<OrganizationUnitPo
     new TextFilterColumn('enName'),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
+      this.lookupService.lookups.commonStatus.filter(
+        (item) => item.lookupKey !== StatusTypes.DELETED,
+      ),
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
     new TextFilterColumn('mawaredDepId'),
-    new SelectFilterColumn('assistantOuId', this.service.loadOUsByType(), 'id', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'assistantOuId',
+      this.service.loadOUsByType(),
+      'id',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

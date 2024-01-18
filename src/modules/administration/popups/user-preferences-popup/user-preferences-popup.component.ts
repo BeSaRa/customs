@@ -38,7 +38,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
         new FormControl(email, [
           CustomValidators.required,
           CustomValidators.pattern('EMAIL'),
-        ])
+        ]),
     );
     const formModel = {
       ...formObj,
@@ -56,7 +56,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
       new FormControl('', [
         CustomValidators.required,
         CustomValidators.pattern('EMAIL'),
-      ])
+      ]),
     );
   }
 

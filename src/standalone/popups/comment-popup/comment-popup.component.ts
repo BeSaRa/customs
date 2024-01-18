@@ -64,7 +64,7 @@ export class CommentPopupComponent
   isPreviewForm = false;
   constructor(
     private internalUserOUService: InternalUserOUService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
   ) {
     super();
   }
@@ -126,7 +126,7 @@ export class CommentPopupComponent
           return this.model
             .getService()
             .completeTask(this.model.taskDetails.tkiid, completeBody);
-        })
+        }),
       )
       .subscribe(() => {
         this.dialogRef.close(UserClick.YES);
@@ -264,7 +264,7 @@ export class CommentPopupComponent
     return 'صفة الموقع';
   }
   offenders!: [
-    { name: string; jobTitle: string; violations: [{ name: 'مخالفة ١' }] }
+    { name: string; jobTitle: string; violations: [{ name: 'مخالفة ١' }] },
   ];
   violations = [{ name: 'مخالفة ١' }, { name: 'مخالفة ٢' }];
   violation = { name: 'مخالفة ١', date: '1/1/2021' };

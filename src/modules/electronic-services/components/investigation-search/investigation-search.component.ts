@@ -73,7 +73,7 @@ export class InvestigationSearchComponent implements OnInit {
     new NoneFilterColumn('limitedAccess'),
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   );
 
   protected _beforeSearch(): boolean | Observable<boolean> {
@@ -90,7 +90,7 @@ export class InvestigationSearchComponent implements OnInit {
         switchMap(() => {
           const result = this._beforeSearch();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
@@ -99,9 +99,9 @@ export class InvestigationSearchComponent implements OnInit {
             catchError((error) => {
               return throwError(error);
             }),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .subscribe((data: Investigation[]) => {
         if (data.length) {

@@ -50,7 +50,7 @@ export class MakePenaltyDecisionPopupComponent
       this.penaltyImposedBySystem
         ? this.penaltyList[this.penaltyImposedBySystem].id
         : null,
-      [CustomValidators.required]
+      [CustomValidators.required],
     ),
   });
   constructor() {
@@ -74,7 +74,7 @@ export class MakePenaltyDecisionPopupComponent
             status: 1,
           });
           return penaltyDecision.save();
-        })
+        }),
       )
       .subscribe(() => this.dialogRef.close());
   }

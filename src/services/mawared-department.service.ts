@@ -22,7 +22,10 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class MawaredDepartmentService extends BaseCrudWithDialogService<MawaredDepartmentPopupComponent, MawaredDepartment> {
+export class MawaredDepartmentService extends BaseCrudWithDialogService<
+  MawaredDepartmentPopupComponent,
+  MawaredDepartment
+> {
   serviceName = 'MawaredDepartmentService';
   protected getModelClass(): Constructor<MawaredDepartment> {
     return MawaredDepartment;
@@ -42,6 +45,8 @@ export class MawaredDepartmentService extends BaseCrudWithDialogService<MawaredD
 
   @CastResponse()
   loadUserDepartments(): Observable<MawaredDepartment[]> {
-    return this.http.get<MawaredDepartment[]>(this.getUrlSegment() + '/user-departments');
+    return this.http.get<MawaredDepartment[]>(
+      this.getUrlSegment() + '/user-departments',
+    );
   }
 }

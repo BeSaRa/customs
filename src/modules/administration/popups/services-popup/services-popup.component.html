@@ -1,43 +1,90 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_services }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content" style="overflow: auto">
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+    >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 items-center">
-            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
-            <app-input formControlName="bawServiceCode" [label]="lang.map.baw_service_code"></app-input>
-            <app-input formControlName="licenseSerialCode" [label]="lang.map.license_serial_code"></app-input>
-            <app-input formControlName="requestSerialCode" [label]="lang.map.request_serial_code"></app-input>
+            <app-input
+              formControlName="arName"
+              [label]="lang.map.ar_name"
+            ></app-input>
+            <app-input
+              formControlName="enName"
+              [label]="lang.map.en_name"
+            ></app-input>
+            <app-input
+              formControlName="bawServiceCode"
+              [label]="lang.map.baw_service_code"
+            ></app-input>
+            <app-input
+              formControlName="licenseSerialCode"
+              [label]="lang.map.license_serial_code"
+            ></app-input>
+            <app-input
+              formControlName="requestSerialCode"
+              [label]="lang.map.request_serial_code"
+            ></app-input>
             <app-input
               formControlName="serviceTimeLimit"
               [label]="lang.map.service_time_limit"
-              [type]="'number'"></app-input>
+              [type]="'number'"
+            ></app-input>
             <app-input
               formControlName="licenseMinTime"
               [label]="lang.map.license_min_time + ' (months)'"
-              [type]="'number'"></app-input>
+              [type]="'number'"
+            ></app-input>
             <app-input
               formControlName="licenseMaxTime"
               [label]="lang.map.license_max_time + ' (months)'"
-              [type]="'number'"></app-input>
-            <app-input formControlName="fees" [label]="lang.map.fees" [type]="'number'"></app-input>
+              [type]="'number'"
+            ></app-input>
+            <app-input
+              formControlName="fees"
+              [label]="lang.map.fees"
+              [type]="'number'"
+            ></app-input>
           </div>
           <div class="grid grid-cols-1 gap-4 items-center">
-            <app-textarea formControlName="serviceTerms" [label]="lang.map.service_terms"></app-textarea>
-            <app-textarea formControlName="serviceRequirements" [label]="lang.map.service_requirements"></app-textarea>
-            <app-textarea formControlName="serviceDescription" [label]="lang.map.service_description"></app-textarea>
-            <app-textarea formControlName="serviceStepsArabic" [label]="lang.map.service_steps_arabic"></app-textarea>
-            <app-textarea formControlName="serviceStepsEnglish" [label]="lang.map.service_steps_english"></app-textarea>
+            <app-textarea
+              formControlName="serviceTerms"
+              [label]="lang.map.service_terms"
+            ></app-textarea>
+            <app-textarea
+              formControlName="serviceRequirements"
+              [label]="lang.map.service_requirements"
+            ></app-textarea>
+            <app-textarea
+              formControlName="serviceDescription"
+              [label]="lang.map.service_description"
+            ></app-textarea>
+            <app-textarea
+              formControlName="serviceStepsArabic"
+              [label]="lang.map.service_steps_arabic"
+            ></app-textarea>
+            <app-textarea
+              formControlName="serviceStepsEnglish"
+              [label]="lang.map.service_steps_english"
+            ></app-textarea>
             <app-switch
               formControlName="status"
               [label]="lang.map.lbl_status"
               trueValue="1"
-              falseValue="0"></app-switch>
+              falseValue="0"
+            ></app-switch>
           </div>
         </ng-container>
       </mat-tab>
@@ -48,11 +95,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

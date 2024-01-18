@@ -18,12 +18,22 @@ import { GetLookupServiceContract } from '@contracts/get-lookup-service-contract
 
 export abstract class BaseModel<
     M,
-    S extends BaseCrudServiceContract<M, PrimaryType> | BaseCrudWithDialogServiceContract<C, M, PrimaryType>,
+    S extends
+      | BaseCrudServiceContract<M, PrimaryType>
+      | BaseCrudWithDialogServiceContract<C, M, PrimaryType>,
     C = unknown,
-    PrimaryType = number
+    PrimaryType = number,
   >
-  extends HasServiceMixin(ClonerMixin(GetNamesMixin(GetLookupServiceMixin(class {}))))
-  implements HasServiceNameContract, ModelCrudContract<M>, BaseModelContract, CloneContract, GetNamesContract, GetLookupServiceContract
+  extends HasServiceMixin(
+    ClonerMixin(GetNamesMixin(GetLookupServiceMixin(class {}))),
+  )
+  implements
+    HasServiceNameContract,
+    ModelCrudContract<M>,
+    BaseModelContract,
+    CloneContract,
+    GetNamesContract,
+    GetLookupServiceContract
 {
   abstract override $$__service_name__$$: string;
   id!: number;
@@ -36,9 +46,12 @@ export abstract class BaseModel<
   updatedOn!: string;
 
   private getCrudWithDialogService(): BaseCrudWithDialogServiceContract<C, M> {
-    const service = this.$$getService$$<BaseCrudWithDialogServiceContract<C, M>>();
+    const service =
+      this.$$getService$$<BaseCrudWithDialogServiceContract<C, M>>();
     if (!service || !service.openCreateDialog) {
-      throw new Error('Please extends BaseCrudWithDialogService to use this method! in model service');
+      throw new Error(
+        'Please extends BaseCrudWithDialogService to use this method! in model service',
+      );
     }
     return service;
   }
@@ -48,12 +61,12 @@ export abstract class BaseModel<
       .activate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.ACTIVE))
       .pipe(
-        map(status => {
+        map((status) => {
           this.status = status;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;
           return this as unknown as M;
-        })
+        }),
       );
   }
 
@@ -66,12 +79,12 @@ export abstract class BaseModel<
       .deactivate(this.id as PrimaryType)
       .pipe(map(() => StatusTypes.INACTIVE))
       .pipe(
-        map(status => {
+        map((status) => {
           this.status = status;
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.statusInfo = this.$$getLookupService$$().statusMap.get(status)!;
           return this as unknown as M;
-        })
+        }),
       );
   }
 
@@ -104,18 +117,34 @@ export abstract class BaseModel<
   }
 
   openCreate(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
-    return this.getCrudWithDialogService().openCreateDialog(this as unknown as M, extras, config);
+    return this.getCrudWithDialogService().openCreateDialog(
+      this as unknown as M,
+      extras,
+      config,
+    );
   }
 
   openEdit(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
-    return this.getCrudWithDialogService().openEditDialog(this as unknown as M, extras, config);
+    return this.getCrudWithDialogService().openEditDialog(
+      this as unknown as M,
+      extras,
+      config,
+    );
   }
 
   openEditComposite(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
-    return this.getCrudWithDialogService().openEditDialogWithComposite(this as unknown as M, extras, config);
+    return this.getCrudWithDialogService().openEditDialogWithComposite(
+      this as unknown as M,
+      extras,
+      config,
+    );
   }
 
   openView(extras?: object, config?: Omit<MatDialogConfig, 'data'>) {
-    return this.getCrudWithDialogService().openViewDialog(this as unknown as M, extras, config);
+    return this.getCrudWithDialogService().openViewDialog(
+      this as unknown as M,
+      extras,
+      config,
+    );
   }
 }

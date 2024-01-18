@@ -1,24 +1,46 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_localization }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
       <ng-container [formGroup]="form">
-        <app-input formControlName="localizationKey" [label]="lang.map.localization_key"></app-input>
-        <app-textarea formControlName="arName" [label]="lang.map.arabic_translation"></app-textarea>
-        <app-textarea formControlName="enName" [label]="lang.map.english_translation"></app-textarea>
+        <app-input
+          formControlName="localizationKey"
+          [label]="lang.map.localization_key"
+        ></app-input>
+        <app-textarea
+          formControlName="arName"
+          [label]="lang.map.arabic_translation"
+        ></app-textarea>
+        <app-textarea
+          formControlName="enName"
+          [label]="lang.map.english_translation"
+        ></app-textarea>
       </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

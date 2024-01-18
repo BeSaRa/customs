@@ -41,8 +41,8 @@ export class UnlinkedViolationsComponent {
             }, [])
             .filter((offenderViolation) => {
               return offenderViolation.violationId == violation.id;
-            }).length
-      )
+            }).length,
+      ),
     );
   }
 }

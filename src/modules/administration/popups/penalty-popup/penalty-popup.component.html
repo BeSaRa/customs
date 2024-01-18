@@ -1,10 +1,20 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_penalty }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
-    <mat-tab-group [(selectedIndex)]="activeTab" mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+    <mat-tab-group
+      [(selectedIndex)]="activeTab"
+      mat-stretch-tabs="false"
+      mat-align-tabs="start"
+      dynamicHeight
+    >
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 items-center">
@@ -13,21 +23,42 @@
               formControlName="offenderType"
               [options]="offenderTypes"
               bindLabel="getNames"
-              bindValue="lookupKey" />
+              bindValue="lookupKey"
+            />
             <app-input
               formControlName="erasureDuration"
               [label]="lang.map.penalty_grace_period"
-              type="number"></app-input>
-            <app-input formControlName="penaltyWeight" [label]="lang.map.penalty_weight" type="number"></app-input>
+              type="number"
+            ></app-input>
+            <app-input
+              formControlName="penaltyWeight"
+              [label]="lang.map.penalty_weight"
+              type="number"
+            ></app-input>
             @if (isDeduction?.value) {
-            <app-input formControlName="deductionDays" [label]="lang.map.deduction_days" type="number"></app-input>
-            } @if (isCash?.value) {
-            <app-input formControlName="cashAmount" [label]="lang.map.cash_amount" type="number"></app-input>
+              <app-input
+                formControlName="deductionDays"
+                [label]="lang.map.deduction_days"
+                type="number"
+              ></app-input>
+            }
+            @if (isCash?.value) {
+              <app-input
+                formControlName="cashAmount"
+                [label]="lang.map.cash_amount"
+                type="number"
+              ></app-input>
             }
           </div>
           <div class="grid grid-cols-2 gap-4 items-center">
-            <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-            <app-input formControlName="enName" [label]="lang.map.en_name"></app-input>
+            <app-input
+              formControlName="arName"
+              [label]="lang.map.ar_name"
+            ></app-input>
+            <app-input
+              formControlName="enName"
+              [label]="lang.map.en_name"
+            ></app-input>
           </div>
           <div class="grid grid-cols-2 gap-4 items-center">
             <app-switch
@@ -35,11 +66,19 @@
               [trueValue]="1"
               [falseValue]="0"
               [label]="lang.map.change_status"
-              [matTooltip]="statusTooltipText"></app-switch>
+              [matTooltip]="statusTooltipText"
+            ></app-switch>
             @if (!isEmployee) {
-            <app-switch formControlName="isCash" [label]="lang.map.is_cash"></app-switch>
-            } @if (isEmployee) {
-            <app-switch formControlName="isDeduction" [label]="lang.map.is_deduction"></app-switch>
+              <app-switch
+                formControlName="isCash"
+                [label]="lang.map.is_cash"
+              ></app-switch>
+            }
+            @if (isEmployee) {
+              <app-switch
+                formControlName="isDeduction"
+                [label]="lang.map.is_deduction"
+              ></app-switch>
             }
           </div>
         </ng-container>
@@ -49,26 +88,39 @@
           [(list)]="penaltyDetailsList"
           [viewMode]="inViewMode()"
           (listIsEmpty)="checkDetailsListValidity($event)"
-          [isEmployee]="isEmployee"></app-penalty-details>
+          [isEmployee]="isEmployee"
+        ></app-penalty-details>
         <label class="group block relative">
           @if (penaltyDetailsListIsEmpty) {
-          <span class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
-            {{
-              this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({ x: this.lang.map.menu_penalty_details })
-            }}
-          </span>
-          }</label
-        >
+            <span
+              class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500"
+            >
+              {{
+                this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({
+                  x: this.lang.map.menu_penalty_details
+                })
+              }}
+            </span>
+          }
+        </label>
       </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

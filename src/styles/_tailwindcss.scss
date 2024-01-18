@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 @layer base {
-  html[dir="rtl"] {
+  html[dir='rtl'] {
     body {
-      font-family: "Tajawal", sans-serif;
+      font-family: 'Tajawal', sans-serif;
     }
   }
 
-  html[dir="ltr"] {
+  html[dir='ltr'] {
     body {
-      font-family: Roboto, "Tajawal", "Helvetica Neue", sans-serif;
+      font-family: Roboto, 'Tajawal', 'Helvetica Neue', sans-serif;
     }
   }
 }

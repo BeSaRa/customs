@@ -18,16 +18,22 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './mawared-employee.component.html',
   styleUrls: ['./mawared-employee.component.scss'],
 })
-export class MawaredEmployeeComponent extends AdminComponent<MawaredEmployeePopupComponent, MawaredEmployee, MawaredEmployeeService> {
+export class MawaredEmployeeComponent extends AdminComponent<
+  MawaredEmployeePopupComponent,
+  MawaredEmployee,
+  MawaredEmployeeService
+> {
   service = inject(MawaredEmployeeService);
-  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED);
+  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
+    (lookupItem) => lookupItem.lookupKey !== StatusTypes.DELETED,
+  );
   actions: ContextMenuActionContract<MawaredEmployee>[] = [
     {
       name: 'view',
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -36,7 +42,7 @@ export class MawaredEmployeeComponent extends AdminComponent<MawaredEmployeePopu
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -47,7 +53,12 @@ export class MawaredEmployeeComponent extends AdminComponent<MawaredEmployeePopu
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('qid'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

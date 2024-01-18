@@ -29,7 +29,7 @@ export class SuspendedEmployeeComponent
 {
   service = inject(SuspendedEmployeeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    (s) => s.lookupKey != StatusTypes.DELETED
+    (s) => s.lookupKey != StatusTypes.DELETED,
   );
   suspensionTypes: Lookup[] = this.lookupService.lookups.suspensionTypes;
   extendSuspension$: Subject<SuspendedEmployee> =
@@ -61,9 +61,9 @@ export class SuspendedEmployeeComponent
             .pipe(
               filter((model): model is SuspendedEmployee => {
                 return this.service.isInstanceOf(model);
-              })
+              }),
             );
-        })
+        }),
       )
       .subscribe(() => {
         this.reload$.next();
@@ -93,15 +93,15 @@ export class SuspendedEmployeeComponent
       'type',
       this.suspensionTypes,
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
     new TextFilterColumn('signerName'),
     new SelectFilterColumn(
       'status',
       this.commonStatus,
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

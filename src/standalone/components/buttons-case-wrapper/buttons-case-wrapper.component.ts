@@ -70,7 +70,7 @@ export class ButtonsCaseWrapperComponent
               },
             })
             .afterClosed();
-        })
+        }),
       )
       .pipe(filter((click: unknown) => click == UserClick.YES))
       .subscribe(() => {

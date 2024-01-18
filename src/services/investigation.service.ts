@@ -46,7 +46,7 @@ export class InvestigationService
 
   openAddViolation(
     caseId: string,
-    transformer$: Subject<TransformerAction<Investigation>>
+    transformer$: Subject<TransformerAction<Investigation>>,
   ): MatDialogRef<ViolationPopupComponent> {
     return this.violationService.openCreateDialog(undefined, {
       caseId,
@@ -61,7 +61,7 @@ export class InvestigationService
   extendSuspendEmployee(body: SusbendEmployee) {
     return this.http.post(
       this.getUrlSegment() + '/extend-suspend-employee',
-      body
+      body,
     );
   }
 }

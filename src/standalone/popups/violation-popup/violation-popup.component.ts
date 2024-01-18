@@ -73,7 +73,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   years: string[] = range(
     new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
-    new Date().getFullYear()
+    new Date().getFullYear(),
   ).map((i) => i.toString());
 
   classificationsMap: Record<number, ViolationClassification> = {} as Record<
@@ -115,8 +115,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.transformer$
       ?.pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'done'
-        )
+          (data: TransformerAction<Investigation>) => data.action == 'done',
+        ),
       )
       .subscribe((data: TransformerAction<Investigation>) => {
         this.caseId = data.model?.id;
@@ -158,7 +158,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.invalid &&
       this.dialog.error(
-        this.lang.map.msg_make_sure_all_required_fields_are_filled
+        this.lang.map.msg_make_sure_all_required_fields_are_filled,
       );
     return this.form.valid;
   }
@@ -175,7 +175,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected _afterSave(model: Violation): void {
     this.model = model;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations })
+      this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }),
     );
     this.dialogRef.close(model);
   }
@@ -200,8 +200,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         switchMap((value) =>
           this.violationTypeService.load(undefined, {
             classificationId: value,
-          })
-        )
+          }),
+        ),
       )
       .pipe(map((pagination) => pagination.rs))
       .subscribe((value) => {

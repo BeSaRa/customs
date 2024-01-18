@@ -5,7 +5,12 @@ export class CheckGroup<T extends { id: number } = { id: number }> {
   rows!: T[][];
   idList!: number[];
 
-  constructor(public group: Lookup, private items: T[], private selected: number[] = [], chunkCount = 3) {
+  constructor(
+    public group: Lookup,
+    private items: T[],
+    private selected: number[] = [],
+    chunkCount = 3,
+  ) {
     this.getItemsId();
     this.filterSelection();
     this.updateChunkCount(chunkCount);
@@ -37,7 +42,9 @@ export class CheckGroup<T extends { id: number } = { id: number }> {
   }
 
   toggle(id: number): void {
-    return this.isSelected(id) ? this.removeFromSelection(id) : this.addToSelection(id);
+    return this.isSelected(id)
+      ? this.removeFromSelection(id)
+      : this.addToSelection(id);
   }
 
   removeFromSelection(id: number): void {
@@ -46,7 +53,7 @@ export class CheckGroup<T extends { id: number } = { id: number }> {
   }
 
   selectAll(): void {
-    this.selected = this.list.map(item => {
+    this.selected = this.list.map((item) => {
       return item.id;
     });
   }
@@ -66,14 +73,14 @@ export class CheckGroup<T extends { id: number } = { id: number }> {
 
   private filterSelection(): void {
     // filter selected
-    this.selected = this.selected.filter(id => {
+    this.selected = this.selected.filter((id) => {
       return this.idList.indexOf(id) !== -1;
     });
   }
 
   private getItemsId(): void {
     // get items id
-    this.idList = this.list.map(item => {
+    this.idList = this.list.map((item) => {
       return item.id;
     });
   }

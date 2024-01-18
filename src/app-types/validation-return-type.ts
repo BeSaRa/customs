@@ -4,7 +4,7 @@ export type ValidationReturnType = null | ValidationErrors;
 
 export type searchFunctionType<T = unknown> = (
   text: string,
-  model: T
+  model: T,
 ) => boolean;
 
 export type ISearchFieldsMap<T = unknown> = {

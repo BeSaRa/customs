@@ -8,7 +8,10 @@ import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penal
 @Injectable({
   providedIn: 'root',
 })
-export class PenaltyDecisionService extends BaseCrudWithDialogService<MakePenaltyDecisionPopupComponent, PenaltyDecision> {
+export class PenaltyDecisionService extends BaseCrudWithDialogService<
+  MakePenaltyDecisionPopupComponent,
+  PenaltyDecision
+> {
   constructor() {
     super();
   }

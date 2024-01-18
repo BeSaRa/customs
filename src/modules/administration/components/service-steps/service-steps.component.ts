@@ -14,7 +14,11 @@ import { NoneFilterColumn } from '@models/none-filter-column';
   templateUrl: './service-steps.component.html',
   styleUrls: ['./service-steps.component.scss'],
 })
-export class ServiceStepsComponent extends AdminComponent<ServiceStepsPopupComponent, ServiceSteps, ServiceStepsService> {
+export class ServiceStepsComponent extends AdminComponent<
+  ServiceStepsPopupComponent,
+  ServiceSteps,
+  ServiceStepsService
+> {
   service = inject(ServiceStepsService);
   actions: ContextMenuActionContract<ServiceSteps>[] = [
     {
@@ -22,7 +26,7 @@ export class ServiceStepsComponent extends AdminComponent<ServiceStepsPopupCompo
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -33,6 +37,6 @@ export class ServiceStepsComponent extends AdminComponent<ServiceStepsPopupCompo
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('stepName'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

@@ -1,8 +1,8 @@
-@import "material";
+@import 'material';
 /* You can add global styles to this file, and also import other style files */
-@import "material-icons";
-@import "arabic_font";
-@import "tailwindcss";
+@import 'material-icons';
+@import 'arabic_font';
+@import 'tailwindcss';
 
 html,
 body {
@@ -11,11 +11,11 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-html[dir="rtl"] body {
-  font-family: "Tajawal", sans-serif;
+html[dir='rtl'] body {
+  font-family: 'Tajawal', sans-serif;
 }
 
 .mat-icon {
@@ -77,7 +77,7 @@ mat-tab-body {
   min-height: 400px;
 }
 .mdc-tab--active {
-  background-color: theme("colors.primary-light/0.1") !important;
+  background-color: theme('colors.primary-light/0.1') !important;
 }
 
 input::-webkit-outer-spin-button,

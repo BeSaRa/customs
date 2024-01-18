@@ -37,7 +37,13 @@ export class GuidePanelService extends BaseCrudService<GuidePanel> {
   }
 
   @CastResponse(() => Penalty, { unwrap: 'rs', fallback: '$default' })
-  loadSearchResult(criteria: { offenderType: number; penaltySigner: number; violationIdsList: number[]; repeat?: number; offenderLevel?: number }) {
+  loadSearchResult(criteria: {
+    offenderType: number;
+    penaltySigner: number;
+    violationIdsList: number[];
+    repeat?: number;
+    offenderLevel?: number;
+  }) {
     return this.http.get<Penalty[]>(this.getUrlSegment(), {
       params: new HttpParams({ fromObject: criteria }),
     });

@@ -12,7 +12,10 @@ import { WitnessTypes } from '@enums/witness-types';
 const { send, receive } = new ClearingAgentInterceptor();
 
 @InterceptModel({ send, receive })
-export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService> {
+export class ClearingAgent extends BaseModel<
+  ClearingAgent,
+  ClearingAgentService
+> {
   $$__service_name__$$ = 'ClearingAgentService';
 
   type!: number;
@@ -50,11 +53,21 @@ export class ClearingAgent extends BaseModel<ClearingAgent, ClearingAgentService
     return {
       enName: controls ? [enName, CustomValidators.required] : enName,
       arName: controls ? [arName, CustomValidators.required] : arName,
-      agentctLicenseNo: controls ? [agentctLicenseNo, CustomValidators.required] : agentctLicenseNo,
-      agentLicenseIssueDate: controls ? [agentLicenseIssueDate, CustomValidators.required] : agentLicenseIssueDate,
-      agentLicenseExpiryDate: controls ? [agentLicenseExpiryDate, CustomValidators.required] : agentLicenseExpiryDate,
-      agentCustomCode: controls ? [agentCustomCode, CustomValidators.required] : agentCustomCode,
-      phoneNumber: controls ? [phoneNumber, CustomValidators.required] : phoneNumber,
+      agentctLicenseNo: controls
+        ? [agentctLicenseNo, CustomValidators.required]
+        : agentctLicenseNo,
+      agentLicenseIssueDate: controls
+        ? [agentLicenseIssueDate, CustomValidators.required]
+        : agentLicenseIssueDate,
+      agentLicenseExpiryDate: controls
+        ? [agentLicenseExpiryDate, CustomValidators.required]
+        : agentLicenseExpiryDate,
+      agentCustomCode: controls
+        ? [agentCustomCode, CustomValidators.required]
+        : agentCustomCode,
+      phoneNumber: controls
+        ? [phoneNumber, CustomValidators.required]
+        : phoneNumber,
       email: controls ? [email, CustomValidators.required] : email,
       qid: controls ? [qid, CustomValidators.required] : qid,
       agencyId: controls ? [agencyId, CustomValidators.required] : agencyId,

@@ -2,15 +2,35 @@ import { CommonModule } from '@angular/common';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
-import { Component, inject, Injector, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import {
+  Component,
+  inject,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+  ReactiveFormsModule,
+  ValidationErrors,
+} from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
 
 @Component({
   selector: 'app-html-editor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AngularEditorModule, ValidationErrorsComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    AngularEditorModule,
+    ValidationErrorsComponent,
+  ],
   templateUrl: './html-editor.component.html',
   styleUrls: ['./html-editor.component.scss'],
   providers: [
@@ -22,7 +42,9 @@ import { LangService } from '@services/lang.service';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class HtmlEditorComponent
+  implements ControlValueAccessor, OnInit, OnDestroy
+{
   // @Input() label = '';
   @Input() placeHolder = '';
   @Input() editorId = '';
@@ -69,12 +91,15 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
     if (this.isTableWithTitle)
       tableString = tableString.concat(
         `<tr style="height:40px; word-wrap: break-word;"> <td style="color: white; outline: ${this.headerBgColor.value} solid thin;" colspan="${this
-          .tabelCols.value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`
+          .tabelCols
+          .value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`,
       );
     for (let i = 1; i <= this.tabelRows.value!; i++) {
       tableString = tableString.concat('<tr>');
       for (let j = 1; j <= this.tabelCols.value!; j++)
-        tableString = tableString.concat('<td style=" height:40px; outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>');
+        tableString = tableString.concat(
+          '<td style=" height:40px; outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>',
+        );
       tableString = tableString.concat('</tr>');
     }
     tableString = tableString.concat('</tbody></table>');
@@ -83,7 +108,9 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
+      map(() =>
+        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined,
+      ),
     );
   }
 
@@ -93,7 +120,9 @@ export class HtmlEditorComponent implements ControlValueAccessor, OnInit, OnDest
       optional: true,
     });
 
-    this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
+    this.control.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((value) => this.onChange && this.onChange(value));
     this.config.placeholder = this.placeHolder;
   }
 

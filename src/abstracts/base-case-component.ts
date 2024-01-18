@@ -33,7 +33,7 @@ import { FolderType } from '@enums/folder-type.enum';
 @Directive({})
 export abstract class BaseCaseComponent<
     Model extends BaseCase<BaseCaseService<Model>, Model>,
-    Service
+    Service,
   >
   extends OnDestroyMixin(class {})
   implements OnInit
@@ -72,13 +72,13 @@ export abstract class BaseCaseComponent<
 
   private _saveModel(
     model: Model,
-    saveType: SaveTypes
+    saveType: SaveTypes,
   ): Observable<{ model: Model; saveType: SaveTypes }> {
     return model[this.saveMap[saveType]]().pipe(
       map((model) => ({
         model,
         saveType,
-      }))
+      })),
     );
   }
 
@@ -88,14 +88,14 @@ export abstract class BaseCaseComponent<
         switchMap((saveType) => {
           const beforeSave = this._beforeSave(saveType);
           return isObservable(beforeSave) ? beforeSave : of(beforeSave);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const model = this._prepareModel();
           return isObservable(model) ? model : of(model);
-        })
+        }),
       )
       .pipe(withLatestFrom(this.save$))
       .pipe(
@@ -105,15 +105,15 @@ export abstract class BaseCaseComponent<
               catchError((error) => {
                 this._saveFail(error);
                 return error;
-              })
+              }),
             )
             .pipe(ignoreErrors());
-        })
+        }),
       )
       .pipe(
         filter(
-          (result): result is { model: Model; saveType: SaveTypes } => !!result
-        )
+          (result): result is { model: Model; saveType: SaveTypes } => !!result,
+        ),
       )
       .subscribe(({ model, saveType }) => {
         this._afterSave(model, saveType, this.operation);
@@ -136,12 +136,12 @@ export abstract class BaseCaseComponent<
             catchError((error) => {
               this._launchFail(error);
               return of(false);
-            })
+            }),
           );
         }),
         filter<boolean | unknown, boolean>((value): value is boolean => {
           return !!value;
-        })
+        }),
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
@@ -182,7 +182,7 @@ export abstract class BaseCaseComponent<
   abstract _afterSave(
     model: Model,
     saveType: SaveTypes,
-    operation: OperationType
+    operation: OperationType,
   ): void;
 
   abstract _afterLaunch(): void;

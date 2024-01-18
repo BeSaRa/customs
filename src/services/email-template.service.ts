@@ -21,7 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class EmailTemplateService extends BaseCrudWithDialogService<EmailTemplatePopupComponent, EmailTemplate> {
+export class EmailTemplateService extends BaseCrudWithDialogService<
+  EmailTemplatePopupComponent,
+  EmailTemplate
+> {
   serviceName = 'EmailTemplateService';
   protected getModelClass(): Constructor<EmailTemplate> {
     return EmailTemplate;

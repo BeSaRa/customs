@@ -1,7 +1,12 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.search_for_offender }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
     <mat-tab-group mat-stretch-tabs="false">
@@ -14,68 +19,106 @@
     </mat-tab-group>
     <ng-template #searchCriteria>
       <div class="p-4">
-        <div [formGroup]="clearingAgentFormGroup" class="grid grid-cols-1 gap-4">
+        <div
+          [formGroup]="clearingAgentFormGroup"
+          class="grid grid-cols-1 gap-4"
+        >
           <app-select-input
             [formControl]="offenderViolationControl"
             [label]="lang.map.violations"
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
-            [options]="violations">
+            [options]="violations"
+          >
             <span appInputSuffix>
-              <app-icon-button (click)="addViolation$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+              <app-icon-button
+                (click)="addViolation$.next()"
+                class="text-primary"
+                icon="PLUS_BOX"
+              ></app-icon-button>
             </span>
           </app-select-input>
         </div>
         <hr class="mb-5" />
         <h4 class="mb-4 text-primary">{{ lang.map.search_criteria }}</h4>
         @if (isEmployee && employeeFormGroup) {
-        <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
-          <app-select-input
-            [formControl]="offenderTypeControl"
-            [label]="lang.map.offender_type"
-            bindLabel="getNames"
-            bindValue="lookupKey"
-            [options]="offenderTypes" />
-          <app-select-input
-            formControlName="employeeDepartmentId"
-            [label]="lang.map.administration"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="administrations" />
-          <app-input formControlName="employeeQualificationId" [label]="lang.map.employee_number" />
-          <app-input formControlName="arName" [label]="lang.map.ar_name" />
-          <app-input formControlName="enName" [label]="lang.map.en_name" />
-          <app-input formControlName="qid" [label]="lang.map.qid" />
-          <app-input formControlName="employeeQualification" [label]="lang.map.job_title" />
-        </div>
-        } @if (isClearingAgent) {
-        <div [formGroup]="clearingAgentFormGroup" class="grid grid-cols-3 gap-4">
-          <app-select-input
-            [formControl]="offenderTypeControl"
-            [label]="lang.map.offender_type"
-            bindLabel="getNames"
-            bindValue="lookupKey"
-            [options]="offenderTypes" />
-          <app-input formControlName="code" [label]="lang.map.clearing_agent_code" />
-          <app-input formControlName="arName" [label]="lang.map.ar_name" />
-          <app-input formControlName="enName" [label]="lang.map.en_name" />
-          <app-input formControlName="qid" [label]="lang.map.qid" />
-          <app-input formControlName="agencyArabicCompanyName" [label]="lang.map.clearing_agency_name" />
-          <app-input formControlName="agencyLicenseNo" [label]="lang.map.clearing_agency_number" />
-          <app-input [label]="lang.map.clearing_agency_cr_number" />
-          <app-input [label]="lang.map.clearing_agency_er_number" />
-        </div>
+          <div [formGroup]="employeeFormGroup" class="grid grid-cols-3 gap-4">
+            <app-select-input
+              [formControl]="offenderTypeControl"
+              [label]="lang.map.offender_type"
+              bindLabel="getNames"
+              bindValue="lookupKey"
+              [options]="offenderTypes"
+            />
+            <app-select-input
+              formControlName="employeeDepartmentId"
+              [label]="lang.map.administration"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="administrations"
+            />
+            <app-input
+              formControlName="employeeQualificationId"
+              [label]="lang.map.employee_number"
+            />
+            <app-input formControlName="arName" [label]="lang.map.ar_name" />
+            <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="qid" [label]="lang.map.qid" />
+            <app-input
+              formControlName="employeeQualification"
+              [label]="lang.map.job_title"
+            />
+          </div>
+        }
+        @if (isClearingAgent) {
+          <div
+            [formGroup]="clearingAgentFormGroup"
+            class="grid grid-cols-3 gap-4"
+          >
+            <app-select-input
+              [formControl]="offenderTypeControl"
+              [label]="lang.map.offender_type"
+              bindLabel="getNames"
+              bindValue="lookupKey"
+              [options]="offenderTypes"
+            />
+            <app-input
+              formControlName="code"
+              [label]="lang.map.clearing_agent_code"
+            />
+            <app-input formControlName="arName" [label]="lang.map.ar_name" />
+            <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="qid" [label]="lang.map.qid" />
+            <app-input
+              formControlName="agencyArabicCompanyName"
+              [label]="lang.map.clearing_agency_name"
+            />
+            <app-input
+              formControlName="agencyLicenseNo"
+              [label]="lang.map.clearing_agency_number"
+            />
+            <app-input [label]="lang.map.clearing_agency_cr_number" />
+            <app-input [label]="lang.map.clearing_agency_er_number" />
+          </div>
         }
       </div>
     </ng-template>
     <ng-template #searchResult>
       <div [hidden]="!isEmployee" class="p-4">
-        <table mat-table class="table-style table-primary" [dataSource]="employeeDatasource">
+        <table
+          mat-table
+          class="table-style table-primary"
+          [dataSource]="employeeDatasource"
+        >
           <!-- arName -->
           <ng-container matColumnDef="employee_number">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.employee_number }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.jobTitleCode }}</td>
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.employee_number }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.jobTitleCode }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="arName">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
@@ -98,30 +141,46 @@
             <td mat-cell *matCellDef="let element">{{ element.jobTitle }}</td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="employeeDisplayedColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: employeeDisplayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: employeeDisplayedColumns"
+          ></tr>
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
             <td mat-cell *matCellDef="let element">
               <div class="flex">
                 <div [matTooltip]="lang.map.add_offender">
-                  <app-icon-button (click)="addEmployee(element)" icon="PLUS_BOX" />
+                  <app-icon-button
+                    (click)="addEmployee(element)"
+                    icon="PLUS_BOX"
+                  />
                 </div>
               </div>
             </td>
           </ng-container>
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
-            <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
           </tr>
         </table>
       </div>
       <div [hidden]="!isClearingAgent" class="p-4">
-        <table mat-table class="table-style table-primary" [dataSource]="clearingAgentsDatasource">
+        <table
+          mat-table
+          class="table-style table-primary"
+          [dataSource]="clearingAgentsDatasource"
+        >
           <!-- arName -->
           <ng-container matColumnDef="clearingAgentCode">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agent_code }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.agentCustomCode }}</td>
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agent_code }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agentCustomCode }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="arName">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
@@ -132,40 +191,61 @@
             <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
           </ng-container>
           <ng-container matColumnDef="companyName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.agencyInfo.getNames() }}</td>
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agency_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agencyInfo.getNames() }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="companyNumber">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.clearing_agency_number }}</th>
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agency_number }}
+            </th>
             <td mat-cell *matCellDef="let element">--</td>
           </ng-container>
           <ng-container matColumnDef="qid">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.qid }}</th>
             <td mat-cell *matCellDef="let element">{{ element.qid }}</td>
           </ng-container>
-          <tr mat-header-row *matHeaderRowDef="clearingAgentDisplayedColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: clearingAgentDisplayedColumns"></tr>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="clearingAgentDisplayedColumns"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let element; columns: clearingAgentDisplayedColumns"
+          ></tr>
           <!-- actions -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
             <td mat-cell *matCellDef="let element">
               <div class="flex">
                 <div [matTooltip]="lang.map.add_offender">
-                  <app-icon-button (click)="addClearingAgent(element)" icon="PLUS_BOX" />
+                  <app-icon-button
+                    (click)="addClearingAgent(element)"
+                    icon="PLUS_BOX"
+                  />
                 </div>
               </div>
             </td>
           </ng-container>
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
-            <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
           </tr>
         </table>
       </div>
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="search$.next()" buttonType="primary">{{ lang.map.search }}</app-button>
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    <app-button (click)="search$.next()" buttonType="primary">{{
+      lang.map.search
+    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
   </div>
 </div>

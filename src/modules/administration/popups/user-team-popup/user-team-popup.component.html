@@ -1,7 +1,12 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_user_team }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
     <div class="grid">
@@ -13,18 +18,27 @@
             bindLabel="getNames"
             [label]="lang.map.menu_team"
             formControlName="selectedTeams"
-            [isMultiple]="true"></app-select-input>
+            [isMultiple]="true"
+          ></app-select-input>
         </div>
       </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="saveUserTeams$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="saveUserTeams$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

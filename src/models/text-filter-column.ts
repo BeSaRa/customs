@@ -6,7 +6,10 @@ export class TextFilterColumn implements FilterColumnContract {
   filterName = '';
   bindKey: string;
 
-  constructor(public name: string, bindKey?: string) {
+  constructor(
+    public name: string,
+    bindKey?: string,
+  ) {
     this.filterName = this.name + '_filter';
     this.bindKey = bindKey ? bindKey : this.name;
   }

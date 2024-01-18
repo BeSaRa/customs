@@ -11,14 +11,19 @@ export class ExceptionHandlerService {
 
   httpExceptionHandle(error: HttpErrorResponse): void {
     // this.dialog.error();
-    const hasErrorObject = Object.prototype.hasOwnProperty.call(error.error, 'eo');
+    const hasErrorObject = Object.prototype.hasOwnProperty.call(
+      error.error,
+      'eo',
+    );
 
     const hasMessage = Object.prototype.hasOwnProperty.call(error.error, 'ms');
 
     if (hasErrorObject) {
       // const content = ;
 
-      this.dialog.error(new AdminResult().clone<AdminResult>({ ...error.error.eo }).getNames());
+      this.dialog.error(
+        new AdminResult().clone<AdminResult>({ ...error.error.eo }).getNames(),
+      );
       return;
     }
 

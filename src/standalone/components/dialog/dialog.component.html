@@ -1,15 +1,22 @@
 <div class="max-w-full min-w-[400px]">
   <div [ngClass]="selectedClass.bg" class="h-2"></div>
   <div class="dialog-content p-4 h-30">
-    <div [ngClass]="{ 'flex-col': !data.title }" class="flex items-center gap-2">
+    <div
+      [ngClass]="{ 'flex-col': !data.title }"
+      class="flex items-center gap-2"
+    >
       <div class="dialog-icon flex-none">
-        <mat-icon [ngClass]="selectedClass.text" class="size-48" [svgIcon]="selectedClass.icon"></mat-icon>
+        <mat-icon
+          [ngClass]="selectedClass.text"
+          class="size-48"
+          [svgIcon]="selectedClass.icon"
+        ></mat-icon>
       </div>
       <div class="flex-auto flex flex-col">
         @if (data.title) {
-        <div class="dialog-body-title font-semibold text-lg">
-          {{ data.title }}
-        </div>
+          <div class="dialog-body-title font-semibold text-lg">
+            {{ data.title }}
+          </div>
         }
         <div class="dialog-body-content">
           {{ data.content }}
@@ -19,14 +26,17 @@
   </div>
   <div class="dialog-footer justify-center">
     @if (!isConfirmDialog()) {
-    <app-button (click)="close()" [buttonType]="selectedClass.btn">Close</app-button>
-    } @if (isConfirmDialog()) {
-    <app-button (click)="yes()" [buttonType]="selectedClass.btn">
-      {{ data.buttons!.yes }}
-    </app-button>
-    <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
-      {{ data.buttons!.no }}
-    </app-button>
+      <app-button (click)="close()" [buttonType]="selectedClass.btn"
+        >Close</app-button
+      >
+    }
+    @if (isConfirmDialog()) {
+      <app-button (click)="yes()" [buttonType]="selectedClass.btn">
+        {{ data.buttons!.yes }}
+      </app-button>
+      <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
+        {{ data.buttons!.no }}
+      </app-button>
     }
   </div>
 </div>

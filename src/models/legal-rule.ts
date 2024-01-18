@@ -17,15 +17,49 @@ export class LegalRule extends BaseModel<LegalRule, LegalRuleService> {
   legalTextEnglish!: string;
   override status: number = 1;
   buildForm(controls = false): object {
-    const { enName, arName, law, lawStartDate, articleNumber, legalTextArabic, legalTextEnglish, status } = this;
+    const {
+      enName,
+      arName,
+      law,
+      lawStartDate,
+      articleNumber,
+      legalTextArabic,
+      legalTextEnglish,
+      status,
+    } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
       law: controls ? [law] : law,
       lawStartDate: controls ? [lawStartDate] : lawStartDate,
       articleNumber: controls ? [articleNumber] : articleNumber,
-      legalTextArabic: controls ? [legalTextArabic, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : legalTextArabic,
-      legalTextEnglish: controls ? [legalTextEnglish, [CustomValidators.pattern('ENG_NUM')]] : legalTextEnglish,
+      legalTextArabic: controls
+        ? [
+            legalTextArabic,
+            [CustomValidators.required, CustomValidators.pattern('AR_NUM')],
+          ]
+        : legalTextArabic,
+      legalTextEnglish: controls
+        ? [legalTextEnglish, [CustomValidators.pattern('ENG_NUM')]]
+        : legalTextEnglish,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }

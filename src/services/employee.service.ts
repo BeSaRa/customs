@@ -13,7 +13,10 @@ import { DepartmentGroupNames } from '@enums/department-group-names.enum';
 })
 export class EmployeeService {
   private loginData?: LoginDataContract;
-  private readonly permissionMap = new Map<keyof AppPermissionsType, Permission>();
+  private readonly permissionMap = new Map<
+    keyof AppPermissionsType,
+    Permission
+  >();
   private readonly lookupService = inject(LookupService);
 
   setLoginData(data: LoginDataContract): LoginDataContract {
@@ -47,7 +50,7 @@ export class EmployeeService {
 
   private generatePermissionMap(permissionSet: Permission[]) {
     this.permissionMap.clear();
-    permissionSet.forEach(permission => {
+    permissionSet.forEach((permission) => {
       this.permissionMap.set(permission.permissionKey, permission);
     });
   }
@@ -65,7 +68,7 @@ export class EmployeeService {
    * @param permissions
    */
   hasAnyPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
-    return permissions.some(permission => {
+    return permissions.some((permission) => {
       return this.permissionMap.has(permission);
     });
   }
@@ -75,28 +78,46 @@ export class EmployeeService {
    * @param permissions
    */
   hasAllPermissions(permissions: (keyof AppPermissionsType)[]): boolean {
-    return !permissions.some(permission => {
+    return !permissions.some((permission) => {
       return !this.permissionMap.has(permission);
     });
   }
 
   isApplicantUser() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department);
+    return (this.loginData?.teams || []).find(
+      (t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department,
+    );
   }
   isApplicantChief() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Chief);
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Chief,
+    );
   }
   isApplicantManager() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager);
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager,
+    );
   }
   isHrManager() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Human_Resources_Manager);
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.ldapGroupName == DepartmentGroupNames.Human_Resources_Manager,
+    );
   }
   isDisciplinaryCommittee() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Disciplinary_Committee);
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.ldapGroupName == DepartmentGroupNames.Disciplinary_Committee,
+    );
   }
   isPermanentDisciplinaryCommittee() {
-    return (this.loginData?.teams || []).find((t: Team) => t.ldapGroupName == DepartmentGroupNames.Permanent_Disciplinary_Committee);
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.ldapGroupName ==
+        DepartmentGroupNames.Permanent_Disciplinary_Committee,
+    );
   }
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;

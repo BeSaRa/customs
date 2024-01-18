@@ -2,7 +2,9 @@ import { isValidValue } from '@utils/utils';
 import { ModelInterceptorContract } from 'cast-response';
 import { GlobalSetting } from '@models/global-setting';
 
-export class GlobalSettingInterceptor implements ModelInterceptorContract<GlobalSetting> {
+export class GlobalSettingInterceptor
+  implements ModelInterceptorContract<GlobalSetting>
+{
   send(model: Partial<GlobalSetting>): Partial<GlobalSetting> {
     GlobalSettingInterceptor.stringifyFileTypes(model);
     GlobalSettingInterceptor.stringifyEmailList(model);
@@ -16,7 +18,9 @@ export class GlobalSettingInterceptor implements ModelInterceptorContract<Global
     return model;
   }
   private static stringifyFileTypes(model: Partial<GlobalSetting>): void {
-    model.fileType = JSON.stringify((model.fileTypeParsed ?? []).filter(fileType => isValidValue(fileType)));
+    model.fileType = JSON.stringify(
+      (model.fileTypeParsed ?? []).filter((fileType) => isValidValue(fileType)),
+    );
   }
   private static parseFileTypes(model: GlobalSetting): void {
     try {
@@ -26,7 +30,11 @@ export class GlobalSettingInterceptor implements ModelInterceptorContract<Global
     }
   }
   private static stringifyEmailList(model: Partial<GlobalSetting>) {
-    model.supportEmailList = JSON.stringify((model.supportEmailListParsed ?? []).filter(email => isValidValue(email)));
+    model.supportEmailList = JSON.stringify(
+      (model.supportEmailListParsed ?? []).filter((email) =>
+        isValidValue(email),
+      ),
+    );
   }
   private static parseEmailList(model: GlobalSetting): void {
     try {

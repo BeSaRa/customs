@@ -6,14 +6,27 @@ export class MawaredEmployeeCriteria extends MawaredEmployee {
   }
 
   override buildForm(controls = false): object {
-    const { arName, enName, qid, employeeDepartmentId, employeeQualification, employeeQualificationId } = this;
+    const {
+      arName,
+      enName,
+      qid,
+      employeeDepartmentId,
+      employeeQualification,
+      employeeQualificationId,
+    } = this;
     return {
       arName: controls ? [arName] : arName,
       enName: controls ? [enName] : enName,
       qid: controls ? [qid] : qid,
-      employeeDepartmentId: controls ? [employeeDepartmentId] : employeeDepartmentId,
-      employeeQualification: controls ? [employeeQualification] : employeeQualification,
-      employeeQualificationId: controls ? [employeeQualificationId] : employeeQualificationId,
+      employeeDepartmentId: controls
+        ? [employeeDepartmentId]
+        : employeeDepartmentId,
+      employeeQualification: controls
+        ? [employeeQualification]
+        : employeeQualification,
+      employeeQualificationId: controls
+        ? [employeeQualificationId]
+        : employeeQualificationId,
     };
   }
 }

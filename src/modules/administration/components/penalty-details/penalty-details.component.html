@@ -1,35 +1,54 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2"
+>
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_penalty_details }}
   </h1>
   @if (!viewMode) {
-  <app-icon-button [matTooltip]="lang.map.add" (click)="createDetails()" icon="PLUS"></app-icon-button>
+    <app-icon-button
+      [matTooltip]="lang.map.add"
+      (click)="createDetails()"
+      icon="PLUS"
+    ></app-icon-button>
   }
 </div>
 <div class="shadow relative">
   <table mat-table matSort class="table-style" [dataSource]="displayedList">
     <!-- penaltySigner -->
     <ng-container matColumnDef="penaltySigner">
-      <th mat-header-cell mat-sort-header="penaltySigner" *matHeaderCellDef>{{ lang.map.penalty_signer }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.penaltySignerInfo.getNames() }}</td> </ng-container
+      <th mat-header-cell mat-sort-header="penaltySigner" *matHeaderCellDef>
+        {{ lang.map.penalty_signer }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.penaltySignerInfo.getNames() }}
+      </td> </ng-container
     >'
 
     <!-- offenderLevel -->
     <ng-container matColumnDef="offenderLevel">
-      <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>{{ lang.map.offender_level }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.offenderLevelInfo.getNames() }}</td>
+      <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>
+        {{ lang.map.offender_level }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.offenderLevelInfo.getNames() }}
+      </td>
     </ng-container>
 
     <!-- legalRule -->
     <ng-container matColumnDef="legalRule">
-      <th mat-header-cell mat-sort-header="legalRule" *matHeaderCellDef>{{ lang.map.legal_rule }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.legalRuleInfo.getNames() }}</td>
+      <th mat-header-cell mat-sort-header="legalRule" *matHeaderCellDef>
+        {{ lang.map.legal_rule }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.legalRuleInfo.getNames() }}
+      </td>
     </ng-container>
 
     <!-- legalTextArabic -->
     <ng-container matColumnDef="legalTextArabic">
-      <th mat-header-cell mat-sort-header="legalTextArabic" *matHeaderCellDef>{{ lang.map.legal_text_ar }}</th>
+      <th mat-header-cell mat-sort-header="legalTextArabic" *matHeaderCellDef>
+        {{ lang.map.legal_text_ar }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.legalTextArabic }}</td>
     </ng-container>
 
@@ -38,14 +57,24 @@
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
       <td mat-cell *matCellDef="let element">
         <div class="flex">
-          <app-icon-button [matTooltip]="lang.map.view" (click)="viewDetails(element)" icon="VIEW"></app-icon-button>
-          @if (!viewMode) {
-          <app-icon-button [matTooltip]="lang.map.edit" (click)="editDetails(element)" icon="EDIT"></app-icon-button>
-          } @if (!viewMode) {
           <app-icon-button
-            [matTooltip]="lang.map.delete"
-            (click)="deleteDetails(element)"
-            icon="DELETE"></app-icon-button>
+            [matTooltip]="lang.map.view"
+            (click)="viewDetails(element)"
+            icon="VIEW"
+          ></app-icon-button>
+          @if (!viewMode) {
+            <app-icon-button
+              [matTooltip]="lang.map.edit"
+              (click)="editDetails(element)"
+              icon="EDIT"
+            ></app-icon-button>
+          }
+          @if (!viewMode) {
+            <app-icon-button
+              [matTooltip]="lang.map.delete"
+              (click)="deleteDetails(element)"
+              icon="DELETE"
+            ></app-icon-button>
           }
         </div>
       </td>
@@ -55,7 +84,8 @@
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"
-      *matRowDef="let element; columns: displayedColumns"></tr>
+      *matRowDef="let element; columns: displayedColumns"
+    ></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>

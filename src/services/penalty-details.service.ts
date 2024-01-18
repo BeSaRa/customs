@@ -21,7 +21,10 @@ import { Pagination } from '@models/pagination';
 @Injectable({
   providedIn: 'root',
 })
-export class PenaltyDetailsService extends BaseCrudWithDialogService<PenaltyDetailsPopupComponent, PenaltyDetails> {
+export class PenaltyDetailsService extends BaseCrudWithDialogService<
+  PenaltyDetailsPopupComponent,
+  PenaltyDetails
+> {
   serviceName = 'PenaltyDetailsService';
   protected getModelClass(): Constructor<PenaltyDetails> {
     return PenaltyDetails;

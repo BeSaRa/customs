@@ -24,6 +24,9 @@ export class InvestigationDraftsService extends InvestigationService {
 
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$default' })
   search(criteria: Partial<Investigation> = {}): Observable<Investigation[]> {
-    return this.http.post<Investigation[]>(this.getUrlSegment() + '/is-drafted/search', criteria);
+    return this.http.post<Investigation[]>(
+      this.getUrlSegment() + '/is-drafted/search',
+      criteria,
+    );
   }
 }

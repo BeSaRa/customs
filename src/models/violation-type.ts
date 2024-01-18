@@ -9,7 +9,10 @@ import { StatusTypes } from '@enums/status-types';
 const { send, receive } = new ViolationTypeInterceptor();
 
 @InterceptModel({ send, receive })
-export class ViolationType extends BaseModel<ViolationType, ViolationTypeService> {
+export class ViolationType extends BaseModel<
+  ViolationType,
+  ViolationTypeService
+> {
   $$__service_name__$$ = 'ViolationTypeService';
 
   classificationId!: number;
@@ -49,18 +52,44 @@ export class ViolationType extends BaseModel<ViolationType, ViolationTypeService
       level,
     } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
-      classificationId: controls ? [classificationId, CustomValidators.required] : classificationId,
-      offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
+      classificationId: controls
+        ? [classificationId, CustomValidators.required]
+        : classificationId,
+      offenderType: controls
+        ? [offenderType, CustomValidators.required]
+        : offenderType,
       isNumeric: controls ? [isNumeric] : isNumeric,
       numericFrom: controls ? [numericFrom] : numericFrom,
       numericTo: controls ? [numericTo] : numericTo,
       isAbsence: controls ? [isAbsence] : isAbsence,
       criminalType: controls ? [criminalType] : criminalType,
-      responsibilityRepeatViolations: controls ? [responsibilityRepeatViolations] : responsibilityRepeatViolations,
+      responsibilityRepeatViolations: controls
+        ? [responsibilityRepeatViolations]
+        : responsibilityRepeatViolations,
       level: controls ? [level, CustomValidators.required] : level,
-      managerDecision: controls ? [managerDecision, CustomValidators.required] : managerDecision,
+      managerDecision: controls
+        ? [managerDecision, CustomValidators.required]
+        : managerDecision,
       status: status,
     };
   }

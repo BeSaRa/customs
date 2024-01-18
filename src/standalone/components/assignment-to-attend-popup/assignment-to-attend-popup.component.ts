@@ -5,7 +5,12 @@ import { ButtonComponent } from '../button/button.component';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LangService } from '@services/lang.service';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AssignmentToAttend } from '@models/assignment-to-attend';
 import { InputComponent } from '../input/input.component';
 import { LookupService } from '@services/lookup.service';
@@ -34,7 +39,10 @@ import { ignoreErrors } from '@utils/utils';
   templateUrl: './assignment-to-attend-popup.component.html',
   styleUrls: ['./assignment-to-attend-popup.component.scss'],
 })
-export class AssignmentToAttendPopupComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class AssignmentToAttendPopupComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   form!: FormGroup;
@@ -49,7 +57,9 @@ export class AssignmentToAttendPopupComponent extends OnDestroyMixin(class {}) i
 
   ngOnInit(): void {
     this.form = this.fb.group(new AssignmentToAttend().buildForm());
-    this.mawaredEmployeeService.loadAsLookups().subscribe(emp => (this.mawaredEmployee = emp));
+    this.mawaredEmployeeService
+      .loadAsLookups()
+      .subscribe((emp) => (this.mawaredEmployee = emp));
     this.caseId?.setValue(this.data.caseId);
     if (this.isInternal()) {
       this.summonedId?.setValue(this.data?.offender?.id);
@@ -96,13 +106,15 @@ export class AssignmentToAttendPopupComponent extends OnDestroyMixin(class {}) i
       .pipe(tap(() => console.log(this.form.value)))
       .pipe(
         exhaustMap(() => {
-          return this.assignmentToAttendService.assignToAttend(this.form.value).pipe(
-            catchError(error => {
-              return throwError(error);
-            }),
-            ignoreErrors()
-          );
-        })
+          return this.assignmentToAttendService
+            .assignToAttend(this.form.value)
+            .pipe(
+              catchError((error) => {
+                return throwError(error);
+              }),
+              ignoreErrors(),
+            );
+        }),
       )
       .subscribe(() => {
         console.log('done');

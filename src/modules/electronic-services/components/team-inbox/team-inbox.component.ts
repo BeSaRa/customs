@@ -55,9 +55,9 @@ export class TeamInboxComponent
       'RISK_STATUS',
       this.riskStatus,
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
   actions: ContextMenuActionContract<InboxResult>[] = [
@@ -83,7 +83,7 @@ export class TeamInboxComponent
         switchMap(() => {
           return this.inboxService.loadTeamInbox(teamId);
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;

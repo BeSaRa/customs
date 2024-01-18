@@ -1,42 +1,54 @@
 @if (isText()) {
-<app-input size="sm" tabindex="-1" [noMargin]="true" label="" [formControl]="control">
-  <mat-icon
-    (keydown.enter)="clear()"
-    (keydown.space)="clear()"
-    (click)="clear()"
-    class="cursor-pointer"
-    mat-ripple
-    tabindex="0"
-    appInputSuffix
-    [matTooltip]="lang.map.clear_filter"
-    [svgIcon]="getFilterIcon()"></mat-icon>
-</app-input>
-} @if (isActions()) {
-<app-icon-button
-  class="w-12 inline-block"
-  [matTooltip]="lang.map.clear_all_filters"
-  [disabled]="noFilteredColumns()"
-  (click)="clearAllFilters()"
-  icon="FILTER_REMOVE"></app-icon-button>
-} @if (isSelect()) {
-<app-select-input
-  [options]="(options | async)!"
-  [bindLabel]="column!.config.bindSelectLabel!"
-  [bindValue]="column!.config.bindSelectValue!"
-  size="sm"
-  tabindex="-1"
-  [noMargin]="true"
-  label=""
-  [formControl]="control">
-  <mat-icon
-    (keydown.enter)="clear()"
-    (keydown.space)="clear()"
-    (click)="clear()"
-    class="cursor-pointer"
-    mat-ripple
-    tabindex="0"
-    appInputSuffix
-    [matTooltip]="lang.map.clear_filter"
-    [svgIcon]="getFilterIcon()"></mat-icon>
-</app-select-input>
+  <app-input
+    size="sm"
+    tabindex="-1"
+    [noMargin]="true"
+    label=""
+    [formControl]="control"
+  >
+    <mat-icon
+      (keydown.enter)="clear()"
+      (keydown.space)="clear()"
+      (click)="clear()"
+      class="cursor-pointer"
+      mat-ripple
+      tabindex="0"
+      appInputSuffix
+      [matTooltip]="lang.map.clear_filter"
+      [svgIcon]="getFilterIcon()"
+    ></mat-icon>
+  </app-input>
+}
+@if (isActions()) {
+  <app-icon-button
+    class="w-12 inline-block"
+    [matTooltip]="lang.map.clear_all_filters"
+    [disabled]="noFilteredColumns()"
+    (click)="clearAllFilters()"
+    icon="FILTER_REMOVE"
+  ></app-icon-button>
+}
+@if (isSelect()) {
+  <app-select-input
+    [options]="(options | async)!"
+    [bindLabel]="column!.config.bindSelectLabel!"
+    [bindValue]="column!.config.bindSelectValue!"
+    size="sm"
+    tabindex="-1"
+    [noMargin]="true"
+    label=""
+    [formControl]="control"
+  >
+    <mat-icon
+      (keydown.enter)="clear()"
+      (keydown.space)="clear()"
+      (click)="clear()"
+      class="cursor-pointer"
+      mat-ripple
+      tabindex="0"
+      appInputSuffix
+      [matTooltip]="lang.map.clear_filter"
+      [svgIcon]="getFilterIcon()"
+    ></mat-icon>
+  </app-select-input>
 }

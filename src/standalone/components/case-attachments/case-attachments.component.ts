@@ -106,9 +106,9 @@ export class CaseAttachmentsComponent
                 default:
                   return of([]);
               }
-            })
+            }),
           );
-        })
+        }),
       )
       .pipe(takeUntil(this.destroy$));
   }
@@ -127,7 +127,7 @@ export class CaseAttachmentsComponent
         this.caseId as string,
         this.service,
         this.type,
-        this.entityId
+        this.entityId,
       )
       .afterClosed()
       .subscribe(() => {
@@ -141,7 +141,7 @@ export class CaseAttachmentsComponent
       .pipe(
         exhaustMap((item) => {
           return item.view(this.service);
-        })
+        }),
       )
       .subscribe();
   }
@@ -155,15 +155,15 @@ export class CaseAttachmentsComponent
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
                 x: item.documentTitle,
-              })
+              }),
             )
             .afterClosed()
             .pipe(
               map((userClick) => {
                 return { userClick: userClick, item };
-              })
+              }),
             );
-        })
+        }),
       )
       .pipe(filter((response) => response.userClick === UserClick.YES))
       .pipe(
@@ -171,15 +171,17 @@ export class CaseAttachmentsComponent
           response.item
             .delete(this.service)
             .pipe(ignoreErrors())
-            .pipe(map(() => response.item))
-        )
+            .pipe(map(() => response.item)),
+        ),
       )
       .pipe(
         tap((item) =>
           this.toast.success(
-            this.lang.map.msg_delete_x_success.change({ x: item.documentTitle })
-          )
-        )
+            this.lang.map.msg_delete_x_success.change({
+              x: item.documentTitle,
+            }),
+          ),
+        ),
       )
       .subscribe(() => this.reload$.next());
   }

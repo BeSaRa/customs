@@ -50,9 +50,9 @@ export class UserInboxComponent
       'RISK_STATUS',
       this.riskStatus,
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
   actions: ContextMenuActionContract<InboxResult>[] = [
@@ -81,7 +81,7 @@ export class UserInboxComponent
           //   return this.inboxService.loadUserInbox(this.filterCriteria);
           // }
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;

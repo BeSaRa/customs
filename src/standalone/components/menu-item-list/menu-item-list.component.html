@@ -1,8 +1,19 @@
 <div class="flex justify-center">
-  <app-input class="w-80" label="" [formControl]="control" [placeholder]="lang.map.search"></app-input>
+  <app-input
+    class="w-80"
+    label=""
+    [formControl]="control"
+    [placeholder]="lang.map.search"
+  ></app-input>
 </div>
-<div [@listAnimation]="items.length" class="flex justify-center gap-5 flex-wrap">
-  @for (item of items | filterSidebarMenuItem : control.value : true; track item) {
-  <app-menu-item-icon @addRemoveItem [item]="item" />
+<div
+  [@listAnimation]="items.length"
+  class="flex justify-center gap-5 flex-wrap"
+>
+  @for (
+    item of items | filterSidebarMenuItem: control.value : true;
+    track item
+  ) {
+    <app-menu-item-icon @addRemoveItem [item]="item" />
   }
 </div>

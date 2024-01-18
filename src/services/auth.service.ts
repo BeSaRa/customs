@@ -37,16 +37,16 @@ export class AuthService
 
   @CastResponse()
   private _login(
-    credentials: Partial<CredentialsContract>
+    credentials: Partial<CredentialsContract>,
   ): Observable<LoginDataContract> {
     return this.http.post<LoginDataContract>(
       this.urlService.URLS.AUTH,
-      credentials
+      credentials,
     );
   }
 
   login(
-    credentials: Partial<CredentialsContract>
+    credentials: Partial<CredentialsContract>,
   ): Observable<LoginDataContract> {
     return this._login(credentials).pipe(this.setDateAfterAuthenticate());
   }
@@ -57,8 +57,8 @@ export class AuthService
         tap(
           () =>
             this.tokenService.getTokenFromStore() &&
-            this.tokenService.setToken(this.tokenService.getTokenFromStore())
-        )
+            this.tokenService.setToken(this.tokenService.getTokenFromStore()),
+        ),
       )
       .pipe(
         switchMap(() =>
@@ -67,16 +67,16 @@ export class AuthService
             this.tokenService
               .validateToken()
               .pipe(this.setDateAfterAuthenticate()),
-            of(false)
-          )
-        )
+            of(false),
+          ),
+        ),
       )
       .pipe(map(() => true))
       .pipe(
         catchError((e) => {
           console.log(e);
           return of(false);
-        })
+        }),
       );
   }
 
@@ -96,7 +96,7 @@ export class AuthService
         tap((data) => this.tokenService.setToken(data.token)),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
-        tap(() => this.menuItemService.buildHierarchy())
+        tap(() => this.menuItemService.buildHierarchy()),
         // tap(() => this.globalSettingsService.loadCurrentGlobalSettings().subscribe())
       );
     };

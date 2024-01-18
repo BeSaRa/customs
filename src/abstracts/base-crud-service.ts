@@ -48,11 +48,15 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       limit: 50,
     },
     criteria?: Partial<M>,
-    sortOptions?: SortOptionsContract
+    sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
     if (criteria) {
-      Object.keys(criteria as unknown as object).forEach(key => {
-        if (criteria && (criteria[key as keyof Partial<M>] === null || criteria[key as keyof Partial<M>] === undefined)) {
+      Object.keys(criteria as unknown as object).forEach((key) => {
+        if (
+          criteria &&
+          (criteria[key as keyof Partial<M>] === null ||
+            criteria[key as keyof Partial<M>] === undefined)
+        ) {
           delete criteria[key as keyof Partial<M>];
         }
       });
@@ -75,13 +79,16 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
-    }
+    },
   ): Observable<Pagination<Audit[]>> {
-    return this.http.get<Pagination<Audit[]>>(`${this.getUrlSegment()}/audit/${id}`, {
-      params: new HttpParams({
-        fromObject: { ...options },
-      }),
-    });
+    return this.http.get<Pagination<Audit[]>>(
+      `${this.getUrlSegment()}/audit/${id}`,
+      {
+        params: new HttpParams({
+          fromObject: { ...options },
+        }),
+      },
+    );
   }
 
   @CastResponse(undefined)
@@ -99,11 +106,15 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       limit: 50,
     },
     criteria?: Partial<M>,
-    sortOptions?: SortOptionsContract
+    sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
     if (criteria) {
-      Object.keys(criteria as unknown as object).forEach(key => {
-        if (criteria && (criteria[key as keyof Partial<M>] === null || criteria[key as keyof Partial<M>] === undefined)) {
+      Object.keys(criteria as unknown as object).forEach((key) => {
+        if (
+          criteria &&
+          (criteria[key as keyof Partial<M>] === null ||
+            criteria[key as keyof Partial<M>] === undefined)
+        ) {
           delete criteria[key as keyof Partial<M>];
         }
       });
@@ -141,7 +152,10 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   @CastResponse()
   deactivate(id: PrimaryType): Observable<M> {
-    return this.http.put<M>(this.getUrlSegment() + `/admin/${id}/de-activate`, {});
+    return this.http.put<M>(
+      this.getUrlSegment() + `/admin/${id}/de-activate`,
+      {},
+    );
   }
 
   @CastResponse()
@@ -157,19 +171,29 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   @CastResponse()
   deleteBulk(modelsIds: PrimaryType[]): Observable<M> {
-    return this.http.request<M>('DELETE', this.getUrlSegment() + '/admin/bulk', {
-      body: modelsIds,
-    });
+    return this.http.request<M>(
+      'DELETE',
+      this.getUrlSegment() + '/admin/bulk',
+      {
+        body: modelsIds,
+      },
+    );
   }
 
   @CastResponse()
   activateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
-    return this.http.put<M[]>(this.getUrlSegment() + '/admin/bulk/activate', modelsIds);
+    return this.http.put<M[]>(
+      this.getUrlSegment() + '/admin/bulk/activate',
+      modelsIds,
+    );
   }
 
   @CastResponse()
   deactivateBulk(modelsIds: PrimaryType[]): Observable<M[]> {
-    return this.http.put<M[]>(this.getUrlSegment() + '/admin/bulk/activate', modelsIds);
+    return this.http.put<M[]>(
+      this.getUrlSegment() + '/admin/bulk/activate',
+      modelsIds,
+    );
   }
 
   @HasInterception
@@ -181,7 +205,10 @@ export abstract class BaseCrudService<M, PrimaryType = number>
   @HasInterception
   @CastResponse()
   createBulkFull(@InterceptParam() models: M[]): Observable<M[]> {
-    return this.http.post<M[]>(this.getUrlSegment() + '/admin/bulk/full', models);
+    return this.http.post<M[]>(
+      this.getUrlSegment() + '/admin/bulk/full',
+      models,
+    );
   }
 
   @HasInterception

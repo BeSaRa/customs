@@ -57,7 +57,7 @@ export class UserTeamService extends BaseCrudWithDialogService<
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
-    }
+    },
   ): Observable<Pagination<UserTeam[]>> {
     return this.http.get<Pagination<UserTeam[]>>(
       this.getUrlSegment() + `/${userId}`,
@@ -65,7 +65,7 @@ export class UserTeamService extends BaseCrudWithDialogService<
         params: new HttpParams({
           fromObject: { ...options } as never,
         }),
-      }
+      },
     );
   }
 
@@ -76,14 +76,14 @@ export class UserTeamService extends BaseCrudWithDialogService<
   }): Observable<unknown> {
     return this.http.post(
       this.teamService.getUrlSegment() + '/admin/add-user',
-      userTeam
+      userTeam,
     );
   }
 
   override delete(id: number): Observable<UserTeam> {
     return this.http.delete<UserTeam>(
       this.teamService.getUrlSegment() + '/admin/remove-users/bulk',
-      { body: [id] }
+      { body: [id] },
     );
   }
 }

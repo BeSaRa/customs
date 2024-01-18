@@ -60,7 +60,7 @@ export class InboxService extends RegisterServiceMixin(class {}) {
   @CastResponse(() => QueryResultSet)
   private _loadTeamInbox(
     teamId: number,
-    options?: unknown
+    options?: unknown,
   ): Observable<QueryResultSet> {
     return this.http.get<QueryResultSet>(
       this.urlService.URLS.TEAM_INBOX + '/' + teamId,
@@ -68,7 +68,7 @@ export class InboxService extends RegisterServiceMixin(class {}) {
         params: new HttpParams({
           fromObject: options as { [p: string]: string },
         }),
-      }
+      },
     );
   }
 
@@ -79,7 +79,7 @@ export class InboxService extends RegisterServiceMixin(class {}) {
   getService(serviceNumber: number): BaseCaseService<unknown> {
     if (!this.services.has(serviceNumber)) {
       console.log(
-        'Service number ' + serviceNumber + ' not registered in InboxServices'
+        'Service number ' + serviceNumber + ' not registered in InboxServices',
       );
     }
     return this.services.get(serviceNumber) as BaseCaseService<unknown>;

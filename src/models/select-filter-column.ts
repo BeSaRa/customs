@@ -19,7 +19,7 @@ export class SelectFilterColumn implements FilterColumnContract {
     bindSelectValue?: string | ((item: any) => any),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bindSelectLabel?: string | ((item: any) => any),
-    bindKey?: string
+    bindKey?: string,
   ) {
     this.filterName = this.name + '_filter';
     this.bindKey = bindKey ? bindKey : this.name;

@@ -86,7 +86,7 @@ export class AuditPopupComponent implements OnInit {
     new NoneFilterColumn('ip'),
     new NoneFilterColumn('user'),
     new NoneFilterColumn('operation'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   );
 
   get limit(): number {
@@ -101,21 +101,21 @@ export class AuditPopupComponent implements OnInit {
         switchMap(() => {
           this.loadingSubject.next(true);
           return combineLatest([this.paginate$]);
-        })
+        }),
       )
       .pipe(
         switchMap(([pagination]) => {
           this.loadingSubject.next(true);
           return this.service.loadAudit(this.model.id, pagination).pipe(
             finalize(() => this.loadingSubject.next(false)),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .pipe(
         tap((result) => {
           this.length = result.count;
-        })
+        }),
       )
       .pipe(map((pagination) => pagination.rs))
       .pipe(finalize(() => this.loadingSubject.next(false)));
@@ -131,7 +131,7 @@ export class AuditPopupComponent implements OnInit {
             .loadAuditEntityById(audit.id)
             .pipe(finalize(() => this.loadingSubject.next(false)))
             .pipe(ignoreErrors());
-        })
+        }),
       )
       .subscribe((model) => {
         model.openView();

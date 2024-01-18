@@ -17,9 +17,15 @@ import { Lookup } from '@models/lookup';
   templateUrl: './internal-user.component.html',
   styleUrls: ['./internal-user.component.scss'],
 })
-export class InternalUserComponent extends AdminComponent<InternalUserPopupComponent, InternalUser, InternalUserService> {
+export class InternalUserComponent extends AdminComponent<
+  InternalUserPopupComponent,
+  InternalUser,
+  InternalUserService
+> {
   service = inject(InternalUserService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED,
+  );
 
   actions: ContextMenuActionContract<InternalUser>[] = [
     {
@@ -27,7 +33,7 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -36,7 +42,7 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -45,7 +51,7 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -58,19 +64,20 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
     {
       name: 'email',
       type: 'info',
-      label: item => `${this.lang.map.email} : ${item.email}`,
+      label: (item) => `${this.lang.map.email} : ${item.email}`,
       parent: 'more-details',
     },
     {
       name: 'job-title-info',
       type: 'info',
-      label: item => `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
+      label: (item) =>
+        `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
       parent: 'more-details',
     },
     {
       name: 'phone-number',
       type: 'info',
-      label: item => `${this.lang.map.phone_number} : ${item.phoneNumber}`,
+      label: (item) => `${this.lang.map.phone_number} : ${item.phoneNumber}`,
       parent: 'more-details',
     },
   ];
@@ -82,8 +89,13 @@ export class InternalUserComponent extends AdminComponent<InternalUserPopupCompo
     new TextFilterColumn('domainName'),
     new TextFilterColumn('qid'),
     new TextFilterColumn('empNum'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
   getStatusString(status: number) {

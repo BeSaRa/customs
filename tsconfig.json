@@ -2,66 +2,26 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@services/*": [
-        "./src/services/*"
-      ],
-      "@models/*": [
-        "./src/models/*"
-      ],
-      "@modules/*": [
-        "./src/modules/*"
-      ],
-      "@contracts/*": [
-        "./src/contracts/*"
-      ],
-      "@mixins/*": [
-        "./src/mixins/*"
-      ],
-      "@enums/*": [
-        "./src/enums/*"
-      ],
-      "@model-interceptors/*": [
-        "./src/model-interceptors/*"
-      ],
-      "@http-interceptors/*": [
-        "./src/http-interceptors/*"
-      ],
-      "@http-contexts/*": [
-        "./src/http-contexts/*"
-      ],
-      "@pipes/*": [
-        "./src/pipes/*"
-      ],
-      "@guards/*": [
-        "./src/guards/*"
-      ],
-      "@resolvers/*": [
-        "./src/resolvers/*"
-      ],
-      "@validators/*": [
-        "./src/validators/*"
-      ],
-      "@tokens/*": [
-        "./src/tokens/*"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ],
-      "@standalone/*": [
-        "./src/standalone/*"
-      ],
-      "@constants/*": [
-        "./src/constants/*"
-      ],
-      "@abstracts/*": [
-        "./src/abstracts/*"
-      ],
-      "@app-types/*": [
-        "./src/app-types/*"
-      ],
-      "@animations/*": [
-        "./src/animations/*"
-      ]
+      "@services/*": ["./src/services/*"],
+      "@models/*": ["./src/models/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@contracts/*": ["./src/contracts/*"],
+      "@mixins/*": ["./src/mixins/*"],
+      "@enums/*": ["./src/enums/*"],
+      "@model-interceptors/*": ["./src/model-interceptors/*"],
+      "@http-interceptors/*": ["./src/http-interceptors/*"],
+      "@http-contexts/*": ["./src/http-contexts/*"],
+      "@pipes/*": ["./src/pipes/*"],
+      "@guards/*": ["./src/guards/*"],
+      "@resolvers/*": ["./src/resolvers/*"],
+      "@validators/*": ["./src/validators/*"],
+      "@tokens/*": ["./src/tokens/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@standalone/*": ["./src/standalone/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@abstracts/*": ["./src/abstracts/*"],
+      "@app-types/*": ["./src/app-types/*"],
+      "@animations/*": ["./src/animations/*"]
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -80,10 +40,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2021",
-      "dom"
-    ]
+    "lib": ["ES2021", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

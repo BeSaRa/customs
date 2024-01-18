@@ -85,14 +85,14 @@ export class SuspendEmployeePopupComponent
         switchMap(() => {
           const result = this._beforeSave();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(
         exhaustMap((model) => {
@@ -101,9 +101,9 @@ export class SuspendEmployeePopupComponent
               this._saveFail(error);
               return throwError(error);
             }),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .subscribe(() => {
         this._afterSave();
@@ -124,7 +124,7 @@ export class SuspendEmployeePopupComponent
 
   protected _afterSave(): void {
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
     // you can close the dialog after save here
     this.dialogRef.close();

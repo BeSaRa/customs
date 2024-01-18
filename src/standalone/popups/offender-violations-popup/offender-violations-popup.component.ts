@@ -94,7 +94,7 @@ export class OffenderViolationsPopupComponent
             : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
                 this.data.offender.type ||
               (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
-                OffenderTypes.BOTH)
+                OffenderTypes.BOTH),
       );
     this.listenToReload();
     this.listenToDelete();
@@ -113,16 +113,16 @@ export class OffenderViolationsPopupComponent
               caseId: this.data.caseId,
               offenderId: this.data.offender.id,
             })
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .subscribe((pagination) => {
         this.offenderViolations.next(pagination.rs);
         this.violations = this.violations.filter(
           (v) =>
             !this.dataSource.data.find(
-              (offenderViolation) => offenderViolation.violationId == v.id
-            )
+              (offenderViolation) => offenderViolation.violationId == v.id,
+            ),
           // TODO: add filter by violation offender type
         );
       });
@@ -141,11 +141,11 @@ export class OffenderViolationsPopupComponent
                   violationId: violationId,
                   status: 1,
                   isProved: true,
-                })
+                }),
               );
-            })
+            }),
           );
-        })
+        }),
       )
       .subscribe(() => {
         this.control.reset();
@@ -160,10 +160,10 @@ export class OffenderViolationsPopupComponent
             this.dataSource.data.length == 1 &&
             this.dialog.error(
               this.lang.map
-                .can_not_delete_offender_must_has_at_least_one_violation
-            )
+                .can_not_delete_offender_must_has_at_least_one_violation,
+            ),
         ),
-        filter(() => this.dataSource.data.length !== 1)
+        filter(() => this.dataSource.data.length !== 1),
       )
       .pipe(
         exhaustMap((model) =>
@@ -173,16 +173,16 @@ export class OffenderViolationsPopupComponent
                 x: this.violations
                   .find((v) => v.id == model.violationId)
                   ?.getOffenderViolationSelectNames(),
-              })
+              }),
             )
             .afterClosed()
             .pipe(
               map((userClick) => ({
                 model,
                 userClick,
-              }))
-            )
-        )
+              })),
+            ),
+        ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
@@ -192,7 +192,7 @@ export class OffenderViolationsPopupComponent
             x: this.violations
               .find((v) => v.id == model.violationId)
               ?.getOffenderViolationSelectNames(),
-          })
+          }),
         );
         this.reload$.next(null);
       });

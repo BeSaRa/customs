@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, Input, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  ViewChild,
+} from '@angular/core';
 
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { MatMenu, MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
@@ -37,11 +43,14 @@ export class ContextMenuItemComponent {
     if (!this.item) return '';
     return typeof action.label === 'function'
       ? action.label(this.item as never)
-      : this.lang.map[action.label as keyof LangKeysContract] || `messing key ${action.label}`;
+      : this.lang.map[action.label as keyof LangKeysContract] ||
+          `messing key ${action.label}`;
   }
 
   callback(action: ContextMenuActionContract<never>) {
-    typeof action.callback === 'function' && !this.isDisabled(action) && action.callback(this.item as never);
+    typeof action.callback === 'function' &&
+      !this.isDisabled(action) &&
+      action.callback(this.item as never);
   }
 
   isDisabled(action: ContextMenuActionContract<never>): boolean {

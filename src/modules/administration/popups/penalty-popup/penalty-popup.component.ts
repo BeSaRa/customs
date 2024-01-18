@@ -28,7 +28,10 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
 
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 
-  statusTooltipText = this.model?.status === StatusTypes.ACTIVE ? this.lang.map.active : this.lang.map.in_active;
+  statusTooltipText =
+    this.model?.status === StatusTypes.ACTIVE
+      ? this.lang.map.active
+      : this.lang.map.in_active;
   activeTab = 0;
   isEmployee = true;
 
@@ -39,7 +42,9 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
     this.penaltyDetailsList = this.penaltyDetails ?? [];
-    this.tempList = this.penaltyDetailsList.map(detail => new PenaltyDetails().clone<PenaltyDetails>(detail));
+    this.tempList = this.penaltyDetailsList.map((detail) =>
+      new PenaltyDetails().clone<PenaltyDetails>(detail),
+    );
     this.listenToStatusChange();
     this.listenToIsCash();
     this.listenToIsDeduction();
@@ -78,21 +83,30 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   protected _afterSave(model: Penalty): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
 
   protected listenToStatusChange() {
-    this.status?.valueChanges.subscribe(value => {
-      this.statusTooltipText = value ? this.lang.map.active : this.lang.map.in_active;
+    this.status?.valueChanges.subscribe((value) => {
+      this.statusTooltipText = value
+        ? this.lang.map.active
+        : this.lang.map.in_active;
     });
   }
 
   listenToIsCash() {
-    this.form.get('isCash')?.valueChanges.subscribe(value => {
+    this.form.get('isCash')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.cashAmount?.addValidators([CustomValidators.required, CustomValidators.positiveNumber, Validators.min(500), Validators.max(5000)]);
+        this.cashAmount?.addValidators([
+          CustomValidators.required,
+          CustomValidators.positiveNumber,
+          Validators.min(500),
+          Validators.max(5000),
+        ]);
         this.form.get('isDeduction')?.setValue(false, { emitEvent: false });
         this.deductionDays?.setValue(null);
         this.deductionDays?.clearValidators();
@@ -106,9 +120,14 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToIsDeduction() {
-    this.form.get('isDeduction')?.valueChanges.subscribe(value => {
+    this.form.get('isDeduction')?.valueChanges.subscribe((value) => {
       if (value) {
-        this.deductionDays?.addValidators([CustomValidators.required, CustomValidators.positiveNumber, Validators.min(1), Validators.max(15)]);
+        this.deductionDays?.addValidators([
+          CustomValidators.required,
+          CustomValidators.positiveNumber,
+          Validators.min(1),
+          Validators.max(15),
+        ]);
         this.form.get('isCash')?.setValue(false, { emitEvent: false });
         this.cashAmount?.setValue(null);
         this.cashAmount?.clearValidators();
@@ -122,7 +141,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToOffenderTypeChange() {
-    this.form.get('offenderType')?.valueChanges.subscribe(value => {
+    this.form.get('offenderType')?.valueChanges.subscribe((value) => {
       this.deductionDays?.setValue(null);
       this.cashAmount?.setValue(null);
       this.isDeduction?.setValue(false);

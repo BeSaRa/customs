@@ -49,7 +49,7 @@ export class InternalUserService extends BaseCrudWithDialogService<
 
   downloadSignature(
     id: number,
-    domSanitizer: DomSanitizer
+    domSanitizer: DomSanitizer,
   ): Observable<BlobModel> {
     return this.http
       .get(this.getUrlSegment() + '/signature/content', {
@@ -78,18 +78,18 @@ export class InternalUserService extends BaseCrudWithDialogService<
   @CastResponse()
   getInternalUsersByOuId(ouId: number): Observable<InternalUser[]> {
     return this.http.get<InternalUser[]>(
-      this.getUrlSegment() + `/admin/${ouId}`
+      this.getUrlSegment() + `/admin/${ouId}`,
     );
   }
 
   @CastResponse()
   updateDefaultDepartment(
     id: number,
-    defaultOUId: number
+    defaultOUId: number,
   ): Observable<boolean> {
     return this.http.put<boolean>(
       this.getUrlSegment() + '/admin/default-department/update',
-      { id, defaultOUId }
+      { id, defaultOUId },
     );
   }
 }

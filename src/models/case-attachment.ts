@@ -41,7 +41,9 @@ export class CaseAttachment extends ClonerMixin(class {}) {
     this.content = file;
   }
 
-  view(service: BaseCaseService<unknown>): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+  view(
+    service: BaseCaseService<unknown>,
+  ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return service.viewAttachment(this.id);
   }
 

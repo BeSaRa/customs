@@ -6,7 +6,10 @@ import { InterceptModel } from 'cast-response';
 const { send, receive } = new MawaredDepartmentInterceptor();
 
 @InterceptModel({ send, receive })
-export class MawaredDepartment extends BaseModel<MawaredDepartment, MawaredDepartmentService> {
+export class MawaredDepartment extends BaseModel<
+  MawaredDepartment,
+  MawaredDepartmentService
+> {
   $$__service_name__$$ = 'MawaredDepartmentService';
 
   ldapCode!: string;

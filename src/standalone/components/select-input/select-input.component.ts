@@ -14,7 +14,14 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+  ReactiveFormsModule,
+  ValidationErrors,
+} from '@angular/forms';
 import { debounceTime, map, Observable, of, Subject, takeUntil } from 'rxjs';
 import { MatOption, MatOptionModule } from '@angular/material/core';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
@@ -54,9 +61,11 @@ import { IconButtonComponent } from '../icon-button/icon-button.component';
     },
   ],
 })
-export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit {
+export class SelectInputComponent
+  implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit
+{
   ngAfterViewInit(): void {
-    Promise.resolve(!!this.optionTemplate).then(value => {
+    Promise.resolve(!!this.optionTemplate).then((value) => {
       if (!value) return;
       const options = this._selectOptions?.toArray() || [];
       this.selectInput?.options.reset(options);
@@ -136,7 +145,9 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
-      map(() => (this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined))
+      map(() =>
+        this.ctrl?.dirty || this.ctrl?.touched ? this.ctrl?.errors : undefined,
+      ),
     );
   }
 
@@ -149,7 +160,9 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
 
   control = new FormControl('');
   // noinspection JSUnusedLocalSymbols
-  private values = this.control.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(value => this.onChange && this.onChange(value));
+  private values = this.control.valueChanges
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((value) => this.onChange && this.onChange(value));
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -179,7 +192,9 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
 
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
-    this.disabled ? this.control.disable({ emitEvent: false }) : this.control.enable({ emitEvent: false });
+    this.disabled
+      ? this.control.disable({ emitEvent: false })
+      : this.control.enable({ emitEvent: false });
   }
 
   inputTouch() {
@@ -196,11 +211,11 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
       ? typeof (option as never)[this.bindValue] === 'function'
         ? ((option as never)[this.bindValue] as () => unknown)()
         : objectHasOwnProperty(option, this.bindValue)
-        ? option[this.bindValue]
-        : option
+          ? option[this.bindValue]
+          : option
       : this.bindValue && typeof this.bindValue === 'function'
-      ? this.bindValue(option)
-      : option;
+        ? this.bindValue(option)
+        : option;
   }
 
   getBindLabel(option: unknown): unknown {
@@ -208,11 +223,11 @@ export class SelectInputComponent implements ControlValueAccessor, OnInit, OnDes
       ? typeof (option as never)[this.bindLabel] === 'function'
         ? ((option as never)[this.bindLabel] as () => unknown)()
         : objectHasOwnProperty(option, this.bindLabel)
-        ? option[this.bindLabel]
-        : option
+          ? option[this.bindLabel]
+          : option
       : this.bindLabel && typeof this.bindLabel === 'function'
-      ? this.bindLabel(option)
-      : option;
+        ? this.bindLabel(option)
+        : option;
   }
   delete(event: MouseEvent, option: unknown) {
     event.preventDefault();

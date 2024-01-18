@@ -35,7 +35,9 @@ export class LegalRulePopupComponent extends AdminDialogComponent<LegalRule> {
   protected _afterSave(model: LegalRule): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }

@@ -17,7 +17,11 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './violation-type.component.html',
   styleUrls: ['./violation-type.component.scss'],
 })
-export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupComponent, ViolationType, ViolationTypeService> {
+export class ViolationTypeComponent extends AdminComponent<
+  ViolationTypePopupComponent,
+  ViolationType,
+  ViolationTypeService
+> {
   service = inject(ViolationTypeService);
 
   violationClassificationService = inject(ViolationClassificationService);
@@ -28,7 +32,7 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -37,7 +41,7 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +50,7 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -55,7 +59,7 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -68,28 +72,30 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
     {
       name: 'isNumeric',
       type: 'info',
-      label: item => `${this.lang.map.is_numeric} : ${item.isNumeric ? 'Yes' : 'No'}`,
+      label: (item) =>
+        `${this.lang.map.is_numeric} : ${item.isNumeric ? 'Yes' : 'No'}`,
       parent: 'more-details',
     },
     {
       name: 'isAbsence',
       type: 'info',
-      label: item => `${this.lang.map.absence} : ${item.isAbsence ? 'Yes' : 'No'}`,
+      label: (item) =>
+        `${this.lang.map.absence} : ${item.isAbsence ? 'Yes' : 'No'}`,
       parent: 'more-details',
     },
     {
       name: 'numericFrom',
       type: 'info',
-      label: item => `${this.lang.map.numeric_from} : ${item.numericFrom}`,
+      label: (item) => `${this.lang.map.numeric_from} : ${item.numericFrom}`,
       parent: 'more-details',
-      hide: item => !item.isNumeric,
+      hide: (item) => !item.isNumeric,
     },
     {
       name: 'numericTo',
       type: 'info',
-      label: item => `${this.lang.map.numeric_to} : ${item.numericTo}`,
+      label: (item) => `${this.lang.map.numeric_to} : ${item.numericTo}`,
       parent: 'more-details',
-      hide: item => !item.isNumeric,
+      hide: (item) => !item.isNumeric,
     },
   ];
 
@@ -98,18 +104,50 @@ export class ViolationTypeComponent extends AdminComponent<ViolationTypePopupCom
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('classificationId', this.violationClassificationService.loadAsLookups(), 'id', 'getNames'),
-    new SelectFilterColumn('offenderType', this.lookupService.lookups.offenderType, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('level', this.lookupService.lookups.violationLevel, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('managerDecision', this.lookupService.lookups.managerDecisionControl, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('responsibilityRepeatViolations', this.lookupService.lookups.responsibilityRepeatViolations, 'lookupKey', 'getNames'),
-    new SelectFilterColumn('criminalType', this.lookupService.lookups.criminalType, 'lookupKey', 'getNames'),
+    new SelectFilterColumn(
+      'classificationId',
+      this.violationClassificationService.loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'offenderType',
+      this.lookupService.lookups.offenderType,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'level',
+      this.lookupService.lookups.violationLevel,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'managerDecision',
+      this.lookupService.lookups.managerDecisionControl,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'responsibilityRepeatViolations',
+      this.lookupService.lookups.responsibilityRepeatViolations,
+      'lookupKey',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'criminalType',
+      this.lookupService.lookups.criminalType,
+      'lookupKey',
+      'getNames',
+    ),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus.filter(item => item.lookupKey !== StatusTypes.DELETED),
+      this.lookupService.lookups.commonStatus.filter(
+        (item) => item.lookupKey !== StatusTypes.DELETED,
+      ),
       'lookupKey',
-      'getNames'
+      'getNames',
     ),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

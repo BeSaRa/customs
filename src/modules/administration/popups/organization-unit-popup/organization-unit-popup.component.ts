@@ -66,13 +66,13 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
     this.organizationUnitService
       .uploadOuLogo(this.ouLogo)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null)
+        filter((response) => response !== null),
       )
       .subscribe();
     // you can close the dialog after save here

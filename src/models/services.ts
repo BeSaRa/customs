@@ -55,22 +55,56 @@ export class Services extends BaseModel<Services, ServicesService> {
       serviceStepsEnglish,
     } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.maxLength(50), CustomValidators.pattern('ENG_NUM')]] : enName,
+      arName: controls
+        ? [
+            arName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('AR_NUM'),
+            ],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [
+              CustomValidators.required,
+              CustomValidators.maxLength(50),
+              CustomValidators.pattern('ENG_NUM'),
+            ],
+          ]
+        : enName,
       status: controls ? [status, CustomValidators.required] : status,
       caseType: controls ? [caseType, CustomValidators.required] : caseType,
-      bawServiceCode: controls ? [bawServiceCode, CustomValidators.required] : bawServiceCode,
-      licenseSerialCode: controls ? [licenseSerialCode, CustomValidators.required] : licenseSerialCode,
-      requestSerialCode: controls ? [requestSerialCode, CustomValidators.required] : requestSerialCode,
-      serviceTimeLimit: controls ? [serviceTimeLimit, CustomValidators.number] : serviceTimeLimit,
-      licenseMinTime: controls ? [licenseMinTime, CustomValidators.number] : licenseMinTime,
-      licenseMaxTime: controls ? [licenseMaxTime, CustomValidators.number] : licenseMaxTime,
+      bawServiceCode: controls
+        ? [bawServiceCode, CustomValidators.required]
+        : bawServiceCode,
+      licenseSerialCode: controls
+        ? [licenseSerialCode, CustomValidators.required]
+        : licenseSerialCode,
+      requestSerialCode: controls
+        ? [requestSerialCode, CustomValidators.required]
+        : requestSerialCode,
+      serviceTimeLimit: controls
+        ? [serviceTimeLimit, CustomValidators.number]
+        : serviceTimeLimit,
+      licenseMinTime: controls
+        ? [licenseMinTime, CustomValidators.number]
+        : licenseMinTime,
+      licenseMaxTime: controls
+        ? [licenseMaxTime, CustomValidators.number]
+        : licenseMaxTime,
       fees: controls ? [fees, CustomValidators.number] : fees,
       serviceTerms: controls ? [serviceTerms] : serviceTerms,
-      serviceRequirements: controls ? [serviceRequirements] : serviceRequirements,
+      serviceRequirements: controls
+        ? [serviceRequirements]
+        : serviceRequirements,
       serviceDescription: controls ? [serviceDescription] : serviceDescription,
       serviceStepsArabic: controls ? [serviceStepsArabic] : serviceStepsArabic,
-      serviceStepsEnglish: controls ? [serviceStepsEnglish] : serviceStepsEnglish,
+      serviceStepsEnglish: controls
+        ? [serviceStepsEnglish]
+        : serviceStepsEnglish,
     };
   }
 }

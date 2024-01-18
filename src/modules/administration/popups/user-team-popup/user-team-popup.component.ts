@@ -46,10 +46,10 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
           teams.filter(
             (team) =>
               !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
-                team.id
-              )
-          )
-        )
+                team.id,
+              ),
+          ),
+        ),
       )
       .subscribe((filteredTeams) => {
         this.teams = filteredTeams;
@@ -76,7 +76,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   protected _afterSave(): void {
     this.operation = OperationType.UPDATE;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
@@ -96,7 +96,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
         internalUserId: userTeam.internalUserId,
         teamId: teamId,
         status: userTeam.status,
-      })
+      }),
     );
     return forkJoin(requests$);
   }
@@ -108,14 +108,14 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
         switchMap(() => {
           const result = this._beforeSave();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
         switchMap(() => {
           const result = this._prepareModel();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(
         exhaustMap((userTeam) => {
@@ -124,9 +124,9 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
               this._saveFail(error);
               return throwError(error);
             }),
-            ignoreErrors()
+            ignoreErrors(),
           );
-        })
+        }),
       )
       .subscribe(() => {
         this._afterSave();

@@ -6,7 +6,10 @@ export class DateFilterColumn implements FilterColumnContract {
   filterName: string;
   bindKey: string;
 
-  constructor(public name: string, bindKey?: string) {
+  constructor(
+    public name: string,
+    bindKey?: string,
+  ) {
     this.filterName = this.name + '_filter';
     this.bindKey = bindKey ? bindKey : this.name;
   }

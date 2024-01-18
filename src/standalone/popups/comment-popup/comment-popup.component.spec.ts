@@ -9,9 +9,8 @@ describe('CommentPopupComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CommentPopupComponent ]
-    })
-    .compileComponents();
+      declarations: [CommentPopupComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

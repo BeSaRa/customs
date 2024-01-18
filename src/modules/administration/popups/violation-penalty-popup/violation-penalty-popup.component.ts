@@ -50,13 +50,13 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   protected getViolationTypes() {
-    this.violationTypeService.loadAsLookups().subscribe(data => {
+    this.violationTypeService.loadAsLookups().subscribe((data) => {
       this.violationTypes = data;
     });
   }
 
   protected getPenalties() {
-    this.penaltyService.loadAsLookups().subscribe(data => {
+    this.penaltyService.loadAsLookups().subscribe((data) => {
       this.penalties = data;
       this.filteredPenalties = data;
       if (this.operation === OperationType.UPDATE) this.setFilteredPenalties();
@@ -82,7 +82,9 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   protected _afterSave(model: ViolationPenalty): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
@@ -148,26 +150,39 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   needOffenderLevel(): boolean {
-    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
-    return this.offenderTypeValue && offenderTypeLookupKey === OffenderTypes.EMPLOYEE && this.penaltySignerValue;
+    const offenderTypeLookupKey = this.offenderTypes.find(
+      (offenderType) => offenderType.lookupKey === this.offenderTypeValue,
+    )?.lookupKey;
+    return (
+      this.offenderTypeValue &&
+      offenderTypeLookupKey === OffenderTypes.EMPLOYEE &&
+      this.penaltySignerValue
+    );
   }
 
   showPenaltiesAndPenaltyGuidance() {
     return (
       (this.penaltySignerValue && this.offenderLevelValue) ||
-      this.penaltySignerValue === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+      this.penaltySignerValue ===
+        PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
     );
   }
 
   setFilteredPenaltySigners() {
-    const offenderTypeLookupKey = this.offenderTypes.find(offenderType => offenderType.lookupKey === this.offenderTypeValue)?.lookupKey;
+    const offenderTypeLookupKey = this.offenderTypes.find(
+      (offenderType) => offenderType.lookupKey === this.offenderTypeValue,
+    )?.lookupKey;
     if (offenderTypeLookupKey === OffenderTypes.ClEARING_AGENT) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
-        lookupItem => lookupItem.lookupKey === PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+        (lookupItem) =>
+          lookupItem.lookupKey ===
+          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
       );
     } else if (offenderTypeLookupKey === OffenderTypes.EMPLOYEE) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
-        lookupItem => lookupItem.lookupKey !== PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+        (lookupItem) =>
+          lookupItem.lookupKey !==
+          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
       );
     }
   }
@@ -177,27 +192,33 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     switch (penaltySignerValue) {
       case PenaltySignerTypes.MANAGER_DIRECTOR:
         this.filteredOffenderLevels = this.offenderLevels.filter(
-          lookupItem =>
+          (lookupItem) =>
             lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
-            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE,
         );
         break;
       case PenaltySignerTypes.PRESIDENT_ASSISTANT:
         this.filteredOffenderLevels = this.offenderLevels.filter(
-          lookupItem =>
+          (lookupItem) =>
             lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
-            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE,
         );
         break;
       case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
         this.filteredOffenderLevels = this.offenderLevels.filter(
-          lookupItem =>
-            lookupItem.lookupKey === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
-            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS
+          (lookupItem) =>
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS,
         );
         break;
       case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
-        this.filteredOffenderLevels = this.offenderLevels.filter(lookupItem => lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS);
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          (lookupItem) =>
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS,
+        );
         break;
       default:
         break;
@@ -208,26 +229,32 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     if (!this.showPenaltiesAndPenaltyGuidance()) return;
     const penaltySigner = this.penaltySignerValue;
     this.filteredPenalties = [];
-    this.penalties.forEach(penalty => {
+    this.penalties.forEach((penalty) => {
       if (penalty.isSystem) {
         if (penaltySigner === PenaltySignerTypes.MANAGER_DIRECTOR) {
           if (
             penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PRESIDENT ||
-            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
+            penalty.penaltyKey ===
+              SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT
           ) {
             this.filteredPenalties.push(penalty);
           }
         } else if (penaltySigner === PenaltySignerTypes.PRESIDENT_ASSISTANT) {
           if (
-            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL ||
-            penalty.penaltyKey === SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL
+            penalty.penaltyKey ===
+              SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL ||
+            penalty.penaltyKey ===
+              SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL
           ) {
             this.filteredPenalties.push(penalty);
           }
         }
       } else {
-        penalty.detailsList.forEach(detail => {
-          if (detail.offenderLevel === this.offenderLevelValue && detail.penaltySigner === this.penaltySignerValue) {
+        penalty.detailsList.forEach((detail) => {
+          if (
+            detail.offenderLevel === this.offenderLevelValue &&
+            detail.penaltySigner === this.penaltySignerValue
+          ) {
             this.filteredPenalties.push(penalty);
           }
         });
@@ -241,39 +268,61 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     const offenderLevelValue: OffenderLevels = this.offenderLevelValue;
     switch (penaltySignerValue) {
       case PenaltySignerTypes.MANAGER_DIRECTOR:
-        if (offenderLevelValue === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE) {
-          this.filteredPenaltyGuidance = this.penaltyGuidance.filter(lookupItem => lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL);
-        } else if (offenderLevelValue === OffenderLevels.FOURTH_DEGREE_OR_LESS) {
+        if (
+          offenderLevelValue ===
+          OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE
+        ) {
           this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
-            lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE || lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL
+            (lookupItem) =>
+              lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL,
+          );
+        } else if (
+          offenderLevelValue === OffenderLevels.FOURTH_DEGREE_OR_LESS
+        ) {
+          this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
+            (lookupItem) =>
+              lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE ||
+              lookupItem.lookupKey === PenaltyGuidances.NECESSARY_ASK_REFERRAL,
           );
         }
         break;
       case PenaltySignerTypes.PRESIDENT_ASSISTANT:
-        if (offenderLevelValue === OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE) {
+        if (
+          offenderLevelValue ===
+          OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE
+        ) {
           this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
-            lookupItem =>
+            (lookupItem) =>
               lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE ||
-              lookupItem.lookupKey === PenaltyGuidances.REFERRAL_TO_THE_PERMANENT_DISCIPLINARY_COUNCIL
+              lookupItem.lookupKey ===
+                PenaltyGuidances.REFERRAL_TO_THE_PERMANENT_DISCIPLINARY_COUNCIL,
           );
-        } else if (offenderLevelValue === OffenderLevels.SECOND_DEGREE_OR_LESS) {
+        } else if (
+          offenderLevelValue === OffenderLevels.SECOND_DEGREE_OR_LESS
+        ) {
           this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
-            lookupItem =>
+            (lookupItem) =>
               lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE ||
-              lookupItem.lookupKey === PenaltyGuidances.REFERRAL_TO_THE_DISCIPLINARY_COMMITTEE
+              lookupItem.lookupKey ===
+                PenaltyGuidances.REFERRAL_TO_THE_DISCIPLINARY_COMMITTEE,
           );
         }
         break;
       case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
         if (offenderLevelValue === OffenderLevels.SECOND_DEGREE_OR_LESS) {
-          this.filteredPenaltyGuidance = this.penaltyGuidance.filter(lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE);
+          this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
+            (lookupItem) =>
+              lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE,
+          );
         }
         break;
       case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
         this.filteredPenaltyGuidance = [];
         break;
       case PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER:
-        this.filteredPenaltyGuidance = this.penaltyGuidance.filter(lookupItem => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE);
+        this.filteredPenaltyGuidance = this.penaltyGuidance.filter(
+          (lookupItem) => lookupItem.lookupKey === PenaltyGuidances.APPROPRIATE,
+        );
         break;
       default:
         break;

@@ -1,201 +1,330 @@
 <div class="grid grid-cols-5 gap-4 mt-3">
   <!-- save -->
-  <app-button [disabled]="!model?.canSave()" (click)="save.emit(SaveTypes.FINAL)">{{ lang.map.save }}</app-button>
+  <app-button
+    [disabled]="!model?.canSave()"
+    (click)="save.emit(SaveTypes.FINAL)"
+    >{{ lang.map.save }}</app-button
+  >
 
   <!-- manager approve -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)) {
-  <app-button (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
-    {{ lang.map.manager_approve }}
-  </app-button>
+  @if (
+    model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)
+  ) {
+    <app-button (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
+      {{ lang.map.manager_approve }}
+    </app-button>
   }
   <!-- hr manager approve -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.HR_APPROVE)) {
-  <app-button (click)="responseAction$.next(taskResponses.HR_APPROVE)">
-    {{ lang.map.manager_approve }}
-  </app-button>
+    <app-button (click)="responseAction$.next(taskResponses.HR_APPROVE)">
+      {{ lang.map.manager_approve }}
+    </app-button>
   }
   <!-- complete action -->
   @if (model?.hasComplete()) {
-  <app-button (click)="responseAction$.next(taskResponses.COMPLETE)">
-    {{ lang.map.complete }}
-  </app-button>
+    <app-button (click)="responseAction$.next(taskResponses.COMPLETE)">
+      {{ lang.map.complete }}
+    </app-button>
   }
   <!-- final complete action -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_COMPLETE)) {
-  <app-button (click)="responseAction$.next(taskResponses.PA_FNL_COMPLETE)">
-    {{ lang.map.final_complete }}
-  </app-button>
+  @if (
+    model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_COMPLETE)
+  ) {
+    <app-button (click)="responseAction$.next(taskResponses.PA_FNL_COMPLETE)">
+      {{ lang.map.final_complete }}
+    </app-button>
   }
 
   <!-- apply and return -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_APPLY_AND_RETURN)) {
-  <app-button buttonType="secondary" (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)">
-    {{ lang.map.apply_and_return_remining }}
-  </app-button>
+  @if (
+    model?.isClaimed() &&
+    model?.hasResponse(taskResponses.PA_FNL_APPLY_AND_RETURN)
+  ) {
+    <app-button
+      buttonType="secondary"
+      (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)"
+    >
+      {{ lang.map.apply_and_return_remining }}
+    </app-button>
   }
   <!-- Issuing a referral decision to study in the president assistant office -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_TO_PAE)) {
-  <app-button buttonType="secondary" (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)">
-    {{ lang.map.final_issuing_referral_decision_to_study_in_the_president_assistant_office }}
-  </app-button>
+    <app-button
+      buttonType="secondary"
+      (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)"
+    >
+      {{
+        lang.map
+          .final_issuing_referral_decision_to_study_in_the_president_assistant_office
+      }}
+    </app-button>
   }
   <!-- transfer report to staff president office -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)) {
-  <app-button buttonType="secondary" (click)="responseAction$.next(taskResponses.TO_PO)">
-    {{ lang.map.transfer_report_to_staff_president_office }}
-  </app-button>
+    <app-button
+      buttonType="secondary"
+      (click)="responseAction$.next(taskResponses.TO_PO)"
+    >
+      {{ lang.map.transfer_report_to_staff_president_office }}
+    </app-button>
   }
 
   <!-- return -->
-  @if ( model?.isClaimed() && (model?.hasResponse(taskResponses.TO_USER) ||
-  model?.hasResponse(taskResponses.RETURN_TO_HR) || model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
-  model?.hasResponse(taskResponses.RETURN_TO_APP) || model?.hasResponse(taskResponses.RETURN_APP_MANAGER)) ) {
-  <app-button buttonType="secondary" mat-button [matMenuTriggerFor]="returnMenu">
-    {{ lang.map.return }}
-    <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
-  </app-button>
+  @if (
+    model?.isClaimed() &&
+    (model?.hasResponse(taskResponses.TO_USER) ||
+      model?.hasResponse(taskResponses.RETURN_TO_HR) ||
+      model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
+      model?.hasResponse(taskResponses.RETURN_TO_APP) ||
+      model?.hasResponse(taskResponses.RETURN_APP_MANAGER))
+  ) {
+    <app-button
+      buttonType="secondary"
+      mat-button
+      [matMenuTriggerFor]="returnMenu"
+    >
+      {{ lang.map.return }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+    </app-button>
   }
   <mat-menu #returnMenu="matMenu">
     @if (model?.hasResponse(taskResponses.RETURN_APP_MANAGER)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
-      {{ lang.map.return_to_manager }}
-    </button>
-    } @if (model?.hasResponse(taskResponses.RETURN_TO_HR)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
-      {{ lang.map.return_to_hr_department }}
-    </button>
-    } @if (model?.hasResponse(taskResponses.TO_USER)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.TO_USER)">
-      {{ lang.map.return }}
-    </button>
-    } @if (model?.hasResponse(taskResponses.RETURN_TO_SAME)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
-      {{ lang.map.return_to_same }}
-    </button>
-    } @if (model?.hasResponse(taskResponses.RETURN_TO_APP)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
-      {{ lang.map.return_to_applicant_department }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)"
+      >
+        {{ lang.map.return_to_manager }}
+      </button>
+    }
+    @if (model?.hasResponse(taskResponses.RETURN_TO_HR)) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.RETURN_TO_HR)"
+      >
+        {{ lang.map.return_to_hr_department }}
+      </button>
+    }
+    @if (model?.hasResponse(taskResponses.TO_USER)) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.TO_USER)"
+      >
+        {{ lang.map.return }}
+      </button>
+    }
+    @if (model?.hasResponse(taskResponses.RETURN_TO_SAME)) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)"
+      >
+        {{ lang.map.return_to_same }}
+      </button>
+    }
+    @if (model?.hasResponse(taskResponses.RETURN_TO_APP)) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.RETURN_TO_APP)"
+      >
+        {{ lang.map.return_to_applicant_department }}
+      </button>
     }
   </mat-menu>
 
   <!-- referral request -->
-  @if ( model?.isClaimed() && (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT) ||
-  model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)) ) {
-  <app-button buttonType="secondary" mat-button [matMenuTriggerFor]="referralMenu">
-    {{ lang.map.referral_request }}
-    <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
-  </app-button>
+  @if (
+    model?.isClaimed() &&
+    (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT) ||
+      model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT))
+  ) {
+    <app-button
+      buttonType="secondary"
+      mat-button
+      [matMenuTriggerFor]="referralMenu"
+    >
+      {{ lang.map.referral_request }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+    </app-button>
   }
   <mat-menu #referralMenu="matMenu">
     @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
-      {{ lang.map.referral_request_to_presodent }}
-    </button>
-    } @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)">
-      {{ lang.map.referral_request_to_presodent_assistant }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)"
+      >
+        {{ lang.map.referral_request_to_presodent }}
+      </button>
+    }
+    @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)) {
+      <button
+        mat-menu-item
+        (click)="
+          responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)
+        "
+      >
+        {{ lang.map.referral_request_to_presodent_assistant }}
+      </button>
     }
   </mat-menu>
 
   <!-- send to -->
-  @if (model?.isClaimed() && ( model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS) ||
-  model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL) ||
-  model?.hasResponse(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL) )) {
-  <app-button buttonType="secondary" mat-button [matMenuTriggerFor]="sendToMenu">
-    {{ lang.map.send_to }}
-    <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
-  </app-button>
+  @if (
+    model?.isClaimed() &&
+    (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS) ||
+      model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL) ||
+      model?.hasResponse(
+        taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
+      ))
+  ) {
+    <app-button
+      buttonType="secondary"
+      mat-button
+      [matMenuTriggerFor]="sendToMenu"
+    >
+      {{ lang.map.send_to }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+    </app-button>
   }
   <mat-menu #sendToMenu="matMenu">
     <!-- launch legal affairs -->
     @if (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)">
-      {{ lang.map.launch_legal_affairs }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="
+          responseAction$.next(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)
+        "
+      >
+        {{ lang.map.launch_legal_affairs }}
+      </button>
     }
     <!-- launch disciplinary council -->
     @if (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)">
-      {{ lang.map.launch_disciplinary_council }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="
+          responseAction$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
+        "
+      >
+        {{ lang.map.launch_disciplinary_council }}
+      </button>
     }
     <!-- launch disciplinary council -->
-    @if (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL)">
-      {{ lang.map.launch_permanent_disciplinary_council }}
-    </button>
+    @if (
+      model?.hasResponse(
+        taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
+      )
+    ) {
+      <button
+        mat-menu-item
+        (click)="
+          responseAction$.next(
+            taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
+          )
+        "
+      >
+        {{ lang.map.launch_permanent_disciplinary_council }}
+      </button>
     }
   </mat-menu>
 
   <!-- issuing referral decision -->
-  @if (model?.isClaimed() && ( model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS) ||
-  model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS) || model?.hasResponse(taskResponses.TO_PAE))) {
-  <app-button buttonType="secondary" mat-button [matMenuTriggerFor]="issuingMenu">
-    {{ lang.map.issuing_referral_decision }}
-    <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
-  </app-button>
+  @if (
+    model?.isClaimed() &&
+    (model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS) ||
+      model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS) ||
+      model?.hasResponse(taskResponses.TO_PAE))
+  ) {
+    <app-button
+      buttonType="secondary"
+      mat-button
+      [matMenuTriggerFor]="issuingMenu"
+    >
+      {{ lang.map.issuing_referral_decision }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+    </app-button>
   }
   <mat-menu #issuingMenu="matMenu">
     <!-- issuing referral decision to legal affairs manager -->
     @if (model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)">
-      {{ lang.map.to_legal_affairs_manager }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)"
+      >
+        {{ lang.map.to_legal_affairs_manager }}
+      </button>
     }
     <!-- issuing referral decision to legal affairs manager -->
     @if (model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.LAUNCH_LEAGL_AFFAIRS)">
-      {{ lang.map.to_legal_affairs_manager }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.LAUNCH_LEAGL_AFFAIRS)"
+      >
+        {{ lang.map.to_legal_affairs_manager }}
+      </button>
     }
     <!-- Issuing a referral decision to study in the president assistant office -->
     @if (model?.hasResponse(taskResponses.TO_PAE)) {
-    <button mat-menu-item (click)="responseAction$.next(taskResponses.TO_PAE)">
-      {{ lang.map.to_study_in_the_president_assistant_office }}
-    </button>
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.TO_PAE)"
+      >
+        {{ lang.map.to_study_in_the_president_assistant_office }}
+      </button>
     }
   </mat-menu>
 
   <!-- data entry actions -->
   <!-- send to manager -->
   @if (canLaunch() && !isApplicantManager()) {
-  <app-button (click)="launch.emit(isApplicantChief() ? sendTypes.CHIEF_TO_MANAGER : sendTypes.DIRECTOR_ADMIN)">{{
-    lang.map.send_to_manager
-  }}</app-button>
+    <app-button
+      (click)="
+        launch.emit(
+          isApplicantChief()
+            ? sendTypes.CHIEF_TO_MANAGER
+            : sendTypes.DIRECTOR_ADMIN
+        )
+      "
+      >{{ lang.map.send_to_manager }}</app-button
+    >
   }
   <!-- send to chief -->
   @if (canLaunch() && !isApplicantManager() && model?.sectionId) {
-  <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)">{{ lang.map.send_to_chief }}</app-button>
+    <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
+      lang.map.send_to_chief
+    }}</app-button>
   }
 
   <!-- data entry chief actions -->
   <!-- send to manager -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)) {
-  <app-button (click)="responseAction$.next(taskResponses.TO_MANAGER)">
-    {{ lang.map.to_manager }}
-  </app-button>
+    <app-button (click)="responseAction$.next(taskResponses.TO_MANAGER)">
+      {{ lang.map.to_manager }}
+    </app-button>
   }
 
   <!-- cliam -->
   @if (model?.canClaim()) {
-  <app-button (click)="claimItem()">
-    {{ lang.map.claim }}
-  </app-button>
+    <app-button (click)="claimItem()">
+      {{ lang.map.claim }}
+    </app-button>
   }
 
   <!-- close action -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)) {
-  <app-button buttonType="error" (click)="responseAction$.next(taskResponses.CLOSE)">
-    {{ lang.map.close }}
-  </app-button>
+    <app-button
+      buttonType="error"
+      (click)="responseAction$.next(taskResponses.CLOSE)"
+    >
+      {{ lang.map.close }}
+    </app-button>
   }
 
   <!-- terminate -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)) {
-  <app-button buttonType="error" (click)="responseAction$.next(taskResponses.TERMINATE)">
-    {{ lang.map.terminate }}
-  </app-button>
+    <app-button
+      buttonType="error"
+      (click)="responseAction$.next(taskResponses.TERMINATE)"
+    >
+      {{ lang.map.terminate }}
+    </app-button>
   }
 </div>

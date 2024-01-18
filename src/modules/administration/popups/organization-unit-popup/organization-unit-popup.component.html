@@ -83,44 +83,52 @@
         </ng-container>
       </mat-tab>
       @if (!inCreateMode()) {
-      <mat-tab [label]="lang.map.ou_logo">
-        <div class="dialog-content">
-          <div [formGroup]="form" class="flex flex-col">
-            <div
-              (drop)="filesDropped($event)"
-              (dragover)="$event.preventDefault()"
-              [ngClass]="getOuLogoStyle()"
-            >
-              @if (ouLogoSafeUrl) {
-              <div class="dialog-content !p-0 w-full h-full">
-                <img class="w-full h-full" alt="logo" [src]="ouLogoSafeUrl" />
+        <mat-tab [label]="lang.map.ou_logo">
+          <div class="dialog-content">
+            <div [formGroup]="form" class="flex flex-col">
+              <div
+                (drop)="filesDropped($event)"
+                (dragover)="$event.preventDefault()"
+                [ngClass]="getOuLogoStyle()"
+              >
+                @if (ouLogoSafeUrl) {
+                  <div class="dialog-content !p-0 w-full h-full">
+                    <img
+                      class="w-full h-full"
+                      alt="logo"
+                      [src]="ouLogoSafeUrl"
+                    />
+                  </div>
+                } @else {
+                  <div class="flex flex-col items-center text-gray-500">
+                    <mat-icon
+                      [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"
+                    ></mat-icon>
+                    <span>{{ lang.map.drag_and_drop_files }}</span>
+                  </div>
+                }
               </div>
-              } @else {
-              <div class="flex flex-col items-center text-gray-500">
-                <mat-icon [svgIcon]="AppIcons.FOLDER_MULTIPLE_IMAGE"></mat-icon>
-                <span>{{ lang.map.drag_and_drop_files }}</span>
-              </div>
-              }
             </div>
           </div>
-        </div>
-      </mat-tab>
+        </mat-tab>
       }
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{
-      lang.map.close
-    }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

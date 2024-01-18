@@ -8,7 +8,10 @@ import { CustomValidators } from '@validators/custom-validators';
 const { send, receive } = new ViolationPenaltyInterceptor();
 
 @InterceptModel({ send, receive })
-export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenaltyService> {
+export class ViolationPenalty extends BaseModel<
+  ViolationPenalty,
+  ViolationPenaltyService
+> {
   $$__service_name__$$ = 'ViolationPenaltyService';
 
   violationTypeId!: number;
@@ -29,14 +32,29 @@ export class ViolationPenalty extends BaseModel<ViolationPenalty, ViolationPenal
   penaltyGuidanceInfo!: AdminResult;
   override status = 1;
   buildForm(controls = false): object {
-    const { repeat, violationTypeId, penaltySigner, penaltyId, penaltyGuidance, offenderType, offenderLevel, status } = this;
+    const {
+      repeat,
+      violationTypeId,
+      penaltySigner,
+      penaltyId,
+      penaltyGuidance,
+      offenderType,
+      offenderLevel,
+      status,
+    } = this;
     return {
       repeat: controls ? [repeat, CustomValidators.required] : repeat,
-      violationTypeId: controls ? [violationTypeId, CustomValidators.required] : violationTypeId,
-      penaltySigner: controls ? [penaltySigner, CustomValidators.required] : penaltySigner,
+      violationTypeId: controls
+        ? [violationTypeId, CustomValidators.required]
+        : violationTypeId,
+      penaltySigner: controls
+        ? [penaltySigner, CustomValidators.required]
+        : penaltySigner,
       penaltyId: controls ? [penaltyId, CustomValidators.required] : penaltyId,
       penaltyGuidance: controls ? [penaltyGuidance] : penaltyGuidance,
-      offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
+      offenderType: controls
+        ? [offenderType, CustomValidators.required]
+        : offenderType,
       offenderLevel: controls ? [offenderLevel] : offenderLevel,
       status: controls ? [status, CustomValidators.required] : status,
     };

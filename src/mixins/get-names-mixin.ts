@@ -4,10 +4,15 @@ import { ServiceRegistry } from '@services/service-registry';
 import { LangService } from '@services/lang.service';
 import { NamesContract } from '@contracts/names-contract';
 
-type CanGetNames = Constructor<GetNamesContract> & AbstractConstructor<GetNamesContract>;
+type CanGetNames = Constructor<GetNamesContract> &
+  AbstractConstructor<GetNamesContract>;
 
-export function GetNamesMixin<T extends AbstractConstructor<object>>(base: T): CanGetNames & T;
-export function GetNamesMixin<T extends Constructor<object>>(base: T): CanGetNames & T {
+export function GetNamesMixin<T extends AbstractConstructor<object>>(
+  base: T,
+): CanGetNames & T;
+export function GetNamesMixin<T extends Constructor<object>>(
+  base: T,
+): CanGetNames & T {
   return class CanGetNames extends base implements GetNamesContract {
     arName!: string;
     enName!: string;
@@ -23,7 +28,10 @@ export function GetNamesMixin<T extends Constructor<object>>(base: T): CanGetNam
 
     getNames(): string {
       try {
-        return this[(this.getLangService().getCurrent().code + 'Name') as keyof NamesContract];
+        return this[
+          (this.getLangService().getCurrent().code +
+            'Name') as keyof NamesContract
+        ];
       } catch (e) {
         return 'lang service not ready yet';
       }

@@ -67,13 +67,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     const hasSelected = this.groups.some(
-      (group) => group.getSelectedValue().length
+      (group) => group.getSelectedValue().length,
     );
     if (!hasSelected) {
       this.toast.error(
         this.lang.map.msg_select_one_at_least_x_to_proceed.change({
           x: this.lang.map.permission,
-        })
+        }),
       );
       return false;
     }
@@ -91,21 +91,21 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
     const permissions = this.groups.map((g) => g.getSelectedValue()).flat();
     this.permissionService
       .savePermissions(model.id, permissions)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null)
+        filter((response) => response !== null),
       )
       .subscribe();
     this.internalUserService
       .uploadSignature(this.userSignature)
       .pipe(
         catchError(() => of(null)),
-        filter((response) => response !== null)
+        filter((response) => response !== null),
       )
       .subscribe();
     // you can close the dialog after save here
@@ -134,16 +134,19 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       groups: of(this.lookupService.lookups.permissionGroups),
     }).pipe(
       tap(({ permissions }) => {
-        this.permissionsByGroup = permissions.reduce((acc, permission) => {
-          return {
-            ...acc,
-            [permission.groupId]: [
-              ...(acc[permission.groupId]
-                ? acc[permission.groupId].concat(permission)
-                : [permission]),
-            ],
-          };
-        }, {} as Record<number, Permission[]>);
+        this.permissionsByGroup = permissions.reduce(
+          (acc, permission) => {
+            return {
+              ...acc,
+              [permission.groupId]: [
+                ...(acc[permission.groupId]
+                  ? acc[permission.groupId].concat(permission)
+                  : [permission]),
+              ],
+            };
+          },
+          {} as Record<number, Permission[]>,
+        );
       }),
       map(({ groups }) => {
         return groups.map((group) => {
@@ -151,10 +154,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
             group,
             this.permissionsByGroup[group.lookupKey] || [],
             this.selectedIds,
-            3
+            3,
           );
         });
-      })
+      }),
     );
   }
 
@@ -193,10 +196,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   private listenToPermissionRoleChange() {
     this.permissionRoleId?.valueChanges.subscribe((val) => {
       const selectedRoleId = this.permissionsRoles.find(
-        (permission) => permission.id === val
+        (permission) => permission.id === val,
       );
       this.selectedIds = selectedRoleId!.permissionSet.map(
-        (permission) => permission.permissionId
+        (permission) => permission.permissionId,
       );
       this.loadGroups();
     });
@@ -215,7 +218,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     if (!$event.dataTransfer.files[0]) return;
     this.userSignature = new UserSignature(
       this.data.model.id,
-      $event.dataTransfer.files[0]
+      $event.dataTransfer.files[0],
     );
     const reader = new FileReader();
     reader.onload = (e) => {

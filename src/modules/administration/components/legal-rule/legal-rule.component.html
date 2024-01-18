@@ -1,20 +1,36 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2"
+>
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_legal_rule }}
   </h1>
-  <app-icon-button [matTooltip]="lang.map.reload" (click)="reload$.next()" icon="RELOAD"></app-icon-button>
-  <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button>
+  <app-icon-button
+    [matTooltip]="lang.map.reload"
+    (click)="reload$.next()"
+    icon="RELOAD"
+  ></app-icon-button>
+  <app-icon-button
+    [matTooltip]="lang.map.add"
+    (click)="create$.next()"
+    icon="PLUS"
+  ></app-icon-button>
 </div>
 <div class="shadow relative overflow-auto">
-  <table mat-table matSort class="table-style" (matSortChange)="sort($event)" [dataSource]="dataSource">
+  <table
+    mat-table
+    matSort
+    class="table-style"
+    (matSortChange)="sort($event)"
+    [dataSource]="dataSource"
+  >
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
           [disabled]="(loading$ | async)!"
           (change)="$event ? toggleAllRows() : null"
           [checked]="selection.hasValue() && isAllSelected()"
-          [indeterminate]="selection.hasValue() && !isAllSelected()">
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+        >
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let element">
@@ -22,43 +38,61 @@
           [disabled]="(loading$ | async)!"
           (click)="$event.stopPropagation()"
           (change)="$event ? selection.toggle(element) : null"
-          [checked]="selection.isSelected(element)">
+          [checked]="selection.isSelected(element)"
+        >
         </mat-checkbox>
       </td>
     </ng-container>
     <!-- arName arName -->
     <ng-container matColumnDef="arName">
-      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
+      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>
+        {{ lang.map.ar_name }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
 
     <!-- enName -->
     <ng-container matColumnDef="enName">
-      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>
+        {{ lang.map.en_name }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
     </ng-container>
 
     <!-- law -->
     <ng-container matColumnDef="law">
-      <th mat-header-cell mat-sort-header="law" *matHeaderCellDef>{{ lang.map.law }}</th>
+      <th mat-header-cell mat-sort-header="law" *matHeaderCellDef>
+        {{ lang.map.law }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.law }}</td>
     </ng-container>
 
     <!-- legalTextArabic -->
     <ng-container matColumnDef="legalTextArabic">
-      <th mat-header-cell mat-sort-header="legalTextArabic" *matHeaderCellDef>{{ lang.map.legal_text_ar }}</th>
+      <th mat-header-cell mat-sort-header="legalTextArabic" *matHeaderCellDef>
+        {{ lang.map.legal_text_ar }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.legalTextArabic }}</td>
     </ng-container>
 
     <!-- legalTextEnglish -->
     <ng-container matColumnDef="legalTextEnglish">
-      <th mat-header-cell mat-sort-header="legalTextEnglish" *matHeaderCellDef>{{ lang.map.legal_text_en }}</th>
+      <th mat-header-cell mat-sort-header="legalTextEnglish" *matHeaderCellDef>
+        {{ lang.map.legal_text_en }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.legalTextEnglish }}</td>
     </ng-container>
 
     <!-- status status -->
     <ng-container matColumnDef="status">
-      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef class="status-min-width">{{ lang.map.status }}</th>
+      <th
+        mat-header-cell
+        mat-sort-header="status"
+        *matHeaderCellDef
+        class="status-min-width"
+      >
+        {{ lang.map.status }}
+      </th>
       <td mat-cell *matCellDef="let element">
         <mat-slide-toggle
           [disabled]="(loading$ | async)!"
@@ -66,7 +100,8 @@
           [matTooltip]="lang.map.change_status"
           color="primary"
           (toggleChange)="status$.next(element)"
-          [checked]="element.isActive()">
+          [checked]="element.isActive()"
+        >
         </mat-slide-toggle>
       </td>
     </ng-container>
@@ -80,38 +115,47 @@
             [disabled]="(loading$ | async)!"
             [matTooltip]="lang.map.view"
             (click)="view$.next(element)"
-            icon="VIEW"></app-icon-button>
+            icon="VIEW"
+          ></app-icon-button>
           <app-icon-button
             [disabled]="(loading$ | async)!"
             [matTooltip]="lang.map.edit"
             (click)="edit$.next(element)"
-            icon="EDIT"></app-icon-button>
+            icon="EDIT"
+          ></app-icon-button>
           <app-icon-button
             [disabled]="(loading$ | async)!"
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"
-            icon="DELETE"></app-icon-button>
+            icon="DELETE"
+          ></app-icon-button>
         </div>
       </td>
     </ng-container>
 
     @for (filter of columnsWrapper.filteredColumns; track filter) {
-    <!-- filtered Columns -->
-    <ng-container [matColumnDef]="filter">
-      <th mat-header-cell *matHeaderCellDef>
-        <app-filter-column
-          (filterChange)="filterChange($event)"
-          [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
-      </th>
-    </ng-container>
+      <!-- filtered Columns -->
+      <ng-container [matColumnDef]="filter">
+        <th mat-header-cell *matHeaderCellDef>
+          <app-filter-column
+            (filterChange)="filterChange($event)"
+            [column]="columnsWrapper.columnsMap[filter]"
+          ></app-filter-column>
+        </th>
+      </ng-container>
     }
 
     <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
-    <tr mat-header-row class="!bg-primary/5 row-filter" *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
+    <tr
+      mat-header-row
+      class="!bg-primary/5 row-filter"
+      *matHeaderRowDef="columnsWrapper.filteredColumns"
+    ></tr>
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"
-      *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
+      *matRowDef="let element; columns: columnsWrapper.displayedColumns"
+    ></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
@@ -125,5 +169,6 @@
   [pageSizeOptions]="pageSizeOptions"
   [pageSize]="limit"
   [showFirstLastButtons]="showFirstLastButtons"
-  [length]="length">
+  [length]="length"
+>
 </mat-paginator>

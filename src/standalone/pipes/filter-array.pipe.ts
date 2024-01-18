@@ -10,7 +10,7 @@ export class FilterArrayPipe implements PipeTransform {
     options: T[],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     bindFilter: string | ((item: any) => any) | undefined,
-    filterTxt: string | null
+    filterTxt: string | null,
   ) {
     if (!filterTxt || !options || !bindFilter) return options;
 
@@ -20,15 +20,17 @@ export class FilterArrayPipe implements PipeTransform {
         ? typeof (option as never)[bindFilter] === 'function'
           ? ((option as never)[bindFilter] as () => unknown)()
           : objectHasOwnProperty(option, bindFilter)
-          ? option[bindFilter]
-          : option
+            ? option[bindFilter]
+            : option
         : bindFilter && typeof bindFilter === 'function'
-        ? bindFilter(option)
-        : option;
+          ? bindFilter(option)
+          : option;
     }
 
-    return options.filter(option => {
-      return getBindFilter(option).toLowerCase().includes(filterTxt.toLowerCase());
+    return options.filter((option) => {
+      return getBindFilter(option)
+        .toLowerCase()
+        .includes(filterTxt.toLowerCase());
     });
   }
 }

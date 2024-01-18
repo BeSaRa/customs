@@ -8,10 +8,9 @@ describe('OffenderAttachmentsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OffenderAttachmentsComponent]
-    })
-    .compileComponents();
-    
+      imports: [OffenderAttachmentsComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(OffenderAttachmentsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -34,7 +34,7 @@ export class InvestigationInterceptor
       (model.creatorInfo = AdminResult.createInstance(model.creatorInfo));
     model.limitedAccessInfo &&
       (model.limitedAccessInfo = AdminResult.createInstance(
-        model.limitedAccessInfo
+        model.limitedAccessInfo,
       ));
 
     return model;

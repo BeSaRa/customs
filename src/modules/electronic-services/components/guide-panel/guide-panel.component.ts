@@ -95,7 +95,7 @@ export class GuidePanelComponent
     new NoneFilterColumn('isDeduction'),
     new NoneFilterColumn('deductionDays'),
     new NoneFilterColumn('status'),
-    new NoneFilterColumn('actions')
+    new NoneFilterColumn('actions'),
   );
 
   protected _beforeSearch(): boolean | Observable<boolean> {
@@ -132,7 +132,7 @@ export class GuidePanelComponent
         this.filteredPenaltySigners = this.penaltySigners.filter(
           (penaltySigner) =>
             penaltySigner.lookupKey !==
-            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
         );
       } else {
         this.offenderLevelField?.setValue(null);
@@ -140,7 +140,7 @@ export class GuidePanelComponent
         this.filteredPenaltySigners = this.penaltySigners.filter(
           (penaltySigner) =>
             penaltySigner.lookupKey ===
-            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER
+            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
         );
       }
       this.offenderLevelField?.updateValueAndValidity();
@@ -154,7 +154,7 @@ export class GuidePanelComponent
         switchMap(() => {
           const result = this._beforeSearch();
           return isObservable(result) ? result : of(result);
-        })
+        }),
       )
       .pipe(filter((value) => value))
       .pipe(
@@ -165,9 +165,9 @@ export class GuidePanelComponent
               catchError((error) => {
                 return throwError(error);
               }),
-              ignoreErrors()
+              ignoreErrors(),
             );
-        })
+        }),
       )
       .subscribe((data: Penalty[]) => {
         if (!data.length) {
@@ -203,7 +203,7 @@ export class GuidePanelComponent
   }
 
   viewRecord(
-    model: Penalty
+    model: Penalty,
   ): MatDialogRef<PenaltyPopupComponent, UserClick.CLOSE> {
     return this.dialog.open<
       PenaltyPopupComponent,

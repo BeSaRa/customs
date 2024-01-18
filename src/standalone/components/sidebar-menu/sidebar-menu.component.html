@@ -1,5 +1,10 @@
 <div class="text-white space-y-0.5 relative">
-  @for (item of items | filterSidebarMenuItem : searchText; track item) {
-  <app-sidebar-menu-item [shrinkMode]="shrinkMode" [searchText]="searchText" [level]="level" [item]="item" />
+  @for (item of items | filterSidebarMenuItem: searchText; track item) {
+    <app-sidebar-menu-item
+      [shrinkMode]="shrinkMode"
+      [searchText]="searchText"
+      [level]="level"
+      [item]="item"
+    />
   }
 </div>

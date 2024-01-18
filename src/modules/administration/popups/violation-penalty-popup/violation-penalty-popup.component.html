@@ -1,7 +1,12 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_violation_penalty }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
@@ -13,7 +18,8 @@
           bindValue="lookupKey"
           bindLabel="getNames"
           [enableFilter]="true"
-          bindFilter="getNames" />
+          bindFilter="getNames"
+        />
         <app-select-input
           formControlName="violationTypeId"
           [options]="violationTypes"
@@ -21,52 +27,77 @@
           bindValue="id"
           bindLabel="getNames"
           [enableFilter]="true"
-          bindFilter="getNames" />
-        <app-input formControlName="repeat" [label]="lang.map.repeat" type="number"></app-input>
+          bindFilter="getNames"
+        />
+        <app-input
+          formControlName="repeat"
+          [label]="lang.map.repeat"
+          type="number"
+        ></app-input>
         @if (offenderTypeValue) {
-        <app-select-input
-          formControlName="penaltySigner"
-          [options]="filteredPenaltySigners"
-          [label]="lang.map.penalty_signer"
-          bindValue="lookupKey"
-          bindLabel="getNames" />
-        } @if (needOffenderLevel()) {
-        <app-select-input
-          formControlName="offenderLevel"
-          [options]="filteredOffenderLevels"
-          [label]="lang.map.offender_level"
-          bindValue="lookupKey"
-          bindLabel="getNames" />
-        } @if (showPenaltiesAndPenaltyGuidance()) {
-        <app-select-input
-          formControlName="penaltyId"
-          [options]="filteredPenalties"
-          [label]="lang.map.penalty"
-          bindValue="id"
-          bindLabel="getNames"
-          [enableFilter]="true"
-          bindFilter="getNames" />
-        } @if (showPenaltiesAndPenaltyGuidance()) {
-        <app-select-input
-          formControlName="penaltyGuidance"
-          [options]="filteredPenaltyGuidance"
-          [label]="lang.map.penalty_guidance"
-          bindValue="lookupKey"
-          bindLabel="getNames" />
+          <app-select-input
+            formControlName="penaltySigner"
+            [options]="filteredPenaltySigners"
+            [label]="lang.map.penalty_signer"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+          />
+        }
+        @if (needOffenderLevel()) {
+          <app-select-input
+            formControlName="offenderLevel"
+            [options]="filteredOffenderLevels"
+            [label]="lang.map.offender_level"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+          />
+        }
+        @if (showPenaltiesAndPenaltyGuidance()) {
+          <app-select-input
+            formControlName="penaltyId"
+            [options]="filteredPenalties"
+            [label]="lang.map.penalty"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames"
+          />
+        }
+        @if (showPenaltiesAndPenaltyGuidance()) {
+          <app-select-input
+            formControlName="penaltyGuidance"
+            [options]="filteredPenaltyGuidance"
+            [label]="lang.map.penalty_guidance"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+          />
         }
         <div class="flex flex-row pl-1 items-center justify-start">
-          <app-switch [trueValue]="1" [falseValue]="0" formControlName="status" [label]="lang.map.status"></app-switch>
+          <app-switch
+            [trueValue]="1"
+            [falseValue]="0"
+            formControlName="status"
+            [label]="lang.map.status"
+          ></app-switch>
         </div>
       </div>
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

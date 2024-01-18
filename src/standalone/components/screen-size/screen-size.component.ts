@@ -1,4 +1,11 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { debounceTime, filter, map, startWith, Subject } from 'rxjs';
 import { SizeContract } from '@contracts/size-contract';
 import { MediaQueriesContract } from '@contracts/media-queries-contract';
@@ -97,18 +104,21 @@ export class ScreenSizeComponent implements OnInit, MediaQueriesContract {
     this.resize$
       .pipe(debounceTime(200))
       .pipe(startWith(window.innerWidth))
-      .pipe(map(value => this.checkCorrespondentSize(value)))
+      .pipe(map((value) => this.checkCorrespondentSize(value)))
       .pipe(filter((size): size is SizeContract => !!size))
-      .subscribe(val => {
+      .subscribe((val) => {
         this[val.name].next({ width: window.innerWidth, name: val.name });
       });
   }
 
   private checkCorrespondentSize(val: number): SizeContract | undefined {
-    return this.sizes.find(item => item.callback(val, item));
+    return this.sizes.find((item) => item.callback(val, item));
   }
 
-  private checkSize(val: number, size: { min: number; max: number; name: string }): boolean {
+  private checkSize(
+    val: number,
+    size: { min: number; max: number; name: string },
+  ): boolean {
     return val >= size.min && val < size.max;
   }
 }

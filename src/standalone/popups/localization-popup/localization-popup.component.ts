@@ -17,7 +17,14 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
   templateUrl: './localization-popup.component.html',
   styleUrls: ['./localization-popup.component.scss'],
   standalone: true,
-  imports: [InputComponent, IconButtonComponent, TextareaComponent, ButtonComponent, ReactiveFormsModule, MatDialogModule],
+  imports: [
+    InputComponent,
+    IconButtonComponent,
+    TextareaComponent,
+    ButtonComponent,
+    ReactiveFormsModule,
+    MatDialogModule,
+  ],
 })
 export class LocalizationPopupComponent extends AdminDialogComponent<Localization> {
   form!: UntypedFormGroup;
@@ -42,7 +49,9 @@ export class LocalizationPopupComponent extends AdminDialogComponent<Localizatio
   protected _afterSave(model: Localization): void {
     this.model = model;
     this.operation = OperationType.UPDATE;
-    this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+    this.toast.success(
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
+    );
     this.dialogRef.close(this.model);
   }
 }

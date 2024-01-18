@@ -1,26 +1,54 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_team }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"
+    ></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4 items-center">
-        <app-input formControlName="arName" [label]="lang.map.ar_name"></app-input>
-        <app-input formControlName="enName" [label]="lang.map.en_name"></app-input
-        ><app-input formControlName="ldapGroupName" [label]="lang.map.ldap_group_name"></app-input>
-        <app-input formControlName="teamEmail" [label]="lang.map.team_email"></app-input>
-        <app-switch formControlName="autoClaim" [label]="lang.map.auto_claim"></app-switch>
+        <app-input
+          formControlName="arName"
+          [label]="lang.map.ar_name"
+        ></app-input>
+        <app-input
+          formControlName="enName"
+          [label]="lang.map.en_name"
+        ></app-input
+        ><app-input
+          formControlName="ldapGroupName"
+          [label]="lang.map.ldap_group_name"
+        ></app-input>
+        <app-input
+          formControlName="teamEmail"
+          [label]="lang.map.team_email"
+        ></app-input>
+        <app-switch
+          formControlName="autoClaim"
+          [label]="lang.map.auto_claim"
+        ></app-switch>
       </div>
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-    <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    } @if (!inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    } @if (inViewMode()) {
-    <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

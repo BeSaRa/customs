@@ -5,7 +5,10 @@ export class BlobModel implements BlobModelContract {
   readonly url: string;
   safeUrl: SafeResourceUrl;
 
-  constructor(public blob: Blob, domSanitizer: DomSanitizer) {
+  constructor(
+    public blob: Blob,
+    domSanitizer: DomSanitizer,
+  ) {
     this.url = URL.createObjectURL(blob);
     this.safeUrl = domSanitizer.bypassSecurityTrustResourceUrl(this.url);
   }

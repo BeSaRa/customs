@@ -17,16 +17,22 @@ import { StatusTypes } from '@enums/status-types';
   templateUrl: './clearing-agent.component.html',
   styleUrls: ['./clearing-agent.component.scss'],
 })
-export class ClearingAgentComponent extends AdminComponent<ClearingAgentPopupComponent, ClearingAgent, ClearingAgentService> {
+export class ClearingAgentComponent extends AdminComponent<
+  ClearingAgentPopupComponent,
+  ClearingAgent,
+  ClearingAgentService
+> {
   service = inject(ClearingAgentService);
-  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(s => s.lookupKey != StatusTypes.DELETED);
+  commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
+    (s) => s.lookupKey != StatusTypes.DELETED,
+  );
   actions: ContextMenuActionContract<ClearingAgent>[] = [
     {
       name: 'view',
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -37,7 +43,12 @@ export class ClearingAgentComponent extends AdminComponent<ClearingAgentPopupCom
     new TextFilterColumn('enName'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('qid'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

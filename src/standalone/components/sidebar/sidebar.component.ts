@@ -1,4 +1,10 @@
-import { Component, ElementRef, HostBinding, HostListener, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  inject,
+} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { MatIconModule } from '@angular/material/icon';

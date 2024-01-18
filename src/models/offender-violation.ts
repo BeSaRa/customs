@@ -8,7 +8,10 @@ import { InterceptModel } from 'cast-response';
 const { send, receive } = new OffenderViolationInterceptor();
 
 @InterceptModel({ send, receive })
-export class OffenderViolation extends BaseModel<OffenderViolation, OffenderViolationService> {
+export class OffenderViolation extends BaseModel<
+  OffenderViolation,
+  OffenderViolationService
+> {
   $$__service_name__$$ = 'OffenderViolationService';
   repeat!: number;
   isProved = true;

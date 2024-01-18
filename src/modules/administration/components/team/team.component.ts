@@ -18,9 +18,15 @@ import { TeamService } from '@services/team.service';
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
-export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, TeamService> {
+export class TeamComponent extends AdminComponent<
+  TeamPopupComponent,
+  Team,
+  TeamService
+> {
   service = inject(TeamService);
-  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED);
+  commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
+    (lookupItem) => lookupItem.lookupKey !== StatusTypes.DELETED,
+  );
 
   actions: ContextMenuActionContract<Team>[] = [
     {
@@ -28,7 +34,7 @@ export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, Team
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: item => {
+      callback: (item) => {
         this.view$.next(item);
       },
     },
@@ -37,7 +43,7 @@ export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, Team
       type: 'action',
       label: 'edit',
       icon: AppIcons.EDIT,
-      callback: item => {
+      callback: (item) => {
         this.edit$.next(item);
       },
     },
@@ -46,7 +52,7 @@ export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, Team
       type: 'action',
       label: 'audit',
       icon: AppIcons.HISTORY,
-      callback: item => {
+      callback: (item) => {
         this.viewAudit$.next(item);
       },
     },
@@ -56,7 +62,12 @@ export class TeamComponent extends AdminComponent<TeamPopupComponent, Team, Team
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
-    new SelectFilterColumn('status', this.commonStatus, 'lookupKey', 'getNames'),
-    new NoneFilterColumn('actions')
+    new SelectFilterColumn(
+      'status',
+      this.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
+    new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

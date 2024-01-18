@@ -23,7 +23,7 @@ describe('LangService', () => {
   });
 
   it('should toggle the language to english language', function (done) {
-    service.change$.subscribe(value => {
+    service.change$.subscribe((value) => {
       expect(value.code).toBe(LangCodes.EN);
       done();
     });
@@ -31,7 +31,7 @@ describe('LangService', () => {
   });
 
   it('should set current language to arabic ', function (done) {
-    service.change$.subscribe(lang => {
+    service.change$.subscribe((lang) => {
       expect(lang.code).toBe(LangCodes.AR);
       done();
     });

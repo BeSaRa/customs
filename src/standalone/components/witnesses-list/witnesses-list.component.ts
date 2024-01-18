@@ -4,7 +4,15 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
@@ -24,11 +32,19 @@ import { EmployeeService } from '@services/employee.service';
 @Component({
   selector: 'app-witnesses-list',
   standalone: true,
-  imports: [IconButtonComponent, MatSortModule, MatTableModule, MatTooltipModule],
+  imports: [
+    IconButtonComponent,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
+  ],
   templateUrl: './witnesses-list.component.html',
   styleUrls: ['./witnesses-list.component.scss'],
 })
-export class WitnessesListComponent extends OnDestroyMixin(class {}) implements OnInit {
+export class WitnessesListComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
@@ -50,23 +66,32 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   delete$ = new Subject<Witness>();
   assignmentToAttend$: Subject<Witness> = new Subject<Witness>();
   witnessService = inject(WitnessService);
-  displayedColumns = ['personType', 'witnessType', 'arName', 'enName', 'phoneNumber', 'email'];
+  displayedColumns = [
+    'personType',
+    'witnessType',
+    'arName',
+    'enName',
+    'phoneNumber',
+    'email',
+  ];
 
-  personTypesMap: Record<number, Lookup> = this.lookupService.lookups.personType.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.lookupKey]: item,
-    }),
-    {}
-  );
+  personTypesMap: Record<number, Lookup> =
+    this.lookupService.lookups.personType.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.lookupKey]: item,
+      }),
+      {},
+    );
 
-  witnessTypesMap: Record<number, Lookup> = this.lookupService.lookups.witnessType.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.lookupKey]: item,
-    }),
-    {}
-  );
+  witnessTypesMap: Record<number, Lookup> =
+    this.lookupService.lookups.witnessType.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.lookupKey]: item,
+      }),
+      {},
+    );
 
   ngOnInit(): void {
     this.listenToAdd();
@@ -82,8 +107,14 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   private listenToAdd() {
     this.add$
       .pipe(
-        tap(() => !this.violations.length && this.dialog.error(this.lang.map.add_violation_first_to_take_this_action)),
-        filter(() => !!this.violations.length)
+        tap(
+          () =>
+            !this.violations.length &&
+            this.dialog.error(
+              this.lang.map.add_violation_first_to_take_this_action,
+            ),
+        ),
+        filter(() => !!this.violations.length),
       )
       .pipe(
         exhaustMap(() =>
@@ -93,8 +124,8 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
                 caseId: this.caseId,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe(() => this.reload$.next());
   }
@@ -102,9 +133,13 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   private listenToReload() {
     this.reload$
       .pipe(filter(() => !!this.caseId))
-      .pipe(switchMap(() => this.witnessService.load(undefined, { caseId: this.caseId })))
+      .pipe(
+        switchMap(() =>
+          this.witnessService.load(undefined, { caseId: this.caseId }),
+        ),
+      )
       .pipe(takeUntil(this.destroy$))
-      .subscribe(list => {
+      .subscribe((list) => {
         this.data.next(list.rs);
       });
   }
@@ -112,24 +147,32 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
   private listenToDelete() {
     this.delete$
       .pipe(
-        switchMap(model =>
+        switchMap((model) =>
           this.dialog
-            .confirm(this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() }))
+            .confirm(
+              this.lang.map.msg_delete_x_confirm.change({
+                x: model.getNames(),
+              }),
+            )
             .afterClosed()
-            .pipe(map(userClick => ({ userClick, model })))
-        )
+            .pipe(map((userClick) => ({ userClick, model }))),
+        ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(switchMap(({ model }) => model.delete().pipe(map(() => model))))
-      .subscribe(model => {
-        this.toast.success(this.lang.map.msg_delete_x_success.change({ x: model.getNames() }));
+      .subscribe((model) => {
+        this.toast.success(
+          this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
+        );
         this.reload$.next();
       });
   }
   deleteAllWitnesses() {
-    return this.witnessService.deleteBulk(this.dataSource.data.map((witness: Witness) => witness.id)).subscribe(() => {
-      this.reload$.next();
-    });
+    return this.witnessService
+      .deleteBulk(this.dataSource.data.map((witness: Witness) => witness.id))
+      .subscribe(() => {
+        this.reload$.next();
+      });
   }
   resetDataList() {
     this.data.next([]);
@@ -146,8 +189,8 @@ export class WitnessesListComponent extends OnDestroyMixin(class {}) implements 
                 type: UserTypes.EXTERNAL,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }

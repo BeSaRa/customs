@@ -40,8 +40,8 @@ export class GlobalSettingService extends BaseCrudService<GlobalSetting> {
   @CastResponse(() => GlobalSetting, { unwrap: 'rs', fallback: '$default' })
   loadCurrentGlobalSettings(): Observable<GlobalSetting> {
     return this.load().pipe(
-      map(settings => settings.rs[0]),
-      tap(settings => this.setGlobalSettings(settings))
+      map((settings) => settings.rs[0]),
+      tap((settings) => this.setGlobalSettings(settings)),
     );
   }
 
@@ -52,7 +52,11 @@ export class GlobalSettingService extends BaseCrudService<GlobalSetting> {
 
   getAllowedFileTypes(): Observable<FileType[]> {
     return this.loadAllFileTypes().pipe(
-      map(allowedFileTypes => allowedFileTypes.filter(item => this.getGlobalSettings().fileTypeParsed.includes(item.id.toString())))
+      map((allowedFileTypes) =>
+        allowedFileTypes.filter((item) =>
+          this.getGlobalSettings().fileTypeParsed.includes(item.id.toString()),
+        ),
+      ),
     );
   }
 }

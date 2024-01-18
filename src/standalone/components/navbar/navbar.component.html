@@ -1,16 +1,30 @@
-<div class="bg-white h-16 shadow items-center justify-start flex px-4 space-x-4 rtl:space-x-reverse">
+<div
+  class="bg-white h-16 shadow items-center justify-start flex px-4 space-x-4 rtl:space-x-reverse"
+>
   <button (click)="menuClicked()" mat-icon-button>
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
   <div class="flex-auto"></div>
-  <button class="space-x-4 rtl:space-x-reverse flex items-center" [matMenuTriggerFor]="userMenu">
+  <button
+    class="space-x-4 rtl:space-x-reverse flex items-center"
+    [matMenuTriggerFor]="userMenu"
+  >
     <div class="rounded-full w-10">
-      <img ngSrc="assets/images/user.png" alt="avatar" height="512" width="512" />
+      <img
+        ngSrc="assets/images/user.png"
+        alt="avatar"
+        height="512"
+        width="512"
+      />
     </div>
     <div>
       <span>{{ employee && employee.getNames() }}</span>
       <mat-menu #userMenu="matMenu">
-        <button class="text-slate-700" (click)="editUserPreferences$.next()" mat-menu-item>
+        <button
+          class="text-slate-700"
+          (click)="editUserPreferences$.next()"
+          mat-menu-item
+        >
           <mat-icon [svgIcon]="AppIcons.USER_PREFERENCES"></mat-icon>
           <span>{{ lang.map.lbl_user_preferences }}</span>
         </button>
@@ -21,11 +35,20 @@
       </mat-menu>
     </div>
   </button>
-  <app-icon-button (click)="logout()" [matTooltip]="lang.map.logout" icon="LOGOUT"></app-icon-button>
+  <app-icon-button
+    (click)="logout()"
+    [matTooltip]="lang.map.logout"
+    icon="LOGOUT"
+  ></app-icon-button>
   <button mat-button (click)="openLangChangeConfirmDialog()">
     <div class="flex items-center justify-start gap-x-2">
       <div class="w-7">
-        <img alt="language-switcher" ngSrc="assets/images/lang.png" height="512" width="512" />
+        <img
+          alt="language-switcher"
+          ngSrc="assets/images/lang.png"
+          height="512"
+          width="512"
+        />
       </div>
       <span>{{ lang.toggleToLangName() }}</span>
     </div>

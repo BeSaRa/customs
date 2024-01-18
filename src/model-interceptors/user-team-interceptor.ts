@@ -8,9 +8,14 @@ export class UserTeamInterceptor implements ModelInterceptorContract<UserTeam> {
   }
 
   receive(model: UserTeam): UserTeam {
-    model.teamInfo && (model.teamInfo = AdminResult.createInstance(model.teamInfo));
-    model.internalUserInfo && (model.internalUserInfo = AdminResult.createInstance(model.internalUserInfo));
-    model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
+    model.teamInfo &&
+      (model.teamInfo = AdminResult.createInstance(model.teamInfo));
+    model.internalUserInfo &&
+      (model.internalUserInfo = AdminResult.createInstance(
+        model.internalUserInfo,
+      ));
+    model.statusInfo &&
+      (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     return model;
   }
 }

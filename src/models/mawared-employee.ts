@@ -11,7 +11,10 @@ import { AdminResult } from './admin-result';
 const { send, receive } = new MawaredEmployeeInterceptor();
 
 @InterceptModel({ send, receive })
-export class MawaredEmployee extends BaseModel<MawaredEmployee, MawaredEmployeeService> {
+export class MawaredEmployee extends BaseModel<
+  MawaredEmployee,
+  MawaredEmployeeService
+> {
   $$__service_name__$$ = 'MawaredEmployeeService';
   username!: string;
   email!: string;

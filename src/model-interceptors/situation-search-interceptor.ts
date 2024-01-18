@@ -6,7 +6,9 @@ import { ViolationInterceptor } from './violation-interceptor';
 import { Offender } from '@models/offender';
 import { OffenderInterceptor } from './offender-interceptor';
 
-export class SituationSearchInterceptor implements ModelInterceptorContract<SituationSearch> {
+export class SituationSearchInterceptor
+  implements ModelInterceptorContract<SituationSearch>
+{
   send(model: Partial<SituationSearch>): Partial<SituationSearch> {
     delete model.statusInfo;
     delete model.offenderInfo;
@@ -15,9 +17,14 @@ export class SituationSearchInterceptor implements ModelInterceptorContract<Situ
   }
 
   receive(model: SituationSearch): SituationSearch {
-    model.statusInfo && (model.statusInfo = AdminResult.createInstance(model.statusInfo));
-    model.offenderInfo = new Offender().clone<Offender>(new OffenderInterceptor().receive(model.offenderInfo));
-    model.violationInfo = new Violation().clone<Violation>(new ViolationInterceptor().receive(model.violationInfo));
+    model.statusInfo &&
+      (model.statusInfo = AdminResult.createInstance(model.statusInfo));
+    model.offenderInfo = new Offender().clone<Offender>(
+      new OffenderInterceptor().receive(model.offenderInfo),
+    );
+    model.violationInfo = new Violation().clone<Violation>(
+      new ViolationInterceptor().receive(model.violationInfo),
+    );
 
     return model;
   }

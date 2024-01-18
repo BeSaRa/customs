@@ -9,7 +9,16 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InternalUser } from '@models/internal-user';
-import { Observable, combineLatest, delay, finalize, map, of, switchMap, tap } from 'rxjs';
+import {
+  Observable,
+  combineLatest,
+  delay,
+  finalize,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 
 @Component({
@@ -17,7 +26,11 @@ import { ignoreErrors } from '@utils/utils';
   templateUrl: './user-team.component.html',
   styleUrls: ['./user-team.component.scss'],
 })
-export class UserTeamComponent extends AdminComponent<UserTeamPopupComponent, UserTeam, UserTeamService> {
+export class UserTeamComponent extends AdminComponent<
+  UserTeamPopupComponent,
+  UserTeam,
+  UserTeamService
+> {
   @Input({ required: true }) internalUser!: InternalUser;
   service = inject(UserTeamService);
   actions: ContextMenuActionContract<UserTeam>[] = [
@@ -26,7 +39,7 @@ export class UserTeamComponent extends AdminComponent<UserTeamPopupComponent, Us
       type: 'action',
       label: 'delete',
       icon: AppIcons.DELETE,
-      callback: item => {
+      callback: (item) => {
         this.delete$.next(item);
       },
     },
@@ -40,29 +53,35 @@ export class UserTeamComponent extends AdminComponent<UserTeamPopupComponent, Us
           return combineLatest([this.reload$, this.paginate$]).pipe(
             switchMap(([, paginationOptions]) => {
               this.loadingSubject.next(true);
-              return this.service.loadUserTeams(this.internalUser.id, paginationOptions).pipe(
-                finalize(() => this.loadingSubject.next(false)),
-                ignoreErrors()
-              );
+              return this.service
+                .loadUserTeams(this.internalUser.id, paginationOptions)
+                .pipe(
+                  finalize(() => this.loadingSubject.next(false)),
+                  ignoreErrors(),
+                );
             }),
             tap(({ count }) => {
               this.length = count;
               this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
             }),
-            map(response => response.rs)
+            map((response) => response.rs),
           );
-        })
+        }),
       );
   }
 
   // here we have a new implementation for displayed/filter Columns for the table
-  columnsWrapper: ColumnsWrapper<UserTeam> = new ColumnsWrapper(new TextFilterColumn('teamName'), new NoneFilterColumn('actions')).attacheFilter(
-    this.filter$
-  );
+  columnsWrapper: ColumnsWrapper<UserTeam> = new ColumnsWrapper(
+    new TextFilterColumn('teamName'),
+    new NoneFilterColumn('actions'),
+  ).attacheFilter(this.filter$);
 
-  override _getCreateExtras(): { mappedUserTeamsIds: number[]; internalUserId: number } {
+  override _getCreateExtras(): {
+    mappedUserTeamsIds: number[];
+    internalUserId: number;
+  } {
     return {
-      mappedUserTeamsIds: this.dataSource.data.map(team => team.teamInfo.id),
+      mappedUserTeamsIds: this.dataSource.data.map((team) => team.teamInfo.id),
       internalUserId: this.internalUser.id,
     };
   }

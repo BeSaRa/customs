@@ -32,15 +32,44 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   penGuidance!: number;
 
   buildForm(controls = false): object {
-    const { arName, enName, offenderType, status, penaltyWeight, isDeduction, deductionDays, erasureDuration, isCash, cashAmount } = this;
+    const {
+      arName,
+      enName,
+      offenderType,
+      status,
+      penaltyWeight,
+      isDeduction,
+      deductionDays,
+      erasureDuration,
+      isCash,
+      cashAmount,
+    } = this;
     return {
-      arName: controls ? [arName, [CustomValidators.required, CustomValidators.pattern('AR_NUM')]] : arName,
-      enName: controls ? [enName, [CustomValidators.required, CustomValidators.pattern('ENG_NUM')]] : enName,
-      offenderType: controls ? [offenderType, CustomValidators.required] : offenderType,
+      arName: controls
+        ? [
+            arName,
+            [CustomValidators.required, CustomValidators.pattern('AR_NUM')],
+          ]
+        : arName,
+      enName: controls
+        ? [
+            enName,
+            [CustomValidators.required, CustomValidators.pattern('ENG_NUM')],
+          ]
+        : enName,
+      offenderType: controls
+        ? [offenderType, CustomValidators.required]
+        : offenderType,
       status: controls ? [status, CustomValidators.required] : status,
-      penaltyWeight: controls ? [penaltyWeight, CustomValidators.required] : penaltyWeight,
-      erasureDuration: controls ? [erasureDuration, CustomValidators.required] : erasureDuration,
-      isDeduction: controls ? [isDeduction, CustomValidators.required] : isDeduction,
+      penaltyWeight: controls
+        ? [penaltyWeight, CustomValidators.required]
+        : penaltyWeight,
+      erasureDuration: controls
+        ? [erasureDuration, CustomValidators.required]
+        : erasureDuration,
+      isDeduction: controls
+        ? [isDeduction, CustomValidators.required]
+        : isDeduction,
       deductionDays: controls ? [deductionDays] : deductionDays,
       isCash: controls ? [isCash, CustomValidators.required] : isCash,
       cashAmount: controls ? [cashAmount] : cashAmount,

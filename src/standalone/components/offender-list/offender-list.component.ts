@@ -96,7 +96,7 @@ export class OffenderListComponent
         ...acc,
         [item.lookupKey]: item,
       }),
-      {}
+      {},
     );
   ngOnInit(): void {
     this.listenToAdd();
@@ -114,13 +114,13 @@ export class OffenderListComponent
       .pipe(
         tap(
           (data: TransformerAction<Investigation>) =>
-            data.action == 'done' && (this.caseId = data.model?.id || '')
-        )
+            data.action == 'done' && (this.caseId = data.model?.id || ''),
+        ),
       )
       .pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'save'
-        )
+          (data: TransformerAction<Investigation>) => data.action == 'save',
+        ),
       )
       .subscribe(() => {
         this.saveCase.emit(this.transformer$);
@@ -139,8 +139,8 @@ export class OffenderListComponent
                 transformer$: this.transformer$,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe(() => {
         this.reload$.next();
@@ -160,10 +160,10 @@ export class OffenderListComponent
               map((pagination) => {
                 this.data.next(pagination.rs);
                 return pagination;
-              })
+              }),
             )
-            .pipe(ignoreErrors())
-        )
+            .pipe(ignoreErrors()),
+        ),
       )
       .subscribe((pagination) => this.offenders.next(pagination.rs || []));
   }
@@ -177,17 +177,19 @@ export class OffenderListComponent
         switchMap((model) =>
           this.dialog
             .confirm(
-              this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() })
+              this.lang.map.msg_delete_x_confirm.change({
+                x: model.getNames(),
+              }),
             )
             .afterClosed()
-            .pipe(map((userClick) => ({ userClick, model })))
-        )
+            .pipe(map((userClick) => ({ userClick, model }))),
+        ),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(switchMap(({ model }) => model.delete().pipe(map(() => model))))
       .subscribe((model) => {
         this.toast.success(
-          this.lang.map.msg_delete_x_success.change({ x: model.getNames() })
+          this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );
         this.reload$.next();
       });
@@ -212,8 +214,8 @@ export class OffenderListComponent
                 readonly: this.readonly,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }
@@ -230,8 +232,8 @@ export class OffenderListComponent
                 readonly: this.readonly,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe(() => this.linkOffenderWithViolation.emit());
   }
@@ -247,8 +249,8 @@ export class OffenderListComponent
                 isCompany: data.isCompany,
               },
             })
-            .afterClosed()
-        )
+            .afterClosed(),
+        ),
       )
       .subscribe();
   }

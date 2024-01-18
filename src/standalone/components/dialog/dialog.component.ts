@@ -25,7 +25,10 @@ type DialogSelectedClasses = {
   styleUrls: ['./dialog.component.scss'],
 })
 export class DialogComponent {
-  dialogTypes: Record<keyof Omit<DialogContract, 'open'>, DialogSelectedClasses> = {
+  dialogTypes: Record<
+    keyof Omit<DialogContract, 'open'>,
+    DialogSelectedClasses
+  > = {
     info: {
       bg: 'bg-sky-500',
       text: 'text-sky-500',

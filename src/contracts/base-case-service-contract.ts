@@ -17,9 +17,17 @@ export interface BaseCaseServiceContract<M> {
 
   update(model: M): Observable<M>;
 
-  getActions(criteria: { caseId: string; offset: number; limit: number }): Observable<unknown>;
+  getActions(criteria: {
+    caseId: string;
+    offset: number;
+    limit: number;
+  }): Observable<unknown>;
 
-  exportActions(criteria: { caseId: string; offset: number; limit: number }): Observable<unknown>;
+  exportActions(criteria: {
+    caseId: string;
+    offset: number;
+    limit: number;
+  }): Observable<unknown>;
 
   getAssignedTo(caseId: string): Observable<unknown>;
 
@@ -69,22 +77,33 @@ export interface BaseCaseServiceContract<M> {
       selectedResponse: string;
       userId?: number;
       comment: string;
-    }
+    },
   ): Observable<M>;
 
   terminate(taskId: string): Observable<M>;
 
-  addOffenderAttachment(offenderId: number, attachment: CaseAttachment): Observable<unknown>;
+  addOffenderAttachment(
+    offenderId: number,
+    attachment: CaseAttachment,
+  ): Observable<unknown>;
 
   getOffenderAttachments(offenderId: number): Observable<unknown>;
 
-  addCaseAttachment(caseId: string, attachment: CaseAttachment): Observable<unknown>;
+  addCaseAttachment(
+    caseId: string,
+    attachment: CaseAttachment,
+  ): Observable<unknown>;
 
-  addBulkCaseAttachments(caseId: string, attachments: CaseAttachment[]): Observable<unknown>;
+  addBulkCaseAttachments(
+    caseId: string,
+    attachments: CaseAttachment[],
+  ): Observable<unknown>;
 
   loadCaseFolders(caseId: string): Observable<CaseFolder[]>;
 
-  viewAttachment(attachmentId: string): Observable<MatDialogRef<ViewAttachmentPopupComponent>>;
+  viewAttachment(
+    attachmentId: string,
+  ): Observable<MatDialogRef<ViewAttachmentPopupComponent>>;
 
   downloadAttachment(attachmentId: string): Observable<BlobModel>;
 

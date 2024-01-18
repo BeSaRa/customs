@@ -2,7 +2,10 @@ import { BaseModel } from '@abstracts/base-model';
 import { AssignmentToAttendService } from '@services/assignment-to-attend.service';
 import { CustomValidators } from '@validators/custom-validators';
 
-export class AssignmentToAttend extends BaseModel<AssignmentToAttend, AssignmentToAttendService> {
+export class AssignmentToAttend extends BaseModel<
+  AssignmentToAttend,
+  AssignmentToAttendService
+> {
   override $$__service_name__$$: string = 'AssignmentToAttendService';
   caseId!: string;
   summonedId!: number;

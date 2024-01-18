@@ -23,5 +23,4 @@ export enum TaskResponses {
   PA_FNL_LAUNCH_LEGAL_AFFAIRS = 'pa_fnl_launch_legal_affairs', // إلى الشؤون القانونية
   PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_disciplinary_council', // المجلس التأديبي
   PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_permanent_disciplinary_council', // المجلس التأديبي الدائم
-
 }

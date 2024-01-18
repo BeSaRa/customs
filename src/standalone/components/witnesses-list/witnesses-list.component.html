@@ -1,63 +1,98 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
   @if (!readonly && canManageWitness()) {
-  <app-icon-button (click)="add$.next()" class="text-primary" icon="PLUS_BOX"></app-icon-button>
+    <app-icon-button
+      (click)="add$.next()"
+      class="text-primary"
+      icon="PLUS_BOX"
+    ></app-icon-button>
   }
-  <app-icon-button (click)="reload$.next()" class="text-primary" icon="RELOAD"></app-icon-button>
+  <app-icon-button
+    (click)="reload$.next()"
+    class="text-primary"
+    icon="RELOAD"
+  ></app-icon-button>
 </div>
 <div>
-  <table mat-table matSort class="table-style table-primary" [dataSource]="dataSource">
+  <table
+    mat-table
+    matSort
+    class="table-style table-primary"
+    [dataSource]="dataSource"
+  >
     <!-- personType -->
     <ng-container matColumnDef="personType">
       <th mat-header-cell mat-sort-header="personType" *matHeaderCellDef>
         {{ lang.map.external_person_type }}
       </th>
-      <td mat-cell *matCellDef="let element">{{ personTypesMap[element.personType].getNames() }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ personTypesMap[element.personType].getNames() }}
+      </td>
     </ng-container>
     <!-- witnessType -->
     <ng-container matColumnDef="witnessType">
       <th mat-header-cell mat-sort-header="witnessType" *matHeaderCellDef>
         {{ lang.map.witness_type }}
       </th>
-      <td mat-cell *matCellDef="let element">{{ witnessTypesMap[element.witnessType].getNames() }}</td>
+      <td mat-cell *matCellDef="let element">
+        {{ witnessTypesMap[element.witnessType].getNames() }}
+      </td>
     </ng-container>
     <!-- arName -->
     <ng-container matColumnDef="arName">
-      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>{{ lang.map.ar_name }}</th>
+      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>
+        {{ lang.map.ar_name }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
     </ng-container>
     <!-- enName -->
     <ng-container matColumnDef="enName">
-      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>{{ lang.map.en_name }}</th>
+      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>
+        {{ lang.map.en_name }}
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
     </ng-container>
     <!-- phoneNumber -->
     <ng-container matColumnDef="phoneNumber">
-      <th mat-header-cell mat-sort-header="phoneNumber" *matHeaderCellDef>{{ lang.map.phone_number }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.phoneNumber || "---" }}</td>
+      <th mat-header-cell mat-sort-header="phoneNumber" *matHeaderCellDef>
+        {{ lang.map.phone_number }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.phoneNumber || '---' }}
+      </td>
     </ng-container>
     <!-- email -->
     <ng-container matColumnDef="email">
-      <th mat-header-cell mat-sort-header="email" *matHeaderCellDef>{{ lang.map.email }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.email || "---" }}</td>
+      <th mat-header-cell mat-sort-header="email" *matHeaderCellDef>
+        {{ lang.map.email }}
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.email || '---' }}</td>
     </ng-container>
     <!-- actions -->
     @if (canManageWitness()) {
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>{{ lang.map.actions }}</th>
-      <td mat-cell *matCellDef="let element">
-        <div class="flex gap-2">
-          @if (!readonly) {
-          <div [matTooltip]="lang.map.delete">
-            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
+          {{ lang.map.actions }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="flex gap-2">
+            @if (!readonly) {
+              <div [matTooltip]="lang.map.delete">
+                <app-icon-button
+                  (click)="delete$.next(element)"
+                  icon="DELETE"
+                />
+              </div>
+            }
+            <div [matTooltip]="lang.map.assignment_to_attend">
+              <app-icon-button
+                (click)="assignmentToAttend$.next(element)"
+                icon="ACCOUNT_EDIT_OUTLINE"
+              />
+            </div>
           </div>
-          }
-          <div [matTooltip]="lang.map.assignment_to_attend">
-            <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" />
-          </div>
-        </div>
-      </td>
-    </ng-container>
+        </td>
+      </ng-container>
     }
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
