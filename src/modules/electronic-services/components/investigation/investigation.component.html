@@ -42,7 +42,7 @@
       </div>
       <div class="mb-3">
         <span class="font-medium text-white">{{
-          lang.map.limited_access
+          lang.map.level_of_secrecy
         }}</span>
         <label class="input-form p-2 block">
           {{
@@ -58,8 +58,8 @@
 <div
   class="relative"
   [ngClass]="{
-    'investegation-tab-group': summaryMode(),
-    'investegation-tab-group-preview': !summaryMode()
+    'investigation-tab-group': summaryMode(),
+    'investigation-tab-group-preview': !summaryMode()
   }">
   <mat-card>
     <mat-tab-group
@@ -131,7 +131,7 @@
       </app-input>
       <app-select-input
         formControlName="limitedAccess"
-        [label]="lang.map.limited_access"
+        [label]="lang.map.level_of_secrecy"
         bindValue="lookupKey"
         bindLabel="getNames"
         [options]="violationDegreeConfidentiality" />
