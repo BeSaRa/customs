@@ -143,13 +143,9 @@
             bindValue="id"
             [isMultiple]="true"
             [options]="violations">
-            <span appInputSuffix>
-              <app-icon-button
-                (click)="addViolation$.next()"
-                [matTooltip]="lang.map.add_selected"
-                class="text-primary"
-                icon="PLUS_BOX"></app-icon-button>
-            </span>
+            <app-button appInputSuffix (click)="addViolation$.next()">
+              {{ lang.map.select }}
+            </app-button>
           </app-select-input>
         }
       </div>
