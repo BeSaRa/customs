@@ -7,7 +7,7 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       [(selectedIndex)]="activeTab"
       mat-stretch-tabs="false"
@@ -15,7 +15,7 @@
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4 pb-0">
             <app-select-input
               [label]="lang.map.offender_type"
               formControlName="offenderType"
@@ -43,7 +43,7 @@
                 type="number"></app-input>
             }
           </div>
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center px-4">
             <app-input
               formControlName="arName"
               [label]="lang.map.ar_name"></app-input>
@@ -51,7 +51,7 @@
               formControlName="enName"
               [label]="lang.map.en_name"></app-input>
           </div>
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4 pt-0">
             <app-switch
               formControlName="status"
               [trueValue]="1"
@@ -72,11 +72,13 @@
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.more_details">
-        <app-penalty-details
-          [(list)]="penaltyDetailsList"
-          [viewMode]="inViewMode()"
-          (listIsEmpty)="checkDetailsListValidity($event)"
-          [isEmployee]="isEmployee"></app-penalty-details>
+        <div class="p-4">
+          <app-penalty-details
+            [(list)]="penaltyDetailsList"
+            [viewMode]="inViewMode()"
+            (listIsEmpty)="checkDetailsListValidity($event)"
+            [isEmployee]="isEmployee"></app-penalty-details>
+        </div>
         <label class="group block relative">
           @if (penaltyDetailsListIsEmpty) {
             <span

@@ -7,14 +7,14 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4">
             <app-input
               formControlName="arName"
               [label]="lang.map.ar_name"></app-input>
@@ -47,7 +47,7 @@
       <mat-tab [label]="lang.map.lbl_user_preferences">
         <div [formGroup]="form">
           <ng-container formGroupName="userPreferences">
-            <div class="grid grid-cols-2 gap-4 mt-4">
+            <div class="grid grid-cols-2 gap-4 p-4">
               <!-- mail notifications -->
               <app-switch
                 formControlName="isMailNotificationEnabled"
@@ -73,7 +73,7 @@
       </mat-tab>
       <mat-tab [label]="lang.map.lbl_permissions">
         <ng-container [formGroup]="form">
-          <div class="mt-4">
+          <div class="p-4">
             <!-- user permissions -->
             <app-select-input
               [options]="permissionsRoles"
@@ -83,7 +83,7 @@
               formControlName="permissionRoleId"></app-select-input>
           </div>
 
-          <div class="grid grid-cols-1 gap-4">
+          <div class="grid grid-cols-1 gap-4 p-4">
             @for (group of groups; track group) {
               <div
                 class="border-b flex items-center justify-between bg-slate-300">
@@ -160,7 +160,7 @@
       </mat-tab>
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.menu_internal_user_ou">
-          <div class="mt-4">
+          <div class="p-4">
             <app-internal-user-ou
               [internalUser]="data.model"></app-internal-user-ou>
           </div>
@@ -168,14 +168,14 @@
       }
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.menu_user_team">
-          <div class="mt-4">
+          <div class="p-4">
             <app-user-team [internalUser]="data.model"></app-user-team>
           </div>
         </mat-tab>
       }
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.lbl_user_signature">
-          <div class="dialog-content">
+          <div class="p-4">
             <div [formGroup]="form" class="flex flex-col">
               <div
                 (drop)="filesDropped($event)"

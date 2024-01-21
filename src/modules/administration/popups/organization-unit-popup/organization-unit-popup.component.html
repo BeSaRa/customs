@@ -7,14 +7,14 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 my-auto items-center">
+          <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="email" [label]="lang.map.email" />
@@ -74,14 +74,14 @@
       </mat-tab>
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.ou_logo">
-          <div class="dialog-content">
+          <div class="p-4">
             <div [formGroup]="form" class="flex flex-col">
               <div
                 (drop)="filesDropped($event)"
                 (dragover)="$event.preventDefault()"
                 [ngClass]="getOuLogoStyle()">
                 @if (ouLogoSafeUrl) {
-                  <div class="dialog-content !p-0 w-full h-full">
+                  <div class="w-full h-full">
                     <img
                       class="w-full h-full"
                       alt="logo"

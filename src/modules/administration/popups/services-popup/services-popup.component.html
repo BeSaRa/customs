@@ -7,14 +7,14 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content" style="overflow: auto">
+  <div style="overflow: auto">
     <mat-tab-group
       mat-stretch-tabs="false"
       mat-align-tabs="start"
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="grid grid-cols-2 gap-4 items-center p-4">
             <app-input
               formControlName="arName"
               [label]="lang.map.ar_name"></app-input>
@@ -47,7 +47,7 @@
               [label]="lang.map.fees"
               [type]="'number'"></app-input>
           </div>
-          <div class="grid grid-cols-1 gap-4 items-center">
+          <div class="grid grid-cols-1 gap-4 items-center p-4">
             <app-textarea
               formControlName="serviceTerms"
               [label]="lang.map.service_terms"></app-textarea>
@@ -72,7 +72,9 @@
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.lbl_service_steps">
-        <app-service-steps></app-service-steps>
+        <div class="p-4">
+          <app-service-steps></app-service-steps>
+        </div>
       </mat-tab>
     </mat-tab-group>
   </div>
