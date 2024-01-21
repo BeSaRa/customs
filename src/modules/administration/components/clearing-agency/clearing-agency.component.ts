@@ -24,7 +24,7 @@ export class ClearingAgencyComponent extends AdminComponent<
 > {
   service = inject(ClearingAgencyService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<ClearingAgency>[] = [
     {

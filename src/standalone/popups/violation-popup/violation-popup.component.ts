@@ -118,7 +118,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.transformer$
       ?.pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'done',
+          (data: TransformerAction<Investigation>) => data.action === 'done',
         ),
       )
       .subscribe((data: TransformerAction<Investigation>) => {

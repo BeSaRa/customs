@@ -132,12 +132,12 @@ export class CaseAttachmentPopupComponent
     this.save$
       .pipe(
         exhaustMap(() => {
-          if (this.data.type == 'folder') {
+          if (this.data.type === 'folder') {
             return this.data.service.addBulkCaseAttachments(
               this.data.caseId,
               this.attachments,
             );
-          } else if (this.data.type == 'offender') {
+          } else if (this.data.type === 'offender') {
             return combineLatest(
               this.attachments.map(attachment => {
                 return this.data.service.addOffenderAttachment(

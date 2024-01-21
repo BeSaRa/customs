@@ -159,7 +159,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       }
 
       const offenderOfClassification = this.violationClassifications.find(
-        vc => vc.id == value,
+        vc => vc.id === value,
       )?.offenderType;
       if (offenderOfClassification === OffenderTypes.EMPLOYEE) {
         this.filteredOffenderTypes = this.offenderTypes.filter(

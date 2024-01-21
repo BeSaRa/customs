@@ -40,7 +40,7 @@ export class UnlinkedViolationsComponent {
               return [...prev, ...curr.violations];
             }, [])
             .filter(offenderViolation => {
-              return offenderViolation.violationId == violation.id;
+              return offenderViolation.violationId === violation.id;
             }).length,
       ),
     );

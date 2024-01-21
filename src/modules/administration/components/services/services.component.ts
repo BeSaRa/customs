@@ -24,7 +24,7 @@ export class ServicesComponent extends AdminComponent<
 > {
   service = inject(ServicesService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
 
   actions: ContextMenuActionContract<Services>[] = [

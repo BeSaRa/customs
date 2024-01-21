@@ -75,7 +75,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.taskDetails?.name;
   }
   isPresedentAssestantReview() {
-    return this.getTaskName() == TaskName.PA_REV;
+    return this.getTaskName() === TaskName.PA_REV;
   }
   canClaim(): boolean {
     return (
@@ -97,7 +97,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this?.isClaimed() &&
       (!this.getResponses().length ||
         this.getResponses().includes(TaskResponses.COMPLETE)) &&
-      this.caseStatus != CommonCaseStatus.CANCELLED
+      this.caseStatus !== CommonCaseStatus.CANCELLED
     );
   }
   canCommit(): boolean {

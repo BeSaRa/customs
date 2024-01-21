@@ -24,7 +24,7 @@ export class AttachmentTypeComponent extends AdminComponent<
 > {
   service = inject(AttachmentTypeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
   actions: ContextMenuActionContract<AttachmentType>[] = [
     {

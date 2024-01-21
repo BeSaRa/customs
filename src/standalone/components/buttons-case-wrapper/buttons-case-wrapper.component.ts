@@ -72,7 +72,7 @@ export class ButtonsCaseWrapperComponent
             .afterClosed();
         }),
       )
-      .pipe(filter((click: unknown) => click == UserClick.YES))
+      .pipe(filter((click: unknown) => click === UserClick.YES))
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });

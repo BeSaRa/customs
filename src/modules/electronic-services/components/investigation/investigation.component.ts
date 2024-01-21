@@ -94,9 +94,9 @@ export class InvestigationComponent extends BaseCaseComponent<
 
   canEdit() {
     return (
-      this.model?.getCaseStatus() == CommonCaseStatus.NEW ||
-      this.model?.getCaseStatus() == CommonCaseStatus.DRAFT ||
-      this.model?.getCaseStatus() == CommonCaseStatus.RETURNED
+      this.model?.getCaseStatus() === CommonCaseStatus.NEW ||
+      this.model?.getCaseStatus() === CommonCaseStatus.DRAFT ||
+      this.model?.getCaseStatus() === CommonCaseStatus.RETURNED
     );
   }
 
@@ -202,7 +202,7 @@ export class InvestigationComponent extends BaseCaseComponent<
         map(({ rs }) => {
           return rs.reduce((prev: Offender[], curr: OffenderViolation) => {
             const offender = prev.find(
-              offender => offender.id == curr.offenderId,
+              offender => offender.id === curr.offenderId,
             );
             if (offender) {
               offender.violations.push(curr);
@@ -259,7 +259,7 @@ export class InvestigationComponent extends BaseCaseComponent<
       });
   }
   navigateToSamePageThatUserCameFrom(): void {
-    if (this.info == null) {
+    if (this.info === null) {
       return;
     }
     switch (this.info.openFrom) {

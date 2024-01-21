@@ -88,12 +88,12 @@ export class OffenderViolationsPopupComponent
         (v: Violation | OffenderViolation) =>
           this.data.offender &&
           ((v as Violation).offenderTypeInfo
-            ? (v as Violation).offenderTypeInfo.lookupKey ==
+            ? (v as Violation).offenderTypeInfo.lookupKey ===
                 this.data.offender.type ||
-              (v as Violation).offenderTypeInfo.lookupKey == OffenderTypes.BOTH
-            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
+              (v as Violation).offenderTypeInfo.lookupKey === OffenderTypes.BOTH
+            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
                 this.data.offender.type ||
-              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ==
+              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
                 OffenderTypes.BOTH),
       );
     this.listenToReload();
@@ -121,7 +121,7 @@ export class OffenderViolationsPopupComponent
         this.violations = this.violations.filter(
           v =>
             !this.dataSource.data.find(
-              offenderViolation => offenderViolation.violationId == v.id,
+              offenderViolation => offenderViolation.violationId === v.id,
             ),
           // TODO: add filter by violation offender type
         );
@@ -157,7 +157,7 @@ export class OffenderViolationsPopupComponent
       .pipe(
         tap(
           () =>
-            this.dataSource.data.length == 1 &&
+            this.dataSource.data.length === 1 &&
             this.dialog.error(
               this.lang.map
                 .can_not_delete_offender_must_has_at_least_one_violation,
@@ -171,7 +171,7 @@ export class OffenderViolationsPopupComponent
             .confirm(
               this.lang.map.msg_delete_link_with_x_confirm.change({
                 x: this.violations
-                  .find(v => v.id == model.violationId)
+                  .find(v => v.id === model.violationId)
                   ?.getOffenderViolationSelectNames(),
               }),
             )
@@ -190,7 +190,7 @@ export class OffenderViolationsPopupComponent
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({
             x: this.violations
-              .find(v => v.id == model.violationId)
+              .find(v => v.id === model.violationId)
               ?.getOffenderViolationSelectNames(),
           }),
         );

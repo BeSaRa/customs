@@ -27,7 +27,7 @@
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
-            [options]="violations">
+            [options]="violations()">
             <span appInputSuffix>
               <app-icon-button
                 (click)="addViolation$.next()"

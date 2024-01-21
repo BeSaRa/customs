@@ -155,7 +155,7 @@ export class OffendersViolationsPreviewComponent
     return (
       this.penaltyMap &&
       this.penaltyMap[element.id].second.find(
-        penalty => penalty.penaltyKey == penaltyKey,
+        penalty => penalty.penaltyKey === penaltyKey,
       )?.id
     );
   }

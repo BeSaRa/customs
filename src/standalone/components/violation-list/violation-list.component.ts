@@ -105,12 +105,12 @@ export class ViolationListComponent
       .pipe(
         tap(
           (data: TransformerAction<Investigation>) =>
-            data.action == 'done' && (this.caseId = data.model?.id || ''),
+            data.action === 'done' && (this.caseId = data.model?.id || ''),
         ),
       )
       .pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'save',
+          (data: TransformerAction<Investigation>) => data.action === 'save',
         ),
       )
       .subscribe(() => {
@@ -248,7 +248,7 @@ export class ViolationListComponent
         exhaustMap(model =>
           this.dialog
             .confirm(
-              this.dataSource.data.length == 1
+              this.dataSource.data.length === 1
                 ? this.lang.map.reset_violations_effects_msg
                 : '',
               this.lang.map.msg_delete_x_confirm.change({

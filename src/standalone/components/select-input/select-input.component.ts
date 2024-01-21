@@ -232,6 +232,6 @@ export class SelectInputComponent
   delete(event: MouseEvent, option: unknown) {
     event.preventDefault();
     event.stopPropagation();
-    if (this.control.value == option) this.control.setValue(null);
+    if (this.control.value === option) this.control.setValue(null);
   }
 }

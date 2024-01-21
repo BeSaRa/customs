@@ -23,7 +23,7 @@ export class ViolationClassificationPopupComponent extends AdminDialogComponent<
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
     this.isDisabled =
-      this.operation === OperationType.UPDATE && this.isSystem?.value == true;
+      this.operation === OperationType.UPDATE && this.isSystem?.value === true;
     if (this.isDisabled) {
       this.offenderType?.disable();
       this.status?.disable();

@@ -44,6 +44,7 @@ export class ViolationService extends BaseCrudWithDialogService<
   protected getModelClass(): Constructor<Violation> {
     return Violation;
   }
+
   getViolationWithDateLabel(model: Violation) {
     return (
       model.violationTypeInfo?.getNames() +

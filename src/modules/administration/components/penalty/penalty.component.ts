@@ -25,7 +25,7 @@ export class PenaltyComponent extends AdminComponent<
   service = inject(PenaltyService);
 
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
 

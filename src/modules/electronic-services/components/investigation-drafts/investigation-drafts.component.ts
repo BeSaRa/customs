@@ -87,7 +87,7 @@ export class InvestigationDraftsComponent implements OnInit {
           } else {
             investigation.offenderInfo.forEach((element, index) => {
               namesOfOffenders += element.offenderInfo?.arName;
-              if (index + 1 != investigation.offenderInfo.length) {
+              if (index + 1 !== investigation.offenderInfo.length) {
                 namesOfOffenders += ', ';
               }
             });

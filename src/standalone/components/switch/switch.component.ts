@@ -87,7 +87,7 @@ export class SwitchComponent
   }
 
   writeValue(value: unknown): void {
-    this.control.setValue(value == this.trueValue, {
+    this.control.setValue(value === this.trueValue, {
       emitEvent: false,
     });
   }

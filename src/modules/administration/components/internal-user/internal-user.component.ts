@@ -24,7 +24,7 @@ export class InternalUserComponent extends AdminComponent<
 > {
   service = inject(InternalUserService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
 
   actions: ContextMenuActionContract<InternalUser>[] = [

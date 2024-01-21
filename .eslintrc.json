@@ -41,7 +41,8 @@
             "varsIgnorePattern": "^_",
             "caughtErrorsIgnorePattern": "^_"
           }
-        ]
+        ],
+        "eqeqeq": "error"
       }
     },
     {

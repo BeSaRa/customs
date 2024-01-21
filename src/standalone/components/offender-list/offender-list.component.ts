@@ -114,12 +114,12 @@ export class OffenderListComponent
       .pipe(
         tap(
           (data: TransformerAction<Investigation>) =>
-            data.action == 'done' && (this.caseId = data.model?.id || ''),
+            data.action === 'done' && (this.caseId = data.model?.id || ''),
         ),
       )
       .pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'save',
+          (data: TransformerAction<Investigation>) => data.action === 'save',
         ),
       )
       .subscribe(() => {

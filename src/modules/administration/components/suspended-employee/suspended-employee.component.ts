@@ -29,7 +29,7 @@ export class SuspendedEmployeeComponent
 {
   service = inject(SuspendedEmployeeService);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
-    s => s.lookupKey != StatusTypes.DELETED,
+    s => s.lookupKey !== StatusTypes.DELETED,
   );
   suspensionTypes: Lookup[] = this.lookupService.lookups.suspensionTypes;
   extendSuspension$: Subject<SuspendedEmployee> =

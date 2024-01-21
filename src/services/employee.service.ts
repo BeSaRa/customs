@@ -85,37 +85,38 @@ export class EmployeeService {
 
   isApplicantUser() {
     return (this.loginData?.teams || []).find(
-      (t: Team) => t.ldapGroupName == DepartmentGroupNames.Applicant_Department,
+      (t: Team) =>
+        t.ldapGroupName === DepartmentGroupNames.Applicant_Department,
     );
   }
   isApplicantChief() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Chief,
+        t.ldapGroupName === DepartmentGroupNames.Applicant_Department_Chief,
     );
   }
   isApplicantManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName == DepartmentGroupNames.Applicant_Department_Manager,
+        t.ldapGroupName === DepartmentGroupNames.Applicant_Department_Manager,
     );
   }
   isHrManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName == DepartmentGroupNames.Human_Resources_Manager,
+        t.ldapGroupName === DepartmentGroupNames.Human_Resources_Manager,
     );
   }
   isDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName == DepartmentGroupNames.Disciplinary_Committee,
+        t.ldapGroupName === DepartmentGroupNames.Disciplinary_Committee,
     );
   }
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName ==
+        t.ldapGroupName ===
         DepartmentGroupNames.Permanent_Disciplinary_Committee,
     );
   }

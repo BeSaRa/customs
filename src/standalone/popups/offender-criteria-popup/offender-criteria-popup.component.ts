@@ -1,6 +1,6 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { Violation } from '@models/violation';
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ControlDirective } from '@standalone/directives/control.directive';
@@ -99,15 +99,15 @@ export class OffenderCriteriaPopupComponent
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
   administrations: MawaredDepartment[] = [];
-  _Violations: Violation[] = [];
-  violations: Violation[] = [];
+  private _violations: Violation[] = [];
+  violations = signal<Violation[]>([]);
   offenders: Offender[] =
     this.data && ((this.data.offenders || []) as Offender[]);
   form!: UntypedFormGroup;
   isEmployee = true;
   isClearingAgent = false;
   offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, {
-    nonNullable: true,
+    nonNullable: false,
   });
   offenderViolationControl = new FormControl<number[]>(
     [],
@@ -154,14 +154,10 @@ export class OffenderCriteriaPopupComponent
     this.clearingAgentFormGroup = this.fb.group(
       new ClearingAgentCriteria().buildForm(true),
     );
-    this._Violations =
+    this._violations =
       this.data && ((this.data.violations || []) as Violation[]);
-    this.violations = this._Violations.filter(
-      v =>
-        this.offenderTypeControl &&
-        (v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value ||
-          v.offenderTypeInfo.lookupKey == OffenderTypes.BOTH),
-    );
+
+    this.filterViolationsBasedOnSelectedType();
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -177,15 +173,28 @@ export class OffenderCriteriaPopupComponent
     if (!this.caseId) this.listenToSaveCaseDone();
   }
 
+  filterViolationsBasedOnSelectedType() {
+    this.violations.set(
+      this._violations.filter(
+        v =>
+          this.offenderTypeControl &&
+          (v.offenderTypeInfo.lookupKey === this.offenderTypeControl.value ||
+            v.offenderTypeInfo.lookupKey === OffenderTypes.BOTH),
+      ),
+    );
+  }
+
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
       this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
       this.offenderViolationControl.reset();
-      this.violations = this._Violations.filter(
-        v =>
-          this.offenderTypeControl &&
-          v.offenderTypeInfo.lookupKey == this.offenderTypeControl?.value,
+      this.violations.set(
+        this._violations.filter(
+          v =>
+            this.offenderTypeControl &&
+            v.offenderTypeInfo.lookupKey === this.offenderTypeControl?.value,
+        ),
       );
     });
   }
@@ -211,11 +220,12 @@ export class OffenderCriteriaPopupComponent
         ),
       )
       .subscribe(violation => {
-        this.violations.unshift(
-          new Violation().clone<Violation>({ ...violation }),
-        );
+        this.violations.update(violations => [
+          new Violation().clone<Violation>(violation),
+          ...violations,
+        ]);
         if (
-          violation.offenderTypeInfo?.lookupKey ==
+          violation.offenderTypeInfo?.lookupKey ===
           this.offenderTypeControl.value
         ) {
           this.offenderViolationControl.patchValue(
@@ -247,8 +257,8 @@ export class OffenderCriteriaPopupComponent
             emp =>
               !this.offenders.find(
                 (offender: Offender) =>
-                  offender.offenderRefId == emp.id &&
-                  offender.type == OffenderTypes.EMPLOYEE,
+                  offender.offenderRefId === emp.id &&
+                  offender.type === OffenderTypes.EMPLOYEE,
               ),
           ),
         ),
@@ -273,8 +283,8 @@ export class OffenderCriteriaPopupComponent
             emp =>
               !this.offenders.find(
                 (offender: Offender) =>
-                  offender.offenderRefId == emp.id &&
-                  offender.type == OffenderTypes.ClEARING_AGENT,
+                  offender.offenderRefId === emp.id &&
+                  offender.type === OffenderTypes.ClEARING_AGENT,
               ),
           ),
         ),
@@ -293,7 +303,7 @@ export class OffenderCriteriaPopupComponent
     this.transformer$
       ?.pipe(
         filter(
-          (data: TransformerAction<Investigation>) => data.action == 'done',
+          (data: TransformerAction<Investigation>) => data.action === 'done',
         ),
       )
       .subscribe((data: TransformerAction<Investigation>) => {
@@ -309,6 +319,7 @@ export class OffenderCriteriaPopupComponent
   }
 
   addEmployee(employee: MawaredEmployee) {
+    console.log('Offender');
     if (!this.caseId) {
       this.selectedOffender = employee;
       this.transformer$?.next({ action: 'save' });
@@ -349,7 +360,7 @@ export class OffenderCriteriaPopupComponent
       .subscribe(model => {
         this.employeeDatasource.data.splice(
           this.employeeDatasource.data.findIndex(
-            emp => emp.id == model.offenderRefId,
+            emp => emp.id === model.offenderRefId,
           ),
           1,
         );
@@ -409,7 +420,7 @@ export class OffenderCriteriaPopupComponent
       .subscribe(model => {
         this.clearingAgentsDatasource.data.splice(
           this.clearingAgentsDatasource.data.findIndex(
-            emp => emp.id == model.offenderRefId,
+            emp => emp.id === model.offenderRefId,
           ),
           1,
         );

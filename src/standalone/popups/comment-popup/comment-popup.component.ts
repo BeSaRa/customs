@@ -86,7 +86,7 @@ export class CommentPopupComponent
     });
   }
   get isSendToUser() {
-    return this.response == TaskResponses.TO_USER;
+    return this.response === TaskResponses.TO_USER;
   }
   private _loadUsersList() {
     if (this.isSendToUser) {
