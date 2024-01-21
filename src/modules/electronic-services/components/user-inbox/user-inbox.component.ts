@@ -61,8 +61,8 @@ export class UserInboxComponent
       type: 'action',
       label: 'view',
       icon: AppIcons.VIEW,
-      callback: () => {
-        console.log('navigate to view the case');
+      callback: element => {
+        this.view(element);
       },
     },
   ];
