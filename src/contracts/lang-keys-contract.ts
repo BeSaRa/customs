@@ -379,4 +379,5 @@ export interface LangKeysContract {
   unlinked_violations_to_offenders: string;
   offenders_attachment: string;
   employee_name: string;
+  employee_career_level: string;
 }
