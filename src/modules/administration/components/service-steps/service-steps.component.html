@@ -8,7 +8,7 @@
     (click)="reload$.next()"
     icon="RELOAD"></app-icon-button>
 </div>
-<div class="shadow relative">
+<div class="shadow relative overflow-auto">
   @if (loading$ | async) {
     <div
       class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
@@ -103,13 +103,13 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  <mat-paginator
-    class="border-t border-gray-200"
-    (page)="paginate($event)"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="limit"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
+<mat-paginator
+  class="border-t border-gray-200"
+  (page)="paginate($event)"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageSize]="limit"
+  [showFirstLastButtons]="showFirstLastButtons"
+  [length]="length">
+</mat-paginator>

@@ -7,7 +7,7 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
+  <div>
     <mat-tab-group
       [(selectedIndex)]="activeTab"
       mat-stretch-tabs="false"
@@ -15,7 +15,7 @@
       [dynamicHeight]="!inViewMode()">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-2 gap-4 p-4">
             <app-input
               formControlName="arName"
               [label]="lang.map.ar_name"></app-input>
@@ -45,44 +45,48 @@
       </mat-tab>
       <mat-tab [label]="lang.map.ar_body_template">
         <ng-container [formGroup]="form">
-          @if (!inViewMode()) {
-            <app-html-editor
-              [id]="'arBodyEditor'"
-              formControlName="arBodyTemplate"
-              [placeHolder]="
-                lang.map.mail_template_placeholder
-              "></app-html-editor>
-          }
-          @if (inViewMode()) {
-            <div class="!w-fit">
-              <div
-                class="prose"
-                [innerHTML]="
-                  form.get('arBodyTemplate')?.value | txtToHtml
-                "></div>
-            </div>
-          }
+          <div class="p-4">
+            @if (!inViewMode()) {
+              <app-html-editor
+                [id]="'arBodyEditor'"
+                formControlName="arBodyTemplate"
+                [placeHolder]="
+                  lang.map.mail_template_placeholder
+                "></app-html-editor>
+            }
+            @if (inViewMode()) {
+              <div class="!w-fit">
+                <div
+                  class="prose"
+                  [innerHTML]="
+                    form.get('arBodyTemplate')?.value | txtToHtml
+                  "></div>
+              </div>
+            }
+          </div>
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.en_body_template">
         <ng-container [formGroup]="form">
-          @if (!inViewMode()) {
-            <app-html-editor
-              [id]="'enBodyEditor'"
-              formControlName="enBodyTemplate"
-              [placeHolder]="
-                lang.map.mail_template_placeholder
-              "></app-html-editor>
-          }
-          @if (inViewMode()) {
-            <div>
-              <div
-                class="prose"
-                [innerHTML]="
-                  form.get('enBodyTemplate')?.value | txtToHtml
-                "></div>
-            </div>
-          }
+          <div class="p-4">
+            @if (!inViewMode()) {
+              <app-html-editor
+                [id]="'enBodyEditor'"
+                formControlName="enBodyTemplate"
+                [placeHolder]="
+                  lang.map.mail_template_placeholder
+                "></app-html-editor>
+            }
+            @if (inViewMode()) {
+              <div>
+                <div
+                  class="prose"
+                  [innerHTML]="
+                    form.get('enBodyTemplate')?.value | txtToHtml
+                  "></div>
+              </div>
+            }
+          </div>
         </ng-container>
       </mat-tab>
     </mat-tab-group>
