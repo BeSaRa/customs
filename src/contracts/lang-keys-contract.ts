@@ -380,4 +380,5 @@ export interface LangKeysContract {
   employee_name: string;
   employee_career_level: string;
   level_of_secrecy: string;
+  type: string;
 }

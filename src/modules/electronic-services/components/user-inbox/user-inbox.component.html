@@ -24,7 +24,11 @@
         {{ lang.map.serial_number }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.BD_DRAFT_FULL_SERIAL }}
+        <button
+          class="text-blue-700 hover:underline focus:outline-none"
+          (click)="view(element)">
+          {{ element.BD_DRAFT_FULL_SERIAL }}
+        </button>
       </td>
     </ng-container>
 
@@ -38,23 +42,13 @@
       </td>
     </ng-container>
 
-    <!-- BD_CASE_TYPE BD_CASE_TYPE -->
-    <ng-container matColumnDef="BD_CASE_TYPE">
-      <th mat-header-cell mat-sort-header="BD_CASE_TYPE" *matHeaderCellDef>
+    <!-- BD_TYPE -->
+    <ng-container matColumnDef="BD_TYPE">
+      <th mat-header-cell mat-sort-header="BD_TYPE" *matHeaderCellDef>
         {{ lang.map.case_type }}
       </th>
       <td mat-cell *matCellDef="let element">
         <span [innerHTML]="element.BD_CASE_TYPE"></span>
-      </td>
-    </ng-container>
-
-    <!-- PI_CREATE PI_CREATE -->
-    <ng-container matColumnDef="PI_CREATE">
-      <th mat-header-cell mat-sort-header="PI_CREATE" *matHeaderCellDef>
-        {{ lang.map.creation_date }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.PI_CREATE"></span>
       </td>
     </ng-container>
 
@@ -94,8 +88,9 @@
         {{ lang.map.status }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <!-- <span [innerHTML]="getJobTypeName(element.jobType) | highlight : getFilterStringColumn('jobType')"></span> -->
-        <span> {{ element.riskStatusInfo.getNames() }}</span>
+        <span [class]="statusStyle(element)">
+          {{ element.riskStatusInfo.getNames() }}</span
+        >
       </td>
     </ng-container>
 
