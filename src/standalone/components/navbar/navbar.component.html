@@ -4,6 +4,18 @@
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
   <div class="flex-auto"></div>
+  @if (DepartmentsNames.length > 0) {
+    <button
+      mat-button
+      [matTooltip]="DepartmentsNames | tooltipList"
+      matTooltipClass="tooltip-list">
+      {{ defaultDepartmentName }}
+    </button>
+  } @else {
+    <button mat-button>
+      {{ defaultDepartmentName }}
+    </button>
+  }
   <button
     class="space-x-4 rtl:space-x-reverse flex items-center"
     [matMenuTriggerFor]="userMenu">

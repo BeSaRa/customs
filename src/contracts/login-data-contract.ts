@@ -9,7 +9,7 @@ export interface LoginDataContract {
   lookupMap: LookupMapContract;
   menuItems: unknown[];
   organizationUnit: OrganizationUnit;
-  organizationUnits: unknown[];
+  organizationUnits: OrganizationUnit[];
   permissionSet: Permission[];
   teams: Team[];
   token: string;
