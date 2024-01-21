@@ -51,7 +51,6 @@ export interface LangKeysContract {
   menu_attachment_type: string;
   false: string;
   true: string;
-  limited_access: string;
   draft: string;
   expand_all: string;
   collapse_all: string;
@@ -380,4 +379,5 @@ export interface LangKeysContract {
   offenders_attachment: string;
   employee_name: string;
   employee_career_level: string;
+  level_of_secrecy: string;
 }
