@@ -1,0 +1,12 @@
+.custom-status {
+  @apply inline-flex me-2 mb-1 items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset;
+}
+.custom-status-risk {
+  @apply bg-red-50 text-red-800 ring-red-600/20;
+}
+.custom-status-normal {
+  @apply bg-green-50 text-green-800 ring-green-600/20;
+}
+.custom-status-overdue {
+  @apply bg-yellow-50 text-yellow-800 ring-yellow-600/20;
+}

@@ -13,6 +13,7 @@ import { ContextMenuActionContract } from '@contracts/context-menu-action-contra
 import { AppIcons } from '@constants/app-icons';
 import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
+import { InboxRiskStatus } from '@enums/inbox-risk-status';
 
 @Component({
   selector: 'app-user-inbox',
@@ -41,8 +42,7 @@ export class UserInboxComponent
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
     new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
     new NoneFilterColumn('BD_SUBJECT'),
-    new NoneFilterColumn('BD_CASE_TYPE'),
-    new NoneFilterColumn('PI_CREATE'),
+    new NoneFilterColumn('BD_TYPE'),
     new NoneFilterColumn('ACTIVATED'),
     new NoneFilterColumn('PI_DUE'),
     new NoneFilterColumn('BD_FROM_USER'),
@@ -109,5 +109,16 @@ export class UserInboxComponent
     this.router
       .navigate([item.itemRoute], { queryParams: { item: item.itemDetails } })
       .then();
+  }
+  statusStyle(element: InboxResult) {
+    let classes = 'custom-status ';
+    if (element.RISK_STATUS === InboxRiskStatus.normal) {
+      classes += 'custom-status-normal';
+    } else if (element.RISK_STATUS === InboxRiskStatus.at_risk) {
+      classes += 'custom-status-risk';
+    } else if (element.RISK_STATUS === InboxRiskStatus.overdue) {
+      classes += 'custom-status-overdue';
+    }
+    return classes;
   }
 }
