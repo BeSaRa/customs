@@ -115,16 +115,7 @@ export class NavbarComponent
       });
   }
 
-  openLangChangeConfirmDialog() {
-    const dialog = this.dialog.confirm(
-      this.lang.map.are_you_sure_you_want_to_change_lang,
-      '',
-    );
-    dialog
-      .afterClosed()
-      .pipe(filter(value => value === UserClick.YES))
-      .subscribe(() => {
-        this.lang.toggleLang();
-      });
+  switchLang() {
+    this.lang.toggleLang();
   }
 }
