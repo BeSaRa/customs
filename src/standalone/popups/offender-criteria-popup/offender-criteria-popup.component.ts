@@ -113,6 +113,7 @@ export class OffenderCriteriaPopupComponent
     [],
     [CustomValidators.required],
   );
+  offenderTypesEnum = OffenderTypes;
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
@@ -121,17 +122,14 @@ export class OffenderCriteriaPopupComponent
   clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
   employeeDisplayedColumns = [
     'employee_number',
-    'arName',
-    'enName',
-    'department',
+    'offenderName',
     'qid',
     'jobTitle',
     'actions',
   ];
   clearingAgentDisplayedColumns = [
     'clearingAgentCode',
-    'arName',
-    'enName',
+    'offenderName',
     'qid',
     'companyName',
     'companyNumber',
