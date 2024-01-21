@@ -3,6 +3,7 @@ import { BaseModel } from '@abstracts/base-model';
 import { ViolationService } from '@services/violation.service';
 import { ViolationInterceptor } from '@model-interceptors/violation-interceptor';
 import { InterceptModel } from 'cast-response';
+import { CustomValidators } from '@validators/custom-validators';
 
 const { send, receive } = new ViolationInterceptor();
 
@@ -55,9 +56,11 @@ export class Violation extends BaseModel<Violation, ViolationService> {
       controlReportNumber,
     } = this;
     return {
-      violationTypeId: controls ? [violationTypeId] : violationTypeId,
+      violationTypeId: controls
+        ? [violationTypeId, CustomValidators.required]
+        : violationTypeId,
       violationClassificationId: controls
-        ? [violationClassification]
+        ? [violationClassification, CustomValidators.required]
         : violationClassification,
       violationsDate: controls ? [violationsDate] : violationsDate,
       violationsDateFrom: controls ? [violationsDateFrom] : violationsDateFrom,
@@ -78,6 +81,7 @@ export class Violation extends BaseModel<Violation, ViolationService> {
         : controlReportNumber,
     };
   }
+
   getOffenderViolationSelectNames() {
     return this.$$getService$$<ViolationService>().getViolationWithDateLabel(
       this,

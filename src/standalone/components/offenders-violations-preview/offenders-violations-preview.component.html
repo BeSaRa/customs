@@ -99,8 +99,8 @@
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
           </div>
           <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-                            <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
-                          </div> -->
+                                      <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
+                                    </div> -->
           @if (isClaimed) {
             <div class="flex justify-center gap-2">
               @if (canMakeDecision(element)) {
@@ -206,7 +206,7 @@
         @for (violation of assertType(element).violations; track violation) {
           <div class="p-3 border-bottom">
             <h5 class="text-lg font-medium mb-1">
-              {{ violation.violationInfo?.violationTypeInfo?.getNames() }}
+              {{ violation.violationInfo.violationTypeInfo.getNames() }}
             </h5>
             <!-- classificationInfo -->
             <span
@@ -215,66 +215,66 @@
                 >{{ lang.map.violation_classification }} :
               </label>
               <label>{{
-                violation.violationInfo?.classificationInfo?.getNames()
+                violation.violationInfo.classificationInfo.getNames()
               }}</label>
             </span>
             <!-- competentProsecutionDecisionInfo -->
-            @if (violation.violationInfo?.competentProsecutionDecision) {
+            @if (violation.violationInfo.competentProsecutionDecision) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.competent_prosecutiond_decision }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.competentProsecutionDecisionInfo?.getNames()
+                  violation.violationInfo.competentProsecutionDecisionInfo.getNames()
                 }}</label>
               </span>
             }
             <!-- courtDecision -->
-            @if (violation.violationInfo?.courtDecision) {
+            @if (violation.violationInfo.courtDecision) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.court_decision }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.courtDecisionInfo?.getNames()
+                  violation.violationInfo.courtDecisionInfo.getNames()
                 }}</label>
               </span>
             }
             <!-- drugProsecutionDecision -->
-            @if (violation.violationInfo?.drugProsecutionDecision) {
+            @if (violation.violationInfo.drugProsecutionDecision) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.drug_prosecution_decision }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.drugProsecutionDecisionInfo?.getNames()
+                  violation.violationInfo.drugProsecutionDecisionInfo.getNames()
                 }}</label>
               </span>
             }
             <!-- forensicLabAnalysis -->
-            @if (violation.violationInfo?.forensicLabAnalysis) {
+            @if (violation.violationInfo.forensicLabAnalysis) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.forensic_lab_analysis }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.forensicLabAnalysisInfo?.getNames()
+                  violation.violationInfo.forensicLabAnalysisInfo.getNames()
                 }}</label>
               </span>
             }
             <!-- securityAdminDecision -->
-            @if (violation.violationInfo?.securityAdminDecision) {
+            @if (violation.violationInfo.securityAdminDecision) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.security_admin_decision }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.securityAdminDecisionInfo?.getNames()
+                  violation.violationInfo.securityAdminDecisionInfo.getNames()
                 }}</label>
               </span>
             }
@@ -292,45 +292,43 @@
               }
             </span>
             <!-- customsDeclarationNumber -->
-            @if (violation.violationInfo?.customsDeclarationNumber) {
+            @if (violation.violationInfo.customsDeclarationNumber) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.customs_declaration_number }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.customsDeclarationNumber
+                  violation.violationInfo.customsDeclarationNumber
                 }}</label>
               </span>
             }
             <!-- controlReportNumber -->
-            @if (violation.violationInfo?.controlReportNumber) {
+            @if (violation.violationInfo.controlReportNumber) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.control_report_number }} :
                 </label>
-                <label>{{
-                  violation.violationInfo?.controlReportNumber
-                }}</label>
+                <label>{{ violation.violationInfo.controlReportNumber }}</label>
               </span>
             }
             <!-- reportNumber -->
-            @if (violation.violationInfo?.reportNumber) {
+            @if (violation.violationInfo.reportNumber) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.report_number }} :
                 </label>
-                <label>{{ violation.violationInfo?.reportNumber }}</label>
+                <label>{{ violation.violationInfo.reportNumber }}</label>
               </span>
             }
             <!-- reportNumber -->
-            @if (violation.violationInfo?.reportYear) {
+            @if (violation.violationInfo.reportYear) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium">{{ lang.map.report_year }} : </label>
-                <label>{{ violation.violationInfo?.reportYear }}</label>
+                <label>{{ violation.violationInfo.reportYear }}</label>
               </span>
             }
             <!-- repeat -->
@@ -340,42 +338,42 @@
               <label>{{ violation.repeat }}</label>
             </span>
             <!-- date -->
-            @if (violation.violationInfo?.violationsDate) {
+            @if (violation.violationInfo.violationsDate) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium"
                   >{{ lang.map.violation_date }} :
                 </label>
                 <label>{{
-                  violation.violationInfo?.violationsDate | date: 'YYYY/MM/dd'
+                  violation.violationInfo.violationsDate | date: 'YYYY/MM/dd'
                 }}</label>
               </span>
             }
             <!-- date -->
             @if (
-              violation.violationInfo?.violationsDateTo ||
-              violation.violationInfo?.violationsDateFrom
+              violation.violationInfo.violationsDateTo ||
+              violation.violationInfo.violationsDateFrom
             ) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-                @if (violation.violationInfo?.violationsDateFrom) {
+                @if (violation.violationInfo.violationsDateFrom) {
                   <span>
                     <label class="font-medium"
                       >{{ lang.map.date_from }} :
                     </label>
                     <label>{{
-                      violation.violationInfo?.violationsDateFrom
+                      violation.violationInfo.violationsDateFrom
                         | date: 'YYYY/MM/dd'
                     }}</label>
                   </span>
                 }
-                @if (violation.violationInfo?.violationsDateTo) {
+                @if (violation.violationInfo.violationsDateTo) {
                   <span>
                     <label class="font-medium">
                       - {{ lang.map.date_to }} :
                     </label>
                     <label>{{
-                      violation.violationInfo?.violationsDateTo
+                      violation.violationInfo.violationsDateTo
                         | date: 'YYYY/MM/d'
                     }}</label>
                   </span>
@@ -383,11 +381,11 @@
               </span>
             }
             <!-- description -->
-            @if (violation.violationInfo?.description) {
+            @if (violation.violationInfo.description) {
               <div
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
                 <label class="font-medium">{{ lang.map.description }} : </label>
-                <label>{{ violation.violationInfo?.description }}</label>
+                <label>{{ violation.violationInfo.description }}</label>
               </div>
             }
           </div>

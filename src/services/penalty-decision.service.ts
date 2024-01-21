@@ -19,13 +19,17 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
   protected override getDialogComponent(): ComponentType<MakePenaltyDecisionPopupComponent> {
     throw new Error('Method not implemented.');
   }
-  override serviceName!: string;
+
+  override serviceName: string = 'PenaltyDecisionService';
+
   protected override getUrlSegment(): string {
     return this.urlService.URLS.PENALTY_DECISION;
   }
+
   protected override getModelInstance(): PenaltyDecision {
     return new PenaltyDecision();
   }
+
   protected override getModelClass(): Constructor<PenaltyDecision> {
     return PenaltyDecision;
   }

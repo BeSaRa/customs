@@ -122,9 +122,9 @@ export class OffendersViolationsPreviewComponent
   }
 
   ngOnInit(): void {
-    if (this.offenderDataSource.data.length) {
-      this.loadPenalties();
-    }
+    // if (this.offenderDataSource.data.length) {
+    this.loadPenalties();
+    // }
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();

@@ -55,6 +55,7 @@ import { enUS } from 'date-fns/locale';
 import { Config } from '@constants/config';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
 import { VersionComponent } from '@standalone/components/version/version.component';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -101,6 +102,7 @@ import { VersionComponent } from '@standalone/components/version/version.compone
         LookupService,
         AuthService,
         MenuItemService,
+        PenaltyDecisionService,
       ],
       multi: true,
     },

@@ -93,7 +93,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     (this.data.extras.transformer$ as Subject<
       TransformerAction<Investigation>
     >);
+
   caseId = this.data.extras && (this.data.extras.caseId as string);
+
   protected override _init() {
     super._init();
     this.loadClassifications();
@@ -111,6 +113,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
     if (!this.caseId) this.listenToSaveCaseDone();
   }
+
   listenToSaveCaseDone() {
     this.transformer$
       ?.pipe(
@@ -123,6 +126,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         this.save$.next();
       });
   }
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -146,6 +150,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       this.checkRequiredField();
     }
   }
+
   addViolation() {
     if (this._beforeSave()) {
       if (!this.caseId) {
@@ -155,11 +160,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       }
     }
   }
+
   protected _beforeSave(): boolean | Observable<boolean> {
-    this.form.invalid &&
+    if (this.form.invalid) {
       this.dialog.error(
         this.lang.map.msg_make_sure_all_required_fields_are_filled,
       );
+      this.form.markAllAsTouched();
+    }
     return this.form.valid;
   }
 
