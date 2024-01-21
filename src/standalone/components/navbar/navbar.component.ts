@@ -19,6 +19,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserPreferencesService } from '@services/user-preferences.service';
 import { UserPreferences } from '@models/user-preferences';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { SelectInputComponent } from '../select-input/select-input.component';
+import { TooltipListPipe } from '@standalone/pipes/tooltip-list.pipe';
+import { OrganizationUnit } from '@models/organization-unit';
 
 @Component({
   selector: 'app-navbar',
@@ -31,6 +34,8 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
     MatMenuModule,
     IconButtonComponent,
     MatTooltipModule,
+    SelectInputComponent,
+    TooltipListPipe,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
@@ -43,6 +48,9 @@ export class NavbarComponent
   menuClick = new EventEmitter<MouseEvent | undefined>();
   lang = inject(LangService);
   employee = inject(EmployeeService).getEmployee();
+  employeeOUs = inject(EmployeeService).getOrganizationUnits();
+  defaultDepartmentName: string = '';
+  DepartmentsNames: string[] = [];
   dialog = inject(DialogService);
   toast = inject(ToastService);
   authService = inject(AuthService);
@@ -53,8 +61,15 @@ export class NavbarComponent
 
   ngOnInit(): void {
     this._listenToEditUserPreferences();
+    this.employeeOUs?.forEach(eou => {
+      const employeeOU = new OrganizationUnit().clone<OrganizationUnit>(eou);
+      if (employeeOU.id === this.employee?.defaultOUId) {
+        this.defaultDepartmentName = employeeOU.getNames();
+      } else {
+        this.DepartmentsNames.push(employeeOU.getNames());
+      }
+    });
   }
-
   menuClicked($event?: MouseEvent) {
     this.menuClick.emit($event);
   }

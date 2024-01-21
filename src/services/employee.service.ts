@@ -133,4 +133,8 @@ export class EmployeeService {
   getOrganizationUnit(): OrganizationUnit | undefined {
     return this.loginData?.organizationUnit;
   }
+
+  getOrganizationUnits(): OrganizationUnit[] | undefined {
+    return this.loginData?.organizationUnits;
+  }
 }
