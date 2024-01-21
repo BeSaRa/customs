@@ -124,7 +124,7 @@ export class OffenderCriteriaPopupComponent
     'employee_number',
     'offenderName',
     'qid',
-    'jobTitle',
+    'employeeCareerLevel',
     'actions',
   ];
   clearingAgentDisplayedColumns = [
