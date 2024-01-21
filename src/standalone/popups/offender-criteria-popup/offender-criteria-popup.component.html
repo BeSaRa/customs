@@ -106,17 +106,13 @@
               {{ element.jobTitleCode }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="arName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
-          </ng-container>
-          <ng-container matColumnDef="enName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.en_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
-          </ng-container>
-          <ng-container matColumnDef="department">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.en_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+          <ng-container matColumnDef="offenderName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.employee_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.getNames() }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="qid">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.qid }}</th>
@@ -165,13 +161,13 @@
               {{ element.agentCustomCode }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="arName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.ar_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.arName }}</td>
-          </ng-container>
-          <ng-container matColumnDef="enName">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.en_name }}</th>
-            <td mat-cell *matCellDef="let element">{{ element.enName }}</td>
+          <ng-container matColumnDef="offenderName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agent_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.getNames() }}
+            </td>
           </ng-container>
           <ng-container matColumnDef="companyName">
             <th mat-header-cell *matHeaderCellDef>
@@ -224,11 +220,9 @@
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    @if (tabComponent && tabComponent.selectedIndex === 0) {
-      <app-button (click)="search$.next()" buttonType="primary">{{
-        lang.map.search
-      }}</app-button>
-    }
+    <app-button (click)="search$.next()" buttonType="primary">{{
+      lang.map.search
+    }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>
