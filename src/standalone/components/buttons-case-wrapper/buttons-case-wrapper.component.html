@@ -3,8 +3,8 @@
   <app-button
     [disabled]="!model?.canSave()"
     (click)="save.emit(SaveTypes.FINAL)"
-    >{{ lang.map.save }}</app-button
-  >
+    >{{ lang.map.save }}
+  </app-button>
 
   <!-- manager approve -->
   @if (
@@ -124,6 +124,7 @@
   <!-- referral request -->
   @if (
     model?.isClaimed() &&
+    mandatoryMakePenaltyDecisions &&
     (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT) ||
       model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT))
   ) {
@@ -263,14 +264,14 @@
             : sendTypes.DIRECTOR_ADMIN
         )
       "
-      >{{ lang.map.send_to_manager }}</app-button
-    >
+      >{{ lang.map.send_to_manager }}
+    </app-button>
   }
   <!-- send to chief -->
   @if (canLaunch() && !isApplicantManager() && model?.sectionId) {
-    <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)">{{
-      lang.map.send_to_chief
-    }}</app-button>
+    <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
+      >{{ lang.map.send_to_chief }}
+    </app-button>
   }
 
   <!-- data entry chief actions -->
@@ -288,21 +289,19 @@
     </app-button>
   }
 
-  <!-- close action -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.CLOSE)) {
-    <app-button
-      buttonType="error"
-      (click)="responseAction$.next(taskResponses.CLOSE)">
-      {{ lang.map.close }}
-    </app-button>
-  }
-
   <!-- terminate -->
   @if (model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)) {
     <app-button
       buttonType="error"
       (click)="responseAction$.next(taskResponses.TERMINATE)">
       {{ lang.map.terminate }}
+    </app-button>
+  }
+
+  <!-- close action -->
+  @if (model?.isClaimed()) {
+    <app-button buttonType="error" (click)="close()">
+      {{ lang.map.close }}
     </app-button>
   }
 </div>

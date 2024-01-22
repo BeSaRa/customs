@@ -82,11 +82,11 @@ export class ViolationListComponent
   selectViolation = new EventEmitter<Violation>();
 
   @Output()
+  reloadOffenderViolationList = new EventEmitter<void>();
+  @Output()
   saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
   violationService = inject(ViolationService);
 
-  @Output()
-  empty = new EventEmitter<void>();
   @Output()
   violations = new EventEmitter<Violation[]>();
   @Input()
@@ -97,10 +97,10 @@ export class ViolationListComponent
     this.listenToEdit();
     this.listenToView();
     this.listenToDelete();
-    this.listernToSaveCase();
+    this.listenToSaveCase();
     this.reload$.next();
   }
-  listernToSaveCase() {
+  listenToSaveCase() {
     this.transformer$
       .pipe(
         tap(
@@ -270,8 +270,8 @@ export class ViolationListComponent
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.description }),
         );
-        this.empty.emit();
         this.reload$.next();
+        this.reloadOffenderViolationList.emit();
       });
   }
 

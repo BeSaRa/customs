@@ -70,7 +70,7 @@ export class InvestigationSearchComponent implements OnInit {
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
     new NoneFilterColumn('draftFullSerial'),
     new NoneFilterColumn('caseStatus'),
-    new NoneFilterColumn('limitedAccess'),
+    new NoneFilterColumn('securityLevel'),
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
     new NoneFilterColumn('actions'),

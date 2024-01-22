@@ -43,7 +43,7 @@
             <mat-datepicker touchUi #datepicker />
           </app-input>
           <app-select-input
-            formControlName="limitedAccess"
+            formControlName="securityLevel"
             [label]="lang.map.level_of_secrecy"
             bindValue="lookupKey"
             bindLabel="getNames"
@@ -95,13 +95,13 @@
               <span>{{ element.creatorInfo.getNames() }}</span>
             </td>
           </ng-container>
-          <!-- limited access -->
-          <ng-container matColumnDef="limitedAccess">
+          <!-- security Level -->
+          <ng-container matColumnDef="securityLevel">
             <th mat-header-cell *matHeaderCellDef>
               {{ lang.map.level_of_secrecy }}
             </th>
             <td mat-cell *matCellDef="let element">
-              <span>{{ element.limitedAccessInfo?.getNames() }}</span>
+              <span>{{ element.securityLevelInfo?.getNames() }}</span>
             </td>
           </ng-container>
 
