@@ -19,7 +19,7 @@ export interface LookupMapContract {
   menuType: Lookup[];
   menuView: Lookup[];
   nationality: Lookup[];
-  organizationUniType: Lookup[];
+  organizationUnitType: Lookup[];
   penaltyPowers: Lookup[];
   penaltyRepeat: Lookup[];
   penaltySigner: Lookup[];

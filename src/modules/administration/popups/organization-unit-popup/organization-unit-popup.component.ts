@@ -14,6 +14,7 @@ import { InternalUser } from '@models/internal-user';
 import { OuLogo } from '@models/ou_logo';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppIcons } from '@constants/app-icons';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -26,7 +27,13 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   ouLogo!: OuLogo;
   ouLogoSafeUrl: SafeResourceUrl | null = null;
 
-  unitTypes: Lookup[] = inject(LookupService).lookups.organizationUniType;
+  unitTypes: Lookup[] = inject(
+    LookupService,
+  ).lookups.organizationUnitType.filter(
+    ou =>
+      ou.lookupKey !== OrganizationUnitType.OFFICE &&
+      ou.lookupKey !== OrganizationUnitType.COMMITTEE,
+  );
   internalUserService = inject(InternalUserService);
   private readonly sanitizer = inject(DomSanitizer);
   internalUsers!: InternalUser[];
@@ -93,7 +100,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   protected loadAssistantOus() {
     this.organizationUnitService
-      .loadOUsByType()
+      .loadOUsByType(OrganizationUnitType.ASSiSTENT_DEPARTMENT)
       .subscribe(ous => (this.assistantOus = ous));
   }
 

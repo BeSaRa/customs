@@ -1,3 +1,7 @@
 export enum OrganizationUnitType {
-  SECTION = 1,
+  ADMINISTRATION = 1,
+  OFFICE = 2,
+  SECTION = 3,
+  COMMITTEE = 4,
+  ASSiSTENT_DEPARTMENT = 5,
 }
