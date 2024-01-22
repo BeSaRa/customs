@@ -350,7 +350,6 @@ export interface LangKeysContract {
   user_type: string;
   note: string;
   employee_clearing_agent_numbers: string;
-  offender_names: string;
   send_to_user_x: string;
   hr_employees: string;
   hr_employee: string;
