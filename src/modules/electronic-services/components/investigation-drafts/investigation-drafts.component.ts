@@ -5,7 +5,6 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { INavigatedItem } from '@contracts/inavigated-item';
-import { OffenderTypes } from '@enums/offender-types';
 import { OpenFrom } from '@enums/open-from';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';

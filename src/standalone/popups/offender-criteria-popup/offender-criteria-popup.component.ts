@@ -313,7 +313,6 @@ export class OffenderCriteriaPopupComponent
   }
 
   addEmployee(employee: MawaredEmployee) {
-    console.log('Offender');
     if (!this.caseId) {
       this.selectedOffender = employee;
       this.transformer$?.next({ action: 'save' });
