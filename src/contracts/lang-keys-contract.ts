@@ -381,4 +381,6 @@ export interface LangKeysContract {
   employee_career_level: string;
   level_of_secrecy: string;
   type: string;
+  grievance: string;
+  investigation: string;
 }
