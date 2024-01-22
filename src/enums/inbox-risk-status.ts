@@ -1,5 +1,5 @@
 export enum InboxRiskStatus {
-  normal = 1,
-  at_risk = 2,
-  overdue = 3,
+  NORMAL = 1,
+  AT_RISK = 2,
+  OVERDUE = 3,
 }

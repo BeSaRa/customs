@@ -112,11 +112,11 @@ export class UserInboxComponent
   }
   statusStyle(element: InboxResult) {
     let classes = 'custom-status ';
-    if (element.RISK_STATUS === InboxRiskStatus.normal) {
+    if (element.RISK_STATUS === InboxRiskStatus.NORMAL) {
       classes += 'custom-status-normal';
-    } else if (element.RISK_STATUS === InboxRiskStatus.at_risk) {
+    } else if (element.RISK_STATUS === InboxRiskStatus.AT_RISK) {
       classes += 'custom-status-risk';
-    } else if (element.RISK_STATUS === InboxRiskStatus.overdue) {
+    } else if (element.RISK_STATUS === InboxRiskStatus.OVERDUE) {
       classes += 'custom-status-overdue';
     }
     return classes;
