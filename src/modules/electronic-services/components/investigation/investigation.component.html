@@ -46,8 +46,8 @@
         }}</span>
         <label class="input-form p-2 block">
           {{
-            model?.limitedAccessInfo
-              ? model?.limitedAccessInfo?.getNames()
+            model?.securityLevelInfo
+              ? model?.securityLevelInfo?.getNames()
               : '---'
           }}
         </label>
@@ -130,7 +130,7 @@
         <mat-datepicker touchUi #datepicker />
       </app-input>
       <app-select-input
-        formControlName="limitedAccess"
+        formControlName="securityLevel"
         [label]="lang.map.level_of_secrecy"
         bindValue="lookupKey"
         bindLabel="getNames"

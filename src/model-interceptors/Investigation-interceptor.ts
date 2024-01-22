@@ -9,7 +9,7 @@ export class InvestigationInterceptor
     delete model.$$__service_name__$$;
     delete model.caseStatusInfo;
     delete model.departmentInfo;
-    delete model.limitedAccessInfo;
+    delete model.securityLevelInfo;
     delete model.ouInfo;
     delete model.namesOfOffenders;
     delete model.caseStatusInfo;
@@ -32,9 +32,9 @@ export class InvestigationInterceptor
     model.ouInfo && (model.ouInfo = AdminResult.createInstance(model.ouInfo));
     model.creatorInfo &&
       (model.creatorInfo = AdminResult.createInstance(model.creatorInfo));
-    model.limitedAccessInfo &&
-      (model.limitedAccessInfo = AdminResult.createInstance(
-        model.limitedAccessInfo,
+    model.securityLevelInfo &&
+      (model.securityLevelInfo = AdminResult.createInstance(
+        model.securityLevelInfo,
       ));
 
     return model;
