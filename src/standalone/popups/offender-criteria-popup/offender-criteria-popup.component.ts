@@ -45,7 +45,6 @@ import { MatTableModule } from '@angular/material/table';
 import { ToastService } from '@services/toast.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ignoreErrors } from '@utils/utils';
-import { CustomValidators } from '@validators/custom-validators';
 import { OffenderViolation } from '@models/offender-violation';
 import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
@@ -109,10 +108,7 @@ export class OffenderCriteriaPopupComponent
   offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, {
     nonNullable: false,
   });
-  offenderViolationControl = new FormControl<number[]>(
-    [],
-    [CustomValidators.required],
-  );
+  offenderViolationControl = new FormControl<number[]>([]);
   offenderTypesEnum = OffenderTypes;
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;

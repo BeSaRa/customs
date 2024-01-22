@@ -167,13 +167,7 @@ export class WitnessesListComponent
         this.reload$.next();
       });
   }
-  deleteAllWitnesses() {
-    return this.witnessService
-      .deleteBulk(this.dataSource.data.map((witness: Witness) => witness.id))
-      .subscribe(() => {
-        this.reload$.next();
-      });
-  }
+
   resetDataList() {
     this.data.next([]);
   }

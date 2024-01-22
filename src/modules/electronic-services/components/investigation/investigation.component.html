@@ -98,6 +98,7 @@
     (save)="save$.next($event)"
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
+    [mandatoryMakePenaltyDecisions]="mandatoryMakePenaltyDecisions()"
     (navigateToSamePageThatUserCameFrom)="
       navigateToSamePageThatUserCameFrom()
     "></app-buttons-case-wrapper>
@@ -136,6 +137,10 @@
         bindLabel="getNames"
         [options]="violationDegreeConfidentiality" />
       <app-textarea
+        formControlName="subject"
+        class="col-span-1 md:col-span-2 lg:col-span-4"
+        [label]="lang.map.subject" />
+      <app-textarea
         formControlName="description"
         [rows]="12"
         class="col-span-1 md:col-span-2 lg:col-span-4"
@@ -146,7 +151,6 @@
   <ng-template #violation_tab>
     <div class="p-4">
       <app-violation-list
-        (empty)="resetOffendersAndExternalPersons()"
         (violations)="violations = $event"
         (saveCase)="saveCase($event)"
         [readonly]="readonly"
@@ -163,6 +167,7 @@
         (saveCase)="saveCase($event)"
         [readonly]="readonly"
         [caseId]="model?.id"
+        [canDelete]="isOpenedFromAddScreen() || canEdit()"
         (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)" />
     </div>
   </ng-template>
@@ -172,6 +177,7 @@
       <app-witnesses-list
         [violations]="violations"
         [readonly]="readonly"
+        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
         [caseId]="model?.id" />
     </div>
   </ng-template>

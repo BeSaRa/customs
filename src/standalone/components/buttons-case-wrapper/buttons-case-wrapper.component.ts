@@ -47,7 +47,7 @@ export class ButtonsCaseWrapperComponent
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
   @Input() model?: Investigation;
-
+  @Input() mandatoryMakePenaltyDecisions: boolean = false;
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
   @Output() claim = new EventEmitter<Investigation>();
@@ -94,5 +94,8 @@ export class ButtonsCaseWrapperComponent
     this.model?.claim().subscribe((model: Investigation) => {
       this.claim.emit(model);
     });
+  }
+  close() {
+    this.navigateToSamePageThatUserCameFrom.emit();
   }
 }
