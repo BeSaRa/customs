@@ -97,7 +97,6 @@ export class AuthService
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
         tap(() => this.menuItemService.buildHierarchy()),
-        // tap(() => this.globalSettingsService.loadCurrentGlobalSettings().subscribe())
       );
     };
   }

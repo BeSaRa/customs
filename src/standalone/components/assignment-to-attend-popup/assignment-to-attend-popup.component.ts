@@ -19,7 +19,7 @@ import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { TextareaComponent } from '../textarea/textarea.component';
 import { UserTypes } from '@enums/user-types';
-import { Subject, catchError, exhaustMap, tap, throwError } from 'rxjs';
+import { Subject, catchError, exhaustMap, throwError } from 'rxjs';
 import { AssignmentToAttendService } from '@services/assignment-to-attend.service';
 import { ignoreErrors } from '@utils/utils';
 
@@ -103,7 +103,6 @@ export class AssignmentToAttendPopupComponent
 
   private assignmentToAttend() {
     this.assignmentToAttend$
-      .pipe(tap(() => console.log(this.form.value)))
       .pipe(
         exhaustMap(() => {
           return this.assignmentToAttendService
