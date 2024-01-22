@@ -48,7 +48,11 @@
         {{ lang.map.case_type }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.BD_CASE_TYPE"></span>
+        @if (element.BD_CASE_TYPE === caseTypes.INVESTIGATION) {
+          <span>{{ lang.map.investigation }}</span>
+        } @else if (element.BD_CASE_TYPE === caseTypes.GRIEVANCE) {
+          <span>{{ lang.map.grievance }}</span>
+        }
       </td>
     </ng-container>
 

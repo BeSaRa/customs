@@ -17,6 +17,7 @@ import { EmployeeService } from '@services/employee.service';
 import { Team } from '@models/team';
 import { FormControl } from '@angular/forms';
 import { InboxRiskStatus } from '@enums/inbox-risk-status';
+import { CaseTypes } from '@enums/case-types';
 
 @Component({
   selector: 'app-team-inbox',
@@ -43,7 +44,7 @@ export class TeamInboxComponent
   teams: Team[] = this.employeeService.getEmployeeTeams();
   selectedTeamId = new FormControl(-1);
   length = 50;
-
+  caseTypes = CaseTypes;
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
     new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
     new NoneFilterColumn('BD_SUBJECT'),

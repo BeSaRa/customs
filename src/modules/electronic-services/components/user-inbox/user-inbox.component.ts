@@ -14,6 +14,7 @@ import { AppIcons } from '@constants/app-icons';
 import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
 import { InboxRiskStatus } from '@enums/inbox-risk-status';
+import { CaseTypes } from '@enums/case-types';
 
 @Component({
   selector: 'app-user-inbox',
@@ -38,7 +39,7 @@ export class UserInboxComponent
   view$: Subject<InboxResult> = new Subject<InboxResult>();
 
   length = 50;
-
+  caseTypes = CaseTypes;
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
     new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
     new NoneFilterColumn('BD_SUBJECT'),
