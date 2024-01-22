@@ -8,9 +8,12 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 export class FilterSidebarMenuItemPipe implements PipeTransform {
   transform(
     items: MenuItemContract[] | undefined,
-    searchText: string,
+    searchText: string | null | undefined,
     onlyTranslation = false,
   ): MenuItemContract[] {
+    if (!searchText) {
+      return items ?? [];
+    }
     return (items ?? []).filter(item => {
       return ((onlyTranslation ? item.translate : item.searchText) ?? '')
         .toLowerCase()

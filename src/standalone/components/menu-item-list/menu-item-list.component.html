@@ -9,7 +9,7 @@
   [@listAnimation]="items.length"
   class="flex justify-center gap-5 flex-wrap">
   @for (
-    item of items | filterSidebarMenuItem: control.value : true;
+    item of items | filterSidebarMenuItem: (value | async) : true;
     track item
   ) {
     <app-menu-item-icon @addRemoveItem [item]="item" />

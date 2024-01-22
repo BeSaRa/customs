@@ -10,6 +10,8 @@ import { listAnimation } from '@animations/list-animation';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FilterSidebarMenuItemPipe } from '@standalone/pipes/filter-sidebar-menu-item.pipe';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { debounceTime, Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-menu-item-list',
@@ -20,6 +22,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
     InputComponent,
     ReactiveFormsModule,
     FilterSidebarMenuItemPipe,
+    AsyncPipe,
   ],
   templateUrl: './menu-item-list.component.html',
   styleUrls: ['./menu-item-list.component.scss'],
@@ -60,6 +63,7 @@ export class MenuItemListComponent implements OnInit {
   items: MenuItemContract[] = [];
 
   control = new FormControl('', { nonNullable: true });
+  value: Observable<string> = this.control.valueChanges.pipe(debounceTime(200));
 
   ngOnInit(): void {
     this.items = this.parent
