@@ -31,9 +31,7 @@ export class Investigation extends BaseCase<
   violationInfo: Violation[] = [];
   securityLevelInfo!: AdminResult;
   namesOfOffenders?: string = '';
-
-  // TODO
-  subject: string = '';
+  subject!: string;
 
   buildForm(controls = false, disabled = false): object {
     const {
@@ -41,6 +39,7 @@ export class Investigation extends BaseCase<
       createdOn,
       investigationFullSerial,
       draftFullSerial,
+      subject,
       securityLevel,
     } = this;
     return {
@@ -62,6 +61,12 @@ export class Investigation extends BaseCase<
             CustomValidators.required,
           ]
         : securityLevel,
+      subject: controls
+        ? [
+            subject,
+            [CustomValidators.required, CustomValidators.maxLength(1024)],
+          ]
+        : subject,
     };
   }
 }

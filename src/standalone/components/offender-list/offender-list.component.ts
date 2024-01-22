@@ -33,7 +33,6 @@ import { Lookup } from '@models/lookup';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { Violation } from '@models/violation';
-import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
 import { Investigation } from '@models/investigation';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
@@ -71,8 +70,9 @@ export class OffenderListComponent
   investigationModel?: Investigation;
   @Input()
   readonly = false;
+  @Input()
+  canDelete = true;
   add$: Subject<void> = new Subject<void>();
-  attachments$: Subject<Offender> = new Subject<Offender>();
   transformer$ = new Subject<TransformerAction<Investigation>>();
   @Output() saveCase = new EventEmitter<
     Subject<TransformerAction<Investigation>>
@@ -102,7 +102,6 @@ export class OffenderListComponent
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
-    this.listenToAttachments();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
     this.listenToSaveCase();
@@ -192,33 +191,10 @@ export class OffenderListComponent
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );
         this.reload$.next();
+        this.linkOffenderWithViolation.emit();
       });
   }
 
-  deleteAllOffender() {
-    this.offenderService
-      .deleteBulk(this.dataSource.data.map((offender: Offender) => offender.id))
-      .subscribe(() => {
-        this.reload$.next();
-      });
-  }
-  private listenToAttachments() {
-    this.attachments$
-      .pipe(
-        switchMap(model =>
-          this.dialog
-            .open(OffenderAttachmentPopupComponent, {
-              data: {
-                model: this.investigationModel,
-                offenderId: model.id,
-                readonly: this.readonly,
-              },
-            })
-            .afterClosed(),
-        ),
-      )
-      .subscribe();
-  }
   private listenToOffenderViolation() {
     this.offenderViolation$
       .pipe(
