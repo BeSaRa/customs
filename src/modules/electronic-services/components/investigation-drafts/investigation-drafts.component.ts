@@ -49,7 +49,6 @@ export class InvestigationDraftsComponent implements OnInit {
     new NoneFilterColumn('caseStatus'),
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
-    new NoneFilterColumn('namesOfOffenders'),
     new NoneFilterColumn('actions'),
   );
 
@@ -66,34 +65,6 @@ export class InvestigationDraftsComponent implements OnInit {
         }),
       )
       .subscribe((data: Investigation[]) => {
-        data.forEach(investigation => {
-          let employeeCount = 0;
-          let clearingAgentCount = 0;
-          let namesOfOffenders = '';
-
-          if (investigation.offenderInfo.length > 2) {
-            investigation.offenderInfo.forEach(element => {
-              if (element.type === OffenderTypes.ClEARING_AGENT) {
-                clearingAgentCount += 1;
-              } else if (element.type === OffenderTypes.EMPLOYEE) {
-                employeeCount += 1;
-              }
-            });
-            namesOfOffenders =
-              this.lang.map.employee_clearing_agent_numbers.change({
-                x: employeeCount,
-                y: clearingAgentCount,
-              });
-          } else {
-            investigation.offenderInfo.forEach((element, index) => {
-              namesOfOffenders += element.offenderInfo?.arName;
-              if (index + 1 !== investigation.offenderInfo.length) {
-                namesOfOffenders += ', ';
-              }
-            });
-          }
-          investigation.namesOfOffenders = namesOfOffenders;
-        });
         this.displayedList = new MatTableDataSource(data);
       });
   }
