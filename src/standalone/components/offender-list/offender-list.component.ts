@@ -87,7 +87,13 @@ export class OffenderListComponent
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
-  displayedColumns = ['offenderName', 'qid', 'jobTitle', 'actions'];
+  displayedColumns = [
+    'offenderName',
+    'qid',
+    'departmentCompany',
+    'jobTitle',
+    'actions',
+  ];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
   offenderTypes = OffenderTypes;
   offenderTypesMap: Record<number, Lookup> =
