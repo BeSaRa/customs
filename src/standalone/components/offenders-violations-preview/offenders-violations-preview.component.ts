@@ -34,6 +34,7 @@ import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employee-popup/suspend-employee-popup.component';
+import { ManagerDecisions } from '@enums/manager-decisions';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -78,7 +79,9 @@ export class OffendersViolationsPreviewComponent
   view$: Subject<Offender> = new Subject<Offender>();
   makeDecision$ = new Subject<Offender>();
   attachments$: Subject<Offender> = new Subject<Offender>();
-  penaltyMap!: { [key: string]: { first: unknown; second: Penalty[] } };
+  penaltyMap!: {
+    [key: string]: { first: ManagerDecisions; second: Penalty[] };
+  };
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
@@ -317,6 +320,13 @@ export class OffendersViolationsPreviewComponent
       this.penaltyMap[offender.id] &&
       !!this.getFilteredPenalties(offender).length &&
       this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
+    );
+  }
+  mandatoryMakePenaltyDecisions() {
+    return !!Object.keys(this.penaltyMap).find(
+      k =>
+        this.penaltyMap[k].first ===
+        ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
     );
   }
 }

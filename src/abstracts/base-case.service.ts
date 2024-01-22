@@ -19,6 +19,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { MenuItemService } from '@services/menu-item.service';
 import { Penalty } from '@models/penalty';
+import { ManagerDecisions } from '@enums/manager-decisions';
 
 export abstract class BaseCaseService<M>
   extends RegisterServiceMixin(class {})
@@ -216,20 +217,21 @@ export abstract class BaseCaseService<M>
   @CastResponse(undefined, {
     unwrap: 'rs',
   })
-  private _getCasePenalty(
-    caseId: string,
-  ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
+  private _getCasePenalty(caseId: string): Observable<{
+    [key: string]: { first: ManagerDecisions; second: Penalty[] };
+  }> {
     return this.http.get<{
-      [key: string]: { first: unknown; second: Penalty[] };
+      [key: string]: { first: ManagerDecisions; second: Penalty[] };
     }>(this.getUrlSegment() + '/' + caseId + '/penalty');
   }
-  getCasePenalty(
-    caseId: string,
-  ): Observable<{ [key: string]: { first: unknown; second: Penalty[] } }> {
+  getCasePenalty(caseId: string): Observable<{
+    [key: string]: { first: ManagerDecisions; second: Penalty[] };
+  }> {
     return this._getCasePenalty(caseId).pipe(
       map(rs => {
-        const obj: { [key: string]: { first: unknown; second: Penalty[] } } =
-          {};
+        const obj: {
+          [key: string]: { first: ManagerDecisions; second: Penalty[] };
+        } = {};
         Object.keys(rs).map((key: string) => {
           obj[key] = {
             ...rs[key],

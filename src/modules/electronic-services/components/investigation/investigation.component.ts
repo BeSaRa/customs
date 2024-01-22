@@ -29,6 +29,7 @@ import { Offender } from '@models/offender';
 import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
+import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 
 @Component({
   selector: 'app-investigation',
@@ -54,14 +55,15 @@ export class InvestigationComponent extends BaseCaseComponent<
   offenderViolationService = inject(OffenderViolationService);
   adapter = inject(DateAdapter);
   info: OpenedInfoContract | null = null;
-
+  canReferralCase: boolean = false;
   @ViewChild(ViolationListComponent)
   violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent)
   offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent)
   witnessesListComponent!: WitnessesListComponent;
-
+  @ViewChild(SummaryTabComponent)
+  summaryTabComponent!: SummaryTabComponent;
   violationDegreeConfidentiality =
     this.lookupService.lookups.violationDegreeConfidentiality;
 
@@ -86,10 +88,10 @@ export class InvestigationComponent extends BaseCaseComponent<
   }
 
   summaryMode() {
-    return (
-      (this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom) &&
-      !this.canEdit()
-    );
+    return this.isOpenedFromAddScreen() && !this.canEdit();
+  }
+  isOpenedFromAddScreen() {
+    return this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom;
   }
 
   canEdit() {
@@ -186,7 +188,6 @@ export class InvestigationComponent extends BaseCaseComponent<
 
   private _listenToLoadOffendersViolations() {
     this.reloadOffendersViolations$
-      .pipe(tap(() => console.log(this.model?.id)))
       .pipe(filter(() => !!this.model?.id))
       .pipe(
         switchMap(() => {
@@ -198,6 +199,7 @@ export class InvestigationComponent extends BaseCaseComponent<
           );
         }),
       )
+      .pipe(tap(() => (this.canReferralCase = false)))
       .pipe(
         map(({ rs }) => {
           return rs.reduce((prev: Offender[], curr: OffenderViolation) => {
@@ -264,10 +266,10 @@ export class InvestigationComponent extends BaseCaseComponent<
     }
     switch (this.info.openFrom) {
       case OpenFrom.TEAM_INBOX:
-        this.router.navigate(['/home/team-inbox']).then();
+        this.router.navigate(['/home/electronic-services/team-inbox']).then();
         break;
       case OpenFrom.USER_INBOX:
-        this.router.navigate(['/home/user-inbox']).then();
+        this.router.navigate(['/home/electronic-services/user-inbox']).then();
         break;
       case OpenFrom.SEARCH:
         this.router
@@ -347,9 +349,7 @@ export class InvestigationComponent extends BaseCaseComponent<
         this.selectedTab = index === -1 ? 1 : index;
       });
   }
-
-  resetOffendersAndExternalPersons() {
-    this.offenderListComponent.deleteAllOffender();
-    this.witnessesListComponent.deleteAllWitnesses();
+  mandatoryMakePenaltyDecisions() {
+    return this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
   }
 }

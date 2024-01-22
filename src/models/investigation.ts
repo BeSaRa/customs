@@ -18,7 +18,7 @@ export class Investigation extends BaseCase<
   Investigation
 > {
   $$__service_name__$$ = 'InvestigationService';
-  limitedAccess: number = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
+  override securityLevel = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
   investigationFullSerial!: string;
   draftFullSerial!: string;
   draftSerial!: number;
@@ -29,8 +29,9 @@ export class Investigation extends BaseCase<
   offenderInfo: Offender[] = [];
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
-  limitedAccessInfo!: AdminResult;
+  securityLevelInfo!: AdminResult;
   namesOfOffenders?: string = '';
+  subject!: string;
 
   buildForm(controls = false, disabled = false): object {
     const {
@@ -38,7 +39,8 @@ export class Investigation extends BaseCase<
       createdOn,
       investigationFullSerial,
       draftFullSerial,
-      limitedAccess,
+      subject,
+      securityLevel,
     } = this;
     return {
       draftFullSerial: controls
@@ -53,12 +55,18 @@ export class Investigation extends BaseCase<
       description: controls
         ? [{ value: description, disabled: disabled }]
         : description,
-      limitedAccess: controls
+      securityLevel: controls
         ? [
-            { value: limitedAccess, disabled: disabled },
+            { value: securityLevel, disabled: disabled },
             CustomValidators.required,
           ]
-        : limitedAccess,
+        : securityLevel,
+      subject: controls
+        ? [
+            subject,
+            [CustomValidators.required, CustomValidators.maxLength(1024)],
+          ]
+        : subject,
     };
   }
 }
