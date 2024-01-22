@@ -73,7 +73,7 @@
           <div [matTooltip]="lang.map.violations">
             <app-icon-button
               (click)="offenderViolation$.next(element)"
-              icon="VIOLATION_OUTLINE" />
+              icon="OFFENDER_VIOLATION" />
           </div>
           @if (!readonly && canDelete) {
             <div [matTooltip]="lang.map.delete">

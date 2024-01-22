@@ -64,6 +64,7 @@ export const AppIcons = {
   CLEARING_AGENT: 'account-tie-hat-outline',
   CLEARING_AGENCY: 'domain',
   EMPLOYEE: 'account-tie-outline',
+  OFFENDER_VIOLATION: 'cards',
 };
 
 export type AppIconsType = typeof AppIcons;
