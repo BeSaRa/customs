@@ -49,9 +49,7 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<
   }
 
   @CastResponse()
-  loadOUsByType(
-    type = OrganizationUnitType.SECTION,
-  ): Observable<OrganizationUnit[]> {
+  loadOUsByType(type: OrganizationUnitType): Observable<OrganizationUnit[]> {
     return this.http.get<OrganizationUnit[]>(
       this.getUrlSegment() + `/type/${type}`,
     );

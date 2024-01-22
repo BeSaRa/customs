@@ -11,6 +11,7 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
 import { InternalUserService } from '@services/internal-user.service';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 @Component({
   selector: 'app-organization-unit',
@@ -95,7 +96,7 @@ export class OrganizationUnitComponent extends AdminComponent<
     new TextFilterColumn('mawaredDepId'),
     new SelectFilterColumn(
       'assistantOuId',
-      this.service.loadOUsByType(),
+      this.service.loadOUsByType(OrganizationUnitType.ASSiSTENT_DEPARTMENT),
       'id',
       'getNames',
     ),
