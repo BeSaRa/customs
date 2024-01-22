@@ -110,6 +110,7 @@
               @if (canMakeDecision(element)) {
                 <div>
                   <app-icon-button
+                    [matTooltip]="lang.map.make_penalty_decision"
                     (click)="makeDecision$.next(element)"
                     icon="ACCOUNT_MAKE_DECISION" />
                 </div>
