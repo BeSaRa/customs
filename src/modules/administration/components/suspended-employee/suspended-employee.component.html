@@ -132,11 +132,7 @@
         {{ lang.map.decision_date }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span
-          [innerHTML]="
-            element.decisionDate
-              | highlight: getFilterStringColumn('decisionDate')
-          "></span>
+        <span [innerHTML]="element.decisionDate | date: 'YYYY/MM/dd'"></span>
       </td>
     </ng-container>
     <!-- dateFrom -->
@@ -145,10 +141,7 @@
         {{ lang.map.date_from }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span
-          [innerHTML]="
-            element.dateFrom | highlight: getFilterStringColumn('dateFrom')
-          "></span>
+        <span [innerHTML]="element.dateFrom | date: 'YYYY/MM/dd'"></span>
       </td>
     </ng-container>
     <!-- dateTo -->
@@ -157,10 +150,7 @@
         {{ lang.map.date_to }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span
-          [innerHTML]="
-            element.dateTo | highlight: getFilterStringColumn('dateTo')
-          "></span>
+        <span [innerHTML]="element.dateTo | date: 'YYYY/MM/dd'"></span>
       </td>
     </ng-container>
     <!-- duration -->
