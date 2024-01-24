@@ -105,9 +105,10 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   protected loadManagerAssistants(ouId: number) {
-    this.internalUserService
-      .getInternalUsersByOuId(ouId)
-      .subscribe(internalUsers => (this.managerAssistants = internalUsers));
+    if (ouId)
+      this.internalUserService
+        .getInternalUsersByOuId(ouId)
+        .subscribe(internalUsers => (this.managerAssistants = internalUsers));
   }
 
   filesDropped($event: DragEvent) {
