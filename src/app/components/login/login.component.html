@@ -12,7 +12,10 @@
         <h1 class="text-center text-2xl border-b-4 p-4 border-secondary mb-4">
           {{ lang.map.login_form }}
         </h1>
-        <form [formGroup]="form" autocomplete="off">
+        <form
+          [formGroup]="form"
+          autocomplete="off"
+          (keydown.enter)="login$.next()">
           <app-input
             formControlName="userName"
             labelColor="text-white"
