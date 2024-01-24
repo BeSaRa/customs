@@ -2,15 +2,23 @@ import {
   Component,
   EventEmitter,
   inject,
-  input,
   Input,
+  input,
   OnInit,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  map,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InvestigationService } from '@services/investigation.service';
 import { MatTableModule } from '@angular/material/table';
@@ -70,6 +78,10 @@ export class ViolationListComponent
   delete$ = new Subject<Violation>();
   transformer$ = new Subject<TransformerAction<Investigation>>();
   protected readonly Config = Config;
+  @Input()
+  readonly = false;
+  hasValidInvestigationSubject = input(false);
+
   @Output()
   selectViolation = new EventEmitter<Violation>();
 
@@ -77,13 +89,13 @@ export class ViolationListComponent
   reloadOffenderViolationList = new EventEmitter<void>();
   @Output()
   askForSaveModel = new EventEmitter<void>();
+  @Output()
+  focusInvalidTab = new EventEmitter<boolean>();
 
   violationService = inject(ViolationService);
 
   @Output()
   violations = new EventEmitter<Violation[]>();
-  @Input()
-  readonly = false;
 
   ngOnInit(): void {
     this.listenToAdd();
@@ -98,11 +110,17 @@ export class ViolationListComponent
     this.add$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(() =>
-          this.service
-            .openAddViolation(this.caseId, this.askForSaveModel)
-            .afterClosed(),
-        ),
+        switchMap(() => {
+          if (this.hasValidInvestigationSubject()) {
+            return this.service
+              .openAddViolation(this.caseId, this.askForSaveModel)
+              .afterClosed();
+          } else {
+            this.focusInvalidTab.emit();
+            return of(null);
+          }
+        }),
+        filter(result => !!result),
       )
       .subscribe(() => this.reload$.next());
   }
