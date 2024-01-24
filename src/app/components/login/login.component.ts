@@ -14,11 +14,9 @@ import { AppFullRoutes } from '@constants/app-full-routes';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  // dialog = inject(DialogService);
   authService = inject(AuthService);
   lang = inject(LangService);
   fb = inject(FormBuilder);
-  //localizationService = inject(LocalizationService);
   toast = inject(ToastService);
   router = inject(Router);
 
