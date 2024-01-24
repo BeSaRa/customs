@@ -382,4 +382,5 @@ export interface LangKeysContract {
   type: string;
   grievance: string;
   investigation: string;
+  number_of_violations: string;
 }

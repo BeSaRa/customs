@@ -11,15 +11,23 @@
     </th>
     <td mat-cell *matCellDef="let element">
       <span class="flex justify-start items-center">
+        <span
+          [matTooltip]="lang.map.number_of_violations"
+          class="cursor-pointer inline-flex items-center rounded-[12px] mb-0 px-2 py-1 text-xs font-medium ring-1 ring-inset ring-primary-700/10">
+          {{ element.violations?.length }}
+        </span>
         <app-icon-button
           [matTooltip]="offenderTypesMap[element.type].getNames()"
+          class="m-0 text-xs"
           [icon]="
             element.type === offenderTypes.EMPLOYEE
               ? 'EMPLOYEE'
               : 'CLEARING_AGENT'
           ">
         </app-icon-button>
-        {{ element.getNames() }}
+        <span class="m-0">
+          {{ element.getNames() }}
+        </span>
       </span>
     </td>
   </ng-container>
@@ -47,26 +55,23 @@
       {{ lang.map.violations }}
     </th>
     <td mat-cell *matCellDef="let element">
-      <div class="flex items-center">
-        <span
-          [matTooltip]="lang.map.number_of_penalties"
-          class="cursor-pointer inline-flex items-center rounded-[12px] me-2 px-2 py-1 text-xs font-medium ring-1 ring-inset ring-primary-700/10">
-          {{ element.violations?.length }}
-        </span>
-        <div class="flex flex-column">
-          @for (
-            violation of assertType(element).violations.slice(0, 3);
-            track violation
-          ) {
+      <div class="flex flex-col">
+        @for (
+          violation of assertType(element).violations.slice(0, 3);
+          track violation
+        ) {
+          <div class="flex justify-start items-center">
+            <span
+              [matTooltip]="lang.map.number_of_violations"
+              class="cursor-pointer flex me-3 justify-center align-center items-center w-5 h-5 bg-red-100 rounded-[12px] text-xs font-medium ring-1 ring-inset ring-red-700/10">
+              {{ violation.repeat }}
+            </span>
             <span
               class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
               {{ violation.violationInfo.violationTypeInfo.getNames() }}
-              <p class="text-red-500 mx-1">
-                ({{ lang.map.repeatation }} : {{ violation.repeat }})
-              </p>
             </span>
-          }
-        </div>
+          </div>
+        }
       </div>
     </td>
   </ng-container>
