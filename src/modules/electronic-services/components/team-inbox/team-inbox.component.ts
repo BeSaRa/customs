@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
-import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxService } from '@services/inbox.services';
@@ -38,9 +38,7 @@ export class TeamInboxComponent
   oldQueryResultSet?: QueryResultSet;
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
-  reload$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
-  view$: Subject<InboxResult> = new Subject<InboxResult>();
   teams: Team[] = this.employeeService.getEmployeeTeams();
   selectedTeamId = new FormControl(-1);
   length = 50;
@@ -78,7 +76,7 @@ export class TeamInboxComponent
     this.listenToSelectedTeamIdChange();
   }
 
-  private listenToReload(teamId: number = -1) {
+  listenToReload(teamId: number = -1) {
     this.reloadInbox$
       .pipe(
         switchMap(() => {
