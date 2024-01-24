@@ -6,7 +6,7 @@ import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
-import { CastResponse } from 'cast-response';
+import { CastResponse, InterceptParam } from 'cast-response';
 import { CaseFolder } from '@models/case-folder';
 import { CaseAttachment } from '@models/case-attachment';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -40,22 +40,22 @@ export abstract class BaseCaseService<M>
   abstract getModelClass(): Constructor<M>;
 
   @CastResponse()
-  create(model: M): Observable<M> {
+  create(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment(), model);
   }
 
   @CastResponse()
-  update(model: M): Observable<M> {
+  update(@InterceptParam() model: M): Observable<M> {
     return this.http.put<M>(this.getUrlSegment(), model);
   }
 
   @CastResponse()
-  commit(model: M): Observable<M> {
+  commit(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/commit', model);
   }
 
   @CastResponse()
-  draft(model: M): Observable<M> {
+  draft(@InterceptParam() model: M): Observable<M> {
     return this.http.post<M>(this.getUrlSegment() + '/draft', model);
   }
 

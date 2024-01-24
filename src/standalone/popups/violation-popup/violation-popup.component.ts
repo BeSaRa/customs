@@ -1,5 +1,11 @@
-import { Investigation } from '@models/investigation';
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  EventEmitter,
+  inject,
+  InputSignal,
+} from '@angular/core';
 
 import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
@@ -9,7 +15,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { map, Observable, Subject, switchMap, tap, filter } from 'rxjs';
+import { map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { ViolationType } from '@models/violation-type';
 import { ViolationClassification } from '@models/violation-classification';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
@@ -27,7 +33,6 @@ import { ClassificationTypes } from '@enums/violation-classification';
 import { CustomValidators } from '@validators/custom-validators';
 import { OperationType } from '@enums/operation-type';
 import { Router } from '@angular/router';
-import { TransformerAction } from '@contracts/transformer-action';
 import { DialogService } from '@services/dialog.service';
 
 @Component({
@@ -88,13 +93,20 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   securityManagement = this.lookupService.lookups.securityManagement;
 
-  transformer$ =
-    this.data.extras &&
-    (this.data.extras.transformer$ as Subject<
-      TransformerAction<Investigation>
-    >);
+  caseId = computed(() => {
+    return (this.data.extras as { caseId: InputSignal<string> }).caseId();
+  });
 
-  caseId = this.data.extras && (this.data.extras.caseId as string);
+  askForSaveModel = (
+    this.data.extras as { askForSaveModel: EventEmitter<void> }
+  ).askForSaveModel;
+
+  effect = effect(() => {
+    if (this.caseId()) {
+      this.waitTillPendingSaveDone$.next();
+    }
+  });
+  private waitTillPendingSaveDone$: Subject<void> = new Subject<void>();
 
   protected override _init() {
     super._init();
@@ -111,20 +123,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
           })()
         : null;
     }
-    if (!this.caseId) this.listenToSaveCaseDone();
-  }
-
-  listenToSaveCaseDone() {
-    this.transformer$
-      ?.pipe(
-        filter(
-          (data: TransformerAction<Investigation>) => data.action === 'done',
-        ),
-      )
-      .subscribe((data: TransformerAction<Investigation>) => {
-        this.caseId = data.model?.id;
-        this.save$.next();
-      });
   }
 
   _buildForm(): void {
@@ -151,16 +149,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
   }
 
-  addViolation() {
-    if (this._beforeSave()) {
-      if (!this.caseId) {
-        this.transformer$?.next({ action: 'save' });
-      } else {
-        this.save$.next();
-      }
-    }
-  }
-
   protected _beforeSave(): boolean | Observable<boolean> {
     if (this.form.invalid) {
       this.dialog.error(
@@ -168,14 +156,19 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       );
       this.form.markAllAsTouched();
     }
-    return this.form.valid;
+    return !this.caseId()
+      ? (() => {
+          this.askForSaveModel.emit();
+          return this.waitTillPendingSaveDone$.pipe(map(() => true));
+        })()
+      : of(true);
   }
 
   protected _prepareModel(): Violation | Observable<Violation> {
     return new Violation().clone({
       ...this.model,
       ...this.form.getRawValue(),
-      caseId: this.caseId,
+      caseId: this.caseId(),
       status: 1,
     });
   }

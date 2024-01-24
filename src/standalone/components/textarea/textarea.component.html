@@ -1,7 +1,13 @@
 <label
   [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
-  <span [ngClass]="labelColor" class="block font-medium">{{ label }}</span>
+  <span [ngClass]="labelColor" class="block font-medium">
+    {{ label }}
+    @if (isRequired) {
+      <span class="text-amber-700">*</span>
+    }
+  </span>
+
   <div
     [ngClass]="size"
     class="group/text-area-wrapper input-form {{

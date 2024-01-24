@@ -22,6 +22,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { generateUUID, isNgModel } from '@utils/utils';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
+import { requiredValidator } from '@validators/validation-utils';
 
 @Component({
   selector: 'app-textarea',
@@ -86,6 +87,10 @@ export class TextareaComponent
   private cdr = inject(ChangeDetectorRef);
 
   private ctrl!: NgControl | null;
+
+  get isRequired(): boolean {
+    return this.ctrl?.control?.hasValidator(requiredValidator) || false;
+  }
 
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(

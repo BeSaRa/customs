@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
   Input,
   OnInit,
   Output,
@@ -9,15 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import {
-  exhaustMap,
-  filter,
-  map,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InvestigationService } from '@services/investigation.service';
 import { MatTableModule } from '@angular/material/table';
@@ -60,8 +53,7 @@ export class ViolationListComponent
   lang = inject(LangService);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
-  @Input()
-  caseId?: string;
+  caseId = input('');
   add$: Subject<void> = new Subject<void>();
   service = inject(InvestigationService);
   data = new Subject<Violation[]>();
@@ -84,38 +76,23 @@ export class ViolationListComponent
   @Output()
   reloadOffenderViolationList = new EventEmitter<void>();
   @Output()
-  saveCase = new EventEmitter<Subject<TransformerAction<Investigation>>>();
+  askForSaveModel = new EventEmitter<void>();
+
   violationService = inject(ViolationService);
 
   @Output()
   violations = new EventEmitter<Violation[]>();
   @Input()
   readonly = false;
+
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
     this.listenToEdit();
     this.listenToView();
     this.listenToDelete();
-    this.listenToSaveCase();
+
     this.reload$.next();
-  }
-  listenToSaveCase() {
-    this.transformer$
-      .pipe(
-        tap(
-          (data: TransformerAction<Investigation>) =>
-            data.action === 'done' && (this.caseId = data.model?.id || ''),
-        ),
-      )
-      .pipe(
-        filter(
-          (data: TransformerAction<Investigation>) => data.action === 'save',
-        ),
-      )
-      .subscribe(() => {
-        this.saveCase.emit(this.transformer$);
-      });
   }
   private listenToAdd() {
     this.add$
@@ -123,7 +100,7 @@ export class ViolationListComponent
       .pipe(
         switchMap(() =>
           this.service
-            .openAddViolation(this.caseId as string, this.transformer$)
+            .openAddViolation(this.caseId, this.askForSaveModel)
             .afterClosed(),
         ),
       )
@@ -133,11 +110,11 @@ export class ViolationListComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter(() => !!this.caseId))
+      .pipe(filter(() => !!this.caseId()))
       .pipe(
         switchMap(() =>
           this.violationService
-            .load(undefined, { caseId: this.caseId })
+            .load(undefined, { caseId: this.caseId() })
             .pipe(
               map(pagination => {
                 this.data.next(pagination.rs);

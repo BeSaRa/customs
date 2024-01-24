@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { EventEmitter, inject, Injectable, InputSignal } from '@angular/core';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
@@ -8,8 +8,6 @@ import { CastResponse, CastResponseContainer } from 'cast-response';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
 import { ViolationService } from '@services/violation.service';
-import { Subject } from 'rxjs';
-import { TransformerAction } from '@contracts/transformer-action';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { SusbendEmployee } from '@models/susbend-employee';
 
@@ -45,18 +43,20 @@ export class InvestigationService
   }
 
   openAddViolation(
-    caseId: string,
-    transformer$: Subject<TransformerAction<Investigation>>,
+    caseId: InputSignal<string>,
+    askForSaveModel: EventEmitter<void>,
   ): MatDialogRef<ViolationPopupComponent> {
     return this.violationService.openCreateDialog(undefined, {
       caseId,
-      transformer$,
+      askForSaveModel,
     });
   }
+
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
   suspendEmployee(body: SusbendEmployee) {
     return this.http.post(this.getUrlSegment() + '/suspend-employee', body);
   }
+
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
   extendSuspendEmployee(body: SusbendEmployee) {
     return this.http.post(

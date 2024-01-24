@@ -8,7 +8,6 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -46,7 +45,6 @@ import { requiredValidator } from '@validators/validation-utils';
       useExisting: InputComponent,
     },
   ],
-  encapsulation: ViewEncapsulation.None,
 })
 export class InputComponent
   implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit

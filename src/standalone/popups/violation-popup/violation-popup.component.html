@@ -90,7 +90,7 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (inCreateMode()) {
-      <app-button (click)="addViolation()" buttonType="primary">{{
+      <app-button (click)="save$.next()" buttonType="primary">{{
         lang.map.add
       }}</app-button>
     }

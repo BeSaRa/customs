@@ -17,7 +17,6 @@ export class InvestigationInterceptor
     delete model.offenderInfo;
     delete model.offenderViolationInfo;
     delete model.violationInfo;
-
     return model;
   }
 

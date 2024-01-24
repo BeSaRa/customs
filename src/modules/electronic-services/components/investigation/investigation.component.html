@@ -99,9 +99,8 @@
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
     [mandatoryMakePenaltyDecisions]="mandatoryMakePenaltyDecisions()"
-    (navigateToSamePageThatUserCameFrom)="
-      navigateToSamePageThatUserCameFrom()
-    "></app-buttons-case-wrapper>
+    (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
+  </app-buttons-case-wrapper>
   <ng-template #summary_tab>
     <app-summary-tab
       [model]="model"
@@ -151,10 +150,11 @@
   <ng-template #violation_tab>
     <div class="p-4">
       <app-violation-list
+        #violationListComponent
         (violations)="violations = $event"
-        (saveCase)="saveCase($event)"
         [readonly]="readonly"
-        [caseId]="model?.id" />
+        (askForSaveModel)="saveCase()"
+        [caseId]="model?.id || ''" />
     </div>
   </ng-template>
 
@@ -164,9 +164,10 @@
         [investigationModel]="model"
         [violations]="violations"
         (offenders)="offenders = $event"
-        (saveCase)="saveCase($event)"
         [readonly]="readonly"
-        [caseId]="model?.id"
+        [caseId]="model?.id || ''"
+        (askForSaveModel)="saveCase()"
+        (askForViolationListReload)="violationListComponent.reload$.next()"
         [canDelete]="isOpenedFromAddScreen() || canEdit()"
         (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)" />
     </div>
@@ -177,8 +178,8 @@
       <app-witnesses-list
         [violations]="violations"
         [readonly]="readonly"
-        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
         [caseId]="model?.id" />
+      <!--        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"-->
     </div>
   </ng-template>
 

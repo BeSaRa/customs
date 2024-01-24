@@ -164,12 +164,12 @@ export class OffendersViolationsPreviewComponent
   }
 
   private loadPenalties() {
-    this.investigationModel
-      ?.getService()
-      .getCasePenalty(this.investigationModel?.id as string)
-      .subscribe(data => {
-        this.penaltyMap = data;
-      });
+    // this.investigationModel
+    //   ?.getService()
+    //   .getCasePenalty(this.investigationModel?.id as string)
+    //   .subscribe(data => {
+    //     this.penaltyMap = data;
+    //   });
   }
 
   private listenToView() {

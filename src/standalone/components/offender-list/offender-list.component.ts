@@ -1,26 +1,19 @@
 import { EmployeeService } from '@services/employee.service';
 import {
   Component,
+  EventEmitter,
   inject,
   Input,
-  Output,
+  input,
   OnInit,
-  EventEmitter,
+  Output,
 } from '@angular/core';
 
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import {
-  exhaustMap,
-  filter,
-  map,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,7 +30,6 @@ import { Investigation } from '@models/investigation';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
-import { TransformerAction } from '@contracts/transformer-action';
 import { ignoreErrors } from '@utils/utils';
 
 @Component({
@@ -64,8 +56,7 @@ export class OffenderListComponent
   offenderService = inject(OffenderService);
   @Input()
   violations!: Violation[];
-  @Input()
-  caseId?: string;
+  caseId = input('');
   @Input()
   investigationModel?: Investigation;
   @Input()
@@ -73,10 +64,6 @@ export class OffenderListComponent
   @Input()
   canDelete = true;
   add$: Subject<void> = new Subject<void>();
-  transformer$ = new Subject<TransformerAction<Investigation>>();
-  @Output() saveCase = new EventEmitter<
-    Subject<TransformerAction<Investigation>>
-  >();
   @Output()
   offenders = new EventEmitter<Offender[]>();
   @Output()
@@ -104,33 +91,20 @@ export class OffenderListComponent
       }),
       {},
     );
+  @Output()
+  askForSaveModel = new EventEmitter<void>();
+  @Output()
+  askForViolationListReload = new EventEmitter<void>();
+
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
     this.listenToDelete();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
-    this.listenToSaveCase();
     this.reload$.next();
   }
 
-  listenToSaveCase() {
-    this.transformer$
-      .pipe(
-        tap(
-          (data: TransformerAction<Investigation>) =>
-            data.action === 'done' && (this.caseId = data.model?.id || ''),
-        ),
-      )
-      .pipe(
-        filter(
-          (data: TransformerAction<Investigation>) => data.action === 'save',
-        ),
-      )
-      .subscribe(() => {
-        this.saveCase.emit(this.transformer$);
-      });
-  }
   private listenToAdd() {
     this.add$
       .pipe(
@@ -141,7 +115,8 @@ export class OffenderListComponent
                 caseId: this.caseId,
                 violations: this.violations,
                 offenders: this.dataSource.data,
-                transformer$: this.transformer$,
+                askForSaveModel: this.askForSaveModel,
+                askForViolationListReload: this.askForViolationListReload,
               },
             })
             .afterClosed(),
@@ -156,11 +131,11 @@ export class OffenderListComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter(() => !!this.caseId))
+      .pipe(filter(() => !!this.caseId()))
       .pipe(
         switchMap(() =>
           this.offenderService
-            .load(undefined, { caseId: this.caseId })
+            .load(undefined, { caseId: this.caseId() })
             .pipe(
               map(pagination => {
                 this.data.next(pagination.rs);
@@ -172,6 +147,7 @@ export class OffenderListComponent
       )
       .subscribe(pagination => this.offenders.next(pagination.rs || []));
   }
+
   getOffenderType(type: number) {
     return this.offenderTypesMap[type].getNames();
   }
@@ -219,6 +195,7 @@ export class OffenderListComponent
       )
       .subscribe(() => this.linkOffenderWithViolation.emit());
   }
+
   listenToSituationSearch() {
     this.situationSearch$
       .pipe(
@@ -236,10 +213,12 @@ export class OffenderListComponent
       )
       .subscribe();
   }
+
   resetDataList() {
     this.data.next([]);
     this.offenders.emit([]);
   }
+
   isClearingAgent(element: Offender) {
     return element.type === OffenderTypes.ClEARING_AGENT;
   }

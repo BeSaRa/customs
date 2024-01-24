@@ -1,6 +1,6 @@
 import { DialogService } from '@services/dialog.service';
 import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, input, ViewChild } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InvestigationService } from '@services/investigation.service';
@@ -8,14 +8,13 @@ import { Investigation } from '@models/investigation';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { SaveTypes } from '@enums/save-types';
 import { OperationType } from '@enums/operation-type';
-import { Subject, Observable, of, BehaviorSubject } from 'rxjs';
-import { filter, map, take, takeUntil, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Violation } from '@models/violation';
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
-import { TransformerAction } from '@contracts/transformer-action';
 import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
 import { ToastService } from '@services/toast.service';
 import { OpenFrom } from '@enums/open-from';
@@ -50,11 +49,11 @@ export class InvestigationComponent extends BaseCaseComponent<
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   toast = inject(ToastService);
-  encrypt = inject(EncryptionService);
+  encryptionService = inject(EncryptionService);
   lookupService = inject(LookupService);
   offenderViolationService = inject(OffenderViolationService);
   adapter = inject(DateAdapter);
-  info: OpenedInfoContract | null = null;
+  info = input<OpenedInfoContract | null>(null);
   canReferralCase: boolean = false;
   @ViewChild(ViolationListComponent)
   violationListComponent!: ViolationListComponent;
@@ -64,8 +63,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   witnessesListComponent!: WitnessesListComponent;
   @ViewChild(SummaryTabComponent)
   summaryTabComponent!: SummaryTabComponent;
-  violationDegreeConfidentiality =
-    this.lookupService.lookups.violationDegreeConfidentiality;
+  violationDegreeConfidentiality = this.lookupService.lookups.securityLevel;
 
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   caseFolders: CaseFolder[] = [];
@@ -80,7 +78,6 @@ export class InvestigationComponent extends BaseCaseComponent<
   protected override _init() {
     super._init();
     this._listenToLoadOffendersViolations();
-    this.info = this.route.snapshot.data['info'] as OpenedInfoContract | null;
   }
 
   isHrManager() {
@@ -226,7 +223,7 @@ export class InvestigationComponent extends BaseCaseComponent<
       });
   }
 
-  saveCase(e: Subject<TransformerAction<Investigation>>) {
+  saveCase() {
     of(new Investigation().clone<Investigation>(this.form.value))
       .pipe(
         tap(_ => {
@@ -241,30 +238,17 @@ export class InvestigationComponent extends BaseCaseComponent<
         }),
       )
       .subscribe((model: Investigation) => {
-        this.router.navigate([], {
-          relativeTo: this.activeRoute,
-          queryParams: {
-            ...this.activeRoute.snapshot.queryParams,
-            item: this.encrypt.encrypt<INavigatedItem>({
-              openFrom: OpenFrom.ADD_SCREEN,
-              taskId: model.id,
-              caseId: model.id,
-              caseType: model.caseType,
-            }),
-          },
-        });
-        e.next({
-          action: 'done',
-          model,
-        });
+        this.model = model;
         this._updateForm(model);
+        this.updateRoute();
       });
   }
+
   navigateToSamePageThatUserCameFrom(): void {
     if (this.info === null) {
       return;
     }
-    switch (this.info.openFrom) {
+    switch (this.info()?.openFrom) {
       case OpenFrom.TEAM_INBOX:
         this.router.navigate(['/home/electronic-services/team-inbox']).then();
         break;
@@ -278,6 +262,7 @@ export class InvestigationComponent extends BaseCaseComponent<
         break;
     }
   }
+
   loadCaseFolders(): void {
     if (!this.model) return;
     // if there is no folders load it
@@ -286,14 +271,7 @@ export class InvestigationComponent extends BaseCaseComponent<
         .getService()
         .loadCaseFolders(this.model.id)
         .pipe(map(folders => (this.caseFolders = folders)))
-        .subscribe(folders => {
-          this.caseFoldersMap = folders.reduce(
-            (acc, item) => {
-              return { ...acc, [item.name.toLowerCase()]: item };
-            },
-            {} as Record<string, CaseFolder>,
-          );
-        });
+        .subscribe();
     }
   }
 
@@ -314,13 +292,13 @@ export class InvestigationComponent extends BaseCaseComponent<
       .subscribe();
   }
 
-  tabChange($event: number) {
+  tabChange($event: number, withParams: boolean = true) {
     const selectedTab = this.tabsArray[$event];
     this.router
       .navigate([], {
         relativeTo: this.activeRoute,
         queryParams: {
-          ...this.activeRoute.snapshot.queryParams,
+          ...(withParams ? this.activeRoute.snapshot.queryParams : undefined),
           tab: selectedTab,
         },
       })
@@ -332,11 +310,7 @@ export class InvestigationComponent extends BaseCaseComponent<
     this.violationListComponent.resetDataList();
     this.offenderListComponent.resetDataList();
     this.witnessesListComponent.resetDataList();
-    this.tabChange(0);
-    this.router.navigate([], {
-      relativeTo: this.activeRoute,
-      queryParams: {},
-    });
+    this.tabChange(0, false);
   }
 
   private listenToLocationChange() {
@@ -349,7 +323,35 @@ export class InvestigationComponent extends BaseCaseComponent<
         this.selectedTab = index === -1 ? 1 : index;
       });
   }
+
   mandatoryMakePenaltyDecisions() {
     return this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
+  }
+
+  updateRoute(): void {
+    if (this.model)
+      this.router
+        .navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            ...this.route.snapshot.queryParams,
+            item: this.encryptionService.encrypt<INavigatedItem>({
+              openFrom: OpenFrom.ADD_SCREEN,
+              taskId: this.model.id,
+              caseId: this.model.id,
+              caseType: this.model.caseType,
+            }),
+          },
+        })
+        .then();
+  }
+
+  createFoldersMap(): void {
+    this.caseFoldersMap = this.caseFolders.reduce(
+      (acc, item) => {
+        return { ...acc, [item.name.toLowerCase()]: item };
+      },
+      {} as Record<string, CaseFolder>,
+    );
   }
 }

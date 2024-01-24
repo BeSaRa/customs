@@ -224,11 +224,11 @@
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    @if (tabComponent && tabComponent.selectedIndex === 0) {
-      <app-button (click)="search$.next()" buttonType="primary">{{
-        lang.map.search
-      }}</app-button>
-    }
+    <!--    @if (tabComponent && tabComponent.selectedIndex === 0) {-->
+    <app-button (click)="search$.next()" buttonType="primary">{{
+      lang.map.search
+    }}</app-button>
+    <!--    }-->
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>

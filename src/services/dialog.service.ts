@@ -134,11 +134,13 @@ export class DialogService implements DialogContract {
   private listenToLanguageChanges() {
     this.lang.change$.subscribe(current => {
       const overlayWrapper = document.querySelectorAll<HTMLDivElement>(
-        '.cdk-global-overlay-wrapper',
+        '.cdk-global-overlay-wrapper, .cdk-overlay-pane',
       );
       overlayWrapper.forEach((item: HTMLDivElement) => {
         item.dir = current.direction;
       });
+
+      console.log(overlayWrapper);
     });
   }
 }

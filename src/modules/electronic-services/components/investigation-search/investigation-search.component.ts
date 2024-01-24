@@ -44,8 +44,7 @@ export class InvestigationSearchComponent implements OnInit {
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
 
-  violationDegreeConfidentiality =
-    this.lookupService.lookups.violationDegreeConfidentiality;
+  securityLevels = this.lookupService.lookups.securityLevel;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Investigation>();

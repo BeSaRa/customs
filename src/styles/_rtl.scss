@@ -1,0 +1,9 @@
+html[dir="rtl"] {
+  body {
+    font-family: "Tajawal", sans-serif;
+  }
+
+  .app-menu {
+    direction: rtl !important;
+  }
+}

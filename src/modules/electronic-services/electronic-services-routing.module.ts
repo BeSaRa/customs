@@ -5,17 +5,17 @@ import { InvestigationComponent } from '@modules/electronic-services/components/
 import { AppRoutes } from '@constants/app-routes';
 import { UserInboxComponent } from './components/user-inbox/user-inbox.component';
 import { GuidePanelComponent } from './components/guide-panel/guide-panel.component';
-import { ServiceItemResolver } from '@resolvers/service-item.resolver';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
+import { itemResolver } from '@resolvers/item.resolver';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
   {
     path: 'investigation',
     component: InvestigationComponent,
-    resolve: { info: ServiceItemResolver.resolve },
+    resolve: { info: itemResolver },
   },
   {
     path: AppRoutes.USER_INBOX,

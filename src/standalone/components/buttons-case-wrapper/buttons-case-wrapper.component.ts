@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  booleanAttribute,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { LangService } from '@services/lang.service';
@@ -47,7 +48,8 @@ export class ButtonsCaseWrapperComponent
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
   @Input() model?: Investigation;
-  @Input() mandatoryMakePenaltyDecisions: boolean = false;
+  @Input({ transform: booleanAttribute })
+  mandatoryMakePenaltyDecisions: boolean = false;
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
   @Output() claim = new EventEmitter<Investigation>();

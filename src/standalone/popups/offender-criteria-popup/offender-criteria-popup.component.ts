@@ -1,6 +1,14 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { Violation } from '@models/violation';
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { ControlDirective } from '@standalone/directives/control.directive';
@@ -23,6 +31,8 @@ import {
   combineLatest,
   filter,
   map,
+  Observable,
+  of,
   Subject,
   switchMap,
   takeUntil,
@@ -50,8 +60,7 @@ import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
 import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
-import { TransformerAction } from '@contracts/transformer-action';
-import { Investigation } from '@models/investigation';
+import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -79,7 +88,7 @@ export class OffenderCriteriaPopupComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
-  data = inject(MAT_DIALOG_DATA);
+  data = inject<OffenderCriteriaDataContract>(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
   offenderViolationService = inject(OffenderViolationService);
   fb = inject(UntypedFormBuilder);
@@ -133,13 +142,20 @@ export class OffenderCriteriaPopupComponent
   ];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
-  @ViewChild(MatTabGroup)
+  @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
-  transformer$ =
-    this.data &&
-    (this.data.transformer$ as Subject<TransformerAction<Investigation>>);
-  caseId = this.data && (this.data.caseId as string);
+
+  caseId = this.data && this.data.caseId;
   selectedOffender!: MawaredEmployee | ClearingAgent;
+
+  canSave = computed(() => !!this.data.caseId());
+
+  effectCanSaveRef = effect(() => {
+    if (this.canSave()) {
+      this.waitTillPendingSaveDone$.next();
+    }
+  });
+  private waitTillPendingSaveDone$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
     this.employeeFormGroup = this.fb.group(
@@ -164,7 +180,6 @@ export class OffenderCriteriaPopupComponent
     this.listenToAddEmployee();
     this.listenToAddClearingAgent();
     this.listenToAddViolation();
-    if (!this.caseId) this.listenToSaveCaseDone();
   }
 
   filterViolationsBasedOnSelectedType() {
@@ -209,8 +224,9 @@ export class OffenderCriteriaPopupComponent
       .pipe(
         switchMap(() =>
           this.service
-            .openAddViolation(this.caseId as string, this.transformer$)
-            .afterClosed(),
+            .openAddViolation(this.caseId, this.data.askForSaveModel)
+            .afterClosed()
+            .pipe(tap(() => this.data.askForViolationListReload.next())),
         ),
       )
       .subscribe(violation => {
@@ -293,37 +309,14 @@ export class OffenderCriteriaPopupComponent
       });
   }
 
-  listenToSaveCaseDone() {
-    this.transformer$
-      ?.pipe(
-        filter(
-          (data: TransformerAction<Investigation>) => data.action === 'done',
-        ),
-      )
-      .subscribe((data: TransformerAction<Investigation>) => {
-        this.caseId = data.model?.id;
-
-        if (this.isClearingAgent && this.fromOffender) {
-          this.addClearingAgent$.next(this.selectedOffender as ClearingAgent);
-        } else if (this.fromOffender) {
-          this.addEmployee$.next(this.selectedOffender as MawaredEmployee);
-        }
-        this.transformer$.unsubscribe();
-      });
-  }
-
   addEmployee(employee: MawaredEmployee) {
-    if (!this.caseId) {
-      this.selectedOffender = employee;
-      this.transformer$?.next({ action: 'save' });
-    } else {
-      this.addEmployee$.next(employee);
-    }
+    this.addEmployee$.next(employee);
   }
 
   private listenToAddEmployee() {
     this.addEmployee$
-      .pipe(map(model => model.convertToOffender(this.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId())))
+      .pipe(switchMap(model => this.makeSureThatCaseIdExistsBeforeSave(model)))
       .pipe(
         switchMap(offender => {
           return offender.save();
@@ -331,21 +324,7 @@ export class OffenderCriteriaPopupComponent
       )
       .pipe(
         switchMap((model: Offender) => {
-          return combineLatest(
-            (this.offenderViolationControl?.value || []).map(
-              (violationId: number) => {
-                return this.offenderViolationService.create(
-                  new OffenderViolation().clone<OffenderViolation>({
-                    caseId: this.caseId,
-                    offenderId: model.id,
-                    violationId: violationId,
-                    status: 1,
-                    isProved: true,
-                  }),
-                );
-              },
-            ),
-          )
+          return combineLatest(this.addOffenderViolation(model))
             .pipe(ignoreErrors())
             .pipe(map(() => model));
         }),
@@ -373,17 +352,13 @@ export class OffenderCriteriaPopupComponent
   }
 
   addClearingAgent(agent: ClearingAgent) {
-    if (!this.caseId) {
-      this.selectedOffender = agent;
-      this.transformer$?.next({ action: 'save' });
-    } else {
-      this.addClearingAgent$.next(agent);
-    }
+    this.addClearingAgent$.next(agent);
   }
 
   private listenToAddClearingAgent() {
     this.addClearingAgent$
-      .pipe(map(model => model.convertToOffender(this.caseId)))
+      .pipe(map(model => model.convertToOffender(this.caseId())))
+      .pipe(switchMap(model => this.makeSureThatCaseIdExistsBeforeSave(model)))
       .pipe(
         switchMap(offender => {
           return offender.save();
@@ -391,21 +366,7 @@ export class OffenderCriteriaPopupComponent
       )
       .pipe(
         switchMap((model: Offender) => {
-          return combineLatest(
-            (this.offenderViolationControl?.value || []).map(
-              (violationId: number) => {
-                return this.offenderViolationService.create(
-                  new OffenderViolation().clone<OffenderViolation>({
-                    caseId: this.caseId,
-                    offenderId: model.id,
-                    violationId: violationId,
-                    status: 1,
-                    isProved: true,
-                  }),
-                );
-              },
-            ),
-          )
+          return combineLatest(this.addOffenderViolation(model))
             .pipe(ignoreErrors())
             .pipe(map(() => model));
         }),
@@ -422,5 +383,38 @@ export class OffenderCriteriaPopupComponent
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
       });
+  }
+
+  addOffenderViolation(model: Offender): Observable<OffenderViolation>[] {
+    return this.offenderViolationControl?.value &&
+      this.offenderViolationControl?.value?.length
+      ? (this.offenderViolationControl?.value || []).map(
+          (violationId: number) => {
+            return this.offenderViolationService.create(
+              new OffenderViolation().clone<OffenderViolation>({
+                caseId: this.caseId(),
+                offenderId: model.id,
+                violationId: violationId,
+                status: 1,
+                isProved: false,
+              }),
+            );
+          },
+        )
+      : [of(new OffenderViolation())];
+  }
+
+  makeSureThatCaseIdExistsBeforeSave(model: Offender): Observable<Offender> {
+    return !this.canSave()
+      ? (() => {
+          this.data.askForSaveModel.emit();
+          return this.waitTillPendingSaveDone$.pipe(
+            map(() => {
+              model.caseId = this.caseId();
+              return model;
+            }),
+          );
+        })()
+      : of(model);
   }
 }

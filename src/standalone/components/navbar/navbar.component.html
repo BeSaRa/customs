@@ -28,7 +28,7 @@
     </div>
     <div>
       <span>{{ employee && employee.getNames() }}</span>
-      <mat-menu #userMenu="matMenu">
+      <mat-menu class="app-menu" #userMenu="matMenu">
         <button
           class="text-slate-700"
           (click)="editUserPreferences$.next()"
