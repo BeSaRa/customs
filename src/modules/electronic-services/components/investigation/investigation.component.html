@@ -63,7 +63,7 @@
   }">
   <mat-card>
     <mat-tab-group
-      [selectedIndex]="selectedTab"
+      [(selectedIndex)]="selectedTab"
       (selectedIndexChange)="tabChange($event)"
       mat-stretch-tabs="false">
       @if (!summaryMode()) {
@@ -154,7 +154,9 @@
         (violations)="violations = $event"
         [readonly]="readonly"
         (askForSaveModel)="saveCase()"
-        [caseId]="model?.id || ''" />
+        [caseId]="model?.id || ''"
+        (focusInvalidTab)="focusInvalidTab()"
+        [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
   </ng-template>
 
@@ -169,7 +171,9 @@
         (askForSaveModel)="saveCase()"
         (askForViolationListReload)="violationListComponent.reload$.next()"
         [canDelete]="isOpenedFromAddScreen() || canEdit()"
-        (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)" />
+        (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)"
+        (focusInvalidTab)="focusInvalidTab()"
+        [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
   </ng-template>
 

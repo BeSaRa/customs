@@ -13,7 +13,15 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  map,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -63,11 +71,18 @@ export class OffenderListComponent
   readonly = false;
   @Input()
   canDelete = true;
+  hasValidInvestigationSubject = input(false);
   add$: Subject<void> = new Subject<void>();
   @Output()
   offenders = new EventEmitter<Offender[]>();
   @Output()
   linkOffenderWithViolation = new EventEmitter<void>();
+  @Output()
+  askForSaveModel = new EventEmitter<void>();
+  @Output()
+  askForViolationListReload = new EventEmitter<void>();
+  @Output()
+  focusInvalidTab = new EventEmitter<boolean>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -91,10 +106,6 @@ export class OffenderListComponent
       }),
       {},
     );
-  @Output()
-  askForSaveModel = new EventEmitter<void>();
-  @Output()
-  askForViolationListReload = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.listenToAdd();
@@ -108,19 +119,25 @@ export class OffenderListComponent
   private listenToAdd() {
     this.add$
       .pipe(
-        exhaustMap(() =>
-          this.dialog
-            .open(OffenderCriteriaPopupComponent, {
-              data: {
-                caseId: this.caseId,
-                violations: this.violations,
-                offenders: this.dataSource.data,
-                askForSaveModel: this.askForSaveModel,
-                askForViolationListReload: this.askForViolationListReload,
-              },
-            })
-            .afterClosed(),
-        ),
+        exhaustMap(() => {
+          if (this.hasValidInvestigationSubject())
+            return this.dialog
+              .open(OffenderCriteriaPopupComponent, {
+                data: {
+                  caseId: this.caseId,
+                  violations: this.violations,
+                  offenders: this.dataSource.data,
+                  askForSaveModel: this.askForSaveModel,
+                  askForViolationListReload: this.askForViolationListReload,
+                },
+              })
+              .afterClosed();
+          else {
+            this.focusInvalidTab.emit(true);
+            return of(null);
+          }
+        }),
+        filter(result => !!result),
       )
       .subscribe(() => {
         this.reload$.next();

@@ -354,4 +354,16 @@ export class InvestigationComponent extends BaseCaseComponent<
       {} as Record<string, CaseFolder>,
     );
   }
+  get subject() {
+    return this.form.get('subject');
+  }
+  hasValidInvestigationSubject(): boolean {
+    return !!this.subject?.valid;
+  }
+  focusInvalidTab() {
+    if (!this.hasValidInvestigationSubject()) {
+      this.selectedTab = 0;
+      this.subject?.markAsTouched();
+    }
+  }
 }
