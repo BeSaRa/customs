@@ -14,61 +14,63 @@
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
-            <app-input formControlName="arName" [label]="lang.map.ar_name" />
-            <app-input formControlName="enName" [label]="lang.map.en_name" />
-            <app-input formControlName="email" [label]="lang.map.email" />
-            <app-input
-              formControlName="mawaredDepId"
-              [label]="lang.map.mawared_dep_id"></app-input>
-            <app-select-input
-              formControlName="type"
-              [options]="unitTypes"
-              [label]="lang.map.unit_type"
-              bindValue="lookupKey"
-              bindLabel="getNames" />
-            <app-select-input
-              formControlName="managerId"
-              [options]="internalUsers"
-              [label]="lang.map.manager"
-              bindValue="id"
-              bindLabel="getNames"
-              [enableFilter]="true"
-              bindFilter="getNames" />
-            <app-select-input
-              formControlName="parent"
-              [options]="organizationUnits"
-              [label]="lang.map.parent_unit"
-              bindValue="id"
-              bindLabel="getNames"
-              [enableFilter]="true"
-              bindFilter="getNames" />
-            <app-select-input
-              formControlName="assistantOuId"
-              [options]="assistantOus"
-              [label]="lang.map.assistant_ou"
-              bindValue="id"
-              bindLabel="getNames"
-              [enableFilter]="true"
-              bindFilter="getNames" />
-            <app-select-input
-              formControlName="managerAssistant"
-              [options]="managerAssistants"
-              [label]="lang.map.ou_manager_assistant"
-              bindValue="id"
-              bindLabel="getNames"
-              [enableFilter]="true"
-              bindFilter="getNames" />
-            <app-switch
-              formControlName="isCustoms"
-              [trueValue]="1"
-              [falseValue]="0"
-              [label]="lang.map.is_customs" />
-            <app-switch
-              formControlName="status"
-              [trueValue]="1"
-              [falseValue]="0"
-              [label]="lang.map.change_status" />
+          <div class="h-full overflow-y-scroll">
+            <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
+              <app-input formControlName="arName" [label]="lang.map.ar_name" />
+              <app-input formControlName="enName" [label]="lang.map.en_name" />
+              <app-input formControlName="email" [label]="lang.map.email" />
+              <app-input
+                formControlName="mawaredDepId"
+                [label]="lang.map.mawared_dep_id"></app-input>
+              <app-select-input
+                formControlName="type"
+                [options]="unitTypes"
+                [label]="lang.map.unit_type"
+                bindValue="lookupKey"
+                bindLabel="getNames" />
+              <app-select-input
+                formControlName="managerId"
+                [options]="internalUsers"
+                [label]="lang.map.manager"
+                bindValue="id"
+                bindLabel="getNames"
+                [enableFilter]="true"
+                bindFilter="getNames" />
+              <app-select-input
+                formControlName="parent"
+                [options]="organizationUnits"
+                [label]="lang.map.parent_unit"
+                bindValue="id"
+                bindLabel="getNames"
+                [enableFilter]="true"
+                bindFilter="getNames" />
+              <app-select-input
+                formControlName="assistantOuId"
+                [options]="assistantOus"
+                [label]="lang.map.assistant_ou"
+                bindValue="id"
+                bindLabel="getNames"
+                [enableFilter]="true"
+                bindFilter="getNames" />
+              <app-select-input
+                formControlName="managerAssistant"
+                [options]="managerAssistants"
+                [label]="lang.map.ou_manager_assistant"
+                bindValue="id"
+                bindLabel="getNames"
+                [enableFilter]="true"
+                bindFilter="getNames" />
+              <app-switch
+                formControlName="isCustoms"
+                [trueValue]="1"
+                [falseValue]="0"
+                [label]="lang.map.is_customs" />
+              <app-switch
+                formControlName="status"
+                [trueValue]="1"
+                [falseValue]="0"
+                [label]="lang.map.change_status" />
+            </div>
           </div>
         </ng-container>
       </mat-tab>
