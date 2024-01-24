@@ -217,17 +217,31 @@ export abstract class BaseCaseService<M>
   @CastResponse(undefined, {
     unwrap: 'rs',
   })
-  private _getCasePenalty(caseId: string): Observable<{
+  private _getCasePenalty(
+    caseId: string,
+    activityName: string,
+  ): Observable<{
     [key: string]: { first: ManagerDecisions; second: Penalty[] };
   }> {
     return this.http.get<{
       [key: string]: { first: ManagerDecisions; second: Penalty[] };
-    }>(this.getUrlSegment() + '/' + caseId + '/penalty');
+    }>(this.getUrlSegment() + '/penalty', {
+      params: new HttpParams({
+        fromObject: {
+          caseId,
+          taskName: activityName,
+        },
+      }),
+    });
   }
-  getCasePenalty(caseId: string): Observable<{
+
+  getCasePenalty(
+    caseId: string,
+    activityName: string,
+  ): Observable<{
     [key: string]: { first: ManagerDecisions; second: Penalty[] };
   }> {
-    return this._getCasePenalty(caseId).pipe(
+    return this._getCasePenalty(caseId, activityName).pipe(
       map(rs => {
         const obj: {
           [key: string]: { first: ManagerDecisions; second: Penalty[] };
@@ -244,6 +258,7 @@ export abstract class BaseCaseService<M>
       }),
     );
   }
+
   completeTask(
     taskId: string,
     body: {
@@ -391,6 +406,7 @@ export abstract class BaseCaseService<M>
   deleteAttachment(attachmentId: string): Observable<unknown> {
     return this.http.delete(this.getUrlSegment() + `/document/${attachmentId}`);
   }
+
   getMenuItem(): MenuItemContract {
     return this.menuItemService.getMenuItemByLangKey(this.serviceKey)!;
   }

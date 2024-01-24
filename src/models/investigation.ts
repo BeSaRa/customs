@@ -70,4 +70,12 @@ export class Investigation extends BaseCase<
         : subject,
     };
   }
+
+  getActivityName(): string | undefined {
+    return (
+      this.taskDetails &&
+      this.taskDetails.processInstanceName &&
+      this.taskDetails.processInstanceName.split(':')[0]
+    );
+  }
 }

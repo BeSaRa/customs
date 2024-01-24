@@ -157,6 +157,7 @@ export class OffendersViolationsPreviewComponent
   getPenaltyIdByPenaltyKey(element: Offender, penaltyKey: SystemPenalties) {
     return (
       this.penaltyMap &&
+      this.penaltyMap[element.id] &&
       this.penaltyMap[element.id].second.find(
         penalty => penalty.penaltyKey === penaltyKey,
       )?.id
@@ -164,12 +165,15 @@ export class OffendersViolationsPreviewComponent
   }
 
   private loadPenalties() {
-    // this.investigationModel
-    //   ?.getService()
-    //   .getCasePenalty(this.investigationModel?.id as string)
-    //   .subscribe(data => {
-    //     this.penaltyMap = data;
-    //   });
+    this.investigationModel
+      ?.getService()
+      .getCasePenalty(
+        this.investigationModel?.id as string,
+        this.investigationModel!.getActivityName()!,
+      )
+      .subscribe(data => {
+        this.penaltyMap = data;
+      });
   }
 
   private listenToView() {
@@ -322,6 +326,7 @@ export class OffendersViolationsPreviewComponent
       this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
     );
   }
+
   mandatoryMakePenaltyDecisions() {
     return (
       !!this.penaltyMap &&
