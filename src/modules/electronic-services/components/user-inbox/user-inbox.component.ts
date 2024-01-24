@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
-import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxService } from '@services/inbox.services';
@@ -34,9 +34,7 @@ export class UserInboxComponent
   oldQueryResultSet?: QueryResultSet;
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
-  reload$: BehaviorSubject<void> = new BehaviorSubject<void>(undefined);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
-  view$: Subject<InboxResult> = new Subject<InboxResult>();
 
   length = 50;
   caseTypes = CaseTypes;
@@ -72,15 +70,11 @@ export class UserInboxComponent
     this.listenToReload();
   }
 
-  private listenToReload() {
+  listenToReload() {
     this.reloadInbox$
       .pipe(
         switchMap(() => {
-          // if (!this.hasFilterCriteria()) {
           return this.inboxService.loadUserInbox();
-          // } else {
-          //   return this.inboxService.loadUserInbox(this.filterCriteria);
-          // }
         }),
         takeUntil(this.destroy$),
       )
