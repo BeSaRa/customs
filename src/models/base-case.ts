@@ -68,7 +68,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus === CommonCaseStatus.RETURNED;
   }
   canSave(): boolean {
-    return !this.id;
+    return true;
   }
   getTaskName() {
     return this.taskDetails?.name;

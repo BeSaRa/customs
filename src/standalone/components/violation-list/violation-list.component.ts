@@ -2,8 +2,8 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
   input,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -26,7 +26,6 @@ import { MatSortModule } from '@angular/material/sort';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { ViolationService } from '@services/violation.service';
 import { Violation } from '@models/violation';
-import { Config } from '@constants/config';
 import { ignoreErrors } from '@utils/utils';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
@@ -34,9 +33,8 @@ import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
-import { TransformerAction } from '@contracts/transformer-action';
-import { Investigation } from '@models/investigation';
 import { ButtonComponent } from '../button/button.component';
+import { ReportType } from '@app-types/validation-return-type';
 
 @Component({
   selector: 'app-violation-list',
@@ -64,6 +62,7 @@ export class ViolationListComponent
   caseId = input('');
   add$: Subject<void> = new Subject<void>();
   service = inject(InvestigationService);
+  violationService = inject(ViolationService);
   data = new Subject<Violation[]>();
   dataSource = new AppTableDataSource(this.data);
   displayedColumns = [
@@ -76,27 +75,23 @@ export class ViolationListComponent
   view$ = new Subject<Violation>();
   edit$ = new Subject<Violation>();
   delete$ = new Subject<Violation>();
-  transformer$ = new Subject<TransformerAction<Investigation>>();
-  protected readonly Config = Config;
-  @Input()
-  readonly = false;
   hasValidInvestigationSubject = input(false);
-
   @Output()
   selectViolation = new EventEmitter<Violation>();
-
   @Output()
   reloadOffenderViolationList = new EventEmitter<void>();
   @Output()
   askForSaveModel = new EventEmitter<void>();
   @Output()
   focusInvalidTab = new EventEmitter<boolean>();
-
-  violationService = inject(ViolationService);
-
   @Output()
   violations = new EventEmitter<Violation[]>();
-
+  @Input()
+  readonly = false;
+  @Input()
+  canModifyOffenders = true;
+  @Input()
+  reportType: ReportType = `None`;
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -113,7 +108,11 @@ export class ViolationListComponent
         switchMap(() => {
           if (this.hasValidInvestigationSubject()) {
             return this.service
-              .openAddViolation(this.caseId, this.askForSaveModel)
+              .openAddViolation(
+                this.caseId,
+                this.askForSaveModel,
+                this.reportType,
+              )
               .afterClosed();
           } else {
             this.focusInvalidTab.emit();

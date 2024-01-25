@@ -1,6 +1,12 @@
 import { DialogService } from '@services/dialog.service';
 import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
-import { Component, inject, input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  input,
+  ViewChild,
+} from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { InvestigationService } from '@services/investigation.service';
@@ -29,16 +35,24 @@ import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
+import { ReportType } from '@app-types/validation-return-type';
+import { ClassificationTypes } from '@enums/violation-classification';
 
 @Component({
   selector: 'app-investigation',
   templateUrl: './investigation.component.html',
   styleUrls: ['./investigation.component.scss'],
 })
-export class InvestigationComponent extends BaseCaseComponent<
-  Investigation,
-  InvestigationService
-> {
+export class InvestigationComponent
+  extends BaseCaseComponent<Investigation, InvestigationService>
+  implements AfterViewInit
+{
+  ngAfterViewInit(): void {
+    Promise.resolve().then(() => {
+      this.mandatoryMakePenaltyDecisions =
+        this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
+    });
+  }
   lang = inject(LangService);
   route = inject(ActivatedRoute);
   fb = inject(UntypedFormBuilder);
@@ -64,7 +78,7 @@ export class InvestigationComponent extends BaseCaseComponent<
   @ViewChild(SummaryTabComponent)
   summaryTabComponent!: SummaryTabComponent;
   violationDegreeConfidentiality = this.lookupService.lookups.securityLevel;
-
+  mandatoryMakePenaltyDecisions: boolean = false;
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   caseFolders: CaseFolder[] = [];
   caseFoldersMap?: Record<string, CaseFolder>;
@@ -85,12 +99,11 @@ export class InvestigationComponent extends BaseCaseComponent<
   }
 
   summaryMode() {
-    return this.isOpenedFromAddScreen() && !this.canEdit();
+    return !this.isOpenedFromAddScreen();
   }
   isOpenedFromAddScreen() {
     return this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom;
   }
-
   canEdit() {
     return (
       this.model?.getCaseStatus() === CommonCaseStatus.NEW ||
@@ -176,13 +189,32 @@ export class InvestigationComponent extends BaseCaseComponent<
         this.readonly = false;
       }
     } else if (this.openFrom === OpenFrom.SEARCH) {
-      // if saved as draft, then no readonly
       if (this.model?.canCommit()) {
         this.readonly = false;
       }
     }
   }
 
+  getReportType(): ReportType {
+    console.log(
+      !this.violations.length
+        ? 'None'
+        : !this.violations.find(v => {
+              return (
+                v.violationClassificationId === ClassificationTypes.criminal
+              );
+            })
+          ? 'Normal'
+          : 'Creminal',
+    );
+    return !this.violations.length
+      ? 'None'
+      : !this.violations.find(v => {
+            return v.violationClassificationId === ClassificationTypes.criminal;
+          })
+        ? 'Normal'
+        : 'Creminal';
+  }
   private _listenToLoadOffendersViolations() {
     this.reloadOffendersViolations$
       .pipe(filter(() => !!this.model?.id))
@@ -322,10 +354,6 @@ export class InvestigationComponent extends BaseCaseComponent<
       .subscribe(index => {
         this.selectedTab = index === -1 ? 1 : index;
       });
-  }
-
-  mandatoryMakePenaltyDecisions() {
-    return this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
   }
 
   updateRoute(): void {

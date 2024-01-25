@@ -10,3 +10,5 @@ export type searchFunctionType<T = unknown> = (
 export type ISearchFieldsMap<T = unknown> = {
   [key: string]: string | searchFunctionType<T>;
 };
+
+export type ReportType = 'Creminal' | 'Normal' | 'None';

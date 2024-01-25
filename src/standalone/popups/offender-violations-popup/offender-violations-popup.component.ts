@@ -14,7 +14,6 @@ import {
   exhaustMap,
   map,
   combineLatest,
-  tap,
 } from 'rxjs';
 import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
@@ -82,6 +81,14 @@ export class OffenderViolationsPopupComponent
   }
 
   ngOnInit() {
+    this.filterViolations();
+    this.listenToReload();
+    this.listenToDelete();
+    this.listenToAdd();
+    if (this.readonly) this.displayedColumns.pop();
+  }
+
+  filterViolations() {
     this.violations =
       this.data &&
       (this.data.violations || []).filter(
@@ -96,10 +103,6 @@ export class OffenderViolationsPopupComponent
               (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
                 OffenderTypes.BOTH),
       );
-    this.listenToReload();
-    this.listenToDelete();
-    this.listenToAdd();
-    if (this.readonly) this.displayedColumns.pop();
   }
 
   private listenToReload() {
@@ -118,12 +121,12 @@ export class OffenderViolationsPopupComponent
       )
       .subscribe(pagination => {
         this.offenderViolations.next(pagination.rs);
+        this.filterViolations();
         this.violations = this.violations.filter(
           v =>
             !this.dataSource.data.find(
               offenderViolation => offenderViolation.violationId === v.id,
             ),
-          // TODO: add filter by violation offender type
         );
       });
   }
@@ -154,17 +157,6 @@ export class OffenderViolationsPopupComponent
   }
   private listenToDelete() {
     this.delete$
-      .pipe(
-        tap(
-          () =>
-            this.dataSource.data.length === 1 &&
-            this.dialog.error(
-              this.lang.map
-                .can_not_delete_offender_must_has_at_least_one_violation,
-            ),
-        ),
-        filter(() => this.dataSource.data.length !== 1),
-      )
       .pipe(
         exhaustMap(model =>
           this.dialog

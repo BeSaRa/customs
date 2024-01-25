@@ -67,12 +67,12 @@
                 icon="VIEW"></app-icon-button>
             </div>
           }
-          @if (!readonly) {
+          @if (!readonly && canModifyOffenders) {
             <div [matTooltip]="lang.map.edit">
               <app-icon-button (click)="edit$.next(element)" icon="EDIT" />
             </div>
           }
-          @if (!readonly) {
+          @if (!readonly && canModifyOffenders) {
             <div [matTooltip]="lang.map.delete">
               <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
             </div>
