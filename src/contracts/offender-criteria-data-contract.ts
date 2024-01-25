@@ -5,9 +5,9 @@ import { ReportType } from '@app-types/validation-return-type';
 
 export interface OffenderCriteriaDataContract {
   caseId: InputSignal<string>;
-  violations: Violation[];
+  violations: InputSignal<Violation[]>;
   offenders: Offender[];
   askForSaveModel: EventEmitter<void>;
   askForViolationListReload: EventEmitter<void>;
-  reportType: ReportType;
+  reportType: InputSignal<ReportType>;
 }

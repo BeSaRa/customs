@@ -5,8 +5,8 @@ import {
   computed,
   effect,
   inject,
+  InputSignal,
   OnInit,
-  signal,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -61,7 +61,7 @@ import { DialogService } from '@services/dialog.service';
 import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
 import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
-import { ReportType } from '@app-types/validation-return-type';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -104,12 +104,9 @@ export class OffenderCriteriaPopupComponent
   toast = inject(ToastService);
   search$: Subject<void> = new Subject();
   addViolation$: Subject<void> = new Subject<void>();
-  fromOffender: boolean = true;
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
   administrations: MawaredDepartment[] = [];
-  private _violations: Violation[] = [];
-  violations = signal<Violation[]>([]);
   offenders: Offender[] =
     this.data && ((this.data.offenders || []) as Offender[]);
   form!: UntypedFormGroup;
@@ -144,12 +141,24 @@ export class OffenderCriteriaPopupComponent
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
-  reportType = this.data && (this.data.reportType as ReportType);
-
+  selectedIndex: number = 0;
+  reportType = this.data && this.data.reportType;
+  offenderType = toSignal(this.offenderTypeControl.valueChanges, {
+    initialValue: OffenderTypes.EMPLOYEE,
+  });
   caseId = this.data && this.data.caseId;
 
   canSave = computed(() => !!this.data.caseId());
 
+  violations = computed(() => {
+    return (this.data as { violations: InputSignal<Violation[]> })
+      .violations()
+      .filter(
+        v =>
+          v.offenderTypeInfo.lookupKey === this.offenderType() ||
+          v.offenderTypeInfo.lookupKey === OffenderTypes.BOTH,
+      );
+  });
   effectCanSaveRef = effect(() => {
     if (this.canSave()) {
       this.waitTillPendingSaveDone$.next();
@@ -164,10 +173,6 @@ export class OffenderCriteriaPopupComponent
     this.clearingAgentFormGroup = this.fb.group(
       new ClearingAgentCriteria().buildForm(true),
     );
-    this._violations =
-      this.data && ((this.data.violations || []) as Violation[]);
-
-    this.filterViolationsBasedOnSelectedType();
 
     this.employeeFormGroup.patchValue({
       employeeDepartmentId: this.depId,
@@ -182,29 +187,11 @@ export class OffenderCriteriaPopupComponent
     this.listenToAddViolation();
   }
 
-  filterViolationsBasedOnSelectedType() {
-    this.violations.set(
-      this._violations.filter(
-        v =>
-          this.offenderTypeControl &&
-          (v.offenderTypeInfo.lookupKey === this.offenderTypeControl.value ||
-            v.offenderTypeInfo.lookupKey === OffenderTypes.BOTH),
-      ),
-    );
-  }
-
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
       this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
       this.offenderViolationControl.reset();
-      this.violations.set(
-        this._violations.filter(
-          v =>
-            this.offenderTypeControl &&
-            v.offenderTypeInfo.lookupKey === this.offenderTypeControl?.value,
-        ),
-      );
     });
   }
 
@@ -220,7 +207,6 @@ export class OffenderCriteriaPopupComponent
   private listenToAddViolation() {
     this.addViolation$
       .pipe(takeUntil(this.destroy$))
-      .pipe(tap(() => (this.fromOffender = false)))
       .pipe(
         switchMap(() =>
           this.service
@@ -230,14 +216,11 @@ export class OffenderCriteriaPopupComponent
               this.reportType,
             )
             .afterClosed()
+            .pipe(filter(result => !!result))
             .pipe(tap(() => this.data.askForViolationListReload.next())),
         ),
       )
       .subscribe(violation => {
-        this.violations.update(violations => [
-          new Violation().clone<Violation>(violation),
-          ...violations,
-        ]);
         if (
           violation.offenderTypeInfo?.lookupKey ===
           this.offenderTypeControl.value
@@ -248,7 +231,6 @@ export class OffenderCriteriaPopupComponent
               : [violation.id],
           );
         }
-        this.fromOffender = false;
       });
   }
 

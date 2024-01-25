@@ -161,7 +161,7 @@ export class InvestigationComponent
   }
 
   _afterLaunch(): void {
-    this.resetForm();
+    this._updateForm(new Investigation());
     this.toast.success(this.lang.map.request_has_been_sent_successfully);
     this.navigateToSamePageThatUserCameFrom();
   }
@@ -327,10 +327,10 @@ export class InvestigationComponent
   }
 
   resetForm() {
-    this.form.reset();
     this.violationListComponent.resetDataList();
     this.offenderListComponent.resetDataList();
     this.witnessesListComponent.resetDataList();
+    this.reloadOffendersViolations$.next(null);
     this.tabChange(0, false);
   }
 

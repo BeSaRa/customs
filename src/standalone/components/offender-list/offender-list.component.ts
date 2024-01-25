@@ -63,8 +63,7 @@ export class OffenderListComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  @Input()
-  violations!: Violation[];
+  violations = input([] as Violation[]);
   caseId = input('');
   @Input()
   investigationModel?: Investigation;
@@ -78,8 +77,7 @@ export class OffenderListComponent
   offenders = new EventEmitter<Offender[]>();
   @Output()
   linkOffenderWithViolation = new EventEmitter<void>();
-  @Input()
-  reportType: ReportType = `None`;
+  reportType = input(`None` as ReportType);
   @Output()
   askForSaveModel = new EventEmitter<void>();
   @Output()
@@ -123,7 +121,7 @@ export class OffenderListComponent
     this.add$
       .pipe(
         exhaustMap(() => {
-          if (this.hasValidInvestigationSubject())
+          if (this.hasValidInvestigationSubject()) {
             return this.dialog
               .open(OffenderCriteriaPopupComponent, {
                 data: {
@@ -136,12 +134,11 @@ export class OffenderListComponent
                 },
               })
               .afterClosed();
-          else {
+          } else {
             this.focusInvalidTab.emit(true);
             return of(null);
           }
         }),
-        filter(result => !!result),
       )
       .subscribe(() => {
         this.reload$.next();

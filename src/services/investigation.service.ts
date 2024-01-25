@@ -46,7 +46,7 @@ export class InvestigationService
   openAddViolation(
     caseId: InputSignal<string>,
     askForSaveModel: EventEmitter<void>,
-    reportType: ReportType,
+    reportType: InputSignal<ReportType>,
   ): MatDialogRef<ViolationPopupComponent> {
     return this.violationService.openCreateDialog(undefined, {
       caseId,

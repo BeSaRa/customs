@@ -99,7 +99,7 @@
     (save)="save$.next($event)"
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
-    [mandatoryMakePenaltyDecisions]="mandatoryMakePenaltyDecisions()"
+    [mandatoryMakePenaltyDecisions]="mandatoryMakePenaltyDecisions"
     (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
   </app-buttons-case-wrapper>
   <ng-template #summary_tab>
@@ -159,6 +159,7 @@
         (violations)="violations = $event"
         (askForSaveModel)="saveCase()"
         (focusInvalidTab)="focusInvalidTab()"
+        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
         [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
   </ng-template>
