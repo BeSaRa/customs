@@ -10,7 +10,11 @@
     <ng-container matColumnDef="caseIdentifier">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.case_identifier }}</th>
       <td mat-cell *matCellDef="let element">
-        <span>{{ element.caseIdentifier }}</span>
+        <button
+          class="text-blue-700 hover:underline focus:outline-none"
+          (click)="view(element)">
+          {{ element.caseIdentifier }}
+        </button>
       </td>
     </ng-container>
     <!-- case status -->
