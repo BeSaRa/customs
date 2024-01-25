@@ -39,11 +39,12 @@ export class UserInboxComponent
   length = 50;
   caseTypes = CaseTypes;
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
-    new NoneFilterColumn('BD_DRAFT_FULL_SERIAL'),
+    new NoneFilterColumn('SERIAL'),
     new NoneFilterColumn('BD_SUBJECT'),
     new NoneFilterColumn('BD_TYPE'),
     new NoneFilterColumn('ACTIVATED'),
     new NoneFilterColumn('PI_DUE'),
+    new NoneFilterColumn('TAD_DISPLAY_NAME'),
     new NoneFilterColumn('BD_FROM_USER'),
     new SelectFilterColumn(
       'RISK_STATUS',
@@ -82,6 +83,10 @@ export class UserInboxComponent
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };
       });
+  }
+
+  assertType(item: InboxResult): InboxResult {
+    return item;
   }
 
   filterChange($event: { key: string; value: string | null }) {

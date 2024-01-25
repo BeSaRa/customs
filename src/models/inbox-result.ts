@@ -7,12 +7,14 @@ import { EncryptionService } from '@services/encryption.service';
 import { InboxService } from '@services/inbox.services';
 import { ServiceRegistry } from '@services/service-registry';
 import { ClonerMixin } from '@mixins/cloner-mixin';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 const { send, receive } = new InboxInterceptor();
 
 @InterceptModel({ send, receive })
 export class InboxResult extends ClonerMixin(class {}) {
-  BD_FULL_SERIAL!: string;
+  BD_INVESTIGATION_FULL_SERIAL!: string;
+  BD_IS_DRAFTED!: string;
   BD_SUBJECT!: string;
   BD_CASE_TYPE!: number;
   PI_CREATE!: string;
@@ -23,7 +25,7 @@ export class InboxResult extends ClonerMixin(class {}) {
   OWNER!: string;
   TKIID!: string;
   PI_PARENT_CASE_ID!: string;
-
+  TAD_DISPLAY_NAME!: keyof LangKeysContract;
   fromUserInfo!: AdminResult;
   riskStatusInfo!: AdminResult;
 

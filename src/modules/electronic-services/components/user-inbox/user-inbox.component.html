@@ -15,8 +15,8 @@
     matSort
     class="table-style"
     [dataSource]="queryResultSet?.items || []">
-    <!-- BD_FULL_SERIAL BD_FULL_SERIAL -->
-    <ng-container matColumnDef="BD_DRAFT_FULL_SERIAL">
+    <!-- BD_FULL_SERIAL -->
+    <ng-container matColumnDef="SERIAL">
       <th
         mat-header-cell
         mat-sort-header="BD_DRAFT_FULL_SERIAL"
@@ -27,7 +27,11 @@
         <button
           class="text-blue-700 hover:underline focus:outline-none"
           (click)="view(element)">
-          {{ element.BD_DRAFT_FULL_SERIAL }}
+          {{
+            element.BD_IS_DRAFTED
+              ? element.BD_DRAFT_FULL_SERIAL
+              : element.BD_INVESTIGATION_FULL_SERIAL
+          }}
         </button>
       </td>
     </ng-container>
@@ -63,6 +67,17 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <span [innerHTML]="element.ACTIVATED"></span>
+      </td>
+    </ng-container>
+
+    <!-- TAD_DISPLAY_NAME -->
+    <ng-container matColumnDef="TAD_DISPLAY_NAME">
+      <th mat-header-cell mat-sort-header="TAD_DISPLAY_NAME" *matHeaderCellDef>
+        {{ lang.map.step_name }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span
+          [innerHTML]="lang.map[assertType(element).TAD_DISPLAY_NAME]"></span>
       </td>
     </ng-container>
 

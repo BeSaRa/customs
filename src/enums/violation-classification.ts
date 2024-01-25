@@ -3,3 +3,6 @@ export enum ClassificationTypes {
   behavioral = 3,
   custom = 4,
 }
+// criminal = 'criminal',
+// behavioral = 'behavioral',
+// custom = 'custom',
