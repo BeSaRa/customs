@@ -1,11 +1,10 @@
 <div class="grid grid-cols-5 gap-4 mt-3">
   <!-- save -->
-  <app-button
-    [disabled]="!model?.canSave()"
-    (click)="save.emit(SaveTypes.FINAL)"
-    >{{ lang.map.save }}
-  </app-button>
-
+  @if (canSave) {
+    <app-button (click)="save.emit(SaveTypes.FINAL)"
+      >{{ lang.map.save }}
+    </app-button>
+  }
   <!-- manager approve -->
   @if (
     model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)
