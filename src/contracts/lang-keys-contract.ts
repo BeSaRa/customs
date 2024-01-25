@@ -383,4 +383,12 @@ export interface LangKeysContract {
   grievance: string;
   investigation: string;
   number_of_violations: string;
+  case_location: string;
+  is_main: string;
+  start_date: string;
+  action: string;
+  user_from: string;
+  user_to: string;
+  time: string;
+  assigned_to: string;
 }

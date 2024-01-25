@@ -1,0 +1,191 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.actions }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="p-4 overflow-hidden" style="max-height: 62vh">
+      <div class="shadow relative overflow-auto mb-3" style="max-height: 30vh">
+        <div
+          class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+          <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+            {{ lang.map.assigned_to }}
+          </h1>
+        </div>
+        <table
+          mat-table
+          matSort
+          class="table-style"
+          [dataSource]="assignedToDisplayedList">
+          <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.case_location }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.getNames() }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- isMain -->
+          <ng-container matColumnDef="isMain">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.is_main }}</th>
+            <td mat-cell *matCellDef="let element">
+              @if (element.isMain) {
+                <app-icon-button [disabled]="true" icon="CHECK_BOLD">
+                </app-icon-button>
+              }
+            </td>
+          </ng-container>
+
+          <!-- stepSubject -->
+          <ng-container matColumnDef="stepSubject">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.step_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ getStepName(element) }}</span>
+            </td>
+          </ng-container>
+
+          <!-- type -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.type }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ getTypeName(element) }}</span>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="assignedToColumnsWrapper.displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let element;
+              columns: assignedToColumnsWrapper.displayedColumns
+            "></tr>
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="shadow relative overflow-auto" style="max-height: 30vh">
+        <div
+          class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+          <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+            {{ lang.map.actions }}
+          </h1>
+        </div>
+        <table
+          mat-table
+          matSort
+          class="table-style"
+          [dataSource]="ActionsOnCaseDisplayedList">
+          <!-- action -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.action }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.actionInfo.getNames() }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- userFromInfo -->
+          <ng-container matColumnDef="userFrom">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.user }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.userFromInfo.getNames() }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- userToInfo -->
+          <ng-container matColumnDef="userTo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.user_to }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.userToInfo.getNames() || '-' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- addedOn -->
+          <ng-container matColumnDef="addedOn">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.creation_date }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.addedOn }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- time -->
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.time }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.time }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- comment -->
+          <ng-container matColumnDef="comment">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.comment }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="flex justify-start items-center">
+                {{ element.comment }}
+              </span>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="
+              ActionsOnCaseColumnsWrapper.displayedColumns
+            "></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let element;
+              columns: ActionsOnCaseColumnsWrapper.displayedColumns
+            "></tr>
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="dialog-footer justify-end">
+  <app-button mat-dialog-close="" buttonType="primary">{{
+    lang.map.close
+  }}</app-button>
+</div>
