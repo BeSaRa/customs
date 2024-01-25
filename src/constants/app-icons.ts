@@ -65,6 +65,8 @@ export const AppIcons = {
   CLEARING_AGENCY: 'domain',
   EMPLOYEE: 'account-tie-outline',
   OFFENDER_VIOLATION: 'cards',
+  VIEW_LIST_OUTLINE: 'view-list-outline',
+  CHECK_BOLD: 'check-bold',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -18,6 +18,8 @@ import { Team } from '@models/team';
 import { FormControl } from '@angular/forms';
 import { InboxRiskStatus } from '@enums/inbox-risk-status';
 import { CaseTypes } from '@enums/case-types';
+import { DialogService } from '@services/dialog.service';
+import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
 
 @Component({
   selector: 'app-team-inbox',
@@ -32,6 +34,7 @@ export class TeamInboxComponent
   lookupService = inject(LookupService);
   lang = inject(LangService);
   router = inject(Router);
+  dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
@@ -131,5 +134,11 @@ export class TeamInboxComponent
       classes += 'custom-status-overdue';
     }
     return classes;
+  }
+
+  showActionsOnCase(item: InboxResult) {
+    this.dialog.open(ActionsOnCaseComponent, {
+      data: { caseId: item.PI_PARENT_CASE_ID },
+    });
   }
 }

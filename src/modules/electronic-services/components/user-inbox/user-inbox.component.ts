@@ -15,6 +15,8 @@ import { Router } from '@angular/router';
 import { QueryResultSet } from '@models/query-result-set';
 import { InboxRiskStatus } from '@enums/inbox-risk-status';
 import { CaseTypes } from '@enums/case-types';
+import { DialogService } from '@services/dialog.service';
+import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
 
 @Component({
   selector: 'app-user-inbox',
@@ -29,6 +31,8 @@ export class UserInboxComponent
   lookupService = inject(LookupService);
   lang = inject(LangService);
   router = inject(Router);
+  dialog = inject(DialogService);
+
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
@@ -120,5 +124,11 @@ export class UserInboxComponent
       classes += 'custom-status-overdue';
     }
     return classes;
+  }
+
+  showActionsOnCase(item: InboxResult) {
+    this.dialog.open(ActionsOnCaseComponent, {
+      data: { caseId: item.PI_PARENT_CASE_ID },
+    });
   }
 }
