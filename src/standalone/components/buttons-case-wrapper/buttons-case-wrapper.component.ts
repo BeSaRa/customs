@@ -47,6 +47,7 @@ export class ButtonsCaseWrapperComponent
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
+  @Input() canSave: boolean = true;
   @Input() model?: Investigation;
   @Input({ transform: booleanAttribute })
   mandatoryMakePenaltyDecisions: boolean = false;
