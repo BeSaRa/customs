@@ -142,7 +142,7 @@
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
-            [options]="violations">
+            [options]="violations()">
             <app-button appInputSuffix (click)="addViolation$.next()">
               {{ lang.map.select }}
             </app-button>
@@ -153,7 +153,7 @@
         mat-table
         matSort
         class="table-style table-primary"
-        [dataSource]="dataSource">
+        [dataSource]="dataSource()">
         <!-- violationClassification -->
         <ng-container matColumnDef="violationClassification">
           <th

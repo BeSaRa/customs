@@ -1,5 +1,12 @@
 import { LangService } from '@services/lang.service';
-import { Component, OnInit, inject } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  inject,
+  computed,
+  InputSignal,
+  signal,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -57,9 +64,12 @@ export class OffenderViolationsPopupComponent
   offenderViolationService = inject(OffenderViolationService);
   dialog = inject(DialogService);
   toast = inject(ToastService);
+
   offenderTypes = OffenderTypes;
-  offenderViolations = new Subject<OffenderViolation[]>();
-  dataSource = new AppTableDataSource(this.offenderViolations);
+  offenderViolations = signal([] as OffenderViolation[]);
+  dataSource = computed(
+    () => new AppTableDataSource(this.offenderViolations()),
+  );
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   delete$ = new Subject<OffenderViolation>();
   addViolation$: Subject<void> = new Subject<void>();
@@ -72,37 +82,41 @@ export class OffenderViolationsPopupComponent
     'actions',
   ];
   control = new FormControl<number[]>([], [CustomValidators.required]);
-  violations: Violation[] = [];
+
+  violations = computed(() => {
+    return (this.data as { violations: InputSignal<Violation[]> })
+      .violations()
+      .filter(
+        (v: Violation | OffenderViolation) =>
+          this.data.offender &&
+          ((v as Violation).offenderTypeInfo
+            ? !this.offenderViolations().find(
+                ov => ov.violationId === (v as Violation).id,
+              ) &&
+              ((v as Violation).offenderTypeInfo.lookupKey ===
+                this.data.offender.type ||
+                (v as Violation).offenderTypeInfo.lookupKey ===
+                  OffenderTypes.BOTH)
+            : !this.offenderViolations().find(
+                ov => ov.violationId === (v as OffenderViolation).violationId,
+              ) &&
+              ((v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
+                this.data.offender.type ||
+                (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
+                  OffenderTypes.BOTH)),
+      );
+  });
   readonly = this.data && this.data.readonly;
   offender: Offender = this.data && (this.data.offender as Offender);
 
   constructor() {
     super();
   }
-
   ngOnInit() {
-    this.filterViolations();
     this.listenToReload();
     this.listenToDelete();
     this.listenToAdd();
     if (this.readonly) this.displayedColumns.pop();
-  }
-
-  filterViolations() {
-    this.violations =
-      this.data &&
-      (this.data.violations || []).filter(
-        (v: Violation | OffenderViolation) =>
-          this.data.offender &&
-          ((v as Violation).offenderTypeInfo
-            ? (v as Violation).offenderTypeInfo.lookupKey ===
-                this.data.offender.type ||
-              (v as Violation).offenderTypeInfo.lookupKey === OffenderTypes.BOTH
-            : (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
-                this.data.offender.type ||
-              (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
-                OffenderTypes.BOTH),
-      );
   }
 
   private listenToReload() {
@@ -120,14 +134,7 @@ export class OffenderViolationsPopupComponent
         ),
       )
       .subscribe(pagination => {
-        this.offenderViolations.next(pagination.rs);
-        this.filterViolations();
-        this.violations = this.violations.filter(
-          v =>
-            !this.dataSource.data.find(
-              offenderViolation => offenderViolation.violationId === v.id,
-            ),
-        );
+        this.offenderViolations.set(pagination.rs);
       });
   }
   private listenToAdd() {
@@ -158,13 +165,16 @@ export class OffenderViolationsPopupComponent
   private listenToDelete() {
     this.delete$
       .pipe(
-        exhaustMap(model =>
-          this.dialog
+        exhaustMap(model => {
+          const deletedViolation = new Violation().clone<Violation>({
+            ...this.offenderViolations().find(
+              v => v.violationId === model.violationId,
+            )?.violationInfo,
+          });
+          return this.dialog
             .confirm(
               this.lang.map.msg_delete_link_with_x_confirm.change({
-                x: this.violations
-                  .find(v => v.id === model.violationId)
-                  ?.getOffenderViolationSelectNames(),
+                x: deletedViolation.getOffenderViolationSelectNames(),
               }),
             )
             .afterClosed()
@@ -173,17 +183,20 @@ export class OffenderViolationsPopupComponent
                 model,
                 userClick,
               })),
-            ),
-        ),
+            );
+        }),
       )
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
       .subscribe(model => {
+        const deletedViolation = new Violation().clone<Violation>({
+          ...this.offenderViolations().find(
+            v => v.violationId === model.violationId,
+          )?.violationInfo,
+        });
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({
-            x: this.violations
-              .find(v => v.id === model.violationId)
-              ?.getOffenderViolationSelectNames(),
+            x: deletedViolation.getOffenderViolationSelectNames(),
           }),
         );
         this.reload$.next(null);

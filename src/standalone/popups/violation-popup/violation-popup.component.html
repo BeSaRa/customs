@@ -14,7 +14,6 @@
         bindLabel="getNames"
         formControlName="violationClassificationId"
         bindValue="id"
-        [disabled]="!!model?.id"
         [options]="classifications" />
       <app-select-input
         [label]="lang.map.violation_type"

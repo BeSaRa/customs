@@ -97,8 +97,15 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   isCustoms = false;
   isAbsenceType = false;
   onlyOneDay = false;
-  reportType: ReportType = 'None';
   securityManagement = this.lookupService.lookups.securityManagement;
+
+  reportType = computed(() => {
+    return this.data.extras?.reportType
+      ? (
+          this.data.extras as { reportType: InputSignal<ReportType> }
+        ).reportType()
+      : 'None';
+  });
 
   caseId = computed(() => {
     return (this.data.extras as { caseId: InputSignal<string> }).caseId();
@@ -118,7 +125,6 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected override _init() {
     super._init();
     this.loadClassifications();
-    this.reportType = this.data.extras?.reportType as ReportType;
     if (
       this.operation === OperationType.UPDATE ||
       this.operation === OperationType.VIEW
@@ -148,6 +154,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         this.controls
           .classification()
           ?.patchValue(this.data.extras.classificationId, { emitEvent: false });
+      this.controls.classification()?.disable({ emitEvent: false });
       this.checkClassification();
       this.checkViolationType();
       this.checkRequiredField();
@@ -160,6 +167,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         this.lang.map.msg_make_sure_all_required_fields_are_filled,
       );
       this.form.markAllAsTouched();
+      return of(false);
     }
     return !this.caseId()
       ? (() => {
@@ -309,10 +317,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
       this.classifications = list.filter(
         vc =>
-          this.reportType === 'None' ||
-          (this.reportType === 'Creminal' &&
+          this.reportType() === 'None' ||
+          (this.reportType() === 'Creminal' &&
             vc.id === ClassificationTypes.criminal) ||
-          (this.reportType === 'Normal' &&
+          (this.reportType() === 'Normal' &&
             vc.id !== ClassificationTypes.criminal),
       );
       this.prepareClassificationMap();

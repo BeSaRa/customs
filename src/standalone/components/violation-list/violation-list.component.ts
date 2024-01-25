@@ -59,10 +59,10 @@ export class ViolationListComponent
   lang = inject(LangService);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
-  caseId = input('');
-  add$: Subject<void> = new Subject<void>();
   service = inject(InvestigationService);
   violationService = inject(ViolationService);
+  caseId = input('');
+  add$: Subject<void> = new Subject<void>();
   data = new Subject<Violation[]>();
   dataSource = new AppTableDataSource(this.data);
   displayedColumns = [
@@ -86,12 +86,12 @@ export class ViolationListComponent
   focusInvalidTab = new EventEmitter<boolean>();
   @Output()
   violations = new EventEmitter<Violation[]>();
+
   @Input()
   readonly = false;
   @Input()
   canModifyOffenders = true;
-  @Input()
-  reportType: ReportType = `None`;
+  reportType = input(`None` as ReportType);
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -119,7 +119,6 @@ export class ViolationListComponent
             return of(null);
           }
         }),
-        filter(result => !!result),
       )
       .subscribe(() => this.reload$.next());
   }

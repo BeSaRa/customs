@@ -8,7 +8,9 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
-    <mat-tab-group mat-stretch-tabs="false">
+    <mat-tab-group
+      (selectedIndexChange)="selectedIndex = $event"
+      [mat-stretch-tabs]="false">
       <mat-tab [label]="lang.map.search">
         <ng-container [ngTemplateOutlet]="searchCriteria"></ng-container>
       </mat-tab>
@@ -224,11 +226,11 @@
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">
-    <!--    @if (tabComponent && tabComponent.selectedIndex === 0) {-->
-    <app-button (click)="search$.next()" buttonType="primary">{{
-      lang.map.search
-    }}</app-button>
-    <!--    }-->
+    @if (selectedIndex === 0) {
+      <app-button (click)="search$.next()" buttonType="primary">{{
+        lang.map.search
+      }}</app-button>
+    }
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>

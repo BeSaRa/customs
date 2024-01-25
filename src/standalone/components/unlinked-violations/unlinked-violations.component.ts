@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -26,30 +26,21 @@ import { OffenderViolation } from '@models/offender-violation';
 export class UnlinkedViolationsComponent {
   lang = inject(LangService);
 
-  dataSource = new AppTableDataSource<Violation>([]);
   columns: string[] = ['violationName', 'classification', 'description'];
-  _violations: Violation[] = [];
-  _offenders: Offender[] = [];
-  @Input() set offenders(offenders: Offender[]) {
-    this._offenders = offenders || [];
-    this.dataSource = new AppTableDataSource(
-      this._violations.filter(violation => this.filterViolations(violation)),
+  offenders = input([] as Offender[]);
+  data = input([] as Violation[]);
+  violations = computed(() => {
+    return new AppTableDataSource(
+      this.data().filter(
+        violation =>
+          !this.offenders()
+            .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
+              return [...prev, ...curr.violations];
+            }, [])
+            .filter(offenderViolation => {
+              return offenderViolation.violationId === violation.id;
+            }).length,
+      ),
     );
-  }
-
-  @Input({ required: true }) set data(violations: Violation[]) {
-    this._violations = violations;
-    this.dataSource = new AppTableDataSource(
-      violations.filter(violation => this.filterViolations(violation)),
-    );
-  }
-  filterViolations(violation: Violation) {
-    return !this._offenders
-      .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
-        return [...prev, ...curr.violations];
-      }, [])
-      .filter(offenderViolation => {
-        return offenderViolation.violationId === violation.id;
-      }).length;
-  }
+  });
 }
