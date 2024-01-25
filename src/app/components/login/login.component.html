@@ -12,10 +12,7 @@
         <h1 class="text-center text-2xl border-b-4 p-4 border-secondary mb-4">
           {{ lang.map.login_form }}
         </h1>
-        <form
-          [formGroup]="form"
-          autocomplete="off"
-          (keydown.enter)="login$.next()">
+        <form [formGroup]="form" autocomplete="off">
           <app-input
             formControlName="userName"
             labelColor="text-white"
@@ -30,6 +27,7 @@
             [label]="lang.map.password">
             <button
               appInputSuffix
+              type="button"
               (click)="toggleEye()"
               class="mx-2 outline-offset-4 outline-primary flex items-center justify-center">
               <mat-icon [svgIcon]="selectedPasswordOptions.icon"></mat-icon>
