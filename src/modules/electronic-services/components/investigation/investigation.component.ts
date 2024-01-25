@@ -98,11 +98,11 @@ export class InvestigationComponent
     return this.employeeService.isHrManager();
   }
 
-  summaryMode() {
-    return !this.isOpenedFromAddScreen();
+  showSummaryElements() {
+    return !!this.model?.id;
   }
-  isOpenedFromAddScreen() {
-    return this.openFrom === OpenFrom.ADD_SCREEN || !this.openFrom;
+  canSave() {
+    return this.canEdit() || !this.model?.id;
   }
   canEdit() {
     return (
@@ -196,21 +196,10 @@ export class InvestigationComponent
   }
 
   getReportType(): ReportType {
-    console.log(
-      !this.violations.length
-        ? 'None'
-        : !this.violations.find(v => {
-              return (
-                v.violationClassificationId === ClassificationTypes.criminal
-              );
-            })
-          ? 'Normal'
-          : 'Creminal',
-    );
     return !this.violations.length
       ? 'None'
       : !this.violations.find(v => {
-            return v.violationClassificationId === ClassificationTypes.criminal;
+            return v.classificationInfo.id === ClassificationTypes.criminal;
           })
         ? 'Normal'
         : 'Creminal';

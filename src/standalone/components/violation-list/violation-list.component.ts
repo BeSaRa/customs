@@ -95,7 +95,6 @@ export class ViolationListComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(() => {
-          console.log(this.reportType);
           return this.service
             .openAddViolation(
               this.caseId,

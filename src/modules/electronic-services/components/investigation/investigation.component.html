@@ -8,7 +8,7 @@
     <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
     <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
   </div>
-  @if (summaryMode()) {
+  @if (showSummaryElements()) {
     <div
       [formGroup]="form"
       class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
@@ -58,20 +58,20 @@
 <div
   class="relative"
   [ngClass]="{
-    'investigation-tab-group': !summaryMode(),
-    'investigation-tab-group-preview': summaryMode()
+    'investigation-tab-group': !showSummaryElements(),
+    'investigation-tab-group-preview': showSummaryElements()
   }">
   <mat-card>
     <mat-tab-group
       [selectedIndex]="selectedTab"
       (selectedIndexChange)="tabChange($event)"
       mat-stretch-tabs="false">
-      @if (summaryMode()) {
+      @if (showSummaryElements()) {
         <mat-tab [label]="lang.map.basic_report_data_and_violations">
           <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
         </mat-tab>
       }
-      @if (!summaryMode()) {
+      @if (canSave()) {
         <mat-tab [label]="lang.map.lbl_basic_info">
           <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
         </mat-tab>
@@ -95,6 +95,7 @@
   </mat-card>
   <app-buttons-case-wrapper
     [model]="model"
+    [canSave]="canSave()"
     (save)="save$.next($event)"
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
