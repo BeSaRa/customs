@@ -31,6 +31,7 @@ import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-vi
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
 import { ignoreErrors } from '@utils/utils';
+import { ReportType } from '@app-types/validation-return-type';
 
 @Component({
   selector: 'app-offender-list',
@@ -62,12 +63,14 @@ export class OffenderListComponent
   @Input()
   readonly = false;
   @Input()
-  canDelete = true;
+  canModifyOffenders = true;
   add$: Subject<void> = new Subject<void>();
   @Output()
   offenders = new EventEmitter<Offender[]>();
   @Output()
   linkOffenderWithViolation = new EventEmitter<void>();
+  @Input()
+  reportType: ReportType = `None`;
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -117,6 +120,7 @@ export class OffenderListComponent
                 offenders: this.dataSource.data,
                 askForSaveModel: this.askForSaveModel,
                 askForViolationListReload: this.askForViolationListReload,
+                reportType: this.reportType,
               },
             })
             .afterClosed(),

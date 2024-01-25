@@ -30,9 +30,8 @@ export class Investigation extends BaseCase<
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
   securityLevelInfo!: AdminResult;
-
-  // TODO
-  subject: string = '';
+  isDrafted!: boolean;
+  subject!: string;
 
   buildForm(controls = false, disabled = false): object {
     const {

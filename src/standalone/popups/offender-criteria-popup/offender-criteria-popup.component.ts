@@ -61,6 +61,7 @@ import { DialogService } from '@services/dialog.service';
 import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
 import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
+import { ReportType } from '@app-types/validation-return-type';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -118,7 +119,6 @@ export class OffenderCriteriaPopupComponent
     nonNullable: false,
   });
   offenderViolationControl = new FormControl<number[]>([]);
-  offenderTypesEnum = OffenderTypes;
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
   employees$ = new BehaviorSubject<MawaredEmployee[]>([]);
@@ -144,9 +144,9 @@ export class OffenderCriteriaPopupComponent
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
+  reportType = this.data && (this.data.reportType as ReportType);
 
   caseId = this.data && this.data.caseId;
-  selectedOffender!: MawaredEmployee | ClearingAgent;
 
   canSave = computed(() => !!this.data.caseId());
 
@@ -224,7 +224,11 @@ export class OffenderCriteriaPopupComponent
       .pipe(
         switchMap(() =>
           this.service
-            .openAddViolation(this.caseId, this.data.askForSaveModel)
+            .openAddViolation(
+              this.caseId,
+              this.data.askForSaveModel,
+              this.reportType,
+            )
             .afterClosed()
             .pipe(tap(() => this.data.askForViolationListReload.next())),
         ),

@@ -28,21 +28,28 @@ export class UnlinkedViolationsComponent {
 
   dataSource = new AppTableDataSource<Violation>([]);
   columns: string[] = ['violationName', 'classification', 'description'];
-
-  @Input() offenders: Offender[] = [];
+  _violations: Violation[] = [];
+  _offenders: Offender[] = [];
+  @Input() set offenders(offenders: Offender[]) {
+    this._offenders = offenders || [];
+    this.dataSource = new AppTableDataSource(
+      this._violations.filter(violation => this.filterViolations(violation)),
+    );
+  }
 
   @Input({ required: true }) set data(violations: Violation[]) {
+    this._violations = violations;
     this.dataSource = new AppTableDataSource(
-      violations.filter(
-        violation =>
-          !this.offenders
-            .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
-              return [...prev, ...curr.violations];
-            }, [])
-            .filter(offenderViolation => {
-              return offenderViolation.violationId === violation.id;
-            }).length,
-      ),
+      violations.filter(violation => this.filterViolations(violation)),
     );
+  }
+  filterViolations(violation: Violation) {
+    return !this._offenders
+      .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
+        return [...prev, ...curr.violations];
+      }, [])
+      .filter(offenderViolation => {
+        return offenderViolation.violationId === violation.id;
+      }).length;
   }
 }

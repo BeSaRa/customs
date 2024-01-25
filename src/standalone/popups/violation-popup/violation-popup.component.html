@@ -14,6 +14,7 @@
         bindLabel="getNames"
         formControlName="violationClassificationId"
         bindValue="id"
+        [disabled]="!!model?.id"
         [options]="classifications" />
       <app-select-input
         [label]="lang.map.violation_type"
@@ -25,7 +26,7 @@
         formControlName="description"
         [label]="lang.map.description"
         class="col-span-2" />
-      @if (!isAbsenceType) {
+      @if (!isAbsenceType || onlyOneDay) {
         <app-input
           formControlName="violationsDate"
           [label]="lang.map.violation_date">
@@ -35,33 +36,36 @@
             [max]="todayDate"
             (click)="datepicker.open()"
             [matDatepicker]="datepicker" />
-          <mat-datepicker touchUi #datepicker />
+          <mat-datepicker [touchUi]="true" #datepicker />
         </app-input>
       }
-      @if (isAbsenceType) {
-        <app-input
-          formControlName="violationsDateFrom"
-          [label]="lang.map.date_from">
-          <input
-            appControl
-            formControlName="violationsDateFrom"
-            (click)="violationDateFrom.open()"
-            [max]="controls.violationsDateTo()?.value || todayDate"
-            [matDatepicker]="violationDateFrom" />
-          <mat-datepicker touchUi #violationDateFrom />
-        </app-input>
-        <app-input
-          formControlName="violationsDateTo"
-          [label]="lang.map.date_to">
-          <input
-            appControl
-            [min]="controls.violationsDateFrom()?.value"
-            [max]="todayDate"
-            formControlName="violationsDateTo"
-            (click)="violationsDateTo.open()"
-            [matDatepicker]="violationsDateTo" />
-          <mat-datepicker touchUi #violationsDateTo />
-        </app-input>
+      @if (isAbsenceType && !onlyOneDay) {
+        <div class="mb-3">
+          <label class="font-medium"
+            >{{ lang.map.violation_date }}
+            <span class="text-amber-700">*</span>
+          </label>
+          <div
+            (click)="rangePicker.open()"
+            class="flex read-only input-form p-2">
+            <mat-date-range-input
+              [max]="maxEndDate"
+              [min]="minEndDate"
+              [rangePicker]="rangePicker">
+              <input
+                [placeholder]="lang.map.date_from"
+                matStartDate
+                (dateChange)="onSelectionChange()"
+                formControlName="violationsDateFrom" />
+              <input
+                [placeholder]="lang.map.date_to"
+                matEndDate
+                (dateChange)="onSelectionChange()"
+                formControlName="violationsDateTo" />
+            </mat-date-range-input>
+          </div>
+          <mat-date-range-picker hidden #rangePicker></mat-date-range-picker>
+        </div>
       }
       @if (isCriminal) {
         <app-input
@@ -95,12 +99,12 @@
       }}</app-button>
     }
     @if (inEditMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>

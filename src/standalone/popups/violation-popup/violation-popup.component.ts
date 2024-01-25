@@ -34,6 +34,8 @@ import { CustomValidators } from '@validators/custom-validators';
 import { OperationType } from '@enums/operation-type';
 import { Router } from '@angular/router';
 import { DialogService } from '@services/dialog.service';
+import { DatePipe } from '@angular/common';
+import { ReportType } from '@app-types/validation-return-type';
 
 @Component({
   selector: 'app-violation-popup',
@@ -50,7 +52,9 @@ import { DialogService } from '@services/dialog.service';
     MatDatepickerModule,
     ReactiveFormsModule,
     TextareaComponent,
+    DatePipe,
   ],
+
   templateUrl: './violation-popup.component.html',
   styleUrls: ['./violation-popup.component.scss'],
 })
@@ -65,6 +69,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   types: ViolationType[] = [];
   classifications: ViolationClassification[] = [];
   todayDate: Date = new Date();
+  maxEndDate: Date | undefined;
+  minEndDate: Date | undefined;
   controls = {
     classification: () => this.form.get('violationClassificationId'),
     violationType: () => this.form.get('violationTypeId'),
@@ -90,7 +96,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   isCriminal = false;
   isCustoms = false;
   isAbsenceType = false;
-
+  onlyOneDay = false;
+  reportType: ReportType = 'None';
   securityManagement = this.lookupService.lookups.securityManagement;
 
   caseId = computed(() => {
@@ -111,20 +118,18 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   protected override _init() {
     super._init();
     this.loadClassifications();
+    this.reportType = this.data.extras?.reportType as ReportType;
     if (
       this.operation === OperationType.UPDATE ||
       this.operation === OperationType.VIEW
     ) {
       this.data.extras
         ? (() => {
-            this.classifications = this.data.extras
-              .classifciations as ViolationClassification[];
             this.types = this.data.extras.types as ViolationType[];
           })()
         : null;
     }
   }
-
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -225,10 +230,41 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.isCustoms =
       this.controls.classification()?.value === ClassificationTypes.custom;
   }
+  // private checkClassification(): void {
+  //   const selectedClassification = this.classifications.find(
+  //       classification =>
+  //           classification.id === this.controls.classification()?.value,
+  //   );
+  //   this.isCriminal =
+  //       selectedClassification?.key === ClassificationTypes.criminal;
+  //   this.isCustoms = selectedClassification?.key === ClassificationTypes.custom;
+  // }
+  onSelectionChange(): void {
+    if (
+      this.controls.violationsDateFrom()?.value &&
+      !this.controls.violationsDateTo()?.value
+    ) {
+      const selectedType = this.typesMap[this.controls.violationType()?.value];
+      const maxDate = new Date(this.controls.violationsDateFrom()?.value);
+      const minDate = new Date(this.controls.violationsDateFrom()?.value);
+      maxDate.setDate(maxDate.getDate() + selectedType.numericTo - 1);
+      minDate.setDate(minDate.getDate() + selectedType.numericFrom - 1);
+
+      this.maxEndDate = maxDate;
+      this.minEndDate = minDate;
+    } else {
+      this.maxEndDate = undefined;
+      this.minEndDate = undefined;
+    }
+  }
 
   private checkViolationType(): void {
     const selectedType = this.typesMap[this.controls.violationType()?.value];
     this.isAbsenceType = selectedType && selectedType.isAbsence;
+    this.onlyOneDay =
+      selectedType &&
+      selectedType.numericFrom === 1 &&
+      selectedType.numericTo - selectedType.numericFrom === 1;
   }
 
   private checkRequiredField(): void {
@@ -259,12 +295,26 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       : (() => {
           this.controls.customsDeclarationNumber()?.clearValidators();
         })();
+
+    this.controls.customsDeclarationNumber()?.reset();
+    this.controls.violationsDate()?.reset();
+    this.controls.violationsDateFrom()?.reset();
+    this.controls.violationsDateTo()?.reset();
+    this.minEndDate = undefined;
+    this.maxEndDate = undefined;
     this.form.updateValueAndValidity();
   }
 
   private loadClassifications(): void {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
-      this.classifications = list;
+      this.classifications = list.filter(
+        vc =>
+          this.reportType === 'None' ||
+          (this.reportType === 'Creminal' &&
+            vc.id === ClassificationTypes.criminal) ||
+          (this.reportType === 'Normal' &&
+            vc.id !== ClassificationTypes.criminal),
+      );
       this.prepareClassificationMap();
     });
   }

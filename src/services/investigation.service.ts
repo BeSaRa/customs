@@ -10,6 +10,7 @@ import { ViolationPopupComponent } from '@standalone/popups/violation-popup/viol
 import { ViolationService } from '@services/violation.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { SusbendEmployee } from '@models/susbend-employee';
+import { ReportType } from '@app-types/validation-return-type';
 
 @CastResponseContainer({
   $default: {
@@ -45,10 +46,12 @@ export class InvestigationService
   openAddViolation(
     caseId: InputSignal<string>,
     askForSaveModel: EventEmitter<void>,
+    isCreminalReport: ReportType,
   ): MatDialogRef<ViolationPopupComponent> {
     return this.violationService.openCreateDialog(undefined, {
       caseId,
       askForSaveModel,
+      isCreminalReport,
     });
   }
 
