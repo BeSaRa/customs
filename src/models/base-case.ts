@@ -54,7 +54,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   }
 
   getResponses() {
-    return this.taskDetails.responses;
+    return this.taskDetails?.responses;
   }
 
   getCaseStatus() {
