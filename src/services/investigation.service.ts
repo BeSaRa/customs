@@ -16,7 +16,7 @@ import { ReportType } from '@app-types/validation-return-type';
   $default: {
     model: () => Investigation,
   },
-  susbend: {
+  suspend: {
     model: () => SusbendEmployee,
   },
 })
@@ -55,12 +55,12 @@ export class InvestigationService
     });
   }
 
-  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
+  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: 'suspend' })
   suspendEmployee(body: SusbendEmployee) {
     return this.http.post(this.getUrlSegment() + '/suspend-employee', body);
   }
 
-  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$susbend' })
+  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: 'suspend' })
   extendSuspendEmployee(body: SusbendEmployee) {
     return this.http.post(
       this.getUrlSegment() + '/extend-suspend-employee',

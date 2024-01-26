@@ -303,6 +303,7 @@ export class InvestigationComponent
   launchCase(type: SendTypes) {
     if (!this.model) return;
     this.model.applicantDecision = type;
+    console.log(this.model);
     this.model
       .save()
       .pipe(

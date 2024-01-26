@@ -116,7 +116,6 @@ export class OffendersViolationsPreviewComponent
     }, {});
 
   private loadPenalties$ = new Subject<void>();
-  private inApplicantDepartment: boolean = true;
 
   situationClick(
     $event: MouseEvent,
@@ -129,8 +128,6 @@ export class OffendersViolationsPreviewComponent
   }
 
   ngOnInit(): void {
-    this.inApplicantDepartment = !!this.employeeService.isApplicantUser();
-
     this.listenToLoadPenalties();
     this.listenToView();
     this.listenToMakeDecision();
@@ -348,19 +345,11 @@ export class OffendersViolationsPreviewComponent
   }
 
   canLoadPenalties(): boolean {
-    console.log(
-      'COn',
-      !!(
-        this.model &&
-        this.model.hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
-        this.model.getActivityName()
-      ),
-    );
     return !!(
       this.model &&
       this.model.hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
       this.model.getActivityName() &&
-      !this.inApplicantDepartment
+      this.model.getTaskName()
     );
   }
 

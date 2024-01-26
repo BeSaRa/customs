@@ -6,6 +6,7 @@ export class InvestigationInterceptor
   implements ModelInterceptorContract<Investigation>
 {
   send(model: Partial<Investigation>): Partial<Investigation> {
+    console.log('SEND');
     delete model.$$__service_name__$$;
     delete model.caseStatusInfo;
     delete model.departmentInfo;
@@ -17,6 +18,7 @@ export class InvestigationInterceptor
     delete model.offenderInfo;
     delete model.offenderViolationInfo;
     delete model.violationInfo;
+    console.log(model);
     return model;
   }
 
