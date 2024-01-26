@@ -136,6 +136,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         : null;
     }
   }
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -238,6 +239,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.isCustoms =
       this.controls.classification()?.value === ClassificationTypes.custom;
   }
+
   // private checkClassification(): void {
   //   const selectedClassification = this.classifications.find(
   //       classification =>
@@ -276,7 +278,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
 
   private checkRequiredField(): void {
-    this.isAbsenceType
+    this.isAbsenceType && !this.onlyOneDay
       ? (() => {
           this.controls
             .violationsDateFrom()
