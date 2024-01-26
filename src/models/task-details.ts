@@ -4,6 +4,7 @@ import { AssignToType } from '@enums/assign-to-type';
 import { PriorityNames } from '@enums/priority-names';
 import { CollaborationDetails } from '@models/collaboration-details';
 import { ActionNames } from '@enums/action-names';
+import { PenaltyDecision } from '@models/penalty-decision';
 
 export class TaskDetails {
   fromUserInfo!: AdminResult;
@@ -45,4 +46,5 @@ export class TaskDetails {
   isRead!: boolean;
   isMain!: boolean;
   activityProperties!: unknown;
+  penaltyDecisions: PenaltyDecision[] = [];
 }

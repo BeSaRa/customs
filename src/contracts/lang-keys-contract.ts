@@ -1,4 +1,6 @@
 export interface LangKeysContract {
+  make_penalty_decision_action: string;
+  penalty_action: string;
   organization_unit_singular: string;
   suspension_type: string;
   extend_suspension: string;

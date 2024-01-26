@@ -6,7 +6,7 @@ import { LookupService } from '@services/lookup.service';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { OrganizationUnit } from '@models/organization-unit';
 import { Team } from '@models/team';
-import { DepartmentGroupNames } from '@enums/department-group-names.enum';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -85,39 +85,35 @@ export class EmployeeService {
 
   isApplicantUser() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === DepartmentGroupNames.Applicant_Department,
+      (t: Team) => t.ldapGroupName === LDAPGroupNames.Applicant_Department,
     );
   }
   isApplicantChief() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName === DepartmentGroupNames.Applicant_Department_Chief,
+        t.ldapGroupName === LDAPGroupNames.Applicant_Department_Chief,
     );
   }
   isApplicantManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName === DepartmentGroupNames.Applicant_Department_Manager,
+        t.ldapGroupName === LDAPGroupNames.Applicant_Department_Manager,
     );
   }
   isHrManager() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === DepartmentGroupNames.Human_Resources_Manager,
+      (t: Team) => t.ldapGroupName === LDAPGroupNames.Human_Resources_Manager,
     );
   }
   isDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === DepartmentGroupNames.Disciplinary_Committee,
+      (t: Team) => t.ldapGroupName === LDAPGroupNames.Disciplinary_Committee,
     );
   }
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
-        t.ldapGroupName ===
-        DepartmentGroupNames.Permanent_Disciplinary_Committee,
+        t.ldapGroupName === LDAPGroupNames.Permanent_Disciplinary_Committee,
     );
   }
   getEmployee(): InternalUser | undefined {

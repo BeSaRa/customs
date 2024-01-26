@@ -9,6 +9,7 @@ import { Violation } from './violation';
 import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
+import { PenaltyDecision } from '@models/penalty-decision';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -76,5 +77,28 @@ export class Investigation extends BaseCase<
       this.taskDetails.processInstanceName &&
       this.taskDetails.processInstanceName.split(':')[0]
     );
+  }
+
+  hasTask(): boolean {
+    return !!this.taskDetails;
+  }
+
+  appendPenaltyDecision(item: PenaltyDecision): void {
+    this.taskDetails.penaltyDecisions = [
+      ...this.taskDetails.penaltyDecisions.filter(i => i.id !== item.id),
+      item,
+    ];
+  }
+
+  getPenaltyDecisionByOffenderId(
+    offenderId: number,
+  ): PenaltyDecision | undefined {
+    return this.taskDetails.penaltyDecisions.find(
+      i => i.offenderId === offenderId,
+    );
+  }
+
+  getPenaltyDecision(): PenaltyDecision[] {
+    return this.taskDetails.penaltyDecisions;
   }
 }

@@ -16,6 +16,7 @@ import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 
 @Component({
   selector: 'app-make-penalty-decision-popup',
@@ -26,6 +27,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
     SelectInputComponent,
     ButtonComponent,
     MatDialogModule,
+    TextareaComponent,
   ],
   templateUrl: './make-penalty-decision-popup.component.html',
   styleUrls: ['./make-penalty-decision-popup.component.scss'],
@@ -41,24 +43,24 @@ export class MakePenaltyDecisionPopupComponent
   employeeService = inject(EmployeeService);
   model: Offender = this.data && (this.data.model as Offender);
   caseId: string = this.data && (this.data.caseId as string);
+  oldPenalty: PenaltyDecision | undefined = this.data && this.data.oldPenalty;
+
   penaltyList: Penalty[] =
     this.data && (this.data.penalties || ([] as Penalty[]));
   penaltyImposedBySystem: number | null =
     this.data && this.data.penaltyImposedBySystem;
   form: FormGroup = new FormGroup({
     penalty: new FormControl(
-      this.penaltyImposedBySystem
-        ? this.penaltyList[this.penaltyImposedBySystem].id
-        : null,
+      this.oldPenalty ? this.oldPenalty?.penaltyId : null,
       [CustomValidators.required],
     ),
+    comment: new FormControl(this.oldPenalty ? this.oldPenalty?.comment : null),
   });
-  constructor() {
-    super();
-  }
+
   ngOnInit(): void {
     this.listenToSave();
   }
+
   listenToSave() {
     // show form 2
     this.save$
@@ -71,11 +73,15 @@ export class MakePenaltyDecisionPopupComponent
             offenderId: this.model.id,
             signerId: this.employeeService.getEmployee()?.id,
             penaltyId: this.form.value.penalty,
+            comment: this.form.value.comment,
             status: 1,
+            ...(this.oldPenalty ? { id: this.oldPenalty?.id } : undefined),
           });
           return penaltyDecision.save();
         }),
       )
-      .subscribe(() => this.dialogRef.close());
+      .subscribe(model => {
+        this.dialogRef.close(model);
+      });
   }
 }

@@ -4,7 +4,13 @@ import { Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
+import { CastResponseContainer } from 'cast-response';
 
+@CastResponseContainer({
+  $default: {
+    model: () => PenaltyDecision,
+  },
+})
 @Injectable({
   providedIn: 'root',
 })
@@ -12,15 +18,11 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
   MakePenaltyDecisionPopupComponent,
   PenaltyDecision
 > {
-  constructor() {
-    super();
-  }
+  override serviceName: string = 'PenaltyDecisionService';
 
   protected override getDialogComponent(): ComponentType<MakePenaltyDecisionPopupComponent> {
     throw new Error('Method not implemented.');
   }
-
-  override serviceName: string = 'PenaltyDecisionService';
 
   protected override getUrlSegment(): string {
     return this.urlService.URLS.PENALTY_DECISION;

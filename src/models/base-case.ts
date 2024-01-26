@@ -52,45 +52,57 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   getCaseType(): number {
     return this.caseType;
   }
+
   getResponses() {
-    return this.taskDetails?.responses;
+    return this.taskDetails.responses;
   }
+
   getCaseStatus() {
     return this.caseStatus;
   }
+
   hasResponse(responses: TaskResponses) {
     return this.getResponses() && this.getResponses().includes(responses);
   }
+
   isCancelled(): boolean {
     return this.caseStatus === CommonCaseStatus.CANCELLED;
   }
+
   isReturned(): boolean {
     return this.caseStatus === CommonCaseStatus.RETURNED;
   }
+
   canSave(): boolean {
     return true;
   }
+
   getTaskName() {
     return this.taskDetails?.name;
   }
-  isPresedentAssestantReview() {
+
+  isPresidentAssistantReview() {
     return this.getTaskName() === TaskName.PA_REV;
   }
+
   canClaim(): boolean {
     return (
       this.taskDetails &&
       this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM)
     );
   }
+
   canRelease(): boolean {
     return (
       this.taskDetails &&
       this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM)
     );
   }
+
   isClaimed(): boolean {
     return this.canRelease();
   }
+
   hasComplete(): boolean {
     return (
       this?.isClaimed() &&
@@ -99,9 +111,11 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.caseStatus !== CommonCaseStatus.CANCELLED
     );
   }
+
   canCommit(): boolean {
     return this.caseStatus === CommonCaseStatus.DRAFT;
   }
+
   canStart(): boolean {
     return this.caseStatus === CommonCaseStatus.NEW;
   }
@@ -109,6 +123,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   claim(): Observable<Model> {
     return this.getService().claimTask(this.taskDetails.tkiid);
   }
+
   save(): Observable<Model> {
     return this.id
       ? this.getService().update(this as unknown as Model)

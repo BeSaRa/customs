@@ -1,4 +1,4 @@
-export enum DepartmentGroupNames {
+export enum LDAPGroupNames {
   Applicant_Department = 'Applicant_Department',
   Applicant_Department_Chief = 'Applicant_Department_Chief',
   Applicant_Department_Manager = 'Applicant_Department_Manager',

@@ -180,7 +180,7 @@ export class GuidePanelComponent
               +(penalty2.penGuidance === null)
             );
           }
-          return penalty1.penGuidance - penalty2.penGuidance;
+          return penalty1.penGuidance! - penalty2.penGuidance!;
         });
         this.displayedList = new MatTableDataSource(data);
       });

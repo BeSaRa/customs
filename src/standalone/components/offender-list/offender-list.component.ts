@@ -21,6 +21,7 @@ import {
   Subject,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
@@ -133,7 +134,12 @@ export class OffenderListComponent
                   reportType: this.reportType,
                 },
               })
-              .afterClosed();
+              .afterClosed()
+              .pipe(
+                tap(() => {
+                  this.reload$.next();
+                }),
+              );
           } else {
             this.focusInvalidTab.emit(true);
             return of(null);
@@ -141,7 +147,6 @@ export class OffenderListComponent
         }),
       )
       .subscribe(() => {
-        this.reload$.next();
         this.linkOffenderWithViolation.emit();
       });
   }

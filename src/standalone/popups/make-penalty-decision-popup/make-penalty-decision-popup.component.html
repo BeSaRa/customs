@@ -1,6 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.make_penalty_decision }}</h1>
+    <h1>{{ lang.map.make_penalty_decision_action }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -11,12 +11,12 @@
     <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
       <form [formGroup]="form">
         <app-select-input
-          class="col-span-2"
           formControlName="penalty"
           [options]="penaltyList"
-          [label]="lang.map.penalty"
+          [label]="lang.map.penalty_action"
           bindValue="id"
           bindLabel="getNames" />
+        <app-textarea [label]="lang.map.comment" formControlName="comment" />
       </form>
     </div>
   </div>
@@ -24,7 +24,7 @@
     <app-button (click)="save$.next()" buttonType="primary">{{
       lang.map.save
     }}</app-button>
-    <app-button mat-dialog-close="" buttonType="primary">{{
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>
   </div>

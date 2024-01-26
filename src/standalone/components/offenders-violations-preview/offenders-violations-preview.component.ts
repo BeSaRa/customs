@@ -6,7 +6,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, input, Input, OnInit, signal } from '@angular/core';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -16,7 +16,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -29,7 +29,7 @@ import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/
 import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
-import { MatMenuModule } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 import { PenaltyDecision } from '@models/penalty-decision';
@@ -51,10 +51,7 @@ import { ManagerDecisions } from '@enums/manager-decisions';
   ],
   animations: [
     trigger('detailExpand', [
-      state(
-        'collapsed',
-        style({ height: '0px', minHeight: '0', display: 'none' }),
-      ),
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
@@ -79,9 +76,9 @@ export class OffendersViolationsPreviewComponent
   view$: Subject<Offender> = new Subject<Offender>();
   makeDecision$ = new Subject<Offender>();
   attachments$: Subject<Offender> = new Subject<Offender>();
-  penaltyMap!: {
-    [key: string]: { first: ManagerDecisions; second: Penalty[] };
-  };
+  penaltyMap = signal<
+    Record<string, { first: ManagerDecisions; second: Penalty[] }>
+  >({});
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
@@ -89,14 +86,17 @@ export class OffendersViolationsPreviewComponent
     offender: Offender;
     penaltyId: number | undefined;
   }>();
+
   selectedOffender!: Offender | null;
 
   @Input({ required: true }) set data(offenders: Offender[]) {
     this.offenderDataSource = new AppTableDataSource(offenders);
   }
 
-  @Input() investigationModel?: Investigation;
-  @Input() isClaimed = false;
+  @Input() model?: Investigation;
+
+  isClaimed = input(false);
+
   offenderDisplayedColumns = [
     'offenderName',
     'qid',
@@ -105,14 +105,18 @@ export class OffendersViolationsPreviewComponent
     'situationSearch',
     'actions',
   ];
+
   offenderTypesMap: Record<number, Lookup> =
-    this.lookupService.lookups.offenderType.reduce(
-      (acc, item) => ({
+    this.lookupService.lookups.offenderType.reduce((acc, item) => {
+      console.log(acc);
+      return {
         ...acc,
         [item.lookupKey]: item,
-      }),
-      {},
-    );
+      };
+    }, {});
+
+  private loadPenalties$ = new Subject<void>();
+  private inApplicantDepartment: boolean = true;
 
   situationClick(
     $event: MouseEvent,
@@ -125,9 +129,9 @@ export class OffendersViolationsPreviewComponent
   }
 
   ngOnInit(): void {
-    // if (this.offenderDataSource.data.length) {
-    this.loadPenalties();
-    // }
+    this.inApplicantDepartment = !!this.employeeService.isApplicantUser();
+
+    this.listenToLoadPenalties();
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
@@ -135,45 +139,40 @@ export class OffendersViolationsPreviewComponent
     this.listenToSituationSearch();
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
+    this.loadPenalties$.next();
   }
 
   assertType(item: Offender): Offender {
     return item;
   }
 
-  getFilteredPenalties(offender: Offender) {
-    return (
-      this.penaltyMap && this.penaltyMap[offender.id]
-        ? this.penaltyMap[offender.id].second
-        : []
-    ).filter(
-      penalty =>
-        penalty.penaltyKey !== SystemPenalties.TERMINATE &&
-        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT &&
-        penalty.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
-    );
+  getOffenderPenalties(offender: Offender) {
+    return this.penaltyMap() && this.penaltyMap()[offender.id]
+      ? this.penaltyMap()[offender.id].second
+      : [];
   }
 
   getPenaltyIdByPenaltyKey(element: Offender, penaltyKey: SystemPenalties) {
     return (
       this.penaltyMap &&
-      this.penaltyMap[element.id] &&
-      this.penaltyMap[element.id].second.find(
+      this.penaltyMap()[element.id] &&
+      this.penaltyMap()[element.id].second.find(
         penalty => penalty.penaltyKey === penaltyKey,
       )?.id
     );
   }
 
   private loadPenalties() {
-    this.investigationModel
-      ?.getService()
-      .getCasePenalty(
-        this.investigationModel?.id as string,
-        this.investigationModel!.getActivityName()!,
-      )
-      .subscribe(data => {
-        this.penaltyMap = data;
-      });
+    return this.model
+      ? this.model
+          .getService()
+          .getCasePenalty(
+            this.model.id as string,
+            this.model.getActivityName()!,
+          )
+      : of(
+          {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
+        );
   }
 
   private listenToView() {
@@ -184,7 +183,7 @@ export class OffendersViolationsPreviewComponent
             .open(OffenderViolationsPopupComponent, {
               data: {
                 offender: offender,
-                caseId: this.investigationModel?.id,
+                caseId: this.model?.id,
                 violations: offender.violations,
                 readonly: true,
               },
@@ -202,7 +201,7 @@ export class OffendersViolationsPreviewComponent
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
-                model: this.investigationModel,
+                model: this.model,
                 offenderId: model.id,
                 readonly: true,
               },
@@ -216,29 +215,28 @@ export class OffendersViolationsPreviewComponent
   private listenToMakeDecision() {
     this.makeDecision$
       .pipe(
-        tap((offender: Offender) => {
-          !this.getFilteredPenalties(offender).length &&
-            this.dialog.info(this.lang.map.no_records_to_display);
-        }),
-        filter(
-          (offender: Offender) => !!this.getFilteredPenalties(offender).length,
-        ),
-      )
-      .pipe(
         switchMap((offender: Offender) =>
           this.dialog
-            .open(MakePenaltyDecisionPopupComponent, {
-              data: {
-                model: offender,
-                caseId: this.investigationModel?.id,
-                penalties: this.getFilteredPenalties(offender),
-                penaltyImposedBySystem: this.penaltyMap[offender.id].first,
+            .open<unknown, unknown, PenaltyDecision>(
+              MakePenaltyDecisionPopupComponent,
+              {
+                data: {
+                  model: offender,
+                  caseId: this.model?.id,
+                  penalties: this.getOffenderPenalties(offender),
+                  penaltyImposedBySystem: this.penaltyMap()[offender.id].first,
+                  oldPenalty: this.model?.getPenaltyDecisionByOffenderId(
+                    offender.id,
+                  ),
+                },
               },
-            })
+            )
             .afterClosed(),
         ),
       )
-      .subscribe();
+      .subscribe((item: PenaltyDecision | undefined) => {
+        this.model && item && this.model.appendPenaltyDecision(item);
+      });
   }
 
   private listenToAssignmentToAttend() {
@@ -249,7 +247,7 @@ export class OffendersViolationsPreviewComponent
             .open(AssignmentToAttendPopupComponent, {
               data: {
                 offender: offender,
-                caseId: this.investigationModel?.id,
+                caseId: this.model?.id,
                 type: UserTypes.INTERNAL,
               },
             })
@@ -266,7 +264,7 @@ export class OffendersViolationsPreviewComponent
           const suspendedEmployee =
             this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
               offender.offender,
-              this.investigationModel?.id as string,
+              this.model?.id as string,
             );
           return this.dialog
             .open(SuspendEmployeePopupComponent, {
@@ -306,7 +304,7 @@ export class OffendersViolationsPreviewComponent
       .pipe(
         switchMap(({ offender, penaltyId }) => {
           const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
-            caseId: this.investigationModel?.id,
+            caseId: this.model?.id,
             offenderId: offender.id,
             signerId: this.employeeService.getEmployee()?.id,
             penaltyId: penaltyId,
@@ -320,21 +318,65 @@ export class OffendersViolationsPreviewComponent
 
   canMakeDecision(offender: Offender): boolean {
     return (
-      this.penaltyMap &&
-      this.penaltyMap[offender.id] &&
-      !!this.getFilteredPenalties(offender).length &&
+      this.penaltyMap() &&
+      this.penaltyMap()[offender.id] &&
+      !!this.getOffenderPenalties(offender).length &&
       this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
     );
   }
 
   mandatoryMakePenaltyDecisions() {
     return (
-      !!this.penaltyMap &&
-      !!Object.keys(this.penaltyMap).find(
+      !!this.penaltyMap() &&
+      !!Object.keys(this.penaltyMap()).find(
         k =>
-          this.penaltyMap[k].first ===
+          this.penaltyMap()[k].first ===
           ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
       )
     );
+  }
+
+  private listenToLoadPenalties() {
+    this.loadPenalties$
+      .pipe(filter(() => this.canLoadPenalties()))
+      .pipe(switchMap(() => this.loadPenalties()))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.penaltyMap.set(data);
+        console.log(this.penaltyMap());
+      });
+  }
+
+  canLoadPenalties(): boolean {
+    console.log(
+      'COn',
+      !!(
+        this.model &&
+        this.model.hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+        this.model.getActivityName()
+      ),
+    );
+    return !!(
+      this.model &&
+      this.model.hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+      this.model.getActivityName() &&
+      !this.inApplicantDepartment
+    );
+  }
+
+  openMenu(trigger: MatMenuTrigger) {
+    trigger.openMenu();
+  }
+
+  rowClicked($event: MouseEvent, element: Offender) {
+    const requiredClassToPreventExpended = 'mat-mdc-button-touch-target';
+    if (
+      !($event.target as unknown as HTMLElement).classList.contains(
+        requiredClassToPreventExpended,
+      )
+    ) {
+      this.selectedOffender =
+        this.selectedOffender === element ? null : element;
+    }
   }
 }

@@ -65,11 +65,13 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap((response: TaskResponses) => {
+          const decisionIds = this.model!.getPenaltyDecision().map(i => i.id);
           return this.dialog
             .open(CommentPopupComponent, {
               data: {
                 model: this.model,
                 response,
+                decisionIds,
               },
             })
             .afterClosed();

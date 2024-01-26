@@ -1,4 +1,7 @@
 html[dir="rtl"] {
+  :root {
+    --mat-table-header-headline-font: "Tajawal", sans-serif;
+  }
   body {
     font-family: "Tajawal", sans-serif;
   }

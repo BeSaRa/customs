@@ -53,8 +53,14 @@ export class CommentPopupComponent
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
+  decisionIds: number[] = this.data && (this.data.decisionIds as number[]);
+
   taskResponses = TaskResponses;
   usersList: InternalUserOU[] = [];
+  private internalUserOUService = inject(InternalUserOUService);
+
+  private employeeService = inject(EmployeeService);
+
   previewFormList: TaskResponses[] = [
     TaskResponses.TO_MANAGER,
     TaskResponses.MANAGER_APPROVE,
@@ -62,32 +68,18 @@ export class CommentPopupComponent
     TaskResponses.REFERRAL_TO_PRESODENT,
   ];
   isPreviewForm = false;
-  constructor(
-    private internalUserOUService: InternalUserOUService,
-    private employeeService: EmployeeService,
-  ) {
-    super();
-  }
+
   ngOnInit() {
     this.buildForm();
     this.listenToComment();
     this._loadUsersList();
     this.isPreviewForm = this.previewFormList.includes(this.response);
-    this.model.offenderInfo.forEach(offender => {
-      const newOffender = {
-        name: offender.offenderInfo?.arName ? offender.offenderInfo.arName : '',
-        jobTitle: offender.typeInfo.arName ? offender.typeInfo.arName : '',
-        violations: [{}],
-      };
-      offender.violations.forEach(violation => {
-        newOffender.violations.push({ name: violation.violationId });
-      });
-      this.violations.push(newOffender);
-    });
   }
+
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
   }
+
   private _loadUsersList() {
     if (this.isSendToUser) {
       this.internalUserOUService
@@ -99,6 +91,7 @@ export class CommentPopupComponent
         });
     }
   }
+
   buildForm() {
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [CustomValidators.required]),
@@ -109,6 +102,7 @@ export class CommentPopupComponent
       this.form.get('userId')?.updateValueAndValidity();
     }
   }
+
   listenToComment() {
     this.comment$
       .pipe(takeUntil(this.destroy$))
@@ -119,6 +113,7 @@ export class CommentPopupComponent
             selectedResponse: this.response,
             comment: this.form.value.comment,
             userId: this.form.value.userId,
+            decisionIds: this.decisionIds,
           };
           if (!this.isSendToUser) {
             delete completeBody.userId;
@@ -132,6 +127,7 @@ export class CommentPopupComponent
         this.dialogRef.close(UserClick.YES);
       });
   }
+
   get sendToName() {
     if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT) {
       return '';
@@ -153,6 +149,7 @@ export class CommentPopupComponent
     }
     return '';
   }
+
   get formNumberAndType() {
     if (this.response === this.taskResponses.TO_MANAGER) {
       return 'رقم مسودة التحقيق: ((الرقم))';
@@ -169,6 +166,7 @@ export class CommentPopupComponent
     }
     return '';
   }
+
   get decisionNumberAndType() {
     if (
       // this.response === this.taskResponses.FORM2 ||
@@ -185,6 +183,7 @@ export class CommentPopupComponent
     // }
     return '';
   }
+
   get formDateAndType() {
     if (this.response === this.taskResponses.TO_MANAGER) {
       return 'تاريخ مسودة التحقيق: ((التاريخ))';
@@ -205,6 +204,7 @@ export class CommentPopupComponent
     // }
     return '';
   }
+
   get formName() {
     if (
       this.response === this.taskResponses.TO_MANAGER
@@ -226,6 +226,7 @@ export class CommentPopupComponent
     }
     return '';
   }
+
   get upperFixedText() {
     if (
       this.response === this.taskResponses.TO_MANAGER ||
@@ -240,6 +241,7 @@ export class CommentPopupComponent
       return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
     return '';
   }
+
   get lowerFixedText() {
     if (
       this.response === this.taskResponses.TO_MANAGER ||
@@ -254,15 +256,19 @@ export class CommentPopupComponent
       return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
     return '';
   }
+
   get signature() {
     return 'صورة التوقيع';
   }
+
   get sendFromName() {
     return 'اسم الموقع';
   }
+
   get sendFromJobTitle() {
     return 'صفة الموقع';
   }
+
   offenders!: [
     { name: string; jobTitle: string; violations: [{ name: 'مخالفة ١' }] },
   ];
@@ -275,6 +281,7 @@ export class CommentPopupComponent
       // || this.response === this.taskResponses.FORM4 || this.response === this.taskResponses.FORM5
     );
   }
+
   get justifyBetween() {
     return (
       // this.response === this.taskResponses.FORM2 ||
@@ -284,15 +291,19 @@ export class CommentPopupComponent
       // this.response === this.taskResponses.FORM7
     );
   }
+
   get isEmployee() {
     return true;
   }
+
   get isClearingAgent() {
     return !this.isEmployee;
   }
+
   get copyToHumanResources() {
     return 'نسخة الى الموارد البشرية';
   }
+
   get copyToLegalAffairs() {
     return 'نسخة الى الشؤون القانونية';
   }
