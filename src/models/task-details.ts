@@ -13,7 +13,7 @@ export class TaskDetails {
   priority!: number;
   name!: string;
   displayName!: string;
-  owner!: string;
+  owner!: string | null;
   state!: TaskState;
   status!: string;
   isReturned!: boolean;

@@ -23,6 +23,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
 import { EmployeeService } from '@services/employee.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -54,6 +55,7 @@ export class ButtonsCaseWrapperComponent
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
   @Output() claim = new EventEmitter<Investigation>();
+  @Output() release = new EventEmitter<Investigation>();
   @Output() navigateToSamePageThatUserCameFrom = new EventEmitter<void>();
 
   ngOnInit() {
@@ -96,11 +98,24 @@ export class ButtonsCaseWrapperComponent
   }
 
   claimItem() {
-    this.model?.claim().subscribe((model: Investigation) => {
-      this.claim.emit(model);
-    });
+    this.model
+      ?.claim()
+      .pipe(take(1))
+      .subscribe((model: Investigation) => {
+        this.claim.emit(model);
+      });
   }
+
   close() {
     this.navigateToSamePageThatUserCameFrom.emit();
+  }
+
+  releaseItem() {
+    this.model
+      ?.release()
+      .pipe(take(1))
+      .subscribe(model => {
+        this.release.emit(model);
+      });
   }
 }

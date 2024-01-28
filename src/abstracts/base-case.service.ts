@@ -38,6 +38,7 @@ export abstract class BaseCaseService<M>
   abstract getModelInstance(): M;
 
   abstract getModelClass(): Constructor<M>;
+
   @CastResponse()
   @HasInterception
   create(@InterceptParam() model: M): Observable<M> {
@@ -215,6 +216,14 @@ export abstract class BaseCaseService<M>
   claimTask(taskId: string): Observable<M> {
     return this.http.get<M>(
       this.getUrlSegment() + '/task/' + taskId + '/claim',
+    );
+  }
+
+  @CastResponse(undefined, { unwrap: 'rs', fallback: '' })
+  releaseBulk(taskIds: string[]): Observable<Record<string, boolean>> {
+    return this.http.post<Record<string, boolean>>(
+      this.urlService.URLS.RELEASE_BULK,
+      taskIds,
     );
   }
 

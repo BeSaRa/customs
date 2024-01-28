@@ -41,6 +41,7 @@ export const EndPoints = {
   CLEARING_AGENT: '/entity/clearing-agent',
   CLEARING_AGENCY: '/entity/clearing-agency',
   SUSPENDED_EMPLOYEE: '/entity/suspended-employee',
+  RELEASE_BULK: '/inbox/task/return/bulk',
 };
 
 export type EndpointsType = typeof EndPoints;

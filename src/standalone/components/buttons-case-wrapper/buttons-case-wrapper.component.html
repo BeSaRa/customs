@@ -318,6 +318,13 @@
     </app-button>
   }
 
+  <!-- claim -->
+  @if (model?.canRelease()) {
+    <app-button (click)="releaseItem()">
+      {{ lang.map.release }}
+    </app-button>
+  }
+
   <!-- terminate -->
   @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TERMINATE)) {
     <app-button

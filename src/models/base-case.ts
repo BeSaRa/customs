@@ -12,6 +12,7 @@ import { TaskResponses } from '@enums/task-responses';
 import { ActionNames } from '@enums/action-names';
 import { TaskName } from '@enums/task-name';
 import { HasServiceNameContract } from '@contracts/has-service-name-contract';
+import { map } from 'rxjs/operators';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -128,6 +129,23 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 
   claim(): Observable<Model> {
     return this.getService().claimTask(this.taskDetails.tkiid);
+  }
+
+  release(): Observable<Model> {
+    return this.getService()
+      .releaseBulk([this.taskDetails.tkiid])
+      .pipe(
+        map(() => {
+          this.taskDetails.owner = null;
+          this.taskDetails.actions = [ActionNames.ACTION_CLAIM].concat(
+            this.taskDetails.actions.filter(
+              a => a !== ActionNames.ACTION_CANCELCLAIM,
+            ),
+          );
+          console.log('AFTER RELEASE', this);
+          return this as unknown as Model;
+        }),
+      );
   }
 
   save(): Observable<Model> {
