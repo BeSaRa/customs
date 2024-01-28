@@ -61,7 +61,7 @@ export const AppIcons = {
   ACCOUNT_EDIT_OUTLINE: 'account-edit-outline',
   REFERRAL_TO_PRESIDENT: 'book-refresh-outline',
   REFERRAL_TO_PRESIDENT_ASSISTANT: 'book-refresh',
-  CLEARING_AGENT: 'account-tie-hat-outline',
+  CLEARING_AGENT: 'account',
   CLEARING_AGENCY: 'domain',
   EMPLOYEE: 'account-tie-outline',
   OFFENDER_VIOLATION: 'cards',
