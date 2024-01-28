@@ -62,6 +62,7 @@ import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
 import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -112,9 +113,9 @@ export class OffenderCriteriaPopupComponent
   form!: UntypedFormGroup;
   isEmployee = true;
   isClearingAgent = false;
-  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, {
-    nonNullable: false,
-  });
+  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, [
+    CustomValidators.required,
+  ]);
   offenderViolationControl = new FormControl<number[]>([]);
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
