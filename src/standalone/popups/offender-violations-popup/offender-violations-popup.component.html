@@ -48,7 +48,7 @@
             </div>
           </div>
         }
-        @if (offender.offenderInfo?.type == offenderTypes.EMPLOYEE) {
+        @if (offender.offenderInfo?.type === offenderTypes.EMPLOYEE) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
               lang.map.employee_number
@@ -59,7 +59,7 @@
             </div>
           </div>
         }
-        @if (offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT) {
+        @if (offender.offenderInfo?.type === offenderTypes.ClEARING_AGENT) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
               lang.map.clearing_agent_code
@@ -72,7 +72,7 @@
         }
         @if (
           offender.offenderOUInfo &&
-          offender.offenderInfo?.type == offenderTypes.EMPLOYEE
+          offender.offenderInfo?.type === offenderTypes.EMPLOYEE
         ) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
@@ -86,7 +86,7 @@
         }
         @if (
           offender.offenderOUInfo &&
-          offender.offenderInfo?.type == offenderTypes.ClEARING_AGENT
+          offender.offenderInfo?.type === offenderTypes.ClEARING_AGENT
         ) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
@@ -240,8 +240,8 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>
