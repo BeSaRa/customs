@@ -1,5 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  FormArray,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppIcons } from '@constants/app-icons';
@@ -66,8 +71,43 @@ export class GuidePanelComponent
   ngOnInit(): void {
     this.getViolationTypes();
     this.form = this.fb.group(new GuidePanel().buildForm());
+    this.form.addControl(
+      'violationAndRepeatList',
+      this.fb.array([
+        this.fb.group({
+          violationTypeId: [null, [CustomValidators.required]],
+          repeat: [null, [CustomValidators.required, Validators.min(1)]],
+        }),
+      ]),
+    );
     this.onOffenderTypeChange();
     this.listenToSearch();
+  }
+
+  get repeatViolationTypeIdControl() {
+    return this.form.get('violationAndRepeatList') as FormArray;
+  }
+
+  addRepeatViolationTypeId() {
+    const items = this.repeatViolationTypeIdControl;
+    items.markAllAsTouched();
+    if (!items.invalid) {
+      items.push(
+        this.fb.group({
+          violationTypeId: [null, [CustomValidators.required]],
+          repeat: [null, [CustomValidators.required, Validators.min(1)]],
+        }),
+      );
+    }
+  }
+
+  removeRepeatViolationTypeId(index: number) {
+    const items = this.repeatViolationTypeIdControl;
+    if (items.length === 1) {
+      this.dialog.warning(this.lang.map.violation_type_repeat_required);
+    } else {
+      items.removeAt(index);
+    }
   }
 
   actions: ContextMenuActionContract<Penalty>[] = [
@@ -188,14 +228,15 @@ export class GuidePanelComponent
 
   formValidValues() {
     const values = this.form.value;
-
-    if (values.offenderLevel === null) {
-      delete values.offenderLevel;
-    }
-    if (values.repeat === null) {
-      delete values.repeat;
-    }
-    return values;
+    return values.violationAndRepeatList.map(
+      (item: { violationTypeId: number; repeat: number }) => ({
+        offenderType: values.offenderType,
+        penaltySigner: values.penaltySigner,
+        offenderLevel: values.offenderLevel ?? null,
+        violationTypeId: item.violationTypeId,
+        repeat: +item.repeat,
+      }),
+    );
   }
 
   getBooleanString(bool: boolean) {

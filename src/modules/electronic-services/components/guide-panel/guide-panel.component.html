@@ -8,7 +8,7 @@
   <mat-card>
     <div class="p-4 overflow-auto" style="height: 100%">
       <ng-container [formGroup]="form">
-        <div class="grid grid-cols-4 gap-4">
+        <div class="grid grid-cols-3 gap-4">
           <app-select-input
             [label]="lang.map.offender_type"
             formControlName="offenderType"
@@ -31,27 +31,56 @@
               bindLabel="getNames"
               bindValue="lookupKey" />
           }
-          <app-select-input
-            formControlName="violationTypeIdsList"
-            [options]="violationTypes"
-            [label]="lang.map.violation_type"
-            bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames"
-            [isMultiple]="true" />
-          <app-input
-            formControlName="repeat"
-            [label]="lang.map.repeat"
-            type="number"></app-input>
+          <br />
+        </div>
+        <div>
+          <div formArrayName="violationAndRepeatList">
+            @for (
+              RVT of repeatViolationTypeIdControl.controls;
+              track RVT;
+              let i = $index
+            ) {
+              <div
+                class="grid grid-cols-3 gap-4 flex flex-grow items-center justify-center"
+                [formGroupName]="i">
+                <app-select-input
+                  formControlName="violationTypeId"
+                  [options]="violationTypes"
+                  [label]="lang.map.violation_type"
+                  bindValue="id"
+                  bindLabel="getNames"
+                  [enableFilter]="true"
+                  bindFilter="getNames" />
+                <app-input
+                  formControlName="repeat"
+                  [label]="lang.map.repeat"
+                  type="number"></app-input>
+                <app-icon-button
+                  tabindex="-1"
+                  icon="DELETE"
+                  (click)="removeRepeatViolationTypeId(i)"
+                  [matTooltip]="lang.map.delete"
+                  class="w-12" />
+              </div>
+            }
+          </div>
+          <div>
+            <div class="w-full flex items-center justify-start">
+              <app-icon-button
+                class="bg-slate-300"
+                icon="PLUS"
+                (click)="addRepeatViolationTypeId()"
+                [matTooltip]="lang.map.add" />
+            </div>
+          </div>
         </div>
         <div class="pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
-          <app-button (click)="search$.next()" buttonType="primary">{{
-            lang.map.search
-          }}</app-button>
-          <app-button (click)="resetForm()" buttonType="primary">{{
-            lang.map.reset
-          }}</app-button>
+          <app-button (click)="search$.next()" buttonType="primary"
+            >{{ lang.map.search }}
+          </app-button>
+          <app-button (click)="resetForm()" buttonType="primary"
+            >{{ lang.map.reset }}
+          </app-button>
         </div>
       </ng-container>
     </div>
