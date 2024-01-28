@@ -395,4 +395,5 @@ export interface LangKeysContract {
   time: string;
   assigned_to: string;
   of: string;
+  violation_type_repeat_required: string;
 }

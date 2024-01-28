@@ -1,5 +1,4 @@
 import { BaseCrudService } from '@abstracts/base-crud-service';
-import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { GuidePanel } from '@models/guide-panel';
@@ -37,15 +36,15 @@ export class GuidePanelService extends BaseCrudService<GuidePanel> {
   }
 
   @CastResponse(() => Penalty, { unwrap: 'rs', fallback: '$default' })
-  loadSearchResult(criteria: {
-    offenderType: number;
-    penaltySigner: number;
-    violationIdsList: number[];
-    repeat?: number;
-    offenderLevel?: number;
-  }) {
-    return this.http.get<Penalty[]>(this.getUrlSegment(), {
-      params: new HttpParams({ fromObject: criteria }),
-    });
+  loadSearchResult(
+    criteria: {
+      offenderType: number;
+      penaltySigner: number;
+      violationTypeId: number;
+      repeat: number;
+      offenderLevel?: number;
+    }[],
+  ) {
+    return this.http.post<Penalty[]>(this.getUrlSegment(), criteria);
   }
 }
