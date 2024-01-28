@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
 import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
@@ -17,6 +17,8 @@ import { InboxRiskStatus } from '@enums/inbox-risk-status';
 import { CaseTypes } from '@enums/case-types';
 import { DialogService } from '@services/dialog.service';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user-inbox',
@@ -39,7 +41,8 @@ export class UserInboxComponent
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
-
+  dataSource: MatTableDataSource<InboxResult> = new MatTableDataSource();
+  @ViewChild('paginator') paginator!: MatPaginator;
   length = 50;
   caseTypes = CaseTypes;
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
@@ -86,6 +89,8 @@ export class UserInboxComponent
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };
+        this.dataSource.data = this.queryResultSet.items;
+        this.dataSource.paginator = this.paginator;
       });
   }
 
@@ -114,6 +119,7 @@ export class UserInboxComponent
       .navigate([item.itemRoute], { queryParams: { item: item.itemDetails } })
       .then();
   }
+
   statusStyle(element: InboxResult) {
     let classes = 'custom-status ';
     if (element.RISK_STATUS === InboxRiskStatus.NORMAL) {

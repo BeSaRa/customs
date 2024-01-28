@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
 import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { LangService } from '@services/lang.service';
@@ -20,6 +20,8 @@ import { InboxRiskStatus } from '@enums/inbox-risk-status';
 import { CaseTypes } from '@enums/case-types';
 import { DialogService } from '@services/dialog.service';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-team-inbox',
@@ -39,6 +41,8 @@ export class TeamInboxComponent
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
+  dataSource: MatTableDataSource<InboxResult> = new MatTableDataSource();
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
@@ -91,6 +95,8 @@ export class TeamInboxComponent
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };
+        this.dataSource.data = this.queryResultSet.items;
+        this.dataSource.paginator = this.paginator;
       });
   }
 
@@ -115,6 +121,7 @@ export class TeamInboxComponent
       .navigate([item.itemRoute], { queryParams: { item: item.itemDetails } })
       .then();
   }
+
   assertType(item: InboxResult): InboxResult {
     return item;
   }
@@ -124,6 +131,7 @@ export class TeamInboxComponent
       this.listenToReload(value!);
     });
   }
+
   statusStyle(element: InboxResult) {
     let classes = 'custom-status ';
     if (element.RISK_STATUS === InboxRiskStatus.NORMAL) {

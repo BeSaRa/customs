@@ -10,11 +10,7 @@
   <div class="flex-auto"></div>
 </div>
 <div class="shadow relative overflow-auto">
-  <table
-    mat-table
-    matSort
-    class="table-style"
-    [dataSource]="queryResultSet?.items || []">
+  <table mat-table matSort class="table-style" [dataSource]="dataSource">
     <!-- BD_FULL_SERIAL -->
     <ng-container matColumnDef="SERIAL">
       <th
@@ -155,4 +151,9 @@
     </tr>
   </table>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+  <mat-paginator
+    #paginator
+    [pageSizeOptions]="[50, 100, 150, 200]"
+    showFirstLastButtons="true"
+    [length]="queryResultSet?.totalCount || 0"></mat-paginator>
 </div>
