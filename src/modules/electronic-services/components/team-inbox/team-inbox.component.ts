@@ -97,6 +97,15 @@ export class TeamInboxComponent
         this.oldQueryResultSet = { ...value };
         this.dataSource.data = this.queryResultSet.items;
         this.dataSource.paginator = this.paginator;
+        this.paginator._intl.getRangeLabel = (
+          page: number,
+          pageSize: number,
+          length: number,
+        ) => {
+          const start = page * pageSize + 1;
+          const end = Math.min((page + 1) * pageSize, length);
+          return `${start} - ${end} ${this.lang.map.of} ${length}`;
+        };
       });
   }
 

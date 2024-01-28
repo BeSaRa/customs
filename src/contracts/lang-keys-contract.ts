@@ -394,4 +394,5 @@ export interface LangKeysContract {
   user_to: string;
   time: string;
   assigned_to: string;
+  of: string;
 }
