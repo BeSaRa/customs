@@ -7,11 +7,17 @@ import { AppPermissionsType } from '@constants/app-permissions';
 import { OrganizationUnit } from '@models/organization-unit';
 import { Team } from '@models/team';
 import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { ServiceContract } from '@contracts/service-contract';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EmployeeService {
+export class EmployeeService
+  extends RegisterServiceMixin(class {})
+  implements ServiceContract
+{
+  serviceName = 'EmployeeService';
   private loginData?: LoginDataContract;
   private readonly permissionMap = new Map<
     keyof AppPermissionsType,
@@ -88,40 +94,48 @@ export class EmployeeService {
       (t: Team) => t.ldapGroupName === LDAPGroupNames.Applicant_Department,
     );
   }
+
   isApplicantChief() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
         t.ldapGroupName === LDAPGroupNames.Applicant_Department_Chief,
     );
   }
+
   isApplicantManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
         t.ldapGroupName === LDAPGroupNames.Applicant_Department_Manager,
     );
   }
+
   isHrManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.ldapGroupName === LDAPGroupNames.Human_Resources_Manager,
     );
   }
+
   isDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.ldapGroupName === LDAPGroupNames.Disciplinary_Committee,
     );
   }
+
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
         t.ldapGroupName === LDAPGroupNames.Permanent_Disciplinary_Committee,
     );
   }
+
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;
   }
+
   getEmployeeTeams(): Team[] {
     return this.loginData?.teams || [];
   }
+
   clearEmployee() {
     this.loginData = undefined;
   }

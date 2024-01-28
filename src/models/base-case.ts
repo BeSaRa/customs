@@ -2,7 +2,6 @@ import { TaskDetails } from './task-details';
 import { AdminResult } from '@models/admin-result';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { HasServiceMixin } from '@mixins/has-service-mixin';
-import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { CloneContract } from '@contracts/clone-contract';
 import { Observable } from 'rxjs';
@@ -12,6 +11,7 @@ import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
 import { ActionNames } from '@enums/action-names';
 import { TaskName } from '@enums/task-name';
+import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -63,6 +63,12 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 
   hasResponse(responses: TaskResponses) {
     return this.getResponses() && this.getResponses().includes(responses);
+  }
+
+  hasAnyResponse(response: string[]): boolean {
+    return this.getResponses()?.some(i => {
+      return response.includes(i);
+    });
   }
 
   isCancelled(): boolean {

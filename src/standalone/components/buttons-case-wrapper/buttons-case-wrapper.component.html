@@ -7,27 +7,27 @@
   }
   <!-- manager approve -->
   @if (
-    model?.isClaimed() && model?.hasResponse(taskResponses.MANAGER_APPROVE)
+    model?.inMyInbox() && model?.hasResponse(taskResponses.MANAGER_APPROVE)
   ) {
     <app-button (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
   }
   <!-- hr manager approve -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.HR_APPROVE)) {
+  @if (model?.inMyInbox() && model?.hasResponse(taskResponses.HR_APPROVE)) {
     <app-button (click)="responseAction$.next(taskResponses.HR_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
   }
   <!-- complete action -->
-  @if (model?.hasComplete()) {
+  @if (model?.inMyInbox() && model?.hasComplete()) {
     <app-button (click)="responseAction$.next(taskResponses.COMPLETE)">
       {{ lang.map.complete }}
     </app-button>
   }
   <!-- final complete action -->
   @if (
-    model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_COMPLETE)
+    model?.inMyInbox() && model?.hasResponse(taskResponses.PA_FNL_COMPLETE)
   ) {
     <app-button (click)="responseAction$.next(taskResponses.PA_FNL_COMPLETE)">
       {{ lang.map.final_complete }}
@@ -36,7 +36,7 @@
 
   <!-- apply and return -->
   @if (
-    model?.isClaimed() &&
+    model?.inMyInbox() &&
     model?.hasResponse(taskResponses.PA_FNL_APPLY_AND_RETURN)
   ) {
     <app-button
@@ -46,7 +46,7 @@
     </app-button>
   }
   <!-- Issuing a referral decision to study in the president assistant office -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.PA_FNL_TO_PAE)) {
+  @if (model?.inMyInbox() && model?.hasResponse(taskResponses.PA_FNL_TO_PAE)) {
     <app-button
       buttonType="secondary"
       (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)">
@@ -57,7 +57,7 @@
     </app-button>
   }
   <!-- transfer report to staff president office -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.TO_PO)) {
+  @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TO_PO)) {
     <app-button
       buttonType="secondary"
       (click)="responseAction$.next(taskResponses.TO_PO)">
@@ -67,7 +67,7 @@
 
   <!-- return -->
   @if (
-    model?.isClaimed() &&
+    model?.inMyInbox() &&
     (model?.hasResponse(taskResponses.TO_USER) ||
       model?.hasResponse(taskResponses.RETURN_TO_HR) ||
       model?.hasResponse(taskResponses.RETURN_TO_SAME) ||
@@ -83,35 +83,41 @@
     </app-button>
   }
   <mat-menu #returnMenu="matMenu">
-    @if (model?.hasResponse(taskResponses.RETURN_APP_MANAGER)) {
+    @if (
+      model?.inMyInbox() && model?.hasResponse(taskResponses.RETURN_APP_MANAGER)
+    ) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
         {{ lang.map.return_to_manager }}
       </button>
     }
-    @if (model?.hasResponse(taskResponses.RETURN_TO_HR)) {
+    @if (model?.inMyInbox() && model?.hasResponse(taskResponses.RETURN_TO_HR)) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
         {{ lang.map.return_to_hr_department }}
       </button>
     }
-    @if (model?.hasResponse(taskResponses.TO_USER)) {
+    @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TO_USER)) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.TO_USER)">
         {{ lang.map.return }}
       </button>
     }
-    @if (model?.hasResponse(taskResponses.RETURN_TO_SAME)) {
+    @if (
+      model?.inMyInbox() && model?.hasResponse(taskResponses.RETURN_TO_SAME)
+    ) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
         {{ lang.map.return_to_same }}
       </button>
     }
-    @if (model?.hasResponse(taskResponses.RETURN_TO_APP)) {
+    @if (
+      model?.inMyInbox() && model?.hasResponse(taskResponses.RETURN_TO_APP)
+    ) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
@@ -122,10 +128,10 @@
 
   <!-- referral request -->
   @if (
-    model?.isClaimed() &&
-    mandatoryMakePenaltyDecisions &&
-    (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT) ||
-      model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT))
+    model?.inMyInbox() &&
+    !mandatoryMakePenaltyDecisions &&
+    (model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT) ||
+      model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT))
   ) {
     <app-button
       buttonType="secondary"
@@ -136,18 +142,24 @@
     </app-button>
   }
   <mat-menu #referralMenu="matMenu">
-    @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT)
+    ) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT)">
+        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESIDENT)">
         {{ lang.map.referral_request_to_presodent }}
       </button>
     }
-    @if (model?.hasResponse(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
+    ) {
       <button
         mat-menu-item
         (click)="
-          responseAction$.next(taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT)
+          responseAction$.next(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
         ">
         {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
@@ -156,7 +168,7 @@
 
   <!-- send to -->
   @if (
-    model?.isClaimed() &&
+    model?.inMyInbox() &&
     (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS) ||
       model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL) ||
       model?.hasResponse(
@@ -173,7 +185,10 @@
   }
   <mat-menu #sendToMenu="matMenu">
     <!-- launch legal affairs -->
-    @if (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)
+    ) {
       <button
         mat-menu-item
         (click)="
@@ -183,7 +198,10 @@
       </button>
     }
     <!-- launch disciplinary council -->
-    @if (model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
+    ) {
       <button
         mat-menu-item
         (click)="
@@ -194,6 +212,7 @@
     }
     <!-- launch disciplinary council -->
     @if (
+      model?.inMyInbox() &&
       model?.hasResponse(
         taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
       )
@@ -212,9 +231,9 @@
 
   <!-- issuing referral decision -->
   @if (
-    model?.isClaimed() &&
+    model?.inMyInbox() &&
     (model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS) ||
-      model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS) ||
+      model?.hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS) ||
       model?.hasResponse(taskResponses.TO_PAE))
   ) {
     <app-button
@@ -227,7 +246,10 @@
   }
   <mat-menu #issuingMenu="matMenu">
     <!-- issuing referral decision to legal affairs manager -->
-    @if (model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)
+    ) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)">
@@ -235,15 +257,18 @@
       </button>
     }
     <!-- issuing referral decision to legal affairs manager -->
-    @if (model?.hasResponse(taskResponses.LAUNCH_LEAGL_AFFAIRS)) {
+    @if (
+      model?.inMyInbox() &&
+      model?.hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS)
+    ) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.LAUNCH_LEAGL_AFFAIRS)">
+        (click)="responseAction$.next(taskResponses.LAUNCH_LEGAL_AFFAIRS)">
         {{ lang.map.to_legal_affairs_manager }}
       </button>
     }
     <!-- Issuing a referral decision to study in the president assistant office -->
-    @if (model?.hasResponse(taskResponses.TO_PAE)) {
+    @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TO_PAE)) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.TO_PAE)">
@@ -275,7 +300,12 @@
 
   <!-- data entry chief actions -->
   <!-- send to manager -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.TO_MANAGER)) {
+  @if (
+    model?.hasAnyResponse([
+      taskResponses.TO_MANAGER,
+      taskResponses.CHIEF_APPROVE
+    ])
+  ) {
     <app-button (click)="responseAction$.next(taskResponses.TO_MANAGER)">
       {{ lang.map.to_manager }}
     </app-button>
@@ -289,7 +319,7 @@
   }
 
   <!-- terminate -->
-  @if (model?.isClaimed() && model?.hasResponse(taskResponses.TERMINATE)) {
+  @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TERMINATE)) {
     <app-button
       buttonType="error"
       (click)="responseAction$.next(taskResponses.TERMINATE)">
@@ -298,9 +328,7 @@
   }
 
   <!-- close action -->
-  @if (model?.isClaimed()) {
-    <app-button buttonType="error" (click)="close()">
-      {{ lang.map.close }}
-    </app-button>
-  }
+  <app-button buttonType="error" (click)="close()">
+    {{ lang.map.close }}
+  </app-button>
 </div>

@@ -323,6 +323,14 @@ export class OffendersViolationsPreviewComponent
   }
 
   mandatoryMakePenaltyDecisions() {
+    console.log(
+      !!this.penaltyMap() &&
+        !!Object.keys(this.penaltyMap()).find(
+          k =>
+            this.penaltyMap()[k].first ===
+            ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
+        ),
+    );
     return (
       !!this.penaltyMap() &&
       !!Object.keys(this.penaltyMap()).find(

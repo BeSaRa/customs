@@ -64,8 +64,8 @@ export class CommentPopupComponent
   previewFormList: TaskResponses[] = [
     TaskResponses.TO_MANAGER,
     TaskResponses.MANAGER_APPROVE,
-    TaskResponses.REFERRAL_TO_PRESODENT_ASSISTANT,
-    TaskResponses.REFERRAL_TO_PRESODENT,
+    TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
+    TaskResponses.REFERRAL_TO_PRESIDENT,
   ];
   isPreviewForm = false;
 
@@ -129,10 +129,10 @@ export class CommentPopupComponent
   }
 
   get sendToName() {
-    if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT) {
+    if (this.response === this.taskResponses.REFERRAL_TO_PRESIDENT) {
       return '';
     } else if (
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
     ) {
       return '';
     }
@@ -140,10 +140,10 @@ export class CommentPopupComponent
   }
 
   get sendToTitle() {
-    if (this.response === this.taskResponses.REFERRAL_TO_PRESODENT) {
+    if (this.response === this.taskResponses.REFERRAL_TO_PRESIDENT) {
       return 'الرئيس';
     } else if (
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
     ) {
       return 'مساعد الرئيس';
     }
@@ -155,8 +155,8 @@ export class CommentPopupComponent
       return 'رقم مسودة التحقيق: ((الرقم))';
     } else if (
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM4 ||
       // this.response === this.taskResponses.FORM5 ||
       // this.response === this.taskResponses.FORM6 ||
@@ -170,8 +170,8 @@ export class CommentPopupComponent
   get decisionNumberAndType() {
     if (
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM7
     ) {
       return 'رقم القرار:((الرقم))';
@@ -189,8 +189,8 @@ export class CommentPopupComponent
       return 'تاريخ مسودة التحقيق: ((التاريخ))';
     } else if (
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM7
     ) {
       return 'تاريخ القرار: ((التاريخ))';
@@ -219,8 +219,8 @@ export class CommentPopupComponent
     //   return 'نوع القرار';
     // }
     else if (
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
     ) {
       return 'طلب احالة';
     }
@@ -231,8 +231,8 @@ export class CommentPopupComponent
     if (
       this.response === this.taskResponses.TO_MANAGER ||
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM4 ||
       // this.response === this.taskResponses.FORM5 ||
       // this.response === this.taskResponses.FORM6 ||
@@ -246,8 +246,8 @@ export class CommentPopupComponent
     if (
       this.response === this.taskResponses.TO_MANAGER ||
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM4 ||
       // this.response === this.taskResponses.FORM5 ||
       // this.response === this.taskResponses.FORM6 ||
@@ -285,8 +285,8 @@ export class CommentPopupComponent
   get justifyBetween() {
     return (
       // this.response === this.taskResponses.FORM2 ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESODENT_ASSISTANT
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
+      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
       // this.response === this.taskResponses.FORM6 ||
       // this.response === this.taskResponses.FORM7
     );

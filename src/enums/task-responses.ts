@@ -4,14 +4,14 @@ export enum TaskResponses {
   RETURN_TO_SAME = 'return_to_same',
   MANAGER_APPROVE = 'manager_approve',
   TO_MANAGER = 'to_manager', // form 1
-  REFERRAL_TO_PRESODENT = 'referral_to_president', // form 3
-  REFERRAL_TO_PRESODENT_ASSISTANT = 'referral_to_president_assistant', // form 3
+  REFERRAL_TO_PRESIDENT = 'referral_to_president', // form 3
+  REFERRAL_TO_PRESIDENT_ASSISTANT = 'referral_to_president_assistant', // form 3
   CLOSE = 'close',
   RETURN_APP_MANAGER = 'return_app_manager',
   PR_LAUNCH_LEGAL_AFFAIRS = 'pr_launch_legal_affairs',
   TO_PO = 'to_po',
   TERMINATE = 'terminate',
-  LAUNCH_LEAGL_AFFAIRS = 'launch_legal_affairs',
+  LAUNCH_LEGAL_AFFAIRS = 'launch_legal_affairs',
   COMPLETE = 'complete',
   RETURN_TO_HR = 'return_to_hr',
   HR_APPROVE = 'hr_approve',
@@ -23,4 +23,5 @@ export enum TaskResponses {
   PA_FNL_LAUNCH_LEGAL_AFFAIRS = 'pa_fnl_launch_legal_affairs', // إلى الشؤون القانونية
   PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_disciplinary_council', // المجلس التأديبي
   PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_permanent_disciplinary_council', // المجلس التأديبي الدائم
+  CHIEF_APPROVE = 'chief_approve',
 }

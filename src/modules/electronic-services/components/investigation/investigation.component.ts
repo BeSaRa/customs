@@ -157,6 +157,9 @@ export class InvestigationComponent
   }
 
   _beforeLaunch(): boolean | Observable<boolean> {
+    // at least one offender in the case
+    // all offenders in the case linked to violation
+
     return true;
   }
 

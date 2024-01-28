@@ -10,6 +10,8 @@ import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { EmployeeService } from '@services/employee.service';
+import { ServiceRegistry } from '@services/service-registry';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -18,7 +20,7 @@ export class Investigation extends BaseCase<
   InvestigationService,
   Investigation
 > {
-  $$__service_name__$$ = 'InvestigationService';
+  override $$__service_name__$$: string = 'InvestigationService';
   override securityLevel = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
   investigationFullSerial!: string;
   draftFullSerial!: string;
@@ -33,6 +35,7 @@ export class Investigation extends BaseCase<
   securityLevelInfo!: AdminResult;
   isDrafted!: boolean;
   subject!: string;
+  $$_employeeService_$$ = 'EmployeeService';
 
   buildForm(controls = false, disabled = false): object {
     const {
@@ -100,5 +103,18 @@ export class Investigation extends BaseCase<
 
   getPenaltyDecision(): PenaltyDecision[] {
     return this.taskDetails.penaltyDecisions;
+  }
+
+  $_getEmployeeService_$(): EmployeeService {
+    return ServiceRegistry.get<EmployeeService>(this.$$_employeeService_$$);
+  }
+
+  inMyInbox(): boolean {
+    return !!(
+      this.taskDetails &&
+      this.taskDetails.owner &&
+      this.$_getEmployeeService_$().getEmployee()?.domainName.toLowerCase() ===
+        this.taskDetails.owner.toLowerCase()
+    );
   }
 }
