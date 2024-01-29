@@ -36,7 +36,7 @@ export class InternalUserOU extends BaseModel<
 
   override getNames(): string {
     try {
-      return this.internalUserInfo[
+      return this.organizationUnitInfo[
         (this.getLangService().getCurrent().code +
           'Name') as keyof NamesContract
       ];
