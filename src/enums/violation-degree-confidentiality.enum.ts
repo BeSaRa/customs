@@ -1,4 +1,4 @@
 export enum ViolationDegreeConfidentiality {
   SECRET = 1,
-  LINITED_CIRCULATION = 2,
+  LIMITED_CIRCULATION = 2,
 }

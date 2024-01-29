@@ -21,6 +21,7 @@ export const AppPermissions = {
   MANAGE_OFFENDER_VIOLATION: 'MANAGE_OFFENDER_VIOLATION',
   VIEW_WITNESS: 'VIEW_WITNESS',
   MANAGE_WITNESS: 'MANAGE_WITNESS',
+  LIMITED_ACCESS: 'LIMITED_ACCESS',
 };
 
 export type AppPermissionsType = typeof AppPermissions;
