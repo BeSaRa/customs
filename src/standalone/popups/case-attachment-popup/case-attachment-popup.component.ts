@@ -34,6 +34,7 @@ import {
   Subject,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { AttachmentTypeService } from '@services/attachment-type.service';
@@ -130,6 +131,16 @@ export class CaseAttachmentPopupComponent
 
   private listenToUploadFiles() {
     this.save$
+      .pipe(
+        tap(
+          () =>
+            this.form.invalid &&
+            this.dialog.error(
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
+            ),
+        ),
+        filter(() => this.form.valid),
+      )
       .pipe(
         exhaustMap(() => {
           if (this.data.type === 'folder') {

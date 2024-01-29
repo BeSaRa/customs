@@ -80,7 +80,14 @@ export class InvestigationComponent
   summaryTabComponent!: SummaryTabComponent;
   violationDegreeConfidentiality = this.lookupService.lookups.securityLevel;
   mandatoryMakePenaltyDecisions: boolean = false;
-  tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
+  tabsArray = [
+    'summary',
+    'basic_info',
+    'offenders',
+    'violations',
+    'external_persons',
+    'attachments',
+  ];
   caseFolders: CaseFolder[] = [];
   caseFoldersMap?: Record<string, CaseFolder>;
   selectedTab = 0;

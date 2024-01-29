@@ -22,6 +22,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   statusDateModified?: Date | string;
   ouId!: number;
   agentCustomCode!: string;
+  attachmentCount: number = 0;
   offenderInfo?: MawaredEmployee | ClearingAgent;
   violations: OffenderViolation[] = [];
   offenderOUInfo?: AdminResult;
