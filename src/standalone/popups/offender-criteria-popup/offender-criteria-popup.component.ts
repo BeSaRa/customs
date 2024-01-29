@@ -1,11 +1,9 @@
 import { OffenderViolationService } from '@services/offender-violation.service';
-import { Violation } from '@models/violation';
 import {
   Component,
   computed,
   effect,
   inject,
-  InputSignal,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -62,7 +60,7 @@ import { InvestigationService } from '@services/investigation.service';
 import { MawaredDepartment } from '@models/mawared-department';
 import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { CustomValidators } from '@validators/custom-validators';
+import { OffenderService } from '@services/offender.service';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -105,17 +103,17 @@ export class OffenderCriteriaPopupComponent
   toast = inject(ToastService);
   search$: Subject<void> = new Subject();
   addViolation$: Subject<void> = new Subject<void>();
+  model = this.data && this.data.model;
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
   administrations: MawaredDepartment[] = [];
-  offenders: Offender[] =
-    this.data && ((this.data.offenders || []) as Offender[]);
+  offenders = computed(() => this.model().offenderInfo);
   form!: UntypedFormGroup;
   isEmployee = true;
   isClearingAgent = false;
-  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, [
-    CustomValidators.required,
-  ]);
+  offenderTypeControl = new FormControl(OffenderTypes.EMPLOYEE, {
+    nonNullable: false,
+  });
   offenderViolationControl = new FormControl<number[]>([]);
   employeeFormGroup!: UntypedFormGroup;
   clearingAgentFormGroup!: UntypedFormGroup;
@@ -123,6 +121,7 @@ export class OffenderCriteriaPopupComponent
   employeeDatasource = new AppTableDataSource(this.employees$);
   clearingAgents$ = new BehaviorSubject<ClearingAgent[]>([]);
   clearingAgentsDatasource = new AppTableDataSource(this.clearingAgents$);
+  offenderService = inject(OffenderService);
   employeeDisplayedColumns = [
     'employee_number',
     'offenderName',
@@ -147,19 +146,19 @@ export class OffenderCriteriaPopupComponent
   offenderType = toSignal(this.offenderTypeControl.valueChanges, {
     initialValue: OffenderTypes.EMPLOYEE,
   });
-  caseId = this.data && this.data.caseId;
 
-  canSave = computed(() => !!this.data.caseId());
+  caseId = computed(() => this.model().id);
+
+  canSave = computed(() => this.caseId());
 
   violations = computed(() => {
-    return (this.data as { violations: InputSignal<Violation[]> })
-      .violations()
-      .filter(
-        v =>
-          v.offenderTypeInfo.lookupKey === this.offenderType() ||
-          v.offenderTypeInfo.lookupKey === OffenderTypes.BOTH,
-      );
+    return this.model().violationInfo.filter(violation =>
+      [this.offenderType(), OffenderTypes.BOTH].includes(
+        violation.offenderTypeInfo.lookupKey,
+      ),
+    );
   });
+
   effectCanSaveRef = effect(() => {
     if (this.canSave()) {
       this.waitTillPendingSaveDone$.next();
@@ -212,7 +211,7 @@ export class OffenderCriteriaPopupComponent
         switchMap(() =>
           this.service
             .openAddViolation(
-              this.caseId,
+              this.model,
               this.data.askForSaveModel,
               this.reportType,
             )
@@ -252,7 +251,7 @@ export class OffenderCriteriaPopupComponent
         map(pagination =>
           pagination.rs.filter(
             emp =>
-              !this.offenders.find(
+              !this.offenders().find(
                 (offender: Offender) =>
                   offender.offenderRefId === emp.id &&
                   offender.type === OffenderTypes.EMPLOYEE,
@@ -278,7 +277,7 @@ export class OffenderCriteriaPopupComponent
         map(pagination =>
           pagination.rs.filter(
             emp =>
-              !this.offenders.find(
+              !this.offenders().find(
                 (offender: Offender) =>
                   offender.offenderRefId === emp.id &&
                   offender.type === OffenderTypes.ClEARING_AGENT,
@@ -306,7 +305,15 @@ export class OffenderCriteriaPopupComponent
       .pipe(switchMap(model => this.makeSureThatCaseIdExistsBeforeSave(model)))
       .pipe(
         switchMap(offender => {
-          return offender.save();
+          return offender.save().pipe(
+            tap(offender => {
+              this.model().offenderInfo = [
+                ...this.model().offenderInfo,
+                offender,
+              ];
+              this.data.offenderAdded.emit(offender);
+            }),
+          );
         }),
       )
       .pipe(
@@ -323,9 +330,11 @@ export class OffenderCriteriaPopupComponent
           ),
           1,
         );
+
         if (
+          this.offenderService.isEmployee(model.offenderInfo!) &&
           this.employeeService.getEmployee()?.defaultOUId !==
-          model?.offenderInfo?.employeeDepartmentId
+            model?.offenderInfo?.employeeDepartmentId
         ) {
           this.toast.info(
             this.lang.map.selected_offender_related_to_another_department,
@@ -348,7 +357,15 @@ export class OffenderCriteriaPopupComponent
       .pipe(switchMap(model => this.makeSureThatCaseIdExistsBeforeSave(model)))
       .pipe(
         switchMap(offender => {
-          return offender.save();
+          return offender.save().pipe(
+            tap(offender => {
+              this.model().offenderInfo = [
+                ...this.model().offenderInfo,
+                offender,
+              ];
+              this.data.offenderAdded.emit(offender);
+            }),
+          );
         }),
       )
       .pipe(

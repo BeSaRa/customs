@@ -1,26 +1,25 @@
 import { LangService } from '@services/lang.service';
 import {
   Component,
-  OnInit,
-  inject,
   computed,
+  inject,
   InputSignal,
+  OnInit,
   signal,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import {
-  Subject,
+  BehaviorSubject,
+  combineLatest,
+  exhaustMap,
   filter,
+  map,
+  Subject,
   switchMap,
   takeUntil,
-  BehaviorSubject,
-  exhaustMap,
-  map,
-  combineLatest,
 } from 'rxjs';
 import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
@@ -37,6 +36,9 @@ import { CustomValidators } from '@validators/custom-validators';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Offender } from '@models/offender';
 import { OffenderTypes } from '@enums/offender-types';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { ClearingAgent } from '@models/clearing-agent';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-offender-violations-popup',
@@ -60,16 +62,21 @@ export class OffenderViolationsPopupComponent
   implements OnInit
 {
   lang = inject(LangService);
-  data = inject(MAT_DIALOG_DATA);
+  data = inject<{
+    offender: Offender;
+    model: InputSignal<Investigation>;
+    readonly: boolean;
+  }>(MAT_DIALOG_DATA);
   offenderViolationService = inject(OffenderViolationService);
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  model = this.data.model;
+  offender = this.data.offender;
 
   offenderTypes = OffenderTypes;
-  offenderViolations = signal([] as OffenderViolation[]);
-  dataSource = computed(
-    () => new AppTableDataSource(this.offenderViolations()),
-  );
+
+  offenderViolations = signal(this.getOffenderViolations());
+
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   delete$ = new Subject<OffenderViolation>();
   addViolation$: Subject<void> = new Subject<void>();
@@ -81,37 +88,26 @@ export class OffenderViolationsPopupComponent
     'repeat',
     'actions',
   ];
-  control = new FormControl<number[]>([], [CustomValidators.required]);
 
   violations = computed(() => {
-    return (this.data as { violations: InputSignal<Violation[]> })
-      .violations()
-      .filter(
-        (v: Violation | OffenderViolation) =>
-          this.data.offender &&
-          ((v as Violation).offenderTypeInfo
-            ? !this.offenderViolations().find(
-                ov => ov.violationId === (v as Violation).id,
-              ) &&
-              ((v as Violation).offenderTypeInfo.lookupKey ===
-                this.data.offender.type ||
-                (v as Violation).offenderTypeInfo.lookupKey ===
-                  OffenderTypes.BOTH)
-            : !this.offenderViolations().find(
-                ov => ov.violationId === (v as OffenderViolation).violationId,
-              ) &&
-              ((v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
-                this.data.offender.type ||
-                (v as OffenderViolation).offenderInfo.typeInfo.lookupKey ===
-                  OffenderTypes.BOTH)),
+    const violationsIds = this.offenderViolations().map(i => i.violationId);
+    return this.model().violationInfo.filter(item => {
+      return (
+        !violationsIds.includes(item.id) &&
+        this.offender.type === item.offenderTypeInfo.lookupKey
       );
+    });
   });
-  readonly = this.data && this.data.readonly;
-  offender: Offender = this.data && (this.data.offender as Offender);
 
-  constructor() {
-    super();
+  control = new FormControl<number[]>([], [CustomValidators.required]);
+  readonly = this.data.readonly;
+
+  getOffenderViolations(): OffenderViolation[] {
+    return this.model().offenderViolationInfo.filter(item => {
+      return item.offenderId === this.offender.id;
+    });
   }
+
   ngOnInit() {
     this.listenToReload();
     this.listenToDelete();
@@ -122,21 +118,22 @@ export class OffenderViolationsPopupComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(filter(() => !!this.data.caseId && !!this.data.offender.id))
+      .pipe(filter(() => !!this.model().id && !!this.offender.id))
       .pipe(
         switchMap(() =>
           this.offenderViolationService
             .load(undefined, {
-              caseId: this.data.caseId,
-              offenderId: this.data.offender.id,
+              caseId: this.model().id,
             })
             .pipe(ignoreErrors()),
         ),
       )
       .subscribe(pagination => {
-        this.offenderViolations.set(pagination.rs);
+        this.model().offenderViolationInfo = [...pagination.rs];
+        this.offenderViolations.set(this.getOffenderViolations());
       });
   }
+
   private listenToAdd() {
     this.addViolation$
       .pipe(takeUntil(this.destroy$))
@@ -144,13 +141,14 @@ export class OffenderViolationsPopupComponent
         switchMap(() => {
           return combineLatest(
             (this.control?.value || []).map((violationId: number) => {
+              // TODO : call save from Model it self(OffenderViolation) but we have a backend issue related to this call
               return this.offenderViolationService.create(
                 new OffenderViolation().clone<OffenderViolation>({
-                  caseId: this.data.caseId,
-                  offenderId: this.data.offender.id,
+                  caseId: this.model().id,
+                  offenderId: this.offender.id,
                   violationId: violationId,
                   status: 1,
-                  isProved: true,
+                  isProved: false,
                 }),
               );
             }),
@@ -158,10 +156,11 @@ export class OffenderViolationsPopupComponent
         }),
       )
       .subscribe(() => {
-        this.control.reset();
         this.reload$.next(null);
+        this.control.reset();
       });
   }
+
   private listenToDelete() {
     this.delete$
       .pipe(
@@ -201,5 +200,13 @@ export class OffenderViolationsPopupComponent
         );
         this.reload$.next(null);
       });
+  }
+
+  isEmployee(model: MawaredEmployee | ClearingAgent): model is MawaredEmployee {
+    return model.isEmployee();
+  }
+
+  isAgent(model: MawaredEmployee | ClearingAgent): model is ClearingAgent {
+    return model.isAgent();
   }
 }

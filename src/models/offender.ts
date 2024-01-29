@@ -4,6 +4,8 @@ import { AdminResult } from '@models/admin-result';
 import { InterceptModel } from 'cast-response';
 import { OffenderInterceptor } from '@model-interceptors/offender-interceptor';
 import { OffenderViolation } from './offender-violation';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { ClearingAgent } from '@models/clearing-agent';
 
 const { send, receive } = new OffenderInterceptor();
 
@@ -20,27 +22,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   statusDateModified?: Date | string;
   ouId!: number;
   agentCustomCode!: string;
-  offenderInfo?: {
-    updatedBy: 0;
-    updatedOn: '2023-10-16T20:15:23.434Z';
-    clientData: string;
-    code: string;
-    arName: string;
-    enName: string;
-    qid: string;
-    type: number;
-    status: number;
-    statusDateModified: '2023-10-16T20:15:23.434Z';
-    employeeDepartmentId: number;
-    typeInfo: AdminResult;
-    statusInfo: AdminResult;
-    id: 0;
-    jobTitleCode: string;
-    email: string;
-    phone: string;
-    phoneNumber: string;
-    address: string;
-  };
+  offenderInfo?: MawaredEmployee | ClearingAgent;
   violations: OffenderViolation[] = [];
   offenderOUInfo?: AdminResult;
   customsViolationEffectInfo?: AdminResult;

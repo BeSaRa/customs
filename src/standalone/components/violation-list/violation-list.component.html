@@ -16,7 +16,7 @@
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource">
+    [dataSource]="model().violationInfo">
     <!-- violationType -->
     <ng-container matColumnDef="violationType">
       <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>

@@ -17,7 +17,7 @@
           lang.map.report_draft_number
         }}</span>
         <label class="input-form p-2 block">
-          {{ model?.draftFullSerial ? model?.draftFullSerial : '---' }}
+          {{ model.draftFullSerial ? model.draftFullSerial : '---' }}
         </label>
       </div>
       <div class="mb-3">
@@ -26,8 +26,8 @@
         }}</span>
         <label class="input-form p-2 block">
           {{
-            model?.investigationFullSerial
-              ? model?.investigationFullSerial
+            model.investigationFullSerial
+              ? model.investigationFullSerial
               : '---'
           }}
         </label>
@@ -37,7 +37,7 @@
           lang.map.report_entry_date
         }}</span>
         <label class="input-form p-2 block">
-          {{ model?.createdOn ? (model?.createdOn | date) : '---' }}
+          {{ model.createdOn ? (model.createdOn | date) : '---' }}
         </label>
       </div>
       <div class="mb-3">
@@ -46,8 +46,8 @@
         }}</span>
         <label class="input-form p-2 block">
           {{
-            model?.securityLevelInfo
-              ? model?.securityLevelInfo?.getNames()
+            model.securityLevelInfo
+              ? model.securityLevelInfo?.getNames()
               : '---'
           }}
         </label>
@@ -149,46 +149,42 @@
     </div>
   </ng-template>
 
-  <ng-template #violation_tab>
-    <div class="p-4">
-      <app-violation-list
-        #violationListComponent
-        [reportType]="getReportType()"
-        [readonly]="readonly"
-        [caseId]="model?.id || ''"
-        [canModifyOffenders]="canEdit()"
-        (violations)="violations = $event"
-        (askForSaveModel)="saveCase()"
-        (focusInvalidTab)="focusInvalidTab()"
-        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
-        [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
-    </div>
-  </ng-template>
-
   <ng-template #offenders_tab>
     <div class="p-4">
       <app-offender-list
-        [investigationModel]="model"
-        [violations]="violations"
+        [model]="model"
         [readonly]="readonly"
-        [caseId]="model?.id || ''"
         [reportType]="getReportType()"
         [canModifyOffenders]="canEdit()"
-        (offenders)="offenders = $event"
         (askForSaveModel)="saveCase()"
         (askForViolationListReload)="violationListComponent.reload$.next()"
         (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)"
         (focusInvalidTab)="focusInvalidTab()"
         [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
+    <!--        (offenders)="offenders = $event"-->
   </ng-template>
 
+  <ng-template #violation_tab>
+    <div class="p-4">
+      <app-violation-list
+        #violationListComponent
+        [reportType]="getReportType()"
+        [readonly]="readonly"
+        [model]="model"
+        [canModifyOffenders]="canEdit()"
+        (askForSaveModel)="saveCase()"
+        (focusInvalidTab)="focusInvalidTab()"
+        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
+        [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
+    </div>
+  </ng-template>
   <ng-template #external_persons_tab>
     <div class="p-4">
       <app-witnesses-list
         [violations]="violations"
         [readonly]="readonly"
-        [caseId]="model?.id" />
+        [caseId]="model.id" />
       <!--        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"-->
     </div>
   </ng-template>

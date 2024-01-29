@@ -28,5 +28,5 @@ export class SummaryTabComponent {
   @Input() offenders: Offender[] = [];
   @Input() violations: Violation[] = [];
   @Input() form!: FormGroup;
-  @Input() model?: Investigation;
+  @Input() model!: Investigation;
 }

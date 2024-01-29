@@ -32,7 +32,7 @@ export class Investigation extends BaseCase<
   offenderInfo: Offender[] = [];
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
-  securityLevelInfo!: AdminResult;
+  securityLevelInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
   $$_employeeService_$$ = 'EmployeeService';
@@ -115,6 +115,26 @@ export class Investigation extends BaseCase<
       this.taskDetails.owner &&
       this.$_getEmployeeService_$().getEmployee()?.domainName.toLowerCase() ===
         this.taskDetails.owner.toLowerCase()
+    );
+  }
+
+  hasOffenders(): boolean {
+    return this.offenderInfo && !!this.offenderInfo.length;
+  }
+
+  hasViolations(): boolean {
+    return this.violationInfo && !!this.violationInfo.length;
+  }
+
+  hasValidOffenders(): boolean {
+    const offendersIds = this.offenderInfo.map(i => i.id);
+    return (
+      this.hasOffenders() && // should have offenders
+      this.hasViolations() && // should have Violations
+      offendersIds.some(id => {
+        // at least for each offender there is one linked
+        return this.offenderViolationInfo.find(ov => ov.offenderId === id);
+      })
     );
   }
 }

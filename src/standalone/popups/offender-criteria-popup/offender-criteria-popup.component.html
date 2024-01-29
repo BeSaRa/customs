@@ -47,6 +47,7 @@
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
+              nullable="false"
               [options]="offenderTypes" />
             <app-select-input
               formControlName="employeeDepartmentId"
@@ -74,6 +75,7 @@
               [label]="lang.map.offender_type"
               bindLabel="getNames"
               bindValue="lookupKey"
+              nullable="false"
               [options]="offenderTypes" />
             <app-input
               formControlName="code"
@@ -227,12 +229,12 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (selectedIndex === 0) {
-      <app-button (click)="search$.next()" buttonType="primary">{{
-        lang.map.search
-      }}</app-button>
+      <app-button (click)="search$.next()" buttonType="primary"
+        >{{ lang.map.search }}
+      </app-button>
     }
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>

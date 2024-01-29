@@ -48,25 +48,25 @@
             </div>
           </div>
         }
-        @if (offender.offenderInfo?.type === offenderTypes.EMPLOYEE) {
+        @if (isEmployee(offender.offenderInfo!)) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
               lang.map.employee_number
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo?.jobTitleCode }}
+              {{ offender.offenderInfo!.jobTitleCode }}
             </div>
           </div>
         }
-        @if (offender.offenderInfo?.type === offenderTypes.ClEARING_AGENT) {
+        @if (isAgent(offender.offenderInfo!)) {
           <div class="group block relative mb-5">
             <span class="block font-medium text-slate-700">{{
               lang.map.clearing_agent_code
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo?.code }}
+              {{ offender.offenderInfo!.code }}
             </div>
           </div>
         }
@@ -116,9 +116,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{
-                offender.offenderInfo.phone || offender.offenderInfo.phoneNumber
-              }}
+              {{ offender.offenderInfo.phoneNumber }}
             </div>
           </div>
         }
@@ -153,7 +151,7 @@
         mat-table
         matSort
         class="table-style table-primary"
-        [dataSource]="dataSource()">
+        [dataSource]="offenderViolations()">
         <!-- violationClassification -->
         <ng-container matColumnDef="violationClassification">
           <th

@@ -43,8 +43,13 @@ export class MawaredEmployee extends BaseModel<
   totalThanksBooks!: number;
   gethDate!: string;
   address!: string;
-
+  type!: number;
+  phoneNumber!: string;
+  jobTitleCode?: string;
   typeInfo!: AdminResult;
+
+  // not related to the model
+  code?: string;
 
   buildForm(): object {
     const {
@@ -107,6 +112,7 @@ export class MawaredEmployee extends BaseModel<
       ouId: this.employeeDepartmentId,
     });
   }
+
   convertToWitness(caseId: string, personType: number): Witness {
     return new Witness().clone<Witness>({
       personType,
@@ -121,5 +127,13 @@ export class MawaredEmployee extends BaseModel<
 
   static createInstance(model: Partial<MawaredEmployee>): MawaredEmployee {
     return Object.assign(new MawaredEmployee(), model);
+  }
+
+  isEmployee(): boolean {
+    return true;
+  }
+
+  isAgent(): boolean {
+    return false;
   }
 }

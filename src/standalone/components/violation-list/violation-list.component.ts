@@ -1,5 +1,7 @@
 import {
   Component,
+  computed,
+  effect,
   EventEmitter,
   inject,
   input,
@@ -23,7 +25,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InvestigationService } from '@services/investigation.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { ViolationService } from '@services/violation.service';
 import { Violation } from '@models/violation';
 import { ignoreErrors } from '@utils/utils';
@@ -35,6 +36,7 @@ import { ViolationTypeService } from '@services/violation-type.service';
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { ButtonComponent } from '../button/button.component';
 import { ReportType } from '@app-types/validation-return-type';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-violation-list',
@@ -61,10 +63,7 @@ export class ViolationListComponent
   violationClassificationService = inject(ViolationClassificationService);
   service = inject(InvestigationService);
   violationService = inject(ViolationService);
-  caseId = input('');
   add$: Subject<void> = new Subject<void>();
-  data = new Subject<Violation[]>();
-  dataSource = new AppTableDataSource(this.data);
   displayedColumns = [
     'violationType',
     'description',
@@ -84,14 +83,21 @@ export class ViolationListComponent
   askForSaveModel = new EventEmitter<void>();
   @Output()
   focusInvalidTab = new EventEmitter<boolean>();
-  @Output()
-  violations = new EventEmitter<Violation[]>();
 
   @Input()
   readonly = false;
   @Input()
   canModifyOffenders = true;
   reportType = input(`None` as ReportType);
+
+  model = input<Investigation>(new Investigation());
+
+  caseId = computed(() => this.model()?.id);
+
+  modelEffect = effect(() => {
+    console.log(this.model());
+  });
+
   ngOnInit(): void {
     this.listenToAdd();
     this.listenToReload();
@@ -99,8 +105,13 @@ export class ViolationListComponent
     this.listenToView();
     this.listenToDelete();
 
-    this.reload$.next();
+    console.log(this.readonly);
   }
+
+  getViolations(): Violation[] {
+    return this.model().violationInfo;
+  }
+
   private listenToAdd() {
     this.add$
       .pipe(takeUntil(this.destroy$))
@@ -109,7 +120,7 @@ export class ViolationListComponent
           if (this.hasValidInvestigationSubject()) {
             return this.service
               .openAddViolation(
-                this.caseId,
+                this.model,
                 this.askForSaveModel,
                 this.reportType,
               )
@@ -120,7 +131,7 @@ export class ViolationListComponent
           }
         }),
       )
-      .subscribe(() => this.reload$.next());
+      .subscribe();
   }
 
   private listenToReload() {
@@ -133,14 +144,14 @@ export class ViolationListComponent
             .load(undefined, { caseId: this.caseId() })
             .pipe(
               map(pagination => {
-                this.data.next(pagination.rs);
+                this.model().violationInfo = pagination.rs;
                 return pagination;
               }),
             )
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe(pagination => this.violations.next(pagination.rs || []));
+      .subscribe();
   }
 
   private listenToView() {
@@ -186,7 +197,7 @@ export class ViolationListComponent
             .afterClosed(),
         ),
       )
-      .subscribe(() => this.reload$.next());
+      .subscribe();
   }
 
   private listenToEdit() {
@@ -232,7 +243,7 @@ export class ViolationListComponent
             .afterClosed(),
         ),
       )
-      .subscribe(() => this.reload$.next());
+      .subscribe();
   }
 
   private listenToDelete() {
@@ -241,7 +252,7 @@ export class ViolationListComponent
         exhaustMap(model =>
           this.dialog
             .confirm(
-              this.dataSource.data.length === 1
+              this.model().violationInfo.length === 1
                 ? this.lang.map.reset_violations_effects_msg
                 : '',
               this.lang.map.msg_delete_x_confirm.change({
@@ -268,8 +279,5 @@ export class ViolationListComponent
       });
   }
 
-  resetDataList() {
-    this.data.next([]);
-    this.violations.emit([]);
-  }
+  resetDataList() {}
 }

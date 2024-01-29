@@ -36,6 +36,7 @@ import { Router } from '@angular/router';
 import { DialogService } from '@services/dialog.service';
 import { DatePipe } from '@angular/common';
 import { ReportType } from '@app-types/validation-return-type';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-violation-popup',
@@ -106,9 +107,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         ).reportType()
       : 'None';
   });
-
+  caseModel = computed(() => {
+    return (this.data.extras as { model: InputSignal<Investigation> }).model();
+  });
   caseId = computed(() => {
-    return (this.data.extras as { caseId: InputSignal<string> }).caseId();
+    return this.caseModel().id;
   });
 
   askForSaveModel = (
@@ -192,6 +195,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }),
     );
+    this.caseModel().violationInfo = [...this.caseModel().violationInfo, model];
     this.dialogRef.close(model);
   }
 

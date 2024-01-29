@@ -1,6 +1,16 @@
 import { ModelInterceptorContract } from 'cast-response';
 import { Investigation } from '@models/investigation';
 import { AdminResult } from '@models/admin-result';
+import { Offender } from '@models/offender';
+import { OffenderInterceptor } from '@model-interceptors/offender-interceptor';
+import { Violation } from '@models/violation';
+import { ViolationInterceptor } from '@model-interceptors/violation-interceptor';
+import { OffenderViolationInterceptor } from '@model-interceptors/offender-violation-interceptor';
+import { OffenderViolation } from '@models/offender-violation';
+
+const offenderInterceptor = new OffenderInterceptor();
+const violationInterceptor = new ViolationInterceptor();
+const offenderViolationInterceptor = new OffenderViolationInterceptor();
 
 export class InvestigationInterceptor
   implements ModelInterceptorContract<Investigation>
@@ -34,6 +44,32 @@ export class InvestigationInterceptor
       (model.securityLevelInfo = AdminResult.createInstance(
         model.securityLevelInfo,
       ));
+
+    model.offenderInfo =
+      model.offenderInfo &&
+      model.offenderInfo.map(item => {
+        return offenderInterceptor.receive(
+          new Offender().clone<Offender>({
+            ...item,
+          }),
+        );
+      });
+    console.log('violationInfo', model.violationInfo);
+    model.violationInfo =
+      model.violationInfo &&
+      model.violationInfo.map(item => {
+        return violationInterceptor.receive(
+          new Violation().clone<Violation>({ ...item }),
+        );
+      });
+
+    model.offenderViolationInfo &&
+      (model.offenderViolationInfo = model.offenderViolationInfo.map(i => {
+        return offenderViolationInterceptor.receive(
+          new OffenderViolation().clone<OffenderViolation>({ ...i }),
+        );
+      }));
+    console.log({ model });
 
     return model;
   }

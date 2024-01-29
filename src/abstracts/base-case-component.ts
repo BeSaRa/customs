@@ -9,10 +9,8 @@ import {
   map,
   Observable,
   of,
-  startWith,
   Subject,
   switchMap,
-  take,
   takeUntil,
   tap,
   withLatestFrom,
@@ -45,7 +43,7 @@ export abstract class BaseCaseComponent<
   abstract service: Service;
   openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   readonly = false;
-  model?: Model;
+  model!: Model;
   launch$: Subject<null> = new Subject<null>();
   private afterLaunch$: Subject<boolean> = new Subject<boolean>();
   save$ = new Subject<SaveTypes>();
@@ -130,6 +128,8 @@ export abstract class BaseCaseComponent<
           const result = this._beforeLaunch();
           return isObservable(result) ? result : of(result);
         }),
+        // emit only if the beforeLaunch returned true
+        filter(value => !!value),
         exhaustMap(_ => {
           const model = this.model as unknown as BaseCase<never, never>;
           return model.start().pipe(
@@ -152,7 +152,7 @@ export abstract class BaseCaseComponent<
       });
   }
 
-  launch(): Observable<boolean> {
+  /* launch(): Observable<boolean> {
     return (() => {
       return this.afterLaunch$
         .pipe(takeUntil(this.destroy$))
@@ -161,7 +161,7 @@ export abstract class BaseCaseComponent<
         .pipe(tap(value => !value && this.launch$.next(null)))
         .pipe(filter(value => value));
     })();
-  }
+  }*/
 
   protected _init(): void {
     this.model = this.route.snapshot.data.info?.model;

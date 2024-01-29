@@ -6,7 +6,15 @@ import {
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, Input, OnInit, signal } from '@angular/core';
+import {
+  booleanAttribute,
+  Component,
+  inject,
+  input,
+  Input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
@@ -29,7 +37,7 @@ import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/
 import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 import { PenaltyDecision } from '@models/penalty-decision';
@@ -93,9 +101,9 @@ export class OffendersViolationsPreviewComponent
     this.offenderDataSource = new AppTableDataSource(offenders);
   }
 
-  @Input() model?: Investigation;
+  model = input.required<Investigation>();
 
-  isClaimed = input(false);
+  isClaimed = input(false, { transform: booleanAttribute });
 
   offenderDisplayedColumns = [
     'offenderName',
@@ -108,7 +116,6 @@ export class OffendersViolationsPreviewComponent
 
   offenderTypesMap: Record<number, Lookup> =
     this.lookupService.lookups.offenderType.reduce((acc, item) => {
-      console.log(acc);
       return {
         ...acc,
         [item.lookupKey]: item,
@@ -160,12 +167,12 @@ export class OffendersViolationsPreviewComponent
   }
 
   private loadPenalties() {
-    return this.model
-      ? this.model
+    return this.model()
+      ? this.model()
           .getService()
           .getCasePenalty(
-            this.model.id as string,
-            this.model.getActivityName()!,
+            this.model().id as string,
+            this.model().getActivityName()!,
           )
       : of(
           {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
@@ -180,8 +187,7 @@ export class OffendersViolationsPreviewComponent
             .open(OffenderViolationsPopupComponent, {
               data: {
                 offender: offender,
-                caseId: this.model?.id,
-                violations: offender.violations,
+                model: this.model,
                 readonly: true,
               },
             })
@@ -219,10 +225,10 @@ export class OffendersViolationsPreviewComponent
               {
                 data: {
                   model: offender,
-                  caseId: this.model?.id,
+                  caseId: this.model().id,
                   penalties: this.getOffenderPenalties(offender),
                   penaltyImposedBySystem: this.penaltyMap()[offender.id].first,
-                  oldPenalty: this.model?.getPenaltyDecisionByOffenderId(
+                  oldPenalty: this.model().getPenaltyDecisionByOffenderId(
                     offender.id,
                   ),
                 },
@@ -232,7 +238,7 @@ export class OffendersViolationsPreviewComponent
         ),
       )
       .subscribe((item: PenaltyDecision | undefined) => {
-        this.model && item && this.model.appendPenaltyDecision(item);
+        this.model && item && this.model().appendPenaltyDecision(item);
       });
   }
 
@@ -244,7 +250,7 @@ export class OffendersViolationsPreviewComponent
             .open(AssignmentToAttendPopupComponent, {
               data: {
                 offender: offender,
-                caseId: this.model?.id,
+                caseId: this.model().id,
                 type: UserTypes.INTERNAL,
               },
             })
@@ -261,7 +267,7 @@ export class OffendersViolationsPreviewComponent
           const suspendedEmployee =
             this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
               offender.offender,
-              this.model?.id as string,
+              this.model().id as string,
             );
           return this.dialog
             .open(SuspendEmployeePopupComponent, {
@@ -301,7 +307,7 @@ export class OffendersViolationsPreviewComponent
       .pipe(
         switchMap(({ offender, penaltyId }) => {
           const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
-            caseId: this.model?.id,
+            caseId: this.model().id,
             offenderId: offender.id,
             signerId: this.employeeService.getEmployee()?.id,
             penaltyId: penaltyId,
@@ -323,14 +329,6 @@ export class OffendersViolationsPreviewComponent
   }
 
   mandatoryMakePenaltyDecisions() {
-    console.log(
-      !!this.penaltyMap() &&
-        !!Object.keys(this.penaltyMap()).find(
-          k =>
-            this.penaltyMap()[k].first ===
-            ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
-        ),
-    );
     return (
       !!this.penaltyMap() &&
       !!Object.keys(this.penaltyMap()).find(
@@ -348,21 +346,16 @@ export class OffendersViolationsPreviewComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.penaltyMap.set(data);
-        console.log(this.penaltyMap());
       });
   }
 
   canLoadPenalties(): boolean {
     return !!(
-      this.model &&
-      this.model.hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
-      this.model.getActivityName() &&
-      this.model.getTaskName()
+      this.model() &&
+      this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+      this.model().getActivityName() &&
+      this.model().getTaskName()
     );
-  }
-
-  openMenu(trigger: MatMenuTrigger) {
-    trigger.openMenu();
   }
 
   rowClicked($event: MouseEvent, element: Offender) {

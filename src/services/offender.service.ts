@@ -4,6 +4,9 @@ import { CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { BaseCrudService } from '@abstracts/base-crud-service';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { ClearingAgent } from '@models/clearing-agent';
+import { OffenderTypes } from '@enums/offender-types';
 
 @CastResponseContainer({
   $pagination: {
@@ -32,5 +35,13 @@ export class OffenderService extends BaseCrudService<Offender> {
 
   getUrlSegment(): string {
     return this.urlService.URLS.OFFENDER;
+  }
+
+  isEmployee(model: MawaredEmployee | ClearingAgent): model is MawaredEmployee {
+    return model.type === OffenderTypes.EMPLOYEE;
+  }
+
+  isAgent(model: MawaredEmployee | ClearingAgent): model is ClearingAgent {
+    return model.type === OffenderTypes.ClEARING_AGENT;
   }
 }

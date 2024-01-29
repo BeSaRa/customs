@@ -53,6 +53,7 @@ export class InvestigationComponent
         this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
     });
   }
+
   lang = inject(LangService);
   route = inject(ActivatedRoute);
   fb = inject(UntypedFormBuilder);
@@ -86,11 +87,16 @@ export class InvestigationComponent
 
   violations: Violation[] = [];
   offenders: Offender[] = [];
+
   reloadOffendersViolations$: BehaviorSubject<null> = new BehaviorSubject(null);
   offendersMappedWIthViolations: Offender[] = [];
 
   protected override _init() {
     super._init();
+    this.info()
+      ? (this.model = this.info()!.model as unknown as Investigation)
+      : (this.model = new Investigation());
+
     this._listenToLoadOffendersViolations();
   }
 
@@ -99,25 +105,24 @@ export class InvestigationComponent
   }
 
   showSummaryElements() {
-    return !!this.model?.id;
+    return !!this.model.id;
   }
+
   canSave() {
-    return this.canEdit() || !this.model?.id;
+    return this.canEdit() || !this.model.id;
   }
+
   canEdit() {
     return (
-      this.model?.getCaseStatus() === CommonCaseStatus.NEW ||
-      this.model?.getCaseStatus() === CommonCaseStatus.DRAFT ||
-      this.model?.getCaseStatus() === CommonCaseStatus.RETURNED
+      this.model.getCaseStatus() === CommonCaseStatus.NEW ||
+      this.model.getCaseStatus() === CommonCaseStatus.DRAFT ||
+      this.model.getCaseStatus() === CommonCaseStatus.RETURNED ||
+      this.model.getCaseStatus() === CommonCaseStatus.RETURN_TO_SAME_EMPLOYEE
     );
   }
 
   _buildForm(): void {
-    this.form = this.fb.group(
-      this.model
-        ? this.model.buildForm(true, this.readonly)
-        : new Investigation().buildForm(true, this.readonly),
-    );
+    this.form = this.fb.group(this.model.buildForm(true, this.readonly));
     this.listenToLocationChange();
   }
 
@@ -157,10 +162,22 @@ export class InvestigationComponent
   }
 
   _beforeLaunch(): boolean | Observable<boolean> {
-    // at least one offender in the case
-    // all offenders in the case linked to violation
+    console.log(
+      'this.model.hasValidOffenders()',
+      this.model.hasValidOffenders(),
+    );
+    console.log('this.model.hasViolations()', this.model.hasViolations());
+    console.log('this.model.hasOffenders()', this.model.hasOffenders());
 
-    return true;
+    if (!this.model.hasViolations()) {
+      this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
+      return false;
+    } else if (this.model.hasOffenders() && !this.model.hasValidOffenders()) {
+      this.dialog.error(this.lang.map.link_violations_offenders);
+      return false;
+    } else {
+      return true;
+    }
   }
 
   _afterLaunch(): void {
@@ -181,7 +198,7 @@ export class InvestigationComponent
   }
 
   handleReadOnly() {
-    if (!this.model?.id) {
+    if (!this.model.id) {
       return;
     }
     // let caseStatus = this.model.getCaseStatus();
@@ -192,7 +209,7 @@ export class InvestigationComponent
         this.readonly = false;
       }
     } else if (this.openFrom === OpenFrom.SEARCH) {
-      if (this.model?.canCommit()) {
+      if (this.model.canCommit()) {
         this.readonly = false;
       }
     }
@@ -207,15 +224,16 @@ export class InvestigationComponent
         ? 'Normal'
         : 'Creminal';
   }
+
   private _listenToLoadOffendersViolations() {
     this.reloadOffendersViolations$
-      .pipe(filter(() => !!this.model?.id))
+      .pipe(filter(() => !!this.model.id))
       .pipe(
         switchMap(() => {
           return this.offenderViolationService.loadComposite(
             {},
             {
-              caseId: this.model?.id,
+              caseId: this.model.id,
             },
           );
         }),
@@ -305,16 +323,12 @@ export class InvestigationComponent
 
   launchCase(type: SendTypes) {
     if (!this.model) return;
+
     this.model.applicantDecision = type;
-    console.log(this.model);
     this.model
       .save()
-      .pipe(
-        switchMap(() => {
-          return this.launch();
-        }),
-      )
-      .subscribe();
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.launch$.next(null));
   }
 
   tabChange($event: number, withParams: boolean = true) {
@@ -375,16 +389,23 @@ export class InvestigationComponent
       {} as Record<string, CaseFolder>,
     );
   }
+
   get subject() {
     return this.form.get('subject');
   }
+
   hasValidInvestigationSubject(): boolean {
     return !!this.subject?.valid;
   }
+
   focusInvalidTab() {
     if (!this.hasValidInvestigationSubject()) {
       this.selectedTab = 0;
       this.subject?.markAsTouched();
     }
+  }
+
+  updateViolations($event: Violation[]) {
+    this.model!.violationInfo = $event;
   }
 }

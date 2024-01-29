@@ -35,6 +35,9 @@ export class ClearingAgent extends BaseModel<
   qid!: string;
   phoneNumber!: string;
   email!: string;
+  code?: string;
+  // not related to the model
+  jobTitleCode!: string;
 
   buildForm(controls = false): object {
     const {
@@ -100,5 +103,13 @@ export class ClearingAgent extends BaseModel<
       witnessRefId: this.agentId,
       status: 1,
     });
+  }
+
+  isEmployee(): boolean {
+    return false;
+  }
+
+  isAgent(): boolean {
+    return true;
   }
 }

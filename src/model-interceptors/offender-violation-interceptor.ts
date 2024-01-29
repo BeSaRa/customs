@@ -8,6 +8,7 @@ import { Offender } from '@models/offender';
 
 const offenderInterceptor = new OffenderInterceptor();
 const violationInterceptor = new ViolationInterceptor();
+
 export class OffenderViolationInterceptor
   implements ModelInterceptorContract<OffenderViolation>
 {
@@ -22,14 +23,17 @@ export class OffenderViolationInterceptor
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.offenderInfo &&
-      (model.offenderInfo = new Offender().clone<Offender>(
-        offenderInterceptor.receive(model.offenderInfo),
+      (model.offenderInfo = offenderInterceptor.receive(
+        new Offender().clone<Offender>({
+          ...model.offenderInfo,
+        }),
       ));
     model.violationInfo &&
-      (model.violationInfo = new Violation().clone<Violation>(
-        violationInterceptor.receive(model.violationInfo),
+      (model.violationInfo = violationInterceptor.receive(
+        new Violation().clone<Violation>({
+          ...model.violationInfo,
+        }),
       ));
-
     return model;
   }
 }

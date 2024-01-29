@@ -1,6 +1,7 @@
 import { EmployeeService } from '@services/employee.service';
 import {
   Component,
+  computed,
   EventEmitter,
   inject,
   Input,
@@ -21,7 +22,6 @@ import {
   Subject,
   switchMap,
   takeUntil,
-  tap,
 } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { OffenderService } from '@services/offender.service';
@@ -34,7 +34,6 @@ import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
-import { Violation } from '@models/violation';
 import { Investigation } from '@models/investigation';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
@@ -64,10 +63,8 @@ export class OffenderListComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  violations = input([] as Violation[]);
-  caseId = input('');
-  @Input()
-  investigationModel?: Investigation;
+  model = input.required<Investigation>();
+  caseId = computed(() => this.model().id);
   @Input()
   readonly = false;
   @Input()
@@ -75,7 +72,9 @@ export class OffenderListComponent
   hasValidInvestigationSubject = input(false);
   add$: Subject<void> = new Subject<void>();
   @Output()
-  offenders = new EventEmitter<Offender[]>();
+  offenderAdded: EventEmitter<Offender> = new EventEmitter<Offender>();
+  @Output()
+  offenderDeleted: EventEmitter<Offender> = new EventEmitter<Offender>();
   @Output()
   linkOffenderWithViolation = new EventEmitter<void>();
   reportType = input(`None` as ReportType);
@@ -115,7 +114,6 @@ export class OffenderListComponent
     this.listenToDelete();
     this.listenToOffenderViolation();
     this.listenToSituationSearch();
-    this.reload$.next();
   }
 
   private listenToAdd() {
@@ -126,20 +124,14 @@ export class OffenderListComponent
             return this.dialog
               .open(OffenderCriteriaPopupComponent, {
                 data: {
-                  caseId: this.caseId,
-                  violations: this.violations,
-                  offenders: this.dataSource.data,
+                  model: this.model,
                   askForSaveModel: this.askForSaveModel,
                   askForViolationListReload: this.askForViolationListReload,
                   reportType: this.reportType,
+                  offenderAdded: this.offenderAdded,
                 },
               })
-              .afterClosed()
-              .pipe(
-                tap(() => {
-                  this.reload$.next();
-                }),
-              );
+              .afterClosed();
           } else {
             this.focusInvalidTab.emit(true);
             return of(null);
@@ -161,14 +153,16 @@ export class OffenderListComponent
             .load(undefined, { caseId: this.caseId() })
             .pipe(
               map(pagination => {
-                this.data.next(pagination.rs);
+                this.model().offenderInfo = [...pagination.rs];
                 return pagination;
               }),
             )
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe(pagination => this.offenders.next(pagination.rs || []));
+      .subscribe(pagination => {
+        this.model().offenderInfo = [...pagination.rs];
+      });
   }
 
   private listenToDelete() {
@@ -191,7 +185,17 @@ export class OffenderListComponent
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
         );
-        this.reload$.next();
+        this.model().offenderInfo = [
+          ...this.model().offenderInfo.filter(item => item.id !== model.id),
+        ];
+        this.model().offenderViolationInfo = [
+          ...this.model().offenderViolationInfo.filter(
+            item => item.offenderId !== model.id,
+          ),
+        ];
+        this.offenderDeleted.emit(model);
+
+        console.log(this.model());
         this.linkOffenderWithViolation.emit();
       });
   }
@@ -204,8 +208,7 @@ export class OffenderListComponent
             .open(OffenderViolationsPopupComponent, {
               data: {
                 offender: offender,
-                caseId: this.investigationModel?.id,
-                violations: this.violations,
+                model: this.model,
                 readonly: this.readonly,
               },
             })
@@ -235,7 +238,6 @@ export class OffenderListComponent
 
   resetDataList() {
     this.data.next([]);
-    this.offenders.emit([]);
   }
 
   isClearingAgent(element: Offender) {

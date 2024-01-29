@@ -158,7 +158,6 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     );
   }
 
-  @CastResponse()
   delete(id: PrimaryType): Observable<M> {
     return this.http.delete<M>(this.getUrlSegment() + `/admin/${id}`);
   }

@@ -7,6 +7,7 @@ import {
   ElementRef,
   inject,
   Injector,
+  input,
   Input,
   OnDestroy,
   OnInit,
@@ -111,8 +112,9 @@ export class SelectInputComponent
   bindFilter?: string | ((item: any) => any);
   @Input()
   enableFilter = false;
-  @Input()
-  nullable = true;
+
+  nullable = input(true, { transform: booleanAttribute });
+
   @ContentChild(OptionTemplateDirective)
   optionTemplate?: OptionTemplateDirective;
 

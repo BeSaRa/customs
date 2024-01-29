@@ -1,13 +1,12 @@
 import { EventEmitter, InputSignal } from '@angular/core';
-import { Violation } from '@models/violation';
 import { Offender } from '@models/offender';
 import { ReportType } from '@app-types/validation-return-type';
+import { Investigation } from '@models/investigation';
 
 export interface OffenderCriteriaDataContract {
-  caseId: InputSignal<string>;
-  violations: InputSignal<Violation[]>;
-  offenders: Offender[];
+  model: InputSignal<Investigation>;
   askForSaveModel: EventEmitter<void>;
   askForViolationListReload: EventEmitter<void>;
   reportType: InputSignal<ReportType>;
+  offenderAdded: EventEmitter<Offender>;
 }
