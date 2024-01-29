@@ -47,6 +47,7 @@ import { ignoreErrors } from '@utils/utils';
 import { WitnessTypes } from '@enums/witness-types';
 import { Witness } from '@models/witness';
 import { PersonTypes } from '@enums/person-types';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-witness-criteria-popup',
@@ -93,9 +94,9 @@ export class WitnessCriteriaPopupComponent
   isEmployee = true;
   isClearingAgent = false;
   isExternal = false;
-  witnessTypeControl = new FormControl(WitnessTypes.EMPLOYEE, {
-    nonNullable: true,
-  });
+  witnessTypeControl = new FormControl(WitnessTypes.EMPLOYEE, [
+    CustomValidators.required,
+  ]);
   personTypeControl = new FormControl(PersonTypes.EXPERT, {
     nonNullable: true,
   });
@@ -204,6 +205,7 @@ export class WitnessCriteriaPopupComponent
         this.clearingAgents$.next(result);
       });
   }
+
   private listenToAddWitness() {
     this.addWitness$
       .pipe(
@@ -241,6 +243,7 @@ export class WitnessCriteriaPopupComponent
         this.matDialogRef.close();
       });
   }
+
   private listenToAddEmployee() {
     this.addEmployee$
       .pipe(
