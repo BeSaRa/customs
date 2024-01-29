@@ -140,15 +140,15 @@ export class ViolationListComponent
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe(pagination => this.violations.next(pagination.rs || []));
+      .subscribe(pagination => this.violations.emit(pagination.rs || []));
   }
 
   private listenToView() {
     this.view$
       .pipe(
         exhaustMap(model =>
-          this.violationTypeService
-            .loadById(model.violationTypeId)
+          this.violationService
+            .loadByIdComposite(model.id)
             .pipe(
               map(type => ({
                 type,
@@ -161,7 +161,7 @@ export class ViolationListComponent
       .pipe(
         exhaustMap(({ type, model }) =>
           this.violationClassificationService
-            .loadById(type.classificationId)
+            .loadById(type.violationClassificationId)
             .pipe(
               map(classification => {
                 return {
@@ -179,7 +179,7 @@ export class ViolationListComponent
           model
             .openView({
               caseId: this.caseId,
-              classificationId: type.classificationId,
+              classificationId: type.violationClassificationId,
               classifications: [classification],
               types: [type],
             })
@@ -193,8 +193,8 @@ export class ViolationListComponent
     this.edit$
       .pipe(
         exhaustMap(model =>
-          this.violationTypeService
-            .loadById(model.violationTypeId)
+          this.violationService
+            .loadByIdComposite(model.id)
             .pipe(
               map(type => ({
                 type,
@@ -207,7 +207,7 @@ export class ViolationListComponent
       .pipe(
         exhaustMap(({ type, model }) =>
           this.violationClassificationService
-            .loadById(type.classificationId)
+            .loadById(type.violationClassificationId)
             .pipe(
               map(classification => {
                 return {
@@ -225,7 +225,7 @@ export class ViolationListComponent
           model
             .openEdit({
               caseId: this.caseId,
-              classificationId: type.classificationId,
+              classificationId: type.violationClassificationId,
               classifications: [classification],
               types: [type],
             })
