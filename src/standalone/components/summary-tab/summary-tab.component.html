@@ -30,12 +30,11 @@
   </div>
   <app-offenders-violations-preview
     [model]="model"
-    [data]="offenders"
     class="col-span-1 md:col-span-2 lg:col-span-4 mb-3"
     [isClaimed]="model.inMyInbox()" />
 
   <app-unlinked-violations
-    [offenders]="offenders"
-    [data]="violations"
+    [offenders]="model.offenderInfo"
+    [data]="model.violationInfo"
     class="col-span-1 md:col-span-2 lg:col-span-4 mb-3" />
 </div>

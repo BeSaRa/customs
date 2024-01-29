@@ -129,6 +129,7 @@ export class OffenderListComponent
                   askForViolationListReload: this.askForViolationListReload,
                   reportType: this.reportType,
                   offenderAdded: this.offenderAdded,
+                  linkOffenderWithViolation: this.linkOffenderWithViolation,
                 },
               })
               .afterClosed();

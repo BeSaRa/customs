@@ -9,4 +9,5 @@ export interface OffenderCriteriaDataContract {
   askForViolationListReload: EventEmitter<void>;
   reportType: InputSignal<ReportType>;
   offenderAdded: EventEmitter<Offender>;
+  linkOffenderWithViolation: EventEmitter<void>;
 }

@@ -137,4 +137,10 @@ export class Investigation extends BaseCase<
       })
     );
   }
+
+  getOffenderViolationByOffender(offenderId: number): OffenderViolation[] {
+    return this.offenderViolationInfo.filter(item => {
+      return item.offenderId === offenderId;
+    });
+  }
 }

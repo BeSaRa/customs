@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  Input,
+  OnInit,
+} from '@angular/core';
 
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
@@ -20,7 +27,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LookupService } from '@services/lookup.service';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
-import { Violation } from '@models/violation';
 import { Lookup } from '@models/lookup';
 import { Witness } from '@models/witness';
 import { WitnessService } from '@services/witness.service';
@@ -28,6 +34,7 @@ import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criter
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
 import { UserTypes } from '@enums/user-types';
 import { EmployeeService } from '@services/employee.service';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-witnesses-list',
@@ -50,10 +57,8 @@ export class WitnessesListComponent
   lang = inject(LangService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
-  @Input()
-  violations!: Violation[];
-  @Input()
-  caseId?: string;
+  model = input.required<Investigation>();
+  caseId = computed(() => this.model().id);
   @Input()
   title: string = this.lang.map.external_persons;
   @Input()
@@ -109,19 +114,19 @@ export class WitnessesListComponent
       .pipe(
         tap(
           () =>
-            !this.violations.length &&
+            !this.model().violationInfo.length &&
             this.dialog.error(
               this.lang.map.add_violation_first_to_take_this_action,
             ),
         ),
-        filter(() => !!this.violations.length),
+        filter(() => !!this.model().violationInfo.length),
       )
       .pipe(
         exhaustMap(() =>
           this.dialog
             .open(WitnessCriteriaPopupComponent, {
               data: {
-                caseId: this.caseId,
+                caseId: this.caseId(),
               },
             })
             .afterClosed(),
@@ -132,10 +137,10 @@ export class WitnessesListComponent
 
   private listenToReload() {
     this.reload$
-      .pipe(filter(() => !!this.caseId))
+      .pipe(filter(() => !!this.caseId()))
       .pipe(
         switchMap(() =>
-          this.witnessService.load(undefined, { caseId: this.caseId }),
+          this.witnessService.load(undefined, { caseId: this.caseId() }),
         ),
       )
       .pipe(takeUntil(this.destroy$))

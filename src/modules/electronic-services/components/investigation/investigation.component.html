@@ -102,11 +102,7 @@
     (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
   </app-buttons-case-wrapper>
   <ng-template #summary_tab>
-    <app-summary-tab
-      [model]="model"
-      [offenders]="offendersMappedWIthViolations"
-      [violations]="violations"
-      [form]="form" />
+    <app-summary-tab [model]="model" [form]="form" />
   </ng-template>
 
   <ng-template #basic_info_tab>
@@ -179,11 +175,7 @@
   </ng-template>
   <ng-template #external_persons_tab>
     <div class="p-4">
-      <app-witnesses-list
-        [violations]="violations"
-        [readonly]="readonly"
-        [caseId]="model.id" />
-      <!--        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"-->
+      <app-witnesses-list [model]="model" [readonly]="readonly" />
     </div>
   </ng-template>
 
@@ -202,8 +194,7 @@
         [title]="lang.map.correspondence_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-offender-attachments
-        [investigationModel]="model"
-        [data]="offenders"
+        [model]="model"
         class="col-span-1 md:col-span-2 lg:col-span-4"
         [readOnly]="readonly" />
     </div>

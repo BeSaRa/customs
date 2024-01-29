@@ -5,6 +5,7 @@ import {
   effect,
   inject,
   OnInit,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -142,6 +143,7 @@ export class OffenderCriteriaPopupComponent
   @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
   selectedIndex: number = 0;
+  linkOffenderWithViolation = this.data.linkOffenderWithViolation;
   reportType = this.data && this.data.reportType;
   offenderType = toSignal(this.offenderTypeControl.valueChanges, {
     initialValue: OffenderTypes.EMPLOYEE,
@@ -151,7 +153,10 @@ export class OffenderCriteriaPopupComponent
 
   canSave = computed(() => this.caseId());
 
+  refresh = signal(true);
+
   violations = computed(() => {
+    this.refresh();
     return this.model().violationInfo.filter(violation =>
       [this.offenderType(), OffenderTypes.BOTH].includes(
         violation.offenderTypeInfo.lookupKey,
@@ -221,6 +226,7 @@ export class OffenderCriteriaPopupComponent
         ),
       )
       .subscribe(violation => {
+        this.refresh.update(value => !value);
         if (
           violation.offenderTypeInfo?.lookupKey ===
           this.offenderTypeControl.value
@@ -324,6 +330,7 @@ export class OffenderCriteriaPopupComponent
         }),
       )
       .subscribe(model => {
+        this.linkOffenderWithViolation.emit();
         this.employeeDatasource.data.splice(
           this.employeeDatasource.data.findIndex(
             emp => emp.id === model.offenderRefId,
@@ -376,6 +383,7 @@ export class OffenderCriteriaPopupComponent
         }),
       )
       .subscribe(model => {
+        this.linkOffenderWithViolation.emit();
         this.clearingAgentsDatasource.data.splice(
           this.clearingAgentsDatasource.data.findIndex(
             emp => emp.id === model.offenderRefId,
@@ -402,7 +410,15 @@ export class OffenderCriteriaPopupComponent
                 status: 1,
                 isProved: false,
               })
-              .save();
+              .save()
+              .pipe(
+                tap(offenderViolation => {
+                  this.model().offenderViolationInfo = [
+                    ...this.model().offenderViolationInfo,
+                    offenderViolation,
+                  ];
+                }),
+              );
           },
         )
       : [of(new OffenderViolation())];

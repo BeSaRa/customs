@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, InputSignal } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -25,14 +25,18 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
   styleUrls: ['./offender-attachment-popup.component.scss'],
 })
 export class OffenderAttachmentPopupComponent extends OnDestroyMixin(class {}) {
-  data = inject(MAT_DIALOG_DATA);
+  data = inject<{
+    readonly: boolean;
+    model: InputSignal<Investigation>;
+    offenderId: number;
+  }>(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dialogRef = inject(MatDialogRef);
   dialog = inject(DialogService);
 
-  model: Investigation = this.data && (this.data.model as Investigation);
-  offenderId: number = this.data && (this.data.offenderId as number);
-  readonly = this.data && this.data.readonly;
+  model = this.data.model;
+  offenderId: number = this.data.offenderId;
+  readonly = this.data.readonly;
 
   constructor() {
     super();

@@ -3,7 +3,7 @@
   matSort
   class="table-style table-primary"
   multiTemplateDataRows=""
-  [dataSource]="offenderDataSource">
+  [dataSource]="offenders()">
   <!-- offender name -->
   <ng-container matColumnDef="offenderName">
     <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>
@@ -14,7 +14,7 @@
         <span
           [matTooltip]="lang.map.number_of_violations"
           class="cursor-pointer inline-flex items-center rounded-[12px] mb-0 px-2 py-1 text-xs font-medium ring-1 ring-inset ring-primary-700/10">
-          {{ element.violations?.length }}
+          {{ model().getOffenderViolationByOffender(element.id).length }}
         </span>
         <app-icon-button
           [matTooltip]="offenderTypesMap[element.type].getNames()"
@@ -57,7 +57,9 @@
     <td mat-cell *matCellDef="let element">
       <div class="flex items-start flex-col">
         @for (
-          violation of assertType(element).violations.slice(0, 3);
+          violation of model()
+            .getOffenderViolationByOffender(element.id)
+            .slice(0, 3);
           track violation
         ) {
           <div class="flex justify-start items-center">
@@ -137,7 +139,10 @@
           selectedOffender === element ? 'expanded' : 'collapsed'
         "
         class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100">
-        @for (violation of assertType(element).violations; track violation) {
+        @for (
+          violation of model().getOffenderViolationByOffender(element.id);
+          track violation
+        ) {
           <div class="p-3 border-bottom">
             <h5 class="text-lg font-medium mb-1">
               {{ violation.violationInfo.violationTypeInfo.getNames() }}

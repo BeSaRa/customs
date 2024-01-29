@@ -7,7 +7,7 @@
     mat-table
     matSort
     class="table-style table-primary"
-    [dataSource]="dataSource">
+    [dataSource]="model().offenderInfo">
     <!-- offender name -->
     <ng-container matColumnDef="offenderName">
       <th mat-header-cell mat-sort-header="offenderName" *matHeaderCellDef>

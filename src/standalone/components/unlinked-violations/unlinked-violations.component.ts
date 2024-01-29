@@ -27,7 +27,7 @@ export class UnlinkedViolationsComponent {
   lang = inject(LangService);
 
   columns: string[] = ['violationName', 'classification', 'description'];
-  offenders = input([] as Offender[]);
+  offenders = input.required<Offender[]>();
   data = input([] as Violation[]);
   violations = computed(() => {
     return new AppTableDataSource(

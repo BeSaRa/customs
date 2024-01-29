@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, inject, Input, input, OnInit } from '@angular/core';
 import { OffenderTypes } from '@enums/offender-types';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { Investigation } from '@models/investigation';
 import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
@@ -39,14 +38,10 @@ export class OffenderAttachmentsComponent
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   offenderTypes = OffenderTypes;
-  dataSource = new AppTableDataSource<Offender>([]);
   attachments$: Subject<Offender> = new Subject<Offender>();
-  @Input({ required: true }) set data(offenders: Offender[]) {
-    this.dataSource = new AppTableDataSource(offenders);
-  }
-
-  @Input() investigationModel?: Investigation;
   @Input() readOnly = true;
+
+  model = input.required<Investigation>();
 
   displayedColumns = [
     'offenderName',
@@ -64,6 +59,7 @@ export class OffenderAttachmentsComponent
     );
 
   ngOnInit(): void {
+    console.log(this.model());
     this.listenToAttachments();
   }
 
@@ -74,7 +70,7 @@ export class OffenderAttachmentsComponent
           this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
-                model: this.investigationModel,
+                model: this.model,
                 offenderId: model.id,
                 readonly: this.readOnly,
               },

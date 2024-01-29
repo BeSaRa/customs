@@ -31,7 +31,6 @@ import { LookupService } from '@services/lookup.service';
 import { SendTypes } from '@enums/send-types';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { Offender } from '@models/offender';
-import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
@@ -85,9 +84,6 @@ export class InvestigationComponent
   caseFoldersMap?: Record<string, CaseFolder>;
   selectedTab = 0;
 
-  violations: Violation[] = [];
-  offenders: Offender[] = [];
-
   reloadOffendersViolations$: BehaviorSubject<null> = new BehaviorSubject(null);
   offendersMappedWIthViolations: Offender[] = [];
 
@@ -135,12 +131,14 @@ export class InvestigationComponent
   }
 
   _beforeSave(_saveType: SaveTypes): boolean | Observable<boolean> {
-    !this.violations.length &&
-      !this.offenders.length &&
+    !this.model.violationInfo.length &&
+      !this.model.offenderInfo.length &&
       this.dialog.error(
         this.lang.map.add_violation_or_offender_first_to_take_this_action,
       );
-    return !!this.violations.length || !!this.offenders.length;
+    return (
+      !!this.model.violationInfo.length || !!this.model.offenderInfo.length
+    );
   }
 
   _prepareModel(): Investigation | Observable<Investigation> {
@@ -216,9 +214,9 @@ export class InvestigationComponent
   }
 
   getReportType(): ReportType {
-    return !this.violations.length
+    return !this.model.violationInfo.length
       ? 'None'
-      : !this.violations.find(v => {
+      : !this.model.violationInfo.find(v => {
             return v.classificationInfo.id === ClassificationTypes.criminal;
           })
         ? 'Normal'
@@ -227,41 +225,11 @@ export class InvestigationComponent
 
   private _listenToLoadOffendersViolations() {
     this.reloadOffendersViolations$
-      .pipe(filter(() => !!this.model.id))
-      .pipe(
-        switchMap(() => {
-          return this.offenderViolationService.loadComposite(
-            {},
-            {
-              caseId: this.model.id,
-            },
-          );
-        }),
-      )
-      .pipe(tap(() => (this.canReferralCase = false)))
-      .pipe(
-        map(({ rs }) => {
-          return rs.reduce((prev: Offender[], curr: OffenderViolation) => {
-            const offender = prev.find(
-              offender => offender.id === curr.offenderId,
-            );
-            if (offender) {
-              offender.violations.push(curr);
-              return [...prev];
-            } else {
-              return [
-                ...prev,
-                new Offender().clone<Offender>({
-                  ...curr.offenderInfo,
-                  violations: [curr],
-                }),
-              ];
-            }
-          }, []);
-        }),
-      )
-      .subscribe(data => {
-        this.offendersMappedWIthViolations = data;
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.model = new Investigation().clone<Investigation>({
+          ...this.model,
+        });
       });
   }
 

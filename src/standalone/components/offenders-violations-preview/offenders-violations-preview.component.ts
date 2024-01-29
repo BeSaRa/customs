@@ -9,9 +9,9 @@ import { CommonModule } from '@angular/common';
 import {
   booleanAttribute,
   Component,
+  computed,
   inject,
   input,
-  Input,
   OnInit,
   signal,
 } from '@angular/core';
@@ -23,7 +23,6 @@ import { LangService } from '@services/lang.service';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
@@ -79,7 +78,6 @@ export class OffendersViolationsPreviewComponent
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
   systemPenalties = SystemPenalties;
-  offenderDataSource = new AppTableDataSource<Offender>([]);
   reload$: Subject<void> = new Subject<void>();
   view$: Subject<Offender> = new Subject<Offender>();
   makeDecision$ = new Subject<Offender>();
@@ -96,10 +94,6 @@ export class OffendersViolationsPreviewComponent
   }>();
 
   selectedOffender!: Offender | null;
-
-  @Input({ required: true }) set data(offenders: Offender[]) {
-    this.offenderDataSource = new AppTableDataSource(offenders);
-  }
 
   model = input.required<Investigation>();
 
@@ -123,6 +117,14 @@ export class OffendersViolationsPreviewComponent
     }, {});
 
   private loadPenalties$ = new Subject<void>();
+  offenders = computed(() => {
+    const offendersIds = this.model().offenderViolationInfo.map(
+      i => i.offenderId,
+    );
+    return this.model().offenderInfo.filter(offender => {
+      return offendersIds.includes(offender.id);
+    });
+  });
 
   situationClick(
     $event: MouseEvent,
