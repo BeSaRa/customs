@@ -36,6 +36,7 @@ import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { ReportType } from '@app-types/validation-return-type';
 import { ClassificationTypes } from '@enums/violation-classification';
+import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 
 @Component({
   selector: 'app-investigation',
@@ -120,6 +121,15 @@ export class InvestigationComponent
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true, this.readonly));
     this.listenToLocationChange();
+    if (!this.hasLimitedAccess()) {
+      this.violationDegreeConfidentiality =
+        this.violationDegreeConfidentiality.filter(
+          securityLevel =>
+            securityLevel.lookupKey !==
+            ViolationDegreeConfidentiality.LIMITED_CIRCULATION,
+        );
+      this.form.get('securityLevel')?.disable();
+    }
   }
 
   canViewExternalPersonsTab() {
@@ -375,5 +385,9 @@ export class InvestigationComponent
 
   updateViolations($event: Violation[]) {
     this.model!.violationInfo = $event;
+  }
+
+  hasLimitedAccess() {
+    return this.employeeService.hasPermissionTo('LIMITED_ACCESS');
   }
 }
