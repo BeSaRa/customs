@@ -54,15 +54,6 @@
         {{ element.offenderOUInfo && element.offenderOUInfo?.getNames() }}
       </td>
     </ng-container>
-    <!-- jobTitle -->
-    <ng-container matColumnDef="jobTitle">
-      <th mat-header-cell mat-sort-header="jobTitle" *matHeaderCellDef>
-        {{ lang.map.job_title }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.offenderInfo.jobTitle }}
-      </td>
-    </ng-container>
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
