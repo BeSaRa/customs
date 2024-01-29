@@ -16,6 +16,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
+import { OffenderService } from '@services/offender.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-offender-attachments',
@@ -38,22 +40,30 @@ export class OffenderAttachmentsComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
+  offenderService = inject(OffenderService);
   offenderTypes = OffenderTypes;
   dataSource = new AppTableDataSource<Offender>([]);
   attachments$: Subject<Offender> = new Subject<Offender>();
+  firstTimeToLoadCount = true;
+  offenderAttachmentsCountMap = new Map();
+
   @Input({ required: true }) set data(offenders: Offender[]) {
+    offenders
+      .filter(o => !this.offenderAttachmentsCountMap.has(o.id))
+      .forEach(o => {
+        this.offenderAttachmentsCountMap.set(o.id, 0);
+      });
     this.dataSource = new AppTableDataSource(offenders);
+    if (this.firstTimeToLoadCount && offenders.length) {
+      this.loadOffenderAttachmentsCount();
+      this.firstTimeToLoadCount = false;
+    }
   }
 
   @Input() investigationModel?: Investigation;
   @Input() readOnly = true;
 
-  displayedColumns = [
-    'offenderName',
-    'qid',
-    'departmentCompany',
-    'attachments',
-  ];
+  displayedColumns = ['offenderName', 'qid', 'attachmentsCount', 'attachments'];
   offenderTypesMap: Record<number, Lookup> =
     this.lookupService.lookups.offenderType.reduce(
       (acc, item) => ({
@@ -66,7 +76,18 @@ export class OffenderAttachmentsComponent
   ngOnInit(): void {
     this.listenToAttachments();
   }
-
+  loadOffenderAttachmentsCount() {
+    this.offenderService
+      .getAttachmentsCount(this.dataSource.data.map(o => o.id))
+      .subscribe(offenders => {
+        offenders.forEach(offender => {
+          this.offenderAttachmentsCountMap.set(
+            offender.id,
+            offender.attachmentCount,
+          );
+        });
+      });
+  }
   private listenToAttachments() {
     this.attachments$
       .pipe(
@@ -79,9 +100,19 @@ export class OffenderAttachmentsComponent
                 readonly: this.readOnly,
               },
             })
-            .afterClosed(),
+            .afterClosed()
+            .pipe(
+              map(length => {
+                return { offenderId: model.id, attachmentsNumber: length };
+              }),
+            ),
         ),
       )
-      .subscribe();
+      .subscribe(payload => {
+        this.offenderAttachmentsCountMap.set(
+          payload.offenderId,
+          payload.attachmentsNumber,
+        );
+      });
   }
 }

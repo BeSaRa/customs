@@ -20,6 +20,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   statusDateModified?: Date | string;
   ouId!: number;
   agentCustomCode!: string;
+  attachmentCount: number = 0;
   offenderInfo?: {
     updatedBy: 0;
     updatedOn: '2023-10-16T20:15:23.434Z';

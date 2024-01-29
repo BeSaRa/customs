@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Offender } from '@models/offender';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { BaseCrudService } from '@abstracts/base-crud-service';
+import { HttpParams } from '@angular/common/http';
 
 @CastResponseContainer({
   $pagination: {
@@ -32,5 +33,18 @@ export class OffenderService extends BaseCrudService<Offender> {
 
   getUrlSegment(): string {
     return this.urlService.URLS.OFFENDER;
+  }
+  @CastResponse()
+  getAttachmentsCount(offenderIds: number[]) {
+    return this.http.get<Offender[]>(
+      this.getUrlSegment() + `/offender/attachment/count`,
+      {
+        params: new HttpParams({
+          fromObject: {
+            offenderIds: offenderIds.join(', '),
+          },
+        }),
+      },
+    );
   }
 }
