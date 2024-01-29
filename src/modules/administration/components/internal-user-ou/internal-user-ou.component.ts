@@ -29,6 +29,7 @@ export class InternalUserOUComponent
   @Input({ required: true }) internalUser!: InternalUser;
   organizationUnits: number[] = [];
   defaultOUId!: number;
+
   override ngOnInit(): void {
     super.ngOnInit();
     this.data$
@@ -45,6 +46,7 @@ export class InternalUserOUComponent
     this.filter$.next({ internalUserId: this.internalUser.id });
     this.defaultOUId = this.internalUser.defaultOUId;
   }
+
   service = inject(InternalUserOUService);
   internalUserService = inject(InternalUserService);
   actions: ContextMenuActionContract<InternalUserOU>[] = [
@@ -88,6 +90,7 @@ export class InternalUserOUComponent
         this.reload$.next();
       });
   }
+
   isDefaultDepartment(element: InternalUserOU): boolean {
     return element.organizationUnitId === this.defaultOUId;
   }
