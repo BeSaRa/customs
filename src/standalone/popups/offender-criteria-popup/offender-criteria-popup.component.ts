@@ -394,15 +394,15 @@ export class OffenderCriteriaPopupComponent
       this.offenderViolationControl?.value?.length
       ? (this.offenderViolationControl?.value || []).map(
           (violationId: number) => {
-            return this.offenderViolationService.create(
-              new OffenderViolation().clone<OffenderViolation>({
+            return new OffenderViolation()
+              .clone<OffenderViolation>({
                 caseId: this.caseId(),
                 offenderId: model.id,
                 violationId: violationId,
                 status: 1,
                 isProved: false,
-              }),
-            );
+              })
+              .save();
           },
         )
       : [of(new OffenderViolation())];

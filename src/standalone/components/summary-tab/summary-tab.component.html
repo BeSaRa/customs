@@ -16,7 +16,7 @@
     <div class="mb-3">
       <span class="font-medium text-slate-700">{{ lang.map.subject }}</span>
       <pre class="block">
-        {{ model?.subject }}
+        {{ model.subject }}
       </pre>
     </div>
     <div class="mb-3">
@@ -24,7 +24,7 @@
         lang.map.general_explanation_of_violations
       }}</span>
       <pre class="block">
-        {{ model?.description ? model?.description : 'No description' }}
+        {{ model.description ? model.description : 'No description' }}
       </pre>
     </div>
   </div>
@@ -32,7 +32,7 @@
     [model]="model"
     [data]="offenders"
     class="col-span-1 md:col-span-2 lg:col-span-4 mb-3"
-    [isClaimed]="model?.inMyInbox()" />
+    [isClaimed]="model.inMyInbox()" />
 
   <app-unlinked-violations
     [offenders]="offenders"
