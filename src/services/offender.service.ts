@@ -48,7 +48,7 @@ export class OffenderService extends BaseCrudService<Offender> {
   @CastResponse()
   getAttachmentsCount(offenderIds: number[]) {
     return this.http.get<Offender[]>(
-      this.getUrlSegment() + `/offender/attachment/count`,
+      this.getUrlSegment() + `/attachment/count`,
       {
         params: new HttpParams({
           fromObject: {
