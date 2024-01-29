@@ -5,10 +5,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
-import { Violation } from '@models/violation';
-import { AppTableDataSource } from '@models/app-table-data-source';
-import { Offender } from '@models/offender';
-import { OffenderViolation } from '@models/offender-violation';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-unlinked-violations',
@@ -25,22 +22,12 @@ import { OffenderViolation } from '@models/offender-violation';
 })
 export class UnlinkedViolationsComponent {
   lang = inject(LangService);
-
+  model = input.required<Investigation>();
   columns: string[] = ['violationName', 'classification', 'description'];
-  offenders = input.required<Offender[]>();
-  data = input([] as Violation[]);
   violations = computed(() => {
-    return new AppTableDataSource(
-      this.data().filter(
-        violation =>
-          !this.offenders()
-            .reduce((prev: OffenderViolation[], curr): OffenderViolation[] => {
-              return [...prev, ...curr.violations];
-            }, [])
-            .filter(offenderViolation => {
-              return offenderViolation.violationId === violation.id;
-            }).length,
-      ),
+    const violationIds = this.model().offenderViolationInfo.map(
+      i => i.violationId,
     );
+    return this.model().violationInfo.filter(v => !violationIds.includes(v.id));
   });
 }

@@ -104,8 +104,6 @@ export class ViolationListComponent
     this.listenToEdit();
     this.listenToView();
     this.listenToDelete();
-
-    console.log(this.readonly);
   }
 
   getViolations(): Violation[] {
@@ -271,6 +269,14 @@ export class ViolationListComponent
       .pipe(filter(({ userClick }) => userClick === UserClick.YES))
       .pipe(exhaustMap(({ model }) => model.delete().pipe(map(() => model))))
       .subscribe(model => {
+        this.model().violationInfo = [
+          ...this.model().violationInfo.filter(v => v.id !== model.id),
+        ];
+        this.model().offenderViolationInfo = [
+          ...this.model().offenderViolationInfo.filter(ov => {
+            return ov.violationId !== model.id;
+          }),
+        ];
         this.toast.success(
           this.lang.map.msg_delete_x_success.change({ x: model.description }),
         );

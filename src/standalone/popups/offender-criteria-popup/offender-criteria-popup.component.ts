@@ -415,7 +415,13 @@ export class OffenderCriteriaPopupComponent
                 tap(offenderViolation => {
                   this.model().offenderViolationInfo = [
                     ...this.model().offenderViolationInfo,
-                    offenderViolation,
+                    new OffenderViolation().clone<OffenderViolation>({
+                      ...offenderViolation,
+                      offenderInfo: model,
+                      violationInfo: this.violations().find(
+                        i => i.id === offenderViolation.violationId,
+                      ),
+                    }),
                   ];
                 }),
               );

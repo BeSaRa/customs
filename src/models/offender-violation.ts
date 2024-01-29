@@ -13,7 +13,7 @@ export class OffenderViolation extends BaseModel<
   OffenderViolationService
 > {
   $$__service_name__$$ = 'OffenderViolationService';
-  repeat!: number;
+  repeat: number = 0;
   isProved = true;
   caseId!: string;
   violationId!: number;
