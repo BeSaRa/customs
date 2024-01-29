@@ -2,8 +2,6 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { AppIcons } from '@constants/app-icons';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { MenuIdes } from '@constants/menu-ides';
-import { Permission } from '@models/permission';
-import { AppPermissions } from '@constants/app-permissions';
 
 export const Menus: MenuItemContract[] = [
   {
