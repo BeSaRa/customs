@@ -9,9 +9,9 @@
   </div>
   <div>
     <mat-tab-group
-      mat-stretch-tabs="false"
+      [mat-stretch-tabs]="false"
       mat-align-tabs="start"
-      dynamicHeight>
+      dynamicHeight="true">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 items-center p-4">
