@@ -53,9 +53,7 @@ export class Investigation extends BaseCase<
       investigationFullSerial: controls
         ? [{ value: investigationFullSerial, disabled: true }]
         : investigationFullSerial,
-      createdOn: controls
-        ? [{ value: createdOn, disabled: disabled }]
-        : createdOn,
+      createdOn: controls ? [{ value: createdOn, disabled: true }] : createdOn,
       description: controls
         ? [{ value: description, disabled: disabled }]
         : description,
