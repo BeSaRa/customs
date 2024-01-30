@@ -32,13 +32,17 @@
       </td>
     </ng-container>
 
-    <!-- BD_SUBJECT BD_SUBJECT -->
+    <!-- BD_SUBJECT -->
     <ng-container matColumnDef="BD_SUBJECT">
       <th mat-header-cell mat-sort-header="BD_SUBJECT" *matHeaderCellDef>
         {{ lang.map.subject }}
       </th>
-      <td mat-cell *matCellDef="let element">
-        <span [innerHTML]="element.BD_SUBJECT"></span>
+      <td
+        [matTooltip]="element.BD_SUBJECT"
+        mat-cell
+        *matCellDef="let element"
+        class="max-w-28">
+        <span class="text-nowrap" [innerHTML]="element.BD_SUBJECT"></span>
       </td>
     </ng-container>
 
