@@ -306,7 +306,14 @@
       taskResponses.CHIEF_APPROVE
     ])
   ) {
-    <app-button (click)="responseAction$.next(taskResponses.TO_MANAGER)">
+    <app-button
+      (click)="
+        responseAction$.next(
+          model?.hasResponse(taskResponses.TO_MANAGER)
+            ? taskResponses.TO_MANAGER
+            : taskResponses.CHIEF_APPROVE
+        )
+      ">
       {{ lang.map.to_manager }}
     </app-button>
   }
