@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   inject,
+  input,
 } from '@angular/core';
 import { PenaltyDetails } from '@models/penalty-details';
 import { PenaltyDetailsService } from '@services/penalty-details.service';
@@ -34,6 +35,9 @@ export class PenaltyDetailsComponent implements OnInit {
   @Output() listIsEmpty = new EventEmitter<boolean>();
   @Input() viewMode!: boolean;
   @Input() isEmployee!: boolean;
+  hasValidOffenderType = input(false);
+  @Output()
+  focusInvalidTab = new EventEmitter<boolean>();
   displayedList: MatTableDataSource<PenaltyDetails> =
     new MatTableDataSource<PenaltyDetails>(this.list);
   displayedColumns = [
@@ -50,6 +54,7 @@ export class PenaltyDetailsComponent implements OnInit {
       this.setDisplayedList();
     });
   }
+
   setDisplayedList() {
     this.list = this.list.map(listItem => {
       const legalTextArabic = this.legalRules.find(
@@ -108,19 +113,22 @@ export class PenaltyDetailsComponent implements OnInit {
   }
 
   createDetails() {
-    this.service
-      .openCreateDialog(undefined, { isEmployee: this.isEmployee })
-      .afterClosed()
-      .pipe(
-        filter((model): model is PenaltyDetails => {
-          return this.service.isInstanceOf(model);
-        }),
-      )
-      .subscribe(result => {
-        // if (!result) return;
-        this.list = this.list.concat(result);
-        this.reloadDataSource();
-      });
+    if (this.hasValidOffenderType()) {
+      this.service
+        .openCreateDialog(undefined, { isEmployee: this.isEmployee })
+        .afterClosed()
+        .pipe(
+          filter((model): model is PenaltyDetails => {
+            return this.service.isInstanceOf(model);
+          }),
+        )
+        .subscribe(result => {
+          this.list = this.list.concat(result);
+          this.reloadDataSource();
+        });
+    } else {
+      this.focusInvalidTab.emit(true);
+    }
   }
 
   editDetails(penaltyDetails: PenaltyDetails) {

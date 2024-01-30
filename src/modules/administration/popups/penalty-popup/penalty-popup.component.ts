@@ -141,7 +141,7 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
   }
 
   listenToOffenderTypeChange() {
-    this.form.get('offenderType')?.valueChanges.subscribe(value => {
+    this.offenderType?.valueChanges.subscribe(value => {
       this.deductionDays?.setValue(null);
       this.cashAmount?.setValue(null);
       this.isDeduction?.setValue(false);
@@ -149,22 +149,43 @@ export class PenaltyPopupComponent extends AdminDialogComponent<Penalty> {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
     });
   }
+
   get cashAmount() {
     return this.form.get('cashAmount');
   }
+
   get deductionDays() {
     return this.form.get('deductionDays');
   }
+
   get status() {
     return this.form.get('status');
   }
+
   get isDeduction() {
     return this.form.get('isDeduction');
   }
+
   get isCash() {
     return this.form.get('isCash');
   }
+
   get penaltyDetails() {
     return this.model.detailsList;
+  }
+
+  get offenderType() {
+    return this.form.get('offenderType');
+  }
+
+  hasValidOffenderType() {
+    return !!this.offenderType?.valid;
+  }
+
+  focusInvalidTab() {
+    if (!this.hasValidOffenderType()) {
+      this.offenderType?.markAsTouched();
+      this.activeTab = 0;
+    }
   }
 }

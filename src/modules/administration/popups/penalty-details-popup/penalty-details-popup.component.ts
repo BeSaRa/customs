@@ -19,6 +19,8 @@ import { LegalRuleService } from '@services/legal-rule.service';
 import { LegalRule } from '@models/legal-rule';
 import { AdminResult } from '@models/admin-result';
 import { CustomValidators } from '@validators/custom-validators';
+import { PenaltySignerTypes } from '@enums/penalty-signer-types';
+import { OffenderLevels } from '@enums/offender-levels';
 
 @Component({
   selector: 'app-penalty-details-popup',
@@ -33,8 +35,10 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
   legalRuleService = inject(LegalRuleService);
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
   offenderLevels: Lookup[] = this.lookupService.lookups.offenderLevel;
+  filteredOffenderLevels: Lookup[] = this.lookupService.lookups.offenderLevel;
   legalRules!: LegalRule[];
   isEmployee = this.data.extras?.isEmployee;
+
   protected override _initPopup(): void {
     super._initPopup();
     this.getLegalRules();
@@ -42,8 +46,29 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
-    if (this.isEmployee)
-      this.form.get('offenderLevel')?.setValidators(CustomValidators.required);
+  }
+
+  protected override _afterBuildForm() {
+    super._afterBuildForm();
+    if (!this.isEmployee) {
+      this.offenderLevel?.clearValidators();
+      this.penaltySigner?.setValue(
+        PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
+      );
+      this.penaltySigner?.disable();
+    } else {
+      this.penaltySigners = this.penaltySigners.filter(
+        penaltySigner =>
+          penaltySigner.lookupKey !==
+          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
+      );
+      this.offenderLevel?.setValidators(CustomValidators.required);
+    }
+    this.form.updateValueAndValidity();
+    this.listenToPenaltySignerChange();
+    if (this.operation === OperationType.UPDATE) {
+      this.setFilteredOffenderLevels();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -107,12 +132,59 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
       });
   }
 
+  setFilteredOffenderLevels() {
+    const penaltySignerValue: PenaltySignerTypes = this.penaltySigner?.value;
+    switch (penaltySignerValue) {
+      case PenaltySignerTypes.MANAGER_DIRECTOR:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.FOURTH_DEGREE_OR_LESS ||
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_THIRD_DEGREE,
+        );
+        break;
+      case PenaltySignerTypes.PRESIDENT_ASSISTANT:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS ||
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE,
+        );
+        break;
+      case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey ===
+              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS,
+        );
+        break;
+      case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
+        this.filteredOffenderLevels = this.offenderLevels.filter(
+          lookupItem =>
+            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS,
+        );
+        break;
+      default:
+        break;
+    }
+  }
+
+  listenToPenaltySignerChange() {
+    this.form.get('penaltySigner')?.valueChanges.subscribe(() => {
+      this.form.get('offenderLevel')?.setValue(null);
+      this.setFilteredOffenderLevels();
+    });
+  }
+
   get penaltySigner() {
     return this.form.get('penaltySigner');
   }
+
   get legalRule() {
     return this.form.get('legalRule');
   }
+
   get offenderLevel() {
     return this.form.get('offenderLevel');
   }

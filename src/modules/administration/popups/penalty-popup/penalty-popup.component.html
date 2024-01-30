@@ -77,38 +77,43 @@
             [(list)]="penaltyDetailsList"
             [viewMode]="inViewMode()"
             (listIsEmpty)="checkDetailsListValidity($event)"
-            [isEmployee]="isEmployee"></app-penalty-details>
+            [isEmployee]="isEmployee"
+            [hasValidOffenderType]="hasValidOffenderType()"
+            class="mb-2"
+            (focusInvalidTab)="focusInvalidTab()"></app-penalty-details>
+          <label class="group block relative">
+            @if (penaltyDetailsListIsEmpty) {
+              <span
+                class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
+                {{
+                  this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change(
+                    {
+                      x: this.lang.map.menu_penalty_details
+                    }
+                  )
+                }}
+              </span>
+            }
+          </label>
         </div>
-        <label class="group block relative">
-          @if (penaltyDetailsListIsEmpty) {
-            <span
-              class="block absolute bottom-0 translate-y-full text-sm py-1 text-red-500">
-              {{
-                this.lang.map.msg_add_one_item_at_least_to_x_to_proceed.change({
-                  x: this.lang.map.menu_penalty_details
-                })
-              }}
-            </span>
-          }
-        </label>
       </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>
