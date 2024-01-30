@@ -28,6 +28,8 @@ import { INavigatedItem } from '@contracts/inavigated-item';
 import { OpenFrom } from '@enums/open-from';
 import { LookupService } from '@services/lookup.service';
 import { DialogService } from '@services/dialog.service';
+import { InboxResult } from '@models/inbox-result';
+import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
 
 @Component({
   selector: 'app-investigation-search',
@@ -124,5 +126,10 @@ export class InvestigationSearchComponent implements OnInit {
         queryParams: { item: itemDetails },
       })
       .then();
+  }
+  showActionsOnCase(item: InboxResult) {
+    this.dialog.open(ActionsOnCaseComponent, {
+      data: { caseId: item.PI_PARENT_CASE_ID },
+    });
   }
 }
