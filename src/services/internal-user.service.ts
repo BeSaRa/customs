@@ -78,7 +78,7 @@ export class InternalUserService extends BaseCrudWithDialogService<
   @CastResponse()
   getInternalUsersByOuId(ouId: number): Observable<InternalUser[]> {
     return this.http.get<InternalUser[]>(
-      this.getUrlSegment() + `/admin/${ouId}`,
+      this.getUrlSegment() + `/ouid/${ouId}`,
     );
   }
 
