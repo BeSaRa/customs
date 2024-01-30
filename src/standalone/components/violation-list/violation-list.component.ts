@@ -1,7 +1,6 @@
 import {
   Component,
   computed,
-  effect,
   EventEmitter,
   inject,
   input,
@@ -93,10 +92,6 @@ export class ViolationListComponent
   model = input<Investigation>(new Investigation());
 
   caseId = computed(() => this.model()?.id);
-
-  modelEffect = effect(() => {
-    console.log(this.model());
-  });
 
   ngOnInit(): void {
     this.listenToAdd();

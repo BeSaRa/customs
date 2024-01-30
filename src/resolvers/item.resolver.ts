@@ -4,7 +4,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { InboxService } from '@services/inbox.services';
 import { ConfigService } from '@services/config.service';
 import { INavigatedItem } from '@contracts/inavigated-item';
-import { iif, map, of, switchMap, tap } from 'rxjs';
+import { iif, map, of, switchMap } from 'rxjs';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { OpenFrom } from '@enums/open-from';
 
@@ -47,7 +47,6 @@ export const itemResolver: ResolveFn<OpenedInfoContract | null> = route => {
         map(model => {
           return { model, ...info } as unknown as OpenedInfoContract;
         }),
-        tap(console.log),
       );
   }
 };

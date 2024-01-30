@@ -54,7 +54,6 @@ export class InvestigationInterceptor
           }),
         );
       });
-    console.log('violationInfo', model.violationInfo);
     model.violationInfo =
       model.violationInfo &&
       model.violationInfo.map(item => {
@@ -69,7 +68,6 @@ export class InvestigationInterceptor
           new OffenderViolation().clone<OffenderViolation>({ ...i }),
         );
       }));
-    console.log({ model });
 
     return model;
   }

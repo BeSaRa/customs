@@ -59,7 +59,6 @@ export class OffenderAttachmentsComponent
     );
 
   ngOnInit(): void {
-    console.log(this.model());
     this.listenToAttachments();
   }
 
