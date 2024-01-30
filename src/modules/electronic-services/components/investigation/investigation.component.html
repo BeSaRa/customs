@@ -93,6 +93,7 @@
   </mat-card>
   <app-buttons-case-wrapper
     [model]="model"
+    [openFrom]="openFrom"
     [canSave]="canSave()"
     (save)="save$.next($event)"
     (launch)="launchCase($event)"

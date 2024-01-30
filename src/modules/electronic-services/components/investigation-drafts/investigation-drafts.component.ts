@@ -73,7 +73,7 @@ export class InvestigationDraftsComponent implements OnInit {
 
   view(item: Investigation) {
     const itemDetails = this.encrypt.encrypt<INavigatedItem>({
-      openFrom: OpenFrom.ADD_SCREEN,
+      openFrom: OpenFrom.DRAFT_SCREEN,
       taskId: item.id,
       caseId: item.id,
       caseType: item.caseType,

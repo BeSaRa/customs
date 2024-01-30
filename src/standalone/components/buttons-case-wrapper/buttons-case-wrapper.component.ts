@@ -22,8 +22,9 @@ import { AppIcons } from '@constants/app-icons';
 import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
 import { EmployeeService } from '@services/employee.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -39,8 +40,8 @@ export class ButtonsCaseWrapperComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
-  route = inject(ActivatedRoute);
   router = inject(Router);
+  protected readonly OpenFromEnum = OpenFrom;
 
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
@@ -50,6 +51,7 @@ export class ButtonsCaseWrapperComponent
 
   @Input() canSave: boolean = true;
   @Input() model?: Investigation;
+  @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   @Input({ transform: booleanAttribute })
   mandatoryMakePenaltyDecisions: boolean = false;
   @Output() save = new EventEmitter<SaveTypes>();
