@@ -78,7 +78,13 @@ export class InvestigationComponent
   witnessesListComponent!: WitnessesListComponent;
   @ViewChild(SummaryTabComponent)
   summaryTabComponent!: SummaryTabComponent;
-  violationDegreeConfidentiality = this.lookupService.lookups.securityLevel;
+  violationDegreeConfidentiality =
+    this.lookupService.lookups.securityLevel.filter(
+      degreeConfidentiality =>
+        this.employeeService.hasPermissionTo('LIMITED_ACCESS') ||
+        degreeConfidentiality.lookupKey !==
+          ViolationDegreeConfidentiality.LINITED_CIRCULATION,
+    );
   mandatoryMakePenaltyDecisions: boolean = false;
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   caseFolders: CaseFolder[] = [];
