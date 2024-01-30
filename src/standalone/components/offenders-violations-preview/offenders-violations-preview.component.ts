@@ -10,6 +10,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  EventEmitter,
   inject,
   input,
   OnInit,
@@ -43,6 +44,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employee-popup/suspend-employee-popup.component';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { OffenderViolation } from '@models/offender-violation';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -72,6 +74,8 @@ export class OffendersViolationsPreviewComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
+  updateModel = input.required<EventEmitter<void>>();
+  penaltyDecisionService = inject(PenaltyDecisionService);
   lang = inject(LangService);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
@@ -409,5 +413,13 @@ export class OffendersViolationsPreviewComponent
 
   getOffenderViolationsSlice(offenderId: number): OffenderViolation[] {
     return this.offenderViolationsSlices()[offenderId] || [];
+  }
+
+  openDecisionDialog(element: Offender) {
+    this.penaltyDecisionService.openSingleDecisionDialog(
+      element,
+      this.model,
+      this.updateModel,
+    );
   }
 }

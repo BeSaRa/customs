@@ -77,7 +77,7 @@ export class ViolationListComponent
   @Output()
   selectViolation = new EventEmitter<Violation>();
   @Output()
-  reloadOffenderViolationList = new EventEmitter<void>();
+  updateModel = new EventEmitter<void>();
   @Output()
   askForSaveModel = new EventEmitter<void>();
   @Output()
@@ -276,7 +276,7 @@ export class ViolationListComponent
           this.lang.map.msg_delete_x_success.change({ x: model.description }),
         );
         this.reload$.next();
-        this.reloadOffenderViolationList.emit();
+        this.updateModel.emit();
       });
   }
 

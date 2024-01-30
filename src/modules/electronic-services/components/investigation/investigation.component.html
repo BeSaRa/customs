@@ -102,7 +102,7 @@
     (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
   </app-buttons-case-wrapper>
   <ng-template #summary_tab>
-    <app-summary-tab [model]="model" />
+    <app-summary-tab (updateModel)="updateModel$.next(null)" [model]="model" />
   </ng-template>
 
   <ng-template #basic_info_tab>
@@ -152,7 +152,7 @@
         [canModifyOffenders]="canEdit()"
         (askForSaveModel)="saveCase()"
         (askForViolationListReload)="violationListComponent.reload$.next()"
-        (linkOffenderWithViolation)="reloadOffendersViolations$.next(null)"
+        (updateModel)="updateModel$.next(null)"
         (focusInvalidTab)="focusInvalidTab()"
         [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
@@ -169,7 +169,7 @@
         [canModifyOffenders]="canEdit()"
         (askForSaveModel)="saveCase()"
         (focusInvalidTab)="focusInvalidTab()"
-        (reloadOffenderViolationList)="reloadOffendersViolations$.next(null)"
+        (updateModel)="updateModel$.next(null)"
         [hasValidInvestigationSubject]="hasValidInvestigationSubject()" />
     </div>
   </ng-template>

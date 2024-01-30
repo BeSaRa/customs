@@ -76,7 +76,7 @@ export class OffenderListComponent
   @Output()
   offenderDeleted: EventEmitter<Offender> = new EventEmitter<Offender>();
   @Output()
-  linkOffenderWithViolation = new EventEmitter<void>();
+  updateModel = new EventEmitter<void>();
   reportType = input(`None` as ReportType);
   @Output()
   askForSaveModel = new EventEmitter<void>();
@@ -123,7 +123,7 @@ export class OffenderListComponent
                   askForViolationListReload: this.askForViolationListReload,
                   reportType: this.reportType,
                   offenderAdded: this.offenderAdded,
-                  linkOffenderWithViolation: this.linkOffenderWithViolation,
+                  linkOffenderWithViolation: this.updateModel,
                 },
               })
               .afterClosed();
@@ -134,7 +134,7 @@ export class OffenderListComponent
         }),
       )
       .subscribe(() => {
-        this.linkOffenderWithViolation.emit();
+        this.updateModel.emit();
       });
   }
 
@@ -191,7 +191,7 @@ export class OffenderListComponent
         this.offenderDeleted.emit(model);
 
         console.log(this.model());
-        this.linkOffenderWithViolation.emit();
+        this.updateModel.emit();
       });
   }
 
@@ -210,7 +210,7 @@ export class OffenderListComponent
             .afterClosed(),
         ),
       )
-      .subscribe(() => this.linkOffenderWithViolation.emit());
+      .subscribe(() => this.updateModel.emit());
   }
 
   listenToSituationSearch() {

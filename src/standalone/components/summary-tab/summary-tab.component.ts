@@ -1,4 +1,11 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Investigation } from '@models/investigation';
 import { OffendersViolationsPreviewComponent } from '../offenders-violations-preview/offenders-violations-preview.component';
 import { LangService } from '@services/lang.service';
@@ -21,4 +28,5 @@ export class SummaryTabComponent {
   @ViewChild(OffendersViolationsPreviewComponent)
   offendersViolationsPreview!: OffendersViolationsPreviewComponent;
   @Input() model!: Investigation;
+  @Output() updateModel: EventEmitter<void> = new EventEmitter<void>();
 }

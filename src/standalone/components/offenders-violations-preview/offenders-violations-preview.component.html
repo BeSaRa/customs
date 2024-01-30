@@ -119,6 +119,12 @@
                   (click)="makeDecision$.next(element)"
                   icon="ACCOUNT_MAKE_DECISION" />
               </div>
+              <div>
+                <app-icon-button
+                  [matTooltip]="lang.map.make_penalty_decision"
+                  (click)="openDecisionDialog(element)"
+                  icon="ACCOUNT_MAKE_DECISION" />
+              </div>
             }
           </div>
         </div>

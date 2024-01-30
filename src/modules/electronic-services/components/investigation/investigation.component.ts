@@ -85,7 +85,7 @@ export class InvestigationComponent
   caseFoldersMap?: Record<string, CaseFolder>;
   selectedTab = 0;
 
-  reloadOffendersViolations$: BehaviorSubject<null> = new BehaviorSubject(null);
+  updateModel$: BehaviorSubject<null> = new BehaviorSubject(null);
   offendersMappedWIthViolations: Offender[] = [];
 
   protected override _init() {
@@ -234,13 +234,11 @@ export class InvestigationComponent
   }
 
   private _listenToLoadOffendersViolations() {
-    this.reloadOffendersViolations$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.model = new Investigation().clone<Investigation>({
-          ...this.model,
-        });
+    this.updateModel$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.model = new Investigation().clone<Investigation>({
+        ...this.model,
       });
+    });
   }
 
   saveCase() {
@@ -326,7 +324,7 @@ export class InvestigationComponent
     this.violationListComponent.resetDataList();
     this.offenderListComponent.resetDataList();
     this.witnessesListComponent.resetDataList();
-    this.reloadOffendersViolations$.next(null);
+    this.updateModel$.next(null);
     this.tabChange(0, false);
   }
 
