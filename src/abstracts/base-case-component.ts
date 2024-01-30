@@ -166,6 +166,7 @@ export abstract class BaseCaseComponent<
   protected _init(): void {
     this.model = this.route.snapshot.data.info?.model;
     this.model?.id && (this.readonly = !this.model?.canSave());
+    this.model?.id && (this.operation = OperationType.UPDATE);
     this.openFrom = this.route.snapshot.data.info?.openFrom;
   }
 

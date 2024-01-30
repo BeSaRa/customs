@@ -154,7 +154,11 @@ export class InvestigationComponent
     _operation: OperationType,
   ): void {
     this.model = model;
-    // display success message based on operation and save type
+    if (this.operation === OperationType.UPDATE) {
+      this.toast.success(
+        this.lang.map.msg_save_x_success.change({ x: model.draftFullSerial }),
+      );
+    }
 
     this.loadCaseFolders();
   }
