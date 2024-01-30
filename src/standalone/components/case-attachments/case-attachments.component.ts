@@ -1,4 +1,12 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  Input,
+  InputSignal,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatSortModule, Sort } from '@angular/material/sort';
@@ -52,12 +60,11 @@ export class CaseAttachmentsComponent
   delete$ = new Subject<CaseAttachment>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  caseId: InputSignal<string | undefined> = input();
   @Input()
   type: 'folder' | 'offender' = 'folder';
   @Input()
   entityId!: number;
-  @Input()
-  caseId?: string;
   @Input()
   disabled = false;
   @Input()
@@ -79,10 +86,15 @@ export class CaseAttachmentsComponent
     'creator',
     'actions',
   ];
-
+  constructor() {
+    super();
+    effect(() => {
+      if (this.caseId()) {
+        this.reload$.next();
+      }
+    });
+  }
   ngOnInit(): void {
-    this.reload$.next();
-
     this.listenToView();
     this.listenToDelete();
   }
@@ -96,8 +108,10 @@ export class CaseAttachmentsComponent
             switchMap(() => {
               switch (this.type) {
                 case 'folder':
-                  return this.caseId
-                    ? this.service.loadFolderAttachments(this.caseId)
+                  return this.caseId()
+                    ? this.service.loadFolderAttachments(
+                        this.caseId() as string,
+                      )
                     : of([]);
                 case 'offender':
                   return this.entityId
@@ -118,13 +132,13 @@ export class CaseAttachmentsComponent
   }
 
   openAddDialog() {
-    if (!this.caseId && !this.entityId) {
+    if (!this.caseId() && !this.entityId) {
       this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
       return;
     }
     this.service
       .openAddAttachmentDialog(
-        this.caseId as string,
+        this.caseId() as string,
         this.service,
         this.type,
         this.entityId,

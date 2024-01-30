@@ -297,7 +297,9 @@ export class InvestigationComponent
         .getService()
         .loadCaseFolders(this.model.id)
         .pipe(map(folders => (this.caseFolders = folders)))
-        .subscribe();
+        .subscribe(() => {
+          this.createFoldersMap();
+        });
     }
   }
 
