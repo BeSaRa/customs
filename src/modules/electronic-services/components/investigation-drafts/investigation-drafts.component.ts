@@ -14,6 +14,8 @@ import { InvestigationDraftsService } from '@services/investigation-drafts.servi
 import { LangService } from '@services/lang.service';
 import { ignoreErrors } from '@utils/utils';
 import { catchError, exhaustMap, of, throwError } from 'rxjs';
+import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-investigation-drafts',
@@ -22,6 +24,7 @@ import { catchError, exhaustMap, of, throwError } from 'rxjs';
 })
 export class InvestigationDraftsComponent implements OnInit {
   router = inject(Router);
+  dialog = inject(DialogService);
   encrypt = inject(EncryptionService);
 
   lang = inject(LangService);
@@ -44,7 +47,7 @@ export class InvestigationDraftsComponent implements OnInit {
     },
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
-    new NoneFilterColumn('caseIdentifier'),
+    new NoneFilterColumn('draftFullSerial'),
     new NoneFilterColumn('caseStatus'),
     new NoneFilterColumn('creator'),
     new NoneFilterColumn('department'),
@@ -80,5 +83,10 @@ export class InvestigationDraftsComponent implements OnInit {
         queryParams: { item: itemDetails },
       })
       .then();
+  }
+  showActionsOnCase(item: Investigation) {
+    this.dialog.open(ActionsOnCaseComponent, {
+      data: { caseId: item.id },
+    });
   }
 }
