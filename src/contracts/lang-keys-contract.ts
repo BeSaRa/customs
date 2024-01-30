@@ -406,4 +406,5 @@ export interface LangKeysContract {
   of: string;
   violation_type_repeat_required: string;
   or_select_file: string;
+  preview_related_documents: string;
 }

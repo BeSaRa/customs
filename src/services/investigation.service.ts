@@ -11,6 +11,11 @@ import { ViolationService } from '@services/violation.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { SusbendEmployee } from '@models/susbend-employee';
 import { ReportType } from '@app-types/validation-return-type';
+import { map, Observable } from 'rxjs';
+import { BlobModel } from '@models/blob-model';
+import { DeclarationNumberDetailsResult } from '@models/declaration-number-details-result';
+import { b64toBlob } from '@utils/utils';
+import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
 
 @CastResponseContainer({
   $default: {
@@ -65,6 +70,57 @@ export class InvestigationService
     return this.http.post(
       this.getUrlSegment() + '/extend-suspend-employee',
       body,
+    );
+  }
+
+  getDeclarationDetails(
+    declarationNumber: string,
+  ): Observable<{ blob: BlobModel; title: string }> {
+    return this._getDeclarationDetails(declarationNumber).pipe(
+      map(payload => {
+        return {
+          blob: new BlobModel(
+            b64toBlob(payload.declarationAttachmentPDF, 'application/pdf'),
+            this.domSanitizer,
+          ),
+          title: payload.declarationNumber,
+        };
+      }),
+    );
+  }
+
+  @CastResponse(() => DeclarationNumberDetailsResult, { unwrap: 'rs' })
+  private _getDeclarationDetails(
+    declarationNumber: string,
+  ): Observable<DeclarationNumberDetailsResult> {
+    return this.http.get<DeclarationNumberDetailsResult>(
+      this.getUrlSegment() +
+        `/nadeeb/declaration-details/${encodeURIComponent(declarationNumber)}`,
+    );
+  }
+
+  getOffenceDetails(
+    offenceNumber: string,
+  ): Observable<{ blob: BlobModel; title: string }> {
+    return this._getOffenceDetails(offenceNumber).pipe(
+      map(payload => {
+        return {
+          blob: new BlobModel(
+            b64toBlob(payload.offenceAttachmentPDF, 'application/pdf'),
+            this.domSanitizer,
+          ),
+          title: payload.offenceNumber,
+        };
+      }),
+    );
+  }
+  @CastResponse(() => OffenceNumberDetailsResult, { unwrap: 'rs' })
+  private _getOffenceDetails(
+    offenceNumber: string,
+  ): Observable<OffenceNumberDetailsResult> {
+    return this.http.get<OffenceNumberDetailsResult>(
+      this.getUrlSegment() +
+        `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
     );
   }
 }

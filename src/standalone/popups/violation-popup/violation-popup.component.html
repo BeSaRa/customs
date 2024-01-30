@@ -84,18 +84,38 @@
       @if (isCustoms) {
         <app-input
           [label]="lang.map.customs_declaration_number"
-          formControlName="customsDeclarationNumber" />
+          formControlName="customsDeclarationNumber"
+          (keydown.enter)="showDeclarationNumberDetails()">
+          @if (controls.customsDeclarationNumber()?.value) {
+            <app-icon-button
+              class="absolute rtl:left-0 ltr:right-0"
+              appInputSuffix
+              [matTooltip]="lang.map.preview_related_documents"
+              [icon]="'MORE_DETAILS'"
+              (click)="showDeclarationNumberDetails()"></app-icon-button>
+          }
+        </app-input>
         <app-input
           [label]="lang.map.control_report_number"
-          formControlName="controlReportNumber" />
+          formControlName="controlReportNumber"
+          (keydown.enter)="showReportNumberDetails()">
+          @if (controls.controlReportNumber()?.value) {
+            <app-icon-button
+              class="absolute rtl:left-0 ltr:right-0"
+              appInputSuffix
+              [matTooltip]="lang.map.preview_related_documents"
+              [icon]="'MORE_DETAILS'"
+              (click)="showReportNumberDetails()"></app-icon-button>
+          }
+        </app-input>
       }
     </div>
   </div>
   <div class="dialog-footer justify-end">
     @if (inCreateMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.add
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.add }}
+      </app-button>
     }
     @if (inEditMode()) {
       <app-button (click)="save$.next()" buttonType="primary"
