@@ -63,6 +63,7 @@ import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-
 import { toSignal } from '@angular/core/rxjs-interop';
 import { OffenderService } from '@services/offender.service';
 import { ProofTypes } from '@enums/proof-types';
+import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -108,6 +109,7 @@ export class OffenderCriteriaPopupComponent
   model = this.data && this.data.model;
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
+  offenderTypesEnum = OffenderTypes;
   administrations: MawaredDepartment[] = [];
   offenders = computed(() => this.model().offenderInfo);
   form!: UntypedFormGroup;
@@ -141,6 +143,11 @@ export class OffenderCriteriaPopupComponent
   ];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
+  situationSearch$ = new Subject<{
+    offender: Offender;
+    offenderType: number;
+    isCompany: boolean;
+  }>();
   @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
   selectedIndex: number = 0;
@@ -191,6 +198,7 @@ export class OffenderCriteriaPopupComponent
     this.listenToAddEmployee();
     this.listenToAddClearingAgent();
     this.listenToAddViolation();
+    this.listenToSituationSearch();
   }
 
   private listenToOffenderTypeChange() {
@@ -444,4 +452,29 @@ export class OffenderCriteriaPopupComponent
         })()
       : of(model);
   }
+
+  listenToSituationSearch() {
+    this.situationSearch$
+      .pipe(
+        switchMap(
+          (data: {
+            offender: Offender;
+            offenderType: number;
+            isCompany: boolean;
+          }) =>
+            this.dialog
+              .open(SituationSearchComponent, {
+                data: {
+                  id: data.offender.id,
+                  type: data.offenderType,
+                  isCompany: data.isCompany,
+                },
+              })
+              .afterClosed(),
+        ),
+      )
+      .subscribe();
+  }
+
+  protected readonly OffenderTypes = OffenderTypes;
 }
