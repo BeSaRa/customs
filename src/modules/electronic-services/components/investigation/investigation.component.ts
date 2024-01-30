@@ -36,6 +36,7 @@ import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { ReportType } from '@app-types/validation-return-type';
 import { ClassificationTypes } from '@enums/violation-classification';
+import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 
 @Component({
   selector: 'app-investigation',
@@ -77,7 +78,13 @@ export class InvestigationComponent
   witnessesListComponent!: WitnessesListComponent;
   @ViewChild(SummaryTabComponent)
   summaryTabComponent!: SummaryTabComponent;
-  violationDegreeConfidentiality = this.lookupService.lookups.securityLevel;
+  violationDegreeConfidentiality =
+    this.lookupService.lookups.securityLevel.filter(
+      degreeConfidentiality =>
+        this.employeeService.hasPermissionTo('LIMITED_ACCESS') ||
+        degreeConfidentiality.lookupKey !==
+          ViolationDegreeConfidentiality.LINITED_CIRCULATION,
+    );
   mandatoryMakePenaltyDecisions: boolean = false;
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
   caseFolders: CaseFolder[] = [];

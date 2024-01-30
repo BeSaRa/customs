@@ -21,7 +21,7 @@ export class Investigation extends BaseCase<
   Investigation
 > {
   override $$__service_name__$$: string = 'InvestigationService';
-  override securityLevel = ViolationDegreeConfidentiality.LINITED_CIRCULATION;
+  override securityLevel = ViolationDegreeConfidentiality.SECRET;
   investigationFullSerial!: string;
   draftFullSerial!: string;
   draftSerial!: number;
