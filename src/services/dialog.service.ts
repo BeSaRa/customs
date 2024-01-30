@@ -139,8 +139,6 @@ export class DialogService implements DialogContract {
       overlayWrapper.forEach((item: HTMLDivElement) => {
         item.dir = current.direction;
       });
-
-      console.log(overlayWrapper);
     });
   }
 }

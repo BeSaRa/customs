@@ -271,6 +271,7 @@ export class OffendersViolationsPreviewComponent
       )
       .subscribe((item: PenaltyDecision | undefined) => {
         this.model && item && this.model().appendPenaltyDecision(item);
+        console.log(this.model());
       });
   }
 

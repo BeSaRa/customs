@@ -132,19 +132,22 @@
           </div>
         }
       </div>
-      <div class="mb-4">
+      <div class="mb-4 flex gap-4 items-center">
         @if (!readonly) {
-          <app-select-input
-            [formControl]="control"
-            [label]="lang.map.violations"
-            bindLabel="getOffenderViolationSelectNames"
-            bindValue="id"
-            [isMultiple]="true"
-            [options]="violations()">
-            <app-button appInputSuffix (click)="addViolation$.next()">
-              {{ lang.map.select }}
-            </app-button>
-          </app-select-input>
+          <div class="flex-auto flex">
+            <app-select-input
+              class="flex-auto w-0"
+              [formControl]="control"
+              [label]="lang.map.violations"
+              bindLabel="getOffenderViolationSelectNames"
+              bindValue="id"
+              [isMultiple]="true"
+              [options]="violations()">
+            </app-select-input>
+          </div>
+          <app-button class="mt-1" (click)="addViolation$.next()">
+            {{ lang.map.add }}
+          </app-button>
         }
       </div>
       <table
