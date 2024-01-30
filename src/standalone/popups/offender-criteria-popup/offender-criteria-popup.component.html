@@ -144,6 +144,23 @@
                     (click)="addEmployee(element)"
                     icon="PLUS_BOX" />
                 </div>
+                <div [matTooltip]="lang.map.add_violation">
+                  <app-icon-button
+                    (click)="addViolation$.next()"
+                    class="text-primary"
+                    icon="PLUS"></app-icon-button>
+                </div>
+                <div [matTooltip]="lang.map.situation_search">
+                  <app-icon-button
+                    (click)="
+                      situationSearch$.next({
+                        offender: element,
+                        offenderType: offenderTypesEnum.EMPLOYEE,
+                        isCompany: false
+                      })
+                    "
+                    icon="INFORMATION"></app-icon-button>
+                </div>
               </div>
             </td>
           </ng-container>
@@ -213,6 +230,34 @@
                   <app-icon-button
                     (click)="addClearingAgent(element)"
                     icon="PLUS_BOX" />
+                </div>
+                <div [matTooltip]="lang.map.add_violation">
+                  <app-icon-button
+                    (click)="addViolation$.next()"
+                    class="text-primary"
+                    icon="PLUS"></app-icon-button>
+                </div>
+                <div [matTooltip]="lang.map.situation_search">
+                  <app-icon-button
+                    (click)="
+                      situationSearch$.next({
+                        offender: element,
+                        offenderType: offenderTypesEnum.ClEARING_AGENT,
+                        isCompany: false
+                      })
+                    "
+                    icon="INFORMATION"></app-icon-button>
+                </div>
+                <div [matTooltip]="lang.map.situation_search_clearing_agency">
+                  <app-icon-button
+                    (click)="
+                      situationSearch$.next({
+                        offender: element,
+                        offenderType: offenderTypesEnum.ClEARING_AGENT,
+                        isCompany: true
+                      })
+                    "
+                    icon="CLEARING_AGENCY"></app-icon-button>
                 </div>
               </div>
             </td>
