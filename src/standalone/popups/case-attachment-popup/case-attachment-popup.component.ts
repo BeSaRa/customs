@@ -101,7 +101,25 @@ export class CaseAttachmentPopupComponent
     this.listenToView();
     this.listenToDelete();
   }
-
+  selectFiles($event: Event) {
+    $event.preventDefault();
+    Array.from(($event.target as HTMLInputElement).files || []).forEach(
+      item => {
+        if (!this.validFile(item)) {
+          return;
+        }
+        this.createControlsInProgress = true;
+        this.attachments = [
+          ...this.attachments,
+          new CaseAttachment().clone<CaseAttachment>({
+            content: item,
+            documentTitle: item.name,
+          }),
+        ];
+        this.createControls();
+      },
+    );
+  }
   filesDropped($event: DragEvent) {
     $event.preventDefault();
 
