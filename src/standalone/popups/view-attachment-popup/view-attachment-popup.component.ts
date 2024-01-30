@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,10 +26,7 @@ import { BlobModel } from '@models/blob-model';
   templateUrl: './view-attachment-popup.component.html',
   styleUrls: ['./view-attachment-popup.component.scss'],
 })
-export class ViewAttachmentPopupComponent implements OnInit, OnDestroy {
-  ngOnInit(): void {
-    console.log(this.data);
-  }
+export class ViewAttachmentPopupComponent implements OnDestroy {
   lang = inject(LangService);
   data: { title: string; model: BlobModel } = inject(MAT_DIALOG_DATA);
 

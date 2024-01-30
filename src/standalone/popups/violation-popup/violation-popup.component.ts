@@ -37,6 +37,9 @@ import { DialogService } from '@services/dialog.service';
 import { DatePipe } from '@angular/common';
 import { ReportType } from '@app-types/validation-return-type';
 import { Investigation } from '@models/investigation';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @Component({
   selector: 'app-violation-popup',
@@ -54,6 +57,8 @@ import { Investigation } from '@models/investigation';
     ReactiveFormsModule,
     TextareaComponent,
     DatePipe,
+    MatTooltip,
+    InputSuffixDirective,
   ],
 
   templateUrl: './violation-popup.component.html',
@@ -79,6 +84,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     violationsDateTo: () => this.form.get('violationsDateTo'),
     violationsDate: () => this.form.get('violationsDate'),
     customsDeclarationNumber: () => this.form.get('customsDeclarationNumber'),
+    controlReportNumber: () => this.form.get('controlReportNumber'),
   };
 
   config = inject(ConfigService);
@@ -243,7 +249,34 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.isCustoms =
       this.controls.classification()?.value === ClassificationTypes.custom;
   }
-
+  showDeclarationNumberDetails() {
+    this.caseModel()
+      .getService()
+      .getDeclarationDetails(this.controls.customsDeclarationNumber()?.value)
+      .subscribe(({ blob, title }) => {
+        return this.dialog.open(ViewAttachmentPopupComponent, {
+          disableClose: true,
+          data: {
+            model: blob,
+            title: title,
+          },
+        });
+      });
+  }
+  showReportNumberDetails() {
+    this.caseModel()
+      .getService()
+      .getOffenceDetails(this.controls.controlReportNumber()?.value)
+      .subscribe(({ blob, title }) => {
+        return this.dialog.open(ViewAttachmentPopupComponent, {
+          disableClose: true,
+          data: {
+            model: blob,
+            title: title,
+          },
+        });
+      });
+  }
   // private checkClassification(): void {
   //   const selectedClassification = this.classifications.find(
   //       classification =>
