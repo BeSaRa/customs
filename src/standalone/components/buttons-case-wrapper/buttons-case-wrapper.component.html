@@ -340,9 +340,10 @@
       {{ lang.map.terminate }}
     </app-button>
   }
-
-  <!-- close action -->
-  <app-button buttonType="error" (click)="close()">
-    {{ lang.map.close }}
-  </app-button>
+  @if (!!openFrom) {
+    <!-- close action -->
+    <app-button buttonType="error" (click)="close()">
+      {{ lang.map.close }}
+    </app-button>
+  }
 </div>

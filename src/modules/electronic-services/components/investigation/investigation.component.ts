@@ -282,6 +282,11 @@ export class InvestigationComponent
           .navigate(['/home/electronic-services/investigation-search'])
           .then();
         break;
+      case OpenFrom.DRAFT_SCREEN:
+        this.router
+          .navigate(['/home/electronic-services/investigation-drafts'])
+          .then();
+        break;
     }
   }
 

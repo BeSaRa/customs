@@ -3,4 +3,5 @@ export enum OpenFrom {
   USER_INBOX,
   TEAM_INBOX,
   SEARCH,
+  DRAFT_SCREEN,
 }

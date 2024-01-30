@@ -37,7 +37,9 @@ export const itemResolver: ResolveFn<OpenedInfoContract | null> = route => {
         switchMap(() =>
           iif(
             () =>
-              openFrom === OpenFrom.SEARCH || openFrom === OpenFrom.ADD_SCREEN,
+              openFrom === OpenFrom.SEARCH ||
+              openFrom === OpenFrom.ADD_SCREEN ||
+              openFrom === OpenFrom.DRAFT_SCREEN,
             service.getDetails(caseId),
             service.getTask(taskId!),
           ),
