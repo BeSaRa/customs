@@ -93,7 +93,12 @@
             buttonType="primary"
             >{{ lang.map.or_select_file }}</app-button
           >
-          <input type="file" #file hidden (input)="selectFiles($event)" />
+          <input
+            type="file"
+            #file
+            [multiple]="true"
+            hidden
+            (input)="selectFiles($event)" />
         </div>
       </div>
     </div>
