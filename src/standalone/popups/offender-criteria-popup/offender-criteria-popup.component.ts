@@ -62,6 +62,7 @@ import { MawaredDepartment } from '@models/mawared-department';
 import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-contract';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { OffenderService } from '@services/offender.service';
+import { ProofTypes } from '@enums/proof-types';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -408,7 +409,7 @@ export class OffenderCriteriaPopupComponent
                 offenderId: model.id,
                 violationId: violationId,
                 status: 1,
-                isProved: false,
+                proofStatus: ProofTypes.UNDEFINED,
               })
               .save()
               .pipe(

@@ -20,6 +20,7 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { MenuItemService } from '@services/menu-item.service';
 import { Penalty } from '@models/penalty';
 import { ManagerDecisions } from '@enums/manager-decisions';
+import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
 
 export abstract class BaseCaseService<M>
   extends RegisterServiceMixin(class {})
@@ -233,12 +234,12 @@ export abstract class BaseCaseService<M>
   private _getCasePenalty(
     caseId: string,
     activityName: string,
-  ): Observable<{
-    [key: string]: { first: ManagerDecisions; second: Penalty[] };
-  }> {
-    return this.http.get<{
-      [key: string]: { first: ManagerDecisions; second: Penalty[] };
-    }>(this.getUrlSegment() + '/penalty', {
+  ): Observable<
+    Record<string, { first: ManagerDecisions; second: Penalty[] }>
+  > {
+    return this.http.get<
+      Record<string, { first: ManagerDecisions; second: Penalty[] }>
+    >(this.getUrlSegment() + '/penalty', {
       params: new HttpParams({
         fromObject: {
           caseId,
@@ -251,9 +252,10 @@ export abstract class BaseCaseService<M>
   getCasePenalty(
     caseId: string,
     activityName: string,
-  ): Observable<{
-    [key: string]: { first: ManagerDecisions; second: Penalty[] };
-  }> {
+  ): Observable<
+    Record<string, { first: ManagerDecisions; second: Penalty[] }>
+  > {
+    const penaltyInterceptor = new PenaltyInterceptor();
     return this._getCasePenalty(caseId, activityName).pipe(
       map(rs => {
         const obj: {
@@ -263,7 +265,9 @@ export abstract class BaseCaseService<M>
           obj[key] = {
             ...rs[key],
             second: rs[key].second.map(o =>
-              new Penalty().clone<Penalty>({ ...o }),
+              penaltyInterceptor.receive(
+                new Penalty().clone<Penalty>({ ...o }),
+              ),
             ),
           };
         });

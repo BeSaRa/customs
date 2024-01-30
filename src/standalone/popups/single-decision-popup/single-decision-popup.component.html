@@ -1,1 +1,163 @@
-<p>single-decision-popup works!</p>
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>
+      {{ lang.map.make_penalty_decision_action }} {{ lang.map.for }} :
+      {{ offender().getNames() }}
+    </h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content space-y-4">
+    <div class="flex justify-between">
+      <p>
+        <span> السيد الاستاذ : </span>
+        <span class="font-semibold">
+          {{ offender().offenderInfo?.getNames() }}
+        </span>
+      </p>
+      <p class="flex flex-col">
+        <span>
+          <span>{{ lang.map.investigation_file_number }} : </span>
+          <span class="font-semibold">{{ model().draftFullSerial }}</span>
+        </span>
+        <span>
+          <span>{{ lang.map.decision_number }} : </span>
+          <span class="font-semibold">(({{ lang.map.decision_number }}))</span>
+        </span>
+        <span>
+          <span>{{ lang.map.decision_date }} : </span>
+          <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+        </span>
+      </p>
+    </div>
+    <div class="flex justify-center">
+      <span>{{ lang.map.after_greetings }}</span>
+    </div>
+    <div class="flex">
+      <span>{{ lang.map.based_on_your_violations }}</span>
+    </div>
+    <table
+      mat-table
+      class="table-style table-primary"
+      [dataSource]="offenderViolations()">
+      <!-- violation -->
+      <ng-container matColumnDef="violation">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ lang.map.violation }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ assetType(element).violationInfo.violationTypeInfo.getNames() }}
+        </td>
+      </ng-container>
+      <!-- createdOn -->
+      <ng-container matColumnDef="createdOn">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ lang.map.violation_date }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          @if (assetType(element).isNormalDate()) {
+            {{ assetType(element).violationInfo.violationsDate | date }}
+          } @else {
+            <span class="flex flex-col">
+              <span
+                >{{ lang.map.date_from }} :
+                <span>{{
+                  assetType(element).violationInfo.violationsDateFrom | date
+                }}</span>
+              </span>
+              <span
+                >{{ lang.map.date_to }} :
+                <span>{{
+                  assetType(element).violationInfo.violationsDateTo | date
+                }}</span>
+              </span>
+            </span>
+          }
+        </td>
+      </ng-container>
+      <!-- classification -->
+      <ng-container matColumnDef="proofStatus">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ lang.map.is_proved }}
+        </th>
+        <td mat-cell class="w-40" *matCellDef="let element; index as i">
+          <div class="flex justify-center items-center h-full">
+            <app-select-input
+              [formControl]="controls()[i]"
+              noMargin="true"
+              class="flex-auto"
+              label=""
+              size="sm"
+              nullable="false"
+              [options]="proofStatus()"
+              (selectChange)="updateIsProve(element, i)"
+              bindLabel="getNames"
+              bindValue="lookupKey" />
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+      </tr>
+    </table>
+    <div class="flex flex-col">
+      <label (click)="focusOnSelect(select)">{{
+        lang.map.penalty_action
+      }}</label>
+      <div class="input-form">
+        <mat-select
+          #select="matSelect"
+          id="penalty"
+          [formControl]="penaltyControl"
+          class="min-h-[42px] input-select">
+          <mat-select-trigger>
+            {{
+              penaltyControl.value
+                ? selectedPenaltyText(penaltyControl.value)
+                : ''
+            }}
+          </mat-select-trigger>
+          @for (penalty of (penalties$ | async)?.second; track penalty) {
+            <mat-option [value]="penalty.id">
+              {{ penalty.getNames() }}
+              @if (penalty.penGuidance) {
+                <span class="bg-emerald-400 rounded text-white px-2 mx-2">
+                  {{ penalty.penGuidanceInfo.getNames() }}
+                </span>
+              }
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+    </div>
+    <div>
+      <app-textarea [formControl]="textControl" [label]="lang.map.text" />
+    </div>
+    <div class="flex justify-end">
+      <p class="flex flex-col">
+        <span>
+          <span>{{ lang.map.lbl_department }} : </span>
+          <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+        </span>
+        <span>
+          <span>{{ lang.map.decision_signer }} : </span>
+          <span class="font-semibold">(({{ lang.map.decision_signer }}))</span>
+        </span>
+      </p>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">
+      {{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

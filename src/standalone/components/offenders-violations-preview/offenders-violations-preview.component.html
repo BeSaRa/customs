@@ -219,18 +219,18 @@
               </span>
             }
             <!-- is proved -->
-            <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-              <label class="font-medium">{{ lang.map.is_proved }} : </label>
-              @if (!violation.isProved) {
-                <span class="text-secondary">
-                  {{ lang.map.no }}
-                </span>
-              }
-              @if (violation.isProved) {
-                <span class="text-red-500">{{ lang.map.yes }}</span>
-              }
-            </span>
+            <!--            <span-->
+            <!--              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">-->
+            <!--              <label class="font-medium">{{ lang.map.is_proved }} : </label>-->
+            <!--              @if (!violation.isProved) {-->
+            <!--                <span class="text-secondary">-->
+            <!--                  {{ lang.map.no }}-->
+            <!--                </span>-->
+            <!--              }-->
+            <!--              @if (violation.isProved) {-->
+            <!--                <span class="text-red-500">{{ lang.map.yes }}</span>-->
+            <!--              }-->
+            <!--            </span>-->
             <!-- customsDeclarationNumber -->
             @if (violation.violationInfo.customsDeclarationNumber) {
               <span

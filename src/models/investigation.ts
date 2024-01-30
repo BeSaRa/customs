@@ -141,4 +141,8 @@ export class Investigation extends BaseCase<
       return item.offenderId === offenderId;
     });
   }
+
+  loadPenalties() {
+    return this.getService().getCasePenalty(this.id, this.getActivityName()!);
+  }
 }

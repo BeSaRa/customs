@@ -1,4 +1,13 @@
 export interface LangKeysContract {
+  the_penalty_saved_successfully: string;
+  please_select_penalty_to_proceed: string;
+  text: string;
+  penalty_recommended_by_system: string;
+  for: string;
+  is_proved_status_updated_successfully: string;
+  violation: string;
+  based_on_your_violations: string;
+  after_greetings: string;
   release: string;
   make_penalty_decision_action: string;
   penalty_action: string;

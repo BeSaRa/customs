@@ -34,6 +34,7 @@ export class OffenderViolationInterceptor
           ...model.violationInfo,
         }),
       ));
+    model.proofStatusInfo = AdminResult.createInstance(model.proofStatusInfo);
     return model;
   }
 }

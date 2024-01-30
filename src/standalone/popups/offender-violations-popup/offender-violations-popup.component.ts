@@ -39,6 +39,7 @@ import { OffenderTypes } from '@enums/offender-types';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { Investigation } from '@models/investigation';
+import { ProofTypes } from '@enums/proof-types';
 
 @Component({
   selector: 'app-offender-violations-popup',
@@ -148,7 +149,7 @@ export class OffenderViolationsPopupComponent
                   offenderId: this.offender.id,
                   violationId: violationId,
                   status: 1,
-                  isProved: false,
+                  proofStatus: ProofTypes.UNDEFINED,
                 }),
               );
             }),

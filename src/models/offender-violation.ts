@@ -4,6 +4,8 @@ import { BaseModel } from '@abstracts/base-model';
 import { OffenderViolationInterceptor } from '@model-interceptors/offender-violation-interceptor';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { InterceptModel } from 'cast-response';
+import { AdminResult } from '@models/admin-result';
+import { ProofTypes } from '@enums/proof-types';
 
 const { send, receive } = new OffenderViolationInterceptor();
 
@@ -14,10 +16,15 @@ export class OffenderViolation extends BaseModel<
 > {
   $$__service_name__$$ = 'OffenderViolationService';
   repeat: number = 0;
-  isProved = true;
   caseId!: string;
   violationId!: number;
   offenderId!: number;
   violationInfo!: Violation;
   offenderInfo!: Offender;
+  proofStatus: ProofTypes = ProofTypes.UNDEFINED;
+  proofStatusInfo!: AdminResult;
+
+  isNormalDate(): boolean {
+    return !!this.violationInfo.violationsDate;
+  }
 }

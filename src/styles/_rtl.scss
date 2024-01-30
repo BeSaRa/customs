@@ -1,9 +1,9 @@
 html[dir="rtl"] {
-  :root {
-    --mat-table-header-headline-font: "Tajawal", sans-serif;
-  }
+  --mat-table-header-headline-font: "Tajawal", sans-serif !important;
+  --mat-table-row-item-label-text-font: "Tajawal", sans-serif !important;
+
   body {
-    font-family: "Tajawal", sans-serif;
+    font-family: "Tajawal", sans-serif !important;
   }
 
   .app-menu {

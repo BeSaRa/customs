@@ -5,12 +5,14 @@ import {
   ContentChild,
   ContentChildren,
   ElementRef,
+  EventEmitter,
   inject,
   Injector,
   input,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   QueryList,
   ViewChild,
 } from '@angular/core';
@@ -140,6 +142,9 @@ export class SelectInputComponent
   lang = inject(LangService);
   filterControl = new FormControl('');
 
+  @Output()
+  selectChange: EventEmitter<unknown> = new EventEmitter<unknown>();
+
   get filterTxt$() {
     return this.filterControl.valueChanges;
   }
@@ -164,7 +169,10 @@ export class SelectInputComponent
   // noinspection JSUnusedLocalSymbols
   private values = this.control.valueChanges
     .pipe(takeUntil(this.destroy$))
-    .subscribe(value => this.onChange && this.onChange(value));
+    .subscribe(value => {
+      this.selectChange.emit(value);
+      return this.onChange && this.onChange(value);
+    });
 
   ngOnInit(): void {
     this.ctrl = this.injector.get(NgControl, null, {
@@ -231,6 +239,7 @@ export class SelectInputComponent
         ? this.bindLabel(option)
         : option;
   }
+
   delete(event: MouseEvent, option: unknown) {
     event.preventDefault();
     event.stopPropagation();
