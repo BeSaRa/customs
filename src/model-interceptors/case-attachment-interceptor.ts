@@ -7,6 +7,8 @@ export class CaseAttachmentInterceptor
 {
   send(model: Partial<CaseAttachment>): Partial<CaseAttachment> {
     delete model.attachmentTypeInfo;
+    delete model.creatorInfo;
+    delete model.ouInfo;
     return model;
   }
 
@@ -15,6 +17,10 @@ export class CaseAttachmentInterceptor
       (model.attachmentTypeInfo = AdminResult.createInstance(
         model.attachmentTypeInfo,
       ));
+    model.creatorInfo &&
+      (model.creatorInfo = AdminResult.createInstance(model.creatorInfo));
+    model.ouInfo && (model.ouInfo = AdminResult.createInstance(model.ouInfo));
+
     return model;
   }
 }
