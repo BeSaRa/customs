@@ -42,6 +42,7 @@ import { SuspendedEmployeeService } from '@services/suspended-employee.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employee-popup/suspend-employee-popup.component';
 import { ManagerDecisions } from '@enums/manager-decisions';
+import { OffenderViolation } from '@models/offender-violation';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -126,6 +127,33 @@ export class OffendersViolationsPreviewComponent
     });
   });
 
+  offenderViolationsMap = computed(() => {
+    return this.model().offenderViolationInfo.reduce<
+      Record<number, OffenderViolation[]>
+    >((acc, current) => {
+      if (!Object.prototype.hasOwnProperty.call(acc, current.offenderId)) {
+        acc[current.offenderId] = [];
+      }
+      acc[current.offenderId] = [...acc[current.offenderId], current];
+      return { ...acc };
+    }, {});
+  });
+
+  offenderViolationsSlices = computed(() => {
+    const keys = Object.keys(this.offenderViolationsMap());
+    return keys.reduce<Record<number, OffenderViolation[]>>(
+      (acc, offenderId: string) => {
+        if (!Object.prototype.hasOwnProperty.call(acc, offenderId)) {
+          acc[Number(offenderId)] = this.offenderViolationsMap()[
+            Number(offenderId)
+          ].slice(0, 3);
+        }
+        return { ...acc };
+      },
+      {},
+    );
+  });
+
   situationClick(
     $event: MouseEvent,
     element: Offender,
@@ -146,6 +174,8 @@ export class OffendersViolationsPreviewComponent
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
     this.loadPenalties$.next();
+
+    console.log(this.offenderViolationsMap(), this.offenderViolationsSlices());
   }
 
   assertType(item: Offender): Offender {
@@ -370,5 +400,13 @@ export class OffendersViolationsPreviewComponent
       this.selectedOffender =
         this.selectedOffender === element ? null : element;
     }
+  }
+
+  getOffenderViolations(offenderId: number): OffenderViolation[] {
+    return this.offenderViolationsMap()[offenderId] || [];
+  }
+
+  getOffenderViolationsSlice(offenderId: number): OffenderViolation[] {
+    return this.offenderViolationsSlices()[offenderId] || [];
   }
 }
