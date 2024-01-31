@@ -1,4 +1,3 @@
-import { OffenderViolationService } from '@services/offender-violation.service';
 import {
   Component,
   computed,
@@ -93,7 +92,6 @@ export class OffenderCriteriaPopupComponent
 {
   data = inject<OffenderCriteriaDataContract>(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
-  offenderViolationService = inject(OffenderViolationService);
   fb = inject(UntypedFormBuilder);
   lang = inject(LangService);
   dialog = inject(DialogService);

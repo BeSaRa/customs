@@ -125,6 +125,7 @@ export class OffenderViolationsPopupComponent
           this.offenderViolationService
             .load(undefined, {
               caseId: this.model().id,
+              offenderId: this.offender.id,
             })
             .pipe(ignoreErrors()),
         ),
