@@ -16,7 +16,7 @@
           }}</span>
           <div
             class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-            {{ offender.offenderInfo?.qid }}
+            {{ offender.offenderInfo?.qid || '---' }}
           </div>
         </div>
         <div class="group block relative mb-5">
@@ -25,7 +25,7 @@
           }}</span>
           <div
             class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-            {{ offender.offenderInfo?.arName }}
+            {{ offender.offenderInfo?.arName || '---' }}
           </div>
         </div>
         <div class="group block relative mb-5">
@@ -34,7 +34,7 @@
           }}</span>
           <div
             class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-            {{ offender.offenderInfo?.enName }}
+            {{ offender.offenderInfo?.enName || '---' }}
           </div>
         </div>
         @if (offender.typeInfo) {
@@ -44,7 +44,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.typeInfo.getNames() }}
+              {{ offender.typeInfo.getNames() || '---' }}
             </div>
           </div>
         }
@@ -55,7 +55,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo!.jobTitleCode }}
+              {{ offender.offenderInfo!.jobTitleCode || '---' }}
             </div>
           </div>
         }
@@ -66,7 +66,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo!.code }}
+              {{ offender.offenderInfo!.code || '---' }}
             </div>
           </div>
         }
@@ -80,7 +80,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderOUInfo.getNames() }}
+              {{ offender.offenderOUInfo.getNames() || '---' }}
             </div>
           </div>
         }
@@ -94,7 +94,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderOUInfo.getNames() }}
+              {{ offender.offenderOUInfo.getNames() || '---' }}
             </div>
           </div>
         }
@@ -105,7 +105,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo.email }}
+              {{ offender.offenderInfo.email || '---' }}
             </div>
           </div>
         }
@@ -116,7 +116,7 @@
             }}</span>
             <div
               class="md group/input-wrapper input-form text-slate-700 py-2 px-3 flex items-center justify-start">
-              {{ offender.offenderInfo.phoneNumber }}
+              {{ offender.offenderInfo.phoneNumber || '---' }}
             </div>
           </div>
         }
