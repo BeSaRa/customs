@@ -96,6 +96,15 @@
       </div>
     </td>
   </ng-container>
+  <!-- decision -->
+  <ng-container matColumnDef="decision">
+    <th mat-header-cell *matHeaderCellDef>{{ lang.map.decision }}</th>
+    <td mat-cell *matCellDef="let element">
+      <div class="px-2 text-white rounded bg-red-300">
+        {{ getOffenderDecision(element.id)?.penaltyInfo?.getNames() }}
+      </div>
+    </td>
+  </ng-container>
   <!-- actions -->
   <ng-container matColumnDef="actions">
     <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
@@ -108,17 +117,17 @@
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
           </div>
           <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-                                                                        <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
-                                                                      </div> -->
+                                                                                  <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
+                                                                                </div> -->
 
           <div class="flex justify-center gap-2">
             @if (canMakeDecision(element)) {
-              <div>
-                <app-icon-button
-                  [matTooltip]="lang.map.make_penalty_decision"
-                  (click)="makeDecision$.next(element)"
-                  icon="ACCOUNT_MAKE_DECISION" />
-              </div>
+              <!--<div>
+                              <app-icon-button
+                                [matTooltip]="lang.map.make_penalty_decision"
+                                (click)="makeDecision$.next(element)"
+                                icon="ACCOUNT_MAKE_DECISION" />
+                            </div>-->
               <div>
                 <app-icon-button
                   [matTooltip]="lang.map.make_penalty_decision"

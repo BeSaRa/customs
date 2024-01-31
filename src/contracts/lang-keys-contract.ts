@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  decision: string;
   the_penalty_saved_successfully: string;
   please_select_penalty_to_proceed: string;
   text: string;

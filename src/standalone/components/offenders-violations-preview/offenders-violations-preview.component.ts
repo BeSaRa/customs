@@ -110,6 +110,7 @@ export class OffendersViolationsPreviewComponent
     'departmentCompany',
     'violations',
     'situationSearch',
+    'decision',
     'actions',
   ];
 
@@ -156,6 +157,14 @@ export class OffendersViolationsPreviewComponent
       },
       {},
     );
+  });
+
+  decisionMap = computed(() => {
+    return this.model().taskDetails.penaltyDecisions.reduce<
+      Record<number, PenaltyDecision>
+    >((acc, item) => {
+      return { ...acc, [item.offenderId]: item };
+    }, {});
   });
 
   situationClick(
@@ -421,5 +430,11 @@ export class OffendersViolationsPreviewComponent
       this.model,
       this.updateModel,
     );
+  }
+
+  getOffenderDecision(offenderId: number): PenaltyDecision | undefined {
+    return this.decisionMap()[offenderId]
+      ? this.decisionMap()[offenderId]
+      : undefined;
   }
 }

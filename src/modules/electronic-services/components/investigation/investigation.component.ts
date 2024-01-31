@@ -83,7 +83,7 @@ export class InvestigationComponent
       degreeConfidentiality =>
         this.employeeService.hasPermissionTo('LIMITED_ACCESS') ||
         degreeConfidentiality.lookupKey !==
-          ViolationDegreeConfidentiality.LINITED_CIRCULATION,
+          ViolationDegreeConfidentiality.LIMITED_CIRCULATION,
     );
   mandatoryMakePenaltyDecisions: boolean = false;
   tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
