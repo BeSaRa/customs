@@ -55,7 +55,10 @@ export class Investigation extends BaseCase<
         : investigationFullSerial,
       createdOn: controls ? [{ value: createdOn, disabled: true }] : createdOn,
       description: controls
-        ? [{ value: description, disabled: disabled }]
+        ? [
+            { value: description, disabled: disabled },
+            [CustomValidators.maxLength(1333)],
+          ]
         : description,
       securityLevel: controls
         ? [

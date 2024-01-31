@@ -72,7 +72,9 @@ export class Violation extends BaseModel<Violation, ViolationService> {
       securityAdminDecision: controls
         ? [securityAdminDecision]
         : securityAdminDecision,
-      description: controls ? [description] : description,
+      description: controls
+        ? [description, CustomValidators.maxLength(1333)]
+        : description,
       customsDeclarationNumber: controls
         ? [customsDeclarationNumber]
         : customsDeclarationNumber,
