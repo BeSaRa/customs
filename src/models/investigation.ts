@@ -35,7 +35,7 @@ export class Investigation extends BaseCase<
   securityLevelInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
-  $$_employeeService_$$ = 'EmployeeService';
+  $$__employeeService__$$ = 'EmployeeService';
 
   buildForm(controls = false, disabled = false): object {
     const {
@@ -103,15 +103,15 @@ export class Investigation extends BaseCase<
     return this.taskDetails.penaltyDecisions;
   }
 
-  $_getEmployeeService_$(): EmployeeService {
-    return ServiceRegistry.get<EmployeeService>(this.$$_employeeService_$$);
+  $$getEmployeeService$$(): EmployeeService {
+    return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
   }
 
   inMyInbox(): boolean {
     return !!(
       this.taskDetails &&
       this.taskDetails.owner &&
-      this.$_getEmployeeService_$().getEmployee()?.domainName.toLowerCase() ===
+      this.$$getEmployeeService$$().getEmployee()?.domainName.toLowerCase() ===
         this.taskDetails.owner.toLowerCase()
     );
   }
