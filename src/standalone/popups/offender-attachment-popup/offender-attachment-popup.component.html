@@ -3,7 +3,7 @@
     <h1>{{ lang.map.offender_attachments }}</h1>
     <app-icon-button
       tabindex="-1"
-      mat-dialog-close=""
+      [mat-dialog-close]="attachmentsCaseComponent.dataSource.data.length"
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>

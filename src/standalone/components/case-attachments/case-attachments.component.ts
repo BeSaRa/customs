@@ -97,6 +97,7 @@ export class CaseAttachmentsComponent
   ngOnInit(): void {
     this.listenToView();
     this.listenToDelete();
+    this.reload$.next();
   }
 
   private _load(): Observable<CaseAttachment[]> {
@@ -106,6 +107,7 @@ export class CaseAttachmentsComponent
         switchMap(() => {
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
+              console.log(this.type);
               switch (this.type) {
                 case 'folder':
                   return this.caseId()

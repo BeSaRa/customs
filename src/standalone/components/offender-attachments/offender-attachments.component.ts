@@ -97,8 +97,9 @@ export class OffenderAttachmentsComponent
   private listenToAttachments() {
     this.attachments$
       .pipe(
-        switchMap(model =>
-          this.dialog
+        switchMap(model => {
+          console.log(model);
+          return this.dialog
             .open(OffenderAttachmentPopupComponent, {
               data: {
                 model: this.model,
@@ -109,10 +110,11 @@ export class OffenderAttachmentsComponent
             .afterClosed()
             .pipe(
               map(length => {
+                console.log(length);
                 return { offenderId: model.id, attachmentsNumber: length };
               }),
-            ),
-        ),
+            );
+        }),
       )
       .subscribe(payload => {
         this.offenderAttachmentsCountMap.set(
