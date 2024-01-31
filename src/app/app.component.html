@@ -11,4 +11,6 @@
 @if (loadingService.loading$ | async) {
   <app-loading></app-loading>
 }
-<router-outlet class="hidden"></router-outlet>
+<router-outlet
+  [dir]="lang.getCurrent().direction"
+  class="hidden"></router-outlet>
