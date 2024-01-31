@@ -18,19 +18,21 @@
           bindLabel="getNames"
           [enableFilter]="true"
           bindFilter="getNames" />
-        <app-select-input
-          formControlName="violationTypeId"
-          [options]="violationTypes"
-          [label]="lang.map.violation_type"
-          bindValue="id"
-          bindLabel="getNames"
-          [enableFilter]="true"
-          bindFilter="getNames" />
+        @if (!!this.offenderTypeCtrl?.valid) {
+          <app-select-input
+            formControlName="violationTypeId"
+            [options]="filteredViolationTypes"
+            [label]="lang.map.violation_type"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+        }
         <app-input
           formControlName="repeat"
           [label]="lang.map.repeat"
           type="number"></app-input>
-        @if (offenderTypeValue) {
+        @if (!!offenderTypeCtrl?.valid) {
           <app-select-input
             formControlName="penaltySigner"
             [options]="filteredPenaltySigners"
@@ -46,22 +48,23 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
         }
-        @if (showPenaltiesAndPenaltyGuidance()) {
+        @if (showPenalties()) {
           <app-select-input
-            formControlName="penaltyId"
+            formControlName="penaltyArray"
             [options]="filteredPenalties"
             [label]="lang.map.penalty"
             bindValue="id"
             bindLabel="getNames"
             [enableFilter]="true"
-            bindFilter="getNames" />
+            bindFilter="getNames"
+            [isMultiple]="true" />
         }
-        @if (showPenaltiesAndPenaltyGuidance()) {
+        @if (showPenaltyGuidance()) {
           <app-select-input
             formControlName="penaltyGuidance"
-            [options]="filteredPenaltyGuidance"
+            [options]="penaltyGuidance"
             [label]="lang.map.penalty_guidance"
-            bindValue="lookupKey"
+            bindValue="id"
             bindLabel="getNames" />
         }
         <div class="flex flex-row pl-1 items-center justify-start">
@@ -76,19 +79,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="saveBulk$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>

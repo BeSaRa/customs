@@ -31,16 +31,20 @@ export class ViolationPenalty extends BaseModel<
   penaltySignerInfo!: AdminResult;
   penaltyGuidanceInfo!: AdminResult;
   override status = 1;
+
+  // Extra
+  penaltyArray: number[] = [];
+
   buildForm(controls = false): object {
     const {
       repeat,
       violationTypeId,
       penaltySigner,
-      penaltyId,
       penaltyGuidance,
       offenderType,
       offenderLevel,
       status,
+      penaltyArray,
     } = this;
     return {
       repeat: controls ? [repeat, CustomValidators.required] : repeat,
@@ -50,7 +54,9 @@ export class ViolationPenalty extends BaseModel<
       penaltySigner: controls
         ? [penaltySigner, CustomValidators.required]
         : penaltySigner,
-      penaltyId: controls ? [penaltyId, CustomValidators.required] : penaltyId,
+      penaltyArray: penaltyArray
+        ? [penaltyArray, CustomValidators.required]
+        : penaltyArray,
       penaltyGuidance: controls ? [penaltyGuidance] : penaltyGuidance,
       offenderType: controls
         ? [offenderType, CustomValidators.required]
