@@ -13,107 +13,97 @@
       mat-align-tabs="start"
       dynamicHeight>
       <mat-tab [label]="lang.map.lbl_basic_info">
-        <!-- user info -->
-        <div class="grid p-4 grid-cols-2 gap-4 items-center">
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.ar_name"
-            [placeholder]="arName"></app-input>
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.en_name"
-            [placeholder]="enName"></app-input>
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.employee_number"
-            [placeholder]="empNum"></app-input>
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.qid"
-            [placeholder]="qid"></app-input>
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.phone_number"
-            [placeholder]="phoneNumber"></app-input>
-          <app-input
-            [disabled]="true"
-            [displayErrors]="false"
-            size="md"
-            [label]="lang.map.email"
-            [placeholder]="email"></app-input>
-        </div>
+        <div class="h-full overflow-auto">
+          <!-- user info -->
+          <div class="grid p-4 grid-cols-2 gap-4 items-center">
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.ar_name"
+              [placeholder]="arName"></app-input>
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.en_name"
+              [placeholder]="enName"></app-input>
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.employee_number"
+              [placeholder]="empNum"></app-input>
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.qid"
+              [placeholder]="qid"></app-input>
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.phone_number"
+              [placeholder]="phoneNumber"></app-input>
+            <app-input
+              [disabled]="true"
+              [displayErrors]="false"
+              size="md"
+              [label]="lang.map.email"
+              [placeholder]="email"></app-input>
+          </div>
 
-        <div class="grid p-4 grid-cols-2 gap-4 items-center">
-          <ng-container [formGroup]="form">
-            <app-select-input
-              [label]="lang.map.default_language"
-              formControlName="defaultLang"
-              [options]="languages"
-              bindLabel="name"
-              bindValue="id" />
-            <!-- sms notifications -->
-            <div class="flex items-center mr-4">
-              <app-switch
-                id="isSMSNotificationEnabled"
-                formControlName="isSMSNotificationEnabled"
-                [trueValue]="1"
-                [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label
-                class="ml-2 block font-medium"
-                for="isSMSNotificationEnabled"
-                >{{ lang.map.sms_notifications }}</label
-              >
-            </div>
-            <!-- is private user -->
-            <div class="flex items-center mr-4">
-              <app-switch
-                id="isPrivateUser"
-                formControlName="isPrivateUser"
-                [trueValue]="1"
-                [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="isPrivateUser">{{
-                lang.map.private_user
-              }}</label>
-            </div>
-            <!-- limitedCirculation -->
-            <div class="flex items-center mr-4">
-              <app-switch
-                id="limitedCirculation"
-                formControlName="limitedCirculation"
-                [trueValue]="1"
-                [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label class="ml-2 block font-medium" for="limitedCirculation">{{
-                lang.map.limited_circulation
-              }}</label>
-            </div>
-            <!-- mail notifications -->
-            <div class="flex items-center mr-4">
-              <app-switch
-                id="isMailNotificationEnabled"
-                formControlName="isMailNotificationEnabled"
-                [trueValue]="1"
-                [falseValue]="0"
-                [matTooltip]="lang.map.change_status"></app-switch>
-              <label
-                class="ml-2 block font-medium"
-                for="isMailNotificationEnabled"
-                >{{ lang.map.mail_notifications }}</label
-              >
-            </div>
-          </ng-container>
+          <div class="grid p-4 grid-cols-2 gap-4 items-center">
+            <ng-container [formGroup]="form">
+              <app-select-input
+                [label]="lang.map.default_language"
+                formControlName="defaultLang"
+                [options]="languages"
+                bindLabel="name"
+                bindValue="id" />
+              <!-- sms notifications -->
+              <div class="flex items-center mr-4">
+                <app-switch
+                  id="isSMSNotificationEnabled"
+                  formControlName="isSMSNotificationEnabled"
+                  [trueValue]="1"
+                  [falseValue]="0"
+                  [matTooltip]="lang.map.change_status"></app-switch>
+                <label
+                  class="ml-2 block font-medium"
+                  for="isSMSNotificationEnabled"
+                  >{{ lang.map.sms_notifications }}</label
+                >
+              </div>
+              <!-- is private user -->
+              <div class="flex items-center mr-4">
+                <app-switch
+                  id="isPrivateUser"
+                  formControlName="isPrivateUser"
+                  [trueValue]="1"
+                  [falseValue]="0"
+                  [matTooltip]="lang.map.change_status"></app-switch>
+                <label class="ml-2 block font-medium" for="isPrivateUser">{{
+                  lang.map.private_user
+                }}</label>
+              </div>
+              <!-- mail notifications -->
+              <div class="flex items-center mr-4">
+                <app-switch
+                  id="isMailNotificationEnabled"
+                  formControlName="isMailNotificationEnabled"
+                  [trueValue]="1"
+                  [falseValue]="0"
+                  [matTooltip]="lang.map.change_status"></app-switch>
+                <label
+                  class="ml-2 block font-medium"
+                  for="isMailNotificationEnabled"
+                  >{{ lang.map.mail_notifications }}</label
+                >
+              </div>
+            </ng-container>
+          </div>
         </div>
       </mat-tab>
       <mat-tab [label]="lang.map.alt_emails">

@@ -120,9 +120,6 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
           isPrivateUser: controls
             ? [userPreferences.isPrivateUser, CustomValidators.required]
             : userPreferences.isPrivateUser,
-          limitedCirculation: controls
-            ? [userPreferences.limitedCirculation, CustomValidators.required]
-            : userPreferences.limitedCirculation,
           defaultLang: controls
             ? [userPreferences.defaultLang]
             : userPreferences.defaultLang,
