@@ -65,6 +65,25 @@
     </app-button>
   }
 
+  <!-- send to manager -->
+  @if (
+    model?.inMyInbox() &&
+    model?.hasAnyResponse([
+      taskResponses.TO_MANAGER,
+      taskResponses.CHIEF_APPROVE
+    ])
+  ) {
+    <app-button
+      (click)="
+        responseAction$.next(
+          model?.hasResponse(taskResponses.TO_MANAGER)
+            ? taskResponses.TO_MANAGER
+            : taskResponses.CHIEF_APPROVE
+        )
+      ">
+      {{ lang.map.to_manager }}
+    </app-button>
+  }
   <!-- return -->
   @if (
     model?.inMyInbox() &&
@@ -229,6 +248,11 @@
     }
   </mat-menu>
 
+  @if (model?.inMyInbox() && model?.hasResponse(taskResponses.TO_CHIEF)) {
+    <app-button (click)="responseAction$.next(taskResponses.TO_CHIEF)">
+      {{ lang.map.return_to_chief }}
+    </app-button>
+  }
   <!-- issuing referral decision -->
   @if (
     model?.inMyInbox() &&
@@ -277,7 +301,6 @@
     }
   </mat-menu>
 
-  <!-- data entry actions -->
   <!-- send to manager -->
   @if (canLaunch() && !isApplicantManager()) {
     <app-button
@@ -295,31 +318,6 @@
   @if (canLaunch() && !isApplicantManager() && model?.sectionId) {
     <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
       >{{ lang.map.send_to_chief }}
-    </app-button>
-  }
-  @if (model?.hasAnyResponse([taskResponses.TO_CHIEF])) {
-    <app-button (click)="responseAction$.next(taskResponses.TO_CHIEF)">
-      {{ lang.map.return_to_chief }}
-    </app-button>
-  }
-
-  <!-- data entry chief actions -->
-  <!-- send to manager -->
-  @if (
-    model?.hasAnyResponse([
-      taskResponses.TO_MANAGER,
-      taskResponses.CHIEF_APPROVE
-    ])
-  ) {
-    <app-button
-      (click)="
-        responseAction$.next(
-          model?.hasResponse(taskResponses.TO_MANAGER)
-            ? taskResponses.TO_MANAGER
-            : taskResponses.CHIEF_APPROVE
-        )
-      ">
-      {{ lang.map.to_manager }}
     </app-button>
   }
 
