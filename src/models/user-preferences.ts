@@ -22,7 +22,6 @@ export class UserPreferences extends BaseModel<
   isMailNotificationEnabled!: boolean;
   isSMSNotificationEnabled!: boolean;
   isPrivateUser!: boolean;
-  limitedCirculation!: boolean;
   defaultLang = 1;
 
   private _alternateEmailList!: string;
@@ -40,7 +39,6 @@ export class UserPreferences extends BaseModel<
 
   buildForm(controls = false) {
     const {
-      limitedCirculation,
       alternateEmailListParsed,
       defaultLang,
       isMailNotificationEnabled,
@@ -49,9 +47,6 @@ export class UserPreferences extends BaseModel<
     } = this;
 
     return {
-      limitedCirculation: controls
-        ? [limitedCirculation, CustomValidators.required]
-        : limitedCirculation,
       defaultLang: controls
         ? [defaultLang, CustomValidators.required]
         : defaultLang,
