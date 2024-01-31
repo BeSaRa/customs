@@ -45,6 +45,10 @@ import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employ
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { OffenderViolation } from '@models/offender-violation';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyService } from '@services/penalty.service';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -58,6 +62,8 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
     MatSortModule,
     MatTableModule,
     MatTooltipModule,
+    MatIconButton,
+    MatIcon,
   ],
   animations: [
     trigger('detailExpand', [
@@ -74,6 +80,7 @@ export class OffendersViolationsPreviewComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
+  protected readonly AppIcons = AppIcons;
   updateModel = input.required<EventEmitter<void>>();
   penaltyDecisionService = inject(PenaltyDecisionService);
   lang = inject(LangService);
@@ -160,12 +167,14 @@ export class OffendersViolationsPreviewComponent
   });
 
   decisionMap = computed(() => {
-    return this.model().taskDetails.penaltyDecisions.reduce<
+    return this.model().taskDetails?.penaltyDecisions.reduce<
       Record<number, PenaltyDecision>
     >((acc, item) => {
       return { ...acc, [item.offenderId]: item };
     }, {});
   });
+
+  penaltyService = inject(PenaltyService);
 
   situationClick(
     $event: MouseEvent,
@@ -187,8 +196,6 @@ export class OffendersViolationsPreviewComponent
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
     this.loadPenalties$.next();
-
-    console.log(this.offenderViolationsMap(), this.offenderViolationsSlices());
   }
 
   assertType(item: Offender): Offender {
@@ -433,7 +440,7 @@ export class OffendersViolationsPreviewComponent
   }
 
   getOffenderDecision(offenderId: number): PenaltyDecision | undefined {
-    return this.decisionMap()[offenderId]
+    return this.decisionMap() && this.decisionMap()[offenderId]
       ? this.decisionMap()[offenderId]
       : undefined;
   }
