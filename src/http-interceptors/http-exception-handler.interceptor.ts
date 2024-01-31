@@ -7,6 +7,7 @@ import {
 } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { ExceptionHandlerService } from '@services/exception-handler.service';
+import { NO_ERROR_HANDLE } from '@http-contexts/tokens';
 
 @Injectable()
 export class HttpExceptionHandlerInterceptor implements HttpInterceptor {
@@ -18,7 +19,8 @@ export class HttpExceptionHandlerInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError(err => {
-        this.handler.httpExceptionHandle(err);
+        !request.context.get(NO_ERROR_HANDLE) &&
+          this.handler.httpExceptionHandle(err);
         return throwError(err);
       }),
     );

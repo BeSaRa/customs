@@ -1,0 +1,35 @@
+<div class="flex justify-center gap-2">
+  <!--  @if (canMakeNormalDecision(offender().id)) {-->
+  <div>
+    <app-icon-button
+      [disabled]="!canMakeNormalDecision(offender().id)"
+      [matTooltip]="lang.map.make_penalty_decision"
+      (click)="openDecisionDialog(offender())"
+      icon="ACCOUNT_MAKE_DECISION" />
+  </div>
+  <!--  }-->
+  <!--  @if (canMakeSystemDecision(offender().id)) {-->
+  <button
+    mat-icon-button
+    [disabled]="!canMakeSystemDecision(offender().id)"
+    [matMenuTriggerFor]="menu"
+    aria-label="Example icon-button with a menu">
+    <mat-icon [svgIcon]="AppIcons.DOTS_VERTICAL"></mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    @for (penalty of getSystemPenalties(offender().id); track penalty.id) {
+      <button mat-menu-item>
+        <div class="flex gap-2">
+          <mat-icon [svgIcon]="getPenaltyIcon(penalty.penaltyKey)"></mat-icon>
+          <span class="flex-shrink-0">{{ penalty.getNames() }}</span>
+          @if (penalty.penGuidance) {
+            <span class="bg-emerald-400 rounded px-4 text-sm text-white">
+              {{ penalty.penGuidanceInfo.getNames() }}
+            </span>
+          }
+        </div>
+      </button>
+    }
+  </mat-menu>
+  <!--  }-->
+</div>

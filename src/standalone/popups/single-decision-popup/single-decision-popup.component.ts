@@ -36,17 +36,9 @@ import {
 import { OffenderViolation } from '@models/offender-violation';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { ToastService } from '@services/toast.service';
-import {
-  exhaustMap,
-  filter,
-  map,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-} from 'rxjs/operators';
+import { exhaustMap, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { merge, startWith, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
@@ -109,12 +101,12 @@ export class SingleDecisionPopupComponent
     offender: Offender;
     model: InputSignal<Investigation>;
     updateModel: InputSignal<EventEmitter<void>>;
+    offenderPenalties: { first: number; second: Penalty[] };
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   lang = inject(LangService);
   toast = inject(ToastService);
   lookupService = inject(LookupService);
-  loadPenalties$ = new Subject<void>();
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
@@ -156,63 +148,25 @@ export class SingleDecisionPopupComponent
   oldPenaltyComment = computed(() => {
     return this.oldPenaltyDecision()?.comment;
   });
-  penaltiesMap = signal<Record<number, Penalty>>({});
+  penalties = signal(this.data.offenderPenalties);
+  penaltiesMap = computed<Record<number, Penalty>>(() => {
+    return this.penalties().second.reduce((acc, item) => {
+      return { ...acc, [item.id]: item };
+    }, {});
+  });
   penaltyControl = new FormControl<number | null>(this.oldPenaltyId()!, {
     nonNullable: false,
     validators: [CustomValidators.required],
   });
   textControl: FormControl = new FormControl<string>(this.oldPenaltyComment()!);
-  penalties$ = merge(this.loadPenalties$)
-    .pipe(tap(() => this.penaltyControl.reset()))
-    .pipe(startWith(undefined))
-    .pipe(switchMap(() => this.model().loadPenalties()))
-    .pipe(
-      map(value => {
-        return value[this.offender().id];
-      }),
-      tap(values => {
-        this.penaltiesMap.set(
-          values.second.reduce((acc, current) => {
-            return { ...acc, [current.id]: current };
-          }, {}),
-        );
-      }),
-    );
   displayedColumns = ['violation', 'createdOn', 'proofStatus'];
 
-  assetType(element: unknown): OffenderViolation {
+  assertType(element: unknown): OffenderViolation {
     return element as OffenderViolation;
   }
 
   ngOnInit(): void {
-    this.loadPenalties$.next();
     this.listenToSave();
-  }
-
-  updateIsProve(item: OffenderViolation, index: number) {
-    Promise.resolve().then(() => {
-      item.proofStatus = this.controls()[index].value!;
-      const offenderViolationIndex =
-        this.model().offenderViolationInfo.findIndex(i => {
-          return i === item;
-        });
-
-      item
-        .update()
-        .pipe(takeUntil(this.destroy$), take(1))
-        .subscribe(model => {
-          this.model().offenderViolationInfo.splice(
-            offenderViolationIndex,
-            1,
-            model,
-          );
-          this.data.updateModel().emit();
-          this.toast.success(
-            this.lang.map.is_proved_status_updated_successfully,
-          );
-          this.loadPenalties$.next();
-        });
-    });
   }
 
   focusOnSelect(select: MatSelect) {

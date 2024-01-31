@@ -94,6 +94,12 @@ export class Investigation extends BaseCase<
     ];
   }
 
+  removePenaltyDecision(item: PenaltyDecision): void {
+    this.taskDetails.penaltyDecisions = [
+      ...this.taskDetails.penaltyDecisions.filter(i => i.id !== item.id),
+    ];
+  }
+
   getPenaltyDecisionByOffenderId(
     offenderId: number,
   ): PenaltyDecision | undefined {

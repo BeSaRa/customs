@@ -3,7 +3,7 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { Constructor } from '@app-types/constructors';
 import { BaseCaseServiceContract } from '@contracts/base-case-service-contract';
 import { map, Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UrlService } from '@services/url.service';
 import { CastResponse, HasInterception, InterceptParam } from 'cast-response';
@@ -21,6 +21,7 @@ import { MenuItemService } from '@services/menu-item.service';
 import { Penalty } from '@models/penalty';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
+import { NO_ERROR_HANDLE } from '@http-contexts/tokens';
 
 export abstract class BaseCaseService<M>
   extends RegisterServiceMixin(class {})
@@ -240,6 +241,7 @@ export abstract class BaseCaseService<M>
     return this.http.get<
       Record<string, { first: ManagerDecisions; second: Penalty[] }>
     >(this.getUrlSegment() + '/penalty', {
+      context: new HttpContext().set(NO_ERROR_HANDLE, true),
       params: new HttpParams({
         fromObject: {
           caseId,

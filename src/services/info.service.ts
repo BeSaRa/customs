@@ -14,7 +14,6 @@ export class InfoService {
   private lang = inject(LangService);
   private http = inject(HttpClient);
   private urlService = inject(UrlService);
-
   load(): Observable<InfoContract> {
     return this.http
       .get<ResponseContract<InfoContract>>(this.urlService.URLS.INFO)

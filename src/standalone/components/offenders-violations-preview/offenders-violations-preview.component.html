@@ -117,25 +117,55 @@
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
           </div>
           <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-                                                                                  <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
-                                                                                </div> -->
-
-          <div class="flex justify-center gap-2">
-            @if (canMakeDecision(element)) {
-              <!--<div>
-                              <app-icon-button
-                                [matTooltip]="lang.map.make_penalty_decision"
-                                (click)="makeDecision$.next(element)"
-                                icon="ACCOUNT_MAKE_DECISION" />
-                            </div>-->
-              <div>
-                <app-icon-button
-                  [matTooltip]="lang.map.make_penalty_decision"
-                  (click)="openDecisionDialog(element)"
-                  icon="ACCOUNT_MAKE_DECISION" />
-              </div>
-            }
-          </div>
+                                                                                                                                                                            <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
+                                                                                                                                                                          </div> -->
+          <app-decision-maker
+            [penaltyMap]="penaltyMap()"
+            [offender]="element"
+            [updateModel]="updateModel()"
+            [model]="model()" />
+          <!--<div class="flex justify-center gap-2">
+                                                    @if (canMakeNormalDecision(element.id)) {
+                                                      <div>
+                                                        <app-icon-button
+                                                          [matTooltip]="lang.map.make_penalty_decision"
+                                                          (click)="openDecisionDialog(element)"
+                                                          icon="ACCOUNT_MAKE_DECISION" />
+                                                      </div>
+                                                    }
+                                                    @if (canMakeSystemDecision(element.id)) {
+                                                      <button
+                                                        mat-icon-button
+                                                        [matMenuTriggerFor]="menu"
+                                                        aria-label="Example icon-button with a menu">
+                                                        <mat-icon [svgIcon]="AppIcons.DOTS_VERTICAL"></mat-icon>
+                                                      </button>
+                                                      <mat-menu #menu="matMenu">
+                                                        @for (
+                                                          penalty of penalties()[element.id].system;
+                                                          track penalty.id
+                                                        ) {
+                                                          <button mat-menu-item>
+                                                            <div class="flex gap-2">
+                                                              <mat-icon
+                                                                [svgIcon]="
+                                                                  getPenaltyIcon(penalty.penaltyKey)
+                                                                "></mat-icon>
+                                                              <span class="flex-shrink-0">{{
+                                                                penalty.getNames()
+                                                              }}</span>
+                                                              @if (penalty.penGuidance) {
+                                                                <span
+                                                                  class="bg-emerald-400 rounded px-4 text-sm text-white">
+                                                                  {{ penalty.penGuidanceInfo.getNames() }}
+                                                                </span>
+                                                              }
+                                                            </div>
+                                                          </button>
+                                                        }
+                                                      </mat-menu>
+                                                    }
+                                                  </div>-->
         </div>
       }
     </td>
@@ -154,9 +184,25 @@
         class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100">
         @for (violation of getOffenderViolations(element.id); track violation) {
           <div class="p-3 border-bottom">
-            <h5 class="text-lg font-medium mb-1">
-              {{ violation.violationInfo.violationTypeInfo.getNames() }}
-            </h5>
+            <div class="flex">
+              <h5 class="text-lg flex-auto font-medium mb-1">
+                {{ violation.violationInfo.violationTypeInfo.getNames() }}
+              </h5>
+
+              <div class="relative">
+                <app-select-input
+                  nullable="false"
+                  [formControl]="violationProofStatus()[element.id][$index]"
+                  size="sm"
+                  class="w-32 absolute rtl:left-0 ltr:right-0"
+                  noMargin="true"
+                  (selectChange)="proofStatusChanged(violation, $index)"
+                  [label]="lang.map.is_proved"
+                  [options]="proofStatus"
+                  bindValue="lookupKey"
+                  bindLabel="getNames" />
+              </div>
+            </div>
             <!-- classificationInfo -->
             <span
               class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
@@ -227,20 +273,6 @@
                 }}</label>
               </span>
             }
-            <!-- is proved -->
-            <!--            <span-->
-            <!--              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">-->
-            <!--              <label class="font-medium">{{ lang.map.is_proved }} : </label>-->
-            <!--              @if (!violation.isProved) {-->
-            <!--                <span class="text-secondary">-->
-            <!--                  {{ lang.map.no }}-->
-            <!--                </span>-->
-            <!--              }-->
-            <!--              @if (violation.isProved) {-->
-            <!--                <span class="text-red-500">{{ lang.map.yes }}</span>-->
-            <!--              }-->
-            <!--            </span>-->
-            <!-- customsDeclarationNumber -->
             @if (violation.violationInfo.customsDeclarationNumber) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">

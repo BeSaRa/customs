@@ -24,7 +24,7 @@ import { LangService } from '@services/lang.service';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
-import { filter, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -45,10 +45,15 @@ import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employ
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { OffenderViolation } from '@models/offender-violation';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { PenaltyService } from '@services/penalty.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
+import { DecisionMakerComponent } from '@standalone/components/decision-maker/decision-maker.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { map, take } from 'rxjs/operators';
+import { ToastService } from '@services/toast.service';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -64,6 +69,9 @@ import { AppIcons } from '@constants/app-icons';
     MatTooltipModule,
     MatIconButton,
     MatIcon,
+    DecisionMakerComponent,
+    SelectInputComponent,
+    ReactiveFormsModule,
   ],
   animations: [
     trigger('detailExpand', [
@@ -89,14 +97,10 @@ export class OffendersViolationsPreviewComponent
   employeeService = inject(EmployeeService);
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
-  systemPenalties = SystemPenalties;
   reload$: Subject<void> = new Subject<void>();
   view$: Subject<Offender> = new Subject<Offender>();
   makeDecision$ = new Subject<Offender>();
   attachments$: Subject<Offender> = new Subject<Offender>();
-  penaltyMap = signal<
-    Record<string, { first: ManagerDecisions; second: Penalty[] }>
-  >({});
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
@@ -106,6 +110,10 @@ export class OffendersViolationsPreviewComponent
   }>();
 
   selectedOffender!: Offender | null;
+  toast = inject(ToastService);
+  proofStatus = this.lookupService.lookups.proofStatus
+    .slice()
+    .sort((a, b) => a.lookupKey - b.lookupKey);
 
   model = input.required<Investigation>();
 
@@ -128,7 +136,6 @@ export class OffendersViolationsPreviewComponent
         [item.lookupKey]: item,
       };
     }, {});
-
   private loadPenalties$ = new Subject<void>();
   offenders = computed(() => {
     const offendersIds = this.model().offenderViolationInfo.map(
@@ -148,6 +155,21 @@ export class OffendersViolationsPreviewComponent
       }
       acc[current.offenderId] = [...acc[current.offenderId], current];
       return { ...acc };
+    }, {});
+  });
+
+  violationProofStatus = computed(() => {
+    return Object.entries(this.offenderViolationsMap()).reduce<
+      Record<number, FormControl<number | null>[]>
+    >((acc, [key, offenderViolation]) => {
+      acc[Number(key)] = offenderViolation.map(
+        i =>
+          new FormControl<number>({
+            value: i.proofStatus,
+            disabled: !this.model().hasTask(),
+          }),
+      );
+      return acc;
     }, {});
   });
 
@@ -174,7 +196,9 @@ export class OffendersViolationsPreviewComponent
     }, {});
   });
 
-  penaltyService = inject(PenaltyService);
+  penaltyMap = signal<
+    Record<number, { first: number | null; second: Penalty[] }>
+  >({});
 
   situationClick(
     $event: MouseEvent,
@@ -187,7 +211,6 @@ export class OffendersViolationsPreviewComponent
   }
 
   ngOnInit(): void {
-    this.listenToLoadPenalties();
     this.listenToView();
     this.listenToMakeDecision();
     this.listenToAttachments();
@@ -195,6 +218,7 @@ export class OffendersViolationsPreviewComponent
     this.listenToSituationSearch();
     this.listenToReferralRequest();
     this.listenToSuspendEmployee();
+    this.listenToLoadPenalties();
     this.loadPenalties$.next();
   }
 
@@ -216,19 +240,6 @@ export class OffendersViolationsPreviewComponent
         penalty => penalty.penaltyKey === penaltyKey,
       )?.id
     );
-  }
-
-  private loadPenalties() {
-    return this.model()
-      ? this.model()
-          .getService()
-          .getCasePenalty(
-            this.model().id as string,
-            this.model().getActivityName()!,
-          )
-      : of(
-          {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
-        );
   }
 
   private listenToView() {
@@ -278,7 +289,6 @@ export class OffendersViolationsPreviewComponent
                 data: {
                   model: offender,
                   caseId: this.model().id,
-                  penalties: this.getOffenderPenalties(offender),
                   penaltyImposedBySystem: this.penaltyMap()[offender.id].first,
                   oldPenalty: this.model().getPenaltyDecisionByOffenderId(
                     offender.id,
@@ -291,7 +301,6 @@ export class OffendersViolationsPreviewComponent
       )
       .subscribe((item: PenaltyDecision | undefined) => {
         this.model && item && this.model().appendPenaltyDecision(item);
-        console.log(this.model());
       });
   }
 
@@ -386,28 +395,9 @@ export class OffendersViolationsPreviewComponent
       !!this.penaltyMap() &&
       !!Object.keys(this.penaltyMap()).find(
         k =>
-          this.penaltyMap()[k].first ===
+          this.penaltyMap()[Number(k)].first ===
           ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
       )
-    );
-  }
-
-  private listenToLoadPenalties() {
-    this.loadPenalties$
-      .pipe(filter(() => this.canLoadPenalties()))
-      .pipe(switchMap(() => this.loadPenalties()))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.penaltyMap.set(data);
-      });
-  }
-
-  canLoadPenalties(): boolean {
-    return !!(
-      this.model() &&
-      this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
-      this.model().getActivityName() &&
-      this.model().getTaskName()
     );
   }
 
@@ -431,17 +421,121 @@ export class OffendersViolationsPreviewComponent
     return this.offenderViolationsSlices()[offenderId] || [];
   }
 
-  openDecisionDialog(element: Offender) {
-    this.penaltyDecisionService.openSingleDecisionDialog(
-      element,
-      this.model,
-      this.updateModel,
-    );
-  }
-
   getOffenderDecision(offenderId: number): PenaltyDecision | undefined {
     return this.decisionMap() && this.decisionMap()[offenderId]
       ? this.decisionMap()[offenderId]
       : undefined;
+  }
+
+  private listenToLoadPenalties() {
+    this.loadPenalties$
+      .pipe(filter(() => this.canLoadPenalties()))
+      .pipe(switchMap(() => this.loadPenalties()))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(data => {
+        this.penaltyMap.set(data);
+      });
+  }
+
+  private canLoadPenalties(): boolean {
+    return !!(
+      this.model() &&
+      this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+      this.model().getActivityName() &&
+      this.model().getTaskName()
+    );
+  }
+
+  private loadPenalties() {
+    return this.model()
+      ? this.model()
+          .getService()
+          .getCasePenalty(
+            this.model().id as string,
+            this.model().getActivityName()!,
+          )
+      : of(
+          {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
+        );
+  }
+
+  proofStatusChanged(item: OffenderViolation, index: number) {
+    const oldValue = this.violationProofStatus()[item.offenderId][index].value!;
+    of(this.decisionMap()[item.offenderId])
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(penaltyDecision =>
+          this.displayConfirmMessage(penaltyDecision),
+        ),
+        tap(({ click }) => {
+          this.resetProofStatusToOldValue(click, item, index, oldValue);
+        }),
+        filter(({ click }) => click === UserClick.YES),
+        switchMap(({ penaltyDecision }) => {
+          return this.deleteOldDecision(penaltyDecision);
+        }),
+      )
+      .subscribe(() => {
+        this.updateOffenderViolationProofStatus(item, index);
+      });
+  }
+
+  private updateOffenderViolationProofStatus(
+    item: OffenderViolation,
+    index: number,
+  ) {
+    Promise.resolve().then(() => {
+      item.proofStatus =
+        this.violationProofStatus()[item.offenderId][index].value!;
+      const violationIndex = this.model().offenderViolationInfo.findIndex(i => {
+        return i === item;
+      });
+
+      item
+        .update()
+        .pipe(takeUntil(this.destroy$), take(1))
+        .subscribe(model => {
+          this.model().offenderViolationInfo.splice(violationIndex, 1, model);
+          this.updateModel().emit();
+          this.toast.success(
+            this.lang.map.is_proved_status_updated_successfully,
+          );
+          this.loadPenalties$.next();
+        });
+    });
+  }
+
+  private deleteOldDecision(penaltyDecision: PenaltyDecision | null) {
+    return penaltyDecision
+      ? penaltyDecision
+          .delete()
+          .pipe(tap(() => this.model().removePenaltyDecision(penaltyDecision)))
+      : of(null);
+  }
+
+  private resetProofStatusToOldValue(
+    click: UserClick | undefined,
+    item: OffenderViolation,
+    index: number,
+    oldValue: number,
+  ) {
+    if (click !== UserClick.YES) {
+      this.violationProofStatus()[item.offenderId][index].patchValue(oldValue, {
+        emitEvent: false,
+      });
+    }
+  }
+
+  private displayConfirmMessage(penaltyDecision: null | PenaltyDecision) {
+    return penaltyDecision
+      ? this.dialog
+          .confirm('this action will effect the current decision for offender')
+          .afterClosed()
+          .pipe(
+            map(click => {
+              return { click, penaltyDecision };
+            }),
+          )
+      : of({ click: UserClick.YES, penaltyDecision });
   }
 }

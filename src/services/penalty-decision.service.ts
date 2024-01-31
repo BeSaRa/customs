@@ -8,6 +8,7 @@ import { CastResponseContainer } from 'cast-response';
 import { SingleDecisionPopupComponent } from '@standalone/popups/single-decision-popup/single-decision-popup.component';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
+import { Penalty } from '@models/penalty';
 
 @CastResponseContainer({
   $default: {
@@ -43,12 +44,14 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     offender: Offender,
     model: InputSignal<Investigation>,
     updateModel: InputSignal<EventEmitter<void>>,
+    offenderPenalties: { first: number | null; second: Penalty[] },
   ) {
     return this.dialog.open(SingleDecisionPopupComponent, {
       data: {
         offender,
         model,
         updateModel,
+        offenderPenalties,
       },
     });
   }

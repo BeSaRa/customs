@@ -68,6 +68,9 @@ export const AppIcons = {
   VIEW_LIST_OUTLINE: 'view-list-outline',
   CHECK_BOLD: 'check-bold',
   SYNC: 'sync',
+  STOP: 'stop',
+  ACCOUNT_ARROW_LEFT: 'account-arrow-left',
+  ACCOUNT_ARROW_LEFT_OUTLINE: 'account-arrow-left-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
