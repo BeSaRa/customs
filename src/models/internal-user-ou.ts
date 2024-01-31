@@ -34,6 +34,16 @@ export class InternalUserOU extends BaseModel<
     };
   }
 
+  getOUUserNames(): string {
+    try {
+      return this.internalUserInfo[
+        (this.getLangService().getCurrent().code +
+          'Name') as keyof NamesContract
+      ];
+    } catch (e) {
+      return 'lang service not ready yet';
+    }
+  }
   override getNames(): string {
     try {
       return this.organizationUnitInfo[
