@@ -8,8 +8,8 @@
   <mat-card>
     <mat-tab-group
       [(selectedIndex)]="selectedTab"
-      mat-stretch-tabs="false"
-      dynamicHeight>
+      [mat-stretch-tabs]="false"
+      [dynamicHeight]="true">
       <mat-tab [label]="lang.map.search_for_investigation">
         <ng-container
           [ngTemplateOutlet]="search_for_investigation"></ng-container>
@@ -40,7 +40,7 @@
               formControlName="createdOn"
               (click)="datepicker.open()"
               [matDatepicker]="datepicker" />
-            <mat-datepicker touchUi #datepicker />
+            <mat-datepicker [touchUi]="true" #datepicker />
           </app-input>
           <app-select-input
             formControlName="securityLevel"

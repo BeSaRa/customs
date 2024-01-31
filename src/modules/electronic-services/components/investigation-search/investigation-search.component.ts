@@ -7,7 +7,6 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InvestigationSearchService } from '@services/investigation-search.service';
-import { InvestigationService } from '@services/investigation.service';
 import { LangService } from '@services/lang.service';
 import { ignoreErrors } from '@utils/utils';
 import {
@@ -28,7 +27,6 @@ import { INavigatedItem } from '@contracts/inavigated-item';
 import { OpenFrom } from '@enums/open-from';
 import { LookupService } from '@services/lookup.service';
 import { DialogService } from '@services/dialog.service';
-import { InboxResult } from '@models/inbox-result';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
 
 @Component({
@@ -37,7 +35,6 @@ import { ActionsOnCaseComponent } from '@modules/electronic-services/components/
   styleUrls: ['./investigation-search.component.scss'],
 })
 export class InvestigationSearchComponent implements OnInit {
-  investigationService = inject(InvestigationService);
   investigationSearchService = inject(InvestigationSearchService);
   router = inject(Router);
   encrypt = inject(EncryptionService);
@@ -127,9 +124,9 @@ export class InvestigationSearchComponent implements OnInit {
       })
       .then();
   }
-  showActionsOnCase(item: InboxResult) {
+  showActionsOnCase(item: Investigation) {
     this.dialog.open(ActionsOnCaseComponent, {
-      data: { caseId: item.PI_PARENT_CASE_ID },
+      data: { caseId: item.id },
     });
   }
 }
