@@ -38,7 +38,9 @@ export class PermissionRole extends BaseModel<
             ],
           ]
         : enName,
-      description: controls ? [description] : description,
+      description: controls
+        ? [description, CustomValidators.maxLength(1333)]
+        : description,
       status: controls ? [status, CustomValidators.required] : status,
     };
   }
