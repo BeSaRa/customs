@@ -49,11 +49,11 @@ body {
 }
 
 .dialog-content {
-  @apply p-4;
+  @apply p-4 flex flex-col overflow-y-auto;
 }
 
 .dialog-container {
-  @apply max-w-full lg:min-w-[600px] md:min-w-[400px];
+  @apply max-w-full lg:min-w-[600px] md:min-w-[400px] flex flex-col max-h-[99vh];
 }
 
 .close-btn {
