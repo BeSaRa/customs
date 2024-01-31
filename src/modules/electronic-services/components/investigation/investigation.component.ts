@@ -86,7 +86,14 @@ export class InvestigationComponent
           ViolationDegreeConfidentiality.LIMITED_CIRCULATION,
     );
   mandatoryMakePenaltyDecisions: boolean = false;
-  tabsArray = ['basic_info', 'offenders', 'violations', 'external_persons'];
+  tabsArray = [
+    'summary',
+    'basic_info',
+    'offenders',
+    'violations',
+    'external_persons',
+    'attachments',
+  ];
   caseFolders: CaseFolder[] = [];
   caseFoldersMap?: Record<string, CaseFolder>;
   selectedTab = 0;
