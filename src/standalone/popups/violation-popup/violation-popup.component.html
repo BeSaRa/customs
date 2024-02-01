@@ -20,12 +20,12 @@
         bindLabel="getNames"
         bindValue="id"
         formControlName="violationTypeId"
-        [options]="types" />
+        [options]="types()" />
       <app-textarea
         formControlName="description"
         [label]="lang.map.description"
         class="col-span-2" />
-      @if (!isAbsenceType || onlyOneDay) {
+      @if (!isAbsenceType() || onlyOneDay()) {
         <app-input
           formControlName="violationsDate"
           [label]="lang.map.violation_date">
@@ -38,7 +38,7 @@
           <mat-datepicker [touchUi]="true" #datepicker />
         </app-input>
       }
-      @if (isAbsenceType && !onlyOneDay) {
+      @if (isAbsenceType() && !onlyOneDay()) {
         <div class="mb-3">
           <label class="font-medium"
             >{{ lang.map.violation_date }}
@@ -66,7 +66,7 @@
           <mat-date-range-picker hidden #rangePicker></mat-date-range-picker>
         </div>
       }
-      @if (isCriminal) {
+      @if (isCriminal()) {
         <app-input
           [label]="lang.map.report_number"
           formControlName="reportNumber" />
@@ -81,7 +81,7 @@
           bindValue="lookupKey"
           [options]="securityManagement" />
       }
-      @if (isCustoms) {
+      @if (isCustoms()) {
         <app-input
           [label]="lang.map.customs_declaration_number"
           formControlName="customsDeclarationNumber"

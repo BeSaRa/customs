@@ -4,7 +4,10 @@ import {
   effect,
   EventEmitter,
   inject,
+  Injector,
   InputSignal,
+  signal,
+  Signal,
 } from '@angular/core';
 
 import { ViolationTypeService } from '@services/violation-type.service';
@@ -15,10 +18,14 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { map, Observable, of, Subject } from 'rxjs';
 import { ViolationType } from '@models/violation-type';
 import { ViolationClassification } from '@models/violation-classification';
-import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { Violation } from '@models/violation';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -31,7 +38,6 @@ import { ConfigService } from '@services/config.service';
 import { LookupService } from '@services/lookup.service';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { CustomValidators } from '@validators/custom-validators';
-import { OperationType } from '@enums/operation-type';
 import { Router } from '@angular/router';
 import { DialogService } from '@services/dialog.service';
 import { DatePipe } from '@angular/common';
@@ -40,6 +46,7 @@ import { Investigation } from '@models/investigation';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-violation-popup',
@@ -72,14 +79,25 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   dialog = inject(DialogService);
   violationTypeService = inject(ViolationTypeService);
   violationClassificationService = inject(ViolationClassificationService);
-  types: ViolationType[] = [];
+  config = inject(ConfigService);
+  injector = inject(Injector);
+  securityManagement = this.lookupService.lookups.securityManagement;
   classifications: ViolationClassification[] = [];
+  _types = signal([] as ViolationType[]);
+  years: string[] = range(
+    new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
+    new Date().getFullYear(),
+  ).map(i => i.toString());
+  typesMap = signal({} as Record<number, ViolationType>);
+
   todayDate: Date = new Date();
   maxEndDate: Date | undefined;
   minEndDate: Date | undefined;
   controls = {
-    classification: () => this.form.get('violationClassificationId'),
-    violationType: () => this.form.get('violationTypeId'),
+    classification: () =>
+      this.form?.get('violationClassificationId') as UntypedFormControl,
+    violationType: () =>
+      this.form?.get('violationTypeId') as UntypedFormControl,
     violationsDateFrom: () => this.form.get('violationsDateFrom'),
     violationsDateTo: () => this.form.get('violationsDateTo'),
     violationsDate: () => this.form.get('violationsDate'),
@@ -87,25 +105,12 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     controlReportNumber: () => this.form.get('controlReportNumber'),
   };
 
-  config = inject(ConfigService);
-
-  years: string[] = range(
-    new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
-    new Date().getFullYear(),
-  ).map(i => i.toString());
-
-  classificationsMap: Record<number, ViolationClassification> = {} as Record<
-    number,
-    ViolationClassification
-  >;
-  typesMap: Record<number, ViolationType> = {} as Record<number, ViolationType>;
-
-  isCriminal = false;
-  isCustoms = false;
-  isAbsenceType = false;
-  onlyOneDay = false;
-  securityManagement = this.lookupService.lookups.securityManagement;
-
+  caseModel = computed(() => {
+    return (this.data.extras as { model: InputSignal<Investigation> }).model();
+  });
+  caseId = computed(() => {
+    return this.caseModel().id;
+  });
   reportType = computed(() => {
     return this.data.extras?.reportType
       ? (
@@ -113,37 +118,88 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         ).reportType()
       : 'None';
   });
-  caseModel = computed(() => {
-    return (this.data.extras as { model: InputSignal<Investigation> }).model();
-  });
-  caseId = computed(() => {
-    return this.caseModel().id;
-  });
 
-  askForSaveModel = (
-    this.data.extras as { askForSaveModel: EventEmitter<void> }
-  ).askForSaveModel;
+  violationType!: Signal<number>;
+  violationClassification!: Signal<number>;
+
+  isCriminal = computed(() => {
+    if (this.violationType() || this.typesMap()) {
+      const violationType =
+        this.typesMap()[this.controls.violationType().value];
+      return (
+        violationType &&
+        violationType.classificationId === ClassificationTypes.criminal
+      );
+    } else if (this.violationClassification() || this.typesMap()) {
+      return (
+        this.controls.classification().value === ClassificationTypes.criminal
+      );
+    } else return false;
+  });
+  isCustoms = computed(() => {
+    if (this.violationType() || this.typesMap()) {
+      const violationType =
+        this.typesMap()[this.controls.violationType().value];
+      return (
+        violationType &&
+        violationType.classificationId === ClassificationTypes.custom
+      );
+    } else if (this.violationClassification() || this.typesMap()) {
+      return (
+        this.controls.classification().value === ClassificationTypes.custom
+      );
+    } else return false;
+  });
+  isAbsenceType = computed(() => {
+    const violationType = this.typesMap()[this.controls.violationType().value];
+    return violationType && violationType.isAbsence;
+  });
+  onlyOneDay = computed(() => {
+    const violationType = this.typesMap()[this.controls.violationType().value];
+    return (
+      violationType &&
+      violationType.numericFrom === 1 &&
+      violationType.numericTo - violationType.numericFrom === 1
+    );
+  });
+  types = computed(() => {
+    return this._types().filter(type => {
+      return (
+        !this.violationClassification() ||
+        type.classificationId === this.violationClassification()
+      );
+    });
+  });
 
   effect = effect(() => {
     if (this.caseId()) {
       this.waitTillPendingSaveDone$.next();
     }
+    if (
+      this.violationClassification() &&
+      this.typesMap()[this.controls.violationType().value] &&
+      this.typesMap()[this.controls.violationType().value].classificationId !==
+        this.violationClassification()
+    ) {
+      this.controls.violationType().reset({}, { emitEvent: false });
+      this.controls
+        .violationType()
+        .updateValueAndValidity({ emitEvent: false });
+    }
+    if (this.violationClassification() || this.violationType()) {
+      this.checkRequiredField();
+    }
   });
+
+  askForSaveModel = (
+    this.data.extras as { askForSaveModel: EventEmitter<void> }
+  ).askForSaveModel;
   private waitTillPendingSaveDone$: Subject<void> = new Subject<void>();
 
   protected override _init() {
     super._init();
     this.loadClassifications();
-    if (
-      this.operation === OperationType.UPDATE ||
-      this.operation === OperationType.VIEW
-    ) {
-      this.data.extras
-        ? (() => {
-            this.types = this.data.extras.types as ViolationType[];
-          })()
-        : null;
-    }
+    this.loadViolationTypes();
   }
 
   _buildForm(): void {
@@ -152,23 +208,15 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   protected override _afterBuildForm() {
     super._afterBuildForm();
-    // listen to some changes from specific properties
-    this.listenToClassificationChange();
-    this.listenToViolationTypeChange();
-
-    if (
-      this.operation === OperationType.UPDATE ||
-      this.operation === OperationType.VIEW
-    ) {
-      this.data.extras &&
-        this.controls
-          .classification()
-          ?.patchValue(this.data.extras.classificationId, { emitEvent: false });
-      this.controls.classification()?.disable({ emitEvent: false });
-      this.checkClassification();
-      this.checkViolationType();
-      this.checkRequiredField();
-    }
+    this.violationType = toSignal(this.controls.violationType().valueChanges, {
+      injector: this.injector,
+    });
+    this.violationClassification = toSignal(
+      this.controls.classification().valueChanges,
+      {
+        injector: this.injector,
+      },
+    );
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -188,6 +236,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   }
 
   protected _prepareModel(): Violation | Observable<Violation> {
+    if (this.onlyOneDay()) {
+      this.model.violationsDateTo = this.model.violationsDate;
+      this.model.violationsDateFrom = this.model.violationsDate;
+    }
     return new Violation().clone({
       ...this.model,
       ...this.form.getRawValue(),
@@ -205,50 +257,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.dialogRef.close(model);
   }
 
-  private prepareClassificationMap() {
-    this.classificationsMap = this.classifications.reduce((acc, item) => {
-      return { ...acc, [item.id]: item };
-    }, {});
-  }
-
   private prepareTypeMap() {
-    this.typesMap = this.types.reduce((acc, item) => {
-      return { ...acc, [item.id]: item };
-    }, {});
+    this.typesMap.set(
+      this._types().reduce((acc, item) => {
+        return { ...acc, [item.id]: item };
+      }, {}),
+    );
   }
 
-  private listenToClassificationChange() {
-    this.controls
-      .classification()
-      ?.valueChanges.pipe(
-        tap(() => this.checkClassification()),
-        switchMap(value =>
-          this.violationTypeService.load(undefined, {
-            classificationId: value,
-          }),
-        ),
-      )
-      .pipe(map(pagination => pagination.rs))
-      .subscribe(value => {
-        this.controls.violationType()?.setValue(null);
-        this.types = value;
-        this.prepareTypeMap();
-      });
-  }
-
-  private listenToViolationTypeChange() {
-    this.controls.violationType()?.valueChanges.subscribe(() => {
-      this.checkViolationType();
-      this.checkRequiredField();
-    });
-  }
-
-  private checkClassification(): void {
-    this.isCriminal =
-      this.controls.classification()?.value === ClassificationTypes.criminal;
-    this.isCustoms =
-      this.controls.classification()?.value === ClassificationTypes.custom;
-  }
   showDeclarationNumberDetails() {
     this.caseModel()
       .getService()
@@ -277,21 +293,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         });
       });
   }
-  // private checkClassification(): void {
-  //   const selectedClassification = this.classifications.find(
-  //       classification =>
-  //           classification.id === this.controls.classification()?.value,
-  //   );
-  //   this.isCriminal =
-  //       selectedClassification?.key === ClassificationTypes.criminal;
-  //   this.isCustoms = selectedClassification?.key === ClassificationTypes.custom;
-  // }
+
   onSelectionChange(): void {
     if (
       this.controls.violationsDateFrom()?.value &&
       !this.controls.violationsDateTo()?.value
     ) {
-      const selectedType = this.typesMap[this.controls.violationType()?.value];
+      const selectedType =
+        this.typesMap()[this.controls.violationType()?.value];
       const maxDate = new Date(this.controls.violationsDateFrom()?.value);
       const minDate = new Date(this.controls.violationsDateFrom()?.value);
       maxDate.setDate(maxDate.getDate() + selectedType.numericTo - 1);
@@ -305,17 +314,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     }
   }
 
-  private checkViolationType(): void {
-    const selectedType = this.typesMap[this.controls.violationType()?.value];
-    this.isAbsenceType = selectedType && selectedType.isAbsence;
-    this.onlyOneDay =
-      selectedType &&
-      selectedType.numericFrom === 1 &&
-      selectedType.numericTo - selectedType.numericFrom === 1;
-  }
-
   private checkRequiredField(): void {
-    this.isAbsenceType && !this.onlyOneDay
+    this.isAbsenceType() && !this.onlyOneDay()
       ? (() => {
           this.controls
             .violationsDateFrom()
@@ -333,7 +333,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
             ?.setValidators(CustomValidators.required);
         })();
 
-    this.isCustoms
+    this.isCustoms()
       ? (() => {
           this.controls
             .customsDeclarationNumber()
@@ -351,18 +351,39 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.maxEndDate = undefined;
     this.form.updateValueAndValidity();
   }
-
+  filterDependingOnReportTypeClassification(classificationId: number) {
+    return (
+      this.reportType() === 'None' ||
+      (this.reportType() === 'Creminal' &&
+        classificationId === ClassificationTypes.criminal) ||
+      (this.reportType() === 'Normal' &&
+        classificationId !== ClassificationTypes.criminal)
+    );
+  }
   private loadClassifications(): void {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
-      this.classifications = list.filter(
-        vc =>
-          this.reportType() === 'None' ||
-          (this.reportType() === 'Creminal' &&
-            vc.id === ClassificationTypes.criminal) ||
-          (this.reportType() === 'Normal' &&
-            vc.id !== ClassificationTypes.criminal),
+      this.classifications = list.filter(vc =>
+        this.filterDependingOnReportTypeClassification(vc.id),
       );
-      this.prepareClassificationMap();
+    });
+  }
+  private loadViolationTypes() {
+    return this.violationTypeService.loadAsLookups().subscribe(types => {
+      this._types.set(
+        types.filter(vt =>
+          this.filterDependingOnReportTypeClassification(vt.classificationId),
+        ),
+      );
+      this.prepareTypeMap();
+      if (this.controls.violationType().value) {
+        this.controls
+          .classification()
+          .setValue(
+            this.typesMap()[this.controls.violationType().value]
+              .classificationId,
+            { emitEvent: false },
+          );
+      }
     });
   }
 }

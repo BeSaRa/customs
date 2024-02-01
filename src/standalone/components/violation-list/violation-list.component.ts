@@ -31,8 +31,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
-import { ViolationTypeService } from '@services/violation-type.service';
-import { ViolationClassificationService } from '@services/violation-classification.service';
 import { ButtonComponent } from '../button/button.component';
 import { ReportType } from '@app-types/validation-return-type';
 import { Investigation } from '@models/investigation';
@@ -58,8 +56,6 @@ export class ViolationListComponent
   dialog = inject(DialogService);
   toast = inject(ToastService);
   lang = inject(LangService);
-  violationTypeService = inject(ViolationTypeService);
-  violationClassificationService = inject(ViolationClassificationService);
   service = inject(InvestigationService);
   violationService = inject(ViolationService);
   add$: Subject<void> = new Subject<void>();
@@ -150,42 +146,15 @@ export class ViolationListComponent
   private listenToView() {
     this.view$
       .pipe(
+        exhaustMap(model => this.violationService.loadByIdComposite(model.id)),
+      )
+      .pipe(
         exhaustMap(model =>
-          this.violationService
-            .loadByIdComposite(model.id)
-            .pipe(
-              map(type => ({
-                type,
-                model,
-              })),
-            )
-            .pipe(ignoreErrors()),
-        ),
-      )
-      .pipe(
-        exhaustMap(({ type, model }) =>
-          this.violationClassificationService
-            .loadById(type.violationClassificationId)
-            .pipe(
-              map(classification => {
-                return {
-                  classification,
-                  model,
-                  type,
-                };
-              }),
-            )
-            .pipe(ignoreErrors()),
-        ),
-      )
-      .pipe(
-        exhaustMap(({ model, type, classification }) =>
           model
             .openView({
+              model: this.model,
               caseId: this.caseId,
-              classificationId: type.violationClassificationId,
-              classifications: [classification],
-              types: [type],
+              reportType: this.reportType,
             })
             .afterClosed(),
         ),
@@ -196,42 +165,15 @@ export class ViolationListComponent
   private listenToEdit() {
     this.edit$
       .pipe(
+        exhaustMap(model => this.violationService.loadByIdComposite(model.id)),
+      )
+      .pipe(
         exhaustMap(model =>
-          this.violationService
-            .loadByIdComposite(model.id)
-            .pipe(
-              map(type => ({
-                type,
-                model,
-              })),
-            )
-            .pipe(ignoreErrors()),
-        ),
-      )
-      .pipe(
-        exhaustMap(({ type, model }) =>
-          this.violationClassificationService
-            .loadById(type.violationClassificationId)
-            .pipe(
-              map(classification => {
-                return {
-                  classification,
-                  model,
-                  type,
-                };
-              }),
-            )
-            .pipe(ignoreErrors()),
-        ),
-      )
-      .pipe(
-        exhaustMap(({ model, type, classification }) =>
           model
             .openEdit({
+              model: this.model,
               caseId: this.caseId,
-              classificationId: type.violationClassificationId,
-              classifications: [classification],
-              types: [type],
+              reportType: this.reportType,
             })
             .afterClosed(),
         ),
