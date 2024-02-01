@@ -2,6 +2,7 @@
   [disabled]="disabled"
   (click)="clickEvent($event)"
   [ngClass]="buttonType"
+  [type]="type"
   class="flex items-center justify-center w-full btn {{ size }}">
   @if (inProgress) {
     <mat-icon
