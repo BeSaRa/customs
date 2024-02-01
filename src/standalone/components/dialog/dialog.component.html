@@ -25,15 +25,15 @@
   <div class="dialog-footer justify-center">
     @if (!isConfirmDialog()) {
       <app-button (click)="close()" [buttonType]="selectedClass.btn"
-        >Close</app-button
-      >
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (isConfirmDialog()) {
       <app-button (click)="yes()" [buttonType]="selectedClass.btn">
-        {{ data.buttons!.yes }}
+        {{ yesButton }}
       </app-button>
       <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
-        {{ data.buttons!.no }}
+        {{ noNoButton }}
       </app-button>
     }
   </div>

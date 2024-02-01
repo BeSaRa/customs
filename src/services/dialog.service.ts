@@ -11,6 +11,7 @@ import { DefaultDialogDataContract } from '@contracts/default-dialog-data-contra
 import { DialogType } from '@enums/dialog-type';
 import { LangService } from '@services/lang.service';
 import { UserClick } from '@enums/user-click';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -101,7 +102,10 @@ export class DialogService implements DialogContract {
   confirm(
     content: string,
     title?: string,
-    buttons: { yes: string; no: string } = { yes: 'Yes', no: 'No' },
+    buttons: {
+      yes: string | keyof LangKeysContract;
+      no: string | keyof LangKeysContract;
+    } = { yes: 'yes', no: 'no' },
     disableClose = true,
   ): MatDialogRef<DialogComponent, UserClick> {
     return this.open<

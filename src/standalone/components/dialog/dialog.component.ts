@@ -8,6 +8,8 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { ButtonTypeContract } from '@contracts/button-type-contract';
 import { UserClick } from '@enums/user-click';
 import { DialogType } from '@enums/dialog-type';
+import { LangService } from '@services/lang.service';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 type DialogSelectedClasses = {
   bg: string;
@@ -64,7 +66,27 @@ export class DialogComponent {
   private dialogRef = inject(MatDialogRef);
   data: DefaultDialogDataContract<string> = inject(MAT_DIALOG_DATA);
   selectedClass: DialogSelectedClasses = this.dialogTypes[this.data.type];
-  // constructor() {} // @Inject(MAT_DIALOG_DATA) public data: DefaultDialogDataContract<string>
+  lang = inject(LangService);
+
+  get yesButton() {
+    return (
+      this.data.buttons &&
+      (this.lang.map[
+        this.data.buttons.yes as unknown as keyof LangKeysContract
+      ] ||
+        this.data.buttons.yes)
+    );
+  }
+
+  get noNoButton() {
+    return (
+      this.data.buttons &&
+      (this.lang.map[
+        this.data.buttons.no as unknown as keyof LangKeysContract
+      ] ||
+        this.data.buttons.no)
+    );
+  }
 
   close(): void {
     this.dialogRef.close();
