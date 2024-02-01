@@ -7,6 +7,10 @@
     [matTooltip]="lang.map.reload"
     (click)="reload$.next()"
     icon="RELOAD"></app-icon-button>
+  <app-icon-button
+    [matTooltip]="lang.map.sync"
+    (click)="sync$.next()"
+    icon="SYNC"></app-icon-button>
   <!-- <app-icon-button [matTooltip]="lang.map.add" (click)="create$.next()" icon="PLUS"></app-icon-button> -->
 </div>
 <div class="shadow relative overflow-auto">

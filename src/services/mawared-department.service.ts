@@ -27,6 +27,7 @@ export class MawaredDepartmentService extends BaseCrudWithDialogService<
   MawaredDepartment
 > {
   serviceName = 'MawaredDepartmentService';
+
   protected getModelClass(): Constructor<MawaredDepartment> {
     return MawaredDepartment;
   }
@@ -47,6 +48,13 @@ export class MawaredDepartmentService extends BaseCrudWithDialogService<
   loadUserDepartments(): Observable<MawaredDepartment[]> {
     return this.http.get<MawaredDepartment[]>(
       this.getUrlSegment() + '/user-departments',
+    );
+  }
+
+  @CastResponse()
+  syncForIntegration(): Observable<MawaredDepartment[]> {
+    return this.http.get<MawaredDepartment[]>(
+      this.getUrlSegment() + '/admin/integration',
     );
   }
 }

@@ -67,6 +67,7 @@ export const AppIcons = {
   OFFENDER_VIOLATION: 'cards',
   VIEW_LIST_OUTLINE: 'view-list-outline',
   CHECK_BOLD: 'check-bold',
+  SYNC: 'sync',
 };
 
 export type AppIconsType = typeof AppIcons;
