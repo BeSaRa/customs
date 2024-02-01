@@ -146,18 +146,23 @@ export class CaseAttachmentPopupComponent
   validFile(_file: File): boolean {
     return true;
   }
-
+  validData() {
+    return !this.attachments.filter(
+      a => !a.attachmentTypeId || !a.documentTitle.trim(),
+    ).length;
+  }
   private listenToUploadFiles() {
     this.save$
       .pipe(
-        tap(
-          () =>
-            this.form.invalid &&
+        tap(() => {
+          return (
+            !this.validData() &&
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
-            ),
-        ),
-        filter(() => this.form.valid),
+            )
+          );
+        }),
+        filter(() => this.validData()),
       )
       .pipe(
         exhaustMap(() => {
