@@ -9,10 +9,11 @@
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
+      <div class="grid grid-cols-1 gap-4 my-auto items-center">
+        <app-textarea formControlName="arName" [label]="lang.map.ar_name" />
+        <app-textarea formControlName="enName" [label]="lang.map.en_name" />
+      </div>
       <div class="grid grid-cols-2 gap-4 my-auto items-center">
-        <app-input formControlName="arName" [label]="lang.map.ar_name" />
-        <app-input formControlName="enName" [label]="lang.map.en_name" />
-
         <app-select-input
           formControlName="classificationId"
           [options]="violationClassifications"
@@ -85,19 +86,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>
