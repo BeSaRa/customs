@@ -12,6 +12,8 @@ export class MawaredEmployeeInterceptor
 
   receive(model: MawaredEmployee): MawaredEmployee {
     model.statusInfo = new AdminResult().clone(model.statusInfo) || '';
+    model.employeeDepartmentInfo =
+      new AdminResult().clone(model.employeeDepartmentInfo) || '';
     return model;
   }
 }
