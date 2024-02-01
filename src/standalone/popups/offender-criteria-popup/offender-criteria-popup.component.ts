@@ -131,6 +131,7 @@ export class OffenderCriteriaPopupComponent
     'offenderName',
     'qid',
     'employeeCareerLevel',
+    'department',
     'actions',
   ];
   clearingAgentDisplayedColumns = [
@@ -280,6 +281,7 @@ export class OffenderCriteriaPopupComponent
         } else {
           this.dialog.warning(this.lang.map.no_records_to_display);
         }
+        console.log(result);
         this.employees$.next(result);
       });
 

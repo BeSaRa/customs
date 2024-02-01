@@ -130,6 +130,14 @@
               {{ element.employeeCareerLevel }}
             </td>
           </ng-container>
+          <ng-container matColumnDef="department">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.department_company }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.employeeDepartmentInfo?.getNames() }}
+            </td>
+          </ng-container>
           <tr mat-header-row *matHeaderRowDef="employeeDisplayedColumns"></tr>
           <tr
             mat-row
