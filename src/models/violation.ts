@@ -60,7 +60,12 @@ export class Violation extends BaseModel<Violation, ViolationService> {
         ? [violationTypeId, CustomValidators.required]
         : violationTypeId,
       violationClassificationId: controls
-        ? [violationClassification, CustomValidators.required]
+        ? [
+            violationClassification,
+            {
+              nonNullable: false,
+            },
+          ]
         : violationClassification,
       violationsDate: controls ? [violationsDate] : violationsDate,
       violationsDateFrom: controls ? [violationsDateFrom] : violationsDateFrom,
