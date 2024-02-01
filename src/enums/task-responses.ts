@@ -4,6 +4,7 @@ export enum TaskResponses {
   RETURN_TO_SAME = 'return_to_same',
   MANAGER_APPROVE = 'manager_approve',
   TO_MANAGER = 'to_manager', // form 1
+  TO_CHIEF = 'to_chief',
   REFERRAL_TO_PRESIDENT = 'referral_to_president', // form 3
   REFERRAL_TO_PRESIDENT_ASSISTANT = 'referral_to_president_assistant', // form 3
   CLOSE = 'close',

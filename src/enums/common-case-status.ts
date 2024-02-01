@@ -11,4 +11,5 @@ export enum CommonCaseStatus {
   RECEIVED = 9,
   UNDER_EXAMINATION = 11,
   RETURN_TO_SAME_EMPLOYEE = 12,
+  SENT_TO_USER = 13,
 }

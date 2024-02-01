@@ -373,7 +373,7 @@ export interface LangKeysContract {
   to_study_in_the_president_assistant_office: string;
   final_issuing_referral_decision_to_study_in_the_president_assistant_office: string;
   final_complete: string;
-  apply_and_return_remining: string;
+  apply_and_return_remaining: string;
   launch_legal_affairs: string;
   launch_disciplinary_council: string;
   launch_permanent_disciplinary_council: string;
