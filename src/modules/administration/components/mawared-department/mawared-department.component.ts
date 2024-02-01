@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { MawaredDepartment } from '@models/mawared-department';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
@@ -10,18 +10,24 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
+import { filter, ReplaySubject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-mawared-department',
   templateUrl: './mawared-department.component.html',
   styleUrls: ['./mawared-department.component.scss'],
 })
-export class MawaredDepartmentComponent extends AdminComponent<
-  MawaredDepartmentPopupComponent,
-  MawaredDepartment,
-  MawaredDepartmentService
-> {
+export class MawaredDepartmentComponent
+  extends AdminComponent<
+    MawaredDepartmentPopupComponent,
+    MawaredDepartment,
+    MawaredDepartmentService
+  >
+  implements OnInit
+{
   service = inject(MawaredDepartmentService);
+  sync$ = new ReplaySubject<void>(1);
+
   actions: ContextMenuActionContract<MawaredDepartment>[] = [
     {
       name: 'view',
@@ -49,4 +55,20 @@ export class MawaredDepartmentComponent extends AdminComponent<
     ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.listenToSync();
+  }
+
+  protected listenToSync() {
+    this.sync$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(() => {
+          return this.service.syncForIntegration();
+        }),
+      )
+      .subscribe(() => this.reload$.next());
+  }
 }

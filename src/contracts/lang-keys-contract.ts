@@ -410,4 +410,5 @@ export interface LangKeysContract {
   or_select_file: string;
   preview_related_documents: string;
   penalty_name: string;
+  sync: string;
 }
