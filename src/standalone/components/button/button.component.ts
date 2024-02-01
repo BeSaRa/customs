@@ -22,7 +22,8 @@ export class ButtonComponent {
   size: 'md' | 'sm' | 'lg' = 'md';
   @Input()
   buttonType: keyof ButtonTypeContract = 'primary';
-
+  @Input()
+  type: string = 'button';
   clickEvent($event: MouseEvent) {
     this.disabled && $event.stopPropagation();
   }
