@@ -6,6 +6,7 @@ import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
 import { AdminResult } from './admin-result';
 import { PenaltyDetails } from './penalty-details';
+import { SystemPenalties } from '@enums/system-penalties';
 import { NamesContract } from '@contracts/names-contract';
 
 const { send, receive } = new PenaltyInterceptor();
@@ -16,7 +17,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
   isSystem = false;
-  penaltyKey = 0;
+  penaltyKey = SystemPenalties.TERMINATE;
   penaltyWeight!: number;
   isDeduction = false;
   erasureDuration!: number;

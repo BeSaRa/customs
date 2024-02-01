@@ -9,6 +9,7 @@ import { SingleDecisionPopupComponent } from '@standalone/popups/single-decision
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
 import { Penalty } from '@models/penalty';
+import { TerminatePopupComponent } from '@standalone/popups/terminate-popup/terminate-popup.component';
 
 @CastResponseContainer({
   $default: {
@@ -52,6 +53,22 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         model,
         updateModel,
         offenderPenalties,
+      },
+    });
+  }
+
+  openSingleTerminateDialog(
+    offender: Offender,
+    model: InputSignal<Investigation>,
+    updateModel: InputSignal<EventEmitter<void>>,
+    penalty: Penalty,
+  ) {
+    return this.dialog.open(TerminatePopupComponent, {
+      data: {
+        offender,
+        model,
+        updateModel,
+        penalty,
       },
     });
   }

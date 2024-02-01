@@ -529,7 +529,7 @@ export class OffendersViolationsPreviewComponent
   private displayConfirmMessage(penaltyDecision: null | PenaltyDecision) {
     return penaltyDecision
       ? this.dialog
-          .confirm('this action will effect the current decision for offender')
+          .confirm(this.lang.map.action_will_effect_current_offender_decision)
           .afterClosed()
           .pipe(
             map(click => {

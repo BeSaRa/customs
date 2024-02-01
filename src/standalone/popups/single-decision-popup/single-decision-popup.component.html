@@ -111,7 +111,7 @@
                 : ''
             }}
           </mat-select-trigger>
-          @for (penalty of penalties()?.second; track penalty) {
+          @for (penalty of penalties(); track penalty.id) {
             <mat-option [value]="penalty.id">
               {{ penalty.getNames() }}
               @if (penalty.penGuidance) {

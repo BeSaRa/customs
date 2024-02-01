@@ -103,6 +103,7 @@ export class Investigation extends BaseCase<
   getPenaltyDecisionByOffenderId(
     offenderId: number,
   ): PenaltyDecision | undefined {
+    console.log('PP', this.taskDetails.penaltyDecisions);
     return this.taskDetails.penaltyDecisions.find(
       i => i.offenderId === offenderId,
     );

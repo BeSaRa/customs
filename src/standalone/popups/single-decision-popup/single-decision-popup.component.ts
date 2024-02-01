@@ -138,9 +138,7 @@ export class SingleDecisionPopupComponent
   });
   updateModel = this.data.updateModel;
   oldPenaltyDecision = computed(() => {
-    const p = this.model().getPenaltyDecisionByOffenderId(this.offender().id);
-    console.log({ p });
-    return p;
+    return this.model().getPenaltyDecisionByOffenderId(this.offender().id);
   });
   oldPenaltyId = computed(() => {
     return this.oldPenaltyDecision()?.penaltyId;
@@ -148,9 +146,12 @@ export class SingleDecisionPopupComponent
   oldPenaltyComment = computed(() => {
     return this.oldPenaltyDecision()?.comment;
   });
-  penalties = signal(this.data.offenderPenalties);
+  offenderPenalties = signal(this.data.offenderPenalties);
+  penalties = computed(() => {
+    return this.offenderPenalties().second.filter(item => !item.isSystem);
+  });
   penaltiesMap = computed<Record<number, Penalty>>(() => {
-    return this.penalties().second.reduce((acc, item) => {
+    return this.offenderPenalties().second.reduce((acc, item) => {
       return { ...acc, [item.id]: item };
     }, {});
   });
