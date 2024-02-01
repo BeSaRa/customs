@@ -107,7 +107,6 @@ export class CaseAttachmentsComponent
         switchMap(() => {
           return combineLatest([this.reload$]).pipe(
             switchMap(() => {
-              console.log(this.type);
               switch (this.type) {
                 case 'folder':
                   return this.caseId()

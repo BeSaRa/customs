@@ -42,7 +42,7 @@
     <app-button
       buttonType="secondary"
       (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)">
-      {{ lang.map.apply_and_return_remining }}
+      {{ lang.map.apply_and_return_remaining }}
     </app-button>
   }
   <!-- Issuing a referral decision to study in the president assistant office -->
@@ -295,6 +295,11 @@
   @if (canLaunch() && !isApplicantManager() && model?.sectionId) {
     <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
       >{{ lang.map.send_to_chief }}
+    </app-button>
+  }
+  @if (model?.hasAnyResponse([taskResponses.TO_CHIEF])) {
+    <app-button (click)="responseAction$.next(taskResponses.TO_CHIEF)">
+      {{ lang.map.return_to_chief }}
     </app-button>
   }
 
