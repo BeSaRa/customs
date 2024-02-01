@@ -35,6 +35,7 @@ export class ViolationType extends BaseModel<
   criminalTypeInfo!: AdminResult;
 
   override status = StatusTypes.ACTIVE;
+
   buildForm(controls = false): object {
     const {
       arName,
@@ -57,7 +58,7 @@ export class ViolationType extends BaseModel<
             arName,
             [
               CustomValidators.required,
-              CustomValidators.maxLength(50),
+              CustomValidators.maxLength(300),
               CustomValidators.pattern('AR_NUM'),
             ],
           ]
@@ -67,7 +68,7 @@ export class ViolationType extends BaseModel<
             enName,
             [
               CustomValidators.required,
-              CustomValidators.maxLength(50),
+              CustomValidators.maxLength(300),
               CustomValidators.pattern('ENG_NUM'),
             ],
           ]
