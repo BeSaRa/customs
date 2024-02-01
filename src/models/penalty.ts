@@ -6,6 +6,7 @@ import { CustomValidators } from '@validators/custom-validators';
 import { StatusTypes } from '@enums/status-types';
 import { AdminResult } from './admin-result';
 import { PenaltyDetails } from './penalty-details';
+import { NamesContract } from '@contracts/names-contract';
 
 const { send, receive } = new PenaltyInterceptor();
 
@@ -74,5 +75,16 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
       isCash: controls ? [isCash, CustomValidators.required] : isCash,
       cashAmount: controls ? [cashAmount] : cashAmount,
     };
+  }
+
+  override getNames(): string {
+    try {
+      return this[
+        (this.getLangService().getCurrent().code +
+          'Name') as keyof NamesContract
+      ] as unknown as string;
+    } catch (e) {
+      return 'error loading name';
+    }
   }
 }

@@ -409,4 +409,5 @@ export interface LangKeysContract {
   attachments_count: string;
   or_select_file: string;
   preview_related_documents: string;
+  penalty_name: string;
 }

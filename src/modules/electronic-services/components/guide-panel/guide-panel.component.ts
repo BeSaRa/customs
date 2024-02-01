@@ -123,18 +123,12 @@ export class GuidePanelComponent
   ];
 
   columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
-    new NoneFilterColumn('violationType'),
     new NoneFilterColumn('repeat'),
     new NoneFilterColumn('penGuidance'),
-    new NoneFilterColumn('arName'),
-    new NoneFilterColumn('enName'),
-    new NoneFilterColumn('penaltyWeight'),
+    new NoneFilterColumn('name'),
     new NoneFilterColumn('erasureDuration'),
-    new NoneFilterColumn('isCash'),
-    new NoneFilterColumn('cashAmount'),
     new NoneFilterColumn('isDeduction'),
     new NoneFilterColumn('deductionDays'),
-    new NoneFilterColumn('status'),
     new NoneFilterColumn('actions'),
   );
 

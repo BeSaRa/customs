@@ -95,15 +95,6 @@
               matSort
               class="table-style"
               [dataSource]="displayedList">
-              <!-- violationTypeInfo -->
-              <ng-container matColumnDef="violationType">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.violation_type }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{ element.violationTypeInfo.getNames() }}</span>
-                </td>
-              </ng-container>
               <!-- repeat -->
               <ng-container matColumnDef="repeat">
                 <th mat-header-cell *matHeaderCellDef>{{ lang.map.repeat }}</th>
@@ -120,22 +111,13 @@
                   <span>{{ element.penGuidanceInfo.getNames() || '' }}</span>
                 </td>
               </ng-container>
-              <!-- arName arName -->
-              <ng-container matColumnDef="arName">
+              <!-- name -->
+              <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.ar_name }}
+                  {{ lang.map.penalty_name }}
                 </th>
                 <td mat-cell *matCellDef="let element">
-                  <span>{{ element.arName }}</span>
-                </td>
-              </ng-container>
-              <!-- enName enName -->
-              <ng-container matColumnDef="enName">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.en_name }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.enName }}
+                  <span>{{ element.getNames() }}</span>
                 </td>
               </ng-container>
               <!-- offenderType -->
@@ -147,15 +129,6 @@
                   <span> {{ element.offenderTypeInfo.getNames() }}</span>
                 </td>
               </ng-container>
-              <!-- penaltyWeight -->
-              <ng-container matColumnDef="penaltyWeight">
-                <th mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.penalty_weight }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{ element.penaltyWeight }}</span>
-                </td>
-              </ng-container>
               <!-- erasureDuration -->
               <ng-container matColumnDef="erasureDuration">
                 <th mat-header-cell *matHeaderCellDef>
@@ -163,33 +136,6 @@
                 </th>
                 <td mat-cell *matCellDef="let element">
                   <span>{{ element.erasureDuration }}</span>
-                </td>
-              </ng-container>
-              <!-- status -->
-              <ng-container matColumnDef="status">
-                <th class="status-min-width" mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.status }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{ element.statusInfo.getNames() }}</span>
-                </td>
-              </ng-container>
-              <!-- isCash -->
-              <ng-container matColumnDef="isCash">
-                <th class="status-min-width" mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.is_cash }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{ getBooleanString(element.isCash) }}</span>
-                </td>
-              </ng-container>
-              <!-- cashAmount -->
-              <ng-container matColumnDef="cashAmount">
-                <th class="status-min-width" mat-header-cell *matHeaderCellDef>
-                  {{ lang.map.cash_amount }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <span>{{ element.cashAmount || '-' }}</span>
                 </td>
               </ng-container>
               <!-- isDeduction -->

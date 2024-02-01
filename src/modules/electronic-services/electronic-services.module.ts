@@ -39,6 +39,7 @@ import { MenuItemListComponent } from '@standalone/components/menu-item-list/men
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { OffenderAttachmentsComponent } from '@standalone/components/offender-attachments/offender-attachments.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -84,6 +85,7 @@ import { MatPaginator } from '@angular/material/paginator';
     ButtonsCaseWrapperComponent,
     OffenderAttachmentsComponent,
     MatPaginator,
+    MatSort,
   ],
 })
 export class ElectronicServicesModule {}
