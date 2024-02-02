@@ -5,9 +5,9 @@ import { PenaltyDetails } from '@models/penalty-details';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import {
-  Observable,
   filter,
   isObservable,
+  Observable,
   of,
   switchMap,
   takeUntil,
@@ -55,7 +55,11 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
       this.penaltySigner?.setValue(
         PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
       );
-      this.penaltySigner?.disable();
+      this.penaltySigners = this.penaltySigners.filter(
+        penaltySigner =>
+          penaltySigner.lookupKey ===
+          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
+      );
     } else {
       this.penaltySigners = this.penaltySigners.filter(
         penaltySigner =>
