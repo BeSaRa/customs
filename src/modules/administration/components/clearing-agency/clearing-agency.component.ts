@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ClearingAgency } from '@models/clearing-agency';
 import { ClearingAgencyService } from '@services/clearing-agency.service';
@@ -11,18 +11,27 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { Lookup } from '@models/lookup';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IntegrationPopupComponent } from '@modules/administration/popups/integration-popup/integration-popup.component';
+import { IntegrationsCases } from '@enums/integrations-cases';
 
 @Component({
   selector: 'app-clearing-agency',
   templateUrl: './clearing-agency.component.html',
   styleUrls: ['./clearing-agency.component.scss'],
 })
-export class ClearingAgencyComponent extends AdminComponent<
-  ClearingAgencyPopupComponent,
-  ClearingAgency,
-  ClearingAgencyService
-> {
+export class ClearingAgencyComponent
+  extends AdminComponent<
+    ClearingAgencyPopupComponent,
+    ClearingAgency,
+    ClearingAgencyService
+  >
+  implements OnInit
+{
   service = inject(ClearingAgencyService);
+  openSyncPopup$ = new ReplaySubject<void>(1);
+
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
     s => s.lookupKey !== StatusTypes.DELETED,
   );
@@ -77,4 +86,24 @@ export class ClearingAgencyComponent extends AdminComponent<
     ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.listenToOpenSyncPopup();
+  }
+
+  protected listenToOpenSyncPopup() {
+    this.openSyncPopup$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        map(() =>
+          this.dialog
+            .open(IntegrationPopupComponent, {
+              data: { fromComponent: IntegrationsCases.CLEARING_AGENCY },
+            })
+            .afterClosed(),
+        ),
+      )
+      .subscribe();
+  }
 }
