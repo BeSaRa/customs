@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
@@ -12,18 +12,27 @@ import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { StatusTypes } from '@enums/status-types';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IntegrationPopupComponent } from '@modules/administration/popups/integration-popup/integration-popup.component';
+import { IntegrationsCases } from '@enums/integrations-cases';
 
 @Component({
   selector: 'app-mawared-employee',
   templateUrl: './mawared-employee.component.html',
   styleUrls: ['./mawared-employee.component.scss'],
 })
-export class MawaredEmployeeComponent extends AdminComponent<
-  MawaredEmployeePopupComponent,
-  MawaredEmployee,
-  MawaredEmployeeService
-> {
+export class MawaredEmployeeComponent
+  extends AdminComponent<
+    MawaredEmployeePopupComponent,
+    MawaredEmployee,
+    MawaredEmployeeService
+  >
+  implements OnInit
+{
   service = inject(MawaredEmployeeService);
+  openSyncPopup$ = new ReplaySubject<void>(1);
+
   commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED,
   );
@@ -61,4 +70,24 @@ export class MawaredEmployeeComponent extends AdminComponent<
     ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.listenToOpenSyncPopup();
+  }
+
+  protected listenToOpenSyncPopup() {
+    this.openSyncPopup$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        map(() =>
+          this.dialog
+            .open(IntegrationPopupComponent, {
+              data: { fromComponent: IntegrationsCases.MAWARED_EMPLOYEE },
+            })
+            .afterClosed(),
+        ),
+      )
+      .subscribe();
+  }
 }
