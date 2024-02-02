@@ -24,8 +24,8 @@
   </div>
   <div class="dialog-footer justify-center">
     @if (!isConfirmDialog()) {
-      <app-button (click)="close()" [buttonType]="selectedClass.btn"
-        >{{ lang.map.close }}
+      <app-button (click)="close()" [buttonType]="selectedClass.btn">
+        {{ closeButton }}
       </app-button>
     }
     @if (isConfirmDialog()) {

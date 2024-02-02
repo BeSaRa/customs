@@ -88,6 +88,10 @@ export class DialogComponent {
     );
   }
 
+  get closeButton() {
+    return this.lang.map.close || 'Close';
+  }
+
   close(): void {
     this.dialogRef.close();
   }
