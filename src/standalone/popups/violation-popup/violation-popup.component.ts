@@ -151,11 +151,15 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     } else return false;
   });
   isAbsenceType = computed(() => {
-    const violationType = this.typesMap()[this.controls.violationType().value];
+    const violationType =
+      this.typesMap()[this.violationType()] ||
+      this.typesMap()[this.controls.violationType().value];
     return violationType && violationType.isAbsence;
   });
   onlyOneDay = computed(() => {
-    const violationType = this.typesMap()[this.controls.violationType().value];
+    const violationType =
+      this.typesMap()[this.violationType()] ||
+      this.typesMap()[this.controls.violationType().value];
     return (
       violationType &&
       violationType.numericFrom === 1 &&
