@@ -411,4 +411,8 @@ export interface LangKeysContract {
   preview_related_documents: string;
   penalty_name: string;
   sync: string;
+  start_employees_date: string;
+  end_employees_date: string;
+  change_departments_date: string;
+  end_date: string;
 }

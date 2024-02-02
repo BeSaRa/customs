@@ -1,0 +1,78 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.sync }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div>
+    @if (isMawaredEmployee) {
+      <ng-container [formGroup]="form">
+        <div class="grid grid-cols-2 gap-4 p-4">
+          <app-input
+            formControlName="startEmployeesDate"
+            [label]="lang.map.start_employees_date">
+            <input
+              appControl
+              formControlName="startEmployeesDate"
+              (click)="startEmployeesDatePicker.open()"
+              [matDatepicker]="startEmployeesDatePicker" />
+            <mat-datepicker touchUi #startEmployeesDatePicker />
+          </app-input>
+          <app-input
+            formControlName="endEmployeesDate"
+            [label]="lang.map.end_employees_date">
+            <input
+              appControl
+              formControlName="endEmployeesDate"
+              (click)="endEmployeesDatepicker.open()"
+              [matDatepicker]="endEmployeesDatepicker" />
+            <mat-datepicker touchUi #endEmployeesDatepicker />
+          </app-input>
+          <app-input
+            formControlName="changeDepartmentsDate"
+            [label]="lang.map.change_departments_date">
+            <input
+              appControl
+              formControlName="changeDepartmentsDate"
+              (click)="changeDepartmentsDatePicker.open()"
+              [matDatepicker]="changeDepartmentsDatePicker" />
+            <mat-datepicker touchUi #changeDepartmentsDatePicker />
+          </app-input>
+        </div>
+      </ng-container>
+    }
+    @if (isClearingAgency || isClearingAgent) {
+      <ng-container [formGroup]="form">
+        <div class="grid grid-cols-2 gap-4 p-4">
+          <app-input formControlName="startDate" [label]="lang.map.start_date">
+            <input
+              appControl
+              formControlName="startDate"
+              (click)="startDatePicker.open()"
+              [matDatepicker]="startDatePicker" />
+            <mat-datepicker touchUi #startDatePicker />
+          </app-input>
+          <app-input formControlName="endDate" [label]="lang.map.end_date">
+            <input
+              appControl
+              formControlName="endDate"
+              (click)="endDatepicker.open()"
+              [matDatepicker]="endDatepicker" />
+            <mat-datepicker touchUi #endDatepicker />
+          </app-input>
+        </div>
+      </ng-container>
+    }
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="sync$.next()" buttonType="primary"
+      >{{ lang.map.sync }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>
