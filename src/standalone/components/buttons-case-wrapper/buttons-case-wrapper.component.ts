@@ -1,16 +1,16 @@
 import {
   Component,
-  OnInit,
+  EventEmitter,
   inject,
   Input,
+  input,
+  OnInit,
   Output,
-  EventEmitter,
-  booleanAttribute,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { LangService } from '@services/lang.service';
 import { SendTypes } from '@enums/send-types';
-import { Subject, filter, switchMap, takeUntil } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { Investigation } from '@models/investigation';
 import { TaskResponses } from '@enums/task-responses';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
@@ -50,15 +50,15 @@ export class ButtonsCaseWrapperComponent
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
   @Input() canSave: boolean = true;
-  @Input() model?: Investigation;
+  model = input.required<Investigation>();
   @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
-  @Input({ transform: booleanAttribute })
-  mandatoryMakePenaltyDecisions: boolean = false;
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
   @Output() claim = new EventEmitter<Investigation>();
   @Output() release = new EventEmitter<Investigation>();
   @Output() navigateToSamePageThatUserCameFrom = new EventEmitter<void>();
+
+  isMandatoryToImposePenalty = input.required<boolean>();
 
   ngOnInit() {
     this.listenToResponseAction();
@@ -69,11 +69,13 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap((response: TaskResponses) => {
-          const decisionIds = this.model!.getPenaltyDecision().map(i => i.id);
+          const decisionIds = this.model()
+            .getPenaltyDecision()
+            .map(i => i.id);
           return this.dialog
             .open(CommentPopupComponent, {
               data: {
-                model: this.model,
+                model: this.model(),
                 response,
                 decisionIds,
               },
@@ -96,12 +98,12 @@ export class ButtonsCaseWrapperComponent
   }
 
   canLaunch() {
-    return this.model?.canStart();
+    return this.model().canStart();
   }
 
   claimItem() {
-    this.model
-      ?.claim()
+    this.model()
+      .claim()
       .pipe(take(1))
       .subscribe((model: Investigation) => {
         this.claim.emit(model);
@@ -113,8 +115,8 @@ export class ButtonsCaseWrapperComponent
   }
 
   releaseItem() {
-    this.model
-      ?.release()
+    this.model()
+      .release()
       .pipe(take(1))
       .subscribe(model => {
         this.release.emit(model);

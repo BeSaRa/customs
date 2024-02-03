@@ -7,10 +7,13 @@ import { Violation } from '@models/violation';
 import { ViolationInterceptor } from '@model-interceptors/violation-interceptor';
 import { OffenderViolationInterceptor } from '@model-interceptors/offender-violation-interceptor';
 import { OffenderViolation } from '@models/offender-violation';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { PenaltyDecisionInterceptor } from '@model-interceptors/penalty-decision-interceptor';
 
 const offenderInterceptor = new OffenderInterceptor();
 const violationInterceptor = new ViolationInterceptor();
 const offenderViolationInterceptor = new OffenderViolationInterceptor();
+const penaltyDecisionInterceptor = new PenaltyDecisionInterceptor();
 
 export class InvestigationInterceptor
   implements ModelInterceptorContract<Investigation>
@@ -68,6 +71,17 @@ export class InvestigationInterceptor
           new OffenderViolation().clone<OffenderViolation>({ ...i }),
         );
       }));
+
+    model.taskDetails &&
+      model.taskDetails.penaltyDecisions &&
+      (model.taskDetails.penaltyDecisions =
+        model.taskDetails.penaltyDecisions.map(item => {
+          return penaltyDecisionInterceptor.receive(
+            new PenaltyDecision().clone<PenaltyDecision>({
+              ...item,
+            }),
+          );
+        }));
 
     return model;
   }

@@ -107,8 +107,33 @@
   </ng-container>
   <!-- actions -->
   <ng-container matColumnDef="actions">
-    <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
-      {{ lang.map.actions }}
+    <th mat-header-cell *matHeaderCellDef>
+      <div class="flex items-center">
+        <span>{{ lang.map.actions }}</span>
+
+        @if (selection.hasValue() && commonPenalties().length) {
+          <div class="relative">
+            <app-icon-button
+              [matMenuTriggerFor]="tableMenu"
+              class="absolute -top-6 rtl:right-14 ltr:left-16"
+              icon="DOTS_VERTICAL" />
+            <mat-menu #tableMenu="matMenu">
+              @for (penalty of commonPenalties(); track penalty.penaltyKey) {
+                <button
+                  (click)="selectedSystemAction$.next(penalty.penaltyKey)"
+                  mat-menu-item>
+                  <div class="flex gap-2">
+                    <mat-icon
+                      class="flex-shrink-0"
+                      [svgIcon]="getPenaltyIcon(penalty.penaltyKey)"></mat-icon>
+                    <span class="flex-shrink-0">{{ penalty.getNames() }}</span>
+                  </div>
+                </button>
+              }
+            </mat-menu>
+          </div>
+        }
+      </div>
     </th>
     <td mat-cell *matCellDef="let element">
       @if (isClaimed()) {
@@ -116,56 +141,11 @@
           <div [matTooltip]="lang.map.view">
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
           </div>
-          <!-- <div [matTooltip]="lang.map.assignment_to_attend">
-                                                                                                                                                                            <app-icon-button (click)="assignmentToAttend$.next(element)" icon="ACCOUNT_EDIT_OUTLINE" /
-                                                                                                                                                                          </div> -->
           <app-decision-maker
             [penaltyMap]="penaltyMap()"
             [offender]="element"
             [updateModel]="updateModel()"
             [model]="model()" />
-          <!--<div class="flex justify-center gap-2">
-                                                    @if (canMakeNormalDecision(element.id)) {
-                                                      <div>
-                                                        <app-icon-button
-                                                          [matTooltip]="lang.map.make_penalty_decision"
-                                                          (click)="openDecisionDialog(element)"
-                                                          icon="ACCOUNT_MAKE_DECISION" />
-                                                      </div>
-                                                    }
-                                                    @if (canMakeSystemDecision(element.id)) {
-                                                      <button
-                                                        mat-icon-button
-                                                        [matMenuTriggerFor]="menu"
-                                                        aria-label="Example icon-button with a menu">
-                                                        <mat-icon [svgIcon]="AppIcons.DOTS_VERTICAL"></mat-icon>
-                                                      </button>
-                                                      <mat-menu #menu="matMenu">
-                                                        @for (
-                                                          penalty of penalties()[element.id].system;
-                                                          track penalty.id
-                                                        ) {
-                                                          <button mat-menu-item>
-                                                            <div class="flex gap-2">
-                                                              <mat-icon
-                                                                [svgIcon]="
-                                                                  getPenaltyIcon(penalty.penaltyKey)
-                                                                "></mat-icon>
-                                                              <span class="flex-shrink-0">{{
-                                                                penalty.getNames()
-                                                              }}</span>
-                                                              @if (penalty.penGuidance) {
-                                                                <span
-                                                                  class="bg-emerald-400 rounded px-4 text-sm text-white">
-                                                                  {{ penalty.penGuidanceInfo.getNames() }}
-                                                                </span>
-                                                              }
-                                                            </div>
-                                                          </button>
-                                                        }
-                                                      </mat-menu>
-                                                    }
-                                                  </div>-->
         </div>
       }
     </td>
@@ -372,6 +352,24 @@
           </div>
         }
       </div>
+    </td>
+  </ng-container>
+
+  <!-- selection -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox
+        (change)="$event ? toggleAllRows() : null"
+        [checked]="selection.hasValue() && isAllSelected()"
+        [indeterminate]="selection.hasValue() && !isAllSelected()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selection.toggle(element) : null"
+        [checked]="selection.isSelected(element)">
+      </mat-checkbox>
     </td>
   </ng-container>
 

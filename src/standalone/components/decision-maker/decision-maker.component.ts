@@ -211,8 +211,8 @@ export class DecisionMakerComponent
   }
 
   openTerminateDialog() {
-    return this.penaltyDecisionService.openSingleTerminateDialog(
-      this.offender(),
+    return this.penaltyDecisionService.openTerminateDialog(
+      [this.offender()],
       this.model,
       this.updateModel,
       this.penaltyMap()[this.offender().id].second.find(

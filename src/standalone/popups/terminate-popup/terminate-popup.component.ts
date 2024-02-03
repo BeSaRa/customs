@@ -13,7 +13,7 @@ import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { LangService } from '@services/lang.service';
-import { Subject, switchMap, tap } from 'rxjs';
+import { forkJoin, Subject, switchMap, tap } from 'rxjs';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
@@ -26,6 +26,19 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { DialogRef } from '@angular/cdk/dialog';
 import { ToastService } from '@services/toast.service';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 
 @Component({
   selector: 'app-terminate-popup',
@@ -38,41 +51,69 @@ import { ToastService } from '@services/toast.service';
     ReactiveFormsModule,
     SwitchComponent,
     TextareaComponent,
+    MatTable,
+    MatHeaderCell,
+    MatColumnDef,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatCell,
+    MatHeaderRow,
+    MatRow,
+    MatNoDataRow,
+    MatRowDef,
+    MatHeaderRowDef,
   ],
   templateUrl: './terminate-popup.component.html',
   styleUrl: './terminate-popup.component.scss',
 })
 export class TerminatePopupComponent implements OnInit {
   data = inject<{
-    offender: Offender;
+    offenders: Offender[];
     model: InputSignal<Investigation>;
     updateModel: InputSignal<EventEmitter<void>>;
     selectedPenalty: Penalty;
+    isSingle: boolean;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(DialogRef);
   toast = inject(ToastService);
   lang = inject(LangService);
   employeeService = inject(EmployeeService);
   save$ = new Subject<void>();
-  offender = this.data.offender;
+  isSingle = this.data.isSingle;
+  offenders = this.data.offenders;
+  offender = this.offenders[0];
   model = this.data.model;
   updateModel = this.data.updateModel;
-  oldPenalty = computed(() => {
-    return this.model().getPenaltyDecisionByOffenderId(this.offender.id);
+  oldPenaltiesMap = computed(() => {
+    return this.offenders
+      .map(offender => {
+        return this.model().getPenaltyDecisionByOffenderId(offender.id);
+      })
+      .filter((item): item is PenaltyDecision => !!item)
+      .reduce<Record<number, PenaltyDecision>>((acc, item) => {
+        return { ...acc, [item.offenderId]: item };
+      }, {});
   });
   samePenalty = computed(() => {
     return (
-      this.oldPenalty()?.penaltyInfo.penaltyKey === SystemPenalties.TERMINATE
+      this.isSingle &&
+      this.oldPenaltiesMap()[this.offender.id]?.penaltyInfo.penaltyKey ===
+        SystemPenalties.TERMINATE
     );
   });
   selectedPenalty = this.data.selectedPenalty;
 
   control = new FormControl(
-    this.samePenalty() ? this.oldPenalty()?.comment : '',
+    this.samePenalty() ? this.oldPenaltiesMap()[this.offender.id]?.comment : '',
     { nonNullable: true, validators: [CustomValidators.required] },
   );
 
   dialog = inject(DialogService);
+  displayedColumns = ['offender', 'type'];
+
+  assertType(offender: unknown): Offender {
+    return offender as Offender;
+  }
 
   ngOnInit(): void {
     this.listenToSave();
@@ -92,29 +133,38 @@ export class TerminatePopupComponent implements OnInit {
         }),
         filter(isValid => isValid),
         map(() => {
-          return new PenaltyDecision().clone<PenaltyDecision>({
-            ...this.oldPenalty(),
-            caseId: this.model().id,
-            penaltyId: this.selectedPenalty.id,
-            penaltyInfo: this.selectedPenalty,
-            signerId: this.employeeService.getEmployee()!.id!,
-            status: 1,
-            comment: this.control.value,
-            offenderId: this.offender.id,
+          return this.offenders.map(offender => {
+            return new PenaltyDecision().clone<PenaltyDecision>({
+              ...this.oldPenaltiesMap()[offender.id],
+              caseId: this.model().id,
+              penaltyId: this.selectedPenalty.id,
+              signerId: this.employeeService.getEmployee()!.id!,
+              status: 1,
+              comment: this.control.value,
+              offenderId: offender.id,
+            });
           });
         }),
-        switchMap(model => {
-          return model.save().pipe(
-            map(item =>
-              model.clone<PenaltyDecision>({
-                id: item.id,
-              }),
-            ),
+        switchMap(models => {
+          return forkJoin(
+            models.map(model => {
+              return model.save().pipe(
+                map(item =>
+                  model.clone<PenaltyDecision>({
+                    id: item.id,
+                    penaltyInfo: this.selectedPenalty,
+                  }),
+                ),
+              );
+            }),
           );
         }),
       )
-      .subscribe(model => {
-        model && this.model().appendPenaltyDecision(model);
+      .subscribe(models => {
+        models &&
+          models.forEach(model => {
+            this.model().appendPenaltyDecision(model);
+          });
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
         this.updateModel().emit();
         this.dialogRef.close();

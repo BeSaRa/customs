@@ -2,7 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
+  input,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -25,8 +25,8 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 })
 export class SummaryTabComponent {
   lang = inject(LangService);
+  model = input.required<Investigation>();
+  @Output() updateModel: EventEmitter<void> = new EventEmitter<void>();
   @ViewChild(OffendersViolationsPreviewComponent)
   offendersViolationsPreview!: OffendersViolationsPreviewComponent;
-  @Input() model!: Investigation;
-  @Output() updateModel: EventEmitter<void> = new EventEmitter<void>();
 }

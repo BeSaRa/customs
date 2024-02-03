@@ -10,6 +10,7 @@ import {
   booleanAttribute,
   Component,
   computed,
+  effect,
   EventEmitter,
   inject,
   input,
@@ -24,7 +25,15 @@ import { LangService } from '@services/lang.service';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
-import { filter, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  filter,
+  of,
+  shareReplay,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
 import { DialogService } from '@services/dialog.service';
 import { OffenderAttachmentPopupComponent } from '@standalone/popups/offender-attachment-popup/offender-attachment-popup.component';
@@ -54,6 +63,10 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { map, take } from 'rxjs/operators';
 import { ToastService } from '@services/toast.service';
 import { UserClick } from '@enums/user-click';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { SelectionModel } from '@angular/cdk/collections';
+import { intersection } from '@utils/utils';
+import { PenaltyIcons } from '@constants/penalty-icons';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -72,6 +85,7 @@ import { UserClick } from '@enums/user-click';
     DecisionMakerComponent,
     SelectInputComponent,
     ReactiveFormsModule,
+    MatCheckbox,
   ],
   animations: [
     trigger('detailExpand', [
@@ -118,6 +132,7 @@ export class OffendersViolationsPreviewComponent
   model = input.required<Investigation>();
 
   isClaimed = input(false, { transform: booleanAttribute });
+  selection = new SelectionModel<Offender>(true);
 
   offenderDisplayedColumns = [
     'offenderName',
@@ -129,6 +144,20 @@ export class OffendersViolationsPreviewComponent
     'actions',
   ];
 
+  isClaimedEffect = effect(() => {
+    if (this.isClaimed()) {
+      this.offenderDisplayedColumns = [
+        'select',
+        ...this.offenderDisplayedColumns,
+      ];
+    } else {
+      this.offenderDisplayedColumns = this.offenderDisplayedColumns.filter(
+        column => column !== 'select',
+      );
+    }
+  });
+
+  penaltyIcons = PenaltyIcons;
   offenderTypesMap: Record<number, Lookup> =
     this.lookupService.lookups.offenderType.reduce((acc, item) => {
       return {
@@ -137,6 +166,13 @@ export class OffendersViolationsPreviewComponent
       };
     }, {});
   private loadPenalties$ = new Subject<void>();
+  penaltiesLoaded$ = this.loadPenalties$
+    .pipe(filter(() => this.canLoadPenalties()))
+    .pipe(switchMap(() => this.loadPenalties()))
+    .pipe(takeUntil(this.destroy$))
+    .pipe(tap(data => this.penaltyMap.set(data)))
+    .pipe(shareReplay(1));
+
   offenders = computed(() => {
     const offendersIds = this.model().offenderViolationInfo.map(
       i => i.offenderId,
@@ -195,10 +231,79 @@ export class OffendersViolationsPreviewComponent
       return { ...acc, [item.offenderId]: item };
     }, {});
   });
+  selectionChange = signal<Offender[]>([]);
+  uniqSystemPenalties = computed(() => {
+    const offenderIds = this.selectionChange().map(item => item.id);
+    const arrayOfSystemPenalties = offenderIds.map(item => {
+      return (
+        this.penaltyMap()[item]
+          ? this.penaltyMap()[item].second
+          : ([] as Penalty[])
+      ).filter(i => i.isSystem);
+    });
+    const penalties = arrayOfSystemPenalties.flat();
+    return penalties.reduce<Record<number, Penalty>>((acc, item) => {
+      return { ...acc, [item.penaltyKey]: item };
+    }, {});
+  });
+  commonPenalties = computed<Penalty[]>(() => {
+    const offenderIds = this.selectionChange().map(item => item.id);
+    const offendersSystemPenaltiesKeys = offenderIds.map(item => {
+      return (
+        this.penaltyMap()[item]
+          ? this.penaltyMap()[item].second
+          : ([] as Penalty[])
+      )
+        .filter(i => i.isSystem)
+        .map(i => i.penaltyKey);
+    });
+
+    return offendersSystemPenaltiesKeys.length === 1
+      ? offendersSystemPenaltiesKeys
+          .flat()
+          .map(key => this.uniqSystemPenalties()[key])
+      : intersection(offendersSystemPenaltiesKeys).map(
+          key => this.uniqSystemPenalties()[key],
+        );
+  });
 
   penaltyMap = signal<
     Record<number, { first: number | null; second: Penalty[] }>
   >({});
+
+  isMandatoryToImposePenalty = computed(() => {
+    return Object.keys(this.penaltyMap()).some(key => {
+      return (
+        this.penaltyMap()[Number(key)].first ===
+        ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY
+      );
+    });
+  });
+
+  selectedSystemAction$ = new Subject<SystemPenalties>();
+
+  systemPenaltiesMap = {
+    [SystemPenalties.TERMINATE]:
+      this.penaltyDecisionService.openTerminateDialog,
+    [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
+      this.penaltyDecisionService.openRequestReferralDialog,
+    [SystemPenalties.REFERRAL_TO_PRESIDENT]:
+      this.penaltyDecisionService.openRequestReferralDialog,
+  };
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.offenders().length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.offenders().forEach(row => this.selection.select(row));
+  }
 
   situationClick(
     $event: MouseEvent,
@@ -220,6 +325,10 @@ export class OffendersViolationsPreviewComponent
     this.listenToSuspendEmployee();
     this.listenToLoadPenalties();
     this.loadPenalties$.next();
+    this.selection.changed.subscribe(() => {
+      this.selectionChange.set(this.selection.selected);
+    });
+    this.listenToSelectedSystemAction();
   }
 
   assertType(item: Offender): Offender {
@@ -390,17 +499,6 @@ export class OffendersViolationsPreviewComponent
     );
   }
 
-  mandatoryMakePenaltyDecisions() {
-    return (
-      !!this.penaltyMap() &&
-      !!Object.keys(this.penaltyMap()).find(
-        k =>
-          this.penaltyMap()[Number(k)].first ===
-          ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
-      )
-    );
-  }
-
   rowClicked($event: MouseEvent, element: Offender) {
     const requiredClassToPreventExpended = 'mat-mdc-button-touch-target';
     if (
@@ -428,13 +526,7 @@ export class OffendersViolationsPreviewComponent
   }
 
   private listenToLoadPenalties() {
-    this.loadPenalties$
-      .pipe(filter(() => this.canLoadPenalties()))
-      .pipe(switchMap(() => this.loadPenalties()))
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(data => {
-        this.penaltyMap.set(data);
-      });
+    this.penaltiesLoaded$.subscribe();
   }
 
   private canLoadPenalties(): boolean {
@@ -537,5 +629,39 @@ export class OffendersViolationsPreviewComponent
             }),
           )
       : of({ click: UserClick.YES, penaltyDecision });
+  }
+
+  getPenaltyIcon(penaltyKey: SystemPenalties) {
+    return (
+      this.penaltyIcons[penaltyKey] ||
+      this.penaltyIcons[SystemPenalties.TERMINATE] // default icon
+    );
+  }
+
+  private listenToSelectedSystemAction() {
+    this.selectedSystemAction$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(map(value => this.uniqSystemPenalties()[value]))
+      .subscribe(selectedPenalty => {
+        // TODO: refactor later to good way
+        type PenaltyKey = typeof this.systemPenaltiesMap;
+        const method =
+          this.systemPenaltiesMap[
+            selectedPenalty.penaltyKey as unknown as keyof PenaltyKey
+          ];
+
+        method
+          .call(
+            this.penaltyDecisionService,
+            this.selection.selected,
+            this.model,
+            this.updateModel,
+            selectedPenalty,
+          )
+          .afterClosed()
+          .subscribe(() => {
+            this.selection.clear();
+          });
+      });
   }
 }

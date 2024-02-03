@@ -3,8 +3,10 @@ import { WitnessesListComponent } from '@standalone/components/witnesses-list/wi
 import {
   AfterViewInit,
   Component,
+  computed,
   inject,
   input,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { LangService } from '@services/lang.service';
@@ -33,10 +35,10 @@ import { CommonCaseStatus } from '@enums/common-case-status';
 import { Offender } from '@models/offender';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
-import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { ReportType } from '@app-types/validation-return-type';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
+import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 
 @Component({
   selector: 'app-investigation',
@@ -49,8 +51,12 @@ export class InvestigationComponent
 {
   ngAfterViewInit(): void {
     Promise.resolve().then(() => {
-      this.mandatoryMakePenaltyDecisions =
-        this.summaryTabComponent?.offendersViolationsPreview?.mandatoryMakePenaltyDecisions();
+      // this.updateIsMandatoryToImposePenalty.set(Math.random());
+      this.summaryTabComponent?.offendersViolationsPreview.penaltiesLoaded$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.updateIsMandatoryToImposePenalty.set(Math.random());
+        });
     });
   }
 
@@ -69,6 +75,8 @@ export class InvestigationComponent
   offenderViolationService = inject(OffenderViolationService);
   adapter = inject(DateAdapter);
   info = input<OpenedInfoContract | null>(null);
+  @ViewChild(SummaryTabComponent)
+  summaryTabComponent?: SummaryTabComponent;
   canReferralCase: boolean = false;
   @ViewChild(ViolationListComponent)
   violationListComponent!: ViolationListComponent;
@@ -76,8 +84,6 @@ export class InvestigationComponent
   offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent)
   witnessesListComponent!: WitnessesListComponent;
-  @ViewChild(SummaryTabComponent)
-  summaryTabComponent!: SummaryTabComponent;
   violationDegreeConfidentiality =
     this.lookupService.lookups.securityLevel.filter(
       degreeConfidentiality =>
@@ -85,7 +91,14 @@ export class InvestigationComponent
         degreeConfidentiality.lookupKey !==
           ViolationDegreeConfidentiality.LIMITED_CIRCULATION,
     );
-  mandatoryMakePenaltyDecisions: boolean = false;
+  updateIsMandatoryToImposePenalty = signal<undefined | number>(undefined);
+  isMandatoryToImposePenalty = computed(() => {
+    return !!(
+      this.updateIsMandatoryToImposePenalty() &&
+      this.summaryTabComponent &&
+      this.summaryTabComponent.offendersViolationsPreview.isMandatoryToImposePenalty()
+    );
+  });
   tabsArray = [
     'summary',
     'basic_info',

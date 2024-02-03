@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  take_action: string;
   copy_to_legal_affairs: string;
   copy_to_hr_department: string;
   single_request_static_header_for_president: string;

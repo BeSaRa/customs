@@ -143,7 +143,13 @@ html[dir="rtl"] {
 
 .table-primary {
   @apply [&_th]:bg-primary [&_th]:text-white [&_th_.mat-sort-header-arrow]:text-white #{!important};
+  th {
+    --mdc-checkbox-unselected-icon-color: white !important;
+    --mdc-checkbox-unselected-hover-icon-color: white !important;
+    --mdc-checkbox-unselected-focus-icon-color: white !important;
+  }
 }
+
 .table-primary-500 {
   @apply [&_th]:text-white [&_th_.mat-sort-header-arrow]:text-white #{!important};
   th {

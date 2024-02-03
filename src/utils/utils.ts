@@ -219,6 +219,7 @@ function* generateChunks<T>(arr: T[], n: number): Generator<T[], void> {
 export function chunks<T>(arr: T[], n: number): T[][] {
   return [...generateChunks(arr, n)];
 }
+
 export const range = (start: number, stop: number) =>
   Array.from({ length: stop - start + 1 }, (_, i) => start + i);
 
@@ -244,3 +245,34 @@ export const b64toBlob = (
 
   return new Blob(byteArrays, { type: contentType });
 };
+
+export function intersection(..._res: unknown[]) {
+  const result = [];
+  let lists;
+  /* eslint-disable prefer-rest-params */
+  if (arguments.length === 1) {
+    lists = arguments[0];
+  } else {
+    lists = arguments;
+  }
+
+  for (let i = 0; i < lists.length; i++) {
+    const currentList = lists[i];
+    for (let y = 0; y < currentList.length; y++) {
+      const currentValue = currentList[y];
+      if (result.indexOf(currentValue) === -1) {
+        let existsInAll = true;
+        for (let x = 0; x < lists.length; x++) {
+          if (lists[x].indexOf(currentValue) === -1) {
+            existsInAll = false;
+            break;
+          }
+        }
+        if (existsInAll) {
+          result.push(currentValue);
+        }
+      }
+    }
+  }
+  return result;
+}
