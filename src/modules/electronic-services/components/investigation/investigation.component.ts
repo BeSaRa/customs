@@ -289,6 +289,7 @@ export class InvestigationComponent
         this.model = model;
         this._updateForm(model);
         this.updateRoute();
+        this.loadCaseFolders();
       });
   }
 
