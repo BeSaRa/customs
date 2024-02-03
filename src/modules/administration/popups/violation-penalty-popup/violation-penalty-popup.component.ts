@@ -340,10 +340,11 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
       payloadArr.push({
         ...this.form.value,
         penaltyId: value,
-        penaltyGuidance:
-          this.penaltyGuidanceCtrl?.value.id === value
-            ? PenaltyGuidances.APPROPRIATE
-            : null,
+        penaltyGuidance: this.filteredPenalties.find(
+          p => p.id === this.form.value.penaltyGuidance,
+        )?.isSystem
+          ? PenaltyGuidances.NECESSARY_ASK_REFERRAL
+          : PenaltyGuidances.APPROPRIATE,
       });
     });
     return this.violationPenaltyService.createBulkFull(
