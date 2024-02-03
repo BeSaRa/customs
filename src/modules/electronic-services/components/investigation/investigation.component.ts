@@ -167,6 +167,10 @@ export class InvestigationComponent
   }
 
   _beforeSave(_saveType: SaveTypes): boolean | Observable<boolean> {
+    if (this.form.invalid) {
+      this.dialog.error(this.lang.map.invalid_investigation_data);
+      return false;
+    }
     !this.model.violationInfo.length &&
       !this.model.offenderInfo.length &&
       this.dialog.error(
