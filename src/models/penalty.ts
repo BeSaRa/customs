@@ -25,7 +25,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   isCash = false;
   cashAmount!: number;
   override status = StatusTypes.ACTIVE;
-  detailsList!: PenaltyDetails[];
+  detailsList: PenaltyDetails[] = [];
 
   // extras
   repeat!: number;

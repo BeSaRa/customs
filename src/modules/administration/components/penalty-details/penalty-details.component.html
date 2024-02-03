@@ -18,7 +18,7 @@
         {{ lang.map.penalty_signer }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.penaltySignerInfo.getNames() }}
+        {{ element.penaltySignerInfo?.getNames() }}
       </td> </ng-container
     >'
 
@@ -28,7 +28,7 @@
         {{ lang.map.offender_level }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.offenderLevelInfo.getNames() }}
+        {{ element.offenderLevelInfo?.getNames() }}
       </td>
     </ng-container>
 
@@ -38,7 +38,7 @@
         {{ lang.map.legal_rule }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.legalRuleInfo.getNames() }}
+        {{ element.legalRuleInfo?.getNames() }}
       </td>
     </ng-container>
 

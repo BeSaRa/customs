@@ -429,4 +429,5 @@ export interface LangKeysContract {
   end_employees_date: string;
   change_departments_date: string;
   end_date: string;
+  invalid_investigation_data: string;
 }
