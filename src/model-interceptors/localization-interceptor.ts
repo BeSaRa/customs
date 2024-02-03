@@ -8,7 +8,7 @@ export class LocalizationInterceptor
     model.localizationKey &&= model.localizationKey
       ?.trim()
       .replace(/\s/g, '_')
-      .toLocaleLowerCase();
+      .toLowerCase();
     return model;
   }
 

@@ -10,6 +10,7 @@ import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
 import { Penalty } from '@models/penalty';
 import { TerminatePopupComponent } from '@standalone/popups/terminate-popup/terminate-popup.component';
+import { RequestReferralPopupComponent } from '@standalone/popups/request-referral-popup/request-referral-popup.component';
 
 @CastResponseContainer({
   $default: {
@@ -61,14 +62,31 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     offender: Offender,
     model: InputSignal<Investigation>,
     updateModel: InputSignal<EventEmitter<void>>,
-    penalty: Penalty,
+    selectedPenalty: Penalty,
   ) {
     return this.dialog.open(TerminatePopupComponent, {
       data: {
         offender,
         model,
         updateModel,
-        penalty,
+        selectedPenalty,
+      },
+    });
+  }
+
+  openRequestReferralDialog(
+    offenders: Offender[],
+    model: InputSignal<Investigation>,
+    updateModel: InputSignal<EventEmitter<void>>,
+    selectedPenalty: Penalty,
+  ) {
+    return this.dialog.open(RequestReferralPopupComponent, {
+      data: {
+        offenders: offenders,
+        model,
+        updateModel,
+        selectedPenalty,
+        isSingle: offenders.length === 1,
       },
     });
   }

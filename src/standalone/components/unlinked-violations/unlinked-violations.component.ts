@@ -25,9 +25,11 @@ export class UnlinkedViolationsComponent {
   model = input.required<Investigation>();
   columns: string[] = ['violationName', 'classification', 'description'];
   violations = computed(() => {
-    const violationIds = this.model().offenderViolationInfo.map(
+    const linkedViolationsIds = this.model().offenderViolationInfo.map(
       i => i.violationId,
     );
-    return this.model().violationInfo.filter(v => !violationIds.includes(v.id));
+    return this.model().violationInfo.filter(
+      v => !linkedViolationsIds.includes(v.id),
+    );
   });
 }

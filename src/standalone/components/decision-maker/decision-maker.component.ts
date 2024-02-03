@@ -204,7 +204,7 @@ export class DecisionMakerComponent
         switchMap(({ penaltyKey }) => {
           return penaltyKey === SystemPenalties.TERMINATE
             ? this.openTerminateDialog().afterClosed()
-            : this.openReferralDialog().afterClosed();
+            : this.openRequestReferralDialog(penaltyKey).afterClosed();
         }),
       )
       .subscribe();
@@ -221,7 +221,14 @@ export class DecisionMakerComponent
     );
   }
 
-  openReferralDialog() {
-    return this.dialog.confirm('WELCOME');
+  openRequestReferralDialog(penaltyKey: SystemPenalties) {
+    return this.penaltyDecisionService.openRequestReferralDialog(
+      [this.offender()],
+      this.model,
+      this.updateModel,
+      this.penaltyMap()[this.offender().id].second.find(
+        item => item.penaltyKey === penaltyKey,
+      )!,
+    );
   }
 }

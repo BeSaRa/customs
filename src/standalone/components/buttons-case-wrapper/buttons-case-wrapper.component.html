@@ -93,10 +93,7 @@
       model?.hasResponse(taskResponses.RETURN_TO_APP) ||
       model?.hasResponse(taskResponses.RETURN_APP_MANAGER))
   ) {
-    <app-button
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="returnMenu">
+    <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -152,10 +149,7 @@
     (model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT) ||
       model?.hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT))
   ) {
-    <app-button
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="referralMenu">
+    <app-button buttonType="secondary" [matMenuTriggerFor]="referralMenu">
       {{ lang.map.referral_request }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -194,10 +188,7 @@
         taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
       ))
   ) {
-    <app-button
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="sendToMenu">
+    <app-button buttonType="secondary" [matMenuTriggerFor]="sendToMenu">
       {{ lang.map.send_to }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
@@ -260,10 +251,7 @@
       model?.hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS) ||
       model?.hasResponse(taskResponses.TO_PAE))
   ) {
-    <app-button
-      buttonType="secondary"
-      mat-button
-      [matMenuTriggerFor]="issuingMenu">
+    <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
       {{ lang.map.issuing_referral_decision }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>

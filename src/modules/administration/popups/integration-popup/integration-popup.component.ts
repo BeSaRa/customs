@@ -21,7 +21,6 @@ import {
   EMPTY,
   filter,
   isObservable,
-  mergeMap,
   Observable,
   of,
   ReplaySubject,
@@ -36,7 +35,6 @@ import {
 } from '@angular/material/datepicker';
 import { ignoreErrors } from '@utils/utils';
 import { CustomValidators } from '@validators/custom-validators';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { ClearingAgencyService } from '@services/clearing-agency.service';
 import { IntegrationsCases } from '@enums/integrations-cases';

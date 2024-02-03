@@ -10,7 +10,7 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-import { filter, ReplaySubject, switchMap, takeUntil } from 'rxjs';
+import { ReplaySubject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-mawared-department',

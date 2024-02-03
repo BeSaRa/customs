@@ -47,7 +47,7 @@ export class TerminatePopupComponent implements OnInit {
     offender: Offender;
     model: InputSignal<Investigation>;
     updateModel: InputSignal<EventEmitter<void>>;
-    penalty: Penalty;
+    selectedPenalty: Penalty;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(DialogRef);
   toast = inject(ToastService);
@@ -65,7 +65,7 @@ export class TerminatePopupComponent implements OnInit {
       this.oldPenalty()?.penaltyInfo.penaltyKey === SystemPenalties.TERMINATE
     );
   });
-  penalty = this.data.penalty;
+  selectedPenalty = this.data.selectedPenalty;
 
   control = new FormControl(
     this.samePenalty() ? this.oldPenalty()?.comment : '',
@@ -95,8 +95,8 @@ export class TerminatePopupComponent implements OnInit {
           return new PenaltyDecision().clone<PenaltyDecision>({
             ...this.oldPenalty(),
             caseId: this.model().id,
-            penaltyId: this.penalty.id,
-            penaltyInfo: this.penalty,
+            penaltyId: this.selectedPenalty.id,
+            penaltyInfo: this.selectedPenalty,
             signerId: this.employeeService.getEmployee()!.id!,
             status: 1,
             comment: this.control.value,
