@@ -207,7 +207,7 @@ export class CaseAttachmentPopupComponent
       .loadAsLookups()
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.attachmentTypes = list;
+        this.attachmentTypes = list.filter(attachment => !attachment.isSystem);
       });
   }
 
