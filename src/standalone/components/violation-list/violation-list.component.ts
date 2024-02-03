@@ -120,7 +120,7 @@ export class ViolationListComponent
           }
         }),
       )
-      .subscribe();
+      .subscribe(() => this.updateModel.emit());
   }
 
   private listenToReload() {
@@ -191,7 +191,7 @@ export class ViolationListComponent
                 ? this.lang.map.reset_violations_effects_msg
                 : '',
               this.lang.map.msg_delete_x_confirm.change({
-                x: model.description,
+                x: model.violationTypeInfo.getNames(),
               }),
             )
             .afterClosed()
