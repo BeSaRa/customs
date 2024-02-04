@@ -5,6 +5,7 @@ import { CaseAttachment } from '@models/case-attachment';
 import { BlobModel } from '@models/blob-model';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { CompleteResponse } from '@contracts/complete-response';
 
 export interface BaseCaseServiceContract<M> {
   getUrlSegment(): string;
@@ -71,14 +72,7 @@ export interface BaseCaseServiceContract<M> {
 
   claimTask(taskId: string): Observable<M>;
 
-  completeTask(
-    taskId: string,
-    body: {
-      selectedResponse: string;
-      userId?: number;
-      comment: string;
-    },
-  ): Observable<M>;
+  completeTask(taskId: string, body: CompleteResponse): Observable<M>;
 
   terminate(taskId: string): Observable<M>;
 

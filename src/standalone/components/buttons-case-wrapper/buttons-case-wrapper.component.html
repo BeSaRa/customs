@@ -164,9 +164,7 @@
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT)
     ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.REFERRAL_TO_PRESIDENT)">
+      <button mat-menu-item (click)="referralPresident()">
         {{ lang.map.referral_request_to_presodent }}
       </button>
     }
@@ -174,11 +172,7 @@
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
     ) {
-      <button
-        mat-menu-item
-        (click)="
-          responseAction$.next(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
-        ">
+      <button mat-menu-item (click)="referralPresidentAssistant()">
         {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
     }

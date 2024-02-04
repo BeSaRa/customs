@@ -4,6 +4,7 @@ import {
   EventEmitter,
   inject,
   InputSignal,
+  isSignal,
   OnInit,
 } from '@angular/core';
 import { LangService } from '@services/lang.service';
@@ -18,7 +19,7 @@ import { Penalty } from '@models/penalty';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { forkJoin, Subject, tap } from 'rxjs';
+import { exhaustMap, forkJoin, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { SystemPenalties } from '@enums/system-penalties';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -45,6 +46,8 @@ import { OffenderTypes } from '@enums/offender-types';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
 import { ToastService } from '@services/toast.service';
+import { TaskResponses } from '@enums/task-responses';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-request-referral-popup',
@@ -82,11 +85,13 @@ export class RequestReferralPopupComponent
   data = inject<{
     offenders: Offender[];
     model: InputSignal<Investigation>;
-    updateModel: InputSignal<EventEmitter<void>>;
+    updateModel: InputSignal<EventEmitter<void>> | EventEmitter<void>;
     selectedPenalty: Penalty;
     isSingle: boolean;
+    response?: TaskResponses;
   }>(MAT_DIALOG_DATA);
   save$ = new Subject<void>();
+  complete$ = new Subject<void>();
 
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
@@ -96,7 +101,16 @@ export class RequestReferralPopupComponent
   toast = inject(ToastService);
 
   model = this.data.model;
-  updateModel = this.data.updateModel;
+  updateModel: EventEmitter<void> = isSignal(this.data.updateModel)
+    ? this.data.updateModel()
+    : this.data.updateModel;
+
+  response = this.data.response;
+
+  isCase = computed(() => {
+    return !!(this.model() && this.response);
+  });
+
   offendersViolationsMap = computed(() => {
     return this.model().offenderViolationInfo.reduce<
       Record<number, OffenderViolation[]>
@@ -168,6 +182,7 @@ export class RequestReferralPopupComponent
 
   ngOnInit(): void {
     this.listenToSave();
+    this.listenToComplete();
   }
 
   assertType(item: unknown): OffenderViolation {
@@ -217,13 +232,48 @@ export class RequestReferralPopupComponent
         }),
       )
       .subscribe(penaltiesDecisions => {
-        console.log(penaltiesDecisions);
         penaltiesDecisions.forEach(item => {
           this.model().appendPenaltyDecision(item);
         });
-        this.updateModel().emit();
+        this.updateModel.emit();
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
         this.dialogRef.close();
+      });
+  }
+
+  private listenToComplete() {
+    this.complete$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(map(() => this.commentControl.valid))
+      .pipe(
+        filter(valid => {
+          !valid &&
+            this.dialog.error(
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
+            );
+          return valid;
+        }),
+      )
+      .pipe(
+        exhaustMap(() => {
+          return this.model()
+            .getService()
+            .completeTask(this.model().getTaskId()!, {
+              comment: this.commentControl.value,
+              selectedResponse: this.response!,
+              decisionIds: this.model()
+                .getPenaltyDecision()
+                .map(i => i.id),
+            });
+        }),
+      )
+      .subscribe(() => {
+        this.toast.success(
+          this.lang.map.msg_x_performed_successfully.change({
+            x: this.selectedPenalty.getNames(),
+          }),
+        );
+        this.dialogRef.close(UserClick.YES);
       });
   }
 }

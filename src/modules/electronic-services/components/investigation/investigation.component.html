@@ -93,6 +93,8 @@
   </mat-card>
   <app-buttons-case-wrapper
     [model]="model"
+    [penaltyMap]="penaltyMap()"
+    (updateModel)="updateModel$.next(null)"
     [openFrom]="openFrom"
     [canSave]="canSave()"
     (save)="save$.next($event)"

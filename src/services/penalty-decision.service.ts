@@ -12,6 +12,7 @@ import { Penalty } from '@models/penalty';
 import { TerminatePopupComponent } from '@standalone/popups/terminate-popup/terminate-popup.component';
 import { RequestReferralPopupComponent } from '@standalone/popups/request-referral-popup/request-referral-popup.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TaskResponses } from '@enums/task-responses';
 
 @CastResponseContainer({
   $default: {
@@ -79,8 +80,9 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
   openRequestReferralDialog(
     offenders: Offender[],
     model: InputSignal<Investigation>,
-    updateModel: InputSignal<EventEmitter<void>>,
-    selectedPenalty: Penalty,
+    updateModel: InputSignal<EventEmitter<void>> | EventEmitter<void>,
+    selectedPenalty?: Penalty,
+    response?: TaskResponses,
   ): MatDialogRef<unknown> {
     return this.dialog.open(RequestReferralPopupComponent, {
       data: {
@@ -89,6 +91,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         updateModel,
         selectedPenalty,
         isSingle: offenders.length === 1,
+        response,
       },
     });
   }

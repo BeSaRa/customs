@@ -22,6 +22,7 @@ import { Penalty } from '@models/penalty';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { PenaltyInterceptor } from '@model-interceptors/penalty-interceptor';
 import { NO_ERROR_HANDLE } from '@http-contexts/tokens';
+import { CompleteResponse } from '@contracts/complete-response';
 
 export abstract class BaseCaseService<M>
   extends RegisterServiceMixin(class {})
@@ -278,14 +279,7 @@ export abstract class BaseCaseService<M>
     );
   }
 
-  completeTask(
-    taskId: string,
-    body: {
-      selectedResponse: string;
-      userId?: number;
-      comment: string;
-    },
-  ): Observable<M> {
+  completeTask(taskId: string, body: CompleteResponse): Observable<M> {
     return this.http.post<M>(
       this.getUrlSegment() + '/task/' + taskId + '/complete',
       body,

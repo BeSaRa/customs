@@ -1,5 +1,7 @@
 import {
   Component,
+  computed,
+  effect,
   EventEmitter,
   inject,
   Input,
@@ -10,7 +12,7 @@ import {
 import { ButtonComponent } from '../button/button.component';
 import { LangService } from '@services/lang.service';
 import { SendTypes } from '@enums/send-types';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { exhaustMap, filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { Investigation } from '@models/investigation';
 import { TaskResponses } from '@enums/task-responses';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
@@ -23,8 +25,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
 import { EmployeeService } from '@services/employee.service';
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { OpenFrom } from '@enums/open-from';
+import { SystemPenalties } from '@enums/system-penalties';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { Penalty } from '@models/penalty';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -40,6 +45,7 @@ export class ButtonsCaseWrapperComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
+  penaltyDecisionService = inject(PenaltyDecisionService);
   router = inject(Router);
   protected readonly OpenFromEnum = OpenFrom;
 
@@ -51,6 +57,8 @@ export class ButtonsCaseWrapperComponent
 
   @Input() canSave: boolean = true;
   model = input.required<Investigation>();
+  @Output()
+  updateModel = new EventEmitter<void>();
   @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
@@ -58,10 +66,37 @@ export class ButtonsCaseWrapperComponent
   @Output() release = new EventEmitter<Investigation>();
   @Output() navigateToSamePageThatUserCameFrom = new EventEmitter<void>();
 
+  penaltyMap =
+    input.required<Record<number, { first: number; second: Penalty[] }>>();
+
+  uniquePenalties = computed(() => {
+    return Object.values(this.penaltyMap()).reduce<
+      Record<SystemPenalties, Penalty>
+    >(
+      (acc, item) => {
+        const penalties = item.second.reduce((acc, penalty) => {
+          return { ...acc, [penalty.penaltyKey]: penalty };
+        }, {});
+        return { ...acc, ...penalties };
+      },
+      {} as Record<SystemPenalties, Penalty>,
+    );
+  });
+
+  penaltiesEffect = effect(() => {
+    console.log('UNIQUE', this.uniquePenalties());
+  });
+
+  referralRequest$ = new Subject<{
+    response: TaskResponses;
+    penaltyKey: SystemPenalties;
+  }>();
+
   isMandatoryToImposePenalty = input.required<boolean>();
 
   ngOnInit() {
     this.listenToResponseAction();
+    this.listenToReferralActions();
   }
 
   listenToResponseAction() {
@@ -106,6 +141,11 @@ export class ButtonsCaseWrapperComponent
       .claim()
       .pipe(take(1))
       .subscribe((model: Investigation) => {
+        this.model()
+          .getPenaltyDecision()
+          .forEach(item => {
+            model.appendPenaltyDecision(item);
+          });
         this.claim.emit(model);
       });
   }
@@ -120,6 +160,59 @@ export class ButtonsCaseWrapperComponent
       .pipe(take(1))
       .subscribe(model => {
         this.release.emit(model);
+      });
+  }
+
+  protected readonly SystemPenalties = SystemPenalties;
+
+  referralPresidentAssistant() {
+    this.referralTo(
+      TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+    );
+  }
+
+  referralPresident() {
+    this.referralTo(
+      TaskResponses.REFERRAL_TO_PRESIDENT,
+      SystemPenalties.REFERRAL_TO_PRESIDENT,
+    );
+  }
+
+  referralTo(response: TaskResponses, penaltyKey: SystemPenalties) {
+    this.referralRequest$.next({
+      penaltyKey,
+      response,
+    });
+  }
+
+  private listenToReferralActions() {
+    this.referralRequest$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        map(({ penaltyKey, response }) => {
+          return {
+            selectedPenalty: this.uniquePenalties()[penaltyKey],
+            response,
+          };
+        }),
+      )
+      .pipe(
+        exhaustMap(({ selectedPenalty, response }) => {
+          return this.penaltyDecisionService
+            .openRequestReferralDialog(
+              this.model().offenderInfo,
+              this.model,
+              this.updateModel,
+              selectedPenalty,
+              response,
+            )
+            .afterClosed();
+        }),
+      )
+      .pipe(filter((click: UserClick) => click === UserClick.YES))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
 }

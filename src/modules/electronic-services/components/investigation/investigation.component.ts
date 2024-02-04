@@ -39,6 +39,7 @@ import { ReportType } from '@app-types/validation-return-type';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
+import { Penalty } from '@models/penalty';
 
 @Component({
   selector: 'app-investigation',
@@ -54,7 +55,8 @@ export class InvestigationComponent
       // this.updateIsMandatoryToImposePenalty.set(Math.random());
       this.summaryTabComponent?.offendersViolationsPreview.penaltiesLoaded$
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
+        .subscribe(penalties => {
+          this.penaltyMap.set(penalties);
           this.updateIsMandatoryToImposePenalty.set(Math.random());
         });
     });
@@ -91,6 +93,7 @@ export class InvestigationComponent
         degreeConfidentiality.lookupKey !==
           ViolationDegreeConfidentiality.LIMITED_CIRCULATION,
     );
+  penaltyMap = signal<Record<number, { first: number; second: Penalty[] }>>({});
   updateIsMandatoryToImposePenalty = signal<undefined | number>(undefined);
   isMandatoryToImposePenalty = computed(() => {
     return !!(

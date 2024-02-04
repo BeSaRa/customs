@@ -103,14 +103,13 @@ export class Investigation extends BaseCase<
   getPenaltyDecisionByOffenderId(
     offenderId: number,
   ): PenaltyDecision | undefined {
-    console.log('PP', this.taskDetails.penaltyDecisions);
     return this.taskDetails.penaltyDecisions.find(
       i => i.offenderId === offenderId,
     );
   }
 
   getPenaltyDecision(): PenaltyDecision[] {
-    return this.taskDetails.penaltyDecisions;
+    return (this.taskDetails && this.taskDetails.penaltyDecisions) || [];
   }
 
   $$getEmployeeService$$(): EmployeeService {
@@ -154,5 +153,9 @@ export class Investigation extends BaseCase<
 
   loadPenalties() {
     return this.getService().getCasePenalty(this.id, this.getActivityName()!);
+  }
+
+  getTaskId(): string | undefined {
+    return this.taskDetails && this.taskDetails.tkiid;
   }
 }

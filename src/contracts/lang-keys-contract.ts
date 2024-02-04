@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  msg_x_performed_successfully: string;
   take_action: string;
   copy_to_legal_affairs: string;
   copy_to_hr_department: string;
