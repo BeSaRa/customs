@@ -24,7 +24,7 @@
   </mat-card>
   <ng-template #search_for_investigation>
     <div class="p-4 overflow-auto" style="height: 100%">
-      <form [formGroup]="form" (ngSubmit)="search$.next()">
+      <form [formGroup]="form">
         <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           <app-input
             formControlName="draftFullSerial"
@@ -49,14 +49,13 @@
             bindLabel="getNames"
             [options]="securityLevels" />
           <app-textarea
-            (keydown.enter)="search$.next()"
             formControlName="description"
             class="col-span-1 md:col-span-2 lg:col-span-4"
             [label]="lang.map.general_explanation_of_violations" />
         </div>
         <div
           class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
-          <app-button type="submit" buttonType="primary">
+          <app-button (click)="search$.next()" buttonType="primary">
             {{ lang.map.search }}</app-button
           >
           <app-button (click)="resetForm()" buttonType="primary">{{
