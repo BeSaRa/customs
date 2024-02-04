@@ -310,10 +310,14 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       maxDate.setDate(maxDate.getDate() + selectedType.numericTo - 1);
       minDate.setDate(minDate.getDate() + selectedType.numericFrom - 1);
 
-      this.maxEndDate = maxDate;
+      this.maxEndDate = maxDate > this.todayDate ? this.todayDate : maxDate;
       this.minEndDate = minDate;
     } else {
-      this.maxEndDate = undefined;
+      const selectedType =
+        this.typesMap()[this.controls.violationType()?.value];
+      const date = new Date();
+      date.setDate(date.getDate() - selectedType.numericFrom + 1);
+      this.maxEndDate = date;
       this.minEndDate = undefined;
     }
   }
@@ -351,8 +355,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.controls.violationsDate()?.reset();
     this.controls.violationsDateFrom()?.reset();
     this.controls.violationsDateTo()?.reset();
+    const selectedType = this.typesMap()[this.controls.violationType()?.value];
+    const date = new Date();
+    date.setDate(date.getDate() - selectedType.numericFrom + 1);
+    this.maxEndDate = date;
     this.minEndDate = undefined;
-    this.maxEndDate = undefined;
     this.form.updateValueAndValidity();
   }
   filterDependingOnReportTypeClassification(classificationId: number) {
