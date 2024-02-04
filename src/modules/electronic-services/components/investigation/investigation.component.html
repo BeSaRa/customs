@@ -186,12 +186,14 @@
   <ng-template #attachments_tab>
     <div class="p-4">
       <app-case-attachments
+        #generalAttachments
         [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
         [service]="service"
         [readonly]="readonly"
         [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-case-attachments
+        #officialAttachments
         [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
         [service]="service"
         [readonly]="readonly"
