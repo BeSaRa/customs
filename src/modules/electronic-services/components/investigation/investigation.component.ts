@@ -40,6 +40,7 @@ import { ClassificationTypes } from '@enums/violation-classification';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { Penalty } from '@models/penalty';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 
 @Component({
   selector: 'app-investigation',
@@ -86,6 +87,10 @@ export class InvestigationComponent
   offenderListComponent!: OffenderListComponent;
   @ViewChild(WitnessesListComponent)
   witnessesListComponent!: WitnessesListComponent;
+  @ViewChild('generalAttachments')
+  generalAttachments!: CaseAttachmentsComponent;
+  @ViewChild('officialAttachments')
+  officialAttachments!: CaseAttachmentsComponent;
   violationDegreeConfidentiality =
     this.lookupService.lookups.securityLevel.filter(
       degreeConfidentiality =>
@@ -370,6 +375,10 @@ export class InvestigationComponent
     this.offenderListComponent.resetDataList();
     this.witnessesListComponent.resetDataList();
     this.updateModel$.next(null);
+    this.caseFolders = [];
+    this.caseFoldersMap = undefined;
+    this.generalAttachments.resetDataList();
+    this.officialAttachments.resetDataList();
     this.tabChange(0, false);
   }
 

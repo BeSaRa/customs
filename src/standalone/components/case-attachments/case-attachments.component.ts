@@ -14,12 +14,9 @@ import { MatTableModule } from '@angular/material/table';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { CaseAttachment } from '@models/case-attachment';
 import {
-  combineLatest,
-  delay,
   exhaustMap,
   filter,
   map,
-  Observable,
   of,
   ReplaySubject,
   Subject,
@@ -75,9 +72,9 @@ export class CaseAttachmentsComponent
   readonly = false;
 
   lang = inject(LangService);
-
+  data: Subject<CaseAttachment[]> = new Subject<CaseAttachment[]>();
   dataSource: AppTableDataSource<CaseAttachment> =
-    new AppTableDataSource<CaseAttachment>(this._load());
+    new AppTableDataSource<CaseAttachment>(this.data);
 
   displayedColumns: string[] = [
     'documentTitle',
@@ -97,35 +94,32 @@ export class CaseAttachmentsComponent
   ngOnInit(): void {
     this.listenToView();
     this.listenToDelete();
+    this._load();
     this.reload$.next();
   }
 
-  private _load(): Observable<CaseAttachment[]> {
-    return of(undefined)
-      .pipe(delay(0))
+  private _load() {
+    this.reload$
+      .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(() => {
-          return combineLatest([this.reload$]).pipe(
-            switchMap(() => {
-              switch (this.type) {
-                case 'folder':
-                  return this.caseId()
-                    ? this.service.loadFolderAttachments(
-                        this.caseId() as string,
-                      )
-                    : of([]);
-                case 'offender':
-                  return this.entityId
-                    ? this.service.getOffenderAttachments(this.entityId)
-                    : of([]);
-                default:
-                  return of([]);
-              }
-            }),
-          );
+          switch (this.type) {
+            case 'folder':
+              return this.caseId()
+                ? this.service.loadFolderAttachments(this.caseId() as string)
+                : of([]);
+            case 'offender':
+              return this.entityId
+                ? this.service.getOffenderAttachments(this.entityId)
+                : of([]);
+            default:
+              return of([]);
+          }
         }),
       )
-      .pipe(takeUntil(this.destroy$));
+      .subscribe(data => {
+        this.data.next(data);
+      });
   }
 
   sort($event: Sort) {
@@ -199,5 +193,8 @@ export class CaseAttachmentsComponent
         ),
       )
       .subscribe(() => this.reload$.next());
+  }
+  resetDataList() {
+    this.data.next([]);
   }
 }
