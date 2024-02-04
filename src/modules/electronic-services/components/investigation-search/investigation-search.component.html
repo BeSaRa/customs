@@ -57,11 +57,11 @@
         <div
           class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
           <app-button type="submit" buttonType="primary">
-            {{ lang.map.search }}</app-button
-          >
-          <app-button (click)="resetForm()" buttonType="primary">{{
-            lang.map.reset
-          }}</app-button>
+            {{ lang.map.search }}
+          </app-button>
+          <app-button (click)="resetForm()" buttonType="primary"
+            >{{ lang.map.reset }}
+          </app-button>
         </div>
       </form>
     </div>
@@ -83,7 +83,6 @@
               <button
                 class="text-blue-700 hover:underline focus:outline-none"
                 (click)="view(element)">
-                q
                 {{ element.draftFullSerial }}
               </button>
             </td>
