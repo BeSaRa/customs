@@ -436,4 +436,5 @@ export interface LangKeysContract {
   change_departments_date: string;
   end_date: string;
   invalid_investigation_data: string;
+  msg_there_is_already_a_violation_with_same_type_and_date_exist: string;
 }

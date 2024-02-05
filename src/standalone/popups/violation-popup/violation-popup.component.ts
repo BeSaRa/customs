@@ -84,6 +84,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
   securityManagement = this.lookupService.lookups.securityManagement;
   classifications: ViolationClassification[] = [];
   _types = signal([] as ViolationType[]);
+  violationsList = (this.data.extras?.violationsList || []) as Violation[];
   years: string[] = range(
     new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
     new Date().getFullYear(),
@@ -222,13 +223,33 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       },
     );
   }
-
+  alreadyAddedViolation() {
+    return this.violationsList.find(v => {
+      return (
+        v.violationTypeId === this.form.value.violationTypeId &&
+        ((v.violationsDate &&
+          new Date(v.violationsDate).getTime() ===
+            new Date(this.form.value.violationsDate).getTime()) ||
+          (new Date(this.form.value.violationsDateFrom).getTime() ===
+            new Date(v.violationsDateFrom).getTime() &&
+            new Date(this.form.value.violationsDateTo).getTime() ===
+              new Date(v.violationsDateTo).getTime()))
+      );
+    });
+  }
   protected _beforeSave(): boolean | Observable<boolean> {
     if (this.form.invalid) {
       this.dialog.error(
         this.lang.map.msg_make_sure_all_required_fields_are_filled,
       );
       this.form.markAllAsTouched();
+      return of(false);
+    }
+    if (this.alreadyAddedViolation()) {
+      this.dialog.error(
+        this.lang.map
+          .msg_there_is_already_a_violation_with_same_type_and_date_exist,
+      );
       return of(false);
     }
     return !this.caseId()
@@ -357,7 +378,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.controls.violationsDateTo()?.reset();
     const selectedType = this.typesMap()[this.controls.violationType()?.value];
     const date = new Date();
-    date.setDate(date.getDate() - selectedType.numericFrom + 1);
+    selectedType && date.setDate(date.getDate() - selectedType.numericFrom + 1);
     this.maxEndDate = date;
     this.minEndDate = undefined;
     this.form.updateValueAndValidity();

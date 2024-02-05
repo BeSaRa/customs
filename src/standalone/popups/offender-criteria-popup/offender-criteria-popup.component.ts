@@ -227,6 +227,7 @@ export class OffenderCriteriaPopupComponent
               this.model,
               this.data.askForSaveModel,
               this.reportType,
+              this.model().violationInfo,
             )
             .afterClosed()
             .pipe(filter(result => !!result))
