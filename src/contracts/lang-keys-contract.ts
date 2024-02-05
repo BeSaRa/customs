@@ -442,4 +442,5 @@ export interface LangKeysContract {
   no_attachments: string;
   attachment: string;
   lbl_attachments: string;
+  not_specified: string;
 }

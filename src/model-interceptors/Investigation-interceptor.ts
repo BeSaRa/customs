@@ -72,16 +72,14 @@ export class InvestigationInterceptor
         );
       }));
 
-    model.taskDetails &&
-      model.taskDetails.penaltyDecisions &&
-      (model.taskDetails.penaltyDecisions =
-        model.taskDetails.penaltyDecisions.map(item => {
-          return penaltyDecisionInterceptor.receive(
-            new PenaltyDecision().clone<PenaltyDecision>({
-              ...item,
-            }),
-          );
-        }));
+    model.penaltyDecisions &&
+      (model.penaltyDecisions = model.penaltyDecisions.map(item => {
+        return penaltyDecisionInterceptor.receive(
+          new PenaltyDecision().clone<PenaltyDecision>({
+            ...item,
+          }),
+        );
+      }));
 
     return model;
   }
