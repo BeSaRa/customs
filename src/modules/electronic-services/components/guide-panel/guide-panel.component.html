@@ -53,7 +53,7 @@
                   bindFilter="getNames" />
                 <app-input
                   formControlName="repeat"
-                  [label]="lang.map.repeat"
+                  [label]="lang.map.occurrence_times"
                   type="number"></app-input>
                 <app-icon-button
                   tabindex="-1"
@@ -97,7 +97,9 @@
               [dataSource]="displayedList">
               <!-- repeat -->
               <ng-container matColumnDef="repeat">
-                <th mat-header-cell *matHeaderCellDef>{{ lang.map.repeat }}</th>
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.occurrence_times }}
+                </th>
                 <td mat-cell *matCellDef="let element">
                   <span>{{ element.repeat }}</span>
                 </td>
