@@ -84,7 +84,7 @@
         {{ lang.map.status }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.statusInfo.getNames() }}
+        {{ element.statusInfo.getNames() || '-' }}
       </td>
     </ng-container>
     <!-- actions Column -->
