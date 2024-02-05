@@ -32,6 +32,7 @@ export class Investigation extends BaseCase<
   offenderInfo: Offender[] = [];
   offenderViolationInfo: OffenderViolation[] = [];
   violationInfo: Violation[] = [];
+  penaltyDecisions: PenaltyDecision[] = [];
   securityLevelInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
@@ -88,28 +89,26 @@ export class Investigation extends BaseCase<
   }
 
   appendPenaltyDecision(item: PenaltyDecision): void {
-    this.taskDetails.penaltyDecisions = [
-      ...this.taskDetails.penaltyDecisions.filter(i => i.id !== item.id),
+    this.penaltyDecisions = [
+      ...this.penaltyDecisions.filter(i => i.id !== item.id),
       item,
     ];
   }
 
   removePenaltyDecision(item: PenaltyDecision): void {
-    this.taskDetails.penaltyDecisions = [
-      ...this.taskDetails.penaltyDecisions.filter(i => i.id !== item.id),
+    this.penaltyDecisions = [
+      ...this.penaltyDecisions.filter(i => i.id !== item.id),
     ];
   }
 
   getPenaltyDecisionByOffenderId(
     offenderId: number,
   ): PenaltyDecision | undefined {
-    return this.taskDetails.penaltyDecisions.find(
-      i => i.offenderId === offenderId,
-    );
+    return this.penaltyDecisions.find(i => i.offenderId === offenderId);
   }
 
   getPenaltyDecision(): PenaltyDecision[] {
-    return (this.taskDetails && this.taskDetails.penaltyDecisions) || [];
+    return this.penaltyDecisions || [];
   }
 
   $$getEmployeeService$$(): EmployeeService {

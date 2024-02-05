@@ -227,7 +227,7 @@ export class OffendersViolationsPreviewComponent
   });
 
   decisionMap = computed(() => {
-    return this.model().taskDetails?.penaltyDecisions.reduce<
+    return this.model().penaltyDecisions.reduce<
       Record<number, PenaltyDecision>
     >((acc, item) => {
       return { ...acc, [item.offenderId]: item };
@@ -561,6 +561,7 @@ export class OffendersViolationsPreviewComponent
   }
 
   getOffenderDecision(offenderId: number): PenaltyDecision | undefined {
+    console.log(this.decisionMap(), offenderId);
     return this.decisionMap() && this.decisionMap()[offenderId]
       ? this.decisionMap()[offenderId]
       : undefined;

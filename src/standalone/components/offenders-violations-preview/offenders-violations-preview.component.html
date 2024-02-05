@@ -110,6 +110,11 @@
   <ng-container matColumnDef="decision">
     <th mat-header-cell *matHeaderCellDef>{{ lang.map.decision }}</th>
     <td mat-cell *matCellDef="let element">
+      @if (!getOffenderDecision(element.id)) {
+        <div class="px-2 text-white rounded bg-gray-400">
+          {{ this.lang.map.not_specified }}
+        </div>
+      }
       <div class="px-2 text-white rounded bg-red-300">
         {{ getOffenderDecision(element.id)?.penaltyInfo?.getNames() }}
       </div>
