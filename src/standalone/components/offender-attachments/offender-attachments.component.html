@@ -41,7 +41,7 @@
         {{ lang.map.attachments_count }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ offenderAttachmentsCountMap.get(element.id) }}
+        {{ getAttachmentsCountValue(element) }}
       </td>
     </ng-container>
     <!-- attachments -->

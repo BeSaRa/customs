@@ -190,6 +190,7 @@
         [caseId]="getCaseFolderIdByName(folderType.GENERAL)"
         [service]="service"
         [readonly]="readonly"
+        [folderType]="folderType.GENERAL"
         [title]="lang.map.report_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-case-attachments
@@ -197,6 +198,7 @@
         [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
         [service]="service"
         [readonly]="readonly"
+        [folderType]="folderType.OFFICIAL"
         [title]="lang.map.correspondence_attachments"
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-offender-attachments

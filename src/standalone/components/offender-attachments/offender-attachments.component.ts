@@ -80,7 +80,15 @@ export class OffenderAttachmentsComponent
   ngOnInit(): void {
     this.listenToAttachments();
   }
-
+  getAttachmentsCountValue(offender: Offender) {
+    return !this.offenderAttachmentsCountMap.get(offender.id)
+      ? this.lang.map.no_attachments
+      : this.offenderAttachmentsCountMap.get(offender.id) +
+          ' ' +
+          (this.offenderAttachmentsCountMap.get(offender.id) === 1
+            ? this.lang.map.attachment
+            : this.lang.map.lbl_attachments);
+  }
   loadOffenderAttachmentsCount() {
     this.offenderService
       .getAttachmentsCount(this.model().offenderInfo.map(o => o.id))

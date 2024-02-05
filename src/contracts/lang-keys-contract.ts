@@ -437,4 +437,8 @@ export interface LangKeysContract {
   end_date: string;
   invalid_investigation_data: string;
   msg_there_is_already_a_violation_with_same_type_and_date_exist: string;
+  movement: string;
+  no_attachments: string;
+  attachment: string;
+  lbl_attachments: string;
 }
