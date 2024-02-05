@@ -14,6 +14,7 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
     delete model.offenderInfo;
     delete model.typeInfo;
     delete model.agencyInfo;
+    delete model.statusInfo;
     return model;
   }
 
@@ -27,11 +28,8 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
       (model.offenderInfo.typeInfo = AdminResult.createInstance(
         model.offenderInfo.typeInfo,
       ));
-    model.offenderInfo &&
-      model.offenderInfo.statusInfo &&
-      (model.offenderInfo.statusInfo = AdminResult.createInstance(
-        model.offenderInfo.statusInfo,
-      ));
+    model.statusInfo &&
+      (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.typeInfo &&
       (model.typeInfo = AdminResult.createInstance(model.typeInfo));
     model.agencyInfo &&
