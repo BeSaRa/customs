@@ -68,6 +68,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { intersection } from '@utils/utils';
 import { PenaltyIcons } from '@constants/penalty-icons';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
+import { ClearingAgent } from '@models/clearing-agent';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -501,7 +502,9 @@ export class OffendersViolationsPreviewComponent
           this.dialog
             .open(SituationSearchComponent, {
               data: {
-                id: data.offender.offenderInfo?.id,
+                id: data.isCompany
+                  ? (data.offender.offenderInfo as ClearingAgent).agencyId!
+                  : data.offender.offenderInfo?.id,
                 type: data.offender.type,
                 isCompany: data.isCompany,
               },
