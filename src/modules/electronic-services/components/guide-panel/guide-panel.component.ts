@@ -41,6 +41,7 @@ import {
   takeUntil,
   throwError,
 } from 'rxjs';
+import { PenaltyGuidances } from '@enums/penalty-guidances';
 
 @Component({
   selector: 'app-guide-panel',
@@ -255,5 +256,9 @@ export class GuidePanelComponent
 
   hasFilteredPenaltySigners() {
     return this.filteredPenaltySigners.length;
+  }
+
+  isAppropriate(element: Penalty) {
+    return element.penGuidance === PenaltyGuidances.APPROPRIATE;
   }
 }
