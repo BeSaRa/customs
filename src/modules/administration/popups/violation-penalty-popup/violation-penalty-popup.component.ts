@@ -336,15 +336,19 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   createBulk(): Observable<ViolationPenalty[]> {
     const payloadArr: ViolationPenalty[] = [];
+    const selectedPenaltyGuidance = this.penalties.find(
+      penalty => penalty.id === this.penaltyGuidanceCtrl?.value,
+    );
     this.penaltyArrayCtrl?.value.forEach((value: number) => {
       payloadArr.push({
         ...this.form.value,
         penaltyId: value,
-        penaltyGuidance: this.filteredPenalties.find(
-          p => p.id === this.form.value.penaltyGuidance,
-        )?.isSystem
-          ? PenaltyGuidances.NECESSARY_ASK_REFERRAL
-          : PenaltyGuidances.APPROPRIATE,
+        penaltyGuidance:
+          selectedPenaltyGuidance?.id === value
+            ? selectedPenaltyGuidance.isSystem
+              ? PenaltyGuidances.NECESSARY_ASK_REFERRAL
+              : PenaltyGuidances.APPROPRIATE
+            : null,
       });
     });
     return this.violationPenaltyService.createBulkFull(
