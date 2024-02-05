@@ -40,6 +40,7 @@ import { SituationSearchComponent } from '@modules/electronic-services/component
 import { OffenderTypes } from '@enums/offender-types';
 import { ignoreErrors } from '@utils/utils';
 import { ReportType } from '@app-types/validation-return-type';
+import { ClearingAgent } from '@models/clearing-agent';
 
 @Component({
   selector: 'app-offender-list',
@@ -218,7 +219,9 @@ export class OffenderListComponent
           this.dialog
             .open(SituationSearchComponent, {
               data: {
-                id: data.offender.offenderInfo?.id,
+                id: data.isCompany
+                  ? (data.offender.offenderInfo as ClearingAgent).agencyId!
+                  : data.offender.offenderInfo?.id,
                 type: data.offender.type,
                 isCompany: data.isCompany,
               },
