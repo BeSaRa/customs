@@ -5,3 +5,7 @@
 .mat-mdc-table .mat-mdc-header-cell {
   @apply bg-primary text-white;
 }
+
+::ng-deep .row-color {
+  background-color: #b1e1f5 !important;
+}
