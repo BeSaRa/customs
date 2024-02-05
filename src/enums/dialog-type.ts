@@ -4,4 +4,5 @@ export enum DialogType {
   INFO = 'info',
   WARNING = 'warning',
   CONFIRM = 'confirm',
+  MULTI = 'multi',
 }

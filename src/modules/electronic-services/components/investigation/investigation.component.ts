@@ -433,4 +433,9 @@ export class InvestigationComponent
   hasLimitedAccess() {
     return this.employeeService.hasPermissionTo('LIMITED_ACCESS');
   }
+
+  reloadPenalties() {
+    this.summaryTabComponent &&
+      this.summaryTabComponent?.offendersViolationsPreview.loadPenalties$.next();
+  }
 }

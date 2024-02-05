@@ -5,10 +5,17 @@ import { Constructor } from '@app-types/constructors';
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Observable, map, tap } from 'rxjs';
 import { FileType } from '@models/file-type';
+import { Pagination } from '@models/pagination';
 
 @CastResponseContainer({
   $default: {
     model: () => GlobalSetting,
+  },
+  $pagination: {
+    model: () => Pagination,
+    shape: {
+      'rs.*': () => GlobalSetting,
+    },
   },
 })
 @Injectable({
@@ -37,7 +44,6 @@ export class GlobalSettingService extends BaseCrudService<GlobalSetting> {
     return this.urlService.URLS.GLOBAL_SETTING;
   }
 
-  @CastResponse(() => GlobalSetting, { unwrap: 'rs', fallback: '$default' })
   loadCurrentGlobalSettings(): Observable<GlobalSetting> {
     return this.load().pipe(
       map(settings => settings.rs[0]),

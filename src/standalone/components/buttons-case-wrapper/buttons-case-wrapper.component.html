@@ -99,53 +99,54 @@
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
+
+    <mat-menu #returnMenu="matMenu">
+      @if (
+        model().inMyInbox() &&
+        model().hasResponse(taskResponses.RETURN_APP_MANAGER)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
+          {{ lang.map.return_to_manager }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_HR)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
+          {{ lang.map.return_to_hr_department }}
+        </button>
+      }
+      @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_USER)) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.TO_USER)">
+          {{ lang.map.return }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_SAME)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
+          {{ lang.map.return_to_same }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_APP)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
+          {{ lang.map.return_to_applicant_department }}
+        </button>
+      }
+    </mat-menu>
   }
-  <mat-menu #returnMenu="matMenu">
-    @if (
-      model().inMyInbox() &&
-      model().hasResponse(taskResponses.RETURN_APP_MANAGER)
-    ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
-        {{ lang.map.return_to_manager }}
-      </button>
-    }
-    @if (
-      model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_HR)
-    ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
-        {{ lang.map.return_to_hr_department }}
-      </button>
-    }
-    @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_USER)) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.TO_USER)">
-        {{ lang.map.return }}
-      </button>
-    }
-    @if (
-      model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_SAME)
-    ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
-        {{ lang.map.return_to_same }}
-      </button>
-    }
-    @if (
-      model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_APP)
-    ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
-        {{ lang.map.return_to_applicant_department }}
-      </button>
-    }
-  </mat-menu>
 
   <!-- referral request -->
   @if (
@@ -315,7 +316,7 @@
     </app-button>
   }
 
-  <!-- claim -->
+  <!-- release -->
   @if (model().canRelease()) {
     <app-button (click)="releaseItem()">
       {{ lang.map.release }}
@@ -330,6 +331,7 @@
       {{ lang.map.terminate }}
     </app-button>
   }
+
   @if (!!openFrom) {
     <!-- close action -->
     <app-button buttonType="error" (click)="close()">

@@ -1,6 +1,7 @@
 import { isValidValue } from '@utils/utils';
 import { ModelInterceptorContract } from 'cast-response';
 import { GlobalSetting } from '@models/global-setting';
+import { AdminResult } from '@models/admin-result';
 
 export class GlobalSettingInterceptor
   implements ModelInterceptorContract<GlobalSetting>
@@ -15,6 +16,12 @@ export class GlobalSettingInterceptor
   receive(model: GlobalSetting): GlobalSetting {
     GlobalSettingInterceptor.parseFileTypes(model);
     GlobalSettingInterceptor.parseEmailList(model);
+    const staticOu = {
+      arName: 'مساعد الرئيس للشؤون الجمركية',
+      enName: 'Customs Affairs President Assistant',
+      id: 14,
+    };
+    model.customsAffairsPAOUInfo = AdminResult.createInstance(staticOu);
     return model;
   }
   private static stringifyFileTypes(model: Partial<GlobalSetting>): void {

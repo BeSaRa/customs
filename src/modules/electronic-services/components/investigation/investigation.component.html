@@ -166,6 +166,7 @@
     <div class="p-4">
       <app-violation-list
         #violationListComponent
+        (violationChanged)="reloadPenalties()"
         [reportType]="getReportType()"
         [readonly]="readonly"
         [model]="model"

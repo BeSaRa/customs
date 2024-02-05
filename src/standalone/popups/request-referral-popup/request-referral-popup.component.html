@@ -12,127 +12,411 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content space-y-4">
-    <div class="flex justify-between">
-      <p>
-        <span> {{ lang.map.mr }} : </span>
-        <span class="font-semibold">
-          {{ singleOffender.offenderInfo?.getNames() }}
-        </span>
-        <span>{{ lang.map.respected }}</span>
-      </p>
-      <p class="flex flex-col">
-        <span>
-          <span>{{ lang.map.investigation_file_number }} : </span>
-          <span class="font-semibold">{{ model().draftFullSerial }}</span>
-        </span>
-        <span>
-          <span>{{ lang.map.decision_number }} : </span>
-          <span class="font-semibold">(({{ lang.map.decision_number }}))</span>
-        </span>
-        <span>
-          <span>{{ lang.map.decision_date }} : </span>
-          <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
-        </span>
-      </p>
-    </div>
-    <div class="flex justify-center">{{ selectedPenalty.getNames() }}</div>
-    <div class="flex">
-      {{ formHeader }}
-    </div>
-    <div class="flex flex-col gap-4">
-      @for (offender of offenders; track offender.id) {
-        <table
-          mat-table
-          class="table-style table-primary"
-          [dataSource]="offendersViolationsMap()[offender.id]">
-          <!-- violation -->
-          <ng-container matColumnDef="violation">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.violation }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              {{
-                assertType(element).violationInfo.violationTypeInfo.getNames()
-              }}
-            </td>
-          </ng-container>
-          <!-- violationDate -->
-          <ng-container matColumnDef="violationDate">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.violation_date }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              @if (assertType(element).isNormalDate()) {
-                {{ assertType(element).violationInfo.violationsDate | date }}
-              } @else {
-                <span class="flex gap-2">
-                  <span
-                    >{{ lang.map.date_from }} :
-                    <span>{{
-                      assertType(element).violationInfo.violationsDateFrom
-                        | date
-                    }}</span>
-                  </span>
-                  <span
-                    >{{ lang.map.date_to }} :
-                    <span>{{
-                      assertType(element).violationInfo.violationsDateTo | date
-                    }}</span>
-                  </span>
-                </span>
-              }
-            </td>
-          </ng-container>
-          <!-- offenderName -->
-          <ng-container matColumnDef="offenderName">
-            <th colspan="100" mat-header-cell *matHeaderCellDef>
-              {{ lang.map.offender_name }} : {{ offender.getNames() }}
-            </th>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="['offenderName']"></tr>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
-          <!-- Row shown when there is no matching data. -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="p-4" colspan="100">
-              {{ lang.map.no_records_to_display }}
-            </td>
-          </tr>
-        </table>
-      }
-    </div>
-    <div>
-      <app-textarea [label]="lang.map.comment" [formControl]="commentControl" />
-    </div>
-    @if (!isSingle) {
-      <div>
-        <app-unlinked-violations [model]="model()" />
+  <div class="dialog-content !p-0">
+    @if (!displayDefaultForm()) {
+      <mat-tab-group>
+        <mat-tab [label]="lang.map.employees">
+          <div class="space-y-4 p-4">
+            <ng-container [ngTemplateOutlet]="employees"></ng-container>
+          </div>
+        </mat-tab>
+        <mat-tab [label]="lang.map.customs_brokers">
+          <div class="space-y-4 p-4">
+            <ng-container [ngTemplateOutlet]="customsBrokers"></ng-container>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    }
+    @if (displayDefaultForm()) {
+      <div class="space-y-4 p-4">
+        <ng-container [ngTemplateOutlet]="all"></ng-container>
       </div>
     }
-    <div class="flex">
-      {{ formFooter }}
-    </div>
-    <div class="flex justify-between">
-      <p class="flex flex-col">
-        @if (hasEmployees()) {
-          <span>{{ lang.map.copy_to_hr_department }} </span>
+    <ng-template #customsBrokers>
+      <div class="flex justify-between">
+        <p>
+          <span> {{ lang.map.mr }} : </span>
+          <span class="font-semibold">
+            {{ customsAffairsPAOUInfo.getNames() }}
+          </span>
+          <span>{{ lang.map.respected }}</span>
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.investigation_file_number }} : </span>
+            <span class="font-semibold">{{ model().draftFullSerial }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_number }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_number }}))</span
+            >
+          </span>
+          <span>
+            <span>{{ lang.map.decision_date }} : </span>
+            <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+          </span>
+        </p>
+      </div>
+      <div class="flex justify-center">{{ selectedPenalty.getNames() }}</div>
+      <div class="flex">
+        {{ formHeader }}
+      </div>
+      <div class="flex flex-col gap-4">
+        @for (offender of brokersOffenders(); track offender.id) {
+          <table
+            mat-table
+            class="table-style table-primary"
+            [dataSource]="offendersViolationsMap()[offender.id]">
+            <ng-container matColumnDef="violation">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  assertType(element).violationInfo.violationTypeInfo.getNames()
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="violationDate">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation_date }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                @if (assertType(element).isNormalDate()) {
+                  {{ assertType(element).violationInfo.violationsDate | date }}
+                } @else {
+                  <span class="flex gap-2">
+                    <span
+                      >{{ lang.map.date_from }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateFrom
+                          | date
+                      }}</span>
+                    </span>
+                    <span
+                      >{{ lang.map.date_to }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateTo
+                          | date
+                      }}</span>
+                    </span>
+                  </span>
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="offenderName">
+              <th colspan="100" mat-header-cell *matHeaderCellDef>
+                {{ lang.map.offender_name }} : {{ offender.getNames() }}
+              </th>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['offenderName']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let element; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="p-4" colspan="100">
+                {{ lang.map.no_records_to_display }}
+              </td>
+            </tr>
+          </table>
         }
-        @if (hasClearingAgent()) {
-          <span>{{ lang.map.copy_to_legal_affairs }} </span>
+      </div>
+      <div>
+        <app-textarea
+          [label]="lang.map.comment"
+          [formControl]="brokersComment" />
+      </div>
+      <div>
+        <app-unlinked-violations
+          [filter]="filterBrokerViolations"
+          [model]="model()" />
+      </div>
+      <div class="flex">
+        {{ formFooter }}
+      </div>
+      <div class="flex justify-between">
+        <p class="flex flex-col">
+          @if (hasEmployees()) {
+            <span>{{ lang.map.copy_to_hr_department }} </span>
+          }
+          @if (hasBrokers()) {
+            <span>{{ lang.map.copy_to_legal_affairs }} </span>
+          }
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.lbl_department }} : </span>
+            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_signer }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_signer }}))</span
+            >
+          </span>
+        </p>
+      </div>
+    </ng-template>
+    <!-- End of Brokers -->
+
+    <ng-template #employees>
+      <div class="flex justify-between">
+        <p>
+          <span> {{ lang.map.mr }} : </span>
+          <span class="font-semibold">
+            {{ lang.map.vice_president }}
+          </span>
+          <span>{{ lang.map.respected }}</span>
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.investigation_file_number }} : </span>
+            <span class="font-semibold">{{ model().draftFullSerial }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_number }} : </span>
+            <span class="font-semibold">
+              (({{ lang.map.decision_number }}))
+            </span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_date }} : </span>
+            <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+          </span>
+        </p>
+      </div>
+      <div class="flex justify-center">{{ selectedPenalty.getNames() }}</div>
+      <div class="flex">
+        {{ formHeader }}
+      </div>
+      <div class="flex flex-col gap-4">
+        @for (offender of employeesOffenders(); track offender.id) {
+          <table
+            mat-table
+            class="table-style table-primary"
+            [dataSource]="offendersViolationsMap()[offender.id]">
+            <ng-container matColumnDef="violation">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  assertType(element).violationInfo.violationTypeInfo.getNames()
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="violationDate">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation_date }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                @if (assertType(element).isNormalDate()) {
+                  {{ assertType(element).violationInfo.violationsDate | date }}
+                } @else {
+                  <span class="flex gap-2">
+                    <span
+                      >{{ lang.map.date_from }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateFrom
+                          | date
+                      }}</span>
+                    </span>
+                    <span
+                      >{{ lang.map.date_to }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateTo
+                          | date
+                      }}</span>
+                    </span>
+                  </span>
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="offenderName">
+              <th colspan="100" mat-header-cell *matHeaderCellDef>
+                {{ lang.map.offender_name }} : {{ offender.getNames() }}
+              </th>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['offenderName']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let element; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="p-4" colspan="100">
+                {{ lang.map.no_records_to_display }}
+              </td>
+            </tr>
+          </table>
         }
-      </p>
-      <p class="flex flex-col">
-        <span>
-          <span>{{ lang.map.lbl_department }} : </span>
-          <span class="font-semibold">{{ lang.map.lbl_department }}</span>
-        </span>
-        <span>
-          <span>{{ lang.map.decision_signer }} : </span>
-          <span class="font-semibold">(({{ lang.map.decision_signer }}))</span>
-        </span>
-      </p>
-    </div>
+      </div>
+      <div>
+        <app-textarea
+          [label]="lang.map.comment"
+          [formControl]="employeesComment" />
+      </div>
+      <div>
+        <app-unlinked-violations
+          [filter]="filterEmployeeViolations"
+          [model]="model()" />
+      </div>
+      <div class="flex">
+        {{ formFooter }}
+      </div>
+      <div class="flex justify-between">
+        <p class="flex flex-col">
+          @if (hasEmployees()) {
+            <span>{{ lang.map.copy_to_hr_department }} </span>
+          }
+          @if (hasBrokers()) {
+            <span>{{ lang.map.copy_to_legal_affairs }} </span>
+          }
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.lbl_department }} : </span>
+            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_signer }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_signer }}))</span
+            >
+          </span>
+        </p>
+      </div>
+    </ng-template>
+    <!--  end of Employees  -->
+
+    <ng-template #all>
+      <div class="flex justify-between">
+        <p>
+          <span> {{ lang.map.mr }} : </span>
+          <span class="font-semibold">
+            {{ defaultForWhom() }}
+          </span>
+          <span>{{ lang.map.respected }}</span>
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.investigation_file_number }} : </span>
+            <span class="font-semibold">{{ model().draftFullSerial }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_number }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_number }}))</span
+            >
+          </span>
+          <span>
+            <span>{{ lang.map.decision_date }} : </span>
+            <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+          </span>
+        </p>
+      </div>
+      <div class="flex justify-center">{{ selectedPenalty.getNames() }}</div>
+      <div class="flex">
+        {{ formHeader }}
+      </div>
+      <div class="flex flex-col gap-4">
+        @for (offender of offenders(); track offender.id) {
+          <table
+            mat-table
+            class="table-style table-primary"
+            [dataSource]="offendersViolationsMap()[offender.id]">
+            <ng-container matColumnDef="violation">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  assertType(element).violationInfo.violationTypeInfo.getNames()
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="violationDate">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ lang.map.violation_date }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                @if (assertType(element).isNormalDate()) {
+                  {{ assertType(element).violationInfo.violationsDate | date }}
+                } @else {
+                  <span class="flex gap-2">
+                    <span
+                      >{{ lang.map.date_from }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateFrom
+                          | date
+                      }}</span>
+                    </span>
+                    <span
+                      >{{ lang.map.date_to }} :
+                      <span>{{
+                        assertType(element).violationInfo.violationsDateTo
+                          | date
+                      }}</span>
+                    </span>
+                  </span>
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="offenderName">
+              <th colspan="100" mat-header-cell *matHeaderCellDef>
+                {{ lang.map.offender_name }} : {{ offender.getNames() }}
+              </th>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="['offenderName']"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let element; columns: displayedColumns"></tr>
+            <tr class="mat-row" *matNoDataRow>
+              <td class="p-4" colspan="100">
+                {{ lang.map.no_records_to_display }}
+              </td>
+            </tr>
+          </table>
+        }
+      </div>
+      <div>
+        <app-textarea
+          [label]="lang.map.comment"
+          [formControl]="commentControl" />
+      </div>
+      @if (!isSingle) {
+        <div>
+          <app-unlinked-violations [model]="model()" />
+        </div>
+      }
+      <div class="flex">
+        {{ formFooter }}
+      </div>
+      <div class="flex justify-between">
+        <p class="flex flex-col">
+          @if (hasEmployees()) {
+            <span>{{ lang.map.copy_to_hr_department }} </span>
+          }
+          @if (hasBrokers()) {
+            <span>{{ lang.map.copy_to_legal_affairs }} </span>
+          }
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.lbl_department }} : </span>
+            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_signer }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_signer }}))</span
+            >
+          </span>
+        </p>
+      </div>
+    </ng-template>
   </div>
   <div class="dialog-footer justify-end">
     @if (isCase()) {

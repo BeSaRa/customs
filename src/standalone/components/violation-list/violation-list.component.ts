@@ -88,6 +88,8 @@ export class ViolationListComponent
   model = input<Investigation>(new Investigation());
 
   caseId = computed(() => this.model()?.id);
+  @Output()
+  violationChanged = new EventEmitter<void>();
 
   ngOnInit(): void {
     this.listenToAdd();
@@ -120,7 +122,10 @@ export class ViolationListComponent
           }
         }),
       )
-      .subscribe(() => this.updateModel.emit());
+      .subscribe(() => {
+        this.updateModel.emit();
+        this.violationChanged.emit();
+      });
   }
 
   private listenToReload() {
@@ -178,7 +183,7 @@ export class ViolationListComponent
             .afterClosed(),
         ),
       )
-      .subscribe();
+      .subscribe(() => this.violationChanged.emit());
   }
 
   private listenToDelete() {
@@ -219,6 +224,8 @@ export class ViolationListComponent
         );
         this.reload$.next();
         this.updateModel.emit();
+        // reload penalties
+        this.violationChanged.emit();
       });
   }
 

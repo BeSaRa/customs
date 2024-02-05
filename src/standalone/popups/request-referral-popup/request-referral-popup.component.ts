@@ -6,6 +6,7 @@ import {
   InputSignal,
   isSignal,
   OnInit,
+  signal,
 } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import {
@@ -39,7 +40,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { UnlinkedViolationsComponent } from '@standalone/components/unlinked-violations/unlinked-violations.component';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { OffenderTypes } from '@enums/offender-types';
@@ -48,6 +49,9 @@ import { EmployeeService } from '@services/employee.service';
 import { ToastService } from '@services/toast.service';
 import { TaskResponses } from '@enums/task-responses';
 import { UserClick } from '@enums/user-click';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { Violation } from '@models/violation';
+import { InfoService } from '@services/info.service';
 
 @Component({
   selector: 'app-request-referral-popup',
@@ -71,6 +75,9 @@ import { UserClick } from '@enums/user-click';
     MatRowDef,
     MatNoDataRow,
     UnlinkedViolationsComponent,
+    MatTabGroup,
+    MatTab,
+    NgTemplateOutlet,
   ],
   templateUrl: './request-referral-popup.component.html',
   styleUrl: './request-referral-popup.component.scss',
@@ -82,6 +89,9 @@ export class RequestReferralPopupComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
+  customsAffairsPAOUInfo =
+    inject(InfoService).info.globalSetting.customsAffairsPAOUInfo;
+
   data = inject<{
     offenders: Offender[];
     model: InputSignal<Investigation>;
@@ -95,12 +105,37 @@ export class RequestReferralPopupComponent
 
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
-  offenders = this.data.offenders;
+  offenders = signal(this.data.offenders);
   singleOffender = this.data.offenders[0];
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
-
   model = this.data.model;
+  penaltyKey = signal(this.data.selectedPenalty.penaltyKey);
+  employeesOffenders = computed(() => {
+    return this.offenders().filter(
+      offender => offender.type === OffenderTypes.EMPLOYEE,
+    );
+  });
+  brokersOffenders = computed(() => {
+    return this.offenders().filter(
+      offender => offender.type === OffenderTypes.ClEARING_AGENT,
+    );
+  });
+
+  hasEmployees = computed(() => {
+    return this.offenders().some(item => item.type === OffenderTypes.EMPLOYEE);
+  });
+
+  hasBrokers = computed(() => {
+    return this.offenders().some(
+      item => item.type === OffenderTypes.ClEARING_AGENT,
+    );
+  });
+
+  hasMixedOffenders = computed(() => {
+    return this.hasBrokers() && this.hasEmployees();
+  });
+
   updateModel: EventEmitter<void> = isSignal(this.data.updateModel)
     ? this.data.updateModel()
     : this.data.updateModel;
@@ -124,7 +159,7 @@ export class RequestReferralPopupComponent
   });
 
   oldPenaltyDecisionsMap = computed(() => {
-    return this.offenders
+    return this.offenders()
       .map(offender => {
         return this.model().getPenaltyDecisionByOffenderId(offender.id);
       })
@@ -137,13 +172,39 @@ export class RequestReferralPopupComponent
       }, {});
   });
 
-  isPresidentRequest =
-    this.selectedPenalty.penaltyKey === SystemPenalties.REFERRAL_TO_PRESIDENT;
-  isAssistantRequest =
-    this.selectedPenalty.penaltyKey ===
-    SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT;
+  isPresidentRequest = computed(
+    () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT,
+  );
+  isAssistantRequest = computed(
+    () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+  );
+
+  displayDefaultForm = computed(() => {
+    return (
+      this.isPresidentRequest() ||
+      (this.isAssistantRequest() && !this.hasMixedOffenders())
+    );
+  });
+
+  defaultForWhom = computed(() => {
+    return this.isAssistantRequest()
+      ? this.offenders()[0].type === OffenderTypes.ClEARING_AGENT
+        ? this.customsAffairsPAOUInfo.getNames()
+        : this.lang.map.vice_president
+      : this.lang.map.president;
+  });
 
   commentControl = new FormControl('', {
+    nonNullable: true,
+    validators: CustomValidators.required,
+  });
+
+  employeesComment = new FormControl('', {
+    nonNullable: true,
+    validators: CustomValidators.required,
+  });
+
+  brokersComment = new FormControl('', {
     nonNullable: true,
     validators: CustomValidators.required,
   });
@@ -151,7 +212,7 @@ export class RequestReferralPopupComponent
   displayedColumns = ['violation', 'violationDate'];
 
   get formHeader() {
-    return this.isPresidentRequest
+    return this.isPresidentRequest()
       ? this.isSingle
         ? this.lang.map.single_request_static_header_for_president
         : this.lang.map.bulk_request_static_header_for_president
@@ -161,23 +222,13 @@ export class RequestReferralPopupComponent
   }
 
   get formFooter() {
-    return this.isPresidentRequest
+    return this.isPresidentRequest()
       ? this.isSingle
         ? this.lang.map.single_request_static_footer_for_president
         : this.lang.map.bulk_request_static_footer_for_president
       : this.isSingle
         ? this.lang.map.single_request_static_footer_for_president_assistant
         : this.lang.map.bulk_request_static_footer_for_president_assistant;
-  }
-
-  hasEmployees(): boolean {
-    return this.offenders.some(item => item.type === OffenderTypes.EMPLOYEE);
-  }
-
-  hasClearingAgent(): boolean {
-    return this.offenders.some(
-      item => item.type === OffenderTypes.ClEARING_AGENT,
-    );
   }
 
   ngOnInit(): void {
@@ -192,7 +243,13 @@ export class RequestReferralPopupComponent
   private listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))
-      .pipe(map(() => this.commentControl.valid))
+      .pipe(
+        map(() =>
+          this.displayDefaultForm()
+            ? this.commentControl.valid
+            : this.employeesComment.valid && this.brokersComment.valid,
+        ),
+      )
       .pipe(
         tap(
           valid =>
@@ -205,7 +262,7 @@ export class RequestReferralPopupComponent
       .pipe(filter(valid => valid))
       .pipe(
         map(() => {
-          return this.offenders.map(item => {
+          return this.offenders().map(item => {
             return new PenaltyDecision()
               .clone<PenaltyDecision>({
                 ...this.oldPenaltyDecisionsMap()[item.id],
@@ -214,6 +271,11 @@ export class RequestReferralPopupComponent
                 penaltyId: this.selectedPenalty.id,
                 offenderId: item.id,
                 status: 1,
+                comment: this.displayDefaultForm()
+                  ? this.commentControl.value
+                  : item.type === OffenderTypes.ClEARING_AGENT
+                    ? this.brokersComment.value
+                    : this.employeesComment.value,
               })
               .save();
           });
@@ -244,7 +306,13 @@ export class RequestReferralPopupComponent
   private listenToComplete() {
     this.complete$
       .pipe(takeUntil(this.destroy$))
-      .pipe(map(() => this.commentControl.valid))
+      .pipe(
+        map(() =>
+          this.displayDefaultForm()
+            ? this.commentControl.valid
+            : this.brokersComment.valid && this.employeesComment.valid,
+        ),
+      )
       .pipe(
         filter(valid => {
           !valid &&
@@ -259,7 +327,18 @@ export class RequestReferralPopupComponent
           return this.model()
             .getService()
             .completeTask(this.model().getTaskId()!, {
-              comment: this.commentControl.value,
+              comment: this.isAssistantRequest()
+                ? JSON.stringify([
+                    {
+                      type: OffenderTypes.EMPLOYEE,
+                      comment: this.employeesComment.value,
+                    },
+                    {
+                      type: OffenderTypes.ClEARING_AGENT,
+                      comment: this.brokersComment.value,
+                    },
+                  ])
+                : this.commentControl.value,
               selectedResponse: this.response!,
               decisionIds: this.model()
                 .getPenaltyDecision()
@@ -275,5 +354,13 @@ export class RequestReferralPopupComponent
         );
         this.dialogRef.close(UserClick.YES);
       });
+  }
+
+  filterEmployeeViolations(v: Violation) {
+    return v.offenderTypeInfo.lookupKey === OffenderTypes.EMPLOYEE;
+  }
+
+  filterBrokerViolations(v: Violation) {
+    return v.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT;
   }
 }

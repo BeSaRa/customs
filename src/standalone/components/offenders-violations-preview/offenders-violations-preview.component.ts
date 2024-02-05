@@ -67,6 +67,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { intersection } from '@utils/utils';
 import { PenaltyIcons } from '@constants/penalty-icons';
+import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -165,7 +166,7 @@ export class OffendersViolationsPreviewComponent
         [item.lookupKey]: item,
       };
     }, {});
-  private loadPenalties$ = new Subject<void>();
+  loadPenalties$ = new Subject<void>();
   penaltiesLoaded$ = this.loadPenalties$
     .pipe(filter(() => this.canLoadPenalties()))
     .pipe(switchMap(() => this.loadPenalties()))
@@ -271,6 +272,25 @@ export class OffendersViolationsPreviewComponent
     Record<number, { first: number | null; second: Penalty[] }>
   >({});
 
+  penalties = computed(() => {
+    return Object.keys(this.penaltyMap()).reduce<
+      Record<string, PenaltyDecisionContract>
+    >((acc, offenderId) => {
+      if (!acc[offenderId]) {
+        acc[offenderId] = {
+          managerDecisionControl: this.penaltyMap()[Number(offenderId)].first,
+          system: this.penaltyMap()[Number(offenderId)].second.filter(
+            p => p.isSystem,
+          ),
+          normal: this.penaltyMap()[Number(offenderId)].second.filter(
+            p => !p.isSystem,
+          ),
+        };
+      }
+      return { ...acc };
+    }, {});
+  });
+
   isMandatoryToImposePenalty = computed(() => {
     return Object.keys(this.penaltyMap()).some(key => {
       return (
@@ -291,10 +311,26 @@ export class OffendersViolationsPreviewComponent
       this.penaltyDecisionService.openRequestReferralDialog,
   };
 
+  canMakeSystemDecision(offenderId: number): boolean {
+    return !!(
+      (
+        this.penalties() &&
+        this.penalties()[offenderId] &&
+        this.penalties()[offenderId].system.length &&
+        (!this.model().hasConcernedOffenders() ||
+          (this.model().hasConcernedOffenders() &&
+            this.model().isOffenderConcerned(offenderId)))
+      ) /*&&
+      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
+    );
+  }
+
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.offenders().length;
+    const numRows = this.offenders().filter(i =>
+      this.canMakeSystemDecision(i.id),
+    ).length;
     return numSelected === numRows;
   }
 
@@ -302,7 +338,11 @@ export class OffendersViolationsPreviewComponent
   toggleAllRows() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.offenders().forEach(row => this.selection.select(row));
+      : this.offenders().forEach(row => {
+          this.canMakeSystemDecision(row.id)
+            ? this.selection.select(row)
+            : null;
+        });
   }
 
   situationClick(

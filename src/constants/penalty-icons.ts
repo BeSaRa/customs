@@ -9,4 +9,5 @@ export const PenaltyIcons: Record<SystemPenalties, string> = {
   [SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL]: '',
   [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]: '',
   [SystemPenalties.SAVE]: '',
+  [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]: AppIcons.SCALE_BALANCE,
 };

@@ -158,4 +158,39 @@ export class Investigation extends BaseCase<
   getTaskId(): string | undefined {
     return this.taskDetails && this.taskDetails.tkiid;
   }
+
+  hasUnlinkedViolations(): boolean {
+    const relatedViolationsIds = this.offenderViolationInfo.map(
+      i => i.violationId,
+    );
+    return this.violationInfo.some(v => !relatedViolationsIds.includes(v.id));
+  }
+
+  getUnlinkedViolations(): Violation[] {
+    const relatedViolationsIds = this.offenderViolationInfo.map(
+      i => i.violationId,
+    );
+    return this.violationInfo.filter(v => !relatedViolationsIds.includes(v.id));
+  }
+
+  hasConcernedOffenders() {
+    return !!(
+      this.hasTask() &&
+      this.taskDetails.activityProperties &&
+      this.taskDetails.activityProperties.OffenderIds &&
+      this.taskDetails.activityProperties.OffenderIds.value &&
+      this.taskDetails.activityProperties.OffenderIds.value.items &&
+      this.taskDetails.activityProperties.OffenderIds.value.items.length
+    );
+  }
+
+  getConcernedOffenders(): number[] {
+    return this.hasConcernedOffenders()
+      ? this.taskDetails.activityProperties!.OffenderIds.value.items
+      : [];
+  }
+
+  isOffenderConcerned(offenderId: number): boolean {
+    return this.getConcernedOffenders().includes(offenderId);
+  }
 }

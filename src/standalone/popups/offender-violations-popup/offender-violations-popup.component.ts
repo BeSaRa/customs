@@ -125,7 +125,6 @@ export class OffenderViolationsPopupComponent
           this.offenderViolationService
             .load(undefined, {
               caseId: this.model().id,
-              offenderId: this.offender.id,
             })
             .pipe(ignoreErrors()),
         ),
@@ -144,15 +143,15 @@ export class OffenderViolationsPopupComponent
           return combineLatest(
             (this.control?.value || []).map((violationId: number) => {
               // TODO : call save from Model it self(OffenderViolation) but we have a backend issue related to this call
-              return this.offenderViolationService.create(
-                new OffenderViolation().clone<OffenderViolation>({
+              return new OffenderViolation()
+                .clone<OffenderViolation>({
                   caseId: this.model().id,
                   offenderId: this.offender.id,
                   violationId: violationId,
                   status: 1,
                   proofStatus: ProofTypes.UNDEFINED,
-                }),
-              );
+                })
+                .save();
             }),
           );
         }),

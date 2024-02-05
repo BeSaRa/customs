@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  EventEmitter,
-  inject,
-  input,
-  OnInit,
-} from '@angular/core';
+import { Component, EventEmitter, inject, input, OnInit } from '@angular/core';
 import { AppIcons } from '@constants/app-icons';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatIcon } from '@angular/material/icon';
@@ -61,25 +54,8 @@ export class DecisionMakerComponent
     input.required<
       Record<number, { first: number | null; second: Penalty[] }>
     >();
+  penalties = input.required<Record<number, PenaltyDecisionContract>>();
 
-  penalties = computed(() => {
-    return Object.keys(this.penaltyMap()).reduce<
-      Record<string, PenaltyDecisionContract>
-    >((acc, offenderId) => {
-      if (!acc[offenderId]) {
-        acc[offenderId] = {
-          managerDecisionControl: this.penaltyMap()[Number(offenderId)].first,
-          system: this.penaltyMap()[Number(offenderId)].second.filter(
-            p => p.isSystem,
-          ),
-          normal: this.penaltyMap()[Number(offenderId)].second.filter(
-            p => !p.isSystem,
-          ),
-        };
-      }
-      return { ...acc };
-    }, {});
-  });
   systemAction$: Subject<SystemPenalties> = new Subject<SystemPenalties>();
 
   ngOnInit(): void {
@@ -95,19 +71,26 @@ export class DecisionMakerComponent
 
   canMakeSystemDecision(offenderId: number): boolean {
     return !!(
-      this.penalties() &&
-      this.penalties()[offenderId] &&
-      this.penalties()[offenderId].system.length &&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
+      (
+        this.penalties() &&
+        this.penalties()[offenderId] &&
+        this.penalties()[offenderId].system.length &&
+        (!this.model().hasConcernedOffenders() ||
+          (this.model().hasConcernedOffenders() &&
+            this.model().isOffenderConcerned(offenderId)))
+      ) /*&&
+      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
     );
   }
 
   canMakeNormalDecision(offenderId: number): boolean {
     return !!(
-      this.penalties() &&
-      this.penalties()[offenderId] &&
-      this.penalties()[offenderId].normal.length &&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
+      (
+        this.penalties() &&
+        this.penalties()[offenderId] &&
+        this.penalties()[offenderId].normal.length
+      ) /*&&
+      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
     );
   }
 

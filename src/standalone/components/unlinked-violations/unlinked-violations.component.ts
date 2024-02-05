@@ -6,6 +6,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { LangService } from '@services/lang.service';
 import { Investigation } from '@models/investigation';
+import { Violation } from '@models/violation';
 
 @Component({
   selector: 'app-unlinked-violations',
@@ -24,12 +25,13 @@ export class UnlinkedViolationsComponent {
   lang = inject(LangService);
   model = input.required<Investigation>();
   columns: string[] = ['violationName', 'classification', 'description'];
+  filter = input<(c: Violation) => boolean>(v => !!v);
   violations = computed(() => {
     const linkedViolationsIds = this.model().offenderViolationInfo.map(
       i => i.violationId,
     );
     return this.model().violationInfo.filter(
-      v => !linkedViolationsIds.includes(v.id),
+      v => !linkedViolationsIds.includes(v.id) && this.filter()(v),
     );
   });
 }

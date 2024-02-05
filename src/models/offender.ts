@@ -33,13 +33,6 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   agencyInfo!: AdminResult;
 
   override getNames(): string {
-    return (
-      (this.offenderInfo &&
-        (this.offenderInfo[
-          (this.getLangService().getCurrent().code +
-            'Name') as keyof typeof this.offenderInfo
-        ] as unknown as string)) ||
-      ''
-    );
+    return this.offenderInfo?.getNames() || '';
   }
 }

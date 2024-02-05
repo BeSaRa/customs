@@ -72,6 +72,7 @@ export const AppIcons = {
   ACCOUNT_ARROW_LEFT: 'account-arrow-left',
   ACCOUNT_ARROW_LEFT_OUTLINE: 'account-arrow-left-outline',
   GAVEL: 'gavel',
+  SCALE_BALANCE: 'scale-balance',
 };
 
 export type AppIconsType = typeof AppIcons;

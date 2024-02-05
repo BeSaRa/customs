@@ -23,18 +23,28 @@
     </div>
   </div>
   <div class="dialog-footer justify-center">
-    @if (!isConfirmDialog()) {
-      <app-button (click)="close()" [buttonType]="selectedClass.btn">
-        {{ closeButton }}
-      </app-button>
-    }
-    @if (isConfirmDialog()) {
-      <app-button (click)="yes()" [buttonType]="selectedClass.btn">
-        {{ yesButton }}
-      </app-button>
-      <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
-        {{ noNoButton }}
-      </app-button>
+    @if (isMultiDialog()) {
+      @for (button of data.multiButtons; track button) {
+        <app-button
+          (click)="dialogRef.close(button.value)"
+          [buttonType]="getButtonType(button.type)">
+          {{ getButtonLabel(button.key) }}
+        </app-button>
+      }
+    } @else {
+      @if (!isConfirmDialog()) {
+        <app-button (click)="close()" [buttonType]="selectedClass.btn">
+          {{ closeButton }}
+        </app-button>
+      }
+      @if (isConfirmDialog()) {
+        <app-button (click)="yes()" [buttonType]="selectedClass.btn">
+          {{ yesButton }}
+        </app-button>
+        <app-button (click)="no()" [buttonType]="selectedClass.secondBtn!">
+          {{ noNoButton }}
+        </app-button>
+      }
     }
   </div>
 </div>

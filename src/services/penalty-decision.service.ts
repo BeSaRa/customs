@@ -90,7 +90,9 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         model,
         updateModel,
         selectedPenalty,
-        isSingle: offenders.length === 1,
+        isSingle:
+          (offenders.length === 1 && !response) ||
+          (response && !model().hasUnlinkedViolations()),
         response,
       },
     });

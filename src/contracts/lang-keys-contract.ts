@@ -1,4 +1,8 @@
 export interface LangKeysContract {
+  president: string;
+  vice_president: string;
+  customs_brokers: string;
+  employees: string;
   msg_x_performed_successfully: string;
   take_action: string;
   copy_to_legal_affairs: string;

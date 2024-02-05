@@ -8,6 +8,7 @@ import { Offender } from './offender';
 import { OffenderTypes } from '@enums/offender-types';
 import { Witness } from './witness';
 import { WitnessTypes } from '@enums/witness-types';
+import { NamesContract } from '@contracts/names-contract';
 
 const { send, receive } = new ClearingAgentInterceptor();
 
@@ -111,5 +112,18 @@ export class ClearingAgent extends BaseModel<
 
   isAgent(): boolean {
     return true;
+  }
+
+  override getNames(): string {
+    return (
+      this[
+        (this.getLangService().getCurrent().code +
+          'Name') as keyof NamesContract
+      ] ||
+      this[
+        (this.getLangService().getCurrent().toggleTo +
+          'Name') as keyof NamesContract
+      ]
+    );
   }
 }

@@ -4,6 +4,7 @@ import { GlobalSettingInterceptor } from '@model-interceptors/global-setting-int
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { FormBuilder } from '@angular/forms';
+import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new GlobalSettingInterceptor();
 
@@ -23,7 +24,8 @@ export class GlobalSetting extends BaseModel<
   enableMailNotification!: number;
   enableSMSNotification!: number;
   maxDeductionRatio!: number;
-
+  customsAffairsPAOU!: number;
+  customsAffairsPAOUInfo!: AdminResult;
   // extra properties
   supportEmailListParsed: string[] = [];
   fileTypeParsed: string[] = [];

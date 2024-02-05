@@ -5,6 +5,7 @@ import { PriorityNames } from '@enums/priority-names';
 import { CollaborationDetails } from '@models/collaboration-details';
 import { ActionNames } from '@enums/action-names';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { ActivityPropertiesContract } from '@contracts/activity-properties-contract';
 
 export class TaskDetails {
   fromUserInfo!: AdminResult;
@@ -45,6 +46,6 @@ export class TaskDetails {
   actions!: ActionNames[];
   isRead!: boolean;
   isMain!: boolean;
-  activityProperties!: unknown;
+  activityProperties?: ActivityPropertiesContract;
   penaltyDecisions: PenaltyDecision[] = [];
 }

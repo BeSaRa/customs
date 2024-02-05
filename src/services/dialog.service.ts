@@ -12,6 +12,7 @@ import { DialogType } from '@enums/dialog-type';
 import { LangService } from '@services/lang.service';
 import { UserClick } from '@enums/user-click';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { ButtonTypeContract } from '@contracts/button-type-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -120,6 +121,35 @@ export class DialogService implements DialogContract {
         content,
         buttons,
         type: DialogType.CONFIRM,
+      },
+    });
+  }
+
+  multi(
+    content: string,
+    title?: string,
+    multiButtons: {
+      key: string | keyof LangKeysContract;
+      value: unknown;
+      type: keyof ButtonTypeContract;
+    }[] = [
+      { key: 'yes', value: UserClick.YES, type: 'primary' },
+      { key: 'no', value: UserClick.NO, type: 'primary-outline' },
+    ],
+    disableClose = true,
+  ): MatDialogRef<DialogComponent, UserClick> {
+    return this.open<
+      DialogComponent,
+      DefaultDialogDataContract<string>,
+      UserClick
+    >(DialogComponent, {
+      direction: this.lang.getCurrent().direction,
+      disableClose,
+      data: {
+        title,
+        content,
+        type: DialogType.MULTI,
+        multiButtons,
       },
     });
   }

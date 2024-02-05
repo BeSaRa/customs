@@ -1,5 +1,6 @@
 import { DialogType } from '@enums/dialog-type';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { ButtonTypeContract } from '@contracts/button-type-contract';
 
 export interface DefaultDialogDataContract<T> {
   content: T;
@@ -9,4 +10,9 @@ export interface DefaultDialogDataContract<T> {
     yes: string | keyof LangKeysContract;
     no: string | LangKeysContract;
   };
+  multiButtons?: {
+    key: string | LangKeysContract;
+    value: unknown;
+    type?: keyof ButtonTypeContract;
+  }[];
 }

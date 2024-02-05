@@ -143,6 +143,7 @@
           </div>
           <app-decision-maker
             [penaltyMap]="penaltyMap()"
+            [penalties]="penalties()"
             [offender]="element"
             [updateModel]="updateModel()"
             [model]="model()" />
@@ -366,6 +367,7 @@
     </th>
     <td mat-cell *matCellDef="let element">
       <mat-checkbox
+        [disabled]="!canMakeSystemDecision(element.id)"
         (click)="$event.stopPropagation()"
         (change)="$event ? selection.toggle(element) : null"
         [checked]="selection.isSelected(element)">

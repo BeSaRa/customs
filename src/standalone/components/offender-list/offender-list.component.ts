@@ -189,8 +189,6 @@ export class OffenderListComponent
           ),
         ];
         this.offenderDeleted.emit(model);
-
-        console.log(this.model());
         this.updateModel.emit();
       });
   }

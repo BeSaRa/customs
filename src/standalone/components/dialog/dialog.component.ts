@@ -62,8 +62,15 @@ export class DialogComponent {
       btn: 'primary',
       secondBtn: 'primary-outline',
     },
+    multi: {
+      bg: 'bg-primary',
+      text: 'text-primary',
+      icon: 'help-circle-outline',
+      btn: 'primary',
+      secondBtn: 'primary-outline',
+    },
   };
-  private dialogRef = inject(MatDialogRef);
+  dialogRef = inject(MatDialogRef);
   data: DefaultDialogDataContract<string> = inject(MAT_DIALOG_DATA);
   selectedClass: DialogSelectedClasses = this.dialogTypes[this.data.type];
   lang = inject(LangService);
@@ -106,5 +113,21 @@ export class DialogComponent {
 
   isConfirmDialog(): boolean {
     return this.data.type === DialogType.CONFIRM;
+  }
+
+  isMultiDialog(): boolean {
+    return this.data.type === DialogType.MULTI;
+  }
+
+  getButtonLabel(key: string | LangKeysContract) {
+    return this.lang.map[key as unknown as keyof LangKeysContract]
+      ? this.lang.map[key as unknown as keyof LangKeysContract]
+      : key;
+  }
+
+  getButtonType(
+    type: keyof ButtonTypeContract | undefined,
+  ): keyof ButtonTypeContract {
+    return !type ? 'primary' : type;
   }
 }
