@@ -141,6 +141,7 @@ export class OffendersViolationsPreviewComponent
     'qid',
     'departmentCompany',
     'violations',
+    'offenderStatus',
     'situationSearch',
     'decision',
     'actions',
