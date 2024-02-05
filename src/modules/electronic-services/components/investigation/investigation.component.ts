@@ -376,10 +376,13 @@ export class InvestigationComponent
     this.witnessesListComponent.resetDataList();
     this.updateModel$.next(null);
     this.caseFolders = [];
+    this.form.reset();
+    this.form.updateValueAndValidity();
     this.caseFoldersMap = undefined;
     this.generalAttachments.resetDataList();
     this.officialAttachments.resetDataList();
-    this.tabChange(0, false);
+    this.selectedTab = 0;
+    this.tabChange(1, false);
   }
 
   private listenToLocationChange() {

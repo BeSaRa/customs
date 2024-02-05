@@ -443,4 +443,5 @@ export interface LangKeysContract {
   attachment: string;
   lbl_attachments: string;
   not_specified: string;
+  select_employee: string;
 }
