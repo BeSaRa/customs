@@ -26,7 +26,13 @@
     </ng-container>
     <!-- attachmentType -->
     <ng-container matColumnDef="attachmentType">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.attachment_type }}</th>
+      <th mat-header-cell *matHeaderCellDef>
+        {{
+          this.folderType === FolderType.OFFICIAL
+            ? lang.map.movement
+            : lang.map.attachment_type
+        }}
+      </th>
       <td mat-cell *matCellDef="let element">
         {{ element.attachmentTypeInfo?.getNames() }}
       </td>
