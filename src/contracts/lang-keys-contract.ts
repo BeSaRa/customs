@@ -438,4 +438,8 @@ export interface LangKeysContract {
   invalid_investigation_data: string;
   occurrence_times: string;
   msg_there_is_already_a_violation_with_same_type_and_date_exist: string;
+  movement: string;
+  no_attachments: string;
+  attachment: string;
+  lbl_attachments: string;
 }

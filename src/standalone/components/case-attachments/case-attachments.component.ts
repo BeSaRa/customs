@@ -33,6 +33,7 @@ import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { ignoreErrors } from '@utils/utils';
 import { Config } from '@constants/config';
+import { FolderType } from '@enums/folder-type.enum';
 
 @Component({
   selector: 'app-case-attachments',
@@ -57,7 +58,10 @@ export class CaseAttachmentsComponent
   delete$ = new Subject<CaseAttachment>();
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  protected readonly FolderType = FolderType;
   caseId: InputSignal<string | undefined> = input();
+  @Input()
+  folderType!: FolderType;
   @Input()
   type: 'folder' | 'offender' = 'folder';
   @Input()
@@ -96,6 +100,9 @@ export class CaseAttachmentsComponent
     this.listenToDelete();
     this._load();
     this.reload$.next();
+    if (this.folderType === FolderType.OFFICIAL) {
+      this.displayedColumns.shift();
+    }
   }
 
   private _load() {

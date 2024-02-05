@@ -11,6 +11,7 @@
     <app-case-attachments
       [service]="model().getService()"
       #attachmentsCaseComponent
+      [folderType]="folderType.OFFENDER"
       [entityId]="offenderId"
       [readonly]="readonly"
       [type]="'offender'"
