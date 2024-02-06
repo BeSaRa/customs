@@ -437,4 +437,5 @@ export interface LangKeysContract {
   end_date: string;
   invalid_investigation_data: string;
   occurrence_times: string;
+  msg_there_is_already_a_violation_with_same_type_and_date_exist: string;
 }
