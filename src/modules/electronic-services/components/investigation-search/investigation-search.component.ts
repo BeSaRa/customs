@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { AppIcons } from '@constants/app-icons';
@@ -49,6 +49,12 @@ export class InvestigationSearchComponent implements OnInit {
   displayedList = new MatTableDataSource<Investigation>();
   selectedTab = 0;
 
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.code === 'Enter') {
+      this.search$.next();
+    }
+  }
   ngOnInit(): void {
     this.form = this.fb.group(new Investigation().buildForm());
     this.listenToSearch();
