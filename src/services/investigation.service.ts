@@ -16,6 +16,7 @@ import { BlobModel } from '@models/blob-model';
 import { DeclarationNumberDetailsResult } from '@models/declaration-number-details-result';
 import { b64toBlob } from '@utils/utils';
 import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
+import { Violation } from '@models/violation';
 
 @CastResponseContainer({
   $default: {
@@ -52,11 +53,13 @@ export class InvestigationService
     model: InputSignal<Investigation>,
     askForSaveModel: EventEmitter<void>,
     reportType: InputSignal<ReportType>,
+    violationsList: Violation[],
   ): MatDialogRef<ViolationPopupComponent> {
     return this.violationService.openCreateDialog(undefined, {
       model,
       askForSaveModel,
       reportType,
+      violationsList,
     });
   }
 

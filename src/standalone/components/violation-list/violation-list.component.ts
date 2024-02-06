@@ -114,6 +114,7 @@ export class ViolationListComponent
                 this.model,
                 this.askForSaveModel,
                 this.reportType,
+                this.getViolations(),
               )
               .afterClosed();
           } else {
