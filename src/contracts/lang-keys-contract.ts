@@ -448,4 +448,5 @@ export interface LangKeysContract {
   msg_delete_selected_confirm: string;
   msg_delete_selected_success: string;
   decision_type: string;
+  save_and_continue: string;
 }

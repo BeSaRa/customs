@@ -20,7 +20,7 @@
       icon="DELETE"></app-icon-button>
   }
 </div>
-<div class="shadow relative overflow-auto" style="max-height: 500px">
+<div class="shadow relative overflow-auto" style="max-height: 30rem">
   <table
     mat-table
     matSort
@@ -46,34 +46,13 @@
         </mat-checkbox>
       </td>
     </ng-container>
-    <!-- offenderLevel -->
-    <ng-container matColumnDef="offenderLevel">
-      <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>
-        {{ lang.map.offender_level }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.offenderLevelInfo.getNames() }}
-      </td>
-    </ng-container>
-
     <!-- repeat -->
     <ng-container matColumnDef="repeat">
       <th mat-header-cell mat-sort-header="repeat" *matHeaderCellDef>
-        {{ lang.map.repeat }}
+        {{ lang.map.occurrence_times }}
       </th>
       <td mat-cell *matCellDef="let element">{{ element.repeat }}</td>
     </ng-container>
-
-    <!-- penalty -->
-    <ng-container matColumnDef="penalty">
-      <th mat-header-cell mat-sort-header="penalty" *matHeaderCellDef>
-        {{ lang.map.penalty }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.penaltyInfo.getNames() }}
-      </td>
-    </ng-container>
-
     <!-- penaltySigner -->
     <ng-container matColumnDef="penaltySigner">
       <th mat-header-cell mat-sort-header="penaltySigner" *matHeaderCellDef>
@@ -83,7 +62,24 @@
         {{ element.penaltySignerInfo.getNames() }}
       </td>
     </ng-container>
-
+    <!-- offenderLevel -->
+    <ng-container matColumnDef="offenderLevel">
+      <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>
+        {{ lang.map.offender_level }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.offenderLevelInfo.getNames() }}
+      </td>
+    </ng-container>
+    <!-- penalty -->
+    <ng-container matColumnDef="penalty">
+      <th mat-header-cell mat-sort-header="penalty" *matHeaderCellDef>
+        {{ lang.map.penalty }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.penaltyInfo.getNames() }}
+      </td>
+    </ng-container>
     <!-- penaltyGuidance -->
     <ng-container matColumnDef="penaltyGuidance">
       <th mat-header-cell mat-sort-header="penaltyGuidance" *matHeaderCellDef>
@@ -146,3 +142,11 @@
   </table>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
+<mat-paginator
+  class="border-t border-gray-200"
+  (page)="paginate($event)"
+  [pageSizeOptions]="pageSizeOptions"
+  [pageSize]="limit"
+  [showFirstLastButtons]="showFirstLastButtons"
+  [length]="length">
+</mat-paginator>

@@ -1,4 +1,4 @@
-<div class="dialog-container">
+<div class="dialog-container" style="max-width: 70rem">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_violation_penalty }}</h1>
     <app-icon-button
@@ -74,8 +74,15 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="saveBulk$.next()" buttonType="primary"
+      <app-button
+        (click)="continue = false; saveBulk$.next()"
+        buttonType="primary"
         >{{ lang.map.save }}
+      </app-button>
+      <app-button
+        (click)="continue = true; saveBulk$.next()"
+        buttonType="primary"
+        >{{ lang.map.save_and_continue }}
       </app-button>
     }
     @if (!inViewMode()) {
