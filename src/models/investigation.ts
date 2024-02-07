@@ -12,6 +12,7 @@ import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confiden
 import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { ServiceRegistry } from '@services/service-registry';
+import { SystemPenalties } from '@enums/system-penalties';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -183,13 +184,38 @@ export class Investigation extends BaseCase<
     );
   }
 
-  getConcernedOffenders(): number[] {
+  getConcernedOffendersIds(): number[] {
     return this.hasConcernedOffenders()
       ? this.taskDetails.activityProperties!.OffenderIds.value.items
       : [];
   }
 
+  getConcernedOffenders(): Offender[] {
+    const offendersIds = this.getConcernedOffendersIds();
+    return this.offenderInfo.filter(offender =>
+      offendersIds.includes(offender.id),
+    );
+  }
+
+  getConcernedOffendersWithOutOldDecision(
+    penaltyKey?: SystemPenalties,
+  ): Offender[] {
+    const oldDecisions = this.penaltyDecisions.reduce<
+      Record<number, PenaltyDecision>
+    >((acc, penalty) => {
+      return { ...acc, [penalty.offenderId]: penalty };
+    }, {});
+    const offendersHasDecisionsIds = Object.keys(oldDecisions).map(Number);
+    return this.getConcernedOffenders().filter(offender => {
+      return !penaltyKey
+        ? !offendersHasDecisionsIds.includes(offender.id)
+        : offendersHasDecisionsIds.includes(offender.id)
+          ? oldDecisions[offender.id].penaltyInfo.penaltyKey === penaltyKey
+          : true;
+    });
+  }
+
   isOffenderConcerned(offenderId: number): boolean {
-    return this.getConcernedOffenders().includes(offenderId);
+    return this.getConcernedOffendersIds().includes(offenderId);
   }
 }

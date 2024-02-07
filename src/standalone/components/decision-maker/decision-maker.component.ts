@@ -99,7 +99,6 @@ export class DecisionMakerComponent
       this.offender().id,
     );
     const systemPenaltyKeys = Object.values(SystemPenalties).filter(Number);
-
     of(null)
       .pipe(take(1))
       .pipe(

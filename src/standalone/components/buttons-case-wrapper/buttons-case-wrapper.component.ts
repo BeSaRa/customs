@@ -201,7 +201,11 @@ export class ButtonsCaseWrapperComponent
         exhaustMap(({ selectedPenalty, response }) => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
-              this.model().offenderInfo,
+              this.model().hasConcernedOffenders()
+                ? this.model().getConcernedOffendersWithOutOldDecision(
+                    selectedPenalty.penaltyKey,
+                  )
+                : this.model().offenderInfo,
               this.model,
               this.updateModel,
               selectedPenalty,
