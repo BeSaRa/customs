@@ -444,4 +444,8 @@ export interface LangKeysContract {
   lbl_attachments: string;
   not_specified: string;
   select_employee: string;
+  is_penalty: string;
+  msg_delete_selected_confirm: string;
+  msg_delete_selected_success: string;
+  decision_type: string;
 }

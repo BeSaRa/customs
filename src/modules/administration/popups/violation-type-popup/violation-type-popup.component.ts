@@ -36,6 +36,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.lookupService.lookups.managerDecisionControl;
   filteredManagerDecisions: Lookup[] =
     this.lookupService.lookups.managerDecisionControl;
+  activeTab = 0;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -71,7 +72,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    this.dialogRef.close(this.model);
+    this.activeTab = 1;
   }
 
   protected loadViolationClassifications() {
@@ -83,27 +84,35 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   get isNumeric() {
     return this.form.get('isNumeric');
   }
+
   get classificationId() {
     return this.form.get('classificationId');
   }
+
   get offenderType() {
     return this.form.get('offenderType');
   }
+
   get responsibilityRepeatViolation() {
     return this.form.get('responsibilityRepeatViolations');
   }
+
   get criminalType() {
     return this.form.get('criminalType');
   }
+
   get numericFrom() {
     return this.form.get('numericFrom');
   }
+
   get numericTo() {
     return this.form.get('numericTo');
   }
+
   get isAbsence() {
     return this.form.get('isAbsence');
   }
+
   get violationLevel() {
     return this.form.get('level');
   }
@@ -120,6 +129,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
     return isCriminal;
   }
+
   isCustom(): boolean {
     if (this.violationClassifications === undefined) return false;
     let isCustom = false;
@@ -132,12 +142,14 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     });
     return isCustom;
   }
+
   isClearingAgent(): boolean {
     let isClearingAgent = false;
     if (this.offenderType?.value === OffenderTypes.ClEARING_AGENT)
       isClearingAgent = true;
     return isClearingAgent;
   }
+
   onViolationClassificationChange() {
     this.classificationId?.valueChanges.subscribe(value => {
       if (!this.isCriminal()) {
@@ -175,6 +187,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       }
     });
   }
+
   onIsNumericChange() {
     this.isNumeric?.valueChanges.subscribe(() => {
       if (!this.isNumeric?.value) {
@@ -197,6 +210,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
       }
     });
   }
+
   onViolationLevelChange() {
     this.violationLevel?.valueChanges.subscribe(() => {
       this.filteredManagerDecisions = this.managerDecisions;

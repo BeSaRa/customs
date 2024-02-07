@@ -9,37 +9,31 @@
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-3 gap-4 border-b-2">
         <app-select-input
           formControlName="offenderType"
           [options]="offenderTypes"
           [label]="lang.map.offender_type"
           bindValue="lookupKey"
-          bindLabel="getNames"
-          [enableFilter]="true"
-          bindFilter="getNames" />
-        @if (!!this.offenderTypeCtrl?.valid) {
-          <app-select-input
-            formControlName="violationTypeId"
-            [options]="filteredViolationTypes"
-            [label]="lang.map.violation_type"
-            bindValue="id"
-            bindLabel="getNames"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-        }
+          bindLabel="getNames" />
+        <app-select-input
+          formControlName="violationTypeId"
+          [options]="violationTypes"
+          [label]="lang.map.violation_type"
+          bindValue="id"
+          bindLabel="getNames" />
         <app-input
           formControlName="repeat"
-          [label]="lang.map.repeat"
+          [label]="lang.map.occurrence_times"
           type="number"></app-input>
-        @if (!!offenderTypeCtrl?.valid) {
-          <app-select-input
-            formControlName="penaltySigner"
-            [options]="filteredPenaltySigners"
-            [label]="lang.map.penalty_signer"
-            bindValue="lookupKey"
-            bindLabel="getNames" />
-        }
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-3">
+        <app-select-input
+          formControlName="penaltySigner"
+          [options]="filteredPenaltySigners"
+          [label]="lang.map.penalty_signer"
+          bindValue="lookupKey"
+          bindLabel="getNames" />
         @if (needOffenderLevel()) {
           <app-select-input
             formControlName="offenderLevel"
@@ -48,32 +42,33 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
         }
-        @if (showPenalties()) {
+        @if (showDecisionType()) {
+          <app-select-input
+            [formControl]="decisionType"
+            [options]="decisionTypes"
+            [label]="lang.map.decision_type"
+            bindValue="lookupKey"
+            bindLabel="getNames" />
+        }
+        @if (filteredPenalties.length) {
           <app-select-input
             formControlName="penaltyArray"
-            [options]="filteredPenalties"
+            [options]="penaltiesOrReferral"
             [label]="lang.map.penalty"
             bindValue="id"
             bindLabel="getNames"
             [enableFilter]="true"
             bindFilter="getNames"
             [isMultiple]="true" />
+          @if (showPenaltyGuidance()) {
+            <app-select-input
+              formControlName="penaltyGuidance"
+              [options]="penaltyGuidance"
+              [label]="lang.map.penalty_guidance"
+              bindValue="id"
+              bindLabel="getNames" />
+          }
         }
-        @if (showPenaltyGuidance()) {
-          <app-select-input
-            formControlName="penaltyGuidance"
-            [options]="penaltyGuidance"
-            [label]="lang.map.penalty_guidance"
-            bindValue="id"
-            bindLabel="getNames" />
-        }
-        <div class="flex flex-row pl-1 items-center justify-start">
-          <app-switch
-            [trueValue]="1"
-            [falseValue]="0"
-            formControlName="status"
-            [label]="lang.map.status"></app-switch>
-        </div>
       </div>
     </ng-container>
   </div>
