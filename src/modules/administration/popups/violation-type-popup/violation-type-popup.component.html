@@ -99,7 +99,7 @@
           <ng-container>
             <div class="p-4">
               <div class="mb-4">
-                {{ lang.map.ar_name }} : {{ form.get('arName')?.value }}
+                {{ lang.map.violation_type }} : {{ model.getNames() }}
               </div>
               <app-violation-penalty
                 [violationType]="model.id"
