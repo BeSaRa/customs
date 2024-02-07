@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ViolationPenalty } from '@models/violation-penalty';
@@ -33,7 +33,10 @@ import { PenaltyGuidances } from '@enums/penalty-guidances';
   templateUrl: './violation-penalty-popup.component.html',
   styleUrls: ['./violation-penalty-popup.component.scss'],
 })
-export class ViolationPenaltyPopupComponent extends AdminDialogComponent<ViolationPenalty> {
+export class ViolationPenaltyPopupComponent
+  extends AdminDialogComponent<ViolationPenalty>
+  implements OnInit
+{
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ViolationPenalty> = inject(MAT_DIALOG_DATA);
   violationPenaltyService = inject(ViolationPenaltyService);
@@ -59,6 +62,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   decisionType = new FormControl();
 
   decisionTypes: Lookup[] = inject(LookupService).lookups.decisionTypes;
+  continue = false;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -125,7 +129,10 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    this.dialogRef.close(this.model);
+    if (!this.continue) this.dialogRef.close(this.model);
+    this.decisionType.setValue(null);
+    this.controls.penaltyArray()?.setValue([]);
+    this.controls.penaltyGuidance()?.setValue(null);
   }
 
   onPenaltySignerChange() {

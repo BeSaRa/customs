@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ViolationPenalty } from '@models/violation-penalty';
 import { ViolationPenaltyService } from '@services/violation-penalty.service';
@@ -20,11 +20,14 @@ import { ignoreErrors } from '@utils/utils';
   templateUrl: './violation-penalty.component.html',
   styleUrls: ['./violation-penalty.component.scss'],
 })
-export class ViolationPenaltyComponent extends AdminComponent<
-  ViolationPenaltyPopupComponent,
-  ViolationPenalty,
-  ViolationPenaltyService
-> {
+export class ViolationPenaltyComponent
+  extends AdminComponent<
+    ViolationPenaltyPopupComponent,
+    ViolationPenalty,
+    ViolationPenaltyService
+  >
+  implements OnInit
+{
   service = inject(ViolationPenaltyService);
   penaltyService = inject(PenaltyService);
   violationTypeService = inject(ViolationTypeService);
@@ -65,23 +68,23 @@ export class ViolationPenaltyComponent extends AdminComponent<
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ViolationPenalty> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
+    new TextFilterColumn('repeat'),
+    new SelectFilterColumn(
+      'penaltySigner',
+      this.lookupService.lookups.penaltySigner,
+      'lookupKey',
+      'getNames',
+    ),
     new SelectFilterColumn(
       'offenderLevel',
       this.lookupService.lookups.offenderLevel,
       'lookupKey',
       'getNames',
     ),
-    new TextFilterColumn('repeat'),
     new SelectFilterColumn(
       'penalty',
       this.penaltyService.loadAsLookups(),
       'id',
-      'getNames',
-    ),
-    new SelectFilterColumn(
-      'penaltySigner',
-      this.lookupService.lookups.penaltySigner,
-      'lookupKey',
       'getNames',
     ),
     new SelectFilterColumn(
