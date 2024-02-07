@@ -16,19 +16,18 @@ export class GlobalSettingInterceptor
   receive(model: GlobalSetting): GlobalSetting {
     GlobalSettingInterceptor.parseFileTypes(model);
     GlobalSettingInterceptor.parseEmailList(model);
-    const staticOu = {
-      arName: 'مساعد الرئيس للشؤون الجمركية',
-      enName: 'Customs Affairs President Assistant',
-      id: 14,
-    };
-    model.customsAffairsPAOUInfo = AdminResult.createInstance(staticOu);
+    model.customsAffairsPAOUInfo = AdminResult.createInstance(
+      model.customsAffairsPAOUInfo,
+    );
     return model;
   }
+
   private static stringifyFileTypes(model: Partial<GlobalSetting>): void {
     model.fileType = JSON.stringify(
       (model.fileTypeParsed ?? []).filter(fileType => isValidValue(fileType)),
     );
   }
+
   private static parseFileTypes(model: GlobalSetting): void {
     try {
       model.fileTypeParsed = JSON.parse(model.fileType);
@@ -36,11 +35,13 @@ export class GlobalSettingInterceptor
       model.fileTypeParsed = [];
     }
   }
+
   private static stringifyEmailList(model: Partial<GlobalSetting>) {
     model.supportEmailList = JSON.stringify(
       (model.supportEmailListParsed ?? []).filter(email => isValidValue(email)),
     );
   }
+
   private static parseEmailList(model: GlobalSetting): void {
     try {
       model.supportEmailListParsed = JSON.parse(model.supportEmailList);

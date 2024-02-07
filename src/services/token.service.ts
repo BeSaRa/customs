@@ -2,12 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { ECookieService } from '@services/e-cookie.service';
 import { ConfigService } from '@services/config.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
 import { Observable } from 'rxjs';
 import { LoginDataContract } from '@contracts/login-data-contract';
 import { CastResponse } from 'cast-response';
 import { ServiceContract } from '@contracts/service-contract';
+import { NO_ERROR_HANDLE } from '@http-contexts/tokens';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,7 @@ export class TokenService
     return this.http.post<LoginDataContract>(
       this.urlService.URLS.VALIDATE_TOKEN,
       {},
+      { context: new HttpContext().set(NO_ERROR_HANDLE, true) },
     );
   }
 

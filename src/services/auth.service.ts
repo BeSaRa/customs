@@ -19,7 +19,6 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { TokenService } from '@services/token.service';
 import { MenuItemService } from '@services/menu-item.service';
 import { ServiceContract } from '@contracts/service-contract';
-import { GlobalSettingService } from '@services/global-setting.service';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +34,7 @@ export class AuthService
   private readonly tokenService = inject(TokenService);
   private readonly menuItemService = inject(MenuItemService);
   private authenticated = false;
-  private globalSettingService = inject(GlobalSettingService);
+
   @CastResponse()
   private _login(
     credentials: Partial<CredentialsContract>,
@@ -74,8 +73,7 @@ export class AuthService
       )
       .pipe(map(() => true))
       .pipe(
-        catchError(e => {
-          console.log(e);
+        catchError(() => {
           return of(false);
         }),
       );
