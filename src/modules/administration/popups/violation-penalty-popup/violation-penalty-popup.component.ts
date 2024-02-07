@@ -255,6 +255,8 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
         this.filteredPenalties = data.rs.filter(
           penalty => penalty.offenderType === OffenderTypes.ClEARING_AGENT,
         );
+        this.penaltiesOrReferral = this.filteredPenalties;
+
         if (this.inCreateMode()) {
           this.setSelectedPenalties();
         }
