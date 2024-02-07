@@ -7,18 +7,27 @@
     [matTooltip]="lang.map.reload"
     (click)="reload$.next()"
     icon="RELOAD"></app-icon-button>
-  <app-icon-button
-    [matTooltip]="lang.map.add"
-    (click)="create$.next()"
-    icon="PLUS"></app-icon-button>
+  @if (inEditMode()) {
+    <app-icon-button
+      [matTooltip]="lang.map.add"
+      (click)="create$.next()"
+      icon="PLUS"></app-icon-button>
+  }
+  @if (this.selection.selected.length > 0) {
+    <app-icon-button
+      [matTooltip]="lang.map.delete_bulk"
+      (click)="deleteBulk()"
+      icon="DELETE"></app-icon-button>
+  }
 </div>
-<div class="shadow relative overflow-auto">
+<div class="shadow relative overflow-auto" style="max-height: 700px">
   <table
     mat-table
     matSort
     class="table-style"
     (matSortChange)="sort($event)"
     [dataSource]="dataSource">
+    <!-- select -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -37,27 +46,6 @@
         </mat-checkbox>
       </td>
     </ng-container>
-
-    <!-- violationType -->
-    <ng-container matColumnDef="violationType">
-      <th mat-header-cell mat-sort-header="violationType" *matHeaderCellDef>
-        {{ lang.map.violation_type }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.violationTypeInfo.getNames() }}
-      </td>
-    </ng-container>
-
-    <!-- offenderType -->
-    <ng-container matColumnDef="offenderType">
-      <th mat-header-cell mat-sort-header="offenderType" *matHeaderCellDef>
-        {{ lang.map.offender_type }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.offenderTypeInfo.getNames() }}
-      </td>
-    </ng-container>
-
     <!-- offenderLevel -->
     <ng-container matColumnDef="offenderLevel">
       <th mat-header-cell mat-sort-header="offenderLevel" *matHeaderCellDef>
@@ -105,28 +93,6 @@
         {{ element.penaltyGuidanceInfo.getNames() }}
       </td>
     </ng-container>
-
-    <!-- status -->
-    <ng-container matColumnDef="status">
-      <th
-        mat-header-cell
-        mat-sort-header="status"
-        *matHeaderCellDef
-        class="status-min-width">
-        {{ lang.map.status }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <mat-slide-toggle
-          [disabled]="(loading$ | async)!"
-          class="cursor-not-allowed"
-          [matTooltip]="lang.map.change_status"
-          color="primary"
-          (toggleChange)="status$.next(element)"
-          [checked]="element.isActive()">
-        </mat-slide-toggle>
-      </td>
-    </ng-container>
-
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
@@ -137,16 +103,18 @@
             [matTooltip]="lang.map.view"
             (click)="view$.next(element)"
             icon="VIEW"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.edit"
-            (click)="edit$.next(element)"
-            icon="EDIT"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.delete"
-            (click)="delete$.next(element)"
-            icon="DELETE"></app-icon-button>
+          @if (inEditMode()) {
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.edit"
+              (click)="edit$.next(element)"
+              icon="EDIT"></app-icon-button>
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.delete"
+              (click)="delete$.next(element)"
+              icon="DELETE"></app-icon-button>
+          }
         </div>
       </td>
     </ng-container>
@@ -178,11 +146,3 @@
   </table>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
-<mat-paginator
-  class="border-t border-gray-200"
-  (page)="paginate($event)"
-  [pageSizeOptions]="pageSizeOptions"
-  [pageSize]="limit"
-  [showFirstLastButtons]="showFirstLastButtons"
-  [length]="length">
-</mat-paginator>

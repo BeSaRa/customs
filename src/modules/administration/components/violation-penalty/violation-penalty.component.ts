@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ViolationPenalty } from '@models/violation-penalty';
 import { ViolationPenaltyService } from '@services/violation-penalty.service';
@@ -9,9 +9,11 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
-import { StatusTypes } from '@enums/status-types';
 import { ViolationTypeService } from '@services/violation-type.service';
 import { PenaltyService } from '@services/penalty.service';
+import { UserClick } from '@enums/user-click';
+import { filter, finalize, switchMap } from 'rxjs';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-violation-penalty',
@@ -26,6 +28,9 @@ export class ViolationPenaltyComponent extends AdminComponent<
   service = inject(ViolationPenaltyService);
   penaltyService = inject(PenaltyService);
   violationTypeService = inject(ViolationTypeService);
+  violationType = input.required<number>();
+  offenderType = input.required<number>();
+  inEditMode = input.required<boolean>();
   actions: ContextMenuActionContract<ViolationPenalty>[] = [
     {
       name: 'view',
@@ -36,6 +41,8 @@ export class ViolationPenaltyComponent extends AdminComponent<
         this.view$.next(item);
       },
     },
+  ];
+  editModeActions: ContextMenuActionContract<ViolationPenalty>[] = [
     {
       name: 'edit',
       type: 'action',
@@ -59,24 +66,12 @@ export class ViolationPenaltyComponent extends AdminComponent<
   columnsWrapper: ColumnsWrapper<ViolationPenalty> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
     new SelectFilterColumn(
-      'violationType',
-      this.violationTypeService.loadAsLookups(),
-      'id',
-      'getNames',
-    ),
-    new SelectFilterColumn(
-      'offenderType',
-      this.lookupService.lookups.offenderType,
-      'lookupKey',
-      'getNames',
-    ),
-    new TextFilterColumn('repeat'),
-    new SelectFilterColumn(
       'offenderLevel',
       this.lookupService.lookups.offenderLevel,
       'lookupKey',
       'getNames',
     ),
+    new TextFilterColumn('repeat'),
     new SelectFilterColumn(
       'penalty',
       this.penaltyService.loadAsLookups(),
@@ -95,14 +90,62 @@ export class ViolationPenaltyComponent extends AdminComponent<
       'lookupKey',
       'getNames',
     ),
-    new SelectFilterColumn(
-      'status',
-      this.lookupService.lookups.commonStatus.filter(
-        item => item.lookupKey !== StatusTypes.DELETED,
-      ),
-      'lookupKey',
-      'getNames',
-    ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  override ngOnInit() {
+    super.ngOnInit();
+    if (this.inEditMode()) {
+      this.actions.push(...this.editModeActions);
+    }
+    this.filter$.next({ violationTypeId: this.violationType() });
+  }
+
+  override _getCreateExtras() {
+    return {
+      violationType: this.violationType(),
+      offenderType: this.offenderType(),
+    };
+  }
+
+  override _getEditExtras() {
+    return {
+      violationType: this.violationType(),
+      offenderType: this.offenderType(),
+    };
+  }
+
+  override _getViewExtras(): unknown {
+    return {
+      violationType: this.violationType(),
+      offenderType: this.offenderType(),
+    };
+  }
+
+  deleteBulk(): void {
+    if (this.selection.selected.length > 0) {
+      this.dialog
+        .confirm(this.lang.map.msg_delete_selected_confirm)
+        .afterClosed()
+        .pipe(filter(value => value === UserClick.YES))
+        .pipe(
+          switchMap(() => {
+            this.loadingSubject.next(true);
+            const ids = this.selection.selected.map(
+              (item: ViolationPenalty) => {
+                return item.id;
+              },
+            );
+            return this.service.deleteBulk(ids).pipe(
+              finalize(() => this.loadingSubject.next(false)),
+              ignoreErrors(),
+            );
+          }),
+        )
+        .subscribe(() => {
+          this.toast.success(this.lang.map.msg_delete_selected_success);
+          this.reload$.next();
+        });
+    }
+  }
 }

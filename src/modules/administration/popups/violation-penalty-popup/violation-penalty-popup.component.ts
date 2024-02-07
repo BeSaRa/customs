@@ -3,9 +3,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ViolationPenalty } from '@models/violation-penalty';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormControl, UntypedFormGroup } from '@angular/forms';
 import {
-  catchError,
   exhaustMap,
   filter,
   isObservable,
@@ -14,7 +13,6 @@ import {
   Subject,
   switchMap,
   takeUntil,
-  throwError,
 } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { ViolationTypeService } from '@services/violation-type.service';
@@ -28,7 +26,6 @@ import { OffenderTypes } from '@enums/offender-types';
 import { OffenderLevels } from '@enums/offender-levels';
 import { CustomValidators } from '@validators/custom-validators';
 import { ViolationPenaltyService } from '@services/violation-penalty.service';
-import { ignoreErrors } from '@utils/utils';
 import { PenaltyGuidances } from '@enums/penalty-guidances';
 
 @Component({
@@ -43,19 +40,25 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   violationTypeService = inject(ViolationTypeService);
   violationTypes!: ViolationType[];
-  filteredViolationTypes!: ViolationType[];
+
+  offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
+  violationTypeId = this.data.extras?.violationType;
+  offenderTypeId = this.data.extras?.offenderType;
 
   penaltyService = inject(PenaltyService);
   penalties: Penalty[] = [];
   filteredPenalties: Penalty[] = [];
   penaltyGuidance: Penalty[] = [];
+  penaltiesOrReferral: Penalty[] = [];
 
   penaltySigners: Lookup[] = inject(LookupService).lookups.penaltySigner;
   filteredPenaltySigners: Lookup[] = this.penaltySigners;
   offenderLevels: Lookup[] = inject(LookupService).lookups.offenderLevel;
   filteredOffenderLevels: Lookup[] = this.offenderLevels;
-  offenderTypes: Lookup[] = inject(LookupService).lookups.offenderType;
   saveBulk$: Subject<void> = new Subject<void>();
+  decisionType = new FormControl();
+
+  decisionTypes: Lookup[] = inject(LookupService).lookups.decisionTypes;
 
   protected override _initPopup(): void {
     super._initPopup();
@@ -67,16 +70,12 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   protected getViolationTypes() {
     this.violationTypeService.loadAsLookups().subscribe(data => {
       this.violationTypes = data;
-      this.filteredViolationTypes = data;
-      this.setFilteredViolationType();
     });
   }
 
   protected getPenalties() {
     this.penaltyService.loadAsLookups().subscribe(data => {
       this.penalties = data;
-      this.filteredPenalties = data;
-      if (this.operation === OperationType.UPDATE) this.setFilteredPenalties();
     });
   }
 
@@ -98,15 +97,27 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
 
   protected override _afterBuildForm(): void {
     super._afterBuildForm();
-    this.onOffenderTypeChange();
+    this.controls.violationTypeId()?.setValue(this.violationTypeId);
+    this.controls.offenderType()?.setValue(this.offenderTypeId);
+    this.controls.violationTypeId()?.disable();
+    this.controls.offenderType()?.disable();
+    this.setFilteredPenaltySigners();
+    this.setFilteredPenalties();
     this.onPenaltySignerChange();
+    this.setOffenderLevelValidity();
     this.onOffenderLevelChange();
-    this.onPenaltiesChange();
-    if (this.operation === OperationType.UPDATE) {
-      this.setFilteredPenaltySigners();
-      this.setFilteredViolationType();
-      this.setOffenderLevelValidity();
+    this.onPenaltiesChanges();
+    this.onDecisionTypeChanges();
+    if (this.inEditMode()) {
+      this.setFilteredOffenderLevels();
     }
+  }
+
+  needOffenderLevel(): boolean {
+    return (
+      this.offenderTypeId === OffenderTypes.EMPLOYEE &&
+      this.controls.penaltySigner()!.valid
+    );
   }
 
   protected _afterSave(): void {
@@ -118,10 +129,8 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   onPenaltySignerChange() {
-    this.penaltySignerCtrl?.valueChanges.subscribe(() => {
-      this.offenderLevelCtrl?.setValue(null);
-      this.penaltyArrayCtrl?.setValue([]);
-      this.penaltyGuidanceCtrl?.setValue(null);
+    this.controls.penaltySigner()?.valueChanges.subscribe(() => {
+      this.controls.offenderLevel()?.setValue(null);
       this.form.updateValueAndValidity();
       this.setFilteredOffenderLevels();
       this.setFilteredPenalties();
@@ -129,101 +138,88 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   onOffenderLevelChange() {
-    this.offenderLevelCtrl?.valueChanges.subscribe(() => {
-      this.penaltyArrayCtrl?.setValue([]);
-      this.penaltyGuidanceCtrl?.setValue(null);
-      this.form.updateValueAndValidity();
+    this.controls.offenderLevel()?.valueChanges.subscribe(() => {
       this.setFilteredPenalties();
     });
   }
 
-  onOffenderTypeChange() {
-    this.offenderTypeCtrl?.valueChanges.subscribe(() => {
-      this.penaltySignerCtrl?.setValue(null);
-      this.violationTypeCtrl?.setValue(null);
-      this.form.updateValueAndValidity();
-      this.setFilteredPenaltySigners();
-      this.setOffenderLevelValidity();
-      this.setFilteredViolationType();
-    });
-  }
-
-  onPenaltiesChange() {
-    this.penaltyArrayCtrl?.valueChanges.subscribe(() => {
-      this.penaltyGuidanceCtrl?.setValue(null);
-      this.penaltyGuidanceCtrl?.updateValueAndValidity();
+  onPenaltiesChanges() {
+    this.controls.penaltyArray()?.valueChanges.subscribe(() => {
       this.setFilteredPenaltyGuidance();
     });
   }
 
+  onDecisionTypeChanges() {
+    this.decisionType?.valueChanges.subscribe(value => {
+      if (value) {
+        this.penaltiesOrReferral = this.filteredPenalties.filter(
+          penalty => penalty.isSystem,
+        );
+        this.controls.penaltyArray()?.setValue([]);
+      } else {
+        this.penaltiesOrReferral = this.filteredPenalties.filter(
+          penalty => !penalty.isSystem,
+        );
+        this.setSelectedPenalties();
+      }
+    });
+  }
+
   setOffenderLevelValidity() {
-    const offenderType: OffenderTypes = this.offenderTypeCtrl?.value;
-    const offenderLevel = this.offenderLevelCtrl;
-    offenderLevel?.clearValidators();
-    if (offenderType === OffenderTypes.EMPLOYEE) {
-      offenderLevel?.setValidators(CustomValidators.required);
+    if (this.controls.offenderType()?.value === OffenderTypes.EMPLOYEE) {
+      this.controls.offenderLevel()?.setValidators(CustomValidators.required);
     }
   }
 
   setFilteredPenaltyGuidance() {
-    if (!this.penalties) return;
-    this.penaltyGuidance = (this.penaltyArrayCtrl?.value as number[]).map(
-      penaltyId => this.penalties.find(p => p.id === penaltyId)!,
-    );
+    if (!this.filteredPenalties.length || !this.controls.penaltyArray()?.valid)
+      return;
+    this.penaltyGuidance = (
+      this.controls.penaltyArray()?.value as number[]
+    ).map(penaltyId => this.filteredPenalties.find(p => p.id === penaltyId)!);
     if (this.model.penaltyGuidance === PenaltyGuidances.APPROPRIATE) {
-      this.penaltyGuidanceCtrl?.setValue(this.model.penaltyArray[0]);
+      this.controls.penaltyGuidance()?.setValue(this.model.penaltyArray[0]);
     }
   }
 
-  needOffenderLevel(): boolean {
-    const offenderTypeLookupKey = this.offenderTypes.find(
-      offenderType => offenderType.lookupKey === this.offenderTypeCtrl?.value,
-    )?.lookupKey;
-    return (
-      this.offenderTypeCtrl?.value &&
-      offenderTypeLookupKey === OffenderTypes.EMPLOYEE &&
-      this.penaltySignerCtrl?.value
-    );
-  }
-
   showPenalties() {
-    return this.penaltySignerCtrl?.value && this.offenderLevelCtrl?.value;
+    return (
+      this.controls.penaltySigner()?.value &&
+      this.controls.offenderLevel()?.value
+    );
   }
 
   showPenaltyGuidance() {
-    return (this.penaltyArrayCtrl?.value as number[]).length > 0;
-  }
-
-  private setFilteredViolationType() {
-    if (!this.offenderTypeCtrl?.value) return;
-    this.filteredViolationTypes = this.violationTypes?.filter(
-      violationType =>
-        violationType.offenderType === this.offenderTypeCtrl?.value,
-    );
+    return (this.controls.penaltyArray()?.value as number[]).length > 0;
   }
 
   setFilteredPenaltySigners() {
-    const offenderTypeLookupKey = this.offenderTypes.find(
-      offenderType => offenderType.lookupKey === this.offenderTypeCtrl?.value,
-    )?.lookupKey;
-    if (offenderTypeLookupKey === OffenderTypes.ClEARING_AGENT) {
+    if (this.offenderTypeId === OffenderTypes.ClEARING_AGENT) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
         lookupItem =>
           lookupItem.lookupKey ===
           PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
       );
-    } else if (offenderTypeLookupKey === OffenderTypes.EMPLOYEE) {
+      this.controls
+        .penaltySigner()
+        ?.setValue(
+          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
+        );
+      this.controls.penaltySigner()?.disable();
+    } else if (this.offenderTypeId === OffenderTypes.EMPLOYEE) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
         lookupItem =>
           lookupItem.lookupKey !==
-          PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER,
+            PenaltySignerTypes.PRESIDENT_ASSISTANT_FOR_CUSTOMS_AFFAIRS_OR_COMMISSIONER &&
+          lookupItem.lookupKey !==
+            PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL,
       );
     }
   }
 
   setFilteredOffenderLevels() {
-    const penaltySignerValue: PenaltySignerTypes =
-      this.penaltySignerCtrl?.value;
+    if (!this.needOffenderLevel()) return;
+    const penaltySignerValue = this.controls.penaltySigner()?.value;
     switch (penaltySignerValue) {
       case PenaltySignerTypes.MANAGER_DIRECTOR:
         this.filteredOffenderLevels = this.offenderLevels.filter(
@@ -241,14 +237,6 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
               OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE,
         );
         break;
-      case PenaltySignerTypes.PERMANENT_DISCIPLINARY_COUNCIL:
-        this.filteredOffenderLevels = this.offenderLevels.filter(
-          lookupItem =>
-            lookupItem.lookupKey ===
-              OffenderLevels.THE_DEGREE_OF_UNDERSECRETARY_TO_THE_FIRST_DEGREE ||
-            lookupItem.lookupKey === OffenderLevels.SECOND_DEGREE_OR_LESS,
-        );
-        break;
       case PenaltySignerTypes.DISCIPLINARY_COMMITTEE:
         this.filteredOffenderLevels = this.offenderLevels.filter(
           lookupItem =>
@@ -261,46 +249,58 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
   }
 
   setFilteredPenalties() {
-    if (!this.showPenalties()) return;
-    const penaltySigner = this.penaltySignerCtrl?.value;
-    const offenderLevel = this.offenderLevelCtrl?.value;
     this.filteredPenalties = [];
-    this.penaltyService
-      .getFilteredPenalties({
-        penaltySigner,
-        offenderLevel,
-      })
-      .subscribe(data => {
-        this.filteredPenalties = data;
-        if (this.operation !== OperationType.CREATE) {
-          this.setFilteredPenaltyGuidance();
+    if (this.offenderTypeId === OffenderTypes.ClEARING_AGENT) {
+      this.penaltyService.loadComposite().subscribe(data => {
+        this.filteredPenalties = data.rs.filter(
+          penalty => penalty.offenderType === OffenderTypes.ClEARING_AGENT,
+        );
+        if (this.inCreateMode()) {
+          this.setSelectedPenalties();
         }
       });
+    } else if (
+      this.offenderTypeId === OffenderTypes.EMPLOYEE &&
+      this.showPenalties()
+    ) {
+      const penaltySigner = this.controls.penaltySigner()?.value;
+      const offenderLevel = this.controls.offenderLevel()?.value;
+      this.penaltyService
+        .getFilteredPenalties({
+          penaltySigner,
+          offenderLevel,
+        })
+        .subscribe(data => {
+          this.filteredPenalties = data;
+          this.setFilteredPenaltyGuidance();
+          if (this.inEditMode()) this.setDecisionTypeValue();
+        });
+    }
   }
 
-  get penaltyArrayCtrl() {
-    return this.form.get('penaltyArray');
+  setDecisionTypeValue() {
+    const penalty = this.filteredPenalties.find(
+      penalty => penalty.id === this.model.penaltyId,
+    );
+    this.decisionType.setValue(penalty?.isSystem ? 1 : 0);
   }
 
-  get offenderTypeCtrl() {
-    return this.form.get('offenderType');
+  setSelectedPenalties() {
+    const ids = this.filteredPenalties
+      .filter(penalty => !penalty.isSystem)
+      .map(penalty => penalty.id);
+    this.controls.penaltyArray()?.setValue(ids);
   }
 
-  get penaltySignerCtrl() {
-    return this.form.get('penaltySigner');
-  }
-
-  get offenderLevelCtrl() {
-    return this.form.get('offenderLevel');
-  }
-
-  get penaltyGuidanceCtrl() {
-    return this.form.get('penaltyGuidance');
-  }
-
-  get violationTypeCtrl() {
-    return this.form.get('violationTypeId');
-  }
+  controls = {
+    violationTypeId: () => this.form.get('violationTypeId'),
+    penaltyGuidance: () => this.form.get('penaltyGuidance'),
+    offenderLevel: () => this.form.get('offenderLevel'),
+    penaltySigner: () => this.form.get('penaltySigner'),
+    offenderType: () => this.form.get('offenderType'),
+    penaltyArray: () => this.form.get('penaltyArray'),
+    repeat: () => this.form.get('repeat'),
+  };
 
   listenToSaveBulk() {
     this.saveBulk$
@@ -320,13 +320,7 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
       )
       .pipe(
         exhaustMap(() => {
-          return this.createBulk().pipe(
-            catchError(error => {
-              this._saveFail(error);
-              return throwError(error);
-            }),
-            ignoreErrors(),
-          );
+          return this.createBulk();
         }),
       )
       .subscribe(() => {
@@ -334,15 +328,22 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
       });
   }
 
-  createBulk(): Observable<ViolationPenalty[]> {
+  createBulk(): Observable<ViolationPenalty[]> | Observable<ViolationPenalty> {
     const payloadArr: ViolationPenalty[] = [];
     const selectedPenaltyGuidance = this.penalties.find(
-      penalty => penalty.id === this.penaltyGuidanceCtrl?.value,
+      penalty => penalty.id === this.controls.penaltyGuidance()?.value,
     );
-    this.penaltyArrayCtrl?.value.forEach((value: number) => {
+    const { penaltyArray: _penaltyArray, ...formValueWithoutPenaltyArray } =
+      this.form.value;
+    this.controls.penaltyArray()?.value.forEach((value: number) => {
       payloadArr.push({
-        ...this.form.value,
+        ...formValueWithoutPenaltyArray,
         penaltyId: value,
+        repeat: this.controls.repeat()?.value,
+        penaltySigner: this.controls.penaltySigner()?.value,
+        violationTypeId: this.violationTypeId,
+        offenderType: this.offenderTypeId,
+        status: 1,
         penaltyGuidance:
           selectedPenaltyGuidance?.id === value
             ? selectedPenaltyGuidance.isSystem
@@ -351,8 +352,19 @@ export class ViolationPenaltyPopupComponent extends AdminDialogComponent<Violati
             : null,
       });
     });
-    return this.violationPenaltyService.createBulkFull(
-      payloadArr as unknown as ViolationPenalty[],
+    return this.inCreateMode()
+      ? this.violationPenaltyService.createBulkFull(
+          payloadArr as unknown as ViolationPenalty[],
+        )
+      : this.violationPenaltyService.updateBulk(
+          payloadArr as unknown as ViolationPenalty[],
+        );
+  }
+
+  showDecisionType() {
+    return (
+      this.controls.penaltySigner()?.valid &&
+      this.controls.offenderLevel()?.valid
     );
   }
 }
