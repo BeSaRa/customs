@@ -45,4 +45,5 @@ export interface LookupMapContract {
   securityLevel: Lookup[];
   proofStatus: Lookup[];
   decisionTypes: Lookup[];
+  CareerLevel: Lookup[];
 }

@@ -60,7 +60,9 @@ export class GuidePanelComponent
   violationTypeService = inject(ViolationTypeService);
 
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
-  offenderLevels: Lookup[] = this.lookupService.lookups.offenderLevel;
+  careerLevel: Lookup[] = this.lookupService.lookups.CareerLevel.sort(
+    (a, b) => a.lookupKey - b.lookupKey,
+  );
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
   filteredPenaltySigners: Lookup[] = [];
   violationTypes!: ViolationType[];
@@ -77,7 +79,7 @@ export class GuidePanelComponent
       this.fb.array([
         this.fb.group({
           violationTypeId: [null, [CustomValidators.required]],
-          repeat: [null, [CustomValidators.required, Validators.min(1)]],
+          repeat: [1, [CustomValidators.required, Validators.min(1)]],
         }),
       ]),
     );
