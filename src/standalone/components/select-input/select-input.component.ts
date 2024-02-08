@@ -114,6 +114,8 @@ export class SelectInputComponent
   bindFilter?: string | ((item: any) => any);
   @Input()
   enableFilter = false;
+  @Input()
+  divider = false;
 
   nullable = input(true, { transform: booleanAttribute });
 

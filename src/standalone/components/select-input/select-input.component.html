@@ -50,9 +50,11 @@
           [ngTemplateOutletContext]="{ $implicit: option }"></ng-container>
       }
       <ng-template #defaultTemplate let-option>
-        <mat-option [value]="getBindValue(option)">{{
-          getBindLabel(option)
-        }}</mat-option>
+        <mat-option
+          [ngClass]="{ 'custom-divider': divider }"
+          [value]="getBindValue(option)"
+          >{{ getBindLabel(option) }}</mat-option
+        >
       </ng-template>
     </mat-select>
     @if (!isRequired && control.value && nullable()) {
