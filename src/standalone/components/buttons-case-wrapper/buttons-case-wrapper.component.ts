@@ -198,16 +198,33 @@ export class ButtonsCaseWrapperComponent
         }),
       )
       .pipe(
-        exhaustMap(({ selectedPenalty, response }) => {
+        map(({ selectedPenalty, response }) => {
+          const offenders = this.model().hasConcernedOffenders()
+            ? this.model().getConcernedOffendersWithOutOldDecision(
+                selectedPenalty.penaltyKey,
+              )
+            : this.model().getOffendersWithOldDecisions(
+                selectedPenalty.penaltyKey,
+              );
+          return {
+            selectedPenalty,
+            response,
+            offenders,
+          };
+        }),
+        filter(({ offenders }) => {
+          if (!offenders.length && !this.model().hasUnlinkedViolations()) {
+            this.dialog.error(
+              this.lang.map
+                .there_is_no_offenders_or_unlinked_violations_to_take_this_action,
+            );
+          }
+          return !!offenders.length || this.model().hasUnlinkedViolations();
+        }),
+        exhaustMap(({ offenders, selectedPenalty, response }) => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
-              this.model().hasConcernedOffenders()
-                ? this.model().getConcernedOffendersWithOutOldDecision(
-                    selectedPenalty.penaltyKey,
-                  )
-                : this.model().getOffendersWithOldDecisions(
-                    selectedPenalty.penaltyKey,
-                  ),
+              offenders,
               this.model,
               this.updateModel,
               selectedPenalty,

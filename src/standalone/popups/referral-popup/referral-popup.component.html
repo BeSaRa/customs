@@ -3,7 +3,7 @@
     <h1>
       {{ selectedPenalty.getNames() }}
       @if (isSingle) {
-        : {{ singleOffender.getNames() }}
+        : {{ singleOffender?.getNames() }}
       }
     </h1>
     <app-icon-button

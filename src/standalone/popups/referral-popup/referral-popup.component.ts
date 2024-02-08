@@ -106,7 +106,7 @@ export class ReferralPopupComponent
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
   offenders = signal(this.data.offenders);
-  singleOffender = this.data.offenders[0];
+  singleOffender? = this.data.offenders[0];
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
   model = this.data.model;

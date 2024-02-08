@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  there_is_no_offenders_or_unlinked_violations_to_take_this_action: string;
   president: string;
   vice_president: string;
   customs_brokers: string;
