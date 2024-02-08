@@ -31,9 +31,7 @@ import { EncryptionService } from '@services/encryption.service';
 import { EmployeeService } from '@services/employee.service';
 import { LookupService } from '@services/lookup.service';
 import { SendTypes } from '@enums/send-types';
-import { CommonCaseStatus } from '@enums/common-case-status';
 import { Offender } from '@models/offender';
-import { OffenderViolationService } from '@services/offender-violation.service';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { ReportType } from '@app-types/validation-return-type';
 import { ClassificationTypes } from '@enums/violation-classification';
@@ -75,12 +73,11 @@ export class InvestigationComponent
   toast = inject(ToastService);
   encryptionService = inject(EncryptionService);
   lookupService = inject(LookupService);
-  offenderViolationService = inject(OffenderViolationService);
   adapter = inject(DateAdapter);
+  canManageInvestigationElements = true;
   info = input<OpenedInfoContract | null>(null);
   @ViewChild(SummaryTabComponent)
   summaryTabComponent?: SummaryTabComponent;
-  canReferralCase: boolean = false;
   @ViewChild(ViolationListComponent)
   violationListComponent!: ViolationListComponent;
   @ViewChild(OffenderListComponent)
@@ -139,19 +136,6 @@ export class InvestigationComponent
     return !!this.model.id;
   }
 
-  canSave() {
-    return this.canEdit() || !this.model.id;
-  }
-
-  canEdit() {
-    return (
-      this.model.getCaseStatus() === CommonCaseStatus.NEW ||
-      this.model.getCaseStatus() === CommonCaseStatus.DRAFT ||
-      this.model.getCaseStatus() === CommonCaseStatus.RETURNED ||
-      this.model.getCaseStatus() === CommonCaseStatus.RETURN_TO_SAME_EMPLOYEE
-    );
-  }
-
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true, this.readonly));
     this.listenToLocationChange();
@@ -201,24 +185,14 @@ export class InvestigationComponent
     _saveType: SaveTypes,
     _operation: OperationType,
   ): void {
-    this.model = model;
     if (this.operation === OperationType.UPDATE) {
       this.toast.success(
         this.lang.map.msg_save_x_success.change({ x: model.draftFullSerial }),
       );
     }
-
-    this.loadCaseFolders();
   }
 
   _beforeLaunch(): boolean | Observable<boolean> {
-    console.log(
-      'this.model.hasValidOffenders()',
-      this.model.hasValidOffenders(),
-    );
-    console.log('this.model.hasViolations()', this.model.hasViolations());
-    console.log('this.model.hasOffenders()', this.model.hasOffenders());
-
     if (!this.model.hasViolations()) {
       this.dialog.error(this.lang.map.add_violation_first_to_take_this_action);
       return false;
@@ -241,27 +215,25 @@ export class InvestigationComponent
   }
 
   _updateForm(model: Investigation): void {
-    this.handleReadOnly();
     if (!model.id) this.resetForm();
     this.model = model;
-    this.form.patchValue(model.buildForm(false, this.readonly));
+    this._handleReadOnly(model);
+    this.form = this.fb.group(model.buildForm(model.canSave(), this.readonly));
+    this._afterBuildForm();
   }
 
-  handleReadOnly() {
-    if (!this.model.id) {
+  _handleReadOnly(model: Investigation) {
+    // reset readonly and canTakeAction
+    this.readonly = false;
+    this.canManageInvestigationElements = true; // specified for violations, offenders, external persons and attachments
+    if (!model.id) return;
+    // has model id
+    if (this.openFrom === OpenFrom.ADD_SCREEN) {
       return;
     }
-    // let caseStatus = this.model.getCaseStatus();
-    if (this.openFrom === OpenFrom.USER_INBOX) {
-      //
-    } else if (this.openFrom === OpenFrom.TEAM_INBOX) {
-      if (this.model.isClaimed()) {
-        this.readonly = false;
-      }
-    } else if (this.openFrom === OpenFrom.SEARCH) {
-      if (this.model.canCommit()) {
-        this.readonly = false;
-      }
+    if (!model.inMyInbox() || !model.canSave()) {
+      this.readonly = true;
+      this.canManageInvestigationElements = false; // specified for violations, offenders, external persons and attachments
     }
   }
 
@@ -298,10 +270,8 @@ export class InvestigationComponent
         }),
       )
       .subscribe((model: Investigation) => {
-        this.model = model;
         this._updateForm(model);
         this.updateRoute();
-        this.loadCaseFolders();
       });
   }
 

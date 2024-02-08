@@ -56,7 +56,6 @@ export class ButtonsCaseWrapperComponent
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
-  @Input() canSave: boolean = true;
   model = input.required<Investigation>();
   @Output()
   updateModel = new EventEmitter<void>();

@@ -31,7 +31,7 @@
       {{ lang.map.description }}
     </th>
     <td mat-cell *matCellDef="let element">
-      {{ element?.description }}
+      {{ element?.description ? element?.description : '- - -' }}
     </td>
   </ng-container>
 

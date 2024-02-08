@@ -1,5 +1,5 @@
 import { OpenFrom } from '@enums/open-from';
-import { Directive, EventEmitter, OnInit } from '@angular/core';
+import { Directive, OnInit } from '@angular/core';
 import {
   catchError,
   delay,
@@ -27,6 +27,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ActivatedRoute } from '@angular/router';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { FolderType } from '@enums/folder-type.enum';
+import { Investigation } from '@models/investigation';
 
 @Directive({})
 export abstract class BaseCaseComponent<
@@ -47,7 +48,6 @@ export abstract class BaseCaseComponent<
   launch$: Subject<null> = new Subject<null>();
   private afterLaunch$: Subject<boolean> = new Subject<boolean>();
   save$ = new Subject<SaveTypes>();
-  afterSave$ = new EventEmitter<{ model: Model; saveType: SaveTypes }>();
   operation = OperationType.CREATE;
   private saveMap: Record<SaveTypes, keyof BaseCaseContract<Model>> = {
     [SaveTypes.COMMIT]: 'commit',
@@ -117,7 +117,6 @@ export abstract class BaseCaseComponent<
         this._afterSave(model, saveType, this.operation);
         this.operation = OperationType.UPDATE;
         this._updateForm(model);
-        this.afterSave$.next({ model, saveType });
       });
   }
 
@@ -152,22 +151,11 @@ export abstract class BaseCaseComponent<
       });
   }
 
-  /* launch(): Observable<boolean> {
-    return (() => {
-      return this.afterLaunch$
-        .pipe(takeUntil(this.destroy$))
-        .pipe(take(1))
-        .pipe(startWith(false))
-        .pipe(tap(value => !value && this.launch$.next(null)))
-        .pipe(filter(value => value));
-    })();
-  }*/
-
   protected _init(): void {
     this.model = this.route.snapshot.data.info?.model;
-    this.model?.id && (this.readonly = !this.model?.canSave());
-    this.model?.id && (this.operation = OperationType.UPDATE);
     this.openFrom = this.route.snapshot.data.info?.openFrom;
+    this.model?.id && (this.operation = OperationType.UPDATE);
+    this._handleReadOnly(this.model || new Investigation());
   }
 
   abstract _buildForm(): void;
@@ -189,6 +177,8 @@ export abstract class BaseCaseComponent<
   abstract _afterLaunch(): void;
 
   abstract _updateForm(model: Model): void;
+
+  abstract _handleReadOnly(model: Model): void;
 
   protected _saveFail(error: Error): void {
     console.log('SAVE_ERROR', error);

@@ -80,11 +80,13 @@
                   icon="DELETE" />
               </div>
             }
-            <div [matTooltip]="lang.map.assignment_to_attend">
-              <app-icon-button
-                (click)="assignmentToAttend$.next(element)"
-                icon="ACCOUNT_EDIT_OUTLINE" />
-            </div>
+            @if (model().inMyInbox()) {
+              <div [matTooltip]="lang.map.assignment_to_attend">
+                <app-icon-button
+                  (click)="assignmentToAttend$.next(element)"
+                  icon="ACCOUNT_EDIT_OUTLINE" />
+              </div>
+            }
           </div>
         </td>
       </ng-container>

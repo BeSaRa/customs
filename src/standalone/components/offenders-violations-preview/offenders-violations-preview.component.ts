@@ -205,7 +205,7 @@ export class OffendersViolationsPreviewComponent
         i =>
           new FormControl<number>({
             value: i.proofStatus,
-            disabled: !this.model().hasTask(),
+            disabled: !this.model().hasTask() || !this.model().inMyInbox(),
           }),
       );
       return acc;

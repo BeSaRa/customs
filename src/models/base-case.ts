@@ -10,7 +10,6 @@ import { BaseCaseContract } from '@contracts/base-case-contract';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
 import { ActionNames } from '@enums/action-names';
-import { TaskName } from '@enums/task-name';
 import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 import { map } from 'rxjs/operators';
 
@@ -20,11 +19,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 {
   abstract override $$__service_name__$$: string;
   id!: string;
-  createdBy!: string;
   createdOn!: Date | number | string;
-  lastModified!: string;
-  lastModifier!: string;
-  classDescription!: string;
   creatorInfo!: AdminResult;
   ouInfo!: AdminResult;
   caseIdentifier!: number;
@@ -34,13 +29,11 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   caseStatus!: CommonCaseStatus;
   caseType!: CaseTypes;
   securityLevel!: number;
-  departmentId!: number;
   sectionId!: number;
   taskDetails!: TaskDetails;
   departmentInfo!: AdminResult;
   sectionInfo!: AdminResult;
   caseStatusInfo!: AdminResult;
-  className!: string;
   description!: string;
 
   getService(): Service {
@@ -72,24 +65,23 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     });
   }
 
-  isCancelled(): boolean {
-    return this.caseStatus === CommonCaseStatus.CANCELLED;
-  }
-
-  isReturned(): boolean {
-    return this.caseStatus === CommonCaseStatus.RETURNED;
-  }
-
   canSave(): boolean {
-    return true;
+    return !this.id || this.canEdit();
   }
-
+  canEdit() {
+    return (
+      this.getCaseStatus() === CommonCaseStatus.NEW ||
+      this.getCaseStatus() === CommonCaseStatus.DRAFT ||
+      this.getCaseStatus() === CommonCaseStatus.SENT ||
+      this.getCaseStatus() === CommonCaseStatus.SENT_TO_MANAGER ||
+      this.getCaseStatus() === CommonCaseStatus.SENT_TO_CHIEF ||
+      this.getCaseStatus() === CommonCaseStatus.RETURNED_TO_SAME_OFFICER ||
+      this.getCaseStatus() === CommonCaseStatus.RETURNED_TO_DEPARTMENT ||
+      this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED
+    );
+  }
   getTaskName() {
     return this.taskDetails?.name;
-  }
-
-  isPresidentAssistantReview() {
-    return this.getTaskName() === TaskName.PA_REV;
   }
 
   canClaim(): boolean {
@@ -102,8 +94,17 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   canRelease(): boolean {
     return (
       this.taskDetails &&
-      this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM)
+      this.taskDetails.actions.includes(ActionNames.ACTION_CANCELCLAIM) &&
+      !this.isCancelled()
     );
+  }
+
+  isCancelled(): boolean {
+    return this.caseState === CommonCaseStatus.CANCELLED;
+  }
+
+  isReturned(): boolean {
+    return false;
   }
 
   isClaimed(): boolean {
@@ -160,10 +161,6 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
 
   commit(): Observable<Model> {
     return this.getService().commit(this as unknown as Model);
-  }
-
-  details(caseId: string): Observable<Model> {
-    return this.getService().getDetails(caseId);
   }
 
   start(): Observable<boolean> {

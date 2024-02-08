@@ -1,6 +1,6 @@
 <div class="grid grid-cols-5 gap-4 mt-3">
   <!-- save -->
-  @if (canSave) {
+  @if (model().canSave()) {
     <app-button (click)="save.emit(SaveTypes.FINAL)"
       >{{ lang.map.save }}
     </app-button>
@@ -268,7 +268,7 @@
     </app-button>
   }
   <mat-menu #issuingMenu="matMenu">
-    <!-- issuing referral decision to legal affairs manager -->
+    <!-- issuing referral decision to legal affairs manager by President assistant -->
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)
