@@ -158,15 +158,18 @@ export class ViolationPenaltyPopupComponent
 
   onDecisionTypeChanges() {
     this.decisionType?.valueChanges.subscribe(value => {
-      if (value) {
+      if (value === 1) {
         this.penaltiesOrReferral = this.filteredPenalties.filter(
           penalty => penalty.isSystem,
         );
         this.controls.penaltyArray()?.setValue([]);
-      } else {
+      } else if (value === 0) {
         this.penaltiesOrReferral = this.filteredPenalties.filter(
           penalty => !penalty.isSystem,
         );
+        this.setSelectedPenalties();
+      } else if (value === -1) {
+        this.penaltiesOrReferral = this.filteredPenalties;
         this.setSelectedPenalties();
       }
     });
