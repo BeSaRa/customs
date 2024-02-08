@@ -17,7 +17,7 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   offenderType!: number;
   offenderTypeInfo!: AdminResult;
   isSystem = false;
-  penaltyKey = SystemPenalties.TERMINATE;
+  penaltyKey!: SystemPenalties;
   penaltyWeight!: number;
   isDeduction = false;
   erasureDuration!: number;

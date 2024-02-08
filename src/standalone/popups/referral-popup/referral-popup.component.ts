@@ -54,7 +54,7 @@ import { Violation } from '@models/violation';
 import { InfoService } from '@services/info.service';
 
 @Component({
-  selector: 'app-request-referral-popup',
+  selector: 'app-referral-popup',
   standalone: true,
   imports: [
     IconButtonComponent,
@@ -79,10 +79,10 @@ import { InfoService } from '@services/info.service';
     MatTab,
     NgTemplateOutlet,
   ],
-  templateUrl: './request-referral-popup.component.html',
-  styleUrl: './request-referral-popup.component.scss',
+  templateUrl: './referral-popup.component.html',
+  styleUrl: './referral-popup.component.scss',
 })
-export class RequestReferralPopupComponent
+export class ReferralPopupComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {

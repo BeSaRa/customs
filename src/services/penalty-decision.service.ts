@@ -10,7 +10,7 @@ import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
 import { Penalty } from '@models/penalty';
 import { TerminatePopupComponent } from '@standalone/popups/terminate-popup/terminate-popup.component';
-import { RequestReferralPopupComponent } from '@standalone/popups/request-referral-popup/request-referral-popup.component';
+import { ReferralPopupComponent } from '@standalone/popups/referral-popup/referral-popup.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TaskResponses } from '@enums/task-responses';
 
@@ -84,7 +84,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     selectedPenalty?: Penalty,
     response?: TaskResponses,
   ): MatDialogRef<unknown> {
-    return this.dialog.open(RequestReferralPopupComponent, {
+    return this.dialog.open(ReferralPopupComponent, {
       data: {
         offenders: offenders,
         model,

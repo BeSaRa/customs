@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequestReferralPopupComponent } from './request-referral-popup.component';
+import { ReferralPopupComponent } from './referral-popup.component';
 
 describe('SingleReferralPopupComponent', () => {
-  let component: RequestReferralPopupComponent;
-  let fixture: ComponentFixture<RequestReferralPopupComponent>;
+  let component: ReferralPopupComponent;
+  let fixture: ComponentFixture<ReferralPopupComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RequestReferralPopupComponent],
+      imports: [ReferralPopupComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RequestReferralPopupComponent);
+    fixture = TestBed.createComponent(ReferralPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

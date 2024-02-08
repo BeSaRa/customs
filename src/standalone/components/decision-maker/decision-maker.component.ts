@@ -11,7 +11,6 @@ import { Investigation } from '@models/investigation';
 import { Penalty } from '@models/penalty';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
-import { EmployeeService } from '@services/employee.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Offender } from '@models/offender';
 import { LangService } from '@services/lang.service';
@@ -42,7 +41,6 @@ export class DecisionMakerComponent
   protected readonly AppIcons = AppIcons;
   penaltyIcons = PenaltyIcons;
 
-  private employeeService = inject(EmployeeService);
   private penaltyDecisionService = inject(PenaltyDecisionService);
   lang = inject(LangService);
   dialog = inject(DialogService);
@@ -163,6 +161,7 @@ export class DecisionMakerComponent
       )
       .pipe(
         switchMap(({ oldPenalty, penaltyKey }) => {
+          console.log(oldPenalty, penaltyKey);
           return oldPenalty && penaltyKey !== oldPenalty.penaltyInfo.penaltyKey
             ? this.dialog
                 .confirm(
