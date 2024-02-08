@@ -210,7 +210,27 @@ export class Investigation extends BaseCase<
       return !penaltyKey
         ? !offendersHasDecisionsIds.includes(offender.id)
         : offendersHasDecisionsIds.includes(offender.id)
-          ? oldDecisions[offender.id].penaltyInfo.penaltyKey === penaltyKey
+          ? oldDecisions[offender.id].penaltyInfo.penaltyKey === penaltyKey ||
+            oldDecisions[offender.id].penaltyInfo.penaltyKey !==
+              SystemPenalties.TERMINATE
+          : true;
+    });
+  }
+
+  getOffendersWithOldDecisions(penaltyKey?: SystemPenalties): Offender[] {
+    const oldDecisions = this.penaltyDecisions.reduce<
+      Record<number, PenaltyDecision>
+    >((acc, penalty) => {
+      return { ...acc, [penalty.offenderId]: penalty };
+    }, {});
+    const offendersHasDecisionsIds = Object.keys(oldDecisions).map(Number);
+    return this.offenderInfo.filter(offender => {
+      return !penaltyKey
+        ? !offendersHasDecisionsIds.includes(offender.id)
+        : offendersHasDecisionsIds.includes(offender.id)
+          ? oldDecisions[offender.id].penaltyInfo.penaltyKey === penaltyKey ||
+            oldDecisions[offender.id].penaltyInfo.penaltyKey !==
+              SystemPenalties.TERMINATE
           : true;
     });
   }

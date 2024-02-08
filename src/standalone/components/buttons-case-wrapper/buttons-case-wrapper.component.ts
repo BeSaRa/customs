@@ -205,7 +205,9 @@ export class ButtonsCaseWrapperComponent
                 ? this.model().getConcernedOffendersWithOutOldDecision(
                     selectedPenalty.penaltyKey,
                   )
-                : this.model().offenderInfo,
+                : this.model().getOffendersWithOldDecisions(
+                    selectedPenalty.penaltyKey,
+                  ),
               this.model,
               this.updateModel,
               selectedPenalty,
