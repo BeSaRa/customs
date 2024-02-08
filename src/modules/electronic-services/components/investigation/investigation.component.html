@@ -69,7 +69,7 @@
           <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
         </mat-tab>
       }
-      @if (canSave()) {
+      @if (model.canSave()) {
         <mat-tab [label]="lang.map.lbl_basic_info">
           <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
         </mat-tab>
@@ -96,7 +96,6 @@
     [penaltyMap]="penaltyMap()"
     (updateModel)="updateModel$.next(null)"
     [openFrom]="openFrom"
-    [canSave]="canSave()"
     (save)="save$.next($event)"
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
@@ -152,7 +151,7 @@
         [model]="model"
         [readonly]="readonly"
         [reportType]="getReportType()"
-        [canModifyOffenders]="canEdit()"
+        [canModifyOffenders]="canManageInvestigationElements"
         (askForSaveModel)="saveCase()"
         (askForViolationListReload)="violationListComponent.reload$.next()"
         (updateModel)="updateModel$.next(null)"
@@ -170,7 +169,7 @@
         [reportType]="getReportType()"
         [readonly]="readonly"
         [model]="model"
-        [canModifyOffenders]="canEdit()"
+        [canModifyViolations]="canManageInvestigationElements"
         (askForSaveModel)="saveCase()"
         (focusInvalidTab)="focusInvalidTab()"
         (updateModel)="updateModel$.next(null)"
@@ -204,7 +203,7 @@
       <app-offender-attachments
         [model]="model"
         class="col-span-1 md:col-span-2 lg:col-span-4"
-        [readOnly]="readonly" />
+        [readonly]="readonly" />
     </div>
   </ng-template>
 </div>

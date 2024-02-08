@@ -40,6 +40,7 @@ import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { Investigation } from '@models/investigation';
 import { ProofTypes } from '@enums/proof-types';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-offender-violations-popup',
@@ -54,6 +55,7 @@ import { ProofTypes } from '@enums/proof-types';
     MatTableModule,
     IconButtonComponent,
     MatDialogModule,
+    MatSort,
   ],
   templateUrl: './offender-violations-popup.component.html',
   styleUrls: ['./offender-violations-popup.component.scss'],

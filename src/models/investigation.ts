@@ -64,13 +64,14 @@ export class Investigation extends BaseCase<
         : description,
       securityLevel: controls
         ? [
+            // this must handle depending on a permission
             { value: securityLevel, disabled: disabled },
             CustomValidators.required,
           ]
         : securityLevel,
       subject: controls
         ? [
-            subject,
+            { value: subject, disabled: disabled },
             [CustomValidators.required, CustomValidators.maxLength(1024)],
           ]
         : subject,

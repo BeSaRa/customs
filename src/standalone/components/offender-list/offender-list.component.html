@@ -61,14 +61,14 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          @if (!readonly && canModifyOffenders) {
+          @if (!readonly || canModifyOffenders) {
             <div [matTooltip]="lang.map.violations">
               <app-icon-button
                 (click)="offenderViolation$.next(element)"
                 icon="OFFENDER_VIOLATION" />
             </div>
           }
-          @if (!readonly && canModifyOffenders) {
+          @if (!model().id || model().canStart()) {
             <div [matTooltip]="lang.map.delete">
               <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
             </div>

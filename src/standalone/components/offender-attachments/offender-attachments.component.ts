@@ -63,7 +63,7 @@ export class OffenderAttachmentsComponent
   }
 
   @Input() investigationModel?: Investigation;
-  @Input() readOnly = true;
+  @Input() readonly = true;
 
   model = input.required<Investigation>();
 
@@ -112,7 +112,7 @@ export class OffenderAttachmentsComponent
               data: {
                 model: this.model,
                 offenderId: model.id,
-                readonly: this.readOnly,
+                readonly: this.readonly,
               },
             })
             .afterClosed()

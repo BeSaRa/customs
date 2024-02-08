@@ -78,11 +78,10 @@ export class ViolationListComponent
   askForSaveModel = new EventEmitter<void>();
   @Output()
   focusInvalidTab = new EventEmitter<boolean>();
-
   @Input()
   readonly = false;
   @Input()
-  canModifyOffenders = true;
+  canModifyViolations = true;
   reportType = input(`None` as ReportType);
 
   model = input<Investigation>(new Investigation());
