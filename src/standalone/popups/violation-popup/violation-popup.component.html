@@ -18,6 +18,7 @@
       <app-select-input
         [label]="lang.map.violation_type"
         bindLabel="getNames"
+        [divider]="true"
         bindValue="id"
         formControlName="violationTypeId"
         [options]="types()" />

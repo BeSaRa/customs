@@ -5,3 +5,7 @@
 .input-form > mat-select {
   @apply rounded-md max-w-full;
 }
+
+mat-option.custom-divider {
+  @apply border-b-2 border-slate-400 py-2;
+}
