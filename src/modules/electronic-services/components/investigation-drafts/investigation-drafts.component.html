@@ -21,14 +21,14 @@
     <ng-container matColumnDef="caseStatus">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.status }}</th>
       <td mat-cell *matCellDef="let element">
-        <span>{{ element.caseStatusInfo.getNames() }}</span>
+        <span>{{ element.caseStatusInfo?.getNames() || '' }}</span>
       </td>
     </ng-container>
     <!-- creator -->
     <ng-container matColumnDef="creator">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.creator }}</th>
       <td mat-cell *matCellDef="let element">
-        <span>{{ element.creatorInfo.getNames() }}</span>
+        <span>{{ element.creatorInfo?.getNames() || '' }}</span>
       </td>
     </ng-container>
 
@@ -38,7 +38,7 @@
         {{ lang.map.department_company }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span>{{ element.departmentInfo.getNames() }}</span>
+        <span>{{ element.departmentInfo?.getNames() || '' }}</span>
       </td>
     </ng-container>
 

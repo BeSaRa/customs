@@ -46,7 +46,9 @@
         }}</span>
         <label class="input-form p-2 block">
           {{
-            model.securityLevelInfo ? model.securityLevelInfo.getNames() : '---'
+            model.securityLevelInfo
+              ? model.securityLevelInfo?.getNames()
+              : '---'
           }}
         </label>
       </div>

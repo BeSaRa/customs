@@ -110,7 +110,7 @@
                   {{ lang.map.penalty_guidance }}
                 </th>
                 <td mat-cell *matCellDef="let element">
-                  <span>{{ element.penGuidanceInfo.getNames() || '' }}</span>
+                  <span>{{ element.penGuidanceInfo?.getNames() || '' }}</span>
                 </td>
               </ng-container>
               <!-- name -->
@@ -128,7 +128,7 @@
                   {{ lang.map.offender_type }}
                 </th>
                 <td mat-cell *matCellDef="let element">
-                  <span> {{ element.offenderTypeInfo.getNames() }}</span>
+                  <span> {{ element.offenderTypeInfo?.getNames() || '' }}</span>
                 </td>
               </ng-container>
               <!-- erasureDuration -->

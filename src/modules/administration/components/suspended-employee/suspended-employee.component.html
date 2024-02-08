@@ -71,8 +71,8 @@
       <td mat-cell *matCellDef="let element">
         <span
           [innerHTML]="
-            element.mawaredEmployeeIdInfo.employeeDepartmentInfo.getNames()
-              | highlight: getFilterStringColumn('OU')
+            element.mawaredEmployeeIdInfo.employeeDepartmentInfo?.getNames() ||
+              '' | highlight: getFilterStringColumn('OU')
           "></span>
       </td>
     </ng-container>
@@ -175,7 +175,7 @@
         {{ lang.map.suspension_type }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.typeInfo.getNames() }}
+        {{ element.typeInfo?.getNames() || '' }}
       </td>
     </ng-container>
     <!-- signerName -->
@@ -200,7 +200,7 @@
         {{ lang.map.status }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.statusInfo.getNames() }}
+        {{ element.statusInfo?.getNames() || '' }}
       </td>
     </ng-container>
     <!-- actions Column -->

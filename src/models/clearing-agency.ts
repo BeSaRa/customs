@@ -68,6 +68,6 @@ export class ClearingAgency extends BaseModel<
   }
 
   getStatusInfoName() {
-    return this.statusInfo.getNames();
+    return this.statusInfo?.getNames() || '';
   }
 }

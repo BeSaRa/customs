@@ -71,7 +71,7 @@ export class InternalUserComponent extends AdminComponent<
       name: 'job-title-info',
       type: 'info',
       label: item =>
-        `${this.lang.map.menu_job_title} : ${item.jobTitleInfo.getNames()}`,
+        `${this.lang.map.menu_job_title} : ${item.jobTitleInfo?.getNames() || ''}`,
       parent: 'more-details',
     },
     {

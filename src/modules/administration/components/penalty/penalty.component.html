@@ -71,7 +71,7 @@
         {{ lang.map.offender_type }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span> {{ element.offenderTypeInfo.getNames() }}</span>
+        <span> {{ element.offenderTypeInfo?.getNames() || '' }}</span>
       </td>
     </ng-container>
 
