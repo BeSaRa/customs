@@ -58,6 +58,17 @@
       }}
     </app-button>
   }
+  <!-- issuing referral decision to legal affairs manager by President -->
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
+  ) {
+    <app-button
+      buttonType="secondary"
+      (click)="responseAction$.next(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)">
+      {{ lang.map.to_legal_affairs_manager }}
+    </app-button>
+  }
   <!-- transfer report to staff president office -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PO)) {
     <app-button
