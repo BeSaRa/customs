@@ -46,6 +46,11 @@ export class LookupService
     ];
     this.lookups.decisionTypes = [
       new Lookup().clone<Lookup>({
+        arName: 'جزاء وإحالة',
+        enName: 'penalty and referral',
+        lookupKey: -1,
+      }),
+      new Lookup().clone<Lookup>({
         arName: 'جزاء',
         enName: 'penalty',
         lookupKey: 0,
