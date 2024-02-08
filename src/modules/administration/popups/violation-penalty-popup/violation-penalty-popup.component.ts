@@ -340,7 +340,7 @@ export class ViolationPenaltyPopupComponent
       });
   }
 
-  createBulk(): Observable<ViolationPenalty[]> | Observable<ViolationPenalty> {
+  createBulk(): Observable<ViolationPenalty[]> {
     const payloadArr: ViolationPenalty[] = [];
     const selectedPenaltyGuidance = this.penalties.find(
       penalty => penalty.id === this.controls.penaltyGuidance()?.value,
@@ -364,13 +364,9 @@ export class ViolationPenaltyPopupComponent
             : null,
       });
     });
-    return this.inCreateMode()
-      ? this.violationPenaltyService.createBulkFull(
-          payloadArr as unknown as ViolationPenalty[],
-        )
-      : this.violationPenaltyService.updateBulk(
-          payloadArr as unknown as ViolationPenalty[],
-        );
+    return this.violationPenaltyService.createBulkFull(
+      payloadArr as unknown as ViolationPenalty[],
+    );
   }
 
   showDecisionType() {
