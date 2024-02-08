@@ -207,7 +207,7 @@
               {{ lang.map.clearing_agency_name }}
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.agencyInfo.getNames() }}
+              {{ element.agencyInfo?.getNames() || '' }}
             </td>
           </ng-container>
           <ng-container matColumnDef="companyNumber">

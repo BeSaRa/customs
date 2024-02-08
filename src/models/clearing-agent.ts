@@ -80,7 +80,7 @@ export class ClearingAgent extends BaseModel<
   }
 
   getStatusInfoName() {
-    return this.statusInfo.getNames();
+    return this.statusInfo?.getNames() || '';
   }
 
   convertToOffender(caseId: string) {
@@ -94,6 +94,7 @@ export class ClearingAgent extends BaseModel<
       ouId: this.agencyId,
     });
   }
+
   convertToWitness(caseId: string, personType: number): Witness {
     return new Witness().clone<Witness>({
       personType,

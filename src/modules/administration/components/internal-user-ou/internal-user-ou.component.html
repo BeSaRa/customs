@@ -30,7 +30,7 @@
         {{ lang.map.organization_unit }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.organizationUnitInfo.getNames() }}
+        {{ element.organizationUnitInfo?.getNames() || '' }}
       </td>
     </ng-container>
 

@@ -71,7 +71,7 @@
       </th>
 
       <td mat-cell *matCellDef="let element">
-        {{ element.offenderTypeInfo.getNames() }}
+        {{ element.offenderTypeInfo?.getNames() || '' }}
       </td>
     </ng-container>
     <!-- status status -->

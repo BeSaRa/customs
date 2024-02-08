@@ -97,7 +97,7 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <!-- <span [innerHTML]="getJobTypeName(element.jobType) | highlight : getFilterStringColumn('jobType')"></span> -->
-        <span> {{ element.fromUserInfo.getNames() }}</span>
+        <span> {{ element.fromUserInfo?.getNames() || '' }}</span>
       </td>
     </ng-container>
 
@@ -108,7 +108,7 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <span [class]="statusStyle(element)">
-          {{ element.riskStatusInfo.getNames() }}</span
+          {{ element.riskStatusInfo?.getNames() || '' }}</span
         >
       </td>
     </ng-container>

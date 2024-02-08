@@ -97,7 +97,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span class="flex justify-start items-center">
-                {{ element.actionInfo.getNames() }}
+                {{ element.actionInfo?.getNames() || '' }}
               </span>
             </td>
           </ng-container>
@@ -109,7 +109,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span class="flex justify-start items-center">
-                {{ element.userFromInfo.getNames() }}
+                {{ element.userFromInfo?.getNames() || '' }}
               </span>
             </td>
           </ng-container>
@@ -121,7 +121,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span class="flex justify-start items-center">
-                {{ element.userToInfo.getNames() || '-' }}
+                {{ element.userToInfo?.getNames() || '' }}
               </span>
             </td>
           </ng-container>
@@ -185,7 +185,7 @@
   </div>
 </div>
 <div class="dialog-footer justify-end">
-  <app-button mat-dialog-close="" buttonType="primary">{{
-    lang.map.close
-  }}</app-button>
+  <app-button mat-dialog-close="" buttonType="primary"
+    >{{ lang.map.close }}
+  </app-button>
 </div>
