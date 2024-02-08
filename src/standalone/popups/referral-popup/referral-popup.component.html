@@ -2,9 +2,6 @@
   <div class="dialog-header bg-primary">
     <h1>
       {{ selectedPenalty.getNames() }}
-      @if (isSingle) {
-        : {{ singleOffender?.getNames() }}
-      }
     </h1>
     <app-icon-button
       tabindex="-1"

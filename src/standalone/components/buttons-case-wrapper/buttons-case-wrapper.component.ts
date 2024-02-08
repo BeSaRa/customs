@@ -1,7 +1,6 @@
 import {
   Component,
   computed,
-  effect,
   EventEmitter,
   inject,
   Input,
@@ -30,6 +29,7 @@ import { OpenFrom } from '@enums/open-from';
 import { SystemPenalties } from '@enums/system-penalties';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Penalty } from '@models/penalty';
+import { PenaltyService } from '@services/penalty.service';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -46,6 +46,7 @@ export class ButtonsCaseWrapperComponent
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
   penaltyDecisionService = inject(PenaltyDecisionService);
+  penaltyService = inject(PenaltyService);
   router = inject(Router);
   protected readonly OpenFromEnum = OpenFrom;
 
@@ -69,23 +70,7 @@ export class ButtonsCaseWrapperComponent
   penaltyMap =
     input.required<Record<number, { first: number; second: Penalty[] }>>();
 
-  uniquePenalties = computed(() => {
-    return Object.values(this.penaltyMap()).reduce<
-      Record<SystemPenalties, Penalty>
-    >(
-      (acc, item) => {
-        const penalties = item.second.reduce((acc, penalty) => {
-          return { ...acc, [penalty.penaltyKey]: penalty };
-        }, {});
-        return { ...acc, ...penalties };
-      },
-      {} as Record<SystemPenalties, Penalty>,
-    );
-  });
-
-  penaltiesEffect = effect(() => {
-    console.log('UNIQUE', this.uniquePenalties());
-  });
+  systemPenaltiesMap = computed(() => this.penaltyService.systemPenaltiesMap());
 
   referralRequest$ = new Subject<{
     response: TaskResponses;
@@ -192,7 +177,7 @@ export class ButtonsCaseWrapperComponent
       .pipe(
         map(({ penaltyKey, response }) => {
           return {
-            selectedPenalty: this.uniquePenalties()[penaltyKey],
+            selectedPenalty: this.systemPenaltiesMap()[penaltyKey],
             response,
           };
         }),

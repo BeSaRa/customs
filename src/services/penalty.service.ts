@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Penalty } from '@models/penalty';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
@@ -8,6 +8,7 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { SystemPenalties } from '@enums/system-penalties';
 
 @CastResponseContainer({
   $pagination: {
@@ -28,6 +29,16 @@ export class PenaltyService extends BaseCrudWithDialogService<
   Penalty
 > {
   serviceName = 'PenaltyService';
+  private _systemPenalties = signal<Penalty[]>([]);
+  systemPenalties = computed(() => this._systemPenalties());
+  systemPenaltiesMap = computed<Record<SystemPenalties, Penalty>>(() => {
+    return this.systemPenalties().reduce<Record<SystemPenalties, Penalty>>(
+      (acc, item) => {
+        return { ...acc, [item.penaltyKey]: item };
+      },
+      {} as Record<SystemPenalties, Penalty>,
+    );
+  });
 
   protected getModelClass(): Constructor<Penalty> {
     return Penalty;
@@ -54,5 +65,9 @@ export class PenaltyService extends BaseCrudWithDialogService<
         fromObject: { ...options },
       }),
     });
+  }
+
+  setSystemPenalties(systemPenalties: Penalty[]) {
+    this._systemPenalties.set(systemPenalties);
   }
 }

@@ -8,14 +8,10 @@ export interface LangKeysContract {
   take_action: string;
   copy_to_legal_affairs: string;
   copy_to_hr_department: string;
-  single_request_static_header_for_president: string;
-  bulk_request_static_header_for_president: string;
-  single_request_static_footer_for_president: string;
-  bulk_request_static_footer_for_president: string;
-  single_request_static_header_for_president_assistant: string;
-  bulk_request_static_header_for_president_assistant: string;
-  single_request_static_footer_for_president_assistant: string;
-  bulk_request_static_footer_for_president_assistant: string;
+  request_static_header_for_president: string;
+  request_static_footer_for_president: string;
+  request_static_header_for_president_assistant: string;
+  request_static_footer_for_president_assistant: string;
   respected: string;
   mr: string;
   return_to_chief: string;

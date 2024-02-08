@@ -213,22 +213,14 @@ export class ReferralPopupComponent
 
   get formHeader() {
     return this.isPresidentRequest()
-      ? this.isSingle
-        ? this.lang.map.single_request_static_header_for_president
-        : this.lang.map.bulk_request_static_header_for_president
-      : this.isSingle
-        ? this.lang.map.single_request_static_header_for_president_assistant
-        : this.lang.map.bulk_request_static_header_for_president_assistant;
+      ? this.lang.map.request_static_header_for_president
+      : this.lang.map.request_static_header_for_president_assistant;
   }
 
   get formFooter() {
     return this.isPresidentRequest()
-      ? this.isSingle
-        ? this.lang.map.single_request_static_footer_for_president
-        : this.lang.map.bulk_request_static_footer_for_president
-      : this.isSingle
-        ? this.lang.map.single_request_static_footer_for_president_assistant
-        : this.lang.map.bulk_request_static_footer_for_president_assistant;
+      ? this.lang.map.request_static_footer_for_president
+      : this.lang.map.request_static_footer_for_president_assistant;
   }
 
   ngOnInit(): void {
