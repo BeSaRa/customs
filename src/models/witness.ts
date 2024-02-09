@@ -13,7 +13,7 @@ export class Witness extends BaseModel<Witness, WitnessService> {
 
   phoneNumber!: string;
   email!: string;
-
+  qid!: string;
   witnessInfo!: AdminResult;
   witnessTypeInfo!: AdminResult;
   personTypeInfo!: AdminResult;
@@ -21,7 +21,7 @@ export class Witness extends BaseModel<Witness, WitnessService> {
   statusDateModified?: Date | string;
 
   buildForm(controls = false): object {
-    const { arName, enName } = this;
+    const { arName, enName, phoneNumber, email, qid } = this;
     return {
       arName: controls
         ? [
@@ -43,8 +43,16 @@ export class Witness extends BaseModel<Witness, WitnessService> {
             ],
           ]
         : enName,
-      phoneNumber: controls ? [enName] : enName,
-      email: controls ? [enName] : enName,
+      qid: controls ? [enName, [CustomValidators.required]] : qid,
+      phoneNumber: controls
+        ? [enName, [CustomValidators.required]]
+        : phoneNumber,
+      email: controls
+        ? [
+            enName,
+            [CustomValidators.required, CustomValidators.pattern('EMAIL')],
+          ]
+        : email,
     };
   }
 }
