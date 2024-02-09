@@ -230,8 +230,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         ((v.violationsDate &&
           new Date(v.violationsDate).getTime() ===
             new Date(this.form.value.violationsDate).getTime()) ||
-          (new Date(this.form.value.violationsDateFrom).getTime() ===
-            new Date(v.violationsDateFrom).getTime() &&
+          (this.form.value.violationsDateFrom &&
+            this.form.value.violationsDateTo &&
+            new Date(this.form.value.violationsDateFrom).getTime() ===
+              new Date(v.violationsDateFrom).getTime() &&
             new Date(this.form.value.violationsDateTo).getTime() ===
               new Date(v.violationsDateTo).getTime()))
       );
