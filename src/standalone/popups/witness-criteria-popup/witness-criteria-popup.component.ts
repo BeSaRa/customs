@@ -23,7 +23,6 @@ import { LangService } from '@services/lang.service';
 import {
   BehaviorSubject,
   filter,
-  isObservable,
   map,
   of,
   Subject,
