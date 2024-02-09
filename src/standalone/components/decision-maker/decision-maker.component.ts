@@ -173,6 +173,7 @@ export class DecisionMakerComponent
                 .afterClosed()
                 .pipe(map(click => ({ click, oldPenalty, penaltyKey })))
                 .pipe(
+                  filter(({ click }) => click === UserClick.YES),
                   switchMap(({ oldPenalty, click, penaltyKey }) => {
                     return oldPenalty
                       .delete()
