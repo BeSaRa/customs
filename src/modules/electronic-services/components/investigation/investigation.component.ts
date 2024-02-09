@@ -228,7 +228,8 @@ export class InvestigationComponent
     this.canManageInvestigationElements = true; // specified for violations, offenders, external persons and attachments
     if (!model.id) return;
     // has model id
-    if (this.openFrom === OpenFrom.ADD_SCREEN) {
+    if (!this.openFrom) {
+      // this.openFrom === OpenFrom.ADD_SCREEN
       return;
     }
     if (!model.inMyInbox() || !model.canSave()) {
