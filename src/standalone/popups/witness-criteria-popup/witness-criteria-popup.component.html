@@ -8,7 +8,7 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content w-[900px] !p-0">
-    <mat-tab-group mat-stretch-tabs="false">
+    <mat-tab-group [mat-stretch-tabs]="false">
       <mat-tab [label]="!isExternal ? lang.map.search : lang.map.person_info">
         <ng-container [ngTemplateOutlet]="searchCriteria"></ng-container>
       </mat-tab>

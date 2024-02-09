@@ -13,6 +13,7 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ignoreErrors } from '@utils/utils';
 import { catchError, exhaustMap, of, throwError } from 'rxjs';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-actions-on-case',
@@ -22,6 +23,7 @@ import { catchError, exhaustMap, of, throwError } from 'rxjs';
     ButtonComponent,
     MatDialogModule,
     MatTableModule,
+    MatSort,
   ],
   templateUrl: './actions-on-case.component.html',
   styleUrl: './actions-on-case.component.scss',
@@ -77,6 +79,7 @@ export class ActionsOnCaseComponent implements OnInit {
         this.ActionsOnCaseDisplayedList = new MatTableDataSource(data);
       });
   }
+
   private loadAssignedTo() {
     of(null)
       .pipe(
@@ -99,6 +102,7 @@ export class ActionsOnCaseComponent implements OnInit {
   getStepName(item: AssignedTo): string {
     return this.lang.map[item.stepSubject as keyof LangKeysContract];
   }
+
   getTypeName(item: AssignedTo): string {
     return this.lang.map[item.type as keyof LangKeysContract];
   }
