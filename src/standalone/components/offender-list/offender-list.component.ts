@@ -85,6 +85,8 @@ export class OffenderListComponent
   askForViolationListReload = new EventEmitter<void>();
   @Output()
   focusInvalidTab = new EventEmitter<boolean>();
+  @Output()
+  askToReloadPenalties = new EventEmitter<void>();
   data = new Subject<Offender[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: Subject<void> = new Subject<void>();
@@ -136,6 +138,7 @@ export class OffenderListComponent
       )
       .subscribe(() => {
         this.updateModel.emit();
+        this.askToReloadPenalties.emit();
       });
   }
 
@@ -191,6 +194,7 @@ export class OffenderListComponent
         ];
         this.offenderDeleted.emit(model);
         this.updateModel.emit();
+        this.askToReloadPenalties.emit();
       });
   }
 
@@ -209,7 +213,10 @@ export class OffenderListComponent
             .afterClosed(),
         ),
       )
-      .subscribe(() => this.updateModel.emit());
+      .subscribe(() => {
+        this.updateModel.emit();
+        this.askToReloadPenalties.emit();
+      });
   }
 
   listenToSituationSearch() {
