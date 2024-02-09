@@ -11,9 +11,13 @@ export class MawaredEmployeeInterceptor
   }
 
   receive(model: MawaredEmployee): MawaredEmployee {
-    model.statusInfo = new AdminResult().clone(model.statusInfo) || '';
-    model.employeeDepartmentInfo =
-      new AdminResult().clone(model.employeeDepartmentInfo) || '';
+    model.statusInfo = AdminResult.createInstance(model.statusInfo);
+    model.employeeDepartmentInfo = AdminResult.createInstance(
+      model.employeeDepartmentInfo,
+    );
+    model.employeeCareerLevelInfo = AdminResult.createInstance(
+      model.employeeCareerLevelInfo,
+    );
     return model;
   }
 }

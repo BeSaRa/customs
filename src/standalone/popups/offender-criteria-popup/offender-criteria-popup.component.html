@@ -127,7 +127,7 @@
               {{ lang.map.employee_career_level }}
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.employeeCareerLevel }}
+              {{ element.employeeCareerLevelInfo.getNames() }}
             </td>
           </ng-container>
           <ng-container matColumnDef="department">

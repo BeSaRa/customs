@@ -30,6 +30,7 @@ export class MawaredEmployee extends BaseModel<
   subDepartmentName!: string;
   gender!: string;
   employeeCareerLevelId!: number;
+  employeeCareerLevelInfo!: AdminResult;
   employeeCareerLevel!: string;
   employeeQualificationId!: number;
   employeeQualification!: string;
