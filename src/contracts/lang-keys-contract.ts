@@ -420,7 +420,7 @@ export interface LangKeysContract {
   user_from: string;
   user_to: string;
   time: string;
-  assigned_to: string;
+  item_place: string;
   of: string;
   violation_type_repeat_required: string;
   attachments_count: string;

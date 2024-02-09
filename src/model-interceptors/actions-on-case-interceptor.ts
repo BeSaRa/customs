@@ -24,6 +24,7 @@ export class ActionsOnCaseInterceptor
       (model.ouFromInfo = AdminResult.createInstance(model.ouFromInfo));
     model.ouToInfo &&
       (model.ouToInfo = AdminResult.createInstance(model.ouToInfo));
+    model.addedOn = new Date(model.addedOn).toLocaleDateString();
     return model;
   }
 }
