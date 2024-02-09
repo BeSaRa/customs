@@ -36,6 +36,7 @@
               [options]="witnessTypes" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
+            <app-input formControlName="qid" [label]="lang.map.qid" />
             <app-input
               formControlName="phoneNumber"
               [label]="lang.map.phone_number" />
@@ -238,17 +239,17 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!isExternal) {
-      <app-button (click)="search$.next()" buttonType="primary">{{
-        lang.map.search
-      }}</app-button>
+      <app-button (click)="search$.next()" buttonType="primary"
+        >{{ lang.map.search }}
+      </app-button>
     }
     @if (isExternal) {
-      <app-button (click)="addWitness$.next()" buttonType="primary">{{
-        lang.map.add
-      }}</app-button>
+      <app-button (click)="addWitness$.next()" buttonType="primary"
+        >{{ lang.map.add }}
+      </app-button>
     }
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>

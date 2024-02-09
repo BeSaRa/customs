@@ -23,7 +23,9 @@ import { LangService } from '@services/lang.service';
 import {
   BehaviorSubject,
   filter,
+  isObservable,
   map,
+  of,
   Subject,
   switchMap,
   takeUntil,
@@ -206,8 +208,18 @@ export class WitnessCriteriaPopupComponent
       });
   }
 
+  beforeSaveWitness() {
+    this.witnessFormGroup.markAllAsTouched();
+    return this.witnessFormGroup.valid;
+  }
+
   private listenToAddWitness() {
     this.addWitness$
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(() => of(this.beforeSaveWitness())),
+      )
+      .pipe(filter(value => value))
       .pipe(
         map(() =>
           new Witness().clone<Witness>({
