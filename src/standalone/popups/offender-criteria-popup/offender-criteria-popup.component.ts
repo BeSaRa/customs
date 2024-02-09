@@ -63,6 +63,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { OffenderService } from '@services/offender.service';
 import { ProofTypes } from '@enums/proof-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
+import { OffenderViolationService } from '@services/offender-violation.service';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -92,6 +93,8 @@ export class OffenderCriteriaPopupComponent
 {
   data = inject<OffenderCriteriaDataContract>(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
+  // don't remove it we need it to make the model make save without any problems
+  offenderViolationService = inject(OffenderViolationService);
   fb = inject(UntypedFormBuilder);
   lang = inject(LangService);
   dialog = inject(DialogService);

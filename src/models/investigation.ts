@@ -198,6 +198,11 @@ export class Investigation extends BaseCase<
     );
   }
 
+  /**
+   * @description this method to return all concerned Offenders in the case even, but they should not have old Decisions
+   * expect if you provide the penaltyKey if one of the offender has same decision return it no problem
+   * @param penaltyKey
+   */
   getConcernedOffendersWithOutOldDecision(
     penaltyKey?: SystemPenalties,
   ): Offender[] {

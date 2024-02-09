@@ -18,6 +18,7 @@ import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
+import { OffenderViolationService } from '@services/offender-violation.service';
 
 @Component({
   selector: 'app-decision-maker',
@@ -42,6 +43,9 @@ export class DecisionMakerComponent
   penaltyIcons = PenaltyIcons;
 
   private penaltyDecisionService = inject(PenaltyDecisionService);
+  // don't remove it will break the code because we use it inside the model
+  private offenderViolationService = inject(OffenderViolationService);
+
   lang = inject(LangService);
   dialog = inject(DialogService);
 
@@ -161,7 +165,6 @@ export class DecisionMakerComponent
       )
       .pipe(
         switchMap(({ oldPenalty, penaltyKey }) => {
-          console.log(oldPenalty, penaltyKey);
           return oldPenalty && penaltyKey !== oldPenalty.penaltyInfo.penaltyKey
             ? this.dialog
                 .confirm(
@@ -169,6 +172,27 @@ export class DecisionMakerComponent
                 )
                 .afterClosed()
                 .pipe(map(click => ({ click, oldPenalty, penaltyKey })))
+                .pipe(
+                  switchMap(({ oldPenalty, click, penaltyKey }) => {
+                    return oldPenalty
+                      .delete()
+                      .pipe(
+                        tap(() => {
+                          this.model().removePenaltyDecision(oldPenalty);
+                          this.updateModel().emit();
+                        }),
+                      )
+                      .pipe(
+                        map(() => {
+                          return {
+                            oldPenalty,
+                            click,
+                            penaltyKey,
+                          };
+                        }),
+                      );
+                  }),
+                )
             : of({
                 click: UserClick.YES,
                 penaltyKey,
