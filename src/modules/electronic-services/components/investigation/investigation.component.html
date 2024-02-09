@@ -148,6 +148,7 @@
   <ng-template #offenders_tab>
     <div class="p-4">
       <app-offender-list
+        (askToReloadPenalties)="reloadPenalties()"
         [model]="model"
         [readonly]="readonly"
         [reportType]="getReportType()"
