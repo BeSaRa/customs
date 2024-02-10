@@ -9,6 +9,8 @@
 mat-option.custom-divider {
   @apply border-b-2 border-slate-400 py-2;
 }
-.mat-mdc-select {
-  width: 0 !important;
+label.nullable {
+  .mat-mdc-select {
+    width: 0 !important;
+  }
 }

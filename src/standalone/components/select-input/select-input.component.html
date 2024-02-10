@@ -1,7 +1,10 @@
 <label
   (click)="delegateFocus()"
   [for]="name"
-  [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
+  [ngClass]="{
+    'has-error': !!(errors | async) && displayErrors,
+    nullable: nullable()
+  }"
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium"
     >{{ label }}
@@ -13,7 +16,7 @@
     [ngClass]="size"
     class="group/input-wrapper input-form {{
       inputColor
-    }} flex items-center justify-start">
+    }} flex items-center relative justify-start">
     <ng-content select="[appInputPrefix]"></ng-content>
     <span
       [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
