@@ -13,6 +13,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { ServiceRegistry } from '@services/service-registry';
 import { SystemPenalties } from '@enums/system-penalties';
+import { OffenderTypes } from '@enums/offender-types';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -172,6 +173,44 @@ export class Investigation extends BaseCase<
       i => i.violationId,
     );
     return this.violationInfo.filter(v => !relatedViolationsIds.includes(v.id));
+  }
+
+  hasEmployeesUnlinkedViolations(): boolean {
+    return (
+      this.hasUnlinkedViolations() &&
+      this.getUnlinkedViolations().some(violation => {
+        return violation.offenderTypeInfo.lookupKey === OffenderTypes.EMPLOYEE;
+      })
+    );
+  }
+
+  getEmployeesUnlinkedViolations(): Violation[] {
+    return this.hasEmployeesUnlinkedViolations()
+      ? this.getUnlinkedViolations().filter(item => {
+          return item.offenderTypeInfo.lookupKey === OffenderTypes.EMPLOYEE;
+        })
+      : [];
+  }
+
+  getBrokersUnlinkedViolations(): Violation[] {
+    return this.hasBrokersUnlinkedViolations()
+      ? this.getUnlinkedViolations().filter(item => {
+          return (
+            item.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT
+          );
+        })
+      : [];
+  }
+
+  hasBrokersUnlinkedViolations(): boolean {
+    return (
+      this.hasUnlinkedViolations() &&
+      this.getUnlinkedViolations().some(violation => {
+        return (
+          violation.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT
+        );
+      })
+    );
   }
 
   hasConcernedOffenders() {

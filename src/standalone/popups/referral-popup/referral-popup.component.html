@@ -125,11 +125,13 @@
           [label]="lang.map.comment"
           [formControl]="brokersComment" />
       </div>
-      <div>
-        <app-unlinked-violations
-          [filter]="filterBrokerViolations"
-          [model]="model()" />
-      </div>
+      @if (unlinkedBrokersViolations().length) {
+        <div>
+          <app-unlinked-violations
+            [filter]="filterBrokerViolations"
+            [model]="model()" />
+        </div>
+      }
       <div class="flex">
         {{ formFooter }}
       </div>
@@ -254,11 +256,13 @@
           [label]="lang.map.comment"
           [formControl]="employeesComment" />
       </div>
-      <div>
-        <app-unlinked-violations
-          [filter]="filterEmployeeViolations"
-          [model]="model()" />
-      </div>
+      @if (unlinkedEmployeesViolations().length) {
+        <div>
+          <app-unlinked-violations
+            [filter]="filterEmployeeViolations"
+            [model]="model()" />
+        </div>
+      }
       <div class="flex">
         {{ formFooter }}
       </div>

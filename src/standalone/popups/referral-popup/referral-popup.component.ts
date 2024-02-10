@@ -211,6 +211,18 @@ export class ReferralPopupComponent
 
   displayedColumns = ['violation', 'violationDate'];
 
+  unlikedViolations = computed(() => {
+    return this.model().getUnlinkedViolations();
+  });
+
+  unlinkedEmployeesViolations = computed(() => {
+    return this.model().getEmployeesUnlinkedViolations();
+  });
+
+  unlinkedBrokersViolations = computed(() => {
+    return this.model().getBrokersUnlinkedViolations();
+  });
+
   get formHeader() {
     return this.isPresidentRequest()
       ? this.lang.map.request_static_header_for_president
