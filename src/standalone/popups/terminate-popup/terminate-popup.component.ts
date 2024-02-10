@@ -105,7 +105,10 @@ export class TerminatePopupComponent implements OnInit {
 
   control = new FormControl(
     this.samePenalty() ? this.oldPenaltiesMap()[this.offender.id]?.comment : '',
-    { nonNullable: true, validators: [CustomValidators.required] },
+    {
+      nonNullable: true,
+      validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+    },
   );
 
   dialog = inject(DialogService);
