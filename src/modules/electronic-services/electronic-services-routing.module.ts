@@ -9,6 +9,7 @@ import { InvestigationSearchComponent } from './components/investigation-search/
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 import { itemResolver } from '@resolvers/item.resolver';
+import { investigationCanDeactivateGuard } from '@guards/investigation-can-deactivate.guard';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
     path: 'investigation',
     component: InvestigationComponent,
     resolve: { info: itemResolver },
+    canDeactivate: [investigationCanDeactivateGuard],
   },
   {
     path: AppRoutes.USER_INBOX,

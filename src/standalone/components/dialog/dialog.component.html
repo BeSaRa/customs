@@ -16,9 +16,7 @@
             {{ data.title }}
           </div>
         }
-        <div class="dialog-body-content">
-          {{ data.content }}
-        </div>
+        <div [innerHTML]="content" class="dialog-body-content"></div>
       </div>
     </div>
   </div>

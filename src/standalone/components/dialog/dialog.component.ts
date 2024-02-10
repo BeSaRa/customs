@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import { UserClick } from '@enums/user-click';
 import { DialogType } from '@enums/dialog-type';
 import { LangService } from '@services/lang.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { DomSanitizer } from '@angular/platform-browser';
 
 type DialogSelectedClasses = {
   bg: string;
@@ -74,6 +75,8 @@ export class DialogComponent {
   data: DefaultDialogDataContract<string> = inject(MAT_DIALOG_DATA);
   selectedClass: DialogSelectedClasses = this.dialogTypes[this.data.type];
   lang = inject(LangService);
+  domSanitizer = inject(DomSanitizer);
+  content = this.domSanitizer.sanitize(SecurityContext.HTML, this.data.content);
 
   get yesButton() {
     return (
