@@ -1,6 +1,6 @@
 <div class="grid grid-cols-5 gap-4 mt-3">
   <!-- save -->
-  @if (model().canSave()) {
+  @if (model().inMyInbox() && model().canSave()) {
     <app-button (click)="save.emit(SaveTypes.FINAL)"
       >{{ lang.map.save }}
     </app-button>
