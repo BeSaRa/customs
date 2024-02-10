@@ -387,7 +387,7 @@
           [label]="lang.map.comment"
           [formControl]="commentControl" />
       </div>
-      @if (!isSingle) {
+      @if (!isSingle && unlikedViolations().length) {
         <div>
           <app-unlinked-violations [model]="model()" />
         </div>
