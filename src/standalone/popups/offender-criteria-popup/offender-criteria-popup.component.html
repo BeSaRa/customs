@@ -22,21 +22,21 @@
       <div class="p-4">
         <div
           [formGroup]="clearingAgentFormGroup"
-          class="grid grid-cols-1 gap-4">
+          class="flex items-center gap-4">
           <app-select-input
+            class="flex-auto w-0"
             [formControl]="offenderViolationControl"
             [label]="lang.map.violations"
             bindLabel="getOffenderViolationSelectNames"
             bindValue="id"
             [isMultiple]="true"
             [options]="violations()">
-            <span appInputSuffix>
-              <app-icon-button
-                (click)="addViolation$.next()"
-                class="text-primary"
-                icon="PLUS_BOX"></app-icon-button>
-            </span>
           </app-select-input>
+          <app-icon-button
+            [matTooltip]="lang.map.add_violation"
+            (click)="addViolation$.next()"
+            class="text-primary"
+            icon="PLUS_BOX"></app-icon-button>
         </div>
         <hr class="mb-5" />
         <h4 class="mb-4 text-primary">{{ lang.map.search_criteria }}</h4>

@@ -20,6 +20,7 @@
       class="peer absolute hidden pointer-events-none"></span>
     <mat-select
       #selectInput
+      class="flex-auto w-0"
       [placeholder]="placeholder"
       [formControl]="control"
       (blur)="inputTouch()"
@@ -33,12 +34,12 @@
             label=""
             [displayErrors]="false"
             [noMargin]="true"
-            [placeholder]="lang.map.filter"
-            ><mat-icon
+            [placeholder]="lang.map.filter">
+            <mat-icon
               appInputSuffix
               class="mx-1 !h-10"
-              svgIcon="magnify"></mat-icon
-          ></app-input>
+              svgIcon="magnify"></mat-icon>
+          </app-input>
         </div>
       }
       @for (
@@ -53,8 +54,8 @@
         <mat-option
           [ngClass]="{ 'custom-divider': divider }"
           [value]="getBindValue(option)"
-          >{{ getBindLabel(option) }}</mat-option
-        >
+          >{{ getBindLabel(option) }}
+        </mat-option>
       </ng-template>
     </mat-select>
     @if (!isRequired && control.value && nullable()) {

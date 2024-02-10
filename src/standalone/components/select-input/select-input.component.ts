@@ -38,7 +38,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { LangService } from '@services/lang.service';
 import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { requiredValidator } from '@validators/validation-utils';
-import { IconButtonComponent } from '../icon-button/icon-button.component';
 
 @Component({
   selector: 'app-select-input',
@@ -52,7 +51,6 @@ import { IconButtonComponent } from '../icon-button/icon-button.component';
     ReactiveFormsModule,
     InputComponent,
     FilterArrayPipe,
-    IconButtonComponent,
   ],
   templateUrl: './select-input.component.html',
   styleUrls: ['./select-input.component.scss'],
