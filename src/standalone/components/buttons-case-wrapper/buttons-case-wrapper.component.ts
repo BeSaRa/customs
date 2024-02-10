@@ -149,17 +149,24 @@ export class ButtonsCaseWrapperComponent
 
   protected readonly SystemPenalties = SystemPenalties;
 
-  referralPresidentAssistant() {
+  requestReferralPresidentAssistant() {
     this.referralTo(
       TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
       SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
     );
   }
 
-  referralPresident() {
+  requestReferralPresident() {
     this.referralTo(
       TaskResponses.REFERRAL_TO_PRESIDENT,
       SystemPenalties.REFERRAL_TO_PRESIDENT,
+    );
+  }
+
+  referralToLegalAffairs() {
+    this.referralTo(
+      TaskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS,
+      SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
     );
   }
 

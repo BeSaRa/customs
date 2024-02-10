@@ -34,7 +34,7 @@
         <p>
           <span> {{ lang.map.mr }} : </span>
           <span class="font-semibold">
-            {{ customsAffairsPAOUInfo.getNames() }}
+            {{ getForWhom('broker') }}
           </span>
           <span>{{ lang.map.respected }}</span>
         </p>
@@ -165,7 +165,7 @@
         <p>
           <span> {{ lang.map.mr }} : </span>
           <span class="font-semibold">
-            {{ lang.map.vice_president }}
+            {{ getForWhom('employee') }}
           </span>
           <span>{{ lang.map.respected }}</span>
         </p>
@@ -296,7 +296,7 @@
         <p>
           <span> {{ lang.map.mr }} : </span>
           <span class="font-semibold">
-            {{ defaultForWhom() }}
+            {{ getForWhom() }}
           </span>
           <span>{{ lang.map.respected }}</span>
         </p>
@@ -366,7 +366,15 @@
             </ng-container>
             <ng-container matColumnDef="offenderName">
               <th colspan="100" mat-header-cell *matHeaderCellDef>
-                {{ lang.map.offender_name }} : {{ offender.getNames() }}
+                <div class="flex justify-between items-center">
+                  <div>
+                    {{ lang.map.offender_name }} : {{ offender.getNames() }}
+                  </div>
+                  <div>
+                    {{ lang.map.offender_type }} :
+                    {{ offender.typeInfo.getNames() }}
+                  </div>
+                </div>
               </th>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="['offenderName']"></tr>
@@ -422,7 +430,7 @@
   <div class="dialog-footer justify-end">
     @if (isCase()) {
       <app-button (click)="complete$.next()" buttonType="primary"
-        >{{ lang.map.save }}
+        >{{ lang.map.send }}
       </app-button>
     } @else {
       <app-button (click)="save$.next()" buttonType="primary"

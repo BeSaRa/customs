@@ -176,7 +176,7 @@
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT)
     ) {
-      <button mat-menu-item (click)="referralPresident()">
+      <button mat-menu-item (click)="requestReferralPresident()">
         {{ lang.map.referral_request_to_presodent }}
       </button>
     }
@@ -184,7 +184,7 @@
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
     ) {
-      <button mat-menu-item (click)="referralPresidentAssistant()">
+      <button mat-menu-item (click)="requestReferralPresidentAssistant()">
         {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
     }
@@ -258,7 +258,9 @@
   <!-- issuing referral decision -->
   @if (
     model().inMyInbox() &&
-    (model().hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS) ||
+    (model().hasResponse(
+      taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
+    ) ||
       model().hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS) ||
       model().hasResponse(taskResponses.TO_PAE))
   ) {
@@ -271,11 +273,11 @@
     <!-- issuing referral decision to legal affairs manager by President assistant -->
     @if (
       model().inMyInbox() &&
-      model().hasResponse(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)
+      model().hasResponse(
+        taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
+      )
     ) {
-      <button
-        mat-menu-item
-        (click)="responseAction$.next(taskResponses.PA_LAUNCH_LEGAL_AFFAIRS)">
+      <button mat-menu-item (click)="referralToLegalAffairs()">
         {{ lang.map.to_legal_affairs_manager }}
       </button>
     }

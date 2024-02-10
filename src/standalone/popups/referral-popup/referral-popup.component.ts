@@ -52,6 +52,7 @@ import { UserClick } from '@enums/user-click';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { Violation } from '@models/violation';
 import { InfoService } from '@services/info.service';
+import { isFunction } from 'rxjs/internal/util/isFunction';
 
 @Component({
   selector: 'app-referral-popup',
@@ -91,7 +92,6 @@ export class ReferralPopupComponent
   employeeService = inject(EmployeeService);
   customsAffairsPAOUInfo =
     inject(InfoService).info.globalSetting.customsAffairsPAOUInfo;
-
   data = inject<{
     offenders: Offender[];
     model: InputSignal<Investigation>;
@@ -102,7 +102,6 @@ export class ReferralPopupComponent
   }>(MAT_DIALOG_DATA);
   save$ = new Subject<void>();
   complete$ = new Subject<void>();
-
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
   offenders = signal(this.data.offenders);
@@ -121,31 +120,24 @@ export class ReferralPopupComponent
       offender => offender.type === OffenderTypes.ClEARING_AGENT,
     );
   });
-
   hasEmployees = computed(() => {
     return this.offenders().some(item => item.type === OffenderTypes.EMPLOYEE);
   });
-
   hasBrokers = computed(() => {
     return this.offenders().some(
       item => item.type === OffenderTypes.ClEARING_AGENT,
     );
   });
-
   hasMixedOffenders = computed(() => {
     return this.hasBrokers() && this.hasEmployees();
   });
-
   updateModel: EventEmitter<void> = isSignal(this.data.updateModel)
     ? this.data.updateModel()
     : this.data.updateModel;
-
   response = this.data.response;
-
   isCase = computed(() => {
     return !!(this.model() && this.response);
   });
-
   offendersViolationsMap = computed(() => {
     return this.model().offenderViolationInfo.reduce<
       Record<number, OffenderViolation[]>
@@ -157,7 +149,6 @@ export class ReferralPopupComponent
       return acc;
     }, {});
   });
-
   oldPenaltyDecisionsMap = computed(() => {
     return this.offenders()
       .map(offender => {
@@ -171,79 +162,110 @@ export class ReferralPopupComponent
         return { ...acc, [item.offenderId]: item };
       }, {});
   });
-
   isPresidentRequest = computed(
     () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT,
   );
   isAssistantRequest = computed(
     () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
   );
-
   displayDefaultForm = computed(() => {
     return (
-      this.isPresidentRequest() ||
+      !this.isAssistantRequest() ||
       (this.isAssistantRequest() && !this.hasMixedOffenders())
     );
   });
-
-  defaultForWhom = computed(() => {
-    return this.isAssistantRequest()
-      ? this.offenders()[0].type === OffenderTypes.ClEARING_AGENT
-        ? this.customsAffairsPAOUInfo.getNames()
-        : this.lang.map.vice_president
-      : this.lang.map.president;
-  });
-
+  referralTextMap: Record<
+    SystemPenalties,
+    {
+      header: string;
+      footer: string;
+      whom: string | ((tab?: 'employee' | 'broker') => string);
+    }
+  > = {
+    [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]: {
+      header: this.lang.map.static_header_text_for_legal_affairs,
+      footer: this.lang.map.static_footer_text_for_legal_affairs,
+      whom: this.lang.map.director_of_legal_affairs_department,
+    },
+    [SystemPenalties.REFERRAL_TO_PRESIDENT]: {
+      header: this.lang.map.request_static_header_for_president,
+      footer: this.lang.map.request_static_footer_for_president,
+      whom: this.lang.map.president,
+    },
+    [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]: {
+      header: this.lang.map.request_static_header_for_president_assistant,
+      footer: this.lang.map.request_static_footer_for_president_assistant,
+      whom: (tab?: 'employee' | 'broker') =>
+        tab === 'broker'
+          ? this.customsAffairsPAOUInfo.getNames()
+          : this.lang.map.vice_president,
+    },
+    [SystemPenalties.TERMINATE]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
+    [SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
+    [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
+    [SystemPenalties.SAVE]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
+  };
+  getForWhom(tab?: 'employee' | 'broker'): string {
+    const method = this.referralTextMap[this.selectedPenalty.penaltyKey]
+      .whom as unknown as (tab?: 'employee' | 'broker') => string;
+    const stringValue = method as unknown as string;
+    return isFunction(
+      this.referralTextMap[this.selectedPenalty.penaltyKey].whom,
+    )
+      ? method(tab)
+      : stringValue;
+  }
   commentControl = new FormControl('', {
     nonNullable: true,
     validators: CustomValidators.required,
   });
-
   employeesComment = new FormControl('', {
     nonNullable: true,
     validators: CustomValidators.required,
   });
-
   brokersComment = new FormControl('', {
     nonNullable: true,
     validators: CustomValidators.required,
   });
-
   displayedColumns = ['violation', 'violationDate'];
-
   unlikedViolations = computed(() => {
     return this.model().getUnlinkedViolations();
   });
-
   unlinkedEmployeesViolations = computed(() => {
     return this.model().getEmployeesUnlinkedViolations();
   });
-
   unlinkedBrokersViolations = computed(() => {
     return this.model().getBrokersUnlinkedViolations();
   });
-
   get formHeader() {
-    return this.isPresidentRequest()
-      ? this.lang.map.request_static_header_for_president
-      : this.lang.map.request_static_header_for_president_assistant;
+    return this.referralTextMap[this.selectedPenalty.penaltyKey].header;
   }
-
   get formFooter() {
-    return this.isPresidentRequest()
-      ? this.lang.map.request_static_footer_for_president
-      : this.lang.map.request_static_footer_for_president_assistant;
+    return this.referralTextMap[this.selectedPenalty.penaltyKey].footer;
   }
-
   ngOnInit(): void {
     this.listenToSave();
     this.listenToComplete();
   }
-
   assertType(item: unknown): OffenderViolation {
     return item as OffenderViolation;
   }
-
   private listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))
@@ -306,7 +328,6 @@ export class ReferralPopupComponent
         this.dialogRef.close();
       });
   }
-
   private listenToComplete() {
     this.complete$
       .pipe(takeUntil(this.destroy$))
@@ -359,11 +380,9 @@ export class ReferralPopupComponent
         this.dialogRef.close(UserClick.YES);
       });
   }
-
   filterEmployeeViolations(v: Violation) {
     return v.offenderTypeInfo.lookupKey === OffenderTypes.EMPLOYEE;
   }
-
   filterBrokerViolations(v: Violation) {
     return v.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT;
   }

@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  send: string;
+  chairman_of_the_disciplinary_committee: string;
+  director_of_legal_affairs_department: string;
+  static_header_text_for_legal_affairs: string;
+  static_footer_text_for_legal_affairs: string;
   msg_unsaved_changes: string;
   there_is_no_offenders_or_unlinked_violations_to_take_this_action: string;
   president: string;

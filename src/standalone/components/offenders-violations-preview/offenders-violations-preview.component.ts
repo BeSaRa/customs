@@ -130,12 +130,9 @@ export class OffendersViolationsPreviewComponent
   proofStatus = this.lookupService.lookups.proofStatus
     .slice()
     .sort((a, b) => a.lookupKey - b.lookupKey);
-
   model = input.required<Investigation>();
-
   isClaimed = input(false, { transform: booleanAttribute });
   selection = new SelectionModel<Offender>(true);
-
   offenderDisplayedColumns = [
     'offenderName',
     'qid',
@@ -146,7 +143,6 @@ export class OffendersViolationsPreviewComponent
     'decision',
     'actions',
   ];
-
   isClaimedEffect = effect(() => {
     if (this.isClaimed()) {
       this.offenderDisplayedColumns = [
@@ -159,7 +155,6 @@ export class OffendersViolationsPreviewComponent
       );
     }
   });
-
   penaltyIcons = PenaltyIcons;
   offenderTypesMap: Record<number, Lookup> =
     this.lookupService.lookups.offenderType.reduce((acc, item) => {
@@ -310,6 +305,8 @@ export class OffendersViolationsPreviewComponent
     [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
       this.penaltyDecisionService.openRequestReferralDialog,
     [SystemPenalties.REFERRAL_TO_PRESIDENT]:
+      this.penaltyDecisionService.openRequestReferralDialog,
+    [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]:
       this.penaltyDecisionService.openRequestReferralDialog,
   };
 

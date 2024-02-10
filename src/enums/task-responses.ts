@@ -17,7 +17,7 @@ export enum TaskResponses {
   RETURN_TO_HR = 'return_to_hr',
   HR_APPROVE = 'hr_approve',
   TO_PAE = 'to_pae',
-  PA_LAUNCH_LEGAL_AFFAIRS = 'pa_launch_legal_affairs',
+  PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS = 'pa_launch_legal_affairs',
   PA_FNL_TO_PAE = 'pa_fnl_to_pae',
   PA_FNL_COMPLETE = 'pa_fnl_complete',
   PA_FNL_APPLY_AND_RETURN = 'pa_fnl_apply_and_return',
