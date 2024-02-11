@@ -13,6 +13,10 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  pre.default-font {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+  }
 }
 
 .mat-icon {

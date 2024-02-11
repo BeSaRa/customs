@@ -13,17 +13,17 @@
 
     <div class="mb-3">
       <span class="font-medium text-slate-700">{{ lang.map.subject }}</span>
-      <pre class="block">
+      <div class="block">
         {{ model().subject }}
-      </pre>
+      </div>
     </div>
-    <div class="mb-3">
+    <div class="mb-3 flex flex-col">
       <span class="font-medium text-slate-700">{{
         lang.map.general_explanation_of_violations
       }}</span>
-      <pre class="block">
+      <div class="flex flex-auto flex-wrap">
         {{ model().description ? model().description : 'No description' }}
-      </pre>
+      </div>
     </div>
   </div>
   <app-offenders-violations-preview
