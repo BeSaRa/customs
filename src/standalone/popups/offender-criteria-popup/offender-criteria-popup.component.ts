@@ -469,7 +469,7 @@ export class OffenderCriteriaPopupComponent
               .open(SituationSearchComponent, {
                 data: {
                   id: data.isCompany
-                    ? (data.offender.offenderInfo as ClearingAgent).agencyId!
+                    ? (data.offender as unknown as ClearingAgent).agencyId!
                     : data.offender.offenderInfo?.id,
                   type: data.offender.type,
                   isCompany: data.isCompany,
