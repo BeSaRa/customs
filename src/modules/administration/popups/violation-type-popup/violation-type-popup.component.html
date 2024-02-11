@@ -15,82 +15,88 @@
       [dynamicHeight]="true">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
-          <div class="grid grid-cols-1 gap-4 my-auto items-center p-4 pb-0">
-            <app-textarea formControlName="arName" [label]="lang.map.ar_name" />
-            <app-textarea formControlName="enName" [label]="lang.map.en_name" />
-          </div>
-          <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
-            <app-select-input
-              formControlName="classificationId"
-              [options]="violationClassifications"
-              [label]="lang.map.violation_classification"
-              bindValue="id"
-              bindLabel="getNames"
-              [enableFilter]="true"
-              bindFilter="getNames" />
-
-            <app-select-input
-              formControlName="offenderType"
-              [options]="filteredOffenderTypes"
-              [label]="lang.map.offender_type"
-              bindValue="lookupKey"
-              bindLabel="getNames" />
-
-            @if (isCriminal()) {
+          <div class="h-full overflow-auto">
+            <div class="grid grid-cols-1 gap-4 my-auto items-center p-4 pb-0">
+              <app-textarea
+                formControlName="arName"
+                [label]="lang.map.ar_name" />
+              <app-textarea
+                formControlName="enName"
+                [label]="lang.map.en_name" />
+            </div>
+            <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
               <app-select-input
-                formControlName="criminalType"
-                [options]="criminalTypes"
-                [label]="lang.map.criminal_type"
+                formControlName="classificationId"
+                [options]="violationClassifications"
+                [label]="lang.map.violation_classification"
+                bindValue="id"
+                bindLabel="getNames"
+                [enableFilter]="true"
+                bindFilter="getNames" />
+
+              <app-select-input
+                formControlName="offenderType"
+                [options]="filteredOffenderTypes"
+                [label]="lang.map.offender_type"
                 bindValue="lookupKey"
                 bindLabel="getNames" />
-            }
-            @if (isCustom()) {
+
+              @if (isCriminal()) {
+                <app-select-input
+                  formControlName="criminalType"
+                  [options]="criminalTypes"
+                  [label]="lang.map.criminal_type"
+                  bindValue="lookupKey"
+                  bindLabel="getNames" />
+              }
+              @if (isCustom()) {
+                <app-select-input
+                  formControlName="responsibilityRepeatViolations"
+                  [options]="responsibilityRepeatViolations"
+                  [label]="lang.map.responsibility_repeat_violations"
+                  bindValue="lookupKey"
+                  bindLabel="getNames" />
+              }
+
               <app-select-input
-                formControlName="responsibilityRepeatViolations"
-                [options]="responsibilityRepeatViolations"
-                [label]="lang.map.responsibility_repeat_violations"
+                formControlName="level"
+                [options]="violationLevels"
+                [label]="lang.map.level"
                 bindValue="lookupKey"
                 bindLabel="getNames" />
-            }
 
-            <app-select-input
-              formControlName="level"
-              [options]="violationLevels"
-              [label]="lang.map.level"
-              bindValue="lookupKey"
-              bindLabel="getNames" />
+              <app-select-input
+                formControlName="managerDecision"
+                [options]="filteredManagerDecisions"
+                [label]="lang.map.manager_decision"
+                bindValue="lookupKey"
+                bindLabel="getNames" />
 
-            <app-select-input
-              formControlName="managerDecision"
-              [options]="filteredManagerDecisions"
-              [label]="lang.map.manager_decision"
-              bindValue="lookupKey"
-              bindLabel="getNames" />
+              @if (isNumeric?.value) {
+                <app-input
+                  formControlName="numericFrom"
+                  [label]="lang.map.numeric_from" />
+              }
+              @if (isNumeric?.value) {
+                <app-input
+                  formControlName="numericTo"
+                  [label]="lang.map.numeric_to" />
+              }
 
-            @if (isNumeric?.value) {
-              <app-input
-                formControlName="numericFrom"
-                [label]="lang.map.numeric_from" />
-            }
-            @if (isNumeric?.value) {
-              <app-input
-                formControlName="numericTo"
-                [label]="lang.map.numeric_to" />
-            }
-
-            <app-switch
-              formControlName="isNumeric"
-              [label]="lang.map.is_numeric" />
-            @if (isNumeric?.value) {
               <app-switch
-                formControlName="isAbsence"
-                [label]="lang.map.absence" />
-            }
-            <app-switch
-              formControlName="status"
-              [trueValue]="1"
-              [falseValue]="0"
-              [label]="lang.map.status" />
+                formControlName="isNumeric"
+                [label]="lang.map.is_numeric" />
+              @if (isNumeric?.value) {
+                <app-switch
+                  formControlName="isAbsence"
+                  [label]="lang.map.absence" />
+              }
+              <app-switch
+                formControlName="status"
+                [trueValue]="1"
+                [falseValue]="0"
+                [label]="lang.map.status" />
+            </div>
           </div>
         </ng-container>
       </mat-tab>
