@@ -19,6 +19,7 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { TokenService } from '@services/token.service';
 import { MenuItemService } from '@services/menu-item.service';
 import { ServiceContract } from '@contracts/service-contract';
+import { LangService } from '@services/lang.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +34,7 @@ export class AuthService
   private readonly employeeService = inject(EmployeeService);
   private readonly tokenService = inject(TokenService);
   private readonly menuItemService = inject(MenuItemService);
+  private readonly langService = inject(LangService);
   private authenticated = false;
 
   @CastResponse()
@@ -93,6 +95,11 @@ export class AuthService
       return source.pipe(
         map(data => this.employeeService.setLoginData(data)),
         tap(data => this.tokenService.setToken(data.token)),
+        tap(data =>
+          this.langService.setDefaultLang(
+            data.internalUser.userPreferences.defaultLang.toString(),
+          ),
+        ),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),
         tap(() => this.menuItemService.buildHierarchy()),
