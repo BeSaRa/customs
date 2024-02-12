@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,7 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AppIcons } from '@constants/app-icons';
 import { LangService } from '@services/lang.service';
 import { DialogService } from '@services/dialog.service';
-import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { AuthService } from '@services/auth.service';
@@ -47,29 +54,24 @@ export class NavbarComponent
   @Output()
   menuClick = new EventEmitter<MouseEvent | undefined>();
   lang = inject(LangService);
-  employee = inject(EmployeeService).getEmployee();
-  employeeOUs = inject(EmployeeService).getOrganizationUnits();
-  defaultDepartmentName: string = '';
-  DepartmentsNames: string[] = [];
+  employeeService = inject(EmployeeService);
+  employee = this.employeeService.getEmployee();
   dialog = inject(DialogService);
   toast = inject(ToastService);
   authService = inject(AuthService);
   router = inject(Router);
   userPreferencesService = inject(UserPreferencesService);
-
   editUserPreferences$: Subject<void> = new Subject<void>();
+
+  switchOrganization$ = new Subject<OrganizationUnit>();
+
+  selectedOrganization = signal(this.employeeService.getOrganizationUnit());
 
   ngOnInit(): void {
     this._listenToEditUserPreferences();
-    this.employeeOUs?.forEach(eou => {
-      const employeeOU = new OrganizationUnit().clone<OrganizationUnit>(eou);
-      if (employeeOU.id === this.employee?.defaultOUId) {
-        this.defaultDepartmentName = employeeOU.getNames();
-      } else {
-        this.DepartmentsNames.push(employeeOU.getNames());
-      }
-    });
+    this.listenToSwitchOrganization();
   }
+
   menuClicked($event?: MouseEvent) {
     this.menuClick.emit($event);
   }
@@ -132,5 +134,20 @@ export class NavbarComponent
 
   switchLang() {
     this.lang.toggleLang();
+  }
+
+  private listenToSwitchOrganization() {
+    this.switchOrganization$
+      .pipe(
+        exhaustMap(org => {
+          return this.authService
+            .switchOrganization(org.id)
+            .pipe(map(() => org));
+        }),
+      )
+      .subscribe(dep => {
+        this.toast.success(this.lang.map.organization_switched_successfully);
+        this.selectedOrganization.set(dep);
+      });
   }
 }

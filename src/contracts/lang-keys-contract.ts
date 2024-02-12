@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  organization_switched_successfully: string;
   send: string;
   chairman_of_the_disciplinary_committee: string;
   director_of_legal_affairs_department: string;

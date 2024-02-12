@@ -35,6 +35,13 @@ export class EmployeeService
     data.internalUser = new InternalUser().clone<InternalUser>({
       ...data.internalUser,
     });
+
+    data.organizationUnits = data.organizationUnits.map(item => {
+      return new OrganizationUnit().clone<OrganizationUnit>(item);
+    });
+    data.organizationUnit = new OrganizationUnit().clone<OrganizationUnit>(
+      data.organizationUnit,
+    );
     // set the lookup after login
     data.lookupMap = this.lookupService.setLookups(data.lookupMap);
     // generate the permissions list
@@ -144,7 +151,7 @@ export class EmployeeService
     return this.loginData?.organizationUnit;
   }
 
-  getOrganizationUnits(): OrganizationUnit[] | undefined {
-    return this.loginData?.organizationUnits;
+  getOrganizationUnits(): OrganizationUnit[] {
+    return this.loginData ? this.loginData.organizationUnits : [];
   }
 }

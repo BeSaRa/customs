@@ -107,4 +107,18 @@ export class AuthService
   isGuest(): boolean {
     return !this.isAuthenticated();
   }
+
+  @CastResponse()
+  private _switchOrganization(
+    organizationId: number,
+  ): Observable<LoginDataContract> {
+    return this.http.post<LoginDataContract>(
+      this.urlService.URLS.SWITCH_ORGANIZATION + '/' + organizationId,
+      {},
+    );
+  }
+
+  switchOrganization(organizationId: number): Observable<LoginDataContract> {
+    return this._switchOrganization(organizationId);
+  }
 }

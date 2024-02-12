@@ -3,6 +3,7 @@ export const EndPoints = {
   INFO: '/auth/login/info',
   LOCALIZATION: '/entity/localization',
   AUTH: '/auth/internal/login',
+  SWITCH_ORGANIZATION: '/auth/internal/organization-unit',
   VALIDATE_TOKEN: '/auth/validate-token',
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
