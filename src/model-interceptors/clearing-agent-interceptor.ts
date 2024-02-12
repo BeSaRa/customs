@@ -20,12 +20,13 @@ export class ClearingAgentInterceptor
       model.agentLicenseExpiryDate;
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
-    model.agencyInfo &&
-      (model.agencyInfo = AdminResult.createInstance({
-        enName: model.agencyEnglishCompanyName,
-        arName: model.agencyArabicCompanyName,
-        id: model.agencyId,
-      }));
+    model.typeInfo &&
+      (model.typeInfo = AdminResult.createInstance(model.typeInfo));
+    model.agencyInfo = AdminResult.createInstance({
+      enName: model.agencyEnglishCompanyName,
+      arName: model.agencyArabicCompanyName,
+      id: model.agencyId,
+    });
     return model;
   }
 }
