@@ -159,7 +159,12 @@ export class SingleDecisionPopupComponent
     nonNullable: false,
     validators: [CustomValidators.required],
   });
-  textControl: FormControl = new FormControl<string>(this.oldPenaltyComment()!);
+  textControl: FormControl = new FormControl<string>(
+    this.oldPenaltyComment()!,
+    {
+      validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+    },
+  );
   displayedColumns = ['violation', 'createdOn', 'proofStatus'];
 
   assertType(element: unknown): OffenderViolation {
@@ -191,12 +196,14 @@ export class SingleDecisionPopupComponent
   private listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))
-      .pipe(map(() => this.penaltyControl.valid))
+      .pipe(map(() => this.penaltyControl.valid && this.textControl.valid))
       .pipe(
         tap(
           valid =>
             !valid &&
-            this.dialog.error(this.lang.map.please_select_penalty_to_proceed),
+            this.dialog.error(
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
+            ),
         ),
         filter(valid => {
           return valid;
