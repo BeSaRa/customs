@@ -47,12 +47,7 @@ export class Witness extends BaseModel<Witness, WitnessService> {
       phoneNumber: controls
         ? [enName, [CustomValidators.required]]
         : phoneNumber,
-      email: controls
-        ? [
-            enName,
-            [CustomValidators.required, CustomValidators.pattern('EMAIL')],
-          ]
-        : email,
+      email: controls ? [enName, [CustomValidators.pattern('EMAIL')]] : email,
     };
   }
 }
