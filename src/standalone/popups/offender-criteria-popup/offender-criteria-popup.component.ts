@@ -147,7 +147,6 @@ export class OffenderCriteriaPopupComponent
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
   situationSearch$ = new Subject<{
     offender: Offender;
-    offenderType: number;
     isCompany: boolean;
   }>();
   @ViewChild(MatTabGroup, { static: true })
@@ -459,24 +458,27 @@ export class OffenderCriteriaPopupComponent
   listenToSituationSearch() {
     this.situationSearch$
       .pipe(
-        switchMap(
-          (data: {
-            offender: Offender;
-            offenderType: number;
-            isCompany: boolean;
-          }) =>
-            this.dialog
-              .open(SituationSearchComponent, {
-                data: {
-                  id: data.isCompany
-                    ? (data.offender.offenderInfo as ClearingAgent).agencyId!
-                    : data.offender.offenderInfo?.id,
-                  type: data.offender.type,
-                  isCompany: data.isCompany,
-                },
-              })
-              .afterClosed(),
-        ),
+        switchMap((data: { offender: Offender; isCompany: boolean }) => {
+          let id;
+          if (data.isCompany) {
+            id = (data.offender as unknown as ClearingAgent).agencyId;
+          } else {
+            if (data.offender.type === OffenderTypes.ClEARING_AGENT) {
+              id = (data.offender as unknown as ClearingAgent).agentId;
+            } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
+              id = data.offender.id;
+            }
+          }
+          return this.dialog
+            .open(SituationSearchComponent, {
+              data: {
+                id,
+                type: data.offender.type,
+                isCompany: data.isCompany,
+              },
+            })
+            .afterClosed();
+        }),
       )
       .subscribe();
   }

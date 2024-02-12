@@ -222,19 +222,29 @@ export class OffenderListComponent
   listenToSituationSearch() {
     this.situationSearch$
       .pipe(
-        switchMap((data: { offender: Offender; isCompany: boolean }) =>
-          this.dialog
+        switchMap((data: { offender: Offender; isCompany: boolean }) => {
+          let id;
+          if (data.isCompany) {
+            id = (data.offender.offenderInfo as unknown as ClearingAgent)
+              .agencyId;
+          } else {
+            if (data.offender.type === OffenderTypes.ClEARING_AGENT) {
+              id = (data.offender.offenderInfo as unknown as ClearingAgent)
+                .agentId;
+            } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
+              id = data.offender.offenderInfo?.id;
+            }
+          }
+          return this.dialog
             .open(SituationSearchComponent, {
               data: {
-                id: data.isCompany
-                  ? (data.offender.offenderInfo as ClearingAgent).agencyId!
-                  : data.offender.offenderInfo?.id,
+                id,
                 type: data.offender.type,
                 isCompany: data.isCompany,
               },
             })
-            .afterClosed(),
-        ),
+            .afterClosed();
+        }),
       )
       .subscribe();
   }
