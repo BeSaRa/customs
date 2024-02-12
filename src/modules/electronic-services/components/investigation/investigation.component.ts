@@ -39,6 +39,8 @@ import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confiden
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { Penalty } from '@models/penalty';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { ViolationClassificationService } from '@services/violation-classification.service';
+import { ViolationClassification } from '@models/violation-classification';
 
 @Component({
   selector: 'app-investigation',
@@ -74,6 +76,7 @@ export class InvestigationComponent
   encryptionService = inject(EncryptionService);
   lookupService = inject(LookupService);
   adapter = inject(DateAdapter);
+  violationClassificationService = inject(ViolationClassificationService);
   canManageInvestigationElements = true;
   info = input<OpenedInfoContract | null>(null);
   @ViewChild(SummaryTabComponent)
@@ -118,9 +121,12 @@ export class InvestigationComponent
 
   updateModel$: BehaviorSubject<null> = new BehaviorSubject(null);
   offendersMappedWIthViolations: Offender[] = [];
+  classificationsMap: Record<number, ViolationClassification> = {};
+  classifications: ViolationClassification[] = [];
 
   protected override _init() {
     super._init();
+    this.loadClassifications();
     this.info()
       ? (this.model = this.info()!.model as unknown as Investigation)
       : (this.model = new Investigation());
@@ -242,12 +248,26 @@ export class InvestigationComponent
     return !this.model.violationInfo.length
       ? 'None'
       : !this.model.violationInfo.find(v => {
-            return v.classificationInfo.id === ClassificationTypes.criminal;
+            return (
+              this.classificationsMap[v.classificationInfo.id]?.key ===
+              ClassificationTypes.criminal
+            );
           })
         ? 'Normal'
         : 'Creminal';
   }
 
+  private prepareClassificationMap() {
+    this.classificationsMap = this.classifications.reduce((acc, item) => {
+      return { ...acc, [item.id]: item };
+    }, {});
+  }
+  private loadClassifications(): void {
+    this.violationClassificationService.loadAsLookups().subscribe(list => {
+      this.classifications = list;
+      this.prepareClassificationMap();
+    });
+  }
   private _listenToLoadOffendersViolations() {
     this.updateModel$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.model = new Investigation().clone<Investigation>({
