@@ -5,6 +5,7 @@ import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
 import { AdminResult } from './admin-result';
 import { StatusTypes } from '@enums/status-types';
+import { ViolationClassification } from '@models/violation-classification';
 
 const { send, receive } = new ViolationTypeInterceptor();
 
@@ -33,7 +34,7 @@ export class ViolationType extends BaseModel<
   managerDecisionInfo!: AdminResult;
   responsibilityRepeatViolationsInfo!: AdminResult;
   criminalTypeInfo!: AdminResult;
-
+  violationClassificationInfo!: ViolationClassification;
   override status = StatusTypes.ACTIVE;
 
   buildForm(controls = false): object {

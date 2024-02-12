@@ -90,6 +90,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     new Date().getFullYear(),
   ).map(i => i.toString());
   typesMap = signal({} as Record<number, ViolationType>);
+  classificationsMap: Record<number, ViolationClassification> = {};
 
   todayDate: Date = new Date();
   maxEndDate: Date | undefined;
@@ -129,11 +130,13 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         this.typesMap()[this.controls.violationType().value];
       return (
         violationType &&
-        violationType.classificationId === ClassificationTypes.criminal
+        violationType.violationClassificationInfo?.key ===
+          ClassificationTypes.criminal
       );
     } else if (this.violationClassification() || this.typesMap()) {
       return (
-        this.controls.classification().value === ClassificationTypes.criminal
+        this.classificationsMap[this.controls.classification().value].key ===
+        ClassificationTypes.criminal
       );
     } else return false;
   });
@@ -143,11 +146,13 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         this.typesMap()[this.controls.violationType().value];
       return (
         violationType &&
-        violationType.classificationId === ClassificationTypes.custom
+        violationType.violationClassificationInfo?.key ===
+          ClassificationTypes.custom
       );
     } else if (this.violationClassification() || this.typesMap()) {
       return (
-        this.controls.classification().value === ClassificationTypes.custom
+        this.classificationsMap[this.controls.classification().value].key ===
+        ClassificationTypes.custom
       );
     } else return false;
   });
@@ -171,7 +176,8 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     return this._types().filter(type => {
       return (
         !this.violationClassification() ||
-        type.classificationId === this.violationClassification()
+        type.violationClassificationInfo?.key ===
+          this.classificationsMap[this.violationClassification()].key
       );
     });
   });
@@ -183,8 +189,9 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     if (
       this.violationClassification() &&
       this.typesMap()[this.controls.violationType().value] &&
-      this.typesMap()[this.controls.violationType().value].classificationId !==
-        this.violationClassification()
+      this.typesMap()[this.controls.violationType().value]
+        .violationClassificationInfo?.key !==
+        this.classificationsMap[this.violationClassification()].key
     ) {
       this.controls.violationType().reset({}, { emitEvent: false });
       this.controls
@@ -291,6 +298,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       }, {}),
     );
   }
+  private prepareClassificationMap() {
+    this.classificationsMap = this.classifications.reduce((acc, item) => {
+      return { ...acc, [item.id]: item };
+    }, {});
+  }
 
   showDeclarationNumberDetails() {
     this.caseModel()
@@ -385,27 +397,30 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.minEndDate = undefined;
     this.form.updateValueAndValidity();
   }
-  filterDependingOnReportTypeClassification(classificationId: number) {
+  filterDependingOnReportTypeClassification(classificationKey: string) {
     return (
       this.reportType() === 'None' ||
       (this.reportType() === 'Creminal' &&
-        classificationId === ClassificationTypes.criminal) ||
+        classificationKey === ClassificationTypes.criminal) ||
       (this.reportType() === 'Normal' &&
-        classificationId !== ClassificationTypes.criminal)
+        classificationKey !== ClassificationTypes.criminal)
     );
   }
   private loadClassifications(): void {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
       this.classifications = list.filter(vc =>
-        this.filterDependingOnReportTypeClassification(vc.id),
+        this.filterDependingOnReportTypeClassification(vc.key),
       );
+      this.prepareClassificationMap();
     });
   }
   private loadViolationTypes() {
     return this.violationTypeService.loadAsLookups().subscribe(types => {
       this._types.set(
         types.filter(vt =>
-          this.filterDependingOnReportTypeClassification(vt.classificationId),
+          this.filterDependingOnReportTypeClassification(
+            vt.violationClassificationInfo?.key,
+          ),
         ),
       );
       this.prepareTypeMap();
