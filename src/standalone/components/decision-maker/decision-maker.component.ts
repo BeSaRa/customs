@@ -154,6 +154,7 @@ export class DecisionMakerComponent
   private listenToSystemActionChanges() {
     this.systemAction$
       .pipe(
+        tap(() => console.log(this.model())),
         map(penaltyKey => {
           return {
             oldPenalty: this.model().getPenaltyDecisionByOffenderId(

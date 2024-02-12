@@ -63,7 +63,6 @@ export class CommentPopupComponent
 
   previewFormList: TaskResponses[] = [
     TaskResponses.TO_MANAGER,
-    TaskResponses.MANAGER_APPROVE,
     TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
     TaskResponses.REFERRAL_TO_PRESIDENT,
   ];
