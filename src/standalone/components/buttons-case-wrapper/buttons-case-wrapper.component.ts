@@ -170,6 +170,13 @@ export class ButtonsCaseWrapperComponent
     );
   }
 
+  presidentToLegalAffairs() {
+    this.referralTo(
+      TaskResponses.PR_LAUNCH_LEGAL_AFFAIRS,
+      SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
+    );
+  }
+
   referralTo(response: TaskResponses, penaltyKey: SystemPenalties) {
     this.referralRequest$.next({
       penaltyKey,

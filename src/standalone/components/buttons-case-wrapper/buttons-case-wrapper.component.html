@@ -63,9 +63,7 @@
     model().inMyInbox() &&
     model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
   ) {
-    <app-button
-      buttonType="secondary"
-      (click)="responseAction$.next(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)">
+    <app-button buttonType="secondary" (click)="presidentToLegalAffairs()">
       {{ lang.map.to_legal_affairs_manager }}
     </app-button>
   }
