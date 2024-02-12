@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  determine_the_proof_status_for_all_violations_first_to_take_this_action: string;
   organization_switched_successfully: string;
   send: string;
   chairman_of_the_disciplinary_committee: string;

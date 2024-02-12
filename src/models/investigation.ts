@@ -14,6 +14,9 @@ import { EmployeeService } from '@services/employee.service';
 import { ServiceRegistry } from '@services/service-registry';
 import { SystemPenalties } from '@enums/system-penalties';
 import { OffenderTypes } from '@enums/offender-types';
+import { ManagerDecisions } from '@enums/manager-decisions';
+import { ProofTypes } from '@enums/proof-types';
+import { ActivitiesName } from '@enums/activities-name';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -79,11 +82,13 @@ export class Investigation extends BaseCase<
     };
   }
 
-  getActivityName(): string | undefined {
+  getActivityName(): '' | ActivitiesName | undefined {
     return (
       this.taskDetails &&
       this.taskDetails.processInstanceName &&
-      this.taskDetails.processInstanceName.split(':')[0]
+      (this.taskDetails.processInstanceName.split(
+        ':',
+      )[0] as unknown as ActivitiesName)
     );
   }
 
@@ -282,5 +287,25 @@ export class Investigation extends BaseCase<
 
   isOffenderConcerned(offenderId: number): boolean {
     return this.getConcernedOffendersIds().includes(offenderId);
+  }
+
+  shouldCheckProofStatus(
+    offenderId: number,
+    managerDecisionControl: ManagerDecisions | null,
+  ): boolean {
+    return [
+      ManagerDecisions.GUIDANCE,
+      ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
+    ].includes(managerDecisionControl!) && this.isSubmitInvestigationActivity()
+      ? this.getOffenderViolationByOffender(offenderId).some(item => {
+          return item.proofStatus === ProofTypes.UNDEFINED;
+        })
+      : false;
+  }
+
+  isSubmitInvestigationActivity(): boolean {
+    return !this.getActivityName()
+      ? false
+      : this.getActivityName() === ActivitiesName.SUBMIT_INVESTIGATION;
   }
 }

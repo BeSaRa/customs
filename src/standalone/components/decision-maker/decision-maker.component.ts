@@ -96,7 +96,20 @@ export class DecisionMakerComponent
     );
   }
 
-  openDecisionDialog(element: Offender) {
+  openDecisionDialog(offender: Offender) {
+    if (
+      this.model().shouldCheckProofStatus(
+        offender.id,
+        this.penalties()[offender.id].managerDecisionControl,
+      )
+    ) {
+      this.dialog.error(
+        this.lang.map
+          .determine_the_proof_status_for_all_violations_first_to_take_this_action,
+      );
+      return;
+    }
+
     const oldDecision = this.model().getPenaltyDecisionByOffenderId(
       this.offender().id,
     );
@@ -139,10 +152,10 @@ export class DecisionMakerComponent
       )
       .subscribe(() => {
         this.penaltyDecisionService.openSingleDecisionDialog(
-          element,
+          offender,
           this.model,
           this.updateModel,
-          this.penaltyMap()[element.id],
+          this.penaltyMap()[offender.id],
         );
       });
   }
@@ -154,7 +167,6 @@ export class DecisionMakerComponent
   private listenToSystemActionChanges() {
     this.systemAction$
       .pipe(
-        tap(() => console.log(this.model())),
         map(penaltyKey => {
           return {
             oldPenalty: this.model().getPenaltyDecisionByOffenderId(
