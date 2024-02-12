@@ -55,7 +55,7 @@ export class LangService
     Localization
   >;
   change$ = this.change.asObservable();
-  private current: LangContract = this.languages[0];
+  private current!: LangContract;
   private langMap: Record<LangCodes, LangContract> = this.languages.reduce(
     (acc, item) => {
       return { ...acc, [item.code]: item };
@@ -65,7 +65,22 @@ export class LangService
 
   constructor(@Inject(DOCUMENT) private document: Document) {
     super();
+    this.setCurrentLangFromLocalStorage();
+  }
+
+  setCurrentLangFromLocalStorage() {
+    const defaultLang = localStorage.getItem('defaultLang');
+    if (defaultLang)
+      this.current =
+        this.languages.find(language => language.id === +defaultLang) ||
+        this.languages[0];
+    else this.current = this.languages[0];
     this.setDirection(this.current.direction);
+  }
+
+  setDefaultLang(langId: string) {
+    localStorage.setItem('defaultLang', langId);
+    this.setCurrentLangFromLocalStorage();
   }
 
   getCurrent(): LangContract {
@@ -138,6 +153,7 @@ export class LangService
       })
     );
   }
+
   private setAppTitle() {
     this.titleService.setTitle(this.map.customs_investigation_platform);
   }
