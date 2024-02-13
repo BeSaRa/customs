@@ -17,11 +17,13 @@
         [options]="classifications" />
       <app-select-input
         [label]="lang.map.violation_type"
-        bindLabel="getNames"
-        [divider]="true"
-        bindValue="id"
+        [options]="types()"
         formControlName="violationTypeId"
-        [options]="types()" />
+        bindLabel="getNames"
+        bindValue="id"
+        [divider]="true"
+        [enableFilter]="true"
+        bindFilter="getNames" />
       <app-textarea
         formControlName="description"
         [label]="lang.map.description"

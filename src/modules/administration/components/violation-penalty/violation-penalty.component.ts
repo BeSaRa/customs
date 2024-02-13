@@ -9,7 +9,6 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
-import { ViolationTypeService } from '@services/violation-type.service';
 import { PenaltyService } from '@services/penalty.service';
 import { UserClick } from '@enums/user-click';
 import { filter, finalize, switchMap } from 'rxjs';
@@ -30,7 +29,6 @@ export class ViolationPenaltyComponent
 {
   service = inject(ViolationPenaltyService);
   penaltyService = inject(PenaltyService);
-  violationTypeService = inject(ViolationTypeService);
   violationType = input.required<number>();
   offenderType = input.required<number>();
   inEditMode = input.required<boolean>();
