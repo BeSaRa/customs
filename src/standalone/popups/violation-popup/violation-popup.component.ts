@@ -271,8 +271,12 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
   protected _prepareModel(): Violation | Observable<Violation> {
     if (this.onlyOneDay()) {
-      this.model.violationsDateTo = this.model.violationsDate;
-      this.model.violationsDateFrom = this.model.violationsDate;
+      this.controls
+        .violationsDateTo()
+        ?.setValue(this.form.getRawValue().violationsDate);
+      this.controls
+        .violationsDateFrom()
+        ?.setValue(this.form.getRawValue().violationsDate);
     }
     return new Violation().clone({
       ...this.model,

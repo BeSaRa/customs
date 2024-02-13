@@ -13,11 +13,14 @@ export class ClearingAgentInterceptor
   }
 
   receive(model: ClearingAgent): ClearingAgent {
-    model.agentLicenseIssueDate =
-      model.agentLicenseIssueDate.split('.')[0] ?? model.agentLicenseIssueDate;
-    model.agentLicenseExpiryDate =
-      model.agentLicenseExpiryDate.split('.')[0] ??
-      model.agentLicenseExpiryDate;
+    model.agentLicenseIssueDate &&
+      (model.agentLicenseIssueDate =
+        model.agentLicenseIssueDate.split('.')[0] ??
+        model.agentLicenseIssueDate);
+    model.agentLicenseExpiryDate &&
+      (model.agentLicenseExpiryDate =
+        model.agentLicenseExpiryDate.split('.')[0] ??
+        model.agentLicenseExpiryDate);
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.agencyInfo &&

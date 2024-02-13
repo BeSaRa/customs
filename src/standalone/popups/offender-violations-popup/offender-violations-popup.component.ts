@@ -17,9 +17,11 @@ import {
   exhaustMap,
   filter,
   map,
+  of,
   Subject,
   switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { OffenderViolation } from '@models/offender-violation';
 import { OffenderViolationService } from '@services/offender-violation.service';
@@ -145,15 +147,48 @@ export class OffenderViolationsPopupComponent
           return combineLatest(
             (this.control?.value || []).map((violationId: number) => {
               // TODO : call save from Model it self(OffenderViolation) but we have a backend issue related to this call
-              return new OffenderViolation()
-                .clone<OffenderViolation>({
-                  caseId: this.model().id,
-                  offenderId: this.offender.id,
-                  violationId: violationId,
-                  status: 1,
-                  proofStatus: ProofTypes.UNDEFINED,
-                })
-                .save();
+              return this.offenderViolationService
+                .validateLinkOffenderWithViolation(
+                  this.offender.id,
+                  violationId,
+                )
+                .pipe(
+                  tap((res: OffenderViolation[]) => {
+                    if (res.length) {
+                      res.forEach(offenderViolation => {
+                        this.dialog.error(
+                          this.lang.map
+                            .msg_there_is_already_a_violation_with_same_type_and_date_exist +
+                            ' ' +
+                            this.lang.map.on_investigation_has_status_x.change({
+                              x: offenderViolation.statusInfo.getNames(),
+                            }),
+                          this.lang.map.can_not_link_violation_x.change({
+                            x: this.violations()
+                              .find(v => v.id === violationId)
+                              ?.violationTypeInfo?.getNames(),
+                          }),
+                        );
+                      });
+                    }
+                  }),
+                )
+                .pipe(
+                  switchMap(res => {
+                    if (res.length) {
+                      return of(false);
+                    }
+                    return new OffenderViolation()
+                      .clone<OffenderViolation>({
+                        caseId: this.model().id,
+                        offenderId: this.offender.id,
+                        violationId: violationId,
+                        status: 1,
+                        proofStatus: ProofTypes.UNDEFINED,
+                      })
+                      .save();
+                  }),
+                );
             }),
           );
         }),

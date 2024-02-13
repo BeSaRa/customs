@@ -414,27 +414,57 @@ export class OffenderCriteriaPopupComponent
       this.offenderViolationControl?.value?.length
       ? (this.offenderViolationControl?.value || []).map(
           (violationId: number) => {
-            return new OffenderViolation()
-              .clone<OffenderViolation>({
-                caseId: this.caseId(),
-                offenderId: model.id,
-                violationId: violationId,
-                status: 1,
-                proofStatus: ProofTypes.UNDEFINED,
-              })
-              .save()
+            return this.offenderViolationService
+              .validateLinkOffenderWithViolation(model.id, violationId)
               .pipe(
-                tap(offenderViolation => {
-                  this.model().offenderViolationInfo = [
-                    ...this.model().offenderViolationInfo,
-                    new OffenderViolation().clone<OffenderViolation>({
-                      ...offenderViolation,
-                      offenderInfo: model,
-                      violationInfo: this.violations().find(
-                        i => i.id === offenderViolation.violationId,
-                      ),
-                    }),
-                  ];
+                tap((res: OffenderViolation[]) => {
+                  if (res.length) {
+                    res.forEach(offenderViolation => {
+                      this.dialog.error(
+                        this.lang.map
+                          .msg_there_is_already_a_violation_with_same_type_and_date_exist +
+                          ' ' +
+                          this.lang.map.on_investigation_has_status_x.change({
+                            x: offenderViolation.statusInfo.getNames(),
+                          }),
+                        this.lang.map.can_not_link_violation_x.change({
+                          x: this.violations()
+                            .find(v => v.id === violationId)
+                            ?.violationTypeInfo?.getNames(),
+                        }),
+                      );
+                    });
+                  }
+                }),
+              )
+              .pipe(
+                switchMap(res => {
+                  if (res.length) {
+                    return of(new OffenderViolation());
+                  }
+                  return new OffenderViolation()
+                    .clone<OffenderViolation>({
+                      caseId: this.caseId(),
+                      offenderId: model.id,
+                      violationId: violationId,
+                      status: 1,
+                      proofStatus: ProofTypes.UNDEFINED,
+                    })
+                    .save()
+                    .pipe(
+                      tap(offenderViolation => {
+                        this.model().offenderViolationInfo = [
+                          ...this.model().offenderViolationInfo,
+                          new OffenderViolation().clone<OffenderViolation>({
+                            ...offenderViolation,
+                            offenderInfo: model,
+                            violationInfo: this.violations().find(
+                              i => i.id === offenderViolation.violationId,
+                            ),
+                          }),
+                        ];
+                      }),
+                    );
                 }),
               );
           },
