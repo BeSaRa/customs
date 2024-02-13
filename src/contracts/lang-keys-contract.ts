@@ -454,4 +454,6 @@ export interface LangKeysContract {
   msg_delete_selected_success: string;
   decision_type: string;
   save_and_continue: string;
+  on_investigation_has_status_x: string;
+  can_not_link_violation_x: string;
 }
