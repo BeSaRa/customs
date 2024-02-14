@@ -47,6 +47,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-violation-popup',
@@ -291,7 +292,21 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.lang.map.violations }),
     );
-    this.caseModel().violationInfo = [...this.caseModel().violationInfo, model];
+    if (this.operation === OperationType.CREATE) {
+      this.caseModel().violationInfo = [
+        ...this.caseModel().violationInfo,
+        model,
+      ];
+    } else {
+      this.caseModel().violationInfo = this.caseModel().violationInfo.map(
+        violation => {
+          if (violation.id === model.id) {
+            return model;
+          }
+          return violation;
+        },
+      );
+    }
     this.dialogRef.close(model);
   }
 
