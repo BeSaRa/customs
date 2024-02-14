@@ -183,7 +183,10 @@ export class ViolationListComponent
             .afterClosed(),
         ),
       )
-      .subscribe(() => this.violationChanged.emit());
+      .subscribe(() => {
+        this.updateModel.emit();
+        this.violationChanged.emit();
+      });
   }
 
   private listenToDelete() {
