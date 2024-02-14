@@ -251,7 +251,9 @@ export class OffenderCriteriaPopupComponent
         }
       });
   }
-
+  assertType(item: Offender): Offender {
+    return new Offender().clone<Offender>(item);
+  }
   private listenToSearch() {
     const mawaredSearch$ = this.search$
       .pipe(filter(() => this.isEmployee))

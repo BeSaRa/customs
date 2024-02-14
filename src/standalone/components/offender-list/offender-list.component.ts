@@ -253,7 +253,7 @@ export class OffenderListComponent
     this.data.next([]);
   }
 
-  isClearingAgent(element: Offender) {
-    return element.type === OffenderTypes.ClEARING_AGENT;
+  assertType(item: Offender): Offender {
+    return new Offender().clone<Offender>(item);
   }
 }

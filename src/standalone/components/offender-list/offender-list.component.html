@@ -1,6 +1,9 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ lang.map.offenders }}</h1>
-  @if (!readonly) {
+  @if (
+    !readonly &&
+    employeeService.hasAnyPermissions(['DATA_ENTRY', 'MANAGE_OFFENDER'])
+  ) {
     <app-icon-button
       (click)="add$.next()"
       class="text-primary"
@@ -73,14 +76,16 @@
               <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
             </div>
           }
-          <div [matTooltip]="lang.map.situation_search">
-            <app-icon-button
-              (click)="
-                situationSearch$.next({ offender: element, isCompany: false })
-              "
-              icon="INFORMATION"></app-icon-button>
-          </div>
-          @if (isClearingAgent(element)) {
+          @if (assertType(element).hasStatusSearch()) {
+            <div [matTooltip]="lang.map.situation_search">
+              <app-icon-button
+                (click)="
+                  situationSearch$.next({ offender: element, isCompany: false })
+                "
+                icon="INFORMATION"></app-icon-button>
+            </div>
+          }
+          @if (assertType(element).hasStatusSearch(true)) {
             <div [matTooltip]="lang.map.situation_search_clearing_agency">
               <app-icon-button
                 (click)="

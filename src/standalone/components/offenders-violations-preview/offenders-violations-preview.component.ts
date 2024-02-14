@@ -372,7 +372,7 @@ export class OffendersViolationsPreviewComponent
   }
 
   assertType(item: Offender): Offender {
-    return item;
+    return new Offender().clone<Offender>(item);
   }
 
   getOffenderPenalties(offender: Offender) {
@@ -488,10 +488,6 @@ export class OffendersViolationsPreviewComponent
         }),
       )
       .subscribe();
-  }
-
-  isClearingAgent(element: Offender) {
-    return element.type === OffenderTypes.ClEARING_AGENT;
   }
 
   listenToSituationSearch() {

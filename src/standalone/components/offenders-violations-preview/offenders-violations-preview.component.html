@@ -92,11 +92,13 @@
     </th>
     <td mat-cell *matCellDef="let element">
       <div class="flex justify-start gap-2">
-        <app-icon-button
-          [matTooltip]="lang.map.situation_search"
-          (click)="situationClick($event, element, false)"
-          icon="INFORMATION"></app-icon-button>
-        @if (isClearingAgent(element)) {
+        @if (assertType(element).hasStatusSearch()) {
+          <app-icon-button
+            [matTooltip]="lang.map.situation_search"
+            (click)="situationClick($event, element, false)"
+            icon="INFORMATION"></app-icon-button>
+        }
+        @if (assertType(element).hasStatusSearch(true)) {
           <app-icon-button
             [matTooltip]="lang.map.situation_search_clearing_agency"
             (click)="situationClick($event, element, true)"
