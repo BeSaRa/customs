@@ -110,6 +110,7 @@ export class OffenderCriteriaPopupComponent
   model = this.data && this.data.model;
   // lookups
   offenderTypes = this.lookupService.lookups.offenderType;
+  careerLevels = this.lookupService.lookups.CareerLevel;
   offenderTypesEnum = OffenderTypes;
   administrations: MawaredDepartment[] = [];
   offenders = computed(() => this.model().offenderInfo);

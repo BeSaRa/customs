@@ -11,8 +11,8 @@ export class MawaredEmployeeCriteria extends MawaredEmployee {
       enName,
       qid,
       employeeDepartmentId,
-      employeeQualification,
       jobTitleCode,
+      employeeCareerLevelId,
     } = this;
     return {
       arName: controls ? [arName] : arName,
@@ -21,10 +21,10 @@ export class MawaredEmployeeCriteria extends MawaredEmployee {
       employeeDepartmentId: controls
         ? [employeeDepartmentId]
         : employeeDepartmentId,
-      employeeQualification: controls
-        ? [employeeQualification]
-        : employeeQualification,
       jobTitleCode: controls ? [jobTitleCode] : jobTitleCode,
+      employeeCareerLevelId: controls
+        ? [employeeCareerLevelId]
+        : employeeCareerLevelId,
     };
   }
 }
