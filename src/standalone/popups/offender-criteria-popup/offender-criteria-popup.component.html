@@ -61,9 +61,12 @@
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
             <app-input formControlName="qid" [label]="lang.map.qid" />
-            <app-input
-              formControlName="employeeQualification"
-              [label]="lang.map.job_title" />
+            <app-select-input
+              formControlName="employeeCareerLevelId"
+              [label]="lang.map.career_level"
+              bindValue="lookupKey"
+              bindLabel="getNames"
+              [options]="careerLevels" />
           </div>
         }
         @if (isClearingAgent) {
