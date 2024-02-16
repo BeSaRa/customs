@@ -119,6 +119,45 @@ export class Investigation extends BaseCase<
     return this.penaltyDecisions || [];
   }
 
+  getFirstPenaltyComment(penaltyKey: SystemPenalties): string {
+    const decision = this.getPenaltyDecision().find(
+      item => item.penaltyInfo.penaltyKey === penaltyKey,
+    );
+    return decision ? decision.comment! : '';
+  }
+
+  getFirstEmployeeComment(penaltyKey: SystemPenalties): string {
+    const employeesIds = this.getEmployeesOffenders().map(item => item.id);
+    const decision = this.getPenaltyDecision().find(item => {
+      return (
+        item.penaltyInfo.penaltyKey === penaltyKey &&
+        employeesIds.includes(item.offenderId)
+      );
+    });
+    return decision ? decision.comment! : '';
+  }
+
+  getFirstBrokerComment(penaltyKey: SystemPenalties): string {
+    const brokersIds = this.getBrokersOffenders().map(item => item.id);
+    const decision = this.getPenaltyDecision().find(item => {
+      return (
+        item.penaltyInfo.penaltyKey === penaltyKey &&
+        brokersIds.includes(item.offenderId)
+      );
+    });
+    return decision ? decision.comment! : '';
+  }
+
+  getEmployeesOffenders(): Offender[] {
+    return this.offenderInfo.filter(
+      item => item.type === OffenderTypes.EMPLOYEE,
+    );
+  }
+
+  getBrokersOffenders(): Offender[] {
+    return this.offenderInfo.filter(item => item.type === OffenderTypes.BROKER);
+  }
+
   $$getEmployeeService$$(): EmployeeService {
     return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
   }
@@ -200,9 +239,7 @@ export class Investigation extends BaseCase<
   getBrokersUnlinkedViolations(): Violation[] {
     return this.hasBrokersUnlinkedViolations()
       ? this.getUnlinkedViolations().filter(item => {
-          return (
-            item.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT
-          );
+          return item.offenderTypeInfo.lookupKey === OffenderTypes.BROKER;
         })
       : [];
   }
@@ -211,9 +248,7 @@ export class Investigation extends BaseCase<
     return (
       this.hasUnlinkedViolations() &&
       this.getUnlinkedViolations().some(violation => {
-        return (
-          violation.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT
-        );
+        return violation.offenderTypeInfo.lookupKey === OffenderTypes.BROKER;
       })
     );
   }
@@ -307,5 +342,44 @@ export class Investigation extends BaseCase<
     return !this.getActivityName()
       ? false
       : this.getActivityName() === ActivitiesName.SUBMIT_INVESTIGATION;
+  }
+
+  itHasReferralRequestBefore(offenderId: number): boolean {
+    const referrals = [
+      SystemPenalties.REFERRAL_TO_PRESIDENT,
+      SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+    ];
+    return this.getPenaltyDecision().some(item => {
+      return (
+        referrals.includes(item.penaltyInfo.penaltyKey) &&
+        item.offenderId !== offenderId
+      );
+    });
+  }
+
+  getOffendersHasSystemDecision(
+    systemPenaltyKey: SystemPenalties,
+    ignoreId?: number,
+  ): Offender[] {
+    const offendersIds = this.getPenaltyDecision()
+      .filter(item => {
+        return (
+          systemPenaltyKey === item.penaltyInfo.penaltyKey &&
+          (ignoreId ? ignoreId !== item.offenderId : true)
+        );
+      })
+      .map(item => item.offenderId);
+    return this.offenderInfo.filter(item => offendersIds.includes(item.id));
+  }
+
+  itIsSameReferralRequestType(
+    systemPenaltyKey: SystemPenalties,
+    offenderId: number,
+  ): boolean {
+    return this.getPenaltyDecision().some(
+      item =>
+        item.penaltyInfo.penaltyKey === systemPenaltyKey &&
+        item.offenderId !== offenderId,
+    );
   }
 }

@@ -145,7 +145,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
 
   isClearingAgent(): boolean {
     let isClearingAgent = false;
-    if (this.offenderType?.value === OffenderTypes.ClEARING_AGENT)
+    if (this.offenderType?.value === OffenderTypes.BROKER)
       isClearingAgent = true;
     return isClearingAgent;
   }
@@ -177,10 +177,9 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.filteredOffenderTypes = this.offenderTypes.filter(
           offenderType => offenderType.lookupKey === OffenderTypes.EMPLOYEE,
         );
-      } else if (offenderOfClassification === OffenderTypes.ClEARING_AGENT) {
+      } else if (offenderOfClassification === OffenderTypes.BROKER) {
         this.filteredOffenderTypes = this.offenderTypes.filter(
-          offenderType =>
-            offenderType.lookupKey === OffenderTypes.ClEARING_AGENT,
+          offenderType => offenderType.lookupKey === OffenderTypes.BROKER,
         );
       } else {
         this.filteredOffenderTypes = this.offenderTypes;

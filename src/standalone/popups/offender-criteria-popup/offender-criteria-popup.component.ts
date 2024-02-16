@@ -206,7 +206,7 @@ export class OffenderCriteriaPopupComponent
   private listenToOffenderTypeChange() {
     this.offenderTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === OffenderTypes.EMPLOYEE;
-      this.isClearingAgent = value === OffenderTypes.ClEARING_AGENT;
+      this.isClearingAgent = value === OffenderTypes.BROKER;
       this.offenderViolationControl.reset();
     });
   }
@@ -300,7 +300,7 @@ export class OffenderCriteriaPopupComponent
               !this.offenders().find(
                 (offender: Offender) =>
                   offender.offenderRefId === emp.id &&
-                  offender.type === OffenderTypes.ClEARING_AGENT,
+                  offender.type === OffenderTypes.BROKER,
               ),
           ),
         ),
@@ -496,7 +496,7 @@ export class OffenderCriteriaPopupComponent
           if (data.isCompany) {
             id = (data.offender as unknown as ClearingAgent).agencyId;
           } else {
-            if (data.offender.type === OffenderTypes.ClEARING_AGENT) {
+            if (data.offender.type === OffenderTypes.BROKER) {
               id = (data.offender as unknown as ClearingAgent).agentId;
             } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
               id = data.offender.id;

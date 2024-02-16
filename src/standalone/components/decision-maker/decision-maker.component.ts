@@ -19,6 +19,7 @@ import { filter, map, switchMap, take } from 'rxjs/operators';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { OffenderViolationService } from '@services/offender-violation.service';
+import { PenaltyService } from '@services/penalty.service';
 
 @Component({
   selector: 'app-decision-maker',
@@ -45,6 +46,7 @@ export class DecisionMakerComponent
   private penaltyDecisionService = inject(PenaltyDecisionService);
   // don't remove it will break the code because we use it inside the model
   private offenderViolationService = inject(OffenderViolationService);
+  private penaltyService = inject(PenaltyService);
 
   lang = inject(LangService);
   dialog = inject(DialogService);
@@ -165,19 +167,93 @@ export class DecisionMakerComponent
   }
 
   private listenToSystemActionChanges() {
+    const referrals = [
+      SystemPenalties.REFERRAL_TO_PRESIDENT,
+      SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+    ];
+
+    const toggleReferrals = {
+      [SystemPenalties.REFERRAL_TO_PRESIDENT]:
+        SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
+        SystemPenalties.REFERRAL_TO_PRESIDENT,
+    };
+
+    this.model().itHasReferralRequestBefore(this.offender().id);
+    this.model().itIsSameReferralRequestType(referrals[0], this.offender().id);
+
     this.systemAction$
       .pipe(
-        map(penaltyKey => {
+        switchMap(penaltyKey => {
+          // check if the request has referral ;
+          if (referrals.includes(penaltyKey)) {
+            const currentPenalty =
+              this.penaltyService.systemPenaltiesMap()[penaltyKey];
+            const oldPenalty =
+              this.penaltyService.systemPenaltiesMap()[
+                toggleReferrals[penaltyKey as keyof typeof toggleReferrals]
+              ];
+
+            if (
+              this.model().itIsSameReferralRequestType(
+                penaltyKey,
+                this.offender().id,
+              )
+            ) {
+              // if it is same referral type open the dialog and append current offender to same referral request
+              const offenders = this.model().getOffendersHasSystemDecision(
+                penaltyKey,
+                this.offender().id,
+              );
+              return of({ offenders, penaltyKey });
+            } else {
+              const offenders = this.model().getOffendersHasSystemDecision(
+                toggleReferrals[penaltyKey as keyof typeof toggleReferrals],
+                this.offender().id,
+              );
+              return offenders.length
+                ? this.dialog
+                    .confirm(
+                      this.lang.map.msg_x_referral_request_exist_y.change({
+                        x: currentPenalty.getNames(),
+                        y: oldPenalty.getNames(),
+                      }),
+                    )
+                    .afterClosed()
+                    .pipe(
+                      map(click => {
+                        return {
+                          offenders: click === UserClick.YES ? offenders : [],
+                          penaltyKey:
+                            click === UserClick.YES
+                              ? toggleReferrals[
+                                  penaltyKey as keyof typeof toggleReferrals
+                                ]
+                              : penaltyKey,
+                          click,
+                        };
+                      }),
+                      filter(({ click }) => click === UserClick.YES),
+                    )
+                : of({ offenders: [], penaltyKey });
+              // if not same referral request display dialog to the user to till him you have old referral request
+            }
+          } else {
+            return of({ offenders: [], penaltyKey });
+          }
+        }),
+        map(({ penaltyKey, offenders }) => {
           return {
             oldPenalty: this.model().getPenaltyDecisionByOffenderId(
               this.offender().id,
             ),
             penaltyKey,
+            offenders,
           };
         }),
       )
       .pipe(
-        switchMap(({ oldPenalty, penaltyKey }) => {
+        switchMap(({ oldPenalty, offenders, penaltyKey }) => {
           return oldPenalty && penaltyKey !== oldPenalty.penaltyInfo.penaltyKey
             ? this.dialog
                 .confirm(
@@ -202,6 +278,7 @@ export class DecisionMakerComponent
                             oldPenalty,
                             click,
                             penaltyKey,
+                            offenders,
                           };
                         }),
                       );
@@ -211,6 +288,7 @@ export class DecisionMakerComponent
                 click: UserClick.YES,
                 penaltyKey,
                 oldPenalty,
+                offenders,
               });
         }),
       )
@@ -220,10 +298,13 @@ export class DecisionMakerComponent
         }),
       )
       .pipe(
-        switchMap(({ penaltyKey }) => {
+        switchMap(({ penaltyKey, offenders }) => {
           return penaltyKey === SystemPenalties.TERMINATE
             ? this.openTerminateDialog().afterClosed()
-            : this.openRequestReferralDialog(penaltyKey).afterClosed();
+            : this.openRequestReferralDialog(
+                penaltyKey,
+                offenders,
+              ).afterClosed();
         }),
       )
       .subscribe();
@@ -240,9 +321,12 @@ export class DecisionMakerComponent
     );
   }
 
-  openRequestReferralDialog(penaltyKey: SystemPenalties) {
+  openRequestReferralDialog(
+    penaltyKey: SystemPenalties,
+    offenders?: Offender[],
+  ) {
     return this.penaltyDecisionService.openRequestReferralDialog(
-      [this.offender()],
+      [...(offenders ? offenders : []), this.offender()],
       this.model,
       this.updateModel,
       this.penaltyMap()[this.offender().id].second.find(

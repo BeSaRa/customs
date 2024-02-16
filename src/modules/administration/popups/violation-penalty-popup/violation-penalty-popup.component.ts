@@ -204,7 +204,7 @@ export class ViolationPenaltyPopupComponent
   }
 
   setFilteredPenaltySigners() {
-    if (this.offenderTypeId === OffenderTypes.ClEARING_AGENT) {
+    if (this.offenderTypeId === OffenderTypes.BROKER) {
       this.filteredPenaltySigners = this.penaltySigners.filter(
         lookupItem =>
           lookupItem.lookupKey ===
@@ -260,10 +260,10 @@ export class ViolationPenaltyPopupComponent
 
   setFilteredPenalties() {
     this.filteredPenalties = [];
-    if (this.offenderTypeId === OffenderTypes.ClEARING_AGENT) {
+    if (this.offenderTypeId === OffenderTypes.BROKER) {
       this.penaltyService.loadComposite().subscribe(data => {
         this.filteredPenalties = data.rs.filter(
-          penalty => penalty.offenderType === OffenderTypes.ClEARING_AGENT,
+          penalty => penalty.offenderType === OffenderTypes.BROKER,
         );
         this.penaltiesOrReferral = this.filteredPenalties;
 

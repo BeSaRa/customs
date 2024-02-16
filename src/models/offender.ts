@@ -47,7 +47,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   hasStatusSearch(isCompany: boolean = false) {
     if (isCompany) {
       return (
-        this.type === OffenderTypes.ClEARING_AGENT &&
+        this.type === OffenderTypes.BROKER &&
         this.$$getEmployeeService$$().hasPermissionTo(
           'CLEARING_AGENCY_SITUATION_SEARCH',
         )
@@ -65,7 +65,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
           'EMPLOYEE_SITUATION_SEARCH_IN_ALL_DEPARTMENTS',
           'EMPLOYEE_SITUATION_SEARCH_IN_DEPARTMENT',
         ])) ||
-      (this.type === OffenderTypes.ClEARING_AGENT &&
+      (this.type === OffenderTypes.BROKER &&
         this.$$getEmployeeService$$().hasPermissionTo(
           'CLEARING_AGENT_SITUATION_SEARCH',
         ))

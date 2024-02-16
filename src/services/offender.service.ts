@@ -43,7 +43,7 @@ export class OffenderService extends BaseCrudService<Offender> {
   }
 
   isAgent(model: MawaredEmployee | ClearingAgent): model is ClearingAgent {
-    return model.type === OffenderTypes.ClEARING_AGENT;
+    return model.type === OffenderTypes.BROKER;
   }
   @CastResponse()
   getAttachmentsCount(offenderIds: number[]) {

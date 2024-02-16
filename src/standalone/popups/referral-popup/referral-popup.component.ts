@@ -105,7 +105,6 @@ export class ReferralPopupComponent
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
   offenders = signal(this.data.offenders);
-  singleOffender? = this.data.offenders[0];
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
   model = this.data.model;
@@ -117,16 +116,14 @@ export class ReferralPopupComponent
   });
   brokersOffenders = computed(() => {
     return this.offenders().filter(
-      offender => offender.type === OffenderTypes.ClEARING_AGENT,
+      offender => offender.type === OffenderTypes.BROKER,
     );
   });
   hasEmployees = computed(() => {
     return this.offenders().some(item => item.type === OffenderTypes.EMPLOYEE);
   });
   hasBrokers = computed(() => {
-    return this.offenders().some(
-      item => item.type === OffenderTypes.ClEARING_AGENT,
-    );
+    return this.offenders().some(item => item.type === OffenderTypes.BROKER);
   });
   hasMixedOffenders = computed(() => {
     return this.hasBrokers() && this.hasEmployees();
@@ -195,10 +192,17 @@ export class ReferralPopupComponent
     [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]: {
       header: this.lang.map.request_static_header_for_president_assistant,
       footer: this.lang.map.request_static_footer_for_president_assistant,
-      whom: (tab?: 'employee' | 'broker') =>
-        tab === 'broker'
-          ? this.customsAffairsPAOUInfo.getNames()
-          : this.lang.map.vice_president,
+      whom: (tab?: 'employee' | 'broker') => {
+        if (!tab) {
+          return this.offenders()[0].type === OffenderTypes.EMPLOYEE
+            ? this.lang.map.vice_president
+            : this.customsAffairsPAOUInfo.getNames();
+        } else {
+          return tab === 'broker'
+            ? this.customsAffairsPAOUInfo.getNames()
+            : this.lang.map.vice_president;
+        }
+      },
     },
     [SystemPenalties.TERMINATE]: {
       header: '',
@@ -221,6 +225,7 @@ export class ReferralPopupComponent
       whom: '',
     },
   };
+
   getForWhom(tab?: 'employee' | 'broker'): string {
     const method = this.referralTextMap[this.selectedPenalty.penaltyKey]
       .whom as unknown as (tab?: 'employee' | 'broker') => string;
@@ -231,15 +236,35 @@ export class ReferralPopupComponent
       ? method(tab)
       : stringValue;
   }
-  commentControl = new FormControl('', {
+
+  defaultComment = computed(() => {
+    return this.displayDefaultForm()
+      ? this.model().getFirstPenaltyComment(this.penaltyKey())
+      : '';
+  });
+
+  employeeComment = computed(() => {
+    return this.displayDefaultForm()
+      ? ''
+      : this.model().getFirstEmployeeComment(this.penaltyKey());
+  });
+
+  brokerComment = computed(() => {
+    return this.displayDefaultForm()
+      ? ''
+      : this.model().getFirstBrokerComment(this.penaltyKey());
+  });
+
+  commentControl = new FormControl(this.defaultComment(), {
     nonNullable: true,
     validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
   });
-  employeesComment = new FormControl('', {
+
+  employeesComment = new FormControl(this.employeeComment(), {
     nonNullable: true,
     validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
   });
-  brokersComment = new FormControl('', {
+  brokersComment = new FormControl(this.brokerComment(), {
     nonNullable: true,
     validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
   });
@@ -253,19 +278,24 @@ export class ReferralPopupComponent
   unlinkedBrokersViolations = computed(() => {
     return this.model().getBrokersUnlinkedViolations();
   });
+
   get formHeader() {
     return this.referralTextMap[this.selectedPenalty.penaltyKey].header;
   }
+
   get formFooter() {
     return this.referralTextMap[this.selectedPenalty.penaltyKey].footer;
   }
+
   ngOnInit(): void {
     this.listenToSave();
     this.listenToComplete();
   }
+
   assertType(item: unknown): OffenderViolation {
     return item as OffenderViolation;
   }
+
   private listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))
@@ -299,7 +329,7 @@ export class ReferralPopupComponent
                 status: 1,
                 comment: this.displayDefaultForm()
                   ? this.commentControl.value
-                  : item.type === OffenderTypes.ClEARING_AGENT
+                  : item.type === OffenderTypes.BROKER
                     ? this.brokersComment.value
                     : this.employeesComment.value,
               })
@@ -328,6 +358,7 @@ export class ReferralPopupComponent
         this.dialogRef.close();
       });
   }
+
   private listenToComplete() {
     this.complete$
       .pipe(takeUntil(this.destroy$))
@@ -359,7 +390,7 @@ export class ReferralPopupComponent
                       comment: this.employeesComment.value,
                     },
                     {
-                      type: OffenderTypes.ClEARING_AGENT,
+                      type: OffenderTypes.BROKER,
                       comment: this.brokersComment.value,
                     },
                   ])
@@ -380,10 +411,12 @@ export class ReferralPopupComponent
         this.dialogRef.close(UserClick.YES);
       });
   }
+
   filterEmployeeViolations(v: Violation) {
     return v.offenderTypeInfo.lookupKey === OffenderTypes.EMPLOYEE;
   }
+
   filterBrokerViolations(v: Violation) {
-    return v.offenderTypeInfo.lookupKey === OffenderTypes.ClEARING_AGENT;
+    return v.offenderTypeInfo.lookupKey === OffenderTypes.BROKER;
   }
 }

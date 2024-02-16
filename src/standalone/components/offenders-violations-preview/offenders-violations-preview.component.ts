@@ -499,7 +499,7 @@ export class OffendersViolationsPreviewComponent
             id = (data.offender.offenderInfo as unknown as ClearingAgent)
               .agencyId;
           } else {
-            if (data.offender.type === OffenderTypes.ClEARING_AGENT) {
+            if (data.offender.type === OffenderTypes.BROKER) {
               id = (data.offender.offenderInfo as unknown as ClearingAgent)
                 .agentId;
             } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
