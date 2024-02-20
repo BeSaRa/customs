@@ -1,0 +1,97 @@
+@if (!opened) {
+  <div
+    [matTooltip]="lang.map.ai_assistant"
+    (click)="toggleChat()"
+    class="hover:bg-primary transition-colors duration-300 group bg-white p-4 rounded-3xl shadow-2xl cursor-pointer">
+    <mat-icon
+      class="group-hover:text-white transition-colors duration-300 text-primary"
+      [svgIcon]="AppIcons.ROBOT_HAPPY"></mat-icon>
+  </div>
+} @else {
+  <div id="chat-ai" class="bg-white shadow-2xl h-full flex flex-col">
+    <div id="chat-header" class="p-2 flex justify-between relative bg-primary">
+      <div class="flex gap-2">
+        <mat-icon
+          class="text-white"
+          [svgIcon]="AppIcons.ROBOT_HAPPY"></mat-icon>
+        <div class="text-white">{{ lang.map.ai_assistant }}</div>
+        @if (context()) {
+          <span class="text-white border rounded px-2 text-sm bg-orange-400">{{
+            context()
+          }}</span>
+        }
+      </div>
+      <app-icon-button
+        (click)="toggleChat()"
+        class="text-white absolute left-0 -top-1"
+        icon="CLOSE" />
+      <app-icon-button
+        (click)="toggleFullScreen()"
+        class="text-white absolute left-10 -top-1"
+        [icon]="!fullscreen ? 'FULLSCREEN' : 'FULLSCREEN_EXIT'" />
+    </div>
+    <div
+      #chatBody
+      (scroll)="scrolling($event)"
+      id="chat-body"
+      [ngClass]="{ normal: !fullscreen }"
+      class="p-2 flex-auto flex flex-col gap-2 h-0 min-h-[500px] [&.normal]:max-w-[500px] overflow-auto relative">
+      @if (loading()) {
+        <app-loading
+          style="--scroll:{{ scrollTop() }}"
+          id="chat-loader"
+          position="absolute" />
+        <mat-progress-bar
+          id="chat-progress"
+          style="--scroll:{{ scrollTop() }}"
+          class="!absolute left-2 right-2 !w-auto"
+          mode="indeterminate" />
+      }
+      <div
+        class="flex mt-3 flex-col items-center bg-cyan-500 rounded justify-center gap-2 p-2">
+        <span class="text-white">
+          {{ lang.map.please_select_chat_context }}
+        </span>
+        <div class="flex gap-2">
+          <app-button (click)="setContextTo(ChatContext.VIOLATIONS)">
+            <mat-icon [svgIcon]="AppIcons.VIOLATION"></mat-icon>
+            <span>{{ lang.map.violations_and_penalties }}</span>
+          </app-button>
+          <app-button (click)="setContextTo(ChatContext.CUSTOMS_PROCEDURES)">
+            <mat-icon [svgIcon]="AppIcons.TRUCK_CHECK_OUTLINE"></mat-icon>
+            <span>{{ lang.map.customs_procedures }}</span>
+          </app-button>
+        </div>
+      </div>
+      @for (message of messages(); track message) {
+        <div
+          class="default-font whitespace-pre-wrap"
+          [ngClass]="{ me: isUser(message), boot: isAssistant(message) }">
+          {{ message.content }}
+        </div>
+      }
+      @if (loading()) {
+        <div
+          id="chat-typing"
+          style="--scroll:{{ scrollTop() }}"
+          class="text-sm flex justify-end italic bottom-0 left-2 right-2 absolute">
+          <span>
+            @for (dot of dots; track dot) {
+              {{ ' ' + dot + ' ' }}
+            }
+          </span>
+          <div>{{ lang.map.typing }}</div>
+        </div>
+      }
+    </div>
+    <div id="chat-footer" class="p-2 border-t">
+      <app-textarea
+        label=""
+        noMargin
+        [formControl]="control"
+        (keydown.arrowUp)="getLatestUserMessage()"
+        (keydown.enter)="sendMessage($event)"
+        rows="1" />
+    </div>
+  </div>
+}

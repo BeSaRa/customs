@@ -56,6 +56,7 @@ import { Config } from '@constants/config';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
 import { VersionComponent } from '@standalone/components/version/version.component';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HomeComponent],
@@ -88,6 +89,7 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
     MatDateFnsModule,
     LoadingComponent,
     VersionComponent,
+    ChatAiComponent,
   ],
   providers: [
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,

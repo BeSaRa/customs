@@ -73,6 +73,10 @@ export const AppIcons = {
   ACCOUNT_ARROW_LEFT_OUTLINE: 'account-arrow-left-outline',
   GAVEL: 'gavel',
   SCALE_BALANCE: 'scale-balance',
+  ROBOT_HAPPY: 'robot-happy',
+  FULLSCREEN: 'fullscreen',
+  FULLSCREEN_EXIT: 'fullscreen-exit',
+  TRUCK_CHECK_OUTLINE: 'truck-check-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

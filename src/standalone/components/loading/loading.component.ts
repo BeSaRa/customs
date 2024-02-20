@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding, Input } from '@angular/core';
 
 // noinspection AngularMissingOrInvalidDeclarationInModule
 @Component({
@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
   templateUrl: './loading.component.html',
   styleUrls: ['./loading.component.scss'],
 })
-export class LoadingComponent {}
+export class LoadingComponent {
+  @HostBinding('style.position')
+  @Input()
+  position: string = 'fixed';
+}

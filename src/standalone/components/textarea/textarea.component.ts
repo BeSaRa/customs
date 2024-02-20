@@ -1,5 +1,6 @@
 import {
   AfterContentInit,
+  booleanAttribute,
   ChangeDetectorRef,
   Component,
   ContentChild,
@@ -80,7 +81,7 @@ export class TextareaComponent
   rows: string | number = 4;
   @Input()
   marginBottom = 'mb-5';
-  @Input()
+  @Input({ transform: booleanAttribute })
   noMargin = false;
 
   private injector = inject(Injector);
