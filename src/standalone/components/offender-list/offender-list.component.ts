@@ -41,6 +41,7 @@ import { OffenderTypes } from '@enums/offender-types';
 import { ignoreErrors } from '@utils/utils';
 import { ReportType } from '@app-types/validation-return-type';
 import { ClearingAgent } from '@models/clearing-agent';
+import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
 @Component({
   selector: 'app-offender-list',
@@ -50,6 +51,7 @@ import { ClearingAgent } from '@models/clearing-agent';
     MatSortModule,
     MatTableModule,
     MatTooltipModule,
+    SituationSearchBtnComponent,
   ],
   templateUrl: './offender-list.component.html',
   styleUrls: ['./offender-list.component.scss'],
