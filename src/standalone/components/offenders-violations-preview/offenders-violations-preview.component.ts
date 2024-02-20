@@ -69,6 +69,7 @@ import { intersection } from '@utils/utils';
 import { PenaltyIcons } from '@constants/penalty-icons';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { ClearingAgent } from '@models/clearing-agent';
+import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -88,6 +89,7 @@ import { ClearingAgent } from '@models/clearing-agent';
     SelectInputComponent,
     ReactiveFormsModule,
     MatCheckbox,
+    SituationSearchBtnComponent,
   ],
   animations: [
     trigger('detailExpand', [

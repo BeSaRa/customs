@@ -77,13 +77,10 @@
             </div>
           }
           @if (assertType(element).hasStatusSearch()) {
-            <div [matTooltip]="lang.map.situation_search">
-              <app-icon-button
-                (click)="
-                  situationSearch$.next({ offender: element, isCompany: false })
-                "
-                icon="INFORMATION"></app-icon-button>
-            </div>
+            <app-situation-search-btn
+              [offender]="element"
+              [isCompany]="false"
+              icon="INFORMATION" />
           }
           @if (assertType(element).hasStatusSearch(true)) {
             <div [matTooltip]="lang.map.situation_search_clearing_agency">
