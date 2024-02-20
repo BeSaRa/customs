@@ -32,6 +32,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { InvestigationSearchComponent } from './components/investigation-search/investigation-search.component';
 import { TeamInboxComponent } from './components/team-inbox/team-inbox.component';
 import { SituationSearchComponent } from './components/situation-search/situation-search.component';
+import { SituationSearchBtnComponent } from './components/situation-search-btn/situation-search-btn.component';
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
@@ -88,6 +89,7 @@ import { LegalAffairsOffendersComponent } from '@standalone/components/legal-aff
     MatPaginator,
     MatSort,
     LegalAffairsOffendersComponent,
+    SituationSearchBtnComponent,
   ],
 })
 export class ElectronicServicesModule {}

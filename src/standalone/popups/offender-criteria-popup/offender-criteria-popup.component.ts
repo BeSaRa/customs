@@ -64,6 +64,7 @@ import { OffenderService } from '@services/offender.service';
 import { ProofTypes } from '@enums/proof-types';
 import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderViolationService } from '@services/offender-violation.service';
+import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -83,6 +84,7 @@ import { OffenderViolationService } from '@services/offender-violation.service';
     MatTabsModule,
     MatTableModule,
     MatTooltipModule,
+    SituationSearchBtnComponent,
   ],
   templateUrl: './offender-criteria-popup.component.html',
   styleUrls: ['./offender-criteria-popup.component.scss'],
