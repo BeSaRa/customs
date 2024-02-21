@@ -29,6 +29,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
 
   userPreferences!: UserPreferences;
   override status = StatusTypes.ACTIVE;
+
   buildForm(controls = false): object {
     const {
       domainName,
@@ -46,11 +47,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       domainName: controls
         ? [
             domainName,
-            [
-              CustomValidators.required,
-              CustomValidators.maxLength(50),
-              CustomValidators.pattern('ENG_NUM_ONLY'),
-            ],
+            [CustomValidators.required, CustomValidators.maxLength(50)],
           ]
         : domainName,
       arName: controls
