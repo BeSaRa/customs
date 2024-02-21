@@ -44,23 +44,6 @@ export class LookupService
         lookupKey: 2,
       }),
     ];
-    this.lookups.decisionTypes = [
-      new Lookup().clone<Lookup>({
-        arName: 'جزاء وإحالة',
-        enName: 'penalty and referral',
-        lookupKey: -1,
-      }),
-      new Lookup().clone<Lookup>({
-        arName: 'جزاء',
-        enName: 'penalty',
-        lookupKey: 0,
-      }),
-      new Lookup().clone<Lookup>({
-        arName: 'إحالة',
-        enName: 'referral',
-        lookupKey: 1,
-      }),
-    ];
     return this.lookups;
   }
 }

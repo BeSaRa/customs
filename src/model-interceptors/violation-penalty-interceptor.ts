@@ -14,7 +14,6 @@ export class ViolationPenaltyInterceptor
     delete model.offenderLevelInfo;
     delete model.statusInfo;
     delete model.offenderTypeInfo;
-    delete model.penaltyArray;
     return model;
   }
 
@@ -29,7 +28,6 @@ export class ViolationPenaltyInterceptor
     model.offenderLevelInfo = new AdminResult().clone(model.offenderLevelInfo);
     model.statusInfo = new AdminResult().clone(model.statusInfo);
     model.offenderTypeInfo = new AdminResult().clone(model.offenderTypeInfo);
-    model.penaltyArray = [model.penaltyId];
     return model;
   }
 }
