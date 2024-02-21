@@ -34,7 +34,7 @@
           [label]="lang.map.penalty_signer"
           bindValue="lookupKey"
           bindLabel="getNames" />
-        @if (needOffenderLevel()) {
+        @if (showOffenderLevel()) {
           <app-select-input
             formControlName="offenderLevel"
             [options]="filteredOffenderLevels"
@@ -42,46 +42,33 @@
             bindValue="lookupKey"
             bindLabel="getNames" />
         }
-        @if (showDecisionType()) {
-          <app-select-input
-            [formControl]="decisionType"
-            [options]="decisionTypes"
-            [label]="lang.map.decision_type"
-            bindValue="lookupKey"
-            bindLabel="getNames" />
-        }
         @if (filteredPenalties.length) {
           <app-select-input
-            formControlName="penaltyArray"
-            [options]="penaltiesOrReferral"
+            formControlName="penaltyId"
+            [options]="filteredPenalties"
             [label]="lang.map.penalty"
             bindValue="id"
             bindLabel="getNames"
             [enableFilter]="true"
-            bindFilter="getNames"
-            [isMultiple]="true" />
-          @if (showPenaltyGuidance()) {
-            <app-select-input
-              formControlName="penaltyGuidance"
-              [options]="penaltyGuidance"
-              [label]="lang.map.penalty_guidance"
-              bindValue="id"
-              bindLabel="getNames" />
-          }
+            bindFilter="getNames" />
+        }
+        @if (showPenaltyGuidance()) {
+          <app-select-input
+            formControlName="penaltyGuidance"
+            [options]="penaltyGuidance"
+            [label]="lang.map.penalty_guidance"
+            bindValue="lookupKey"
+            bindLabel="getNames" />
         }
       </div>
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button
-        (click)="continue = false; saveBulk$.next()"
-        buttonType="primary"
+      <app-button (click)="continue = false; save$.next()" buttonType="primary"
         >{{ lang.map.save }}
       </app-button>
-      <app-button
-        (click)="continue = true; saveBulk$.next()"
-        buttonType="primary"
+      <app-button (click)="continue = true; save$.next()" buttonType="primary"
         >{{ lang.map.save_and_continue }}
       </app-button>
     }
