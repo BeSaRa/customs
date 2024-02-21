@@ -57,9 +57,16 @@ import { LoadingComponent } from '@standalone/components/loading/loading.compone
 import { VersionComponent } from '@standalone/components/version/version.component';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
+import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HomeComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    ExternalLoginComponent,
+    HomeComponent,
+  ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -69,6 +76,7 @@ import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.componen
     MatSnackBarModule,
     MatDialogModule,
     InputComponent,
+    SelectInputComponent,
     FormsModule,
     ReactiveFormsModule,
     NgxMaskDirective,

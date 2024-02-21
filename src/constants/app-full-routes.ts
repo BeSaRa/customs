@@ -16,6 +16,7 @@ export const AppFullRoutes = {
   EMAIL_TEMPLATE: '/home/administration/email-template',
   GLOBAL_SETTING: '/home/administration/global-setting',
   MAIN: '/home/main',
+  EXTERNAL_MAIN: '/external/home',
   ELECTRONIC_SERVICES: '/home/electronic-services',
   INVESTIGATION: '/home/electronic-services/investigation',
   USER_INBOX: '/home/electronic-services/user-inbox',

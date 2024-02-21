@@ -1,0 +1,31 @@
+<div class="dialog-container">
+  <div
+    class="dialog-header bg-primary"
+    style="justify-content: center !important">
+    <h1 class="font-bold">{{ lang.map.verify_identity }}</h1>
+  </div>
+  <div class="dialog-content">
+    <p class="mb-5 font-bold [font-size:18px] text-gray-400">
+      {{ lang.map.msg_enter_verify_code }}
+    </p>
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <input
+        type="number"
+        class="custom-otp-control"
+        appControl
+        [formControl]="control"
+        [mask]="inputMaskPatterns.NUMBER_ONLY_WITH_LIMIT(4, false)" />
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button
+      [disabled]="!isValidOTP()"
+      (click)="verify$.next()"
+      buttonType="primary"
+      >{{ lang.map.verify }}</app-button
+    >
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+  </div>
+</div>

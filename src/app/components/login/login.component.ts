@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { AuthService } from '@services/auth.service';
 import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
+import { AppRoutes } from '@constants/app-routes';
 
 @Component({
   selector: 'app-login',
@@ -46,6 +47,13 @@ export class LoginComponent implements OnInit {
 
   login$: Subject<void> = new Subject<void>();
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.code === 'F1') {
+      event.preventDefault();
+      this.router.navigate(['/' + AppRoutes.EXTERNAL_LOGIN]).then();
+    }
+  }
   ngOnInit(): void {
     this.listenToLogin();
   }

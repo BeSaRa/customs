@@ -1,6 +1,8 @@
 export const AppRoutes = {
   LOGIN: 'login',
+  EXTERNAL_LOGIN: 'external-login',
   HOME: 'home',
+  EXTERNAL_PAGES: 'external',
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
   INTERNAL_USER: 'internal-user',

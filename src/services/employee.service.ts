@@ -9,6 +9,9 @@ import { Team } from '@models/team';
 import { LDAPGroupNames } from '@enums/department-group-names.enum';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { ServiceContract } from '@contracts/service-contract';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { ClearingAgent } from '@models/clearing-agent';
+import { WitnessTypes } from '@enums/witness-types';
 
 @Injectable({
   providedIn: 'root',
@@ -25,18 +28,21 @@ export class EmployeeService
   >();
   private readonly lookupService = inject(LookupService);
 
+  getLoginData() {
+    return this.loginData;
+  }
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
 
     return this.loginData;
   }
-
   private intercept(data: LoginDataContract): LoginDataContract {
-    data.internalUser = new InternalUser().clone<InternalUser>({
-      ...data.internalUser,
-    });
+    data.internalUser &&
+      (data.internalUser = new InternalUser().clone<InternalUser>({
+        ...data.internalUser,
+      }));
 
-    data.organizationUnits = data.organizationUnits.map(item => {
+    data.organizationUnits = (data.organizationUnits || []).map(item => {
       return new OrganizationUnit().clone<OrganizationUnit>(item);
     });
     data.organizationUnit = new OrganizationUnit().clone<OrganizationUnit>(
@@ -46,9 +52,20 @@ export class EmployeeService
     data.lookupMap = this.lookupService.setLookups(data.lookupMap);
     // generate the permissions list
     this.generatePermissionMap(data.permissionSet);
-
+    if (data.person && data.person.type === WitnessTypes.EMPLOYEE) {
+      data.person = new MawaredEmployee().clone<MawaredEmployee>({
+        ...(data.person as MawaredEmployee),
+      });
+    }
+    if (data.person && data.person.type === WitnessTypes.ClEARING_AGENT) {
+      data.person = new ClearingAgent().clone<ClearingAgent>({
+        ...(data.person as ClearingAgent),
+      });
+    }
     // set user teams
-    data.teams = data.teams.map((item: Team) => new Team().clone<Team>(item));
+    data.teams = (data.teams || []).map((item: Team) =>
+      new Team().clone<Team>(item),
+    );
     // add static team called all with id -1 to load all teams items
     if (data.teams.length) {
       const team = new Team().clone<Team>({

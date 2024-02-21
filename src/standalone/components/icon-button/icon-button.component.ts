@@ -19,7 +19,8 @@ export class IconButtonComponent {
   _disabled = false;
   @Input()
   tabindex = '1';
-
+  @Input()
+  color = '';
   @Input()
   set disabled(value: boolean | unknown) {
     this._disabled = coerceBooleanProperty(value);

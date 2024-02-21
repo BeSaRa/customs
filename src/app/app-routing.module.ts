@@ -4,6 +4,8 @@ import { LoginComponent } from './components/login/login.component';
 import { authGuard } from '@guards/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { AppRoutes } from '@constants/app-routes';
+import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { AppFullRoutes } from '@constants/app-full-routes';
 
 const routes: Routes = [
   { path: '', redirectTo: AppRoutes.LOGIN, pathMatch: 'full' },
@@ -12,6 +14,11 @@ const routes: Routes = [
     component: HomeComponent,
     canMatch: [authGuard('AUTH', AppRoutes.LOGIN)],
     children: [
+      {
+        path: '',
+        redirectTo: AppFullRoutes.EXTERNAL_MAIN,
+        pathMatch: 'full',
+      },
       {
         path: AppRoutes.MAIN,
         loadComponent: () =>
@@ -34,13 +41,31 @@ const routes: Routes = [
     ],
   },
   {
+    path: AppRoutes.EXTERNAL_PAGES,
+    loadChildren: () =>
+      import('@modules/external-pages/external-pages.module').then(
+        m => m.ExternalPagesModule,
+      ),
+    canMatch: [authGuard('AUTH', AppRoutes.EXTERNAL_LOGIN)],
+  },
+  {
     path: AppRoutes.LOGIN,
     component: LoginComponent,
-    canMatch: [authGuard('GUEST', AppRoutes.HOME)],
+    canMatch: [
+      authGuard('UNKNOWN'),
+      // will set 'whenFailRedirectTo' inside authGuard
+    ],
   },
-  { path: '**', redirectTo: 'errors' },
+  {
+    path: AppRoutes.EXTERNAL_LOGIN,
+    component: ExternalLoginComponent,
+    canMatch: [authGuard('GUEST', AppRoutes.EXTERNAL_PAGES)],
+  },
+  {
+    path: '**',
+    redirectTo: 'errors',
+  },
 ];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
