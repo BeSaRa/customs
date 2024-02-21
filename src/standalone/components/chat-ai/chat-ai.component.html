@@ -1,6 +1,7 @@
 @if (!opened) {
   <div
     [matTooltip]="lang.map.ai_assistant"
+    matTooltipPosition="above"
     (click)="toggleChat()"
     class="hover:bg-primary transition-colors duration-300 group bg-white p-4 rounded-3xl shadow-2xl cursor-pointer">
     <mat-icon
@@ -22,13 +23,20 @@
         }
       </div>
       <app-icon-button
-        (click)="toggleChat()"
-        class="text-white absolute left-0 -top-1"
-        icon="CLOSE" />
+        (click)="clearChat()"
+        [matTooltip]="lang.map.clear_chat"
+        class="text-white absolute rtl:left-20 ltr:right-20 -top-1"
+        icon="RELOAD" />
       <app-icon-button
         (click)="toggleFullScreen()"
-        class="text-white absolute left-10 -top-1"
+        [matTooltip]="fullscreen ? lang.map.compact_mode : lang.map.fullscreen"
+        class="text-white absolute rtl:left-10 ltr:right-10 -top-1"
         [icon]="!fullscreen ? 'FULLSCREEN' : 'FULLSCREEN_EXIT'" />
+      <app-icon-button
+        (click)="toggleChat()"
+        [matTooltip]="lang.map.close"
+        class="text-white absolute rtl:left-0 ltr:right-0 -top-1"
+        icon="CLOSE" />
     </div>
     <div
       #chatBody
@@ -49,9 +57,7 @@
       }
       <div
         class="flex mt-3 flex-col items-center bg-cyan-500 rounded justify-center gap-2 p-2">
-        <span class="text-white">
-          {{ lang.map.please_select_chat_context }}
-        </span>
+        <span [innerHTML]="welcomeMessage()" class="text-white"></span>
         <div class="flex gap-2">
           <app-button (click)="setContextTo(ChatContext.VIOLATIONS)">
             <mat-icon [svgIcon]="AppIcons.VIOLATION"></mat-icon>

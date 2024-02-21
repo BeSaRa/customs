@@ -1,8 +1,12 @@
 export interface LangKeysContract {
+  compact_mode: string;
+  fullscreen: string;
+  clear_chat: string;
+  x_context_selected_successfully: string;
   typing: string;
   customs_procedures: string;
   violations_and_penalties: string;
-  please_select_chat_context: string;
+  chat_welcome_x_message: string;
   ai_assistant: string;
   msg_x_referral_request_exist_y: string;
   determine_the_proof_status_for_all_violations_first_to_take_this_action: string;

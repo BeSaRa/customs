@@ -5,6 +5,8 @@ import {
   ElementRef,
   HostBinding,
   inject,
+  OnInit,
+  SecurityContext,
   signal,
   viewChild,
 } from '@angular/core';
@@ -27,6 +29,8 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { interval } from 'rxjs';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
+import { EmployeeService } from '@services/employee.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chat-ai',
@@ -45,7 +49,10 @@ import { LoadingComponent } from '@standalone/components/loading/loading.compone
   templateUrl: './chat-ai.component.html',
   styleUrl: './chat-ai.component.scss',
 })
-export class ChatAiComponent extends OnDestroyMixin(class {}) {
+export class ChatAiComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
   protected readonly AppIcons = AppIcons;
   @HostBinding('class.opened')
   protected opened = false;
@@ -67,7 +74,7 @@ export class ChatAiComponent extends OnDestroyMixin(class {}) {
   lang = inject(LangService);
   messages = signal<ChatMessageContract[]>([]);
   chatService = inject(ChatService);
-
+  private currentLang = signal(this.lang.getCurrent());
   chatBody = viewChild<ElementRef<HTMLDivElement>>('chatBody');
   textAreaInput = viewChild(TextareaComponent, {
     read: ElementRef,
@@ -89,6 +96,11 @@ export class ChatAiComponent extends OnDestroyMixin(class {}) {
 
   dots: string[] = ['.', '.', '.'];
 
+  contextMap = {
+    [ChatContext.VIOLATIONS]: this.lang.map.violations_and_penalties,
+    [ChatContext.CUSTOMS_PROCEDURES]: this.lang.map.customs_procedures,
+  };
+
   interval$ = interval(500)
     .pipe(
       tap(() => {
@@ -97,6 +109,23 @@ export class ChatAiComponent extends OnDestroyMixin(class {}) {
     )
     .pipe(takeUntil(this.destroy$))
     .subscribe();
+  employee = inject(EmployeeService);
+  domSanitizer = inject(DomSanitizer);
+  welcomeMessage = computed(() => {
+    this.currentLang();
+    return this.domSanitizer.sanitize(
+      SecurityContext.HTML,
+      this.lang.map.chat_welcome_x_message.change({
+        x: this.employee.getEmployee()?.getNames(),
+      }),
+    );
+  });
+
+  ngOnInit(): void {
+    this.lang.change$.subscribe(lang => {
+      this.currentLang.set(lang);
+    });
+  }
 
   toggleChat() {
     this.opened = !this.opened;
@@ -157,6 +186,16 @@ export class ChatAiComponent extends OnDestroyMixin(class {}) {
     this.selectedContext.set(context);
     this.control.enable();
     this.textAreaInput()?.nativeElement.querySelector('textarea').focus();
+    this.messages.update(messages => [
+      ...messages,
+      {
+        context,
+        role: ChatRoles.ASSISTANT,
+        content: this.lang.map.x_context_selected_successfully.change({
+          x: this.contextMap[context],
+        }),
+      },
+    ]);
   }
 
   getLatestUserMessage() {
@@ -170,5 +209,9 @@ export class ChatAiComponent extends OnDestroyMixin(class {}) {
 
   scrolling($event: Event) {
     this.scrollTop.set(($event.target as HTMLDivElement).scrollTop);
+  }
+
+  clearChat() {
+    this.messages.set([]);
   }
 }
