@@ -1,6 +1,6 @@
 export enum UserTypes {
-  EXTERNAL = 1,
-  INTERNAL = 2,
-  ALL = 3,
+  INTERNAL = 1,
+  EXTERNAL_EMPLOYEE = 2,
+  EXTERNAL_CLEARING_AGENT = 3,
   INTEGRATION = 4,
 }

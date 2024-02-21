@@ -4,6 +4,9 @@
     [disabled]="disabled"
     (click)="clicked($event)"
     mat-icon-button>
-    <mat-icon (click)="clicked($event)" [svgIcon]="selectedIcon"></mat-icon>
+    <mat-icon
+      (click)="clicked($event)"
+      [style]="'color:' + color"
+      [svgIcon]="selectedIcon"></mat-icon>
   </button>
 </div>

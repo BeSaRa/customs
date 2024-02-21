@@ -20,6 +20,11 @@ import { TokenService } from '@services/token.service';
 import { MenuItemService } from '@services/menu-item.service';
 import { ServiceContract } from '@contracts/service-contract';
 import { LangService } from '@services/lang.service';
+import { ExternalCredentialsContract } from '@contracts/external-credentials-contract';
+import { VerifyExternalCredentialsContract } from '@contracts/verify-external-credentials-contract';
+import { UserTypes } from '@enums/user-types';
+import { ignoreErrors } from '@utils/utils';
+import { ExternalLoginDataContract } from '@contracts/external-login-data-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -46,13 +51,42 @@ export class AuthService
       credentials,
     );
   }
-
+  @CastResponse(undefined, { unwrap: 'rs' })
+  private _externalLogin(
+    credentials: Partial<ExternalCredentialsContract>,
+  ): Observable<ExternalLoginDataContract> {
+    return this.http.post<ExternalLoginDataContract>(
+      credentials.userType === UserTypes.EXTERNAL_EMPLOYEE
+        ? this.urlService.URLS.AUTH_EMPLOYEE
+        : this.urlService.URLS.AUTH_CLEARING_AGENT,
+      {
+        qid: credentials.qid,
+      },
+    );
+  }
+  @CastResponse()
+  private _verifyExternalLogin(
+    credentials: Partial<VerifyExternalCredentialsContract>,
+  ): Observable<LoginDataContract> {
+    return this.http
+      .post<LoginDataContract>(this.urlService.URLS.AUTH_VERIFY, credentials)
+      .pipe(ignoreErrors());
+  }
   login(
     credentials: Partial<CredentialsContract>,
   ): Observable<LoginDataContract> {
     return this._login(credentials).pipe(this.setDateAfterAuthenticate());
   }
-
+  externalLogin(
+    credentials: Partial<ExternalCredentialsContract>,
+  ): Observable<ExternalLoginDataContract> {
+    return this._externalLogin(credentials);
+  }
+  verifyExternalLogin(credentials: VerifyExternalCredentialsContract) {
+    return this._verifyExternalLogin(credentials).pipe(
+      this.setDateAfterAuthenticate(),
+    );
+  }
   validateToken(): Observable<boolean> {
     return of(false)
       .pipe(
@@ -95,10 +129,12 @@ export class AuthService
       return source.pipe(
         map(data => this.employeeService.setLoginData(data)),
         tap(data => this.tokenService.setToken(data.token)),
-        tap(data =>
-          this.langService.setDefaultLang(
-            data.internalUser.userPreferences.defaultLang.toString(),
-          ),
+        tap(
+          data =>
+            data.internalUser &&
+            this.langService.setDefaultLang(
+              data.internalUser.userPreferences.defaultLang.toString(),
+            ),
         ),
         tap(() => (this.authenticated = true)),
         tap(() => this.menuItemService.filterStaticMenu()),

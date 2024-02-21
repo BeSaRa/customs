@@ -466,4 +466,10 @@ export interface LangKeysContract {
   save_and_continue: string;
   on_investigation_has_status_x: string;
   can_not_link_violation_x: string;
+  external_users: string;
+  external_users_login: string;
+  main: string;
+  verify: string;
+  verify_identity: string;
+  msg_enter_verify_code: string;
 }

@@ -32,7 +32,7 @@ import { Witness } from '@models/witness';
 import { WitnessService } from '@services/witness.service';
 import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
-import { UserTypes } from '@enums/user-types';
+import { WitnessTypes } from '@enums/witness-types';
 import { EmployeeService } from '@services/employee.service';
 import { Investigation } from '@models/investigation';
 
@@ -185,7 +185,7 @@ export class WitnessesListComponent
               data: {
                 witness: witness,
                 caseId: this.caseId,
-                type: UserTypes.EXTERNAL,
+                type: WitnessTypes.EXTERNAL,
               },
             })
             .afterClosed(),
