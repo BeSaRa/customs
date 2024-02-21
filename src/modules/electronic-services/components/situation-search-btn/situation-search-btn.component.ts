@@ -42,12 +42,20 @@ export class SituationSearchBtnComponent {
         switchMap(() => {
           let id;
           if (this.isCompany) {
-            id = (this.offender as unknown as ClearingAgent).agencyId;
+            id = !this.offender.offenderInfo
+              ? (this.offender as unknown as ClearingAgent).agencyId
+              : (this.offender.offenderInfo as unknown as ClearingAgent)
+                  .agencyId;
           } else {
             if (this.offender.type === OffenderTypes.BROKER) {
-              id = (this.offender as unknown as ClearingAgent).agentId;
+              id = !this.offender.offenderInfo
+                ? (this.offender as unknown as ClearingAgent).agentId
+                : (this.offender.offenderInfo as unknown as ClearingAgent)
+                    .agentId;
             } else if (this.offender.type === OffenderTypes.EMPLOYEE) {
-              id = this.offender.id;
+              id = !this.offender.offenderInfo
+                ? this.offender.id
+                : this.offender.offenderInfo?.id;
             }
           }
           return this.dialog
