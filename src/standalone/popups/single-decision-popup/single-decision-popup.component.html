@@ -115,9 +115,9 @@
           @for (penalty of penalties(); track penalty.id) {
             <mat-option [value]="penalty.id">
               {{ penalty.getNames() }}
-              @if (penalty.penGuidance) {
+              @if (penalty.penaltyGuidance) {
                 <span class="bg-emerald-400 rounded text-white px-2 mx-2">
-                  {{ penalty.penGuidanceInfo.getNames() }}
+                  {{ penalty.penaltyGuidanceInfo.getNames() }}
                 </span>
               }
             </mat-option>

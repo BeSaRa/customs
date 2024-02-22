@@ -20,10 +20,10 @@
             class="flex-shrink-0"
             [svgIcon]="getPenaltyIcon(penalty.penaltyKey)"></mat-icon>
           <span class="flex-shrink-0">{{ penalty.getNames() }}</span>
-          @if (penalty.penGuidance) {
+          @if (penalty.penaltyGuidance) {
             <div
               class="flex-shrink-0 bg-emerald-400 rounded px-4 text-sm text-white">
-              {{ penalty.penGuidanceInfo.getNames() }}
+              {{ penalty.penaltyGuidanceInfo.getNames() }}
             </div>
           }
         </div>

@@ -50,7 +50,8 @@
                   bindValue="id"
                   bindLabel="getNames"
                   [enableFilter]="true"
-                  bindFilter="getNames" />
+                  bindFilter="getNames"
+                  [divider]="true" />
                 <app-input
                   formControlName="repeat"
                   [label]="lang.map.occurrence_times"
@@ -104,13 +105,15 @@
                   <span>{{ element.repeat }}</span>
                 </td>
               </ng-container>
-              <!-- penGuidanceInfo -->
-              <ng-container matColumnDef="penGuidance">
+              <!-- penaltyGuidanceInfo -->
+              <ng-container matColumnDef="penaltyGuidance">
                 <th mat-header-cell *matHeaderCellDef>
                   {{ lang.map.penalty_guidance }}
                 </th>
                 <td mat-cell *matCellDef="let element">
-                  <span>{{ element.penGuidanceInfo?.getNames() || '' }}</span>
+                  <span>{{
+                    element.penaltyGuidanceInfo?.getNames() || ''
+                  }}</span>
                 </td>
               </ng-container>
               <!-- name -->

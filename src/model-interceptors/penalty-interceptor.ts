@@ -3,13 +3,15 @@ import { Penalty } from '@models/penalty';
 import { AdminResult } from '@models/admin-result';
 import { PenaltyDetails } from '@models/penalty-details';
 import { PenaltyDetailsInterceptor } from '@model-interceptors/penalty-details-interceptor';
+
 const penaltyDetailsInterceptor = new PenaltyDetailsInterceptor();
+
 export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
   send(model: Partial<Penalty>): Partial<Penalty> {
     delete model.statusInfo;
     delete model.offenderTypeInfo;
     delete model.violationTypeInfo;
-    delete model.penGuidanceInfo;
+    delete model.penaltyGuidanceInfo;
     model.detailsList = model.detailsList?.map(detail => {
       return new PenaltyDetails().clone<PenaltyDetails>(
         penaltyDetailsInterceptor.send(detail),
@@ -28,8 +30,8 @@ export class PenaltyInterceptor implements ModelInterceptorContract<Penalty> {
     model.violationTypeInfo = new AdminResult().clone<AdminResult>({
       ...model.violationTypeInfo,
     });
-    model.penGuidanceInfo = new AdminResult().clone<AdminResult>({
-      ...model.penGuidanceInfo,
+    model.penaltyGuidanceInfo = new AdminResult().clone<AdminResult>({
+      ...model.penaltyGuidanceInfo,
     });
 
     model.detailsList = model.detailsList?.map(detail => {
