@@ -472,4 +472,8 @@ export interface LangKeysContract {
   verify: string;
   verify_identity: string;
   msg_enter_verify_code: string;
+  lbl_clearing_agency: string;
+  lbl_clearing_agent: string;
+  lbl_employee: string;
+  login_us: string;
 }
