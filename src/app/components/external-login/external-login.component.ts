@@ -28,13 +28,9 @@ export class ExternalLoginComponent implements OnInit {
   router = inject(Router);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
-  userTypes = this.lookupService.lookups.userType.filter(
-    ut =>
-      ut.lookupKey === UserTypes.EXTERNAL_EMPLOYEE ||
-      ut.lookupKey === UserTypes.EXTERNAL_CLEARING_AGENT,
-  );
+  protected readonly userTypes = UserTypes;
   form: UntypedFormGroup = this.fb.nonNullable.group({
-    userType: [null, CustomValidators.required],
+    userType: [UserTypes.EXTERNAL_EMPLOYEE, CustomValidators.required],
     qid: ['', Validators.required],
   });
 
@@ -96,4 +92,6 @@ export class ExternalLoginComponent implements OnInit {
         this.router.navigate([AppFullRoutes.EXTERNAL_MAIN]).then();
       });
   }
+
+  protected readonly UserTypes = UserTypes;
 }

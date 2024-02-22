@@ -58,7 +58,6 @@ import { VersionComponent } from '@standalone/components/version/version.compone
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +75,6 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
     MatSnackBarModule,
     MatDialogModule,
     InputComponent,
-    SelectInputComponent,
     FormsModule,
     ReactiveFormsModule,
     NgxMaskDirective,
