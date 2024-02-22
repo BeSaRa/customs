@@ -30,8 +30,8 @@ export class Penalty extends BaseModel<Penalty, PenaltyService> {
   // extras
   repeat!: number;
   violationTypeInfo!: AdminResult;
-  penGuidanceInfo!: AdminResult;
-  penGuidance?: number;
+  penaltyGuidanceInfo!: AdminResult;
+  penaltyGuidance?: number;
 
   buildForm(controls = false): object {
     const {

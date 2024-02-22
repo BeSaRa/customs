@@ -127,7 +127,7 @@ export class GuidePanelComponent
 
   columnsWrapper: ColumnsWrapper<Penalty> = new ColumnsWrapper(
     new NoneFilterColumn('repeat'),
-    new NoneFilterColumn('penGuidance'),
+    new NoneFilterColumn('penaltyGuidance'),
     new NoneFilterColumn('name'),
     new NoneFilterColumn('erasureDuration'),
     new NoneFilterColumn('isDeduction'),
@@ -211,13 +211,16 @@ export class GuidePanelComponent
           this.dialog.info(this.lang.map.no_records_to_display);
         }
         data = data.sort((penalty1, penalty2) => {
-          if (penalty1.penGuidance === null || penalty2.penGuidance === null) {
+          if (
+            penalty1.penaltyGuidance === null ||
+            penalty2.penaltyGuidance === null
+          ) {
             return (
-              +(penalty1.penGuidance === null) -
-              +(penalty2.penGuidance === null)
+              +(penalty1.penaltyGuidance === null) -
+              +(penalty2.penaltyGuidance === null)
             );
           }
-          return penalty1.penGuidance! - penalty2.penGuidance!;
+          return penalty1.penaltyGuidance! - penalty2.penaltyGuidance!;
         });
         this.displayedList = new MatTableDataSource(data);
       });
@@ -261,6 +264,6 @@ export class GuidePanelComponent
   }
 
   isAppropriate(element: Penalty) {
-    return element.penGuidance === PenaltyGuidances.APPROPRIATE;
+    return element.penaltyGuidance === PenaltyGuidances.APPROPRIATE;
   }
 }
