@@ -31,6 +31,7 @@ import { interval } from 'rxjs';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
 import { EmployeeService } from '@services/employee.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ChatMessageWrapper } from '@models/chat-message-wrapper';
 
 @Component({
   selector: 'app-chat-ai',
@@ -134,19 +135,23 @@ export class ChatAiComponent
   sendMessage($event: Event) {
     $event.stopPropagation();
     $event.preventDefault();
-    const message = new ChatMessage().clone<ChatMessage>({
-      role: ChatRoles.USER,
+    const messageWrapper = new ChatMessageWrapper().clone<ChatMessageWrapper>({
       context: this.selectedContext()!,
-      content: this.control.value!,
+      messages: [
+        new ChatMessage().clone<ChatMessage>({
+          role: ChatRoles.USER,
+          content: this.control.value!,
+        }),
+      ],
     });
     this.control.value &&
-      this.updateMessages(message) &&
+      this.updateMessages(messageWrapper.messages[0]) &&
       (() => {
         this.loading.set(true);
         return true;
       })() &&
       this.chatService
-        .send(message)
+        .send(messageWrapper)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: message => {
