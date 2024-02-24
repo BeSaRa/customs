@@ -5,7 +5,6 @@ import { authGuard } from '@guards/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { AppRoutes } from '@constants/app-routes';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
-import { AppFullRoutes } from '@constants/app-full-routes';
 
 const routes: Routes = [
   { path: '', redirectTo: AppRoutes.LOGIN, pathMatch: 'full' },
@@ -16,7 +15,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: AppFullRoutes.EXTERNAL_MAIN,
+        redirectTo: AppRoutes.MAIN,
         pathMatch: 'full',
       },
       {
