@@ -9,7 +9,10 @@
       [svgIcon]="AppIcons.ROBOT_HAPPY"></mat-icon>
   </div>
 } @else {
-  <div id="chat-ai" class="bg-white shadow-2xl h-full flex flex-col">
+  <div
+    @openCloseChat
+    id="chat-ai"
+    class="bg-white shadow-2xl h-full flex flex-col">
     <div id="chat-header" class="p-2 flex justify-between relative bg-primary">
       <div class="flex gap-2">
         <mat-icon

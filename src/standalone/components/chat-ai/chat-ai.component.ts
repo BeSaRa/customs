@@ -32,6 +32,7 @@ import { LoadingComponent } from '@standalone/components/loading/loading.compone
 import { EmployeeService } from '@services/employee.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ChatMessageWrapper } from '@models/chat-message-wrapper';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-chat-ai',
@@ -49,6 +50,35 @@ import { ChatMessageWrapper } from '@models/chat-message-wrapper';
   ],
   templateUrl: './chat-ai.component.html',
   styleUrl: './chat-ai.component.scss',
+  animations: [
+    trigger('openCloseChat', [
+      transition(':enter', [
+        style({
+          width: 0,
+          height: 0,
+          opacity: 0,
+        }),
+        animate(
+          100,
+          style({
+            width: '*',
+            height: '*',
+            opacity: 1,
+          }),
+        ),
+      ]),
+      transition(':leave', [
+        animate(
+          100,
+          style({
+            width: 0,
+            height: 0,
+            opacity: 0,
+          }),
+        ),
+      ]),
+    ]),
+  ],
 })
 export class ChatAiComponent
   extends OnDestroyMixin(class {})
