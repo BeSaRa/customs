@@ -18,7 +18,23 @@
         <li>
           <!--            for active link -->
           <!--            dark:text-white md:dark:text-blue-500 -->
-          <a [routerLink]="'/external/home'" class="text-white">الرئيسية</a>
+          <a [routerLink]="'/external/home'" class="text-white">{{
+            lang.map.lbl_investigation_files
+          }}</a>
+        </li>
+        <li>
+          <!--            for active link -->
+          <!--            dark:text-white md:dark:text-blue-500 -->
+          <a [routerLink]="'/external/home'" class="text-white">{{
+            lang.map.lbl_decisions
+          }}</a>
+        </li>
+        <li>
+          <!--            for active link -->
+          <!--            dark:text-white md:dark:text-blue-500 -->
+          <a [routerLink]="'/external/summons-to-attend'" class="text-white">{{
+            lang.map.summons_to_attend
+          }}</a>
         </li>
       </ul>
     </div>

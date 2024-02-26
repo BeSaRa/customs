@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ExternalPagesComponent } from './external-pages.component';
-import { AppRoutes } from '@constants/app-routes';
 import { AppFullRoutes } from '@constants/app-full-routes';
+import { AttendanceComponent } from '@standalone/components/attendance/attendance.component';
+import { ExternalHomeComponent } from '@modules/external-pages/components/standalone/external-home/external-home.component';
 
 const routes: Routes = [
   {
@@ -11,15 +12,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: AppFullRoutes.EXTERNAL_MAIN,
+        redirectTo: AppFullRoutes.EXTERNAL_HOME,
         pathMatch: 'full',
       },
       {
-        path: AppRoutes.HOME,
-        loadComponent: () =>
-          import(
-            '@standalone/components/external-main/external-main.component'
-          ),
+        path: 'home',
+        component: ExternalHomeComponent,
+      },
+      {
+        path: 'summons-to-attend',
+        component: AttendanceComponent,
       },
     ],
   },

@@ -79,9 +79,6 @@ export class AssignmentToAttendPopupComponent
   get caseId() {
     return this.form.get('caseId');
   }
-  get note() {
-    return this.form.get('note');
-  }
   get summonedType() {
     return this.form.get('summonedType');
   }

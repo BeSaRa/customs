@@ -58,6 +58,7 @@ import { VersionComponent } from '@standalone/components/version/version.compone
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,8 @@ import { ExternalLoginComponent } from './components/external-login/external-log
     MatOptionModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    MatRadioButton,
+    MatRadioGroup,
     NgProgressModule,
     MatDateFnsModule,
     LoadingComponent,
