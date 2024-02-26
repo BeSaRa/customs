@@ -476,4 +476,12 @@ export interface LangKeysContract {
   lbl_clearing_agent: string;
   lbl_employee: string;
   login_us: string;
+  summons_to_attend: string;
+  lbl_grievances: string;
+  lbl_investigation_files: string;
+  lbl_decisions: string;
+  lbl_summons: string;
+  lbl_summons_place: string;
+  lbl_summon_date: string;
+  apology: string;
 }

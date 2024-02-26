@@ -45,7 +45,7 @@ const routes: Routes = [
       import('@modules/external-pages/external-pages.module').then(
         m => m.ExternalPagesModule,
       ),
-    canMatch: [authGuard('AUTH', AppRoutes.EXTERNAL_LOGIN)],
+    // canMatch: [authGuard('AUTH', AppRoutes.EXTERNAL_LOGIN)],
   },
   {
     path: AppRoutes.LOGIN,

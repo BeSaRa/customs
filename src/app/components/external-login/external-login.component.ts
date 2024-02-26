@@ -89,7 +89,7 @@ export class ExternalLoginComponent implements OnInit {
       )
       .subscribe(() => {
         this.toast.success('logged in successfully!');
-        this.router.navigate([AppFullRoutes.EXTERNAL_MAIN]).then();
+        this.router.navigate([AppFullRoutes.EXTERNAL_HOME]).then();
       });
   }
 

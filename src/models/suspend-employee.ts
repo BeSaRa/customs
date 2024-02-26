@@ -1,4 +1,4 @@
-export class SusbendEmployee {
+export class SuspendEmployee {
   offenderId!: number;
   signerId!: number;
   mawaredEmployee!: number;

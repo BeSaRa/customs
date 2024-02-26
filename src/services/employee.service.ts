@@ -57,7 +57,7 @@ export class EmployeeService
         ...(data.person as MawaredEmployee),
       });
     }
-    if (data.person && data.person.type === WitnessTypes.ClEARING_AGENT) {
+    if (data.person && data.type === WitnessTypes.ClEARING_AGENT) {
       data.person = new ClearingAgent().clone<ClearingAgent>({
         ...(data.person as ClearingAgent),
       });

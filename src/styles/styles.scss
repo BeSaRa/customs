@@ -99,3 +99,41 @@ input::-webkit-inner-spin-button {
 .input-form > input {
   @apply rounded-md max-w-full;
 }
+
+.white-radio-button-group {
+  mat-radio-button .mdc-label {
+    color: white !important;
+  }
+  .mat-mdc-radio-button
+    .mdc-radio
+    .mdc-radio__native-control:enabled:not(:checked)
+    + .mdc-radio__background
+    .mdc-radio__outer-circle {
+    border-color: white !important;
+  }
+  .mat-mdc-radio-button
+    .mdc-radio
+    .mdc-radio__native-control:enabled:checked
+    + .mdc-radio__background
+    .mdc-radio__outer-circle {
+    border-color: rgb(208 162 57 / 0.8) !important;
+  }
+  .mat-mdc-radio-button
+    .mdc-radio
+    .mdc-radio__native-control:enabled
+    + .mdc-radio__background
+    .mdc-radio__inner-circle {
+    color: rgb(208 162 57 / 0.8) !important;
+    background-color: rgb(208 162 57 / 0.8) !important;
+  }
+  .mat-mdc-radio-button
+    .mdc-radio
+    .mdc-radio__native-control:enabled
+    + .mdc-radio__background
+    .mdc-radio__inner-circle {
+    border-color: rgb(208 162 57 / 0.8) !important;
+  }
+  .mat-mdc-radio-button.mat-mdc-radio-checked .mat-ripple-element {
+    background-color: rgb(208 162 57 / 0.8) !important;
+  }
+}

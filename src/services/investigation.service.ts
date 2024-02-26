@@ -9,7 +9,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
 import { ViolationService } from '@services/violation.service';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
-import { SusbendEmployee } from '@models/susbend-employee';
+import { SuspendEmployee } from '@models/suspend-employee';
 import { ReportType } from '@app-types/validation-return-type';
 import { map, Observable } from 'rxjs';
 import { BlobModel } from '@models/blob-model';
@@ -23,7 +23,7 @@ import { Violation } from '@models/violation';
     model: () => Investigation,
   },
   suspend: {
-    model: () => SusbendEmployee,
+    model: () => SuspendEmployee,
   },
 })
 @Injectable({
@@ -64,12 +64,12 @@ export class InvestigationService
   }
 
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: 'suspend' })
-  suspendEmployee(body: SusbendEmployee) {
+  suspendEmployee(body: SuspendEmployee) {
     return this.http.post(this.getUrlSegment() + '/suspend-employee', body);
   }
 
   @CastResponse(() => Investigation, { unwrap: 'rs', fallback: 'suspend' })
-  extendSuspendEmployee(body: SusbendEmployee) {
+  extendSuspendEmployee(body: SuspendEmployee) {
     return this.http.post(
       this.getUrlSegment() + '/extend-suspend-employee',
       body,
