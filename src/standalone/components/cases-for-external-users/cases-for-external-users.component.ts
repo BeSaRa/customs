@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -13,6 +13,7 @@ import {
   MatRow,
   MatRowDef,
   MatTable,
+  MatTableDataSource,
 } from '@angular/material/table';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { DialogService } from '@services/dialog.service';
@@ -24,8 +25,8 @@ import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
 import { OffenderService } from '@services/offender.service';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-cases-for-external-users',
@@ -46,6 +47,7 @@ import { InvestigationForExternalUser } from '@models/investigation-for-external
     MatRowDef,
     MatHeaderCellDef,
     DatePipe,
+    MatPaginator,
   ],
   templateUrl: './cases-for-external-users.component.html',
   styleUrl: './cases-for-external-users.component.scss',
@@ -60,12 +62,13 @@ export class CasesForExternalUsersComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  data = new Subject<InvestigationForExternalUser[]>();
-  dataSource = new AppTableDataSource(this.data);
+  dataSource: MatTableDataSource<InvestigationForExternalUser> =
+    new MatTableDataSource();
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   view$: Subject<InvestigationForExternalUser> =
     new Subject<InvestigationForExternalUser>();
   displayedColumns = ['fileNumber', 'dateCreated', 'status', 'actions'];
+  @ViewChild('paginator') paginator!: MatPaginator;
 
   ngOnInit(): void {
     this.listenToReload();
@@ -76,7 +79,17 @@ export class CasesForExternalUsersComponent
       .pipe(switchMap(() => this.offenderService.loadCasesForExternal()))
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.data.next(list.rs);
+        this.dataSource.data = list.rs;
+        this.dataSource.paginator = this.paginator;
+        this.paginator._intl.getRangeLabel = (
+          page: number,
+          pageSize: number,
+          length: number,
+        ) => {
+          const start = page * pageSize + 1;
+          const end = Math.min((page + 1) * pageSize, length);
+          return `${start} - ${end} ${this.lang.map.of} ${length}`;
+        };
       });
   }
 }
