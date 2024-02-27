@@ -13,7 +13,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { DialogService } from '@services/dialog.service';
 import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
@@ -21,15 +21,13 @@ import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
 import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
 import { AppTableDataSource } from '@models/app-table-data-source';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
-import { CallRequestService } from '@services/call-request.service';
-import { CallRequest } from '@models/call-request';
-import { DatePipe } from '@angular/common';
-import { ApologyPopupComponent } from '@standalone/popups/apology-popup/apology-popup.component';
 
 @Component({
-  selector: 'app-attendance',
+  selector: 'app-penalty-decision-for-external-users',
   standalone: true,
   imports: [
     IconButtonComponent,
@@ -40,18 +38,17 @@ import { ApologyPopupComponent } from '@standalone/popups/apology-popup/apology-
     MatSort,
     MatTable,
     MatTooltip,
-    MatRow,
     MatHeaderRow,
+    MatRow,
     MatNoDataRow,
     MatHeaderRowDef,
-    MatRowDef,
     MatHeaderCellDef,
-    DatePipe,
+    MatRowDef,
   ],
-  templateUrl: './attendance.component.html',
-  styleUrl: './attendance.component.scss',
+  templateUrl: './penalty-decision-for-external-users.component.html',
+  styleUrl: './penalty-decision-for-external-users.component.scss',
 })
-export class AttendanceComponent
+export class PenaltyDecisionForExternalUsersComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
@@ -60,41 +57,31 @@ export class AttendanceComponent
   lang = inject(LangService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
-  callRequestService = inject(CallRequestService);
-  data = new Subject<CallRequest[]>();
+  penaltyDecisionService = inject(PenaltyDecisionService);
+  data = new Subject<PenaltyDecision[]>();
   dataSource = new AppTableDataSource(this.data);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
-  apology$: Subject<CallRequest> = new Subject<CallRequest>();
-  displayedColumns = ['summonDateTime', 'summons', 'summonsPlace', 'actions'];
+  grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  view$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  displayedColumns = [
+    'decisionSerial',
+    'decisionDate',
+    'status',
+    'signer',
+    'penalty',
+    'actions',
+  ];
 
   ngOnInit(): void {
     this.listenToReload();
-    this._listenToApology();
   }
 
   private listenToReload() {
     this.reload$
-      .pipe(switchMap(() => this.callRequestService.loadExternal()))
+      .pipe(switchMap(() => this.penaltyDecisionService.loadExternal()))
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.data.next(list.rs);
-      });
-  }
-  private _listenToApology() {
-    this.apology$
-      .pipe(
-        switchMap((model: CallRequest) => {
-          return this.dialog
-            .open(ApologyPopupComponent, {
-              data: {
-                model,
-              },
-            })
-            .afterClosed();
-        }),
-      )
-      .subscribe(data => {
-        console.log(data);
       });
   }
 }

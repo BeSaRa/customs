@@ -3,6 +3,7 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Penalty } from '@models/penalty';
 import { InterceptModel } from 'cast-response';
 import { PenaltyDecisionInterceptor } from '@model-interceptors/penalty-decision-interceptor';
+import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new PenaltyDecisionInterceptor();
 
@@ -16,6 +17,7 @@ export class PenaltyDecision extends BaseModel<
   offenderId!: number;
   signerId!: number;
   penaltyId!: number;
+  signerInfo!: AdminResult;
   comment?: string;
   penaltyInfo!: Penalty;
 }

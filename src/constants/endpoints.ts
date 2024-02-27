@@ -47,7 +47,7 @@ export const EndPoints = {
   SUSPENDED_EMPLOYEE: '/entity/suspended-employee',
   RELEASE_BULK: '/inbox/task/return/bulk',
   CHAT: '/openai/chat',
-  OBLIGATION_TO_ATTEND: '/entity/obligation-to-attend',
+  CALL_REQUEST: '/entity/obligation-to-attend',
 };
 
 export type EndpointsType = typeof EndPoints;
