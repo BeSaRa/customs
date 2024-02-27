@@ -6,6 +6,7 @@ const { send, receive } = new ApologyModelInterceptor();
 
 @InterceptModel({ send, receive })
 export class ApologyModel {
+  id!: number;
   apologyReasonId!: number;
   apologyReason!: string;
   apologyReasonDate!: string;

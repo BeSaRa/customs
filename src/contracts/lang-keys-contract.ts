@@ -487,4 +487,5 @@ export interface LangKeysContract {
   send_apologize: string;
   lbl_apology_reason: string;
   decision_serial: string;
+  file_number: string;
 }

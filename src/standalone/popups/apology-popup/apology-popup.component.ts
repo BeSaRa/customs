@@ -62,25 +62,29 @@ export class ApologyPopupComponent
   todayDate = new Date();
   data: CrudDialogDataContract<CallRequest> = inject(MAT_DIALOG_DATA);
   save$: Subject<void> = new Subject<void>();
+
   ngOnInit(): void {
     this._buildForm();
     this._listenToSave();
   }
+
   _buildForm(): void {
     this.form = this.fb.group(new ApologyModel().buildForm());
   }
+
   _listenToSave() {
     this.save$
       .pipe(
         switchMap(() => {
-          return this.CallRequestService.apology(
-            this.data.model.id,
-            this.form.getRawValue(),
-          );
+          return this.CallRequestService.apology({
+            id: this.data.model.id,
+            ...this.form.getRawValue(),
+          });
         }),
       )
       .subscribe();
   }
+
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;

@@ -5,6 +5,7 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { AttendanceComponent } from '@standalone/components/attendance/attendance.component';
 import { ExternalHomeComponent } from '@modules/external-pages/components/standalone/external-home/external-home.component';
 import { PenaltyDecisionForExternalUsersComponent } from '@standalone/components/penalty-decision-for-external-users/penalty-decision-for-external-users.component';
+import { CasesForExternalUsersComponent } from '@standalone/components/cases-for-external-users/cases-for-external-users.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path: 'decisions',
         component: PenaltyDecisionForExternalUsersComponent,
+      },
+      {
+        path: 'investigations',
+        component: CasesForExternalUsersComponent,
       },
     ],
   },
