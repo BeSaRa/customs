@@ -11,6 +11,7 @@ const { send, receive } = new CallRequestInterceptor();
 export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   $$__service_name__$$ = 'CallRequestService';
   caseId!: string;
+  investigationFullSerial!: string;
   type!: string;
   summonedId!: number;
   summonedType!: number;

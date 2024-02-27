@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
   MatCell,
@@ -12,6 +12,7 @@ import {
   MatRow,
   MatRowDef,
   MatTable,
+  MatTableDataSource,
 } from '@angular/material/table';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { DialogService } from '@services/dialog.service';
@@ -20,11 +21,12 @@ import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
 import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
+import { DatePipe } from '@angular/common';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -44,6 +46,8 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatHeaderRowDef,
     MatHeaderCellDef,
     MatRowDef,
+    DatePipe,
+    MatPaginator,
   ],
   templateUrl: './penalty-decision-for-external-users.component.html',
   styleUrl: './penalty-decision-for-external-users.component.scss',
@@ -58,11 +62,11 @@ export class PenaltyDecisionForExternalUsersComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   penaltyDecisionService = inject(PenaltyDecisionService);
-  data = new Subject<PenaltyDecision[]>();
-  dataSource = new AppTableDataSource(this.data);
+  dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   view$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  @ViewChild('paginator') paginator!: MatPaginator;
   displayedColumns = [
     'decisionSerial',
     'decisionDate',
@@ -81,7 +85,17 @@ export class PenaltyDecisionForExternalUsersComponent
       .pipe(switchMap(() => this.penaltyDecisionService.loadExternal()))
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.data.next(list.rs);
+        this.dataSource.data = list.rs;
+        this.dataSource.paginator = this.paginator;
+        this.paginator._intl.getRangeLabel = (
+          page: number,
+          pageSize: number,
+          length: number,
+        ) => {
+          const start = page * pageSize + 1;
+          const end = Math.min((page + 1) * pageSize, length);
+          return `${start} - ${end} ${this.lang.map.of} ${length}`;
+        };
       });
   }
 }

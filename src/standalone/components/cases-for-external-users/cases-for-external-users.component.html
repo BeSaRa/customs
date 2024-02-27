@@ -1,16 +1,16 @@
-<div class="flex justify-start items-center">
-  <h1 class="text-primary text-xl">{{ lang.map.lbl_investigation_files }}</h1>
+<div
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+    {{ lang.map.lbl_investigation_files }}
+  </h1>
   <app-icon-button
+    [matTooltip]="lang.map.reload"
     (click)="reload$.next(null)"
-    class="text-primary"
     icon="RELOAD"></app-icon-button>
+  <div class="flex-auto"></div>
 </div>
-<div>
-  <table
-    mat-table
-    matSort
-    class="table-style table-primary"
-    [dataSource]="dataSource">
+<div class="shadow relative overflow-auto">
+  <table mat-table matSort class="table-style" [dataSource]="dataSource">
     <!-- fileNumber -->
     <ng-container matColumnDef="fileNumber">
       <th mat-header-cell mat-sort-header="fileNumber" *matHeaderCellDef>
@@ -66,4 +66,9 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
+  <mat-paginator
+    #paginator
+    [pageSizeOptions]="[10, 25, 50, 100, 150, 200]"
+    showFirstLastButtons="true"
+    [length]="dataSource.data.length || 0"></mat-paginator>
 </div>
