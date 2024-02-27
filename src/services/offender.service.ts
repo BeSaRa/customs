@@ -8,6 +8,10 @@ import { HttpParams } from '@angular/common/http';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { OffenderTypes } from '@enums/offender-types';
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
+import { SortOptionsContract } from '@contracts/sort-options-contract';
+import { Observable } from 'rxjs';
+import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
 
 @CastResponseContainer({
   $pagination: {
@@ -54,6 +58,23 @@ export class OffenderService extends BaseCrudService<Offender> {
           fromObject: {
             offenderIds: offenderIds.join(', '),
           },
+        }),
+      },
+    );
+  }
+
+  loadCasesForExternal(
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+    sortOptions?: SortOptionsContract,
+  ): Observable<Pagination<InvestigationForExternalUser[]>> {
+    return this.http.get<Pagination<InvestigationForExternalUser[]>>(
+      this.getUrlSegment() + '/admin/cases/external',
+      {
+        params: new HttpParams({
+          fromObject: { ...options, ...sortOptions },
         }),
       },
     );

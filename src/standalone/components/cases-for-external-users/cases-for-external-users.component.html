@@ -1,5 +1,5 @@
 <div class="flex justify-start items-center">
-  <h1 class="text-primary text-xl">{{ lang.map.summons_to_attend }}</h1>
+  <h1 class="text-primary text-xl">{{ lang.map.lbl_investigation_files }}</h1>
   <app-icon-button
     (click)="reload$.next(null)"
     class="text-primary"
@@ -18,33 +18,34 @@
       </th>
       <td mat-cell *matCellDef="let element"></td>
     </ng-container>
-    <!-- summons -->
-    <ng-container matColumnDef="summons">
-      <th mat-header-cell mat-sort-header="summons" *matHeaderCellDef>
-        {{ lang.map.lbl_summons }}
-      </th>
-      <td mat-cell *matCellDef="let element">{{ element.summons }}</td>
-    </ng-container>
-
-    <!-- summonsPlace -->
-    <ng-container matColumnDef="summonsPlace">
-      <th mat-header-cell mat-sort-header="summonsPlace" *matHeaderCellDef>
-        {{ lang.map.lbl_summons_place }}
-      </th>
-      <td mat-cell *matCellDef="let element">{{ element.summonsPlace }}</td>
-    </ng-container>
-
-    <!-- summonDate -->
-    <ng-container matColumnDef="summonDateTime">
-      <th mat-header-cell mat-sort-header="summonDate" *matHeaderCellDef>
-        {{ lang.map.lbl_summon_date_time }}
+    <!-- dateCreated -->
+    <ng-container matColumnDef="dateCreated">
+      <th mat-header-cell mat-sort-header="dateCreated" *matHeaderCellDef>
+        {{ lang.map.creation_date }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span class="inline-block"
-          >{{ element.summonDate | date: 'YYYY/MMM/dd' }} - </span
-        ><span>{{ element.summonTime | date: 'hh:mm' }} </span>
+        {{ element.dateCreated | date: 'YYYY/MMM/dd' }}
       </td>
     </ng-container>
+    <!-- serialNumber -->
+    <ng-container matColumnDef="serialNumber">
+      <th mat-header-cell mat-sort-header="serialNumber" *matHeaderCellDef>
+        {{ lang.map.serial_number }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.investigationFullSerial }}
+      </td>
+    </ng-container>
+    <!-- status -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>
+        {{ lang.map.status }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.caseStatusInfo && element.caseStatusInfo?.getNames() }}
+      </td>
+    </ng-container>
+
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
@@ -52,8 +53,8 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <div class="flex gap-2">
-          <div (click)="apology$.next(element)" [matTooltip]="lang.map.apology">
-            <app-icon-button icon="CLIPBOARD_EDIT" />
+          <div (click)="view$.next(element)" [matTooltip]="lang.map.view">
+            <app-icon-button icon="VIEW" />
           </div>
         </div>
       </td>
