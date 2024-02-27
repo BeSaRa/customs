@@ -482,6 +482,9 @@ export interface LangKeysContract {
   lbl_decisions: string;
   lbl_summons: string;
   lbl_summons_place: string;
-  lbl_summon_date: string;
+  lbl_summon_date_time: string;
   apology: string;
+  send_apologize: string;
+  lbl_apology_reason: string;
+  decision_serial: string;
 }

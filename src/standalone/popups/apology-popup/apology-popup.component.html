@@ -1,0 +1,45 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.send_apologize }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <ng-container [formGroup]="form">
+        <app-select-input
+          [label]="lang.map.lbl_apology_reason"
+          formControlName="apologyReasonId"
+          [options]="apologyReasons"
+          [bindValue]="'lookupKey'"
+          [bindLabel]="'getNames'">
+        </app-select-input>
+        <app-textarea
+          formControlName="apologyReason"
+          [label]="lang.map.comment"></app-textarea>
+        <app-input
+          formControlName="apologyReasonDate"
+          [label]="lang.map.date_to">
+          <input
+            appControl
+            [min]="todayDate"
+            formControlName="apologyReasonDate"
+            (click)="datepicker.open()"
+            [matDatepicker]="datepicker" />
+          <mat-datepicker touchUi #datepicker />
+        </app-input>
+      </ng-container>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

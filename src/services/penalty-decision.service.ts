@@ -13,10 +13,17 @@ import { TerminatePopupComponent } from '@standalone/popups/terminate-popup/term
 import { ReferralPopupComponent } from '@standalone/popups/referral-popup/referral-popup.component';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TaskResponses } from '@enums/task-responses';
+import { Pagination } from '@models/pagination';
 
 @CastResponseContainer({
   $default: {
     model: () => PenaltyDecision,
+  },
+  $pagination: {
+    model: () => Pagination,
+    shape: {
+      'rs.*': () => PenaltyDecision,
+    },
   },
 })
 @Injectable({

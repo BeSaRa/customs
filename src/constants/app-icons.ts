@@ -77,6 +77,8 @@ export const AppIcons = {
   FULLSCREEN: 'fullscreen',
   FULLSCREEN_EXIT: 'fullscreen-exit',
   TRUCK_CHECK_OUTLINE: 'truck-check-outline',
+  CLIPBOARD_EDIT: 'clipboard-edit-outline',
+  HAND_BACK_RIGHT: 'hand-back-right-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

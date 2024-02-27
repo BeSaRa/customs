@@ -68,6 +68,26 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     });
   }
 
+  @CastResponse(undefined, {
+    unwrap: '',
+    fallback: '$pagination',
+  })
+  loadExternal(
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+    sortOptions?: SortOptionsContract,
+  ): Observable<Pagination<M[]>> {
+    return this.http.get<Pagination<M[]>>(
+      this.getUrlSegment() + '/admin/external',
+      {
+        params: new HttpParams({
+          fromObject: { ...options, ...sortOptions },
+        }),
+      },
+    );
+  }
   @CastResponse(() => Pagination, {
     unwrap: '',
     shape: {

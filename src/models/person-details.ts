@@ -1,8 +1,8 @@
 import { InterceptModel } from 'cast-response';
-import { ObligationToAttendInterceptor } from '@model-interceptors/obligation-to-attend-interceptor';
+import { CallRequestInterceptor } from '@model-interceptors/call-request-interceptor';
 import { AdminResult } from '@models/admin-result';
 
-const { receive } = new ObligationToAttendInterceptor();
+const { receive } = new CallRequestInterceptor();
 
 @InterceptModel({ receive })
 export class PersonDetails {

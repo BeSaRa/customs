@@ -4,6 +4,7 @@ import { ExternalPagesComponent } from './external-pages.component';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AttendanceComponent } from '@standalone/components/attendance/attendance.component';
 import { ExternalHomeComponent } from '@modules/external-pages/components/standalone/external-home/external-home.component';
+import { PenaltyDecisionForExternalUsersComponent } from '@standalone/components/penalty-decision-for-external-users/penalty-decision-for-external-users.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
       {
         path: 'summons-to-attend',
         component: AttendanceComponent,
+      },
+      {
+        path: 'decisions',
+        component: PenaltyDecisionForExternalUsersComponent,
       },
     ],
   },
