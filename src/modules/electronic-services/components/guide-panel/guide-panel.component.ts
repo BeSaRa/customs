@@ -60,7 +60,7 @@ export class GuidePanelComponent
   violationTypeService = inject(ViolationTypeService);
 
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
-  careerLevel: Lookup[] = this.lookupService.lookups.CareerLevel.sort(
+  careerLevel: Lookup[] = this.lookupService.lookups.careerLevel.sort(
     (a, b) => a.lookupKey - b.lookupKey,
   );
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
