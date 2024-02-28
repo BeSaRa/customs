@@ -16,25 +16,51 @@
       <ul
         class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0">
         <li>
-          <!--            for active link -->
-          <!--            dark:text-white md:dark:text-blue-500 -->
-          <a [routerLink]="'/external/investigations'" class="text-white">{{
-            lang.map.lbl_investigation_files
-          }}</a>
+          <a
+            [routerLink]="'/external/home'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500':
+                isActive('/external/home')
+            }"
+            class="text-white"
+            >{{ lang.map.main }}</a
+          >
         </li>
         <li>
-          <!--            for active link -->
-          <!--            dark:text-white md:dark:text-blue-500 -->
-          <a [routerLink]="'/external/decisions'" class="text-white">{{
-            lang.map.lbl_decisions
-          }}</a>
+          <a
+            [routerLink]="'/external/investigations'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/investigations'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.lbl_investigation_files }}</a
+          >
         </li>
         <li>
-          <!--            for active link -->
-          <!--            dark:text-white md:dark:text-blue-500 -->
-          <a [routerLink]="'/external/summons-to-attend'" class="text-white">{{
-            lang.map.summons_to_attend
-          }}</a>
+          <a
+            [routerLink]="'/external/decisions'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/decisions'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.lbl_decisions }}</a
+          >
+        </li>
+        <li>
+          <a
+            [routerLink]="'/external/summons-to-attend'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/summons-to-attend'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.summons_to_attend }}</a
+          >
         </li>
       </ul>
     </div>

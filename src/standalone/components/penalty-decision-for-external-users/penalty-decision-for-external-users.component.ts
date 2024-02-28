@@ -27,6 +27,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DatePipe } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -66,6 +67,8 @@ export class PenaltyDecisionForExternalUsersComponent
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   view$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  pay$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  protected readonly userTypes = UserTypes;
   @ViewChild('paginator') paginator!: MatPaginator;
   displayedColumns = [
     'decisionSerial',
@@ -98,4 +101,6 @@ export class PenaltyDecisionForExternalUsersComponent
         };
       });
   }
+
+  protected readonly UserTypes = UserTypes;
 }

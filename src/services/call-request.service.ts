@@ -45,7 +45,7 @@ export class CallRequestService extends BaseCrudService<CallRequest> {
   })
   apology(payload: ApologyModel): Observable<CallRequest> {
     return this.http.put<CallRequest>(
-      this.getUrlSegment() + `/admin/${payload.id}/apology`,
+      this.getUrlSegment() + `/admin/apology`,
       payload,
     );
   }

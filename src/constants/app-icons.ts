@@ -79,6 +79,7 @@ export const AppIcons = {
   TRUCK_CHECK_OUTLINE: 'truck-check-outline',
   CLIPBOARD_EDIT: 'clipboard-edit-outline',
   HAND_BACK_RIGHT: 'hand-back-right-outline',
+  HAND_COIN: 'hand-coin-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

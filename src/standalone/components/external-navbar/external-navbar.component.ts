@@ -9,12 +9,18 @@ import { Router, RouterLink } from '@angular/router';
 import { AppRoutes } from '@constants/app-routes';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { NgOptimizedImage } from '@angular/common';
+import { NgClass, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-external-navbar',
   standalone: true,
-  imports: [IconButtonComponent, RouterLink, MatTooltip, NgOptimizedImage],
+  imports: [
+    IconButtonComponent,
+    RouterLink,
+    MatTooltip,
+    NgOptimizedImage,
+    NgClass,
+  ],
   templateUrl: './external-navbar.component.html',
   styleUrls: ['./external-navbar.component.scss'],
 })
@@ -24,7 +30,6 @@ export class ExternalNavbarComponent {
   authService = inject(AuthService);
   toast = inject(ToastService);
   router = inject(Router);
-
   logout() {
     this.dialog
       .confirm(this.lang.map.are_you_sure_you_want_to_logout, '', {
@@ -38,5 +43,8 @@ export class ExternalNavbarComponent {
         this.toast.success(this.lang.map.logged_out_successfully);
         this.router.navigate([AppRoutes.EXTERNAL_LOGIN]).then();
       });
+  }
+  isActive(url: string) {
+    return this.router.url === url;
   }
 }

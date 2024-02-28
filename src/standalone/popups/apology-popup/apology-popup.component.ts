@@ -9,7 +9,11 @@ import {
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { MatCell } from '@angular/material/table';
-import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogClose,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { Observable, Subject, switchMap } from 'rxjs';
@@ -26,6 +30,7 @@ import {
   MatDatepicker,
   MatDatepickerInput,
 } from '@angular/material/datepicker';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-apology-popup',
@@ -53,6 +58,7 @@ export class ApologyPopupComponent
 {
   lang = inject(LangService);
   fb = inject(FormBuilder);
+  dialogRef = inject(MatDialogRef);
   CallRequestService = inject(CallRequestService);
   lookupService = inject(LookupService);
   apologyReasons = this.lookupService.lookups.apologyReason.sort(
@@ -74,6 +80,7 @@ export class ApologyPopupComponent
 
   _listenToSave() {
     this.save$
+      .pipe(filter(() => this._beforeSave()))
       .pipe(
         switchMap(() => {
           return this.CallRequestService.apology({
@@ -82,10 +89,12 @@ export class ApologyPopupComponent
           });
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.dialogRef.close();
+      });
   }
 
-  protected _beforeSave(): boolean | Observable<boolean> {
+  protected _beforeSave(): boolean {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
