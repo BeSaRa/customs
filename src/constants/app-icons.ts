@@ -80,6 +80,9 @@ export const AppIcons = {
   CLIPBOARD_EDIT: 'clipboard-edit-outline',
   HAND_BACK_RIGHT: 'hand-back-right-outline',
   HAND_COIN: 'hand-coin-outline',
+  CONTENT_SAVE_OUTLINE: 'content-save-outline',
+  DELETE_OUTLINE: 'delete-outline',
+  FILE_DOWNLOAD_OUTLINE: 'file-download-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

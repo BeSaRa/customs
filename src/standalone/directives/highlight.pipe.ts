@@ -1,5 +1,5 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { inject, Pipe, PipeTransform, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Pipe({
   name: 'highlight',
@@ -7,7 +7,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class HighlightPipe implements PipeTransform {
   sanitizer = inject(DomSanitizer);
-  transform(value: string, args: string): SafeHtml {
+
+  transform(value: string, args: string): string | null {
     if (!args) {
       return value;
     }
@@ -21,6 +22,6 @@ export class HighlightPipe implements PipeTransform {
     }
 
     const result = String(value).replace(re, '<mark>' + match[0] + '</mark>');
-    return this.sanitizer.bypassSecurityTrustHtml(result);
+    return this.sanitizer.sanitize(SecurityContext.HTML, result);
   }
 }

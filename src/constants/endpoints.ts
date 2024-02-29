@@ -48,6 +48,7 @@ export const EndPoints = {
   RELEASE_BULK: '/inbox/task/return/bulk',
   CHAT: '/openai/chat',
   CALL_REQUEST: '/entity/obligation-to-attend',
+  INVESTIGATION_REPORT: '/entity/administrative-investigation-report',
 };
 
 export type EndpointsType = typeof EndPoints;

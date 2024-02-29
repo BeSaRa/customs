@@ -3,7 +3,7 @@
   class="group block relative {{ !noMargin ? marginBottom : '' }}">
   <span [ngClass]="labelColor" class="block font-medium">
     {{ label }}
-    @if (isRequired) {
+    @if (isRequired && label) {
       <span class="text-amber-700">*</span>
     }
   </span>

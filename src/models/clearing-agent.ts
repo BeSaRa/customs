@@ -127,4 +127,13 @@ export class ClearingAgent extends BaseModel<
       ]
     );
   }
+
+  getCompanyName(): string {
+    const current = this.getLangService().getCurrent();
+    const property =
+      current.code === 'ar'
+        ? 'agencyArabicCompanyName'
+        : 'agencyEnglishCompanyName';
+    return this[property];
+  }
 }

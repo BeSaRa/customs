@@ -40,6 +40,7 @@ import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-
 import { OffenderAttachmentsComponent } from '@standalone/components/offender-attachments/offender-attachments.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { LegalAffairsOffendersComponent } from '@standalone/components/legal-affairs-offenders/legal-affairs-offenders.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { MatSort } from '@angular/material/sort';
     OffenderAttachmentsComponent,
     MatPaginator,
     MatSort,
+    LegalAffairsOffendersComponent,
   ],
 })
 export class ElectronicServicesModule {}

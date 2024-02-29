@@ -1,4 +1,22 @@
 export interface LangKeysContract {
+  this_feature_is_being_worked_on: string;
+  save_pdf: string;
+  need_questions_and_answers_to_take_this_action: string;
+  no_questions_to_display: string;
+  answer: string;
+  question: string;
+  location: string;
+  investigator_name: string;
+  investigation_report: string;
+  hearing_minutes_subject: string;
+  number_of_investigations_records: string;
+  investigation_date: string;
+  investigation_records: string;
+  job_grade: string;
+  request_hear_statements: string;
+  investigation_request: string;
+  call_request: string;
+  legal_procedures: string;
   compact_mode: string;
   fullscreen: string;
   clear_chat: string;

@@ -7,6 +7,7 @@ import {
   inject,
   input,
   signal,
+  viewChild,
   ViewChild,
 } from '@angular/core';
 import { LangService } from '@services/lang.service';
@@ -41,6 +42,7 @@ import { Penalty } from '@models/penalty';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { ViolationClassification } from '@models/violation-classification';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-investigation',
@@ -91,6 +93,9 @@ export class InvestigationComponent
   generalAttachments!: CaseAttachmentsComponent;
   @ViewChild('officialAttachments')
   officialAttachments!: CaseAttachmentsComponent;
+
+  tabsComponent = viewChild(MatTabGroup);
+
   violationDegreeConfidentiality =
     this.lookupService.lookups.securityLevel.filter(
       degreeConfidentiality =>
@@ -108,6 +113,7 @@ export class InvestigationComponent
     );
   });
   tabsArray = [
+    'legal_procedures',
     'summary',
     'basic_info',
     'offenders',
@@ -132,6 +138,7 @@ export class InvestigationComponent
       : (this.model = new Investigation());
 
     this._listenToLoadOffendersViolations();
+    this.listenToTabChange();
   }
 
   isHrManager() {
@@ -262,12 +269,14 @@ export class InvestigationComponent
       return { ...acc, [item.id]: item };
     }, {});
   }
+
   private loadClassifications(): void {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
       this.classifications = list;
       this.prepareClassificationMap();
     });
   }
+
   private _listenToLoadOffendersViolations() {
     this.updateModel$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.model = new Investigation().clone<Investigation>({
@@ -348,14 +357,13 @@ export class InvestigationComponent
       .subscribe(() => this.launch$.next(null));
   }
 
-  tabChange($event: number, withParams: boolean = true) {
-    const selectedTab = this.tabsArray[$event];
+  tabChange(tabName: string, withParams: boolean = true) {
     this.router
       .navigate([], {
         relativeTo: this.activeRoute,
         queryParams: {
           ...(withParams ? this.activeRoute.snapshot.queryParams : undefined),
-          tab: selectedTab,
+          tab: tabName,
         },
       })
       .then();
@@ -373,7 +381,7 @@ export class InvestigationComponent
     this.generalAttachments.resetDataList();
     this.officialAttachments.resetDataList();
     this.selectedTab = 0;
-    this.tabChange(1, false);
+    this.tabChange('basic_info', false);
   }
 
   private listenToLocationChange() {
@@ -440,5 +448,16 @@ export class InvestigationComponent
   reloadPenalties() {
     this.summaryTabComponent &&
       this.summaryTabComponent?.offendersViolationsPreview.loadPenalties$.next();
+  }
+
+  private listenToTabChange() {
+    this.tabsComponent()
+      ?.selectedTabChange.pipe(takeUntil(this.destroy$))
+      .subscribe(tabEvent => {
+        const tabName =
+          tabEvent.tab._implicitContent.elementRef.nativeElement.parentElement
+            .dataset['name'];
+        this.tabChange(tabName);
+      });
   }
 }

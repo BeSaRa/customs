@@ -96,6 +96,7 @@ input::-webkit-inner-spin-button {
     @apply px-4;
   }
 }
+
 .input-form > input {
   @apply rounded-md max-w-full;
 }
@@ -104,6 +105,7 @@ input::-webkit-inner-spin-button {
   mat-radio-button .mdc-label {
     color: white !important;
   }
+
   .mat-mdc-radio-button
     .mdc-radio
     .mdc-radio__native-control:enabled:not(:checked)
@@ -111,6 +113,7 @@ input::-webkit-inner-spin-button {
     .mdc-radio__outer-circle {
     border-color: white !important;
   }
+
   .mat-mdc-radio-button
     .mdc-radio
     .mdc-radio__native-control:enabled:checked
@@ -118,6 +121,7 @@ input::-webkit-inner-spin-button {
     .mdc-radio__outer-circle {
     border-color: rgb(208 162 57 / 0.8) !important;
   }
+
   .mat-mdc-radio-button
     .mdc-radio
     .mdc-radio__native-control:enabled
@@ -126,6 +130,7 @@ input::-webkit-inner-spin-button {
     color: rgb(208 162 57 / 0.8) !important;
     background-color: rgb(208 162 57 / 0.8) !important;
   }
+
   .mat-mdc-radio-button
     .mdc-radio
     .mdc-radio__native-control:enabled
@@ -133,6 +138,7 @@ input::-webkit-inner-spin-button {
     .mdc-radio__inner-circle {
     border-color: rgb(208 162 57 / 0.8) !important;
   }
+
   .mat-mdc-radio-button.mat-mdc-radio-checked .mat-ripple-element {
     background-color: rgb(208 162 57 / 0.8) !important;
   }

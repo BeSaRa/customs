@@ -1,0 +1,7 @@
+tr.details-row {
+  height: 0;
+
+  &:not(.opened) > td {
+    border: none !important;
+  }
+}

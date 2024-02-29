@@ -18,8 +18,6 @@ export class IconButtonComponent {
   icon: keyof AppIconsType = 'RELOAD';
   _disabled = false;
   @Input()
-  tabindex = '1';
-  @Input()
   color = '';
   @Input()
   set disabled(value: boolean | unknown) {

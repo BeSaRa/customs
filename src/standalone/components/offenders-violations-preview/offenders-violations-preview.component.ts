@@ -193,7 +193,6 @@ export class OffendersViolationsPreviewComponent
   });
 
   violationProofStatus = computed(() => {
-    console.log(this.model().isSubmitInvestigationActivity());
     return Object.entries(this.offenderViolationsMap()).reduce<
       Record<number, FormControl<number | null>[]>
     >((acc, [key, offenderViolation]) => {

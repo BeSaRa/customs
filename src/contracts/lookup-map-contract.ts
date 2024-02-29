@@ -46,4 +46,7 @@ export interface LookupMapContract {
   proofStatus: Lookup[];
   careerLevel: Lookup[];
   apologyReason: Lookup[];
+  administrativeInvestigationCategory: Lookup[];
+  administrativeInvestigationReportStatus: Lookup[];
+  summonType: Lookup[];
 }

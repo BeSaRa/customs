@@ -338,12 +338,6 @@ export class Investigation extends BaseCase<
       : false;
   }
 
-  isSubmitInvestigationActivity(): boolean {
-    return !this.getActivityName()
-      ? false
-      : this.getActivityName() === ActivitiesName.SUBMIT_INVESTIGATION;
-  }
-
   itHasReferralRequestBefore(offenderId: number): boolean {
     const referrals = [
       SystemPenalties.REFERRAL_TO_PRESIDENT,
@@ -381,5 +375,17 @@ export class Investigation extends BaseCase<
         item.penaltyInfo.penaltyKey === systemPenaltyKey &&
         item.offenderId !== offenderId,
     );
+  }
+
+  private inActivity(activityName: ActivitiesName): boolean {
+    return activityName === this.getActivityName();
+  }
+
+  isSubmitInvestigationActivity(): boolean {
+    return this.inActivity(ActivitiesName.SUBMIT_INVESTIGATION);
+  }
+
+  inLegalAffairsActivity(): boolean {
+    return this.inActivity(ActivitiesName.REVIEW_LEGAL_AFFAIRS);
   }
 }

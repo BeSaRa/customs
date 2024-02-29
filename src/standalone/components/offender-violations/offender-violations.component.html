@@ -1,0 +1,26 @@
+<div class="flex flex-col gap-y-2">
+  <h2 class="flex items-center gap-2">
+    <span class="text-lg text-primary">
+      {{ lang.map.violations }}
+    </span>
+    <span
+      matTooltipPosition="above"
+      [matTooltip]="lang.map.number_of_violations"
+      class="rounded-full bg-primary text-white px-2">
+      {{ violations().length }}
+    </span>
+  </h2>
+  <ul class="space-y-4">
+    @for (violation of violations(); track violation.id) {
+      <li class="border bg-yellow-50 rounded text-sm p-2 relative">
+        {{ violation.violationInfo.violationTypeInfo.getNames() }}
+        <span
+          matTooltipPosition="above"
+          [matTooltip]="lang.map.repeat"
+          class="bg-red-100 px-2 rounded-full absolute -top-2 -end-2">
+          {{ violation.repeat }}
+        </span>
+      </li>
+    }
+  </ul>
+</div>

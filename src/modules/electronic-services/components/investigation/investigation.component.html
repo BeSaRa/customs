@@ -60,33 +60,41 @@
     'investigation-tab-group-preview': showSummaryElements()
   }">
   <mat-card>
-    <mat-tab-group
-      [(selectedIndex)]="selectedTab"
-      (selectedIndexChange)="tabChange($event)"
-      mat-stretch-tabs="false">
+    <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false">
+      @if (model.inLegalAffairsActivity()) {
+        <mat-tab
+          data-name="legal_procedures"
+          [label]="lang.map.legal_procedures">
+          <ng-container [ngTemplateOutlet]="legal_procedures"></ng-container>
+        </mat-tab>
+      }
       @if (showSummaryElements()) {
-        <mat-tab [label]="lang.map.basic_report_data_and_violations">
+        <mat-tab
+          data-name="summary"
+          [label]="lang.map.basic_report_data_and_violations">
           <ng-container [ngTemplateOutlet]="summary_tab"></ng-container>
         </mat-tab>
       }
       @if (model.canSave()) {
-        <mat-tab [label]="lang.map.lbl_basic_info">
+        <mat-tab data-name="summary" [label]="lang.map.lbl_basic_info">
           <ng-container [ngTemplateOutlet]="basic_info_tab"></ng-container>
         </mat-tab>
       }
-      <mat-tab [label]="lang.map.offenders">
+      <mat-tab data-name="offenders" [label]="lang.map.offenders">
         <ng-container [ngTemplateOutlet]="offenders_tab"></ng-container>
       </mat-tab>
-      <mat-tab [label]="lang.map.violations">
+      <mat-tab data-name="violations" [label]="lang.map.violations">
         <ng-container [ngTemplateOutlet]="violation_tab"></ng-container>
       </mat-tab>
       @if (canViewExternalPersonsTab()) {
-        <mat-tab [label]="lang.map.external_persons">
+        <mat-tab
+          data-name="external_persons"
+          [label]="lang.map.external_persons">
           <ng-container
             [ngTemplateOutlet]="external_persons_tab"></ng-container>
         </mat-tab>
       }
-      <mat-tab [label]="lang.map.attachments">
+      <mat-tab data-name="attachments" [label]="lang.map.attachments">
         <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>
       </mat-tab>
     </mat-tab-group>
@@ -205,6 +213,11 @@
         [model]="model"
         class="col-span-1 md:col-span-2 lg:col-span-4"
         [readonly]="readonly" />
+    </div>
+  </ng-template>
+  <ng-template #legal_procedures>
+    <div class="p-4">
+      <app-legal-affairs-offenders [model]="model" />
     </div>
   </ng-template>
 </div>

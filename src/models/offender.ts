@@ -71,4 +71,20 @@ export class Offender extends BaseModel<Offender, OffenderService> {
         ))
     );
   }
+
+  getDepartmentCompanyNames(): string {
+    return this.type === OffenderTypes.EMPLOYEE
+      ? this.offenderOUInfo?.getNames() || ''
+      : (this.offenderInfo as ClearingAgent).getCompanyName();
+  }
+
+  isEmployee(item: Offender['offenderInfo']): item is MawaredEmployee {
+    return item?.type === OffenderTypes.EMPLOYEE;
+  }
+
+  getJobGrade(): string {
+    return this.offenderInfo && this.isEmployee(this.offenderInfo)
+      ? this.offenderInfo.employeeCareerLevelInfo.getNames()
+      : 'N/A';
+  }
 }

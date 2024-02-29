@@ -1,9 +1,5 @@
 <div (click)="clicked($event)" class="relative">
-  <button
-    [tabindex]="tabindex"
-    [disabled]="disabled"
-    (click)="clicked($event)"
-    mat-icon-button>
+  <button [disabled]="disabled" (click)="clicked($event)" mat-icon-button>
     <mat-icon
       (click)="clicked($event)"
       [style]="'color:' + color"
