@@ -94,7 +94,8 @@
       <div class="flex justify-start gap-2">
         @if (assertType(element).hasStatusSearch()) {
           <app-situation-search-btn
-            [offender]="element"
+            [id]="element.offenderInfo.id"
+            [type]="element.type"
             [isCompany]="false"
             icon="INFORMATION" />
         }

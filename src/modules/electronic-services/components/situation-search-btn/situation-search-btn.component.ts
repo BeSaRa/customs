@@ -1,8 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
 import { AppIconsType } from '@constants/app-icons';
-import { OffenderTypes } from '@enums/offender-types';
-import { ClearingAgent } from '@models/clearing-agent';
-import { Offender } from '@models/offender';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
 import { of, switchMap } from 'rxjs';
@@ -29,40 +26,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class SituationSearchBtnComponent {
   lang = inject(LangService);
   dialog = inject(DialogService);
-  @Input()
+
+  @Input({ required: true })
   isCompany!: boolean;
-  @Input()
-  offender!: Offender;
-  @Input()
+  @Input({ required: true })
+  id!: number;
+  @Input({ required: true })
+  type!: number;
+  @Input({ required: true })
   icon: keyof AppIconsType = 'RELOAD';
 
   onSearchSituationBtnClick() {
     of(null)
       .pipe(
         switchMap(() => {
-          let id;
-          if (this.isCompany) {
-            id = !this.offender.offenderInfo
-              ? (this.offender as unknown as ClearingAgent).agencyId
-              : (this.offender.offenderInfo as unknown as ClearingAgent)
-                  .agencyId;
-          } else {
-            if (this.offender.type === OffenderTypes.BROKER) {
-              id = !this.offender.offenderInfo
-                ? (this.offender as unknown as ClearingAgent).agentId
-                : (this.offender.offenderInfo as unknown as ClearingAgent)
-                    .agentId;
-            } else if (this.offender.type === OffenderTypes.EMPLOYEE) {
-              id = !this.offender.offenderInfo
-                ? this.offender.id
-                : this.offender.offenderInfo?.id;
-            }
-          }
           return this.dialog
             .open(SituationSearchComponent, {
               data: {
-                id,
-                type: this.offender.type,
+                id: this.id,
+                type: this.type,
                 isCompany: this.isCompany,
               },
             })
