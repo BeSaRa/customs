@@ -109,7 +109,11 @@ export class OffenderCriteriaPopupComponent
   addViolation$: Subject<void> = new Subject<void>();
   model = this.data && this.data.model;
   // lookups
-  offenderTypes = this.lookupService.lookups.offenderType;
+  offenderTypes = this.lookupService.lookups.offenderType.filter(
+    type =>
+      type.lookupKey === OffenderTypes.EMPLOYEE ||
+      this.employeeService.hasPermissionTo('ADD_CLEARING_AGENT_OFFENDER'),
+  );
   careerLevels = this.lookupService.lookups.careerLevel;
   offenderTypesEnum = OffenderTypes;
   administrations: MawaredDepartment[] = [];
