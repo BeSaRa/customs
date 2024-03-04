@@ -1,6 +1,10 @@
 <div class="grid grid-cols-5 gap-4 mt-3">
   <!-- save -->
-  @if (model().inMyInbox() && model().canSave()) {
+  @if (
+    !model().id ||
+    (model().inMyInbox() && model().canEdit()) ||
+    model().creatorInfo.id === employeeService.getEmployee()?.id
+  ) {
     <app-button (click)="save.emit(SaveTypes.FINAL)"
       >{{ lang.map.save }}
     </app-button>
