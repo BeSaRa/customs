@@ -251,14 +251,18 @@
                 </div>
                 @if (assertType(element).hasStatusSearch()) {
                   <app-situation-search-btn
-                    [id]="element.offenderInfo.id"
+                    [id]="
+                      element.type === offenderTypesEnum.EMPLOYEE
+                        ? element.offenderInfo?.id ?? element.id
+                        : element.offenderInfo?.agentId ?? element.agentId
+                    "
                     [type]="element.type"
                     [isCompany]="false"
                     icon="INFORMATION" />
                 }
                 @if (assertType(element).hasStatusSearch(true)) {
                   <app-situation-search-btn
-                    [id]="element.offenderInfo.agentId"
+                    [id]="element.offenderInfo?.agencyId ?? element.agencyId"
                     [type]="element.type"
                     [isCompany]="true"
                     icon="CLEARING_AGENCY" />
