@@ -327,13 +327,14 @@ export class ReferralPopupComponent
                 penaltyId: this.selectedPenalty.id,
                 offenderId: item.id,
                 status: 1,
+                tkiid: this.model().getTaskId(),
                 comment: this.displayDefaultForm()
                   ? this.commentControl.value
                   : item.type === OffenderTypes.BROKER
                     ? this.brokersComment.value
                     : this.employeesComment.value,
               })
-              .save();
+              .create();
           });
         }),
       )
@@ -351,6 +352,9 @@ export class ReferralPopupComponent
       )
       .subscribe(penaltiesDecisions => {
         penaltiesDecisions.forEach(item => {
+          this.model().removePenaltyDecision(
+            this.oldPenaltyDecisionsMap()[item.offenderId],
+          );
           this.model().appendPenaltyDecision(item);
         });
         this.updateModel.emit();

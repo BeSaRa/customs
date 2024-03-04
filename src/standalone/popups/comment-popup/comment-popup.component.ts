@@ -53,7 +53,6 @@ export class CommentPopupComponent
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
-  decisionIds: number[] = this.data && (this.data.decisionIds as number[]);
 
   taskResponses = TaskResponses;
   usersList: InternalUserOU[] = [];
@@ -115,7 +114,6 @@ export class CommentPopupComponent
             selectedResponse: this.response,
             comment: this.form.value.comment,
             userId: this.form.value.userId,
-            decisionIds: this.decisionIds,
           };
           if (!this.isSendToUser) {
             delete completeBody.userId;

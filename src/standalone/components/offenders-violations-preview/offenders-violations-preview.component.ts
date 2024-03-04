@@ -120,10 +120,10 @@ export class OffendersViolationsPreviewComponent
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
-  referralOrTerminateDecision$ = new Subject<{
-    offender: Offender;
-    penaltyId: number | undefined;
-  }>();
+  // referralOrTerminateDecision$ = new Subject<{
+  //   offender: Offender;
+  //   penaltyId: number | undefined;
+  // }>();
 
   selectedOffender!: Offender | null;
   toast = inject(ToastService);
@@ -360,7 +360,7 @@ export class OffendersViolationsPreviewComponent
     this.listenToAttachments();
     this.listenToAssignmentToAttend();
     this.listenToSituationSearch();
-    this.listenToReferralRequest();
+    // this.listenToReferralRequest();
     this.listenToSuspendEmployee();
     this.listenToLoadPenalties();
     this.loadPenalties$.next();
@@ -448,7 +448,12 @@ export class OffendersViolationsPreviewComponent
         ),
       )
       .subscribe((item: PenaltyDecision | undefined) => {
-        this.model && item && this.model().appendPenaltyDecision(item);
+        this.model &&
+          item &&
+          (() => {
+            this.model().getPenaltyDecisionByOffenderId(item.offenderId);
+            this.model().appendPenaltyDecision(item);
+          })();
       });
   }
 
@@ -519,23 +524,23 @@ export class OffendersViolationsPreviewComponent
       .subscribe();
   }
 
-  listenToReferralRequest() {
-    this.referralOrTerminateDecision$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        switchMap(({ offender, penaltyId }) => {
-          const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
-            caseId: this.model().id,
-            offenderId: offender.id,
-            signerId: this.employeeService.getEmployee()?.id,
-            penaltyId: penaltyId,
-            status: 1,
-          });
-          return penaltyDecision.save();
-        }),
-      )
-      .subscribe();
-  }
+  // listenToReferralRequest() {
+  //   this.referralOrTerminateDecision$
+  //     .pipe(takeUntil(this.destroy$))
+  //     .pipe(
+  //       switchMap(({ offender, penaltyId }) => {
+  //         const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
+  //           caseId: this.model().id,
+  //           offenderId: offender.id,
+  //           signerId: this.employeeService.getEmployee()?.id,
+  //           penaltyId: penaltyId,
+  //           status: 1,
+  //         });
+  //         return penaltyDecision.save();
+  //       }),
+  //     )
+  //     .subscribe();
+  // }
 
   canMakeDecision(offender: Offender): boolean {
     return (

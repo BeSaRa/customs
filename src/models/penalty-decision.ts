@@ -17,6 +17,7 @@ export class PenaltyDecision extends BaseModel<
   offenderId!: number;
   signerId!: number;
   penaltyId!: number;
+  tkiid?: string;
   signerInfo!: AdminResult;
   comment?: string;
   penaltyInfo!: Penalty;

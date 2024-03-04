@@ -10,7 +10,7 @@ export class PenaltyDecisionInterceptor
     delete model.penaltyInfo;
     delete model.signerInfo;
     delete model.statusInfo;
-
+    delete model.id;
     return model;
   }
 

@@ -103,7 +103,8 @@ export class Investigation extends BaseCase<
     ];
   }
 
-  removePenaltyDecision(item: PenaltyDecision): void {
+  removePenaltyDecision(item: PenaltyDecision | undefined): void {
+    if (!item) return;
     this.penaltyDecisions = [
       ...this.penaltyDecisions.filter(i => i.id !== item.id),
     ];

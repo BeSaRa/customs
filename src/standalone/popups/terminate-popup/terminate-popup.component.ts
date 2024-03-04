@@ -145,13 +145,14 @@ export class TerminatePopupComponent implements OnInit {
               status: 1,
               comment: this.control.value,
               offenderId: offender.id,
+              tkiid: this.model().getTaskId(),
             });
           });
         }),
         switchMap(models => {
           return forkJoin(
             models.map(model => {
-              return model.save().pipe(
+              return model.create().pipe(
                 map(item =>
                   model.clone<PenaltyDecision>({
                     id: item.id,
@@ -166,6 +167,9 @@ export class TerminatePopupComponent implements OnInit {
       .subscribe(models => {
         models &&
           models.forEach(model => {
+            this.model().removePenaltyDecision(
+              this.oldPenaltiesMap()[model.offenderId],
+            );
             this.model().appendPenaltyDecision(model);
           });
         this.toast.success(this.lang.map.the_penalty_saved_successfully);

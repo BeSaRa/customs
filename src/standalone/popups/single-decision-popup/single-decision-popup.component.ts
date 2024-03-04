@@ -190,6 +190,7 @@ export class SingleDecisionPopupComponent
       comment: this.textControl.value,
       status: 1,
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
+      tkiid: this.model().getTaskId(),
     });
   }
 
@@ -216,7 +217,7 @@ export class SingleDecisionPopupComponent
       )
       .pipe(
         exhaustMap(model => {
-          return model.save().pipe(
+          return model.create().pipe(
             map(saved => {
               return new PenaltyDecision().clone<PenaltyDecision>({
                 ...model,
@@ -227,6 +228,7 @@ export class SingleDecisionPopupComponent
         }),
       )
       .subscribe(model => {
+        this.model().removePenaltyDecision(this.oldPenaltyDecision());
         this.model().appendPenaltyDecision(model);
         this.updateModel().emit();
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
