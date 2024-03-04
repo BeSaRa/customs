@@ -1,5 +1,6 @@
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { AppPermissionsType } from '@constants/app-permissions';
+import { AppPermissionsGroupType } from '@constants/app-permissions-group';
 
 export interface MenuItemContract {
   id: number;
@@ -7,7 +8,7 @@ export interface MenuItemContract {
   icon?: string;
   path?: string;
   permission?: keyof AppPermissionsType;
-  permissionGroup?: string;
+  permissionGroup?: keyof AppPermissionsGroupType;
   parent?: number;
   arName?: string;
   enName?: string;

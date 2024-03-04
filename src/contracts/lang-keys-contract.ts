@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  access_denied: string;
   this_feature_is_being_worked_on: string;
   save_pdf: string;
   need_questions_and_answers_to_take_this_action: string;

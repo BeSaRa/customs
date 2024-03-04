@@ -5,6 +5,8 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { MenuItemContract } from '@contracts/menu-item-contract';
 import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
+import { AppPermissionsType } from '@constants/app-permissions';
 
 @Injectable({
   providedIn: 'root',
@@ -37,9 +39,15 @@ export class MenuItemService {
   filterStaticMenu(): void {
     this.filteredStaticMenu = this.staticMenus.filter(item => {
       return (
-        !item.permission ||
+        (!item.permission && !item.permissionGroup) ||
         (item.permission &&
-          this.employeeService.hasPermissionTo(item.permission))
+          this.employeeService.hasPermissionTo(item.permission)) ||
+        (item.permissionGroup &&
+          this.employeeService.hasAnyPermissions(
+            AppPermissionsGroup[
+              item.permissionGroup
+            ] as unknown as (keyof AppPermissionsType)[],
+          ))
       );
     });
   }

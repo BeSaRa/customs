@@ -23,12 +23,22 @@ import { AttachmentTypeComponent } from '@modules/administration/components/atta
 import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
 import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
 import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
+import { accessPageGuard } from '@guards/access-page-guard';
+import { AppPermissions } from '@constants/app-permissions';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
   {
     path: AppRoutes.JOB_TITLE,
     component: JobTitleComponent,
+    canActivate: [
+      accessPageGuard({
+        permissionGroup: [
+          AppPermissions.ADMIN_ADD_OU,
+          AppPermissions.ADMIN_EDIT_OU,
+        ],
+      }),
+    ],
   },
   {
     path: AppRoutes.LOCALIZATION,

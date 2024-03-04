@@ -9,6 +9,7 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_administration',
     icon: AppIcons.SETTINGS,
     path: AppFullRoutes.ADMINISTRATION,
+    permissionGroup: 'ADMINISTRATION',
   },
   {
     id: MenuIdes.LOCALIZATION,

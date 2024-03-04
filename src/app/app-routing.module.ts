@@ -5,6 +5,8 @@ import { authGuard } from '@guards/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { AppRoutes } from '@constants/app-routes';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
+import { accessPageGuard } from '@guards/access-page-guard';
 
 const routes: Routes = [
   { path: '', redirectTo: AppRoutes.LOGIN, pathMatch: 'full' },
@@ -29,6 +31,11 @@ const routes: Routes = [
           import('@modules/administration/administration.module').then(
             m => m.AdministrationModule,
           ),
+        canActivate: [
+          accessPageGuard({
+            permissionGroup: AppPermissionsGroup.ADMINISTRATION,
+          }),
+        ],
       },
       {
         path: AppRoutes.ELECTRONIC_SERVICES,
