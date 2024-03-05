@@ -88,13 +88,11 @@
               icon="INFORMATION" />
           }
           @if (assertType(element).hasStatusSearch(true)) {
-            <div [matTooltip]="lang.map.situation_search_clearing_agency">
-              <app-situation-search-btn
-                [id]="element.offenderInfo?.agencyId"
-                [type]="element.type"
-                [isCompany]="true"
-                icon="CLEARING_AGENCY" />
-            </div>
+            <app-situation-search-btn
+              [id]="element.offenderInfo?.agencyId"
+              [type]="element.type"
+              [isCompany]="true"
+              icon="CLEARING_AGENCY" />
           }
         </div>
       </td>

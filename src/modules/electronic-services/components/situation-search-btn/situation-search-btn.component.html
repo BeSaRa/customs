@@ -1,4 +1,9 @@
-<div [matTooltip]="lang.map.situation_search">
+<div
+  [matTooltip]="
+    isCompany
+      ? lang.map.situation_search_clearing_agency
+      : lang.map.situation_search
+  ">
   <app-icon-button
     (click)="onSearchSituationBtnClick()"
     [icon]="icon"></app-icon-button>

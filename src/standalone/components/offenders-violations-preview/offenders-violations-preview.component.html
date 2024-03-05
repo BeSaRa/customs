@@ -104,10 +104,11 @@
             icon="INFORMATION" />
         }
         @if (assertType(element).hasStatusSearch(true)) {
-          <app-icon-button
-            [matTooltip]="lang.map.situation_search_clearing_agency"
-            (click)="situationClick($event, element, true)"
-            icon="CLEARING_AGENCY"></app-icon-button>
+          <app-situation-search-btn
+            [id]="element.offenderInfo?.agencyId"
+            [type]="element.type"
+            [isCompany]="true"
+            icon="CLEARING_AGENCY" />
         }
       </div>
     </td>

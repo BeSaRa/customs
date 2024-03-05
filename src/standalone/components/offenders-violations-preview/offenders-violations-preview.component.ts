@@ -343,11 +343,6 @@ export class OffendersViolationsPreviewComponent
         });
   }
 
-  situationClick($event: MouseEvent): void {
-    $event.stopPropagation();
-    $event.preventDefault();
-  }
-
   ngOnInit(): void {
     this.listenToView();
     this.listenToMakeDecision();
@@ -486,6 +481,7 @@ export class OffendersViolationsPreviewComponent
       )
       .subscribe();
   }
+
   // listenToReferralRequest() {
   //   this.referralOrTerminateDecision$
   //     .pipe(takeUntil(this.destroy$))
