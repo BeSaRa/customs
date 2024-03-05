@@ -45,7 +45,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { AssignmentToAttendPopupComponent } from '../assignment-to-attend-popup/assignment-to-attend-popup.component';
 import { UserTypes } from '@enums/user-types';
 import { OffenderTypes } from '@enums/offender-types';
-import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { SystemPenalties } from '@enums/system-penalties';
 import { SuspendedEmployeeService } from '@services/suspended-employee.service';
@@ -68,7 +67,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { intersection } from '@utils/utils';
 import { PenaltyIcons } from '@constants/penalty-icons';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
-import { ClearingAgent } from '@models/clearing-agent';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
 @Component({
@@ -120,7 +118,6 @@ export class OffendersViolationsPreviewComponent
   makeDecision$ = new Subject<Offender>();
   attachments$: Subject<Offender> = new Subject<Offender>();
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
-  situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
   // referralOrTerminateDecision$ = new Subject<{
   //   offender: Offender;
@@ -346,14 +343,9 @@ export class OffendersViolationsPreviewComponent
         });
   }
 
-  situationClick(
-    $event: MouseEvent,
-    element: Offender,
-    isCompany: boolean,
-  ): void {
+  situationClick($event: MouseEvent): void {
     $event.stopPropagation();
     $event.preventDefault();
-    this.situationSearch$.next({ offender: element, isCompany });
   }
 
   ngOnInit(): void {
@@ -361,7 +353,6 @@ export class OffendersViolationsPreviewComponent
     this.listenToMakeDecision();
     this.listenToAttachments();
     this.listenToAssignmentToAttend();
-    this.listenToSituationSearch();
     // this.listenToReferralRequest();
     this.listenToSuspendEmployee();
     this.listenToLoadPenalties();
@@ -495,37 +486,6 @@ export class OffendersViolationsPreviewComponent
       )
       .subscribe();
   }
-
-  listenToSituationSearch() {
-    this.situationSearch$
-      .pipe(
-        switchMap((data: { offender: Offender; isCompany: boolean }) => {
-          let id;
-          if (data.isCompany) {
-            id = (data.offender.offenderInfo as unknown as ClearingAgent)
-              .agencyId;
-          } else {
-            if (data.offender.type === OffenderTypes.BROKER) {
-              id = (data.offender.offenderInfo as unknown as ClearingAgent)
-                .agentId;
-            } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
-              id = data.offender.offenderInfo?.id;
-            }
-          }
-          return this.dialog
-            .open(SituationSearchComponent, {
-              data: {
-                id,
-                type: data.offender.type,
-                isCompany: data.isCompany,
-              },
-            })
-            .afterClosed();
-        }),
-      )
-      .subscribe();
-  }
-
   // listenToReferralRequest() {
   //   this.referralOrTerminateDecision$
   //     .pipe(takeUntil(this.destroy$))

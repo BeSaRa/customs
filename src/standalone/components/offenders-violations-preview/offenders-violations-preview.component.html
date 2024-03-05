@@ -96,8 +96,8 @@
           <app-situation-search-btn
             [id]="
               element.type === offenderTypes.EMPLOYEE
-                ? element.offenderInfo?.id ?? element.id
-                : element.offenderInfo?.agentId ?? element.agentId
+                ? element.offenderInfo?.id
+                : element.offenderInfo?.agentId
             "
             [type]="element.type"
             [isCompany]="false"

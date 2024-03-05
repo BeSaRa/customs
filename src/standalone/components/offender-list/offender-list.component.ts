@@ -36,11 +36,9 @@ import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
 import { Investigation } from '@models/investigation';
 import { OffenderViolationsPopupComponent } from '@standalone/popups/offender-violations-popup/offender-violations-popup.component';
-import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderTypes } from '@enums/offender-types';
 import { ignoreErrors } from '@utils/utils';
 import { ReportType } from '@app-types/validation-return-type';
-import { ClearingAgent } from '@models/clearing-agent';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
 @Component({
@@ -94,7 +92,6 @@ export class OffenderListComponent
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
-  situationSearch$ = new Subject<{ offender: Offender; isCompany: boolean }>();
   displayedColumns = ['offenderName', 'qid', 'departmentCompany', 'actions'];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
   offenderTypes = OffenderTypes;
@@ -112,7 +109,6 @@ export class OffenderListComponent
     this.listenToReload();
     this.listenToDelete();
     this.listenToOffenderViolation();
-    this.listenToSituationSearch();
   }
 
   private listenToAdd() {
@@ -220,37 +216,6 @@ export class OffenderListComponent
         this.askToReloadPenalties.emit();
       });
   }
-
-  listenToSituationSearch() {
-    this.situationSearch$
-      .pipe(
-        switchMap((data: { offender: Offender; isCompany: boolean }) => {
-          let id;
-          if (data.isCompany) {
-            id = (data.offender.offenderInfo as unknown as ClearingAgent)
-              .agencyId;
-          } else {
-            if (data.offender.type === OffenderTypes.BROKER) {
-              id = (data.offender.offenderInfo as unknown as ClearingAgent)
-                .agentId;
-            } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
-              id = data.offender.offenderInfo?.id;
-            }
-          }
-          return this.dialog
-            .open(SituationSearchComponent, {
-              data: {
-                id,
-                type: data.offender.type,
-                isCompany: data.isCompany,
-              },
-            })
-            .afterClosed();
-        }),
-      )
-      .subscribe();
-  }
-
   resetDataList() {
     this.data.next([]);
   }

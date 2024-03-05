@@ -34,7 +34,7 @@ export class SituationSearchBtnComponent {
   @Input({ required: true })
   type!: number;
   @Input({ required: true })
-  icon: keyof AppIconsType = 'RELOAD';
+  icon: keyof AppIconsType = 'INFORMATION';
 
   onSearchSituationBtnClick() {
     of(null)

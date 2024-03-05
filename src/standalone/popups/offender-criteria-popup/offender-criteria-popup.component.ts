@@ -62,7 +62,6 @@ import { OffenderCriteriaDataContract } from '@contracts/offender-criteria-data-
 import { toSignal } from '@angular/core/rxjs-interop';
 import { OffenderService } from '@services/offender.service';
 import { ProofTypes } from '@enums/proof-types';
-import { SituationSearchComponent } from '@modules/electronic-services/components/situation-search/situation-search.component';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 
@@ -152,10 +151,6 @@ export class OffenderCriteriaPopupComponent
   ];
   addEmployee$: Subject<MawaredEmployee> = new Subject<MawaredEmployee>();
   addClearingAgent$: Subject<ClearingAgent> = new Subject<ClearingAgent>();
-  situationSearch$ = new Subject<{
-    offender: Offender;
-    isCompany: boolean;
-  }>();
   @ViewChild(MatTabGroup, { static: true })
   tabComponent!: MatTabGroup;
   selectedIndex: number = 0;
@@ -206,7 +201,6 @@ export class OffenderCriteriaPopupComponent
     this.listenToAddEmployee();
     this.listenToAddClearingAgent();
     this.listenToAddViolation();
-    this.listenToSituationSearch();
   }
 
   private listenToOffenderTypeChange() {
@@ -492,34 +486,6 @@ export class OffenderCriteriaPopupComponent
           );
         })()
       : of(model);
-  }
-
-  listenToSituationSearch() {
-    this.situationSearch$
-      .pipe(
-        switchMap((data: { offender: Offender; isCompany: boolean }) => {
-          let id;
-          if (data.isCompany) {
-            id = (data.offender as unknown as ClearingAgent).agencyId;
-          } else {
-            if (data.offender.type === OffenderTypes.BROKER) {
-              id = (data.offender as unknown as ClearingAgent).agentId;
-            } else if (data.offender.type === OffenderTypes.EMPLOYEE) {
-              id = data.offender.id;
-            }
-          }
-          return this.dialog
-            .open(SituationSearchComponent, {
-              data: {
-                id,
-                type: data.offender.type,
-                isCompany: data.isCompany,
-              },
-            })
-            .afterClosed();
-        }),
-      )
-      .subscribe();
   }
 
   protected readonly OffenderTypes = OffenderTypes;

@@ -80,8 +80,8 @@
             <app-situation-search-btn
               [id]="
                 element.type === offenderTypes.EMPLOYEE
-                  ? element.offenderInfo?.id ?? element.id
-                  : element.offenderInfo?.agentId ?? element.agentId
+                  ? element.offenderInfo?.id
+                  : element.offenderInfo?.agentId
               "
               [type]="element.type"
               [isCompany]="false"
@@ -89,11 +89,11 @@
           }
           @if (assertType(element).hasStatusSearch(true)) {
             <div [matTooltip]="lang.map.situation_search_clearing_agency">
-              <app-icon-button
-                (click)="
-                  situationSearch$.next({ offender: element, isCompany: true })
-                "
-                icon="CLEARING_AGENCY"></app-icon-button>
+              <app-situation-search-btn
+                [id]="element.offenderInfo?.agencyId"
+                [type]="element.type"
+                [isCompany]="true"
+                icon="CLEARING_AGENCY" />
             </div>
           }
         </div>
