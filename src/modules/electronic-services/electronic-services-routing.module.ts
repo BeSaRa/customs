@@ -10,6 +10,8 @@ import { TeamInboxComponent } from './components/team-inbox/team-inbox.component
 import { InvestigationDraftsComponent } from './components/investigation-drafts/investigation-drafts.component';
 import { itemResolver } from '@resolvers/item.resolver';
 import { investigationCanDeactivateGuard } from '@guards/investigation-can-deactivate.guard';
+import { accessPageGuard } from '@guards/access-page-guard';
+import { AppPermissions } from '@constants/app-permissions';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -26,6 +28,11 @@ const routes: Routes = [
   {
     path: AppRoutes.TEAM_INBOX,
     component: TeamInboxComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.INBOX_FOLLOW_UP,
+      }),
+    ],
   },
   {
     path: AppRoutes.GUIDE_PANEL,

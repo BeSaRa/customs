@@ -25,6 +25,7 @@ import { ClearingAgencyComponent } from '@modules/administration/components/clea
 import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -33,98 +34,204 @@ const routes: Routes = [
     component: JobTitleComponent,
     canActivate: [
       accessPageGuard({
-        permissionGroup: [
-          AppPermissions.ADMIN_ADD_OU,
-          AppPermissions.ADMIN_EDIT_OU,
-        ],
+        permission: AppPermissions.MANAGE_JOB_TITLES,
       }),
     ],
   },
   {
     path: AppRoutes.LOCALIZATION,
     component: LocalizationComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_LOCALIZATION,
+      }),
+    ],
   },
   {
     path: AppRoutes.INTERNAL_USER,
     component: InternalUserComponent,
+    canActivate: [
+      accessPageGuard({
+        permissionGroup: AppPermissionsGroup.MNG_INTERNAL_USER,
+      }),
+    ],
   },
-  { path: AppRoutes.JOB_TITLE, component: JobTitleComponent },
+  {
+    path: AppRoutes.JOB_TITLE,
+    component: JobTitleComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_JOB_TITLES,
+      }),
+    ],
+  },
 
   {
     path: AppRoutes.TEAM,
     component: TeamComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_TEAMS,
+      }),
+    ],
   },
   {
     path: AppRoutes.PENALTY,
     component: PenaltyComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_PENALTY,
+      }),
+    ],
   },
   {
     path: AppRoutes.TEAM,
     component: TeamComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_TEAMS,
+      }),
+    ],
   },
   {
     path: AppRoutes.VIOLATION_CLASSIFICATION,
     component: ViolationClassificationComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_VIOLATION_CLASSIFICATION,
+      }),
+    ],
   },
   {
     path: AppRoutes.VIOLATION_TYPE,
     component: ViolationTypeComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_VIOLATION_TYPE,
+      }),
+    ],
   },
   {
     path: AppRoutes.PERMISSION_ROLE,
     component: PermissionRoleComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_PERMISSION_ROLE,
+      }),
+    ],
   },
   {
     path: AppRoutes.MAWARED_EMPLOYEE,
     component: MawaredEmployeeComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_MAWARED_EMPLOYEE,
+      }),
+    ],
   },
   {
     path: AppRoutes.ORGANIZATION_UNIT,
     component: OrganizationUnitComponent,
+    canActivate: [
+      accessPageGuard({
+        permissionGroup: AppPermissionsGroup.MNG_OU,
+      }),
+    ],
   },
   {
     path: AppRoutes.MAWARED_DEPARTMENT,
     component: MawaredDepartmentComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_MAWARED_DEPARTMENT,
+      }),
+    ],
   },
   {
     path: AppRoutes.SERVICES,
     component: ServicesComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_SERVICES_DATA,
+      }),
+    ],
   },
   {
     path: AppRoutes.SERVICE_STEPS,
     component: ServiceStepsComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_SERVICES_DATA,
+      }),
+    ],
   },
   {
     path: AppRoutes.EMAIL_TEMPLATE,
     component: EmailTemplateComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_EMAIL_TEMPLATE,
+      }),
+    ],
   },
   {
     path: AppRoutes.GLOBAL_SETTING,
     component: GlobalSettingComponent,
+    //TODO add permission
   },
   {
     path: AppRoutes.VIOLATION_PENALTY,
     component: ViolationPenaltyComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_VIOLATION_TYPE,
+      }),
+    ],
   },
   {
     path: AppRoutes.LEGAL_RULE,
     component: LegalRuleComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_LEGAL_RULE,
+      }),
+    ],
   },
   {
     path: AppRoutes.ATTACHMENT_TYPE,
     component: AttachmentTypeComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_ATTACHMENT_TYPE,
+      }),
+    ],
   },
   {
     path: AppRoutes.CLEARING_AGENT,
     component: ClearingAgentComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_CLEARING_AGENT,
+      }),
+    ],
   },
   {
     path: AppRoutes.CLEARING_AGENCY,
     component: ClearingAgencyComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_CLEARING_AGENCY,
+      }),
+    ],
   },
   {
     path: AppRoutes.SUSPENDED_EMPLOYEE,
     component: SuspendedEmployeeComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
+      }),
+    ],
   },
 ];
 

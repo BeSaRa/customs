@@ -43,6 +43,11 @@ const routes: Routes = [
           import(
             '@modules/electronic-services/electronic-services.module'
           ).then(m => m.ElectronicServicesModule),
+        canActivate: [
+          accessPageGuard({
+            permissionGroup: AppPermissionsGroup.ELECTRONICSERVICES,
+          }),
+        ],
       },
     ],
   },
