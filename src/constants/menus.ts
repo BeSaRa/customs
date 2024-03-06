@@ -17,6 +17,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.TRANSLATE,
     path: AppFullRoutes.LOCALIZATION,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_LOCALIZATION',
   },
   {
     id: MenuIdes.INTERNAL_USER,
@@ -24,6 +25,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.INTERNAL_USER,
     path: AppFullRoutes.INTERNAL_USER,
     parent: MenuIdes.ADMINISTRATION,
+    permissionGroup: 'MNG_INTERNAL_USER',
   },
   {
     id: MenuIdes.TEAM,
@@ -31,6 +33,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.TEAM,
     path: AppFullRoutes.TEAM,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_TEAMS',
   },
   {
     id: MenuIdes.PENALTY,
@@ -38,6 +41,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.PENALTY,
     path: AppFullRoutes.PENALTY,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_PENALTY',
   },
   {
     id: MenuIdes.JOB_TITLE,
@@ -45,6 +49,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.JOB_TITLE,
     path: AppFullRoutes.JOB_TITLE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_JOB_TITLES',
   },
   {
     id: MenuIdes.VIOLATION_CLASSIFICATION,
@@ -52,6 +57,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.BOOK_CANCEL,
     path: AppFullRoutes.VIOLATION_CLASSIFICATION,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_VIOLATION_CLASSIFICATION',
   },
   {
     id: MenuIdes.VIOLATION_TYPE,
@@ -59,6 +65,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.BOOK_CANCEL_OUTLINE,
     path: AppFullRoutes.VIOLATION_TYPE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_VIOLATION_TYPE',
   },
   {
     id: MenuIdes.PERMISSION_ROLE,
@@ -66,6 +73,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.PERMISSIONS_LIST,
     path: AppFullRoutes.PERMISSION_ROLE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_PERMISSION_ROLE',
   },
   {
     id: MenuIdes.MAWARED_EMPLOYEE,
@@ -73,6 +81,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.RESOURCES_CASE,
     path: AppFullRoutes.MAWARED_EMPLOYEE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_MAWARED_EMPLOYEE',
   },
   {
     id: MenuIdes.ORGANIZATION_UNIT,
@@ -80,6 +89,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SITE_MAP_OUTLINE,
     path: AppFullRoutes.ORGANIZATION_UNIT,
     parent: MenuIdes.ADMINISTRATION,
+    permissionGroup: 'MNG_OU',
   },
   {
     id: MenuIdes.MAWARED_DEPARTMENT,
@@ -87,6 +97,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.MAWARED_DEPARTMENT,
     path: AppFullRoutes.MAWARED_DEPARTMENT,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_MAWARED_DEPARTMENT',
   },
   {
     id: MenuIdes.SERVICES,
@@ -94,6 +105,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SERVICES,
     parent: MenuIdes.ADMINISTRATION,
     path: AppFullRoutes.SERVICES,
+    permission: 'MANAGE_SERVICES_DATA',
   },
   {
     id: MenuIdes.EMAIL_TEMPLATE,
@@ -101,6 +113,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.EMAIL_TEMPLATE,
     parent: MenuIdes.ADMINISTRATION,
     path: AppFullRoutes.EMAIL_TEMPLATE,
+    permission: 'MANAGE_EMAIL_TEMPLATE',
   },
   {
     id: MenuIdes.GLOBAL_SETTING,
@@ -108,12 +121,14 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.GLOBAL_SETTING,
     path: AppFullRoutes.GLOBAL_SETTING,
     parent: MenuIdes.ADMINISTRATION,
+    //TODO add permission
   },
   {
     id: MenuIdes.ELECTRONIC_SERVICES,
     langKey: 'menu_electronic_services',
     icon: AppIcons.ELECTRONIC_SERVICES,
     path: AppFullRoutes.ELECTRONIC_SERVICES,
+    permissionGroup: 'ELECTRONICSERVICES',
   },
   {
     id: MenuIdes.TEAM_INBOX,
@@ -121,6 +136,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.TEAM_INBOX,
     path: AppFullRoutes.TEAM_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'INBOX_FOLLOW_UP',
   },
   {
     id: MenuIdes.USER_INBOX,
@@ -128,6 +144,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.USER_INBOX,
     path: AppFullRoutes.USER_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'INBOX_FOLLOW_UP',
   },
   {
     id: MenuIdes.INVESTIGATION,
@@ -149,6 +166,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.LEGAL_RULE,
     path: AppFullRoutes.LEGAL_RULE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_LEGAL_RULE',
   },
   {
     id: MenuIdes.ATTACHMENT_TYPE,
@@ -156,6 +174,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SETTINGS,
     path: AppFullRoutes.ATTACHMENT_TYPE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_ATTACHMENT_TYPE',
   },
   {
     id: MenuIdes.GUIDE_PANEL,
@@ -178,6 +197,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.CLEARING_AGENT,
     path: AppFullRoutes.CLEARING_AGENT,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_CLEARING_AGENT',
   },
   {
     id: MenuIdes.CLEARING_AGENCY,
@@ -185,6 +205,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.CLEARING_AGENCY,
     path: AppFullRoutes.CLEARING_AGENCY,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_CLEARING_AGENCY',
   },
   {
     id: MenuIdes.SUSPENDED_EMPLOYEE,
@@ -192,5 +213,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SETTINGS,
     path: AppFullRoutes.SUSPENDED_EMPLOYEE,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_SUSPENDED_EMPLOYEE',
   },
 ];
