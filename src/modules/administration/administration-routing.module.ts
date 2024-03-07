@@ -25,7 +25,6 @@ import { ClearingAgencyComponent } from '@modules/administration/components/clea
 import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
-import { AppPermissionsGroup } from '@constants/app-permissions-group';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -52,7 +51,7 @@ const routes: Routes = [
     component: InternalUserComponent,
     canActivate: [
       accessPageGuard({
-        permissionGroup: AppPermissionsGroup.MNG_INTERNAL_USER,
+        permission: AppPermissions.MANAGE_INTERNAL_USERS,
       }),
     ],
   },
@@ -134,7 +133,7 @@ const routes: Routes = [
     component: OrganizationUnitComponent,
     canActivate: [
       accessPageGuard({
-        permissionGroup: AppPermissionsGroup.MNG_OU,
+        permission: AppPermissions.MANAGE_ORGANIZATION_UNIT,
       }),
     ],
   },
@@ -177,7 +176,11 @@ const routes: Routes = [
   {
     path: AppRoutes.GLOBAL_SETTING,
     component: GlobalSettingComponent,
-    //TODO add permission
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGEMNT_SYSTEM_PREFRENCES,
+      }),
+    ],
   },
   {
     path: AppRoutes.VIOLATION_PENALTY,

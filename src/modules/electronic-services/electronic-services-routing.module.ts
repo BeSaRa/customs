@@ -28,15 +28,15 @@ const routes: Routes = [
   {
     path: AppRoutes.TEAM_INBOX,
     component: TeamInboxComponent,
-    canActivate: [
-      accessPageGuard({
-        permission: AppPermissions.INBOX_FOLLOW_UP,
-      }),
-    ],
   },
   {
     path: AppRoutes.GUIDE_PANEL,
     component: GuidePanelComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.GUIDE_PANEL,
+      }),
+    ],
   },
   {
     path: AppRoutes.INVESTIGATION_SEARCH,
