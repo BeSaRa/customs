@@ -25,7 +25,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.INTERNAL_USER,
     path: AppFullRoutes.INTERNAL_USER,
     parent: MenuIdes.ADMINISTRATION,
-    permissionGroup: 'MNG_INTERNAL_USER',
+    permission: 'MANAGE_INTERNAL_USERS',
   },
   {
     id: MenuIdes.TEAM,
@@ -89,7 +89,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SITE_MAP_OUTLINE,
     path: AppFullRoutes.ORGANIZATION_UNIT,
     parent: MenuIdes.ADMINISTRATION,
-    permissionGroup: 'MNG_OU',
+    permission: 'MANAGE_ORGANIZATION_UNIT',
   },
   {
     id: MenuIdes.MAWARED_DEPARTMENT,
@@ -121,7 +121,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.GLOBAL_SETTING,
     path: AppFullRoutes.GLOBAL_SETTING,
     parent: MenuIdes.ADMINISTRATION,
-    //TODO add permission
+    permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
   },
   {
     id: MenuIdes.ELECTRONIC_SERVICES,
@@ -136,7 +136,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.TEAM_INBOX,
     path: AppFullRoutes.TEAM_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
-    permission: 'INBOX_FOLLOW_UP',
   },
   {
     id: MenuIdes.USER_INBOX,
@@ -144,7 +143,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.USER_INBOX,
     path: AppFullRoutes.USER_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
-    permission: 'INBOX_FOLLOW_UP',
   },
   {
     id: MenuIdes.INVESTIGATION,
