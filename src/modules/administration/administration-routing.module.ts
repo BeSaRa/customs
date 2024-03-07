@@ -56,16 +56,6 @@ const routes: Routes = [
     ],
   },
   {
-    path: AppRoutes.JOB_TITLE,
-    component: JobTitleComponent,
-    canActivate: [
-      accessPageGuard({
-        permission: AppPermissions.MANAGE_JOB_TITLES,
-      }),
-    ],
-  },
-
-  {
     path: AppRoutes.TEAM,
     component: TeamComponent,
     canActivate: [
