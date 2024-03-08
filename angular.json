@@ -21,7 +21,8 @@
               "crypto-js",
               "bezier-easing",
               "ng2-flatpickr",
-              "qs"
+              "qs",
+              "@utils/prototypes/custom-prototypes"
             ],
             "outputPath": "dist/customs",
             "index": "src/index.html",
