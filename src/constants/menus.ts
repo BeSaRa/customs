@@ -128,7 +128,6 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_electronic_services',
     icon: AppIcons.ELECTRONIC_SERVICES,
     path: AppFullRoutes.ELECTRONIC_SERVICES,
-    permissionGroup: 'ELECTRONICSERVICES',
   },
   {
     id: MenuIdes.TEAM_INBOX,
