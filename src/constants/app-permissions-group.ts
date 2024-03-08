@@ -21,8 +21,7 @@ export const AppPermissionsGroup = {
     AppPermissions.MANAGEMNT_SYSTEM_PREFRENCES,
     AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
   ],
-
-  ELECTRONICSERVICES: [AppPermissions.GUIDE_PANEL],
+  // ELECTRONIC_SERVICES: [AppPermissions.GUIDE_PANEL],
 };
 
 export type AppPermissionsGroupType = typeof AppPermissionsGroup;

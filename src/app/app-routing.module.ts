@@ -44,9 +44,9 @@ const routes: Routes = [
             '@modules/electronic-services/electronic-services.module'
           ).then(m => m.ElectronicServicesModule),
         canActivate: [
-          accessPageGuard({
-            permissionGroup: AppPermissionsGroup.ELECTRONICSERVICES,
-          }),
+          // accessPageGuard({
+          //   permissionGroup: AppPermissionsGroup.ELECTRONICSERVICES,
+          // }),
         ],
       },
     ],
