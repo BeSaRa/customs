@@ -514,4 +514,9 @@ export interface LangKeysContract {
   decision_serial: string;
   file_number: string;
   pay: string;
+  transfer_to_investigators_automatic_distribution: string;
+  return_to_legal_affairs_manager: string;
+  send_to_investigator: string;
+  send_to_legal_affairs_chief: string;
+  send_to_legal_affairs_manager: string;
 }

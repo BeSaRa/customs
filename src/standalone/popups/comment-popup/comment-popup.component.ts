@@ -75,7 +75,10 @@ export class CommentPopupComponent
   }
 
   get isSendToUser() {
-    return this.response === TaskResponses.TO_USER;
+    return (
+      this.response === TaskResponses.TO_USER ||
+      this.response === TaskResponses.TO_INV_USER
+    );
   }
 
   private _loadUsersList() {
