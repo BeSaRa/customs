@@ -276,3 +276,18 @@ export function intersection(..._res: unknown[]) {
   }
   return result;
 }
+
+export function generateTimeList(steps = ['00', '30']): string[] {
+  const times: string[] = [];
+  for (let i = 0; i < 24; i++) {
+    const AMPM = i >= 12 ? 'PM' : 'AM';
+    const time = (i === 0 ? 12 : i > 12 ? i - 12 : i)
+      .toString()
+      .padStart(2, '0');
+
+    steps.forEach(item => {
+      times.push(time + ':' + item + ' ' + AMPM);
+    });
+  }
+  return times;
+}

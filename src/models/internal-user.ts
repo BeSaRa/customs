@@ -6,6 +6,7 @@ import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { UserPreferences } from './user-preferences';
 import { StatusTypes } from '@enums/status-types';
+import { MawaredEmployee } from '@models/mawared-employee';
 
 const { send, receive } = new InternalUserInterceptor();
 
@@ -26,7 +27,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   phoneExtension!: string;
   phoneNumber!: string;
   qid!: string;
-
+  mawaredEmployeeInfo!: MawaredEmployee;
   userPreferences!: UserPreferences;
   override status = StatusTypes.ACTIVE;
 

@@ -24,6 +24,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { SummonType } from '@enums/summon-type';
 import { DatePipe, JsonPipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { ignoreErrors } from '@utils/utils';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -84,11 +85,13 @@ export class InvestigationRecordsTableComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(() => {
-          return this.investigationReportService.load(undefined, {
-            caseId: this.model().id,
-            summonedType: SummonType.OFFENDER,
-            summonedId: this.offender().id,
-          });
+          return this.investigationReportService
+            .load(undefined, {
+              caseId: this.model().id,
+              summonedType: SummonType.OFFENDER,
+              summonedId: this.offender().id,
+            })
+            .pipe(ignoreErrors());
         }),
       )
       .subscribe(result => {

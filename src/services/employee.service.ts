@@ -12,6 +12,9 @@ import { ServiceContract } from '@contracts/service-contract';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { WitnessTypes } from '@enums/witness-types';
+import { InternalUserInterceptor } from '@model-interceptors/internal-user-interceptor';
+
+const internalUserInterceptor = new InternalUserInterceptor();
 
 @Injectable({
   providedIn: 'root',
@@ -31,16 +34,20 @@ export class EmployeeService
   getLoginData() {
     return this.loginData;
   }
+
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
 
     return this.loginData;
   }
+
   private intercept(data: LoginDataContract): LoginDataContract {
     data.internalUser &&
-      (data.internalUser = new InternalUser().clone<InternalUser>({
-        ...data.internalUser,
-      }));
+      (data.internalUser = internalUserInterceptor.receive(
+        new InternalUser().clone<InternalUser>({
+          ...data.internalUser,
+        }),
+      ));
 
     data.organizationUnits = (data.organizationUnits || []).map(item => {
       return new OrganizationUnit().clone<OrganizationUnit>(item);

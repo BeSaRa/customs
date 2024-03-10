@@ -4,6 +4,7 @@ import { CallRequestService } from '@services/call-request.service';
 import { CallRequestInterceptor } from '@model-interceptors/call-request-interceptor';
 import { AdminResult } from '@models/admin-result';
 import { PersonDetails } from '@models/person-details';
+import { CustomValidators } from '@validators/custom-validators';
 
 const { send, receive } = new CallRequestInterceptor();
 
@@ -12,11 +13,10 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   $$__service_name__$$ = 'CallRequestService';
   caseId!: string;
   investigationFullSerial!: string;
-  type!: string;
   summonedId!: number;
   summonedType!: number;
-  summonDate!: string;
-  summonTime!: string;
+  summonDate!: string | Date;
+  summonTime!: string | number;
   summons!: string;
   summonsPlace!: string;
   note!: string;
@@ -30,4 +30,21 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   typeInfo!: AdminResult;
   summonInfo!: PersonDetails;
   summonTypeInfo!: AdminResult;
+  creatorInfo!: AdminResult;
+
+  buildForm(controls = false): object {
+    const { note, summonsPlace, summonTime, summonDate } = this;
+    return {
+      note: controls ? [note, [CustomValidators.required]] : note,
+      summonsPlace: controls
+        ? [summonsPlace, [CustomValidators.required]]
+        : summonsPlace,
+      summonTime: controls
+        ? [summonTime, [CustomValidators.required]]
+        : summonTime,
+      summonDate: controls
+        ? [summonDate, [CustomValidators.required]]
+        : summonDate,
+    };
+  }
 }

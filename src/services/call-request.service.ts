@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { BaseCrudService } from '@abstracts/base-crud-service';
 import { CallRequest } from '@models/call-request';
 import { Observable } from 'rxjs';
 import { ApologyModel } from '@models/apology-model';
+import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
+import { CallRequestPopupComponent } from '@standalone/popups/call-request-popup/call-request-popup.component';
+import { ComponentType } from '@angular/cdk/portal';
 
 @CastResponseContainer({
   $pagination: {
@@ -21,8 +23,16 @@ import { ApologyModel } from '@models/apology-model';
 @Injectable({
   providedIn: 'root',
 })
-export class CallRequestService extends BaseCrudService<CallRequest> {
+export class CallRequestService extends BaseCrudWithDialogService<
+  CallRequestPopupComponent,
+  CallRequest
+> {
   serviceName = 'CallRequestService';
+
+  protected override getDialogComponent(): ComponentType<CallRequestPopupComponent> {
+    return CallRequestPopupComponent;
+  }
+
   protected getModelClass(): Constructor<CallRequest> {
     return CallRequest;
   }

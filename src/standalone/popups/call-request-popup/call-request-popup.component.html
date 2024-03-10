@@ -1,13 +1,37 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.menu_job_title }}</h1>
+    <h1>{{ lang.map.call_request }} : {{ person()?.getNames() }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">CALL REQUEST</div>
+  <div class="dialog-content">
+    <div [formGroup]="form" class="grid grid-cols-2 gap-y-2 gap-x-4">
+      <app-input formControlName="summonDate" [label]="lang.map.date">
+        <input
+          appControl
+          formControlName="summonDate"
+          (click)="picker.open()"
+          [matDatepicker]="picker" />
+        <mat-datepicker #picker></mat-datepicker>
+      </app-input>
+      <app-select-input
+        nullable="false"
+        formControlName="summonTime"
+        [label]="lang.map.time"
+        [options]="times" />
+      <app-input
+        class="col-span-2"
+        formControlName="summonsPlace"
+        [label]="lang.map.location" />
+      <app-textarea
+        formControlName="note"
+        class="col-span-2"
+        [label]="lang.map.note" />
+    </div>
+  </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="save$.next()" buttonType="primary"
       >{{ lang.map.save }}

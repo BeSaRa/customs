@@ -49,6 +49,8 @@ import { InvestigationReport } from '@models/investigation-report';
 import { EmployeeService } from '@services/employee.service';
 import { AdminResult } from '@models/admin-result';
 import { DialogService } from '@services/dialog.service';
+import { CallRequestService } from '@services/call-request.service';
+import { CallRequest } from '@models/call-request';
 
 @Component({
   selector: 'app-legal-affairs-offenders',
@@ -103,6 +105,7 @@ export class LegalAffairsOffendersComponent
   lang = inject(LangService);
   lookupService = inject(LookupService);
   investigationReportService = inject(InvestigationReportService);
+  callRequestService = inject(CallRequestService);
   model = input.required<Investigation>();
   concernedOffenders = computed(() => {
     return (this.model() && this.model().getConcernedOffenders()) || [];
@@ -159,6 +162,7 @@ export class LegalAffairsOffendersComponent
     this.listenToRequestInvestigation();
 
     // this.requestInvestigation$.next(this.concernedOffenders()[0]);
+    this.requestCall$.next(this.concernedOffenders()[0]);
   }
 
   assertType(item: unknown): Offender {
@@ -178,9 +182,31 @@ export class LegalAffairsOffendersComponent
   }
 
   private listenToRequestCall() {
-    this.requestCall$.subscribe(() => {
-      this.dialog.info(this.lang.map.this_feature_is_being_worked_on);
-    });
+    this.requestCall$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(offender => {
+          return this.callRequestService
+            .openCreateDialog(
+              new CallRequest().clone<CallRequest>({
+                createdBy: this.employeeService.getEmployee()?.id,
+                creatorInfo: AdminResult.createInstance({
+                  id: this.employeeService.getEmployee()?.id,
+                  arName: this.employeeService.getEmployee()?.arName,
+                  enName: this.employeeService.getEmployee()?.enName,
+                }),
+              }),
+              {
+                offender,
+                caseId: this.model().id,
+              },
+            )
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        // this.dialog.info(this.lang.map.this_feature_is_being_worked_on);
+      });
   }
 
   private listenToRequestInvestigation() {
