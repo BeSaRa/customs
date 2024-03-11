@@ -103,14 +103,19 @@
             selectedOffender === element ? 'expend' : 'collapse'
           ">
           <div class="flex gap-4 p-4 justify-between items-start">
-            <div class="w-3/5 flex flex-col">
+            <div class="w-3/5 flex flex-col gap-2">
               <div>
                 <app-investigation-records-table
                   [model]="model()"
                   [selected]="selectedOffender"
                   [offender]="assertType(element)" />
               </div>
-              <div></div>
+              <div>
+                <app-call-request-records-table
+                  [model]="model()"
+                  [selected]="selectedOffender"
+                  [offender]="assertType(element)" />
+              </div>
             </div>
             <div class="w-2/5">
               <app-offender-violations

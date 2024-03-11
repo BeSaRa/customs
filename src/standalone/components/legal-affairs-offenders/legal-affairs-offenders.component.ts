@@ -51,6 +51,7 @@ import { AdminResult } from '@models/admin-result';
 import { DialogService } from '@services/dialog.service';
 import { CallRequestService } from '@services/call-request.service';
 import { CallRequest } from '@models/call-request';
+import { CallRequestRecordsTableComponent } from '@standalone/components/call-request-records-table/call-request-records-table.component';
 
 @Component({
   selector: 'app-legal-affairs-offenders',
@@ -74,6 +75,7 @@ import { CallRequest } from '@models/call-request';
     OffenderViolationsComponent,
     InvestigationRecordsTableComponent,
     NgClass,
+    CallRequestRecordsTableComponent,
   ],
   templateUrl: './legal-affairs-offenders.component.html',
   styleUrl: './legal-affairs-offenders.component.scss',
@@ -162,7 +164,7 @@ export class LegalAffairsOffendersComponent
     this.listenToRequestInvestigation();
 
     // this.requestInvestigation$.next(this.concernedOffenders()[0]);
-    this.requestCall$.next(this.concernedOffenders()[0]);
+    // this.requestCall$.next(this.concernedOffenders()[0]);
   }
 
   assertType(item: unknown): Offender {
@@ -189,8 +191,7 @@ export class LegalAffairsOffendersComponent
           return this.callRequestService
             .openCreateDialog(
               new CallRequest().clone<CallRequest>({
-                createdBy: this.employeeService.getEmployee()?.id,
-                creatorInfo: AdminResult.createInstance({
+                createdByInfo: AdminResult.createInstance({
                   id: this.employeeService.getEmployee()?.id,
                   arName: this.employeeService.getEmployee()?.arName,
                   enName: this.employeeService.getEmployee()?.enName,

@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  investigator: string;
+  call_request_creator: string;
+  call_request_date: string;
+  call_request_records: string;
+  number_of_call_request: string;
   date: string;
   access_denied: string;
   this_feature_is_being_worked_on: string;

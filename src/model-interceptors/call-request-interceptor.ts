@@ -1,6 +1,7 @@
 import { ModelInterceptorContract } from 'cast-response';
 import { CallRequest } from '@models/call-request';
 import { getTime, set } from 'date-fns';
+import { AdminResult } from '@models/admin-result';
 
 export class CallRequestInterceptor
   implements ModelInterceptorContract<CallRequest>
@@ -25,6 +26,10 @@ export class CallRequestInterceptor
   }
 
   receive(model: CallRequest): CallRequest {
+    model.statusInfo = AdminResult.createInstance(model.statusInfo);
+    model.createdByInfo = AdminResult.createInstance(model.createdByInfo);
+
+    console.log(model.summonTime);
     return model;
   }
 }

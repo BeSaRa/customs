@@ -25,6 +25,7 @@ import { SummonType } from '@enums/summon-type';
 import { DatePipe, JsonPipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ignoreErrors } from '@utils/utils';
+import { ConfigService } from '@services/config.service';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -69,6 +70,7 @@ export class InvestigationRecordsTableComponent
   displayedColumns = ['date', 'creator', 'status', 'actions'];
   view$ = new Subject<InvestigationReport>();
   edit$ = new Subject<InvestigationReport>();
+  config = inject(ConfigService);
 
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;

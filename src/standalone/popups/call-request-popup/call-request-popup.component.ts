@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { ButtonComponent } from '@standalone/components/button/button.component';
@@ -23,7 +23,8 @@ import {
   MatDatepickerInput,
 } from '@angular/material/datepicker';
 import { ControlDirective } from '@standalone/directives/control.directive';
-import { getTime, set } from 'date-fns';
+import { OperationType } from '@enums/operation-type';
+import { CallRequestStatus } from '@enums/call-request-status';
 
 @Component({
   selector: 'app-call-request-popup',
@@ -82,23 +83,11 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
 
   times = generateTimeList();
 
-  effect = effect(() => {
-    console.log(this.times);
-    console.log('CALl', this.data);
-  });
-
   override _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {
-    const date = this.form.getRawValue().summonDate as Date;
-    const newDate = set(date, {
-      hours: 23,
-      // minutes: 00,
-    });
-    const time = getTime(newDate);
-    console.log(date, newDate, time);
     return this.form.valid;
   }
 
@@ -109,11 +98,15 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
       caseId: this.data.extras?.caseId,
       summonedType: this.summonedType(),
       summonedId: this.personId(),
+      status: this.inCreateMode()
+        ? CallRequestStatus.UNDER_PROCEDURE
+        : this.model.status,
     });
   }
 
   protected override _afterSave(model: CallRequest): void {
     this.model = model;
+    this.operation = OperationType.UPDATE;
     this.toast.success(
       this.lang.map.msg_save_x_success.change({
         x: this.lang.map.call_request,

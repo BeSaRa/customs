@@ -1,0 +1,19 @@
+.status {
+  @apply rounded px-2;
+  &.status-key-1 {
+    // Under procedure
+    @apply bg-gray-200;
+  }
+  &.status-key-2 {
+    // Attended
+    @apply bg-green-200;
+  }
+  &.status-key-3 {
+    // Not attended
+    @apply bg-red-200;
+  }
+  &.status-key-4 {
+    // apology
+    @apply bg-yellow-200;
+  }
+}

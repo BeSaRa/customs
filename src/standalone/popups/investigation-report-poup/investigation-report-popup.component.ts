@@ -158,6 +158,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.listenToSaveQuestion();
     this.listenToDeleteQuestion();
     this.listenToSavePDF();
+    this.form = this.fb.group({}); // just to not throw error while opening the popup on view mode
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {

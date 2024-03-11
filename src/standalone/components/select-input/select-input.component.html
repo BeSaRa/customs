@@ -5,7 +5,9 @@
     'has-error': !!(errors | async) && displayErrors,
     nullable: nullable()
   }"
-  class="group block relative {{ !noMargin ? marginBottom : '' }}">
+  class="group block relative {{ !noMargin ? marginBottom : '' }} {{
+    disabled ? 'disabled' : ''
+  }}">
   <span [ngClass]="labelColor" class="block font-medium"
     >{{ label }}
     @if (isRequired) {

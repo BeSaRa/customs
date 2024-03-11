@@ -49,4 +49,5 @@ export interface LookupMapContract {
   administrativeInvestigationCategory: Lookup[];
   administrativeInvestigationReportStatus: Lookup[];
   summonType: Lookup[];
+  obligationToAttendStatus: Lookup[];
 }

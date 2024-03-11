@@ -5,6 +5,8 @@ import { CallRequestInterceptor } from '@model-interceptors/call-request-interce
 import { AdminResult } from '@models/admin-result';
 import { PersonDetails } from '@models/person-details';
 import { CustomValidators } from '@validators/custom-validators';
+import { Observable } from 'rxjs';
+import { CallRequestStatus } from '@enums/call-request-status';
 
 const { send, receive } = new CallRequestInterceptor();
 
@@ -30,7 +32,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   typeInfo!: AdminResult;
   summonInfo!: PersonDetails;
   summonTypeInfo!: AdminResult;
-  creatorInfo!: AdminResult;
+  createdByInfo!: AdminResult;
 
   buildForm(controls = false): object {
     const { note, summonsPlace, summonTime, summonDate } = this;
@@ -46,5 +48,10 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
         ? [summonDate, [CustomValidators.required]]
         : summonDate,
     };
+  }
+
+  updateStatus(status: CallRequestStatus): Observable<CallRequest> {
+    this.status = status;
+    return this.update();
   }
 }
