@@ -526,4 +526,9 @@ export interface LangKeysContract {
   upcoming_meetings: string;
   at: string;
   disciplinary_committee_meetings: string;
+  lbl_meetings: string;
+  schedule_meeting: string;
+  lbl_title: string;
+  meeting_date: string;
+  meeting_time: string;
 }
