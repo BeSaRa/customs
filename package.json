@@ -37,6 +37,7 @@
     "date-fns": "^2.30.0",
     "ngx-cookie": "^6.0.1",
     "ngx-mask": "^15.1.0",
+    "ngx-mat-timepicker": "^17.0.3",
     "ngx-progressbar": "^9.0.0",
     "ngx-scrollbar": "^11.0.0",
     "qs": "^6.11.2",

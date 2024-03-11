@@ -1,0 +1,51 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>
+      {{ lang.map.schedule_meeting }}
+    </h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content max-w-[800px] space-y-4">
+    <ng-container [formGroup]="form">
+      <app-input
+        formControlName="title"
+        [label]="lang.map.lbl_title"></app-input>
+      <div class="grid gap-4 grid-cols-2">
+        <app-input
+          formControlName="meetingDate"
+          [label]="lang.map.meeting_date">
+          <input
+            appControl
+            formControlName="meetingDate"
+            [min]="todayDate"
+            (click)="datepicker.open()"
+            [matDatepicker]="datepicker" />
+          <mat-datepicker [touchUi]="true" #datepicker />
+        </app-input>
+        <app-input
+          formControlName="meetingTime"
+          [label]="lang.map.meeting_time">
+          <input
+            appControl
+            formControlName="meetingTime"
+            [format]="24"
+            [ngxMatTimepicker]="picker" />
+          <ngx-mat-timepicker [minutesGap]="5" #picker></ngx-mat-timepicker>
+        </app-input>
+      </div>
+      <app-textarea [label]="lang.map.note" formControlName="note" />
+    </ng-container>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">
+      {{ lang.map.close }}
+    </app-button>
+  </div>
+</div>
