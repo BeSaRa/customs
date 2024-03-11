@@ -143,3 +143,30 @@ input::-webkit-inner-spin-button {
     background-color: rgb(208 162 57 / 0.8) !important;
   }
 }
+
+.meetings-calendar {
+  .mat-calendar-body-cell-content {
+    border-radius: 0 !important;
+    height: theme("height.full") !important;
+    width: theme("width.full") !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-color: #e5e7eb !important;
+  }
+  .mat-calendar-body-cell::before,
+  .mat-calendar-body-cell::after,
+  .mat-calendar-body-cell-preview {
+    top: 0 !important;
+    height: theme("height.full") !important;
+  }
+  .mat-calendar-body-today {
+    border-width: 2px !important;
+    border-color: theme("colors.primary-light") !important;
+  }
+  .mat-calendar-body-cell.selected {
+    background-color: theme("colors.primary") !important;
+    .mat-calendar-body-cell-content {
+      color: theme("colors.white") !important;
+    }
+  }
+}

@@ -30,4 +30,5 @@ export const AppFullRoutes = {
   CLEARING_AGENT: '/home/administration/clearing-agent',
   CLEARING_AGENCY: '/home/administration/clearing-agency',
   SUSPENDED_EMPLOYEE: '/home/administration/suspended-employee',
+  CALENDAR: '/home/electronic-services/calendar',
 };

@@ -519,4 +519,11 @@ export interface LangKeysContract {
   send_to_investigator: string;
   send_to_legal_affairs_chief: string;
   send_to_legal_affairs_manager: string;
+  return_to_president_assistant: string;
+  lbl_approve: string;
+  menu_calendar: string;
+  lbl_calendar: string;
+  upcoming_meetings: string;
+  at: string;
+  disciplinary_committee_meetings: string;
 }

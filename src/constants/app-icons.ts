@@ -83,6 +83,7 @@ export const AppIcons = {
   CONTENT_SAVE_OUTLINE: 'content-save-outline',
   DELETE_OUTLINE: 'delete-outline',
   FILE_DOWNLOAD_OUTLINE: 'file-download-outline',
+  CALENDAR: 'calendar-multiselect-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
