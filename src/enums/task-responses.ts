@@ -31,4 +31,6 @@ export enum TaskResponses {
   TO_INV_USER = 'to_inv_user',
   TO_INV_CHIEF = 'to_inv_chief',
   LA_FNL_APPROVE = 'la_fnl_approve',
+  DC_APPROVE = 'dc_approve',
+  DC_RETURN_PA = 'dc_return_pa',
 }

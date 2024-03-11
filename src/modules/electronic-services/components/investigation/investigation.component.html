@@ -61,6 +61,14 @@
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false">
+      @if (model.inDisciplinaryCommittee()) {
+        <mat-tab
+          data-name="disciplinary_committee_meetings"
+          [label]="lang.map.disciplinary_committee_meetings">
+          <ng-container
+            [ngTemplateOutlet]="disciplinary_committee_meetings"></ng-container>
+        </mat-tab>
+      }
       @if (model.inLegalAffairsActivity()) {
         <mat-tab
           data-name="legal_procedures"
@@ -218,6 +226,11 @@
   <ng-template #legal_procedures>
     <div class="p-4">
       <app-legal-affairs-offenders [model]="model" />
+    </div>
+  </ng-template>
+  <ng-template #disciplinary_committee_meetings>
+    <div class="p-4">
+      <app-disciplinary-committee-meetings [model]="model" />
     </div>
   </ng-template>
 </div>

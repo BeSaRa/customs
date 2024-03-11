@@ -113,6 +113,7 @@ export class InvestigationComponent
     );
   });
   tabsArray = [
+    'disciplinary_committee_meetings',
     'legal_procedures',
     'summary',
     'basic_info',

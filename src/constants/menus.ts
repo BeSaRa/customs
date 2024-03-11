@@ -212,4 +212,11 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGE_SUSPENDED_EMPLOYEE',
   },
+  {
+    id: MenuIdes.CALENDAR,
+    langKey: 'menu_calendar',
+    icon: AppIcons.CALENDAR,
+    path: AppFullRoutes.CALENDAR,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+  },
 ];
