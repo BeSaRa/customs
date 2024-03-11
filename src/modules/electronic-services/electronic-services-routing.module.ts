@@ -12,6 +12,7 @@ import { itemResolver } from '@resolvers/item.resolver';
 import { investigationCanDeactivateGuard } from '@guards/investigation-can-deactivate.guard';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
+import { CalendarComponent } from '@modules/electronic-services/components/calendar/calendar.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -45,6 +46,10 @@ const routes: Routes = [
   {
     path: AppRoutes.INVESTIGATION_DRAFTS,
     component: InvestigationDraftsComponent,
+  },
+  {
+    path: AppRoutes.CALENDAR,
+    component: CalendarComponent,
   },
 ];
 

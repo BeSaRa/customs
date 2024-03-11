@@ -1,0 +1,7 @@
+.meetings-container {
+  height: calc(theme("height.screen") - theme("height.24"));
+  ul {
+    height: calc(theme("height.full") - theme("height.10"));
+    overflow: auto;
+  }
+}

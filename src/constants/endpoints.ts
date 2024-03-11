@@ -49,6 +49,7 @@ export const EndPoints = {
   CHAT: '/openai/chat',
   CALL_REQUEST: '/entity/obligation-to-attend',
   INVESTIGATION_REPORT: '/entity/administrative-investigation-report',
+  MEETING: '/entity/meeting',
 };
 
 export type EndpointsType = typeof EndPoints;

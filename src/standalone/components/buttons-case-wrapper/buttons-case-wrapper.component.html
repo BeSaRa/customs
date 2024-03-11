@@ -46,6 +46,21 @@
     </app-button>
   }
 
+  <!-- disciplinary committee approve -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.DC_APPROVE)) {
+    <app-button (click)="responseAction$.next(taskResponses.DC_APPROVE)">
+      {{ lang.map.lbl_approve }}
+    </app-button>
+  }
+  <!-- disciplinary committee return president assistant  -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.DC_RETURN_PA)) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="responseAction$.next(taskResponses.DC_RETURN_PA)">
+      {{ lang.map.return_to_president_assistant }}
+    </app-button>
+  }
+
   <!-- to legal affairs manager -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_USER)) {
     <app-button

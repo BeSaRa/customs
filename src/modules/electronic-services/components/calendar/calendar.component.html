@@ -1,0 +1,40 @@
+<div class="grid grid-cols-12 gap-4 meetings-calendar">
+  <div
+    class="col-span-4 meetings-container pb-6 bg-white border border-gray-200 rounded-lg shadow">
+    <div class="flex justify-start items-center">
+      <h3 class="font-bold text-2xl px-3 py-3">
+        {{ lang.map.upcoming_meetings }}
+      </h3>
+      <app-icon-button
+        (click)="reload$.next(null)"
+        class="text-primary"
+        icon="RELOAD"></app-icon-button>
+    </div>
+    <ul class="divide-y divide-gray-200 px-3">
+      @for (meeting of meetingsList; track meeting.id) {
+        <li class="py-3">
+          <div
+            class="flex items-center justify-between text-base font-semibold text-gray-900">
+            <h3
+              [matTooltip]="meeting.title"
+              class="font-bold text-gray-900 text-1xl">
+              {{ meeting.title }}
+            </h3>
+            <small>
+              {{ meeting.meetingDate | date: 'YYYY/ MMM/ dd' }}
+              {{ lang.map.at }} {{ meeting.meetingDate | date: 'hh: mm' }}
+            </small>
+          </div>
+          <p class="ms-0 text-sm text-gray-500">{{ meeting.note }}</p>
+        </li>
+      }
+    </ul>
+  </div>
+  <div
+    class="col-span-8 pb-6 bg-white border border-gray-200 rounded-lg shadow">
+    <h3 class="font-bold text-2xl px-3 py-3">
+      {{ lang.map.lbl_calendar }}
+    </h3>
+    <mat-calendar [dateClass]="isSelected"></mat-calendar>
+  </div>
+</div>
