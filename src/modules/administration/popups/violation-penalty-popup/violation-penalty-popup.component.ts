@@ -234,6 +234,7 @@ export class ViolationPenaltyPopupComponent
         this.filteredPenalties = data.rs.filter(
           penalty => penalty.offenderType === OffenderTypes.BROKER,
         );
+        this.penaltyGuidanceDisplay();
       });
     } else if (
       this.controls.offenderType()?.value === OffenderTypes.EMPLOYEE &&
@@ -248,7 +249,25 @@ export class ViolationPenaltyPopupComponent
         })
         .subscribe(data => {
           this.filteredPenalties = data;
+          this.penaltyGuidanceDisplay();
         });
+    }
+  }
+
+  penaltyGuidanceDisplay() {
+    this.penaltyGuidance = this.lookups.penaltyGuidance.filter(
+      pg => pg.lookupKey === PenaltyGuidances.APPROPRIATE,
+    );
+    this.controls.penaltyGuidance()?.disable({ emitEvent: false });
+    this.controls.penaltyGuidance()?.setValue(PenaltyGuidances.APPROPRIATE);
+    const isSystemPenalty = !!this.filteredPenalties.find(
+      penalty => penalty.id === this.data.model.penaltyId,
+    )?.isSystem;
+    const isManager =
+      this.data.model.penaltySigner === PenaltySignerTypes.MANAGER_DIRECTOR;
+    if (isManager && isSystemPenalty) {
+      this.penaltyGuidance = this.lookups.penaltyGuidance;
+      this.controls.penaltyGuidance()?.enable({ emitEvent: false });
     }
   }
 
