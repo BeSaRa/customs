@@ -70,19 +70,34 @@ export class GlobalSetting extends BaseModel<
             [
               CustomValidators.required,
               CustomValidators.number,
-              CustomValidators.minValue(5),
+              CustomValidators.minValue(1),
               CustomValidators.maxValue(300),
             ],
           ]
         : null,
       fileSize: controls
-        ? [fileSize, [CustomValidators.required, CustomValidators.number]]
+        ? [
+            fileSize,
+            [
+              CustomValidators.required,
+              CustomValidators.number,
+              CustomValidators.minValue(5),
+              CustomValidators.maxValue(30),
+            ],
+          ]
         : null,
       fileTypeParsed: controls
         ? [fileTypeParsed, CustomValidators.required]
         : '',
       inboxRefreshInterval: controls
-        ? [inboxRefreshInterval, CustomValidators.required]
+        ? [
+            inboxRefreshInterval,
+            [
+              CustomValidators.required,
+              CustomValidators.minValue(5),
+              CustomValidators.maxValue(300),
+            ],
+          ]
         : null,
       supportEmailListParsed: new FormBuilder().array([
         [
