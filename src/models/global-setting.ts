@@ -65,7 +65,15 @@ export class GlobalSetting extends BaseModel<
           ]
         : '',
       sessionTimeout: controls
-        ? [sessionTimeout, [CustomValidators.required, CustomValidators.number]]
+        ? [
+            sessionTimeout,
+            [
+              CustomValidators.required,
+              CustomValidators.number,
+              CustomValidators.minValue(5),
+              CustomValidators.maxValue(300),
+            ],
+          ]
         : null,
       fileSize: controls
         ? [fileSize, [CustomValidators.required, CustomValidators.number]]
