@@ -141,6 +141,15 @@
         </button>
       }
       @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.TO_HR_DEP)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.TO_HR_DEP)">
+          {{ lang.map.send_to_hr_department }}
+        </button>
+      }
+      @if (
         model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_SAME)
       ) {
         <button

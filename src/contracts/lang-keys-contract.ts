@@ -514,4 +514,5 @@ export interface LangKeysContract {
   decision_serial: string;
   file_number: string;
   pay: string;
+  send_to_hr_department: string;
 }

@@ -10,8 +10,6 @@ import { AdminResult } from './admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
 import { PenaltyDecision } from '@models/penalty-decision';
-import { EmployeeService } from '@services/employee.service';
-import { ServiceRegistry } from '@services/service-registry';
 import { SystemPenalties } from '@enums/system-penalties';
 import { OffenderTypes } from '@enums/offender-types';
 import { ManagerDecisions } from '@enums/manager-decisions';
@@ -41,7 +39,6 @@ export class Investigation extends BaseCase<
   securityLevelInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
-  $$__employeeService__$$ = 'EmployeeService';
 
   buildForm(controls = false, disabled = false): object {
     const {
@@ -157,19 +154,6 @@ export class Investigation extends BaseCase<
 
   getBrokersOffenders(): Offender[] {
     return this.offenderInfo.filter(item => item.type === OffenderTypes.BROKER);
-  }
-
-  $$getEmployeeService$$(): EmployeeService {
-    return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
-  }
-
-  inMyInbox(): boolean {
-    return !!(
-      this.taskDetails &&
-      this.taskDetails.owner &&
-      this.$$getEmployeeService$$().getEmployee()?.domainName.toLowerCase() ===
-        this.taskDetails.owner.toLowerCase()
-    );
   }
 
   hasOffenders(): boolean {

@@ -25,4 +25,5 @@ export enum TaskResponses {
   PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_disciplinary_council', // المجلس التأديبي
   PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL = 'pa_fnl_launch_permanent_disciplinary_council', // المجلس التأديبي الدائم
   CHIEF_APPROVE = 'chief_approve',
+  TO_HR_DEP = 'to_hr_dep',
 }
