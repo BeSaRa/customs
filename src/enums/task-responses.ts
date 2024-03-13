@@ -33,4 +33,5 @@ export enum TaskResponses {
   LA_FNL_APPROVE = 'la_fnl_approve',
   DC_APPROVE = 'dc_approve',
   DC_RETURN_PA = 'dc_return_pa',
+  TO_HR_DEP = 'to_hr_dep',
 }
