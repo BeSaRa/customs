@@ -531,4 +531,5 @@ export interface LangKeysContract {
   lbl_title: string;
   meeting_date: string;
   meeting_time: string;
+  send_to_hr_department: string;
 }

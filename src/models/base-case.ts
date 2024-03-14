@@ -12,6 +12,8 @@ import { TaskResponses } from '@enums/task-responses';
 import { ActionNames } from '@enums/action-names';
 import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 import { map } from 'rxjs/operators';
+import { ServiceRegistry } from '@services/service-registry';
+import { EmployeeService } from '@services/employee.service';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -35,6 +37,8 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   sectionInfo!: AdminResult;
   caseStatusInfo!: AdminResult;
   description!: string;
+
+  $$__employeeService__$$ = 'EmployeeService';
 
   getService(): Service {
     return super.$$getService$$<Service>();
@@ -68,6 +72,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   canSave(): boolean {
     return !this.id || this.canEdit();
   }
+
   canEdit() {
     return (
       this.getCaseStatus() === CommonCaseStatus.NEW ||
@@ -80,6 +85,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED
     );
   }
+
   getTaskName() {
     return this.taskDetails?.name;
   }
@@ -107,13 +113,22 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return false;
   }
 
-  isClaimed(): boolean {
-    return this.canRelease();
+  $$getEmployeeService$$(): EmployeeService {
+    return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
+  }
+
+  inMyInbox(): boolean {
+    return !!(
+      this.taskDetails &&
+      this.taskDetails.owner &&
+      this.$$getEmployeeService$$().getEmployee()?.domainName.toLowerCase() ===
+        this.taskDetails.owner.toLowerCase()
+    );
   }
 
   hasComplete(): boolean {
     return (
-      this?.isClaimed() &&
+      this?.inMyInbox() &&
       (!this.getResponses().length ||
         this.getResponses().includes(TaskResponses.COMPLETE)) &&
       this.caseStatus !== CommonCaseStatus.CANCELLED
