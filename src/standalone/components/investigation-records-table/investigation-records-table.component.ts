@@ -18,7 +18,7 @@ import { LangService } from '@services/lang.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
-import { Subject } from 'rxjs';
+import { exhaustMap, Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { SummonType } from '@enums/summon-type';
@@ -70,6 +70,7 @@ export class InvestigationRecordsTableComponent
   displayedColumns = ['date', 'creator', 'status', 'actions'];
   view$ = new Subject<InvestigationReport>();
   edit$ = new Subject<InvestigationReport>();
+  download$ = new Subject<InvestigationReport>();
   config = inject(ConfigService);
 
   assertType(item: unknown): InvestigationReport {
@@ -80,6 +81,7 @@ export class InvestigationRecordsTableComponent
     this.listenToReload();
     this.listenToView();
     this.listenToEdit();
+    this.listenToDownload();
   }
 
   private listenToReload() {
@@ -131,5 +133,14 @@ export class InvestigationRecordsTableComponent
         }),
       )
       .subscribe();
+  }
+
+  private listenToDownload() {
+    this.download$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(exhaustMap(model => model.download().pipe(ignoreErrors())))
+      .subscribe(value => {
+        console.log(value);
+      });
   }
 }

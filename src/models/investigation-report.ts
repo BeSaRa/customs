@@ -4,6 +4,7 @@ import { AdminResult } from '@models/admin-result';
 import { InvestigationReportInterceptor } from '@model-interceptors/investigation-report-interceptor';
 import { InterceptModel } from 'cast-response';
 import { Question } from '@models/question';
+import { Observable } from 'rxjs';
 
 const { send, receive } = new InvestigationReportInterceptor();
 
@@ -24,4 +25,10 @@ export class InvestigationReport extends BaseModel<
   creatorInfo!: AdminResult;
   location?: string;
   override status: number = 1;
+
+  download(): Observable<unknown> {
+    return this.$$getService$$<InvestigationReportService>().downloadReport(
+      this.id,
+    );
+  }
 }

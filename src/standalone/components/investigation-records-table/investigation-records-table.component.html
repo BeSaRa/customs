@@ -58,6 +58,11 @@
             matTooltipPosition="above"
             (click)="edit$.next(assertType(element))"
             icon="EDIT" />
+          <app-icon-button
+            [matTooltip]="lang.map.download"
+            matTooltipPosition="above"
+            (click)="download$.next(assertType(element))"
+            icon="FILE_DOWNLOAD_OUTLINE" />
         </div>
       </td>
     </ng-container>

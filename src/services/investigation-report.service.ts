@@ -6,6 +6,7 @@ import { Pagination } from '@models/pagination';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { InvestigationReportPopupComponent } from '@standalone/popups/investigation-report-poup/investigation-report-popup.component';
 import { ComponentType } from '@angular/cdk/portal';
+import { Observable } from 'rxjs';
 
 @CastResponseContainer({
   $default: {
@@ -41,5 +42,9 @@ export class InvestigationReportService extends BaseCrudWithDialogService<
 
   protected override getModelClass(): Constructor<InvestigationReport> {
     return InvestigationReport;
+  }
+
+  downloadReport(reportId: number): Observable<unknown> {
+    return this.http.get(this.getUrlSegment() + '/' + reportId + '/download');
   }
 }

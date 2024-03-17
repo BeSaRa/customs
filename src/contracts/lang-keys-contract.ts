@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  download: string;
   investigator: string;
   call_request_creator: string;
   call_request_date: string;

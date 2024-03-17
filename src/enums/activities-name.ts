@@ -1,5 +1,6 @@
 export enum ActivitiesName {
   SUBMIT_INVESTIGATION = 'Submit Investigation',
+  REVIEW_APPLICANT_DEPARTMENT = 'Review Applicant Department',
   REVIEW_CUSTOMS_AFFAIRS = 'Review Customs Affairs',
   REVIEW_DEPARTMENT_STATEMENT = 'Review Department Statement',
   REVIEW_DISCIPLINARY_COUNCIL = 'Review Disciplinary Council',

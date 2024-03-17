@@ -28,7 +28,7 @@
     <ul
       #questionsList
       class="flex flex-col gap-2 rounded-lg border min-h-[300px] max-h-[300px] overflow-y-auto p-2">
-      @for (question of model.detailsList; track question) {
+      @for (question of model.detailsList; track question.id) {
         <li @addRemoveQuestion class="bg-gray-100 p-2 rounded-lg divide-y-2">
           <div class="p-2">
             <b>{{ lang.map.question }}</b> : {{ question.question }}
