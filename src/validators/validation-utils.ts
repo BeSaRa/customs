@@ -187,36 +187,6 @@ export function minlengthValidator(minLength: number): ValidatorFn {
       : null;
   };
 }
-export function maxValueValidator(maxValue: number): ValidatorFn {
-  if (!isValidValue(maxValue)) {
-    return Validators.nullValidator;
-  }
-
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (!isValidValue(control.value) || !hasValidLength(control.value)) {
-      return null;
-    }
-    const isNumber = /^[0-9\u0660-\u0669]+$/.test(control.value);
-    if (!isNumber) return { number: true };
-    const numberValue = Number(control.value);
-    return numberValue <= maxValue ? null : { max: { max: maxValue } };
-  };
-}
-export function minValueValidator(minValue: number): ValidatorFn {
-  if (!isValidValue(minValue)) {
-    return Validators.nullValidator;
-  }
-
-  return (control: AbstractControl): ValidationErrors | null => {
-    if (!isValidValue(control.value) || !hasValidLength(control.value)) {
-      return null;
-    }
-    const isNumber = /^[0-9\u0660-\u0669]+$/.test(control.value);
-    if (!isNumber) return { number: true };
-    const numberValue = Number(control.value);
-    return numberValue >= minValue ? null : { min: { min: minValue } };
-  };
-}
 export function requiredValidator(
   control: AbstractControl,
 ): ValidationErrors | null {

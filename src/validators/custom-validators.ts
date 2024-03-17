@@ -12,8 +12,6 @@ import {
   validateSum,
   positiveNumberValidator,
   inputMaskPatterns,
-  maxValueValidator,
-  minValueValidator,
 } from '@validators/validation-utils';
 
 export const CustomValidators = {
@@ -26,8 +24,6 @@ export const CustomValidators = {
   decimal: decimalValidator,
   minLength: minlengthValidator,
   maxLength: maxLengthValidator,
-  maxValue: maxValueValidator,
-  minValue: minValueValidator,
   anyFieldsHasLength,
   unique: uniqueValidator,
   positiveNumber: positiveNumberValidator,
