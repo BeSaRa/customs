@@ -3,7 +3,7 @@ import { GlobalSettingService } from '@services/global-setting.service';
 import { GlobalSettingInterceptor } from '@model-interceptors/global-setting-interceptor';
 import { InterceptModel } from 'cast-response';
 import { CustomValidators } from '@validators/custom-validators';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new GlobalSettingInterceptor();
@@ -70,8 +70,8 @@ export class GlobalSetting extends BaseModel<
             [
               CustomValidators.required,
               CustomValidators.positiveNumber,
-              CustomValidators.minValue(1),
-              CustomValidators.maxValue(300),
+              Validators.min(1),
+              Validators.max(300),
             ],
           ]
         : null,
@@ -81,8 +81,8 @@ export class GlobalSetting extends BaseModel<
             [
               CustomValidators.required,
               CustomValidators.positiveNumber,
-              CustomValidators.minValue(5),
-              CustomValidators.maxValue(30),
+              Validators.min(5),
+              Validators.max(30),
             ],
           ]
         : null,
@@ -95,8 +95,8 @@ export class GlobalSetting extends BaseModel<
             [
               CustomValidators.required,
               CustomValidators.positiveNumber,
-              CustomValidators.minValue(5),
-              CustomValidators.maxValue(300),
+              Validators.min(5),
+              Validators.max(300),
             ],
           ]
         : null,
