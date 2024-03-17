@@ -69,7 +69,7 @@ export class GlobalSetting extends BaseModel<
             sessionTimeout,
             [
               CustomValidators.required,
-              CustomValidators.number,
+              CustomValidators.positiveNumber,
               CustomValidators.minValue(1),
               CustomValidators.maxValue(300),
             ],
@@ -80,7 +80,7 @@ export class GlobalSetting extends BaseModel<
             fileSize,
             [
               CustomValidators.required,
-              CustomValidators.number,
+              CustomValidators.positiveNumber,
               CustomValidators.minValue(5),
               CustomValidators.maxValue(30),
             ],
@@ -94,6 +94,7 @@ export class GlobalSetting extends BaseModel<
             inboxRefreshInterval,
             [
               CustomValidators.required,
+              CustomValidators.positiveNumber,
               CustomValidators.minValue(5),
               CustomValidators.maxValue(300),
             ],

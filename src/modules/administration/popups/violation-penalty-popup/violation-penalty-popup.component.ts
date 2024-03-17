@@ -237,7 +237,7 @@ export class ViolationPenaltyPopupComponent
         this.filteredPenalties = data.rs.filter(
           penalty => penalty.offenderType === OffenderTypes.BROKER,
         );
-        this.penaltyGuidanceDisplay();
+        this.filterPenaltyGuidances();
       });
     } else if (
       this.controls.offenderType()?.value === OffenderTypes.EMPLOYEE &&
@@ -252,12 +252,12 @@ export class ViolationPenaltyPopupComponent
         })
         .subscribe(data => {
           this.filteredPenalties = data;
-          this.penaltyGuidanceDisplay();
+          this.filterPenaltyGuidances();
         });
     }
   }
 
-  penaltyGuidanceDisplay() {
+  filterPenaltyGuidances() {
     this.penaltyGuidance = this.lookups.penaltyGuidance.filter(
       pg => pg.lookupKey === PenaltyGuidances.APPROPRIATE,
     );
