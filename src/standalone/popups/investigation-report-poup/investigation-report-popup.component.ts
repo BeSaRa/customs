@@ -92,9 +92,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.isOffender() ? SummonType.OFFENDER : SummonType.WITNESS,
   );
   personId = computed(() => {
-    return this.isOffender()
-      ? this.offender()!.offenderRefId
-      : this.witness()!.witnessRefId;
+    return this.isOffender() ? this.offender()!.id : this.witness()!.id;
   });
 
   config = inject(ConfigService);
