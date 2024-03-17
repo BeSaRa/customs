@@ -101,13 +101,16 @@ export class ViolationPenaltyPopupComponent
   showOffenderLevel(): boolean {
     return (
       this.controls.offenderType()?.value === OffenderTypes.EMPLOYEE &&
-      this.controls.penaltySigner()!.valid
+      (this.controls.penaltySigner()!.valid ||
+        this.operation === OperationType.VIEW)
     );
   }
 
   showPenaltyGuidance(): boolean {
     return (
-      !!this.controls.penaltyId()?.valid && !!this.filteredPenalties.length
+      (!!this.controls.penaltyId()?.valid ||
+        this.operation === OperationType.VIEW) &&
+      !!this.filteredPenalties.length
     );
   }
 
