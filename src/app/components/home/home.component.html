@@ -8,6 +8,8 @@
     </div>
   </div>
   <app-version class="absolute bottom-5 ltr:right-5 rtl:left-5 drop-shadow" />
-  <app-chat-ai
-    class="z-50 fixed bottom-12 rtl:left-5 ltr:right-5 flex flex-col"></app-chat-ai>
+  @if (employeeService.hasPermissionTo('OPEN_AI_CHAT')) {
+    <app-chat-ai
+      class="z-50 fixed bottom-12 rtl:left-5 ltr:right-5 flex flex-col"></app-chat-ai>
+  }
 </div>
