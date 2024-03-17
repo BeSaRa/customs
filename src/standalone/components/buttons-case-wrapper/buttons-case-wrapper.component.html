@@ -23,6 +23,12 @@
       {{ lang.map.manager_approve }}
     </app-button>
   }
+  <!-- ca manager approve -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.CA_APPROVE)) {
+    <app-button (click)="responseAction$.next(taskResponses.CA_APPROVE)">
+      {{ lang.map.manager_approve }}
+    </app-button>
+  }
   <!-- to legal affairs manager -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_FNL_LA)) {
     <app-button (click)="responseAction$.next(taskResponses.TO_FNL_LA)">
@@ -162,7 +168,8 @@
       model().hasResponse(taskResponses.RETURN_TO_HR) ||
       model().hasResponse(taskResponses.RETURN_TO_SAME) ||
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
-      model().hasResponse(taskResponses.RETURN_APP_MANAGER))
+      model().hasResponse(taskResponses.RETURN_APP_MANAGER) ||
+      model().hasResponse(taskResponses.RETURN_TO_CA))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -189,6 +196,15 @@
           {{ lang.map.return_to_hr_department }}
         </button>
       }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_CA)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_CA)">
+          {{ lang.map.return_to_ca_department }}
+        </button>
+      }
       @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_USER)) {
         <button
           mat-menu-item
@@ -203,6 +219,15 @@
           mat-menu-item
           (click)="responseAction$.next(taskResponses.TO_HR_DEP)">
           {{ lang.map.send_to_hr_department }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.TO_CA_DEP)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.TO_CA_DEP)">
+          {{ lang.map.send_to_ca_department }}
         </button>
       }
       @if (

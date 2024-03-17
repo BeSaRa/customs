@@ -533,4 +533,6 @@ export interface LangKeysContract {
   meeting_date: string;
   meeting_time: string;
   send_to_hr_department: string;
+  send_to_ca_department: string;
+  return_to_ca_department: string;
 }
