@@ -168,9 +168,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       this.typesMap()[this.violationType()] ||
       this.typesMap()[this.controls.violationType().value];
     return (
-      violationType &&
-      violationType.numericFrom === 1 &&
-      violationType.numericTo - violationType.numericFrom === 1
+      violationType && violationType.numericTo === violationType.numericFrom
     );
   });
   types = computed(() => {
