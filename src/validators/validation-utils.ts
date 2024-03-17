@@ -188,7 +188,7 @@ export function minlengthValidator(minLength: number): ValidatorFn {
   };
 }
 export function maxValueValidator(maxValue: number): ValidatorFn {
-  if (!isValidValue(maxValue) || maxValue <= 0) {
+  if (!isValidValue(maxValue)) {
     return Validators.nullValidator;
   }
 
@@ -203,7 +203,7 @@ export function maxValueValidator(maxValue: number): ValidatorFn {
   };
 }
 export function minValueValidator(minValue: number): ValidatorFn {
-  if (!isValidValue(minValue) || minValue <= 0) {
+  if (!isValidValue(minValue)) {
     return Validators.nullValidator;
   }
 
