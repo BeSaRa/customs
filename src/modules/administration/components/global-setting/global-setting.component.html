@@ -19,7 +19,7 @@
     <!-- first tab -->
     <mat-tab [label]="lang.map.basic_settings">
       <ng-container [formGroup]="form">
-        <div class="grid grid-cols-4 gap-4 p-4">
+        <div class="grid grid-cols-3 gap-4 p-4">
           <app-input
             [disabled]="(loading$ | async)!"
             formControlName="systemArabicName"
@@ -51,9 +51,14 @@
             " />
           <app-input
             [disabled]="(loading$ | async)!"
-            formControlName="maxDeductionRatio"
+            formControlName="managerMaxViolation"
             type="number"
-            [label]="lang.map.max_deduction_ratio + ' (' + '%' + ')'" />
+            [label]="lang.map.manager_max_violation" />
+          <app-input
+            [disabled]="(loading$ | async)!"
+            formControlName="maxInvestigationDelay"
+            type="number"
+            [label]="lang.map.max_investigation_delay + '(days)'" />
           <app-select-input
             class="col-span-2"
             [disabled]="(loading$ | async)!"
@@ -63,7 +68,6 @@
             bindValue="id"
             [isMultiple]="true"
             bindLabel="getNames" />
-
           <app-switch
             [disabled]="(loading$ | async)! || form.invalid"
             [trueValue]="1"

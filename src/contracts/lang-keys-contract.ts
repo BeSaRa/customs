@@ -535,4 +535,6 @@ export interface LangKeysContract {
   send_to_hr_department: string;
   send_to_ca_department: string;
   return_to_ca_department: string;
+  manager_max_violation: string;
+  max_investigation_delay: string;
 }
