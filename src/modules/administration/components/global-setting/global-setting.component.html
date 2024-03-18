@@ -58,7 +58,9 @@
             [disabled]="(loading$ | async)!"
             formControlName="maxInvestigationDelay"
             type="number"
-            [label]="lang.map.max_investigation_delay + '(days)'" />
+            [label]="
+              lang.map.max_investigation_delay + ' (' + lang.map.day + ')'
+            " />
           <app-select-input
             class="col-span-2"
             [disabled]="(loading$ | async)!"
