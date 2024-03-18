@@ -23,7 +23,8 @@ export class GlobalSetting extends BaseModel<
   supportEmailList!: string;
   enableMailNotification!: number;
   enableSMSNotification!: number;
-  maxDeductionRatio!: number;
+  managerMaxViolation!: number;
+  maxInvestigationDelay!: number;
   customsAffairsPAOU!: number;
   customsAffairsPAOUInfo!: AdminResult;
   // extra properties
@@ -41,7 +42,8 @@ export class GlobalSetting extends BaseModel<
       supportEmailListParsed,
       enableMailNotification,
       enableSMSNotification,
-      maxDeductionRatio,
+      managerMaxViolation,
+      maxInvestigationDelay,
     } = this;
     return {
       systemArabicName: controls
@@ -112,9 +114,18 @@ export class GlobalSetting extends BaseModel<
       enableSMSNotification: controls
         ? [enableSMSNotification, CustomValidators.required]
         : null,
-      maxDeductionRatio: controls
-        ? [maxDeductionRatio, CustomValidators.required]
-        : null,
+      managerMaxViolation: controls
+        ? [
+            managerMaxViolation,
+            [CustomValidators.required, Validators.min(2), Validators.max(50)],
+          ]
+        : managerMaxViolation,
+      maxInvestigationDelay: controls
+        ? [
+            maxInvestigationDelay,
+            [CustomValidators.required, Validators.min(2), Validators.max(365)],
+          ]
+        : maxInvestigationDelay,
     };
   }
   getApplicationName(): string {
