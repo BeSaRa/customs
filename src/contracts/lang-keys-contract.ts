@@ -539,4 +539,6 @@ export interface LangKeysContract {
   manager_max_violation: string;
   max_investigation_delay: string;
   day: string;
+  lbl_individuals: string;
+  lbl_companies: string;
 }

@@ -55,14 +55,21 @@ export class AuthService
   private _externalLogin(
     credentials: Partial<ExternalCredentialsContract>,
   ): Observable<ExternalLoginDataContract> {
-    return this.http.post<ExternalLoginDataContract>(
-      credentials.userType === UserTypes.EXTERNAL_EMPLOYEE
-        ? this.urlService.URLS.AUTH_EMPLOYEE
-        : this.urlService.URLS.AUTH_CLEARING_AGENT,
-      {
-        qid: credentials.qid,
-      },
-    );
+    if (credentials.userType !== UserTypes.EXTERNAL_CLEARING_AGENCY) {
+      return this.http.post<ExternalLoginDataContract>(
+        this.urlService.URLS.AUTH_EXTERNAL,
+        {
+          qid: credentials.qid,
+        },
+      );
+    } else {
+      return this.http.post<ExternalLoginDataContract>(
+        this.urlService.URLS.AUTH_CLEARING_AGENCY,
+        {
+          licenseNo: credentials.licenseNo,
+        },
+      );
+    }
   }
   @CastResponse()
   private _verifyExternalLogin(
@@ -70,6 +77,17 @@ export class AuthService
   ): Observable<LoginDataContract> {
     return this.http
       .post<LoginDataContract>(this.urlService.URLS.AUTH_VERIFY, credentials)
+      .pipe(ignoreErrors());
+  }
+  @CastResponse()
+  private _verifyExternalAgencyLogin(
+    credentials: Partial<VerifyExternalCredentialsContract>,
+  ): Observable<LoginDataContract> {
+    return this.http
+      .post<LoginDataContract>(
+        this.urlService.URLS.AUTH_CLEARING_AGENCY_VERIFY,
+        credentials,
+      )
       .pipe(ignoreErrors());
   }
   login(
@@ -82,10 +100,20 @@ export class AuthService
   ): Observable<ExternalLoginDataContract> {
     return this._externalLogin(credentials);
   }
-  verifyExternalLogin(credentials: VerifyExternalCredentialsContract) {
-    return this._verifyExternalLogin(credentials).pipe(
-      this.setDateAfterAuthenticate(),
-    );
+  verifyExternalLogin(credentials: Partial<VerifyExternalCredentialsContract>) {
+    if (credentials.userType === UserTypes.EXTERNAL_CLEARING_AGENCY) {
+      delete credentials.userType;
+      delete credentials.qid;
+      return this._verifyExternalAgencyLogin(credentials).pipe(
+        this.setDateAfterAuthenticate(),
+      );
+    } else {
+      delete credentials.userType;
+      delete credentials.licenseNo;
+      return this._verifyExternalLogin(credentials).pipe(
+        this.setDateAfterAuthenticate(),
+      );
+    }
   }
   validateToken(): Observable<boolean> {
     return of(false)

@@ -66,7 +66,8 @@
           @if (
             element?.penaltyInfo?.offenderType ===
               userTypes.EXTERNAL_CLEARING_AGENT ||
-            element?.penaltyInfo?.offenderType === userTypes.EXTERNAL_EMPLOYEE
+            element?.penaltyInfo?.offenderType ===
+              userTypes.EXTERNAL_CLEARING_AGENCY
           ) {
             <div (click)="pay$.next(element)" [matTooltip]="lang.map.pay">
               <app-icon-button icon="HAND_COIN" />

@@ -19,29 +19,33 @@
             </h3>
             <mat-radio-group
               class="white-radio-button-group items-center w-full text-sm font-medium sm:flex text-white mb-5"
+              (change)="handleUseTypeChange()"
               formControlName="userType">
+              <mat-radio-button class="w-full">
+                {{ lang.map.lbl_individuals }}
+              </mat-radio-button>
               <mat-radio-button
                 class="w-full text-white"
-                [value]="userTypes.EXTERNAL_EMPLOYEE">
-                {{ lang.map.lbl_employee }}
-              </mat-radio-button>
-              <mat-radio-button
-                class="w-full"
-                [value]="userTypes.EXTERNAL_CLEARING_AGENT">
-                {{ lang.map.lbl_clearing_agent }}
-              </mat-radio-button>
-              <mat-radio-button class="w-full text-white">
-                {{ lang.map.lbl_clearing_agency }}
+                [value]="userTypes.EXTERNAL_CLEARING_AGENCY">
+                {{ lang.map.lbl_companies }}
               </mat-radio-button>
             </mat-radio-group>
           </div>
-          @if (true) {
+          @if (!isClearingAgency) {
             <!-- hide in case the logged in user of type clearing agency  -->
             <app-input
               formControlName="qid"
               labelColor="text-white"
               class="mt-4"
               [label]="lang.map.qid" />
+          }
+          @if (isClearingAgency) {
+            <!-- hide in case the logged in user of type clearing agency  -->
+            <app-input
+              formControlName="licenseNo"
+              labelColor="text-white"
+              class="mt-4"
+              [label]="lang.map.license_number" />
           }
           <app-button
             (click)="login$.next()"

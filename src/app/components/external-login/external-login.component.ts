@@ -1,7 +1,7 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { AuthService } from '@services/auth.service';
-import { FormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject, switchMap, tap } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
@@ -30,8 +30,9 @@ export class ExternalLoginComponent implements OnInit {
   lookupService = inject(LookupService);
   protected readonly userTypes = UserTypes;
   form: UntypedFormGroup = this.fb.nonNullable.group({
-    userType: [UserTypes.EXTERNAL_EMPLOYEE, CustomValidators.required],
-    qid: ['', Validators.required],
+    userType: [null],
+    qid: ['', [CustomValidators.required]],
+    licenseNo: [''],
   });
 
   login$: Subject<void> = new Subject<void>();
@@ -49,7 +50,19 @@ export class ExternalLoginComponent implements OnInit {
   toggleLanguage() {
     this.lang.toggleLang();
   }
-
+  handleUseTypeChange() {
+    const licenseNo = this.form.get('licenseNo');
+    const qid = this.form.get('qid');
+    licenseNo?.setValidators([]);
+    qid?.setValidators([]);
+    if (this.isClearingAgency) {
+      licenseNo?.setValidators([CustomValidators.required]);
+    } else {
+      qid?.setValidators([CustomValidators.required]);
+    }
+    licenseNo?.updateValueAndValidity();
+    qid?.updateValueAndValidity();
+  }
   listenToLogin(): void {
     this.login$
       .pipe(
@@ -74,6 +87,8 @@ export class ExternalLoginComponent implements OnInit {
               filter(result => !!result),
               map(otp => {
                 return {
+                  userType: this.form.value.userType,
+                  licenseNo: this.form.value.licenseNo,
                   qid: this.form.value.qid,
                   mfaToken: res.mfaToken,
                   otp: otp as string,
@@ -92,6 +107,10 @@ export class ExternalLoginComponent implements OnInit {
         this.router.navigate([AppFullRoutes.EXTERNAL_HOME]).then();
       });
   }
-
+  get isClearingAgency() {
+    return (
+      this.form.get('userType')?.value === UserTypes.EXTERNAL_CLEARING_AGENCY
+    );
+  }
   protected readonly UserTypes = UserTypes;
 }
