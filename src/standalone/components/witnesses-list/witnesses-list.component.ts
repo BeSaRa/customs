@@ -138,14 +138,11 @@ export class WitnessesListComponent
   private listenToReload() {
     this.reload$
       .pipe(filter(() => !!this.caseId()))
-      .pipe(
-        switchMap(() =>
-          this.witnessService.load(undefined, { caseId: this.caseId() }),
-        ),
-      )
+      .pipe(tap(() => this.witnessService.loadForCase(this.caseId())))
+      .pipe(switchMap(() => this.witnessService.loadForCase(this.caseId())))
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.data.next(list.rs);
+        this.data.next(list);
       });
   }
 
