@@ -12,7 +12,10 @@ export interface BaseCrudServiceContract<M, PrimaryType = number> {
     criteria?: Partial<M>,
   ): Observable<Pagination<M[]>>;
 
-  loadExternal(options: FetchOptionsContract): Observable<Pagination<M[]>>;
+  loadExternal(
+    extra: { [key: string]: unknown },
+    options: FetchOptionsContract,
+  ): Observable<Pagination<M[]>>;
 
   loadComposite(options: FetchOptionsContract): Observable<Pagination<M[]>>;
 

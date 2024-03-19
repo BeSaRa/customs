@@ -81,6 +81,12 @@
           <div (click)="view$.next(element)" [matTooltip]="lang.map.view">
             <app-icon-button icon="VIEW" />
           </div>
+          <!--            // handle pass vsId after add it from be-->
+          <div
+            (click)="viewDecisionFile$.next('')"
+            [matTooltip]="lang.map.view_decision_file">
+            <app-icon-button icon="FILE_EYE" />
+          </div>
         </div>
       </td>
     </ng-container>

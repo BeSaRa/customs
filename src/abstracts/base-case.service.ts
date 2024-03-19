@@ -376,8 +376,8 @@ export abstract class BaseCaseService<M>
 
   openAddAttachmentDialog(
     caseId: string,
-    service: BaseCaseService<unknown>,
-    type: 'folder' | 'offender',
+    service: BaseCaseService<unknown> | unknown,
+    type: 'folder' | 'offender' | 'apology',
     entityId: number,
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {

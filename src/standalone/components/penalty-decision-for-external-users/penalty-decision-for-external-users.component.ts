@@ -20,7 +20,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MatSort } from '@angular/material/sort';
@@ -28,6 +28,11 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { DatePipe } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserTypes } from '@enums/user-types';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { BlobModel } from '@models/blob-model';
+import { InvestigationService } from '@services/investigation.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -63,13 +68,18 @@ export class PenaltyDecisionForExternalUsersComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   penaltyDecisionService = inject(PenaltyDecisionService);
+  investigationService = inject(InvestigationService);
+  domSanitize = inject(DomSanitizer);
+  route = inject(ActivatedRoute);
   dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
-  reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
+  reload$: Subject<null> = new Subject<null>();
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   view$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  viewDecisionFile$ = new Subject<string>();
   pay$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   protected readonly userTypes = UserTypes;
   @ViewChild('paginator') paginator!: MatPaginator;
+  userId!: number | undefined;
   displayedColumns = [
     'decisionSerial',
     'decisionDate',
@@ -81,11 +91,32 @@ export class PenaltyDecisionForExternalUsersComponent
 
   ngOnInit(): void {
     this.listenToReload();
+    this.route.queryParams.subscribe(params => {
+      this.userId = params.id;
+      this.reload$.next(null);
+    });
+    this.listenToViewDecisionFile();
   }
 
   private listenToReload() {
     this.reload$
-      .pipe(switchMap(() => this.penaltyDecisionService.loadExternal()))
+      .pipe(
+        filter(
+          () =>
+            UserTypes.EXTERNAL_CLEARING_AGENCY !==
+              this.employeeService.getLoginData()?.type || !!this.userId,
+        ),
+      )
+      .pipe(
+        switchMap(() =>
+          UserTypes.EXTERNAL_CLEARING_AGENCY ===
+          this.employeeService.getLoginData()?.type
+            ? this.penaltyDecisionService.loadExternal({
+                offenderId: this.userId as number,
+              })
+            : this.penaltyDecisionService.loadExternal(),
+        ),
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.dataSource.data = list.rs;
@@ -102,5 +133,29 @@ export class PenaltyDecisionForExternalUsersComponent
       });
   }
 
+  private listenToViewDecisionFile() {
+    this.viewDecisionFile$
+      .pipe(
+        switchMap(vsId => {
+          return this.investigationService.getDecisionFileAttachments(vsId);
+        }),
+      )
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(ViewAttachmentPopupComponent, {
+              data: {
+                model: new BlobModel(
+                  model.content as unknown as Blob,
+                  this.domSanitize,
+                ),
+                title: model.documentTitle,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
+  }
   protected readonly UserTypes = UserTypes;
 }

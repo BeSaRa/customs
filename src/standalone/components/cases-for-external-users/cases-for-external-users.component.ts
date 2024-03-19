@@ -21,12 +21,14 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
 import { OffenderService } from '@services/offender.service';
 import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
 import { MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-cases-for-external-users',
@@ -62,21 +64,43 @@ export class CasesForExternalUsersComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
+  route = inject(ActivatedRoute);
   dataSource: MatTableDataSource<InvestigationForExternalUser> =
     new MatTableDataSource();
-  reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
+  reload$: Subject<null> = new Subject<null>();
   view$: Subject<InvestigationForExternalUser> =
     new Subject<InvestigationForExternalUser>();
   displayedColumns = ['fileNumber', 'dateCreated', 'status', 'actions'];
   @ViewChild('paginator') paginator!: MatPaginator;
+  userId!: number | undefined;
 
   ngOnInit(): void {
     this.listenToReload();
+    this.route.queryParams.subscribe(params => {
+      this.userId = params.id;
+      this.reload$.next(null);
+    });
   }
 
   private listenToReload() {
     this.reload$
-      .pipe(switchMap(() => this.offenderService.loadCasesForExternal()))
+      .pipe(
+        filter(
+          () =>
+            UserTypes.EXTERNAL_CLEARING_AGENCY !==
+              this.employeeService.getLoginData()?.type || !!this.userId,
+        ),
+      )
+      .pipe(
+        switchMap(() =>
+          UserTypes.EXTERNAL_CLEARING_AGENCY ===
+          this.employeeService.getLoginData()?.type
+            ? this.offenderService.loadCasesForExternal({
+                offenderId: this.userId as number,
+              })
+            : this.offenderService.loadCasesForExternal(),
+        ),
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.dataSource.data = list.rs;

@@ -3,5 +3,5 @@ export interface VerifyExternalCredentialsContract {
   mfaToken: string;
   otp: string;
   userType: number;
-  licenseNo: string;
+  eId: string;
 }

@@ -66,7 +66,7 @@ export class AuthService
       return this.http.post<ExternalLoginDataContract>(
         this.urlService.URLS.AUTH_CLEARING_AGENCY,
         {
-          licenseNo: credentials.licenseNo,
+          eId: credentials.eId,
         },
       );
     }
@@ -109,7 +109,7 @@ export class AuthService
       );
     } else {
       delete credentials.userType;
-      delete credentials.licenseNo;
+      delete credentials.eId;
       return this._verifyExternalLogin(credentials).pipe(
         this.setDateAfterAuthenticate(),
       );

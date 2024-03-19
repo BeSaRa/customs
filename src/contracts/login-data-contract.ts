@@ -5,6 +5,7 @@ import { OrganizationUnit } from '@models/organization-unit';
 import { Team } from '@models/team';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgency } from '@models/clearing-agency';
 
 export interface LoginDataContract {
   internalUser: InternalUser;
@@ -14,6 +15,7 @@ export interface LoginDataContract {
   organizationUnits: OrganizationUnit[];
   permissionSet: Permission[];
   person: MawaredEmployee | ClearingAgent;
+  clearingAgency: ClearingAgency;
   teams: Team[];
   token: string;
   type: number;
