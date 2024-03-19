@@ -43,7 +43,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { InvestigationReportService } from '@services/investigation-report.service';
 import { InvestigationReport } from '@models/investigation-report';
 import { EmployeeService } from '@services/employee.service';
@@ -148,6 +148,11 @@ export class LegalAffairsOffendersComponent
   requestInvestigation$ = new Subject<Offender>();
   requestHearing$ = new Subject<Offender>();
 
+  reload$ = new Subject<{
+    type: 'call' | 'investigation';
+    offenderId: number;
+  }>();
+
   offenderTypesMap: Record<number, Lookup> =
     this.lookupService.lookups.offenderType.reduce((acc, item) => {
       return {
@@ -162,9 +167,6 @@ export class LegalAffairsOffendersComponent
   ngOnInit(): void {
     this.listenToRequestCall();
     this.listenToRequestInvestigation();
-
-    // this.requestInvestigation$.next(this.concernedOffenders()[0]);
-    // this.requestCall$.next(this.concernedOffenders()[0]);
   }
 
   assertType(item: unknown): Offender {
@@ -202,11 +204,16 @@ export class LegalAffairsOffendersComponent
                 caseId: this.model().id,
               },
             )
-            .afterClosed();
+            .afterClosed()
+            .pipe(map(() => offender));
         }),
       )
-      .subscribe(() => {
+      .subscribe(offender => {
         // this.dialog.info(this.lang.map.this_feature_is_being_worked_on);
+        this.reload$.next({
+          type: 'call',
+          offenderId: offender.id,
+        });
       });
   }
 
@@ -227,11 +234,15 @@ export class LegalAffairsOffendersComponent
               }),
               { offender, caseId: this.model().id },
             )
-            .afterClosed(),
+            .afterClosed()
+            .pipe(map(() => offender)),
         ),
       )
       .subscribe(offender => {
-        console.log(offender);
+        this.reload$.next({
+          type: 'investigation',
+          offenderId: offender.id,
+        });
       });
   }
 }

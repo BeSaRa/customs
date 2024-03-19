@@ -19,7 +19,7 @@ import {
   UntypedFormGroup,
 } from '@angular/forms';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { Observable, Subject, tap } from 'rxjs';
+import { Observable, of, Subject, tap } from 'rxjs';
 import { Offender } from '@models/offender';
 import { Witness } from '@models/witness';
 import { InputComponent } from '@standalone/components/input/input.component';
@@ -38,6 +38,7 @@ import { OperationType } from '@enums/operation-type';
 import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
 import { UserClick } from '@enums/user-click';
+import { InvestigationReportService } from '@services/investigation-report.service';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -78,6 +79,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   > = inject(MAT_DIALOG_DATA);
   datePipe = inject(DatePipe);
   dialog = inject(DialogService);
+  investigationReportService = inject(InvestigationReportService);
   override form!: UntypedFormGroup;
   offender = signal(this.data.extras!.offender);
   witness = signal(this.data.extras!.witness);
@@ -142,6 +144,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   deleteQuestion$: Subject<Question> = new Subject();
 
   savePDF$ = new Subject<void>();
+  uploadPDF$ = new Subject<File>();
 
   protected override _init() {
     super._init();
@@ -158,6 +161,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.listenToSaveQuestion();
     this.listenToDeleteQuestion();
     this.listenToSavePDF();
+    this.listenToUploadPDF();
     this.form = this.fb.group({}); // just to not throw error while opening the popup on view mode
   }
 
@@ -240,9 +244,19 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   protected readonly AppIcons = AppIcons;
 
   private listenToSavePDF() {
-    this.savePDF$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this.dialog.info(this.lang.map.this_feature_is_being_worked_on);
-    });
+    this.savePDF$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(switchMap(() => this.model.download()))
+      .pipe(
+        switchMap(() => {
+          return this.model.documentVsId
+            ? of(this.model)
+            : this.investigationReportService.loadById(this.model.id);
+        }),
+      )
+      .subscribe(model => {
+        this.model = model;
+      });
   }
 
   private listenToDeleteQuestion() {
@@ -265,6 +279,23 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.model.detailsList = this.model.detailsList.filter(item => {
           return item !== question;
         });
+      });
+  }
+
+  uploadChange($event: Event) {
+    this.uploadPDF$.next(($event.target as HTMLInputElement).files![0]);
+  }
+
+  listenToUploadPDF(): void {
+    this.uploadPDF$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(file => {
+          return this.model.upload(file);
+        }),
+      )
+      .subscribe(() => {
+        this.toast.success(this.lang.map.file_uploaded_successfully);
       });
   }
 }

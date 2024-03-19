@@ -58,11 +58,23 @@
             matTooltipPosition="above"
             (click)="edit$.next(assertType(element))"
             icon="EDIT" />
-          <app-icon-button
-            [matTooltip]="lang.map.download"
-            matTooltipPosition="above"
-            (click)="download$.next(assertType(element))"
-            icon="FILE_DOWNLOAD_OUTLINE" />
+          @if (assertType(element).isDraft()) {
+            <app-icon-button
+              [matTooltip]="lang.map.download"
+              matTooltipPosition="above"
+              (click)="download$.next(assertType(element))"
+              icon="FILE_DOWNLOAD_OUTLINE" />
+          }
+          @if (
+            assertType(element).hasDocumentVsId() &&
+            assertType(element).isDraft()
+          ) {
+            <app-icon-button
+              [matTooltip]="lang.map.upload_files"
+              matTooltipPosition="above"
+              (click)="clickOnUploadButton(uploader, assertType(element))"
+              icon="FILE_UPLOAD_OUTLINE" />
+          }
         </div>
       </td>
     </ng-container>
@@ -72,4 +84,10 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
+  <input
+    #uploader
+    (change)="getFile($event)"
+    type="file"
+    class="hidden"
+    id="report-uploader" />
 </div>

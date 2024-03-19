@@ -4,7 +4,10 @@ import { AdminResult } from '@models/admin-result';
 import { InvestigationReportInterceptor } from '@model-interceptors/investigation-report-interceptor';
 import { InterceptModel } from 'cast-response';
 import { Question } from '@models/question';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { BlobModel } from '@models/blob-model';
+import { downloadLink } from '@utils/utils';
+import { ReportStatus } from '@enums/report-status';
 
 const { send, receive } = new InvestigationReportInterceptor();
 
@@ -24,11 +27,34 @@ export class InvestigationReport extends BaseModel<
   createdBy!: number;
   creatorInfo!: AdminResult;
   location?: string;
+  documentVsId?: string;
   override status: number = 1;
 
-  download(): Observable<unknown> {
-    return this.$$getService$$<InvestigationReportService>().downloadReport(
-      this.id,
+  download(download = true): Observable<BlobModel> {
+    return this.$$getService$$<InvestigationReportService>()
+      .downloadReport(this.id)
+      .pipe(tap(value => download && downloadLink(value.url)))
+      .pipe(tap(value => value.dispose()));
+  }
+
+  upload(file: File) {
+    return this.$$getService$$<InvestigationReportService>().uploadReport(
+      file,
+      {
+        vsId: this.documentVsId!,
+      },
     );
+  }
+
+  isDraft(): boolean {
+    return this.status === ReportStatus.DRAFT;
+  }
+
+  isApproved(): boolean {
+    return this.status === ReportStatus.APPROVED;
+  }
+
+  hasDocumentVsId(): boolean {
+    return !!this.documentVsId;
   }
 }

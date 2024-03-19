@@ -12,7 +12,7 @@ import { LangService } from '@services/lang.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CallRequest } from '@models/call-request';
 import { Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { SummonType } from '@enums/summon-type';
 import { ignoreErrors } from '@utils/utils';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -102,10 +102,16 @@ export class CallRequestRecordsTableComponent
     ),
   );
 
+  reloadInput =
+    input.required<
+      Subject<{ type: 'call' | 'investigation'; offenderId: number }>
+    >();
+
   ngOnInit(): void {
     this.listenToReload();
     this.listenToView();
     this.listenToEdit();
+    this.listenToReloadInput();
   }
 
   assertType(item: unknown): CallRequest {
@@ -175,5 +181,18 @@ export class CallRequestRecordsTableComponent
         callRequest.status = status.lookupKey;
         callRequest.statusInfo = AdminResult.createInstance(status);
       });
+  }
+
+  private listenToReloadInput() {
+    this.reloadInput() &&
+      this.reloadInput()
+        .pipe(takeUntil(this.destroy$))
+        .pipe(
+          filter(
+            value =>
+              value.type === 'call' && value.offenderId === this.offender().id,
+          ),
+        )
+        .subscribe(() => this.reload$.next());
   }
 }

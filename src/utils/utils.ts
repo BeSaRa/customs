@@ -291,3 +291,11 @@ export function generateTimeList(steps = ['00', '30']): string[] {
   }
   return times;
 }
+
+export function downloadLink(value: string, fileName = 'download.pdf') {
+  const link = document.createElement('a');
+  link.href = value;
+  link.download = fileName;
+  link.target = '_blank';
+  link.click();
+}

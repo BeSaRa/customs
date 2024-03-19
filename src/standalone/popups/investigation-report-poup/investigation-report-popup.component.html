@@ -7,7 +7,7 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content gap-4 min-w-[1000px]">
+  <div class="dialog-content gap-4 w-[1000px]">
     <div class="flex gap-2">
       <div class="flex flex-auto flex-col">
         <app-input
@@ -94,15 +94,35 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button
-        [matTooltip]="lang.map.save_pdf"
-        (click)="savePDF$.next()"
-        buttonType="primary-outline">
-        <div class="flex">
-          <mat-icon [svgIcon]="AppIcons.FILE_DOWNLOAD_OUTLINE" />
-          <span>PDF</span>
-        </div>
-      </app-button>
+      @if (model.id && model.isDraft()) {
+        <app-button
+          [matTooltip]="lang.map.save_pdf"
+          (click)="savePDF$.next()"
+          buttonType="primary-outline">
+          <div class="flex">
+            <mat-icon [svgIcon]="AppIcons.FILE_DOWNLOAD_OUTLINE" />
+            <span>PDF</span>
+          </div>
+        </app-button>
+      }
+
+      @if (model.id && model.isDraft() && model.hasDocumentVsId()) {
+        <app-button
+          [matTooltip]="lang.map.upload_files"
+          (click)="uploader.click()"
+          buttonType="primary-outline">
+          <div class="flex">
+            <mat-icon [svgIcon]="AppIcons.FILE_UPLOAD_OUTLINE" />
+            <span>Upload</span>
+          </div>
+          <input
+            #uploader
+            (change)="uploadChange($event)"
+            accept="application/pdf"
+            type="file"
+            class="hidden" />
+        </app-button>
+      }
       <app-button (click)="save$.next()" buttonType="primary">
         {{ lang.map.save }}
       </app-button>

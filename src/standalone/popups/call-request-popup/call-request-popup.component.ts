@@ -112,5 +112,6 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
         x: this.lang.map.call_request,
       }),
     );
+    this.dialogRef.close();
   }
 }

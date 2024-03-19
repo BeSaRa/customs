@@ -18,14 +18,15 @@ import { LangService } from '@services/lang.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
-import { exhaustMap, Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
+import { exhaustMap, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { SummonType } from '@enums/summon-type';
 import { DatePipe, JsonPipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ignoreErrors } from '@utils/utils';
 import { ConfigService } from '@services/config.service';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -71,7 +72,15 @@ export class InvestigationRecordsTableComponent
   view$ = new Subject<InvestigationReport>();
   edit$ = new Subject<InvestigationReport>();
   download$ = new Subject<InvestigationReport>();
+  upload$ = new Subject<File>();
   config = inject(ConfigService);
+  toast = inject(ToastService);
+  selectedUploadReport?: InvestigationReport;
+  uploader?: HTMLInputElement;
+  reloadInput =
+    input.required<
+      Subject<{ type: 'call' | 'investigation'; offenderId: number }>
+    >();
 
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
@@ -82,6 +91,9 @@ export class InvestigationRecordsTableComponent
     this.listenToView();
     this.listenToEdit();
     this.listenToDownload();
+    this.listenToUpload();
+
+    this.listenToReloadInput();
   }
 
   private listenToReload() {
@@ -138,9 +150,75 @@ export class InvestigationRecordsTableComponent
   private listenToDownload() {
     this.download$
       .pipe(takeUntil(this.destroy$))
-      .pipe(exhaustMap(model => model.download().pipe(ignoreErrors())))
-      .subscribe(value => {
-        console.log(value);
+      .pipe(
+        exhaustMap(model =>
+          model
+            .download()
+            .pipe(ignoreErrors())
+            .pipe(
+              map(blob => {
+                return {
+                  blob,
+                  model,
+                };
+              }),
+            ),
+        ),
+      )
+      .pipe(
+        switchMap(({ model }) => {
+          return model.documentVsId
+            ? of(model)
+            : this.investigationReportService.loadById(model.id);
+        }),
+      )
+      .subscribe(model => {
+        this.models.splice(
+          this.models.findIndex(item => item.id === model.id),
+          1,
+          model,
+        );
+        this.models = this.models.slice();
       });
+  }
+
+  private listenToUpload() {
+    this.upload$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        filter(() => !!this.selectedUploadReport),
+        switchMap(file => {
+          return this.selectedUploadReport!.upload(file);
+        }),
+      )
+      .subscribe(() => {
+        this.toast.success(this.lang.map.file_uploaded_successfully);
+        this.uploader!.value = '';
+      });
+  }
+
+  getFile($event: Event) {
+    const files = ($event.target as HTMLInputElement).files;
+    files && files.length && this.upload$.next(files[0]);
+  }
+
+  clickOnUploadButton(uploader: HTMLInputElement, report: InvestigationReport) {
+    uploader.click();
+    this.selectedUploadReport = report;
+    this.uploader = uploader;
+  }
+
+  private listenToReloadInput() {
+    this.reloadInput() &&
+      this.reloadInput()
+        .pipe(takeUntil(this.destroy$))
+        .pipe(
+          filter(
+            value =>
+              value.type === 'investigation' &&
+              value.offenderId === this.offender().id,
+          ),
+        )
+        .subscribe(() => this.reload$.next());
   }
 }
