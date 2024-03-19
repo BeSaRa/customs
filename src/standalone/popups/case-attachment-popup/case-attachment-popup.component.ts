@@ -46,6 +46,7 @@ import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment
 import { BlobModel } from '@models/blob-model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CustomValidators } from '@validators/custom-validators';
+import { CallRequestService } from '@services/call-request.service';
 
 @Component({
   selector: 'app-case-attachment-popup',
@@ -76,8 +77,8 @@ export class CaseAttachmentPopupComponent
   toast = inject(ToastService);
   data: {
     caseId: string;
-    service: BaseCaseService<unknown>;
-    type: 'folder' | 'offender';
+    service: BaseCaseService<unknown> | unknown;
+    type: 'folder' | 'offender' | 'apology';
     entityId: number;
   } = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
@@ -85,7 +86,13 @@ export class CaseAttachmentPopupComponent
   delete$ = new Subject<CaseAttachment>();
   save$: Subject<void> = new Subject<void>();
   attachments: CaseAttachment[] = [];
-  displayedColumns: string[] = ['documentTitle', 'attachmentType', 'actions'];
+
+  get displayedColumns(): string[] {
+    return this.isApologyAttachments
+      ? ['documentTitle', 'actions']
+      : ['documentTitle', 'attachmentType', 'actions'];
+  }
+
   attachmentTypeService = inject(AttachmentTypeService);
   attachmentTypes: AttachmentType[] = [];
   domSanitize = inject(DomSanitizer);
@@ -102,6 +109,7 @@ export class CaseAttachmentPopupComponent
     this.listenToView();
     this.listenToDelete();
   }
+
   selectFiles($event: Event) {
     $event.preventDefault();
     Array.from(($event.target as HTMLInputElement).files || []).forEach(
@@ -121,6 +129,7 @@ export class CaseAttachmentPopupComponent
       },
     );
   }
+
   filesDropped($event: DragEvent) {
     $event.preventDefault();
 
@@ -146,47 +155,58 @@ export class CaseAttachmentPopupComponent
   validFile(_file: File): boolean {
     return true;
   }
+
   validData() {
     return !this.attachments.filter(
       a => !a.attachmentTypeId || !a.documentTitle.trim(),
     ).length;
   }
+
   private listenToUploadFiles() {
     this.save$
       .pipe(
         tap(() => {
           return (
+            this.data.type !== 'apology' &&
             !this.validData() &&
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
             )
           );
         }),
-        filter(() => this.validData()),
+        filter(() => {
+          console.log(this.data.type);
+          return this.data.type === 'apology' || this.validData();
+        }),
       )
       .pipe(
         exhaustMap(() => {
           if (this.data.type === 'folder') {
-            return this.data.service.addBulkCaseAttachments(
-              this.data.caseId,
-              this.attachments,
-            );
+            return (
+              this.data.service as BaseCaseService<unknown>
+            ).addBulkCaseAttachments(this.data.caseId, this.attachments);
           } else if (this.data.type === 'offender') {
             return combineLatest(
               this.attachments.map(attachment => {
-                return this.data.service.addOffenderAttachment(
-                  this.data.entityId,
-                  attachment,
-                );
+                return (
+                  this.data.service as BaseCaseService<unknown>
+                ).addOffenderAttachment(this.data.entityId, attachment);
+              }),
+            );
+          } else if (this.data.type === 'apology') {
+            return combineLatest(
+              this.attachments.map(attachment => {
+                return (
+                  this.data.service as CallRequestService
+                ).addApologyAttachment(this.data.entityId, attachment.content);
               }),
             );
           } else {
             return combineLatest(
               this.attachments.map(attachment => {
-                return this.data.service.addCaseAttachment(
-                  this.data.caseId,
-                  attachment,
-                );
+                return (
+                  this.data.service as BaseCaseService<unknown>
+                ).addCaseAttachment(this.data.caseId, attachment);
               }),
             );
           }
@@ -200,6 +220,10 @@ export class CaseAttachmentPopupComponent
         );
         this.dialogRef.close();
       });
+  }
+
+  get isApologyAttachments() {
+    return this.data.type === 'apology';
   }
 
   private loadAttachmentTypes(): void {
@@ -281,7 +305,10 @@ export class CaseAttachmentPopupComponent
     this.attachments.forEach((item, index) => {
       list.push(
         this.fb.group({
-          documentTitle: [item.documentTitle, CustomValidators.required],
+          documentTitle: [
+            { value: item.documentTitle, disabled: this.isApologyAttachments },
+            CustomValidators.required,
+          ],
           attachmentTypeId: [item.attachmentTypeId, CustomValidators.required],
         }),
       );

@@ -11,8 +11,9 @@ import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { ServiceContract } from '@contracts/service-contract';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
-import { WitnessTypes } from '@enums/witness-types';
 import { InternalUserInterceptor } from '@model-interceptors/internal-user-interceptor';
+import { ClearingAgency } from '@models/clearing-agency';
+import { UserTypes } from '@enums/user-types';
 
 const internalUserInterceptor = new InternalUserInterceptor();
 
@@ -59,16 +60,22 @@ export class EmployeeService
     data.lookupMap = this.lookupService.setLookups(data.lookupMap);
     // generate the permissions list
     this.generatePermissionMap(data.permissionSet);
-    if (data.person && data.person.type === WitnessTypes.EMPLOYEE) {
+    if (data.person && data.person.type === UserTypes.EXTERNAL_EMPLOYEE) {
       data.person = new MawaredEmployee().clone<MawaredEmployee>({
         ...(data.person as MawaredEmployee),
       });
     }
-    if (data.person && data.type === WitnessTypes.ClEARING_AGENT) {
+
+    if (data.person && data.type === UserTypes.EXTERNAL_CLEARING_AGENT) {
       data.person = new ClearingAgent().clone<ClearingAgent>({
         ...(data.person as ClearingAgent),
       });
     }
+
+    data.clearingAgency &&
+      (data.clearingAgency = new ClearingAgency().clone<ClearingAgency>({
+        ...(data.clearingAgency as ClearingAgency),
+      }));
     // set user teams
     data.teams = (data.teams || []).map((item: Team) =>
       new Team().clone<Team>(item),

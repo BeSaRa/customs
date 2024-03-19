@@ -17,6 +17,7 @@ import { DeclarationNumberDetailsResult } from '@models/declaration-number-detai
 import { b64toBlob } from '@utils/utils';
 import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
 import { Violation } from '@models/violation';
+import { CaseAttachment } from '@models/case-attachment';
 
 @CastResponseContainer({
   $default: {
@@ -124,6 +125,13 @@ export class InvestigationService
     return this.http.get<OffenceNumberDetailsResult>(
       this.getUrlSegment() +
         `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
+    );
+  }
+
+  @CastResponse(() => CaseAttachment)
+  getDecisionFileAttachments(vsid: string): Observable<CaseAttachment> {
+    return this.http.get<CaseAttachment>(
+      this.getUrlSegment() + `/document/latest/$${vsid}/content`,
     );
   }
 }

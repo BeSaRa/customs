@@ -153,7 +153,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.INVESTIGATION_SEARCH,
     langKey: 'menu_investigation_search',
-    icon: AppIcons.INVESTIGATION_SEARCH,
+    icon: AppIcons.SEARCH,
     path: AppFullRoutes.INVESTIGATION_SEARCH,
     parent: MenuIdes.ELECTRONIC_SERVICES,
   },

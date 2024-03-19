@@ -64,6 +64,7 @@ export class OffenderService extends BaseCrudService<Offender> {
   }
 
   loadCasesForExternal(
+    extra: { [key: string]: unknown } = {},
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
@@ -74,7 +75,7 @@ export class OffenderService extends BaseCrudService<Offender> {
       this.getUrlSegment() + '/admin/cases/external',
       {
         params: new HttpParams({
-          fromObject: { ...options, ...sortOptions },
+          fromObject: { ...extra, ...options, ...sortOptions },
         }),
       },
     );

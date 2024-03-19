@@ -53,7 +53,7 @@ export const AppIcons = {
   VIOLATION_OUTLINE: 'alert-circle-outline',
   VIOLATION: 'alert-circle',
   GUIDE_PANEL: 'book',
-  INVESTIGATION_SEARCH: 'magnify',
+  SEARCH: 'magnify',
   ACCOUNT_MAKE_DECISION: 'account-cog',
   INVESTIGATION_DRAFTS: 'file',
   CHEVRON_UP: 'chevron-up',
@@ -85,6 +85,8 @@ export const AppIcons = {
   FILE_DOWNLOAD_OUTLINE: 'file-download-outline',
   FILE_UPLOAD_OUTLINE: 'file-upload-outline',
   CALENDAR: 'calendar-multiselect-outline',
+  FILE_EYE: 'file-eye',
+  UPLOAD: 'upload',
 };
 
 export type AppIconsType = typeof AppIcons;

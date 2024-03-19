@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-home',
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  employeeService = inject(EmployeeService);
   // permissionService = inject(PermissionService)
   //   .generateAppPermission()
   //   .subscribe(console.log);

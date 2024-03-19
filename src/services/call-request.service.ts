@@ -8,6 +8,7 @@ import { ApologyModel } from '@models/apology-model';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { CallRequestPopupComponent } from '@standalone/popups/call-request-popup/call-request-popup.component';
 import { ComponentType } from '@angular/cdk/portal';
+import { CaseAttachment } from '@models/case-attachment';
 
 @CastResponseContainer({
   $pagination: {
@@ -57,6 +58,25 @@ export class CallRequestService extends BaseCrudWithDialogService<
     return this.http.put<CallRequest>(
       this.getUrlSegment() + `/admin/apology`,
       payload,
+    );
+  }
+
+  addApologyAttachment(
+    offenderId: number,
+    content: File | undefined,
+  ): Observable<unknown> {
+    const formData = new FormData();
+    content ? formData.append('content ', content) : null;
+    return this.http.post(
+      this.getUrlSegment() + `/admin/apology/${offenderId}/attachment`,
+      formData,
+    );
+  }
+
+  @CastResponse(() => CaseAttachment)
+  getApologyAttachments(offenderId: number): Observable<CaseAttachment[]> {
+    return this.http.get<CaseAttachment[]>(
+      this.getUrlSegment() + `/offender/${offenderId}/contained-attachments`,
     );
   }
 }

@@ -32,7 +32,7 @@ export class ExternalLoginComponent implements OnInit {
   form: UntypedFormGroup = this.fb.nonNullable.group({
     userType: [null],
     qid: ['', [CustomValidators.required]],
-    licenseNo: [''],
+    eId: [''],
   });
 
   login$: Subject<void> = new Subject<void>();
@@ -51,16 +51,16 @@ export class ExternalLoginComponent implements OnInit {
     this.lang.toggleLang();
   }
   handleUseTypeChange() {
-    const licenseNo = this.form.get('licenseNo');
+    const eId = this.form.get('eId');
     const qid = this.form.get('qid');
-    licenseNo?.setValidators([]);
+    eId?.setValidators([]);
     qid?.setValidators([]);
     if (this.isClearingAgency) {
-      licenseNo?.setValidators([CustomValidators.required]);
+      eId?.setValidators([CustomValidators.required]);
     } else {
       qid?.setValidators([CustomValidators.required]);
     }
-    licenseNo?.updateValueAndValidity();
+    eId?.updateValueAndValidity();
     qid?.updateValueAndValidity();
   }
   listenToLogin(): void {
@@ -88,7 +88,7 @@ export class ExternalLoginComponent implements OnInit {
               map(otp => {
                 return {
                   userType: this.form.value.userType,
-                  licenseNo: this.form.value.licenseNo,
+                  eId: this.form.value.eId,
                   qid: this.form.value.qid,
                   mfaToken: res.mfaToken,
                   otp: otp as string,

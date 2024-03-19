@@ -73,6 +73,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     fallback: '$pagination',
   })
   loadExternal(
+    extra: { [key: string]: unknown } = {},
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
@@ -83,7 +84,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
       this.getUrlSegment() + '/admin/external',
       {
         params: new HttpParams({
-          fromObject: { ...options, ...sortOptions },
+          fromObject: { ...extra, ...options, ...sortOptions },
         }),
       },
     );

@@ -20,7 +20,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { BehaviorSubject, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CallRequestService } from '@services/call-request.service';
@@ -28,6 +28,8 @@ import { CallRequest } from '@models/call-request';
 import { DatePipe } from '@angular/common';
 import { ApologyPopupComponent } from '@standalone/popups/apology-popup/apology-popup.component';
 import { MatPaginator } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
+import { UserTypes } from '@enums/user-types';
 
 @Component({
   selector: 'app-attendance',
@@ -63,10 +65,12 @@ export class AttendanceComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   callRequestService = inject(CallRequestService);
+  route = inject(ActivatedRoute);
   dataSource: MatTableDataSource<CallRequest> = new MatTableDataSource();
-  reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
+  reload$: Subject<null> = new Subject<null>();
   apology$: Subject<CallRequest> = new Subject<CallRequest>();
   @ViewChild('paginator') paginator!: MatPaginator;
+  userId!: number | undefined;
   displayedColumns = [
     'fileNumber',
     'summonDateTime',
@@ -77,12 +81,32 @@ export class AttendanceComponent
 
   ngOnInit(): void {
     this.listenToReload();
+    this.route.queryParams.subscribe(params => {
+      this.userId = params.id;
+      this.reload$.next(null);
+    });
     this._listenToApology();
   }
 
   private listenToReload() {
     this.reload$
-      .pipe(switchMap(() => this.callRequestService.loadExternal()))
+      .pipe(
+        filter(
+          () =>
+            UserTypes.EXTERNAL_CLEARING_AGENCY !==
+              this.employeeService.getLoginData()?.type || !!this.userId,
+        ),
+      )
+      .pipe(
+        switchMap(() =>
+          UserTypes.EXTERNAL_CLEARING_AGENCY ===
+          this.employeeService.getLoginData()?.type
+            ? this.callRequestService.loadExternal({
+                offenderId: this.userId as number,
+              })
+            : this.callRequestService.loadExternal(),
+        ),
+      )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
         this.dataSource.data = list.rs;

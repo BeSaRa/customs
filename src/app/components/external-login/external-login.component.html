@@ -42,10 +42,10 @@
           @if (isClearingAgency) {
             <!-- hide in case the logged in user of type clearing agency  -->
             <app-input
-              formControlName="licenseNo"
+              formControlName="eId"
               labelColor="text-white"
               class="mt-4"
-              [label]="lang.map.license_number" />
+              [label]="lang.map.establishment_Id" />
           }
           <app-button
             (click)="login$.next()"

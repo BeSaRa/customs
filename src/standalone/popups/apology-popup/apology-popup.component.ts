@@ -8,14 +8,18 @@ import {
 } from '@angular/forms';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
-import { MatCell } from '@angular/material/table';
+import {
+  MatCell,
+  MatColumnDef,
+  MatHeaderCell,
+  MatTable,
+} from '@angular/material/table';
 import {
   MAT_DIALOG_DATA,
   MatDialogClose,
   MatDialogRef,
 } from '@angular/material/dialog';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { Observable, Subject, switchMap } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { CallRequest } from '@models/call-request';
@@ -31,6 +35,12 @@ import {
   MatDatepickerInput,
 } from '@angular/material/datepicker';
 import { filter } from 'rxjs/operators';
+import { AppIcons } from '@constants/app-icons';
+import { CaseAttachment } from '@models/case-attachment';
+import { InvestigationService } from '@services/investigation.service';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { EmployeeService } from '@services/employee.service';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-apology-popup',
@@ -48,6 +58,11 @@ import { filter } from 'rxjs/operators';
     ControlDirective,
     MatDatepicker,
     MatDatepickerInput,
+    MatTable,
+    MatColumnDef,
+    MatHeaderCell,
+    CaseAttachmentsComponent,
+    MatTooltip,
   ],
   templateUrl: './apology-popup.component.html',
   styleUrl: './apology-popup.component.scss',
@@ -59,15 +74,22 @@ export class ApologyPopupComponent
   lang = inject(LangService);
   fb = inject(FormBuilder);
   dialogRef = inject(MatDialogRef);
-  CallRequestService = inject(CallRequestService);
+  callRequestService = inject(CallRequestService);
   lookupService = inject(LookupService);
+  employeeService = inject(EmployeeService);
+  investigationService = inject(InvestigationService);
   apologyReasons = this.lookupService.lookups.apologyReason.sort(
     (a: Lookup, b: Lookup) => a.lookupKey - b.lookupKey,
   );
   form!: UntypedFormGroup;
   todayDate = new Date();
-  data: CrudDialogDataContract<CallRequest> = inject(MAT_DIALOG_DATA);
+  data = inject<{
+    model: CallRequest;
+    readonly: boolean;
+  }>(MAT_DIALOG_DATA);
   save$: Subject<void> = new Subject<void>();
+  attachments: CaseAttachment[] = [];
+  readonly = this.data.readonly;
 
   ngOnInit(): void {
     this._buildForm();
@@ -83,7 +105,7 @@ export class ApologyPopupComponent
       .pipe(filter(() => this._beforeSave()))
       .pipe(
         switchMap(() => {
-          return this.CallRequestService.apology({
+          return this.callRequestService.apology({
             id: this.data.model.id,
             ...this.form.getRawValue(),
           });
@@ -92,6 +114,18 @@ export class ApologyPopupComponent
       .subscribe(() => {
         this.dialogRef.close();
       });
+  }
+
+  openAddDialog() {
+    this.investigationService
+      .openAddAttachmentDialog(
+        '',
+        this.callRequestService,
+        'apology',
+        this.offenderId,
+      )
+      .afterClosed()
+      .subscribe(() => {});
   }
 
   protected _beforeSave(): boolean {
@@ -104,4 +138,8 @@ export class ApologyPopupComponent
       ...this.form.value,
     });
   }
+  get offenderId() {
+    return this.employeeService.getLoginData()?.person.id as number;
+  }
+  protected readonly AppIcons = AppIcons;
 }
