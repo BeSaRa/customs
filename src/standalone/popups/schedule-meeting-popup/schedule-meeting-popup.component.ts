@@ -24,7 +24,6 @@ import { LDAPGroupNames } from '@enums/department-group-names.enum';
 import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
 import { Investigation } from '@models/investigation';
 import { OperationType } from '@enums/operation-type';
-import { AttendanceListComponent } from '@standalone/components/attendance-list/attendance-list.component';
 
 @Component({
   selector: 'app-schedule-meeting-popup',
@@ -42,7 +41,6 @@ import { AttendanceListComponent } from '@standalone/components/attendance-list/
     NgxMatTimepickerDirective,
     NgxMatTimepickerComponent,
     OffenderListComponent,
-    AttendanceListComponent,
   ],
   templateUrl: './schedule-meeting-popup.component.html',
   styleUrl: './schedule-meeting-popup.component.scss',
