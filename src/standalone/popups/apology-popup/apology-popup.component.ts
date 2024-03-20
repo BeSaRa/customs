@@ -122,7 +122,7 @@ export class ApologyPopupComponent
         '',
         this.callRequestService,
         'apology',
-        this.offenderId,
+        this.data.model.summonedId,
       )
       .afterClosed()
       .subscribe(() => {});
