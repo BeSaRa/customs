@@ -17,6 +17,8 @@ import { DeclarationNumberDetailsResult } from '@models/declaration-number-detai
 import { b64toBlob } from '@utils/utils';
 import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
 import { Violation } from '@models/violation';
+import { Meeting } from '@models/meeting';
+import { HttpParams } from '@angular/common/http';
 import { CaseAttachment } from '@models/case-attachment';
 import { HttpParams } from '@angular/common/http';
 import { Memorandum } from '@models/memorandum';
@@ -29,6 +31,9 @@ import { OperationType } from '@enums/operation-type';
   },
   suspend: {
     model: () => SuspendEmployee,
+  },
+  meeting: {
+    model: () => Meeting,
   },
 })
 @Injectable({
@@ -130,6 +135,25 @@ export class InvestigationService
     return this.http.get<OffenceNumberDetailsResult>(
       this.getUrlSegment() +
         `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
+    );
+  }
+  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
+  addDisciplinaryDecision(penaltyDecisionId: number) {
+    return this.http.post(
+      this.getUrlSegment() + '/document/dc/decisions',
+      {},
+      {
+        params: new HttpParams({
+          fromObject: { penaltyDecisionId },
+        }),
+      },
+    );
+  }
+  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
+  addMeetingMinutes(body: Meeting) {
+    return this.http.post(
+      this.getUrlSegment() + '/document/dc/meeting-minutes',
+      body,
     );
   }
 
