@@ -2,7 +2,12 @@ import { BaseModel } from '@abstracts/base-model';
 import { WitnessService } from '@services/witness.service';
 import { CustomValidators } from '@validators/custom-validators';
 import { AdminResult } from './admin-result';
+import { WitnessInterceptor } from '@model-interceptors/witness-interceptor';
+import { InterceptModel } from 'cast-response';
 
+const { send, receive } = new WitnessInterceptor();
+
+@InterceptModel({ send, receive })
 export class Witness extends BaseModel<Witness, WitnessService> {
   $$__service_name__$$ = 'WitnessService';
   caseId!: string;

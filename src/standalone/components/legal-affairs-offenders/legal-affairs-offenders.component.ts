@@ -1,10 +1,10 @@
 import {
   Component,
   computed,
-  effect,
   inject,
   input,
   OnInit,
+  signal,
 } from '@angular/core';
 import { Investigation } from '@models/investigation';
 import {
@@ -23,7 +23,7 @@ import {
 import { LangService } from '@services/lang.service';
 import { Offender } from '@models/offender';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { Subject } from 'rxjs';
+import { exhaustMap, Subject } from 'rxjs';
 import { OffenderTypes } from '@enums/offender-types';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -52,6 +52,8 @@ import { DialogService } from '@services/dialog.service';
 import { CallRequestService } from '@services/call-request.service';
 import { CallRequest } from '@models/call-request';
 import { CallRequestRecordsTableComponent } from '@standalone/components/call-request-records-table/call-request-records-table.component';
+import { Witness } from '@models/witness';
+import { WitnessService } from '@services/witness.service';
 
 @Component({
   selector: 'app-legal-affairs-offenders',
@@ -108,10 +110,20 @@ export class LegalAffairsOffendersComponent
   lookupService = inject(LookupService);
   investigationReportService = inject(InvestigationReportService);
   callRequestService = inject(CallRequestService);
+  witnessService = inject(WitnessService);
   model = input.required<Investigation>();
   concernedOffenders = computed(() => {
     return (this.model() && this.model().getConcernedOffenders()) || [];
   });
+
+  witness = signal<Witness[]>([]);
+
+  models = computed(() => {
+    return this.isOffender()
+      ? this.concernedOffenders()
+      : (this.witness() as unknown as Offender[]);
+  });
+
   dialog = inject(DialogService);
   offenderViolationsMap = computed<Record<number, OffenderViolation[]>>(() => {
     return this.model().offenderViolationInfo.reduce(
@@ -128,29 +140,34 @@ export class LegalAffairsOffendersComponent
       {} as Record<number, OffenderViolation[]>,
     );
   });
+  type = input.required<'offender' | 'witness'>();
+  isOffender = computed(() => this.type() === 'offender');
+  isWitness = computed(() => this.type() === 'witness');
 
-  effect = effect(() => {
-    console.log(this.model());
-    console.log(this.concernedOffenders());
-    console.log(this.offenderViolationsMap());
+  employeeService = inject(EmployeeService);
+  displayedColumns = computed<string[]>(() => {
+    const buttons = [];
+    this.employeeService.hasPermissionTo('MANAGE_OBLIGATION_TO_ATTEND') &&
+      buttons.push('call');
+    this.employeeService.hasPermissionTo(
+      'ADMINISTRATIVE_INVESTIGATION_REPORT',
+    ) && buttons.push('investigation');
+    return ([] as string[])
+      .concat(
+        this.isOffender()
+          ? ['offenderName', 'qid', 'departmentCompany', 'jobGrade']
+          : ['witnessName', 'witnessQid', 'witnessType', 'personType'],
+      )
+      .concat(buttons);
   });
-  displayedColumns = [
-    'offenderName',
-    'qid',
-    'departmentCompany',
-    'jobGrade',
-    'call',
-    'investigation',
-    // 'hearingStatements',
-  ];
-
-  requestCall$ = new Subject<Offender>();
-  requestInvestigation$ = new Subject<Offender>();
-  requestHearing$ = new Subject<Offender>();
+  reloadWitness$ = new Subject<void>();
+  requestCall$ = new Subject<Offender | Witness>();
+  requestInvestigation$ = new Subject<Offender | Witness>();
 
   reload$ = new Subject<{
     type: 'call' | 'investigation';
-    offenderId: number;
+    offenderId?: number;
+    witnessId?: number;
   }>();
 
   offenderTypesMap: Record<number, Lookup> =
@@ -162,18 +179,28 @@ export class LegalAffairsOffendersComponent
     }, {});
 
   selectedOffender?: Offender;
-  employeeService = inject(EmployeeService);
+
+  protected readonly AppIcons = AppIcons;
+  addWitness$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
     this.listenToRequestCall();
     this.listenToRequestInvestigation();
+
+    if (this.isWitness()) {
+      this.listenToAddWitness();
+      this.listenToReloadWitness();
+      this.reloadWitness$.next();
+    }
   }
 
   assertType(item: unknown): Offender {
     return item as Offender;
   }
 
-  protected readonly AppIcons = AppIcons;
+  assertWitness(item: unknown): Witness {
+    return item as Witness;
+  }
 
   toggleOffender($event: MouseEvent, element: Offender) {
     if (($event.target as HTMLElement).nodeName === 'BUTTON') return;
@@ -189,7 +216,7 @@ export class LegalAffairsOffendersComponent
     this.requestCall$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(offender => {
+        switchMap(person => {
           return this.callRequestService
             .openCreateDialog(
               new CallRequest().clone<CallRequest>({
@@ -200,19 +227,22 @@ export class LegalAffairsOffendersComponent
                 }),
               }),
               {
-                offender,
+                ...(this.isOffender()
+                  ? { offender: person }
+                  : { witness: person }),
                 caseId: this.model().id,
               },
             )
             .afterClosed()
-            .pipe(map(() => offender));
+            .pipe(map(() => person));
         }),
       )
-      .subscribe(offender => {
-        // this.dialog.info(this.lang.map.this_feature_is_being_worked_on);
+      .subscribe(person => {
         this.reload$.next({
           type: 'call',
-          offenderId: offender.id,
+          ...(this.isOffender()
+            ? { offenderId: person.id }
+            : { witnessId: person.id }),
         });
       });
   }
@@ -221,7 +251,7 @@ export class LegalAffairsOffendersComponent
     this.requestInvestigation$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(offender =>
+        switchMap(person =>
           this.investigationReportService
             .openCreateDialog(
               new InvestigationReport().clone<InvestigationReport>({
@@ -232,17 +262,45 @@ export class LegalAffairsOffendersComponent
                   enName: this.employeeService.getEmployee()?.enName,
                 }),
               }),
-              { offender, caseId: this.model().id },
+              {
+                ...(this.isOffender()
+                  ? { offender: person }
+                  : { witness: person }),
+                caseId: this.model().id,
+              },
             )
             .afterClosed()
-            .pipe(map(() => offender)),
+            .pipe(map(() => person)),
         ),
       )
-      .subscribe(offender => {
+      .subscribe(person => {
         this.reload$.next({
-          type: 'investigation',
-          offenderId: offender.id,
+          type: 'call',
+          ...(this.isOffender()
+            ? { offenderId: person.id }
+            : { witnessId: person.id }),
         });
+      });
+  }
+
+  private listenToReloadWitness() {
+    this.reloadWitness$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(switchMap(() => this.witnessService.loadForCase(this.model().id)))
+      .subscribe(list => {
+        this.witness.set(list);
+      });
+  }
+
+  private listenToAddWitness() {
+    this.addWitness$
+      .pipe(
+        exhaustMap(() =>
+          this.witnessService.openCreateDialog(this.model().id).afterClosed(),
+        ),
+      )
+      .subscribe(() => {
+        this.reloadWitness$.next();
       });
   }
 }

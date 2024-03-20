@@ -1,4 +1,11 @@
-import { Component, effect, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  OnInit,
+} from '@angular/core';
 import { InvestigationReportService } from '@services/investigation-report.service';
 import {
   MatCell,
@@ -27,6 +34,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { ignoreErrors } from '@utils/utils';
 import { ConfigService } from '@services/config.service';
 import { ToastService } from '@services/toast.service';
+import { Witness } from '@models/witness';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -58,12 +66,19 @@ export class InvestigationRecordsTableComponent
   lang = inject(LangService);
   investigationReportService = inject(InvestigationReportService);
   models: InvestigationReport[] = [];
-  offender = input.required<Offender>();
+  person = input.required<Offender | Witness>();
   model = input.required<Investigation>();
-  selected = input<Offender>();
+  selected = input<Offender | Witness>();
+
+  isOffender = computed(() => {
+    return this.person() instanceof Offender;
+  });
+  isWitness = computed(() => {
+    return this.person() instanceof Witness;
+  });
   reload$ = new Subject<void>();
   selectedChange = effect(() => {
-    if (this.selected() === this.offender()) {
+    if (this.selected() === this.person()) {
       this.reload$.next();
     }
   });
@@ -77,10 +92,13 @@ export class InvestigationRecordsTableComponent
   toast = inject(ToastService);
   selectedUploadReport?: InvestigationReport;
   uploader?: HTMLInputElement;
-  reloadInput =
-    input.required<
-      Subject<{ type: 'call' | 'investigation'; offenderId: number }>
-    >();
+  reloadInput = input.required<
+    Subject<{
+      type: 'call' | 'investigation';
+      offenderId?: number;
+      witnessId?: number;
+    }>
+  >();
 
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
@@ -104,8 +122,10 @@ export class InvestigationRecordsTableComponent
           return this.investigationReportService
             .load(undefined, {
               caseId: this.model().id,
-              summonedType: SummonType.OFFENDER,
-              summonedId: this.offender().id,
+              summonedType: this.isOffender()
+                ? SummonType.OFFENDER
+                : SummonType.WITNESS,
+              summonedId: this.person().id,
             })
             .pipe(ignoreErrors());
         }),
@@ -122,7 +142,9 @@ export class InvestigationRecordsTableComponent
         switchMap(report => {
           return report
             .openView({
-              offender: this.offender(),
+              ...(this.isOffender()
+                ? { offender: this.person() }
+                : { witness: this.person() }),
               caseId: this.model().id,
             })
             .afterClosed();
@@ -138,7 +160,9 @@ export class InvestigationRecordsTableComponent
         switchMap(report => {
           return report
             .openEdit({
-              offender: this.offender(),
+              ...(this.isOffender()
+                ? { offender: this.person() }
+                : { witness: this.person() }),
               caseId: this.model().id,
             })
             .afterClosed();
@@ -216,7 +240,7 @@ export class InvestigationRecordsTableComponent
           filter(
             value =>
               value.type === 'investigation' &&
-              value.offenderId === this.offender().id,
+              value.offenderId === this.person().id,
           ),
         )
         .subscribe(() => this.reload$.next());

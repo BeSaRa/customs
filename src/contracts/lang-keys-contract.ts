@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  name: string;
   file_uploaded_successfully: string;
   download: string;
   investigator: string;

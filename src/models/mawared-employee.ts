@@ -105,7 +105,7 @@ export class MawaredEmployee extends BaseModel<
   convertToOffender(caseId: string): Offender {
     return new Offender().clone<Offender>({
       caseId: caseId,
-      enName: this.arName,
+      enName: this.enName,
       arName: this.arName,
       type: OffenderTypes.EMPLOYEE,
       offenderRefId: this.id,
@@ -118,7 +118,7 @@ export class MawaredEmployee extends BaseModel<
     return new Witness().clone<Witness>({
       personType,
       caseId: caseId,
-      enName: this.arName,
+      enName: this.enName,
       arName: this.arName,
       witnessType: WitnessTypes.EMPLOYEE,
       witnessRefId: this.id,

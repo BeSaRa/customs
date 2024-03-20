@@ -99,7 +99,7 @@ export class ClearingAgent extends BaseModel<
     return new Witness().clone<Witness>({
       personType,
       caseId: caseId,
-      enName: this.arName,
+      enName: this.enName,
       arName: this.arName,
       witnessType: WitnessTypes.ClEARING_AGENT,
       witnessRefId: this.agentId,

@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   effect,
   inject,
   input,
@@ -39,6 +40,7 @@ import { CallRequestStatus } from '@enums/call-request-status';
 import { Lookup } from '@models/lookup';
 import { AdminResult } from '@models/admin-result';
 import { ToastService } from '@services/toast.service';
+import { Witness } from '@models/witness';
 
 @Component({
   selector: 'app-call-request-records-table',
@@ -69,9 +71,15 @@ export class CallRequestRecordsTableComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
-  offender = input.required<Offender>();
+  person = input.required<Offender | Witness>();
   model = input.required<Investigation>();
-  selected = input<Offender>();
+  selected = input<Offender | Witness>();
+  isOffender = computed(() => {
+    return this.person() instanceof Offender;
+  });
+  isWitness = computed(() => {
+    return this.person() instanceof Witness;
+  });
   lang = inject(LangService);
   models: CallRequest[] = [];
   reload$ = new Subject<void>();
@@ -79,7 +87,7 @@ export class CallRequestRecordsTableComponent
   view$ = new Subject<CallRequest>();
   service = inject(CallRequestService);
   selectedChange = effect(() => {
-    if (this.selected() === this.offender()) {
+    if (this.selected() === this.person()) {
       this.reload$.next();
     }
   });
@@ -102,10 +110,13 @@ export class CallRequestRecordsTableComponent
     ),
   );
 
-  reloadInput =
-    input.required<
-      Subject<{ type: 'call' | 'investigation'; offenderId: number }>
-    >();
+  reloadInput = input.required<
+    Subject<{
+      type: 'call' | 'investigation';
+      offenderId?: number;
+      witnessId?: number;
+    }>
+  >();
 
   ngOnInit(): void {
     this.listenToReload();
@@ -126,8 +137,10 @@ export class CallRequestRecordsTableComponent
           return this.service
             .load(undefined, {
               caseId: this.model().id,
-              summonedType: SummonType.OFFENDER,
-              summonedId: this.offender().id,
+              summonedType: this.isOffender()
+                ? SummonType.OFFENDER
+                : SummonType.WITNESS,
+              summonedId: this.person().id,
             })
             .pipe(ignoreErrors());
         }),
@@ -144,7 +157,9 @@ export class CallRequestRecordsTableComponent
         switchMap(callRequest => {
           return callRequest
             .openView({
-              offender: this.offender(),
+              ...(this.isOffender()
+                ? { offender: this.person() }
+                : { witness: this.person() }),
               caseId: this.model().id,
             })
             .afterClosed();
@@ -160,7 +175,9 @@ export class CallRequestRecordsTableComponent
         switchMap(callRequest => {
           return callRequest
             .openEdit({
-              offender: this.offender(),
+              ...(this.isOffender()
+                ? { offender: this.person() }
+                : { witness: this.person() }),
               caseId: this.model().id,
             })
             .afterClosed();
@@ -190,7 +207,7 @@ export class CallRequestRecordsTableComponent
         .pipe(
           filter(
             value =>
-              value.type === 'call' && value.offenderId === this.offender().id,
+              value.type === 'call' && value.offenderId === this.person().id,
           ),
         )
         .subscribe(() => this.reload$.next());

@@ -43,6 +43,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { LegalAffairsOffendersComponent } from '@standalone/components/legal-affairs-offenders/legal-affairs-offenders.component';
 import { DisciplinaryCommitteeMeetingsComponent } from '@standalone/components/disciplinary-committee-meetings/disciplinary-committee-meetings.component';
+import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { DisciplinaryCommitteeMeetingsComponent } from '@standalone/components/d
     LegalAffairsOffendersComponent,
     SituationSearchBtnComponent,
     DisciplinaryCommitteeMeetingsComponent,
+    LegalAffairsProceduresComponent,
   ],
 })
 export class ElectronicServicesModule {}
