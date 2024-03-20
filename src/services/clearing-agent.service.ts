@@ -8,6 +8,7 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { ClearingAgentCriteriaContract } from '@contracts/clearing-agent-criteria-contract';
 
 @CastResponseContainer({
   $pagination: {
@@ -58,5 +59,16 @@ export class ClearingAgentService extends BaseCrudWithDialogService<
         }),
       },
     );
+  }
+
+  @CastResponse()
+  loadCriteria(
+    options: Partial<ClearingAgentCriteriaContract>,
+  ): Observable<ClearingAgent[]> {
+    return this.http.get<ClearingAgent[]>(this.getUrlSegment() + `/criteria`, {
+      params: new HttpParams({
+        fromObject: { ...options },
+      }),
+    });
   }
 }
