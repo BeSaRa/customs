@@ -564,7 +564,8 @@ export interface LangKeysContract {
   lbl_hour: string;
   edit_memo: string;
   update_meeting: string;
-  meeting_minutes: string;
   launch_disciplinary_committee: string;
   add_meeting_minutes: string;
+  meeting_minutes: string;
+  meetings_minutes: string;
 }
