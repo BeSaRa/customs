@@ -65,14 +65,17 @@
         <mat-tab [label]="lang.map.menu_internal_user_ou">
           <div class="p-4">
             <app-internal-user-ou
-              [internalUser]="data.model"></app-internal-user-ou>
+              [internalUser]="data.model"
+              [inViewMode]="inViewMode()"></app-internal-user-ou>
           </div>
         </mat-tab>
       }
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.menu_user_team">
           <div class="p-4">
-            <app-user-team [internalUser]="data.model"></app-user-team>
+            <app-user-team
+              [internalUser]="data.model"
+              [inViewMode]="inViewMode()"></app-user-team>
           </div>
         </mat-tab>
       }

@@ -79,6 +79,7 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
   permissionsRoles!: PermissionRole[];
   ouId = this.data.model.organizationUnitId;
   internalUserId = this.data.model.internalUserId;
+  inViewMode = !!this.data.extras?.inViewMode;
   protected readonly AppIcons = AppIcons;
 
   private readonly permissionRoleService = inject(PermissionRoleService);

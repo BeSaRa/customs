@@ -28,6 +28,7 @@ export class InternalUserOUComponent
   implements OnInit
 {
   @Input({ required: true }) internalUser!: InternalUser;
+  @Input({ required: true }) inViewMode!: boolean;
   organizationUnits: number[] = [];
   defaultOUId!: number;
   editUserPermissions$: Subject<InternalUserOU> = new Subject<InternalUserOU>();
@@ -57,6 +58,7 @@ export class InternalUserOUComponent
       name: 'delete',
       type: 'action',
       label: 'delete',
+      disabled: this.inViewMode,
       icon: AppIcons.DELETE,
       callback: item => {
         this.delete$.next(item);
@@ -112,6 +114,9 @@ export class InternalUserOUComponent
       this.dialog.open(InternalUserPermissionsPopupComponent, {
         data: {
           model: item,
+          extras: {
+            inViewMode: this.inViewMode,
+          },
         },
       });
     });

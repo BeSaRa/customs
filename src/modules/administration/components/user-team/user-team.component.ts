@@ -32,12 +32,14 @@ export class UserTeamComponent extends AdminComponent<
   UserTeamService
 > {
   @Input({ required: true }) internalUser!: InternalUser;
+  @Input({ required: true }) inViewMode!: boolean;
   service = inject(UserTeamService);
   actions: ContextMenuActionContract<UserTeam>[] = [
     {
       name: 'delete',
       type: 'action',
       label: 'delete',
+      disabled: this.inViewMode,
       icon: AppIcons.DELETE,
       callback: item => {
         this.delete$.next(item);
@@ -45,6 +47,7 @@ export class UserTeamComponent extends AdminComponent<
     },
   ];
   override data$: Observable<UserTeam[]> = this._load();
+
   protected override _load(): Observable<UserTeam[]> {
     return of(undefined)
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.

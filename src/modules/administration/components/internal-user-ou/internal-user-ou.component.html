@@ -3,10 +3,12 @@
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_internal_user_ou }}
   </h1>
-  <app-icon-button
-    [matTooltip]="lang.map.add"
-    (click)="create$.next()"
-    icon="PLUS"></app-icon-button>
+  @if (!inViewMode) {
+    <app-icon-button
+      [matTooltip]="lang.map.add"
+      (click)="create$.next()"
+      icon="PLUS"></app-icon-button>
+  }
 </div>
 <div class="shadow relative">
   @if (loading$ | async) {
@@ -43,6 +45,7 @@
         <mat-slide-toggle
           #slideToggle
           class="cursor-no-drop"
+          [disabled]="inViewMode"
           (change)="changeDefaultDepartment(element, slideToggle)"
           [checked]="isDefaultDepartment(element)">
         </mat-slide-toggle>
@@ -55,7 +58,7 @@
       <td mat-cell *matCellDef="let element">
         <div class="flex">
           <app-icon-button
-            [disabled]="(loading$ | async)!"
+            [disabled]="(loading$ | async)! || inViewMode"
             [matTooltip]="lang.map.delete"
             (click)="delete$.next(element)"
             icon="DELETE"></app-icon-button>

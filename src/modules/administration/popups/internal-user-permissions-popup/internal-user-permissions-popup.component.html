@@ -10,20 +10,24 @@
   <div>
     <ng-container>
       <div class="p-4">
-        <!-- user permissions -->
-        <app-select-input
-          [options]="permissionsRoles"
-          bindValue="id"
-          bindLabel="getNames"
-          [label]="lang.map.lbl_custom_role"
-          [formControl]="permissionRoleId"></app-select-input>
+        @if (!inViewMode) {
+          <!-- user permissions -->
+          <app-select-input
+            [options]="permissionsRoles"
+            bindValue="id"
+            bindLabel="getNames"
+            [label]="lang.map.lbl_custom_role"
+            [formControl]="permissionRoleId"></app-select-input>
+        }
       </div>
 
       <div class="grid grid-cols-1 gap-4 p-4">
         @for (group of groups; track group) {
           <div class="border-b flex items-center justify-between bg-slate-300">
             <mat-checkbox
-              [disabled]="!group.list.length || !permissionRoleId.valid"
+              [disabled]="
+                !group.list.length || inViewMode || !permissionRoleId.valid
+              "
               (change)="group.toggleSelection()"
               [checked]="group.isFull()"
               [indeterminate]="group.isIndeterminate()">
@@ -72,7 +76,7 @@
               track permission
             ) {
               <mat-checkbox
-                [disabled]="!permissionRoleId.valid"
+                [disabled]="!permissionRoleId.valid || inViewMode"
                 [checked]="group.isSelected(permission.id)"
                 (change)="group.toggle(permission.id)">
                 <span
@@ -88,7 +92,7 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save()" buttonType="primary"
+    <app-button [disabled]="inViewMode" (click)="save()" buttonType="primary"
       >{{ lang.map.save }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline"
