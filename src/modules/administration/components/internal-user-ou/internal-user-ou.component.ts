@@ -9,9 +9,10 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InternalUser } from '@models/internal-user';
-import { map } from 'rxjs';
+import { map, Subject } from 'rxjs';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { InternalUserService } from '@services/internal-user.service';
+import { InternalUserPermissionsPopupComponent } from '@modules/administration/popups/internal-user-permissions-popup/internal-user-permissions-popup.component';
 
 @Component({
   selector: 'app-internal-user-ou',
@@ -29,6 +30,7 @@ export class InternalUserOUComponent
   @Input({ required: true }) internalUser!: InternalUser;
   organizationUnits: number[] = [];
   defaultOUId!: number;
+  editUserPermissions$: Subject<InternalUserOU> = new Subject<InternalUserOU>();
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -45,6 +47,7 @@ export class InternalUserOUComponent
       );
     this.filter$.next({ internalUserId: this.internalUser.id });
     this.defaultOUId = this.internalUser.defaultOUId;
+    this.listenToEditUserPermissions();
   }
 
   service = inject(InternalUserOUService);
@@ -57,6 +60,15 @@ export class InternalUserOUComponent
       icon: AppIcons.DELETE,
       callback: item => {
         this.delete$.next(item);
+      },
+    },
+    {
+      name: 'permissions',
+      type: 'action',
+      label: 'lbl_permissions',
+      icon: AppIcons.PERMISSIONS_LIST,
+      callback: item => {
+        this.editUserPermissions$.next(item);
       },
     },
   ];
@@ -93,5 +105,15 @@ export class InternalUserOUComponent
 
   isDefaultDepartment(element: InternalUserOU): boolean {
     return element.organizationUnitId === this.defaultOUId;
+  }
+
+  listenToEditUserPermissions() {
+    this.editUserPermissions$.subscribe(item => {
+      this.dialog.open(InternalUserPermissionsPopupComponent, {
+        data: {
+          model: item,
+        },
+      });
+    });
   }
 }

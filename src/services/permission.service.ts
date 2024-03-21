@@ -5,6 +5,7 @@ import { CastResponse, CastResponseContainer } from 'cast-response';
 import { map, Observable, tap } from 'rxjs';
 import { Constructor } from '@app-types/constructors';
 import { ResponseContract } from '@contracts/response-contract';
+import { InternalUserPermission } from '@models/internal-user-permission';
 
 @CastResponseContainer({
   $default: {
@@ -26,31 +27,35 @@ export class PermissionService extends BaseCrudService<Permission> {
     return this.urlService.URLS.USER_PERMISSION;
   }
 
-  @CastResponse(() => Permission)
-  private _loadUserPermissions(userId: number): Observable<Permission[]> {
-    return this.http.get<Permission[]>(
+  @CastResponse(() => InternalUserPermission)
+  private _loadUserPermissions(
+    userId: number,
+  ): Observable<InternalUserPermission[]> {
+    return this.http.get<InternalUserPermission[]>(
       this.getUrlSegmentUserPermission() + '/internal/' + userId,
     );
   }
 
   private _savePermissions(
     userId: number,
+    ouId: number,
     permissions: number[],
   ): Observable<ResponseContract<number>> {
     return this.http.post<ResponseContract<number>>(
-      this.getUrlSegmentUserPermission() + '/' + userId + '/bulk',
+      this.getUrlSegmentUserPermission() + '/' + userId + '/bulk/' + ouId,
       permissions,
     );
   }
 
   savePermissions(
     userId: number,
+    ouId: number,
     permissions: number[],
   ): Observable<ResponseContract<number>> {
-    return this._savePermissions(userId, permissions);
+    return this._savePermissions(userId, ouId, permissions);
   }
 
-  loadUserPermissions(userId: number): Observable<Permission[]> {
+  loadUserPermissions(userId: number): Observable<InternalUserPermission[]> {
     return this._loadUserPermissions(userId);
   }
 
