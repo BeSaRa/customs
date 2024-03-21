@@ -21,7 +21,6 @@ export class UserPreferences extends BaseModel<
   email!: string;
   isMailNotificationEnabled!: boolean;
   isSMSNotificationEnabled!: boolean;
-  isPrivateUser!: boolean;
   defaultLang = 1;
 
   private _alternateEmailList!: string;
@@ -43,7 +42,6 @@ export class UserPreferences extends BaseModel<
       defaultLang,
       isMailNotificationEnabled,
       isSMSNotificationEnabled,
-      isPrivateUser,
     } = this;
 
     return {
@@ -56,9 +54,6 @@ export class UserPreferences extends BaseModel<
       isSMSNotificationEnabled: controls
         ? [isSMSNotificationEnabled, CustomValidators.required]
         : isSMSNotificationEnabled,
-      isPrivateUser: controls
-        ? [isPrivateUser, CustomValidators.required]
-        : isPrivateUser,
       alternateEmailListParsed: alternateEmailListParsed,
     };
   }
