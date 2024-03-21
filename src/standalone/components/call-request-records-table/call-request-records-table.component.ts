@@ -205,9 +205,10 @@ export class CallRequestRecordsTableComponent
       this.reloadInput()
         .pipe(takeUntil(this.destroy$))
         .pipe(
-          filter(
-            value =>
-              value.type === 'call' && value.offenderId === this.person().id,
+          filter(value =>
+            value.type === 'call' && this.isOffender()
+              ? value.offenderId === this.person().id
+              : value.witnessId === this.person().id,
           ),
         )
         .subscribe(() => this.reload$.next());

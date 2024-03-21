@@ -9,6 +9,11 @@
       <span class="text-lg text-primary">
         {{ lang.map.external_persons }}
       </span>
+      <app-icon-button
+        [matTooltip]="lang.map.reload"
+        class="text-primary"
+        (click)="reloadWitness$.next()"
+        icon="RELOAD" />
       @if (employeeService.hasPermissionTo('MANAGE_WITNESS')) {
         <app-icon-button
           [matTooltip]="lang.map.add"

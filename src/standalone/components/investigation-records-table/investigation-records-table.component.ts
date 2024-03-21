@@ -237,10 +237,10 @@ export class InvestigationRecordsTableComponent
       this.reloadInput()
         .pipe(takeUntil(this.destroy$))
         .pipe(
-          filter(
-            value =>
-              value.type === 'investigation' &&
-              value.offenderId === this.person().id,
+          filter(value =>
+            value.type === 'investigation' && this.isOffender()
+              ? value.offenderId === this.person().id
+              : value.witnessId === this.person().id,
           ),
         )
         .subscribe(() => this.reload$.next());
