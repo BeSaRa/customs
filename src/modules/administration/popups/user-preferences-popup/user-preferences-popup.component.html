@@ -76,18 +76,6 @@
                   >{{ lang.map.sms_notifications }}</label
                 >
               </div>
-              <!-- is private user -->
-              <div class="flex items-center mr-4">
-                <app-switch
-                  id="isPrivateUser"
-                  formControlName="isPrivateUser"
-                  [trueValue]="1"
-                  [falseValue]="0"
-                  [matTooltip]="lang.map.change_status"></app-switch>
-                <label class="ml-2 block font-medium" for="isPrivateUser">{{
-                  lang.map.private_user
-                }}</label>
-              </div>
               <!-- mail notifications -->
               <div class="flex items-center mr-4">
                 <app-switch
@@ -145,19 +133,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="this.save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="this.save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>

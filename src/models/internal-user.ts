@@ -115,9 +115,6 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
                 CustomValidators.required,
               ]
             : userPreferences.isSMSNotificationEnabled,
-          isPrivateUser: controls
-            ? [userPreferences.isPrivateUser, CustomValidators.required]
-            : userPreferences.isPrivateUser,
           defaultLang: controls
             ? [userPreferences.defaultLang]
             : userPreferences.defaultLang,
@@ -125,7 +122,6 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       : {
           isMailNotificationEnabled: [false, CustomValidators.required],
           isSMSNotificationEnabled: [false, CustomValidators.required],
-          isPrivateUser: [false, CustomValidators.required],
           limitedCirculation: [false, CustomValidators.required],
           defaultLang: [1, CustomValidators.required],
         };
