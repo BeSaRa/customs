@@ -17,26 +17,28 @@
             bindLabel="getNames"
             [label]="lang.map.organization_unit"
             formControlName="organizationUnitArray"
-            [isMultiple]="true"></app-select-input>
+            [isMultiple]="true"
+            [enableFilter]="true"
+            bindFilter="getNames"></app-select-input>
         </div>
       </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="saveBulk$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="saveBulk$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>
