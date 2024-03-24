@@ -118,7 +118,7 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
   private load(): Observable<CheckGroup<Permission>[]> {
     return combineLatest({
       permissions: this.permissionService.loadAsLookups(),
-      groups: of(this.lookupService.lookups.permissionGroups),
+      groups: of(this.lookupService.lookups.permissionGroup),
     }).pipe(
       tap(({ permissions }) => {
         this.permissionsByGroup = permissions.reduce(
