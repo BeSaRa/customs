@@ -29,7 +29,7 @@ export interface LookupMapContract {
   serviceActionType: Lookup[];
   serviceRequestType: Lookup[];
   userType: Lookup[];
-  permissionGroups: Lookup[];
+  permissionGroup: Lookup[];
   offenderLevel: Lookup[];
   penaltyGuidance: Lookup[];
   offenderType: Lookup[];
