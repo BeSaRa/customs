@@ -145,7 +145,7 @@ export class InvestigationRecordsTableComponent
               ...(this.isOffender()
                 ? { offender: this.person() }
                 : { witness: this.person() }),
-              caseId: this.model().id,
+              model: this.model(),
             })
             .afterClosed();
         }),
@@ -163,7 +163,7 @@ export class InvestigationRecordsTableComponent
               ...(this.isOffender()
                 ? { offender: this.person() }
                 : { witness: this.person() }),
-              caseId: this.model().id,
+              model: this.model(),
             })
             .afterClosed();
         }),

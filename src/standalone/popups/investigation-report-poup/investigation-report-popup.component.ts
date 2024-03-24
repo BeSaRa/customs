@@ -39,6 +39,7 @@ import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
 import { UserClick } from '@enums/user-click';
 import { InvestigationReportService } from '@services/investigation-report.service';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -72,7 +73,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   override data: CrudDialogDataContract<
     InvestigationReport,
     {
-      caseId: string;
+      model: Investigation;
       offender?: Offender;
       witness?: Witness;
     }
@@ -81,6 +82,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   dialog = inject(DialogService);
   investigationReportService = inject(InvestigationReportService);
   override form!: UntypedFormGroup;
+  investigationModel = signal(this.data.extras!.model!);
   offender = signal(this.data.extras!.offender);
   witness = signal(this.data.extras!.witness);
   isOffender = signal(!!this.offender());
@@ -180,7 +182,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     return new InvestigationReport().clone<InvestigationReport>({
       ...this.model,
       category: this.category(),
-      caseId: this.data.extras?.caseId,
+      caseId: this.investigationModel().id,
       summonedType: this.summonedType(),
       summonedId: this.personId(),
       location: this.locationCtrl.getRawValue()!,

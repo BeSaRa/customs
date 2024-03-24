@@ -266,7 +266,7 @@ export class LegalAffairsOffendersComponent
                 ...(this.isOffender()
                   ? { offender: person }
                   : { witness: person }),
-                caseId: this.model().id,
+                model: this.model(),
               },
             )
             .afterClosed()
