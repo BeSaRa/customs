@@ -7,6 +7,9 @@ export const ValidationMessages: Record<string, ValidationMessageContract> = {
   AR_ONLY: { key: 'only_arabic_letters' },
   ENG_ONLY: { key: 'only_english_letters' },
   positiveNumber: { key: 'only_positive_number' },
+  number: { key: 'only_numbers' },
+  ENG_NUM_ONLY: { key: 'only_english_numbers' },
+  EMAIL: { key: 'email_format' },
   min: {
     key: 'minimum_valid_number_is_x',
     replace: (message: string, errorValue: { min: number }) =>
