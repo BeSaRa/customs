@@ -13,6 +13,8 @@ export class MawaredDepartment extends BaseModel<
   $$__service_name__$$ = 'MawaredDepartmentService';
 
   ldapCode!: string;
+  departmentId!: number;
+  parentId!: number;
 
   buildForm(): object {
     const { arName, enName, ldapCode, status } = this;

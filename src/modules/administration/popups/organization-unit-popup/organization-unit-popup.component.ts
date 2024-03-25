@@ -15,6 +15,10 @@ import { OuLogo } from '@models/ou_logo';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppIcons } from '@constants/app-icons';
 import { OrganizationUnitType } from '@enums/organization-unit-type';
+import { MawaredDepartmentService } from '@services/mawared-department.service';
+import { DialogService } from '@services/dialog.service';
+import { MawaredDepartment } from '@models/mawared-department';
+import { MawaredDepartmentResultPopupComponent } from '@modules/administration/popups/mawared-department-result-popup/mawared-department-result-popup.component';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -36,6 +40,8 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   );
   internalUserService = inject(InternalUserService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly mawaredDepartmentService = inject(MawaredDepartmentService);
+  private readonly dialog = inject(DialogService);
   internalUsers!: InternalUser[];
   organizationUnitService = inject(OrganizationUnitService);
   organizationUnits!: OrganizationUnit[];
@@ -141,5 +147,50 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       .subscribe(blob => {
         if (blob.blob.size !== 0) this.ouLogoSafeUrl = blob.safeUrl;
       });
+  }
+
+  get mawaredDepIdCtrl() {
+    return this.form.get('mawaredDepId');
+  }
+
+  autoFillFields() {
+    this.mawaredDepartmentService.loadAsLookups().subscribe(departments => {
+      const res = departments.filter(dep => {
+        return dep?.departmentId
+          .toString()
+          .includes(this.mawaredDepIdCtrl?.value);
+      });
+      if (!res.length) {
+        this.dialog.warning(
+          this.lang.map.no_mawared_department_with_this_department_id,
+        );
+      } else if (res.length === 1) {
+        this.setDepartment(res[0]);
+      } else {
+        this.dialog
+          .open(MawaredDepartmentResultPopupComponent, {
+            data: { mawaredDepartments: res },
+          })
+          .afterClosed()
+          .subscribe(res => {
+            if (res) {
+              this.setDepartment(res as unknown as MawaredDepartment);
+            }
+          });
+      }
+    });
+  }
+
+  setDepartment(department: MawaredDepartment) {
+    const { arName, enName, status, departmentId, ldapCode, parentId } =
+      department;
+    this.form.patchValue({
+      arName,
+      enName,
+      status,
+      ldapGroupName: ldapCode,
+      mawaredDepId: departmentId,
+      parent: parentId,
+    });
   }
 }
