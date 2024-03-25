@@ -49,6 +49,7 @@ export class MawaredEmployee extends BaseModel<
   jobTitleCode?: string;
   typeInfo!: AdminResult;
   employeeNo!: number;
+  isPrivateUser!: boolean;
 
   // not related to the model
   code?: string;
@@ -74,6 +75,7 @@ export class MawaredEmployee extends BaseModel<
       employeeLastPenalties,
       totalExams,
       totalThanksBooks,
+      isPrivateUser,
     } = this;
     return {
       arName,
@@ -95,6 +97,7 @@ export class MawaredEmployee extends BaseModel<
       employeeLastPenalties,
       totalExams,
       totalThanksBooks,
+      isPrivateUser,
       statusInfo: this.getStatusInfoName(),
     };
   }
