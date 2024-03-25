@@ -8,11 +8,14 @@ import { catchError, filter, Observable, of } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
-import { PermissionService } from '@services/permission.service';
 import { AppIcons } from '@constants/app-icons';
 import { InternalUserService } from '@services/internal-user.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UserSignature } from '@models/user-signature';
+import { MawaredEmployeeService } from '@services/mawared-employee.service';
+import { DialogService } from '@services/dialog.service';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { MawaredEmployeeResultPopupComponent } from '@modules/administration/popups/mawared-employee-result-popup/mawared-employee-result-popup.component';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -23,9 +26,11 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<InternalUser> = inject(MAT_DIALOG_DATA);
   private readonly lookupService = inject(LookupService);
-  private readonly permissionService = inject(PermissionService);
   private readonly internalUserService = inject(InternalUserService);
+  private readonly mawaredEmployeeService = inject(MawaredEmployeeService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly dialog = inject(DialogService);
+
   signatureSafeUrl: SafeResourceUrl | null = null;
   userSignature!: UserSignature;
   statusList!: Lookup[];
@@ -107,5 +112,58 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     if (this.inViewMode())
       return 'rounded w-full flex items-center justify-center h-96';
     return '';
+  }
+
+  get empNumControl() {
+    return this.form.get('empNum');
+  }
+
+  autoFillFields() {
+    this.mawaredEmployeeService.loadAsLookups().subscribe(employees => {
+      const res = employees.filter(emp => {
+        return emp.employeeNo?.toString().includes(this.empNumControl?.value);
+      });
+      if (!res.length) {
+        this.dialog.warning(
+          this.lang.map.no_mawared_employee_with_this_employee_number,
+        );
+      } else if (res.length === 1) {
+        this.setEmployee(res[0]);
+      } else {
+        this.dialog
+          .open(MawaredEmployeeResultPopupComponent, {
+            data: { mawaredEmployee: res },
+          })
+          .afterClosed()
+          .subscribe(res => {
+            if (res) {
+              this.setEmployee(res as unknown as MawaredEmployee);
+            }
+          });
+      }
+    });
+  }
+
+  setEmployee(employee: MawaredEmployee) {
+    const {
+      arName,
+      enName,
+      username,
+      qid,
+      employeeNo,
+      email,
+      phoneNumber,
+      status,
+    } = employee;
+    this.form.patchValue({
+      arName,
+      enName,
+      qid,
+      email,
+      phoneNumber,
+      status,
+      domainName: username,
+      empNum: employeeNo,
+    });
   }
 }

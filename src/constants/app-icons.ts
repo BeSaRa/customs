@@ -87,6 +87,7 @@ export const AppIcons = {
   CALENDAR: 'calendar-multiselect-outline',
   FILE_EYE: 'file-eye',
   UPLOAD: 'upload',
+  AUTO_FILL: 'window-shutter-auto',
 };
 
 export type AppIconsType = typeof AppIcons;
