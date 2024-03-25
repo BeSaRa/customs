@@ -8,10 +8,9 @@ describe('MawaredDepartmentResultPopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MawaredDepartmentResultPopupComponent]
-    })
-    .compileComponents();
-    
+      imports: [MawaredDepartmentResultPopupComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MawaredDepartmentResultPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
