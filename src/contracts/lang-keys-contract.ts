@@ -548,4 +548,5 @@ export interface LangKeysContract {
   select_clearing_agent: string;
   auto_fill: string;
   no_mawared_employee_with_this_employee_number: string;
+  no_mawared_department_with_this_department_id: string;
 }
