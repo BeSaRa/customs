@@ -22,7 +22,6 @@ import {
   map,
   Observable,
   of,
-  Subject,
   tap,
 } from 'rxjs';
 import { PermissionRoleService } from '@services/permission-role.service';
@@ -39,7 +38,6 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
-import { th } from 'date-fns/locale';
 
 @Component({
   selector: 'app-internal-user-permissions-popup',

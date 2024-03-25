@@ -8,10 +8,9 @@ describe('InternalUserPermissionsPopupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InternalUserPermissionsPopupComponent]
-    })
-    .compileComponents();
-    
+      imports: [InternalUserPermissionsPopupComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(InternalUserPermissionsPopupComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
