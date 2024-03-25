@@ -48,6 +48,7 @@ export class MawaredEmployee extends BaseModel<
   phoneNumber!: string;
   jobTitleCode?: string;
   typeInfo!: AdminResult;
+  employeeNo!: number;
 
   // not related to the model
   code?: string;
