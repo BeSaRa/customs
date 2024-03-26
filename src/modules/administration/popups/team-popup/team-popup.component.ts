@@ -6,6 +6,8 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { OrganizationUnit } from '@models/organization-unit';
 
 @Component({
   selector: 'app-team-popup',
@@ -15,6 +17,16 @@ import { OperationType } from '@enums/operation-type';
 export class TeamPopupComponent extends AdminDialogComponent<Team> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Team> = inject(MAT_DIALOG_DATA);
+  organizationUnitService = inject(OrganizationUnitService);
+  organizationUnits!: OrganizationUnit[];
+
+  protected override _init(): void {
+    this.organizationUnitService
+      .loadAsLookups()
+      .subscribe(
+        organizationUnits => (this.organizationUnits = organizationUnits),
+      );
+  }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
