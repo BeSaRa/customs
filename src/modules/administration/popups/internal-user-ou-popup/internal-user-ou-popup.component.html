@@ -12,10 +12,21 @@
       <ng-container [formGroup]="form">
         <div class="mt-4">
           <app-select-input
-            [options]="organizationUnits"
+            [options]="administrationAndSectionUnits"
             bindValue="id"
             bindLabel="getNames"
             [label]="lang.map.organization_unit"
+            formControlName="administrationAndSectionUnit"
+            [isMultiple]="false"
+            [enableFilter]="true"
+            bindFilter="getNames"></app-select-input>
+        </div>
+        <div class="mt-4">
+          <app-select-input
+            [options]="departmentUnits"
+            bindValue="id"
+            bindLabel="getNames"
+            [label]="lang.map.sub_department"
             formControlName="organizationUnitArray"
             [isMultiple]="true"
             [enableFilter]="true"

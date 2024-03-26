@@ -22,6 +22,7 @@ import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { InternalUserOUService } from '@services/internal-user-ou.service';
 import { ignoreErrors } from '@utils/utils';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 @Component({
   selector: 'app-internal-user-ou-popup',
@@ -35,7 +36,8 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   service = inject(InternalUserOUService);
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
-
+  administrationAndSectionUnits!: OrganizationUnit[];
+  departmentUnits: OrganizationUnit[] = [];
   override _init(): void {
     this.listenToSaveBulk();
     this.organizationUnitService
@@ -52,6 +54,13 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
       )
       .subscribe(filteredData => {
         this.organizationUnits = filteredData;
+        console.log('this.organizationUnits: ', this.organizationUnits);
+
+        this.administrationAndSectionUnits = this.organizationUnits.filter(
+          o =>
+            o.type === OrganizationUnitType.ADMINISTRATION ||
+            o.type === OrganizationUnitType.ADMINISTRATION,
+        );
       });
   }
 
@@ -59,7 +68,9 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.form = this.fb.group(this.model.buildForm(true));
     this.internalUserId?.setValue(this.data.extras?.internalUserId);
   }
-
+  protected override _afterBuildForm(): void {
+    this.onAdministrationAndSectionChange();
+  }
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -85,12 +96,20 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
   get organizationUnitArray() {
     return this.form.get('organizationUnitArray');
   }
+  get administrationAndSectionUnit() {
+    return this.form.get('administrationAndSectionUnit');
+  }
 
   createBulk(): Observable<InternalUserOU[]> {
     const payloadArr: InternalUserOU[] = [];
-    this.organizationUnitArray?.value.forEach((value: number) => {
-      payloadArr.push({ ...this.form.value, organizationUnitId: value });
-    });
+    !this.organizationUnitArray?.value?.length
+      ? payloadArr.push({
+          ...this.form.value,
+          organizationUnitId: this.administrationAndSectionUnit?.value,
+        })
+      : this.organizationUnitArray?.value.forEach((value: number) => {
+          payloadArr.push({ ...this.form.value, organizationUnitId: value });
+        });
     return this.service.createBulkFull(
       payloadArr as unknown as InternalUserOU[],
     );
@@ -125,6 +144,16 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
       )
       .subscribe(() => {
         this._afterSave();
+      });
+  }
+
+  onAdministrationAndSectionChange() {
+    this.form
+      .get('administrationAndSectionUnit')
+      ?.valueChanges.subscribe(value => {
+        this.departmentUnits = this.organizationUnits.filter(
+          o => o.parent === value,
+        );
       });
   }
 }
