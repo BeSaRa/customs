@@ -6,6 +6,7 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import {
   catchError,
+  combineLatest,
   exhaustMap,
   filter,
   forkJoin,
@@ -23,6 +24,7 @@ import { TeamService } from '@services/team.service';
 import { Team } from '@models/team';
 import { ignoreErrors } from '@utils/utils';
 import { UserTeamService } from '@services/user-team.service';
+import { InternalUserOUService } from '@services/internal-user-ou.service';
 
 @Component({
   selector: 'app-user-team-popup',
@@ -32,6 +34,7 @@ import { UserTeamService } from '@services/user-team.service';
 export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   private teamsService = inject(TeamService);
   private userTeamService = inject(UserTeamService);
+  private internalUserOUService = inject(InternalUserOUService);
   teams!: Team[];
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<UserTeam> = inject(MAT_DIALOG_DATA);
@@ -39,17 +42,27 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
 
   protected override _init(): void {
     this.listenToSaveUserTeams();
-    this.teamsService
-      .loadAsLookups()
+    combineLatest([
+      this.teamsService.loadAsLookups(),
+      this.internalUserOUService.internalUserOUCriteria({
+        internalUserId: this.data.extras?.internalUserId as number,
+      }),
+    ])
       .pipe(
-        map(teams =>
-          teams.filter(
+        map(([teams, internalUserOUs]) => {
+          const organizationUnitIds = internalUserOUs.map(
+            internalUserOu => internalUserOu.organizationUnitId,
+          );
+          const filteredTeams = teams.filter(
             team =>
               !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
                 team.id,
               ),
-          ),
-        ),
+          );
+          return filteredTeams.filter(team =>
+            organizationUnitIds.includes(team.ouId),
+          );
+        }),
       )
       .subscribe(filteredTeams => {
         this.teams = filteredTeams;
