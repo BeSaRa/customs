@@ -22,6 +22,12 @@
         <app-input
           formControlName="teamEmail"
           [label]="lang.map.team_email"></app-input>
+        <app-select-input
+          formControlName="ouId"
+          [options]="organizationUnits"
+          [label]="lang.map.organization_unit"
+          bindValue="id"
+          bindLabel="getNames" />
         <app-switch
           formControlName="autoClaim"
           [label]="lang.map.auto_claim"></app-switch>
