@@ -12,6 +12,7 @@ export class Team extends BaseModel<Team, TeamService> {
   ldapGroupName!: string;
   teamEmail!: string;
   autoClaim!: boolean;
+  ouId!: number;
 
   buildForm(controls = false): object {
     const { ldapGroupName, arName, enName, teamEmail, autoClaim } = this;
