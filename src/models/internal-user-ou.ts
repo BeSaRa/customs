@@ -19,17 +19,26 @@ export class InternalUserOU extends BaseModel<
   organizationUnitId!: number;
   organizationUnitInfo!: AdminResult;
   organizationUnitArray!: number[];
+  administrationAndSectionUnit!: number;
   override status = 1;
 
   buildForm(controls = false): object {
-    const { internalUserId, organizationUnitArray, status } = this;
+    const {
+      internalUserId,
+      organizationUnitArray,
+      administrationAndSectionUnit,
+      status,
+    } = this;
     return {
       internalUserId: controls
         ? [internalUserId, [CustomValidators.required]]
         : internalUserId,
       organizationUnitArray: controls
-        ? [organizationUnitArray, [CustomValidators.required]]
+        ? [organizationUnitArray]
         : organizationUnitArray,
+      administrationAndSectionUnit: controls
+        ? [administrationAndSectionUnit, [CustomValidators.required]]
+        : administrationAndSectionUnit,
       status: controls ? [status] : status,
     };
   }
