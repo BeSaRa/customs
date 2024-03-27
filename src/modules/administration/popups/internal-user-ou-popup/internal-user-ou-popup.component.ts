@@ -54,12 +54,10 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
       )
       .subscribe(filteredData => {
         this.organizationUnits = filteredData;
-        console.log('this.organizationUnits: ', this.organizationUnits);
-
         this.administrationAndSectionUnits = this.organizationUnits.filter(
           o =>
             o.type === OrganizationUnitType.ADMINISTRATION ||
-            o.type === OrganizationUnitType.ADMINISTRATION,
+            o.type === OrganizationUnitType.SECTION,
         );
       });
   }

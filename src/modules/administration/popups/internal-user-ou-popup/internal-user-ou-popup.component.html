@@ -21,17 +21,19 @@
             [enableFilter]="true"
             bindFilter="getNames"></app-select-input>
         </div>
-        <div class="mt-4">
-          <app-select-input
-            [options]="departmentUnits"
-            bindValue="id"
-            bindLabel="getNames"
-            [label]="lang.map.sub_department"
-            formControlName="organizationUnitArray"
-            [isMultiple]="true"
-            [enableFilter]="true"
-            bindFilter="getNames"></app-select-input>
-        </div>
+        @if (departmentUnits.length > 0) {
+          <div class="mt-4">
+            <app-select-input
+              [options]="departmentUnits"
+              bindValue="id"
+              bindLabel="getNames"
+              [label]="lang.map.sub_department"
+              formControlName="organizationUnitArray"
+              [isMultiple]="true"
+              [enableFilter]="true"
+              bindFilter="getNames"></app-select-input>
+          </div>
+        }
       </ng-container>
     </div>
   </div>
