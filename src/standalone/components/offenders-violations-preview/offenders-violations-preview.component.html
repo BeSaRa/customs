@@ -336,8 +336,9 @@
             }
             <!-- date -->
             @if (
-              violation.violationInfo.violationsDateTo ||
-              violation.violationInfo.violationsDateFrom
+              (violation.violationInfo.violationsDateTo ||
+                violation.violationInfo.violationsDateFrom) &&
+              !violation.violationInfo.violationsDate
             ) {
               <span
                 class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
