@@ -19,6 +19,12 @@ import {
   NgxMatTimepickerComponent,
   NgxMatTimepickerDirective,
 } from 'ngx-mat-timepicker';
+import { EmployeeService } from '@services/employee.service';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
+import { Investigation } from '@models/investigation';
+import { OperationType } from '@enums/operation-type';
+import { AttendanceListComponent } from '@standalone/components/attendance-list/attendance-list.component';
 
 @Component({
   selector: 'app-schedule-meeting-popup',
@@ -35,6 +41,8 @@ import {
     ControlDirective,
     NgxMatTimepickerDirective,
     NgxMatTimepickerComponent,
+    OffenderListComponent,
+    AttendanceListComponent,
   ],
   templateUrl: './schedule-meeting-popup.component.html',
   styleUrl: './schedule-meeting-popup.component.scss',
@@ -45,12 +53,29 @@ export class ScheduleMeetingPopupComponent
 {
   override data: CrudDialogDataContract<Meeting, { [index: string]: unknown }> =
     inject(MAT_DIALOG_DATA);
+  employeeService = inject(EmployeeService);
   caseId = this.data.extras?.caseId;
+  investigationCase: Investigation = new Investigation().clone<Investigation>({
+    offenderInfo: [],
+  });
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   todayDate = new Date();
+  maxDate = this.data.extras?.maxDate;
   form!: UntypedFormGroup;
+  isShowOffenders = this.data.extras?.showOffenders;
+
   _buildForm() {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(
+      this.model.buildForm(
+        true,
+        this.employeeService.isTeamPresident(
+          LDAPGroupNames.Disciplinary_Committee,
+        ),
+      ),
+    );
+  }
+  isMeetingEnd(meeting: Meeting) {
+    return +new Date() > +new Date(meeting.meetingDate);
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
@@ -63,6 +88,15 @@ export class ScheduleMeetingPopupComponent
       caseId: this.caseId,
       offenderList: this.concernedOffendersIds,
     });
+  }
+  get label() {
+    if (this.operation === OperationType.CREATE) {
+      return 'schedule_meeting';
+    } else if (this.operation === OperationType.UPDATE) {
+      return 'update_meeting';
+    } else {
+      return 'meeting_details';
+    }
   }
   protected override _afterSave(model: Meeting): void {
     this.dialogRef.close(model);

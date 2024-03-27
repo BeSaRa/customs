@@ -11,6 +11,7 @@ export class Team extends BaseModel<Team, TeamService> {
   $$__service_name__$$ = 'TeamService';
   ldapGroupName!: string;
   teamEmail!: string;
+  customSettings!: string;
   autoClaim!: boolean;
   ouId!: number;
 

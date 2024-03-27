@@ -61,15 +61,7 @@
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false">
-      @if (model.inDisciplinaryCommittee()) {
-        <mat-tab
-          data-name="disciplinary_committee_meetings"
-          [label]="lang.map.disciplinary_committee_meetings">
-          <ng-container
-            [ngTemplateOutlet]="disciplinary_committee_meetings"></ng-container>
-        </mat-tab>
-      }
-      @if (model.inLegalAffairsActivity()) {
+      @if (model.inLegalAffairsActivity() || model.inDisciplinaryCommittee()) {
         <mat-tab
           data-name="legal_procedures"
           [label]="lang.map.legal_procedures">
@@ -100,6 +92,14 @@
           [label]="lang.map.external_persons">
           <ng-container
             [ngTemplateOutlet]="external_persons_tab"></ng-container>
+        </mat-tab>
+      }
+      @if (model.inDisciplinaryCommittee()) {
+        <mat-tab
+          data-name="disciplinary_committee_meetings"
+          [label]="lang.map.disciplinary_committee">
+          <ng-container
+            [ngTemplateOutlet]="disciplinary_committee_meetings"></ng-container>
         </mat-tab>
       }
       <mat-tab data-name="attachments" [label]="lang.map.attachments">
@@ -230,7 +230,7 @@
   </ng-template>
   <ng-template #disciplinary_committee_meetings>
     <div class="p-4">
-      <app-disciplinary-committee-meetings [model]="model" />
+      <app-disciplinary-committee [model]="model" />
     </div>
   </ng-template>
 </div>

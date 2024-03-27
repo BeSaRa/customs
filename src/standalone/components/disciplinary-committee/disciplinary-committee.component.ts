@@ -4,15 +4,7 @@ import { LookupService } from '@services/lookup.service';
 import { Investigation } from '@models/investigation';
 import { DialogService } from '@services/dialog.service';
 import { MeetingService } from '@services/meeting.service';
-import {
-  BehaviorSubject,
-  exhaustMap,
-  filter,
-  map,
-  Subject,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { Meeting } from '@models/meeting';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -33,12 +25,13 @@ import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ScheduleMeetingPopupComponent } from '@standalone/popups/schedule-meeting-popup/schedule-meeting-popup.component';
 import { OperationType } from '@enums/operation-type';
-import { UserClick } from '@enums/user-click';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ToastService } from '@services/toast.service';
+import { EmployeeService } from '@services/employee.service';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
 
 @Component({
-  selector: 'app-disciplinary-committee-meetings',
+  selector: 'app-disciplinary-committee',
   standalone: true,
   imports: [
     DatePipe,
@@ -57,10 +50,10 @@ import { ToastService } from '@services/toast.service';
     MatRow,
     MatNoDataRow,
   ],
-  templateUrl: './disciplinary-committee-meetings.component.html',
-  styleUrl: './disciplinary-committee-meetings.component.scss',
+  templateUrl: './disciplinary-committee.component.html',
+  styleUrl: './disciplinary-committee.component.scss',
 })
-export class DisciplinaryCommitteeMeetingsComponent
+export class DisciplinaryCommitteeComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
@@ -70,19 +63,21 @@ export class DisciplinaryCommitteeMeetingsComponent
   toast = inject(ToastService);
   model = input.required<Investigation>();
   dialog = inject(DialogService);
+  employeeService = inject(EmployeeService);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
+  addMeetingMinutes$: Subject<void> = new Subject<void>();
   view$: Subject<Meeting> = new Subject<Meeting>();
   update$: Subject<Meeting> = new Subject<Meeting>();
-  delete$: Subject<Meeting> = new Subject<Meeting>();
   dataList: Meeting[] = [];
   displayedColumns: string[] = ['title', 'meetingDate', 'note', 'actions'];
+  LDAPGroupName = LDAPGroupNames;
   ngOnInit(): void {
     this._listenToReload();
     this._listenToAddMeeting();
     this._listenToViewMeeting();
     this._listenToUpdateMeeting();
-    this._listenToDelete();
+    this._listenToAddMeetingMinutes$();
   }
   _listenToReload() {
     this.reload$
@@ -102,6 +97,8 @@ export class DisciplinaryCommitteeMeetingsComponent
     this.add$
       .pipe(
         switchMap(() => {
+          const maxDate = new Date(this.model().taskDetails.dueTime);
+          maxDate.setDate(maxDate.getDate() + 14);
           return this.dialog
             .open(ScheduleMeetingPopupComponent, {
               data: {
@@ -111,6 +108,34 @@ export class DisciplinaryCommitteeMeetingsComponent
                   caseId: this.model().id,
                   concernedOffendersIds:
                     this.model().getConcernedOffendersIds(),
+                  maxDate,
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        this.reload$.next(null);
+      });
+  }
+
+  _listenToAddMeetingMinutes$() {
+    this.addMeetingMinutes$
+      .pipe(
+        switchMap(() => {
+          const maxDate = new Date(this.model().taskDetails.dueTime);
+          maxDate.setDate(maxDate.getDate() + 14);
+          return this.dialog
+            .open(ScheduleMeetingPopupComponent, {
+              data: {
+                model: new Meeting(),
+                operation: OperationType.CREATE,
+                extras: {
+                  caseId: this.model().id,
+                  concernedOffendersIds:
+                    this.model().getConcernedOffendersIds(),
+                  maxDate,
                 },
               },
             })
@@ -133,6 +158,7 @@ export class DisciplinaryCommitteeMeetingsComponent
                 operation: OperationType.VIEW,
                 extras: {
                   caseId: this.model().id,
+                  showOffenders: true,
                 },
               },
             })
@@ -147,6 +173,8 @@ export class DisciplinaryCommitteeMeetingsComponent
     this.update$
       .pipe(
         switchMap(model => {
+          const maxDate = new Date(this.model().taskDetails.dueTime);
+          maxDate.setDate(maxDate.getDate() + 14);
           return this.dialog
             .open(ScheduleMeetingPopupComponent, {
               data: {
@@ -154,6 +182,7 @@ export class DisciplinaryCommitteeMeetingsComponent
                 operation: OperationType.UPDATE,
                 extras: {
                   caseId: this.model().id,
+                  maxDate,
                 },
               },
             })
@@ -161,34 +190,6 @@ export class DisciplinaryCommitteeMeetingsComponent
         }),
       )
       .subscribe(() => {
-        this.reload$.next(null);
-      });
-  }
-
-  _listenToDelete() {
-    this.delete$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        exhaustMap(model =>
-          this.dialog
-            .confirm(
-              this.lang.map.msg_delete_x_confirm.change({
-                x: model.title,
-              }),
-            )
-            .afterClosed()
-            .pipe(filter(value => value === UserClick.YES))
-            .pipe(
-              switchMap(() => {
-                return model.delete().pipe(map(() => model));
-              }),
-            ),
-        ),
-      )
-      .subscribe(model => {
-        this.toast.success(
-          this.lang.map.msg_delete_x_success.change({ x: model.getNames() }),
-        );
         this.reload$.next(null);
       });
   }

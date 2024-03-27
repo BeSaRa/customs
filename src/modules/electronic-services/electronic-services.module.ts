@@ -42,8 +42,8 @@ import { OffenderAttachmentsComponent } from '@standalone/components/offender-at
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { PersonsListComponent } from '@standalone/components/legal-affairs-offenders/persons-list.component';
-import { DisciplinaryCommitteeMeetingsComponent } from '@standalone/components/disciplinary-committee-meetings/disciplinary-committee-meetings.component';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { DisciplinaryCommitteeComponent } from '@standalone/components/disciplinary-committee/disciplinary-committee.component';
 
 @NgModule({
   declarations: [
@@ -92,8 +92,8 @@ import { LegalAffairsProceduresComponent } from '@standalone/components/legal-af
     MatSort,
     PersonsListComponent,
     SituationSearchBtnComponent,
-    DisciplinaryCommitteeMeetingsComponent,
     LegalAffairsProceduresComponent,
+    DisciplinaryCommitteeComponent,
   ],
 })
 export class ElectronicServicesModule {}

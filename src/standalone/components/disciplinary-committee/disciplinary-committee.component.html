@@ -1,14 +1,21 @@
 <div class="flex justify-start items-center">
-  <h1 class="text-primary text-xl">{{ lang.map.lbl_meetings }}</h1>
+  <h1 class="text-primary text-xl">{{ lang.map.meeting_minutes }}</h1>
   <app-icon-button
-    (click)="add$.next()"
+    (click)="addMeetingMinutes$.next()"
     class="text-primary"
-    [matTooltip]="lang.map.schedule_meeting"
+    [matTooltip]="lang.map.add_meeting_minutes"
     icon="PLUS_BOX"></app-icon-button>
   <app-icon-button
     (click)="reload$.next(null)"
     class="text-primary"
     icon="RELOAD"></app-icon-button>
+  @if (employeeService.isTeamPresident(LDAPGroupName.Disciplinary_Committee)) {
+    <app-icon-button
+      (click)="add$.next()"
+      class="text-primary"
+      [matTooltip]="lang.map.schedule_meeting"
+      icon="BOOK_CLOCK"></app-icon-button>
+  }
 </div>
 <div>
   <table
@@ -56,9 +63,6 @@
           </div>
           <div [matTooltip]="lang.map.edit">
             <app-icon-button (click)="update$.next(element)" icon="EDIT" />
-          </div>
-          <div [matTooltip]="lang.map.delete">
-            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
         </div>
       </td>

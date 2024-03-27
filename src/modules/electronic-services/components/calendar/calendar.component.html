@@ -31,6 +31,10 @@
                 [matTooltip]="lang.map.meeting_details"
                 (click)="details$.next(meeting)">
               </app-icon-button>
+              <app-icon-button
+                [matTooltip]="lang.map.edit"
+                (click)="update$.next(meeting)"
+                icon="EDIT" />
             </div>
             <div
               class="inline-block h-auto min-h-[1em] ms-1 me-2 w-0.5 self-stretch bg-neutral-300"></div>
