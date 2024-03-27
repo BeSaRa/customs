@@ -66,7 +66,7 @@ export class GuidePanelComponent
   penaltySigners: Lookup[] = this.lookupService.lookups.penaltySigner;
   filteredPenaltySigners: Lookup[] = [];
   violationTypes!: ViolationType[];
-
+  _violationTypes!: ViolationType[];
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Penalty>();
@@ -154,7 +154,7 @@ export class GuidePanelComponent
 
   protected getViolationTypes() {
     this.violationTypeService.loadAsLookups().subscribe(data => {
-      this.violationTypes = data;
+      this._violationTypes = data;
     });
   }
 
@@ -164,6 +164,9 @@ export class GuidePanelComponent
 
   onOffenderTypeChange() {
     this.offenderTypeField?.valueChanges.subscribe(value => {
+      this.violationTypes = this._violationTypes.filter(
+        vt => vt.offenderType === this.offenderTypeField?.value,
+      );
       if (value === OffenderTypes.EMPLOYEE) {
         this.offenderLevelField?.setValidators(CustomValidators.required);
         this.filteredPenaltySigners = this.penaltySigners.filter(
