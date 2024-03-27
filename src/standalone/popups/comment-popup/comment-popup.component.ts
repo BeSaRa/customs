@@ -1,9 +1,9 @@
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { Subject, takeUntil, filter, switchMap } from 'rxjs';
+import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -25,6 +25,9 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { EmployeeService } from '@services/employee.service';
 import { InternalUserOUService } from '@services/internal-user-ou.service';
 import { InternalUserOU } from '@models/internal-user-ou';
+import { TeamService } from '@services/team.service';
+import { TeamNames } from '@enums/team-names';
+import { InternalUser } from '@models/internal-user';
 
 @Component({
   selector: 'app-comment-popup',
@@ -55,8 +58,9 @@ export class CommentPopupComponent
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
 
   taskResponses = TaskResponses;
-  usersList: InternalUserOU[] = [];
+  usersList: InternalUserOU[] | InternalUser[] = [];
   private internalUserOUService = inject(InternalUserOUService);
+  private teamService = inject(TeamService);
 
   private employeeService = inject(EmployeeService);
 
@@ -75,18 +79,23 @@ export class CommentPopupComponent
   }
 
   get isSendToUser() {
-    return (
-      this.response === TaskResponses.TO_USER ||
-      this.response === TaskResponses.TO_INV_USER
-    );
+    return this.response === TaskResponses.TO_USER;
   }
-
+  get isSendToInvestigator() {
+    return this.response === TaskResponses.TO_INV_USER;
+  }
   private _loadUsersList() {
     if (this.isSendToUser) {
       this.internalUserOUService
         .internalUserOUCriteria({
           organizationUnitId: this.employeeService.getOrganizationUnit()?.id,
         })
+        .subscribe(data => {
+          this.usersList = data;
+        });
+    } else if (this.isSendToInvestigator) {
+      this.teamService
+        .loadTeamMembers(TeamNames.Investigator)
         .subscribe(data => {
           this.usersList = data;
         });
@@ -101,7 +110,7 @@ export class CommentPopupComponent
       ]),
       userId: new UntypedFormControl(null, []),
     });
-    if (this.isSendToUser) {
+    if (this.isSendToUser || this.isSendToInvestigator) {
       this.form.get('userId')?.setValidators([CustomValidators.required]);
       this.form.get('userId')?.updateValueAndValidity();
     }
@@ -118,7 +127,7 @@ export class CommentPopupComponent
             comment: this.form.value.comment,
             userId: this.form.value.userId,
           };
-          if (!this.isSendToUser) {
+          if (!this.isSendToUser && !this.isSendToInvestigator) {
             delete completeBody.userId;
           }
           return this.model

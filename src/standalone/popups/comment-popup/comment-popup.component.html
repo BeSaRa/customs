@@ -123,6 +123,17 @@
               [options]="usersList" />
           </div>
         }
+        @if (isSendToInvestigator) {
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="userId"
+              [label]="lang.map.send_to_user_x"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="usersList" />
+          </div>
+        }
+
         <div class="col-12 mb-3">
           <app-textarea
             formControlName="comment"
