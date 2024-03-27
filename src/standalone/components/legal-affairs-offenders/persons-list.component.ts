@@ -56,7 +56,7 @@ import { Witness } from '@models/witness';
 import { WitnessService } from '@services/witness.service';
 
 @Component({
-  selector: 'app-legal-affairs-offenders',
+  selector: 'app-persons-list',
   standalone: true,
   imports: [
     MatTable,
@@ -79,8 +79,8 @@ import { WitnessService } from '@services/witness.service';
     NgClass,
     CallRequestRecordsTableComponent,
   ],
-  templateUrl: './legal-affairs-offenders.component.html',
-  styleUrl: './legal-affairs-offenders.component.scss',
+  templateUrl: './persons-list.component.html',
+  styleUrl: './persons-list.component.scss',
   animations: [
     trigger('expendCollapse', [
       state(
@@ -101,7 +101,7 @@ import { WitnessService } from '@services/witness.service';
     ]),
   ],
 })
-export class LegalAffairsOffendersComponent
+export class PersonsListComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {

@@ -41,7 +41,7 @@ import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-
 import { OffenderAttachmentsComponent } from '@standalone/components/offender-attachments/offender-attachments.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { LegalAffairsOffendersComponent } from '@standalone/components/legal-affairs-offenders/legal-affairs-offenders.component';
+import { PersonsListComponent } from '@standalone/components/legal-affairs-offenders/persons-list.component';
 import { DisciplinaryCommitteeMeetingsComponent } from '@standalone/components/disciplinary-committee-meetings/disciplinary-committee-meetings.component';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 
@@ -90,7 +90,7 @@ import { LegalAffairsProceduresComponent } from '@standalone/components/legal-af
     OffenderAttachmentsComponent,
     MatPaginator,
     MatSort,
-    LegalAffairsOffendersComponent,
+    PersonsListComponent,
     SituationSearchBtnComponent,
     DisciplinaryCommitteeMeetingsComponent,
     LegalAffairsProceduresComponent,
