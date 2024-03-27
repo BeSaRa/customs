@@ -43,6 +43,7 @@
             [label]="lang.map.meeting_time_from">
             <input
               appControl
+              [max]="form.get('meetingTimeTo')?.value"
               formControlName="meetingTimeFrom"
               [ngxMatTimepicker]="timePickerFrom" />
             <ngx-mat-timepicker
@@ -66,6 +67,7 @@
             [label]="lang.map.meeting_time_to">
             <input
               appControl
+              [min]="form.get('meetingTimeFrom')?.value"
               formControlName="meetingTimeTo"
               [ngxMatTimepicker]="timePickerTo" />
             <ngx-mat-timepicker
