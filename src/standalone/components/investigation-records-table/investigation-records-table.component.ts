@@ -35,6 +35,7 @@ import { ignoreErrors } from '@utils/utils';
 import { ConfigService } from '@services/config.service';
 import { ToastService } from '@services/toast.service';
 import { Witness } from '@models/witness';
+import { InvestigationCategory } from '@enums/investigation-category';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -100,6 +101,16 @@ export class InvestigationRecordsTableComponent
     }>
   >();
 
+  category = computed(() => {
+    return this.model().inLegalAffairsActivity()
+      ? this.isOffender()
+        ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+        : InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT
+      : this.isOffender()
+        ? InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_HEARING_TRANSCRIPT;
+  });
+
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
   }
@@ -122,6 +133,7 @@ export class InvestigationRecordsTableComponent
           return this.investigationReportService
             .load(undefined, {
               caseId: this.model().id,
+              category: this.category(),
               summonedType: this.isOffender()
                 ? SummonType.OFFENDER
                 : SummonType.WITNESS,

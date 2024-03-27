@@ -89,8 +89,12 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   isWitness = signal(!!this.witness());
   category = computed(() =>
     this.isOffender()
-      ? InvestigationCategory.INVESTIGATION_RECORD
-      : InvestigationCategory.HEARING_TRANSCRIPT,
+      ? this.investigationModel().inLegalAffairsActivity()
+        ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+        : InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+      : this.investigationModel().inLegalAffairsActivity()
+        ? InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD,
   );
   summonedType = computed(() =>
     this.isOffender() ? SummonType.OFFENDER : SummonType.WITNESS,

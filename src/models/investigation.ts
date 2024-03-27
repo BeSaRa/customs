@@ -316,7 +316,7 @@ export class Investigation extends BaseCase<
     return [
       ManagerDecisions.GUIDANCE,
       ManagerDecisions.IT_IS_MANDATORY_TO_IMPOSE_A_PENALTY,
-    ].includes(managerDecisionControl!) && this.isSubmitInvestigationActivity()
+    ].includes(managerDecisionControl!) && this.inSubmitInvestigationActivity()
       ? this.getOffenderViolationByOffender(offenderId).some(item => {
           return item.proofStatus === ProofTypes.UNDEFINED;
         })
@@ -366,7 +366,7 @@ export class Investigation extends BaseCase<
     return activityName === this.getActivityName();
   }
 
-  isSubmitInvestigationActivity(): boolean {
+  inSubmitInvestigationActivity(): boolean {
     return this.inActivity(ActivitiesName.SUBMIT_INVESTIGATION);
   }
 

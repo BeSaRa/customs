@@ -67,8 +67,8 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
   isWitness = signal(!!this.witness());
   category = computed(() =>
     this.isOffender()
-      ? InvestigationCategory.INVESTIGATION_RECORD
-      : InvestigationCategory.HEARING_TRANSCRIPT,
+      ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+      : InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT,
   );
   summonedType = computed(() =>
     this.isOffender() ? SummonType.OFFENDER : SummonType.WITNESS,
