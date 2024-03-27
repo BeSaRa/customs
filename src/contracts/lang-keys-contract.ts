@@ -579,4 +579,5 @@ export interface LangKeysContract {
   not_attended: string;
   meeting_minutes_text: string;
   meeting_status: string;
+  save_meeting: string;
 }

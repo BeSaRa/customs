@@ -102,9 +102,17 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
+    <app-button
+      (click)="save$.next()"
+      [disabled]="!selectedMeeting?.id"
+      buttonType="primary"
+      >{{ lang.map.save }}</app-button
+    >
+    @if (!selectedMeeting?.id) {
+      <app-button (click)="saveMeeting$.next()" buttonType="primary">{{
+        lang.map.save_meeting
+      }}</app-button>
+    }
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>
