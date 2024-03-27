@@ -65,11 +65,13 @@ export class MeetingMinutesPopupComponent
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   save$: Subject<void> = new Subject<void>();
+  saveMeeting$: Subject<void> = new Subject<void>();
   form: FormGroup = new FormGroup({});
   meetings: Meeting[] = [];
   selectedMeeting: Meeting | undefined;
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
+  concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   meetingStatus = this.lookupService.lookups.meetingStatus.filter(
     s => s.lookupKey !== MeetingStatusEnum.pending,
   );
@@ -77,9 +79,10 @@ export class MeetingMinutesPopupComponent
     this.buildForm();
     this.listenToSave();
     this.loadMeetings();
+    this.listenToSaveMeeting();
   }
   buildForm() {
-    this.form = this.fb.group(new Meeting().buildForm());
+    this.form = this.fb.group(new Meeting().buildForm(true));
     this.form
       .get('meetingMinutesText')
       ?.setValidators([CustomValidators.required]);
@@ -132,6 +135,34 @@ export class MeetingMinutesPopupComponent
         this.dialogRef.close(model);
       });
   }
-
+  listenToSaveMeeting() {
+    this.saveMeeting$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        tap(
+          () =>
+            this.form.invalid &&
+            this.dialog.error(
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
+            ),
+        ),
+      )
+      .pipe(filter(() => this.form.valid))
+      .pipe(
+        switchMap(() => {
+          return new Meeting()
+            .clone<Meeting>({
+              ...this.form.value,
+              caseId: this.selectedMeeting?.caseId,
+              offenderList: this.concernedOffendersIds,
+            })
+            .save();
+        }),
+      )
+      .subscribe(meeting => {
+        this.meetings.push(meeting);
+        this.handleSelectMeeting(meeting);
+      });
+  }
   protected readonly Meeting = Meeting;
 }
