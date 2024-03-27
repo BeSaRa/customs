@@ -83,6 +83,8 @@ export class MeetingMinutesComponent implements OnInit {
                 model: new Meeting(),
                 extras: {
                   caseId: this.model().id,
+                  concernedOffendersIds:
+                    this.model().getConcernedOffendersIds(),
                 },
               },
             })
