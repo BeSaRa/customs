@@ -246,7 +246,7 @@ export class InvestigationComponent
       // this.openFrom === OpenFrom.ADD_SCREEN
       return;
     }
-    if (!model.inMyInbox() || !model.canSave()) {
+    if ((!model.inMyInbox() || !model.canSave()) && !model.isDrafted) {
       this.readonly = true;
       this.canManageInvestigationElements = false; // specified for violations, offenders, external persons and attachments
     }
