@@ -14,7 +14,8 @@
           appControl
           formControlName="summonDate"
           (click)="picker.open()"
-          [matDatepicker]="picker" />
+          [matDatepicker]="picker"
+          [min]="today" />
         <mat-datepicker #picker></mat-datepicker>
       </app-input>
       <app-select-input
