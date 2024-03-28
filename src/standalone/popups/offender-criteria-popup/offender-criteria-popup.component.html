@@ -54,7 +54,9 @@
               [label]="lang.map.administration"
               bindValue="id"
               bindLabel="getNames"
-              [options]="administrations" />
+              [options]="administrations"
+              [enableFilter]="true"
+              bindFilter="getNames" />
             <app-input
               formControlName="jobTitleCode"
               [label]="lang.map.employee_number" />
