@@ -224,7 +224,9 @@
     </div>
   </ng-template>
   <ng-template #legal_procedures>
-    <app-legal-affairs-procedures [model]="model" />
+    <app-legal-affairs-procedures
+      (updateModel)="updateModel$.next(null)"
+      [model]="model" />
   </ng-template>
   <ng-template #disciplinary_committee_meetings>
     <div class="p-4">

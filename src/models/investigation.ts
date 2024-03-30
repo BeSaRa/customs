@@ -262,6 +262,22 @@ export class Investigation extends BaseCase<
     );
   }
 
+  private hasReferralNumber() {
+    return !!(
+      this.hasTask() &&
+      this.taskDetails &&
+      this.taskDetails.activityProperties &&
+      this.taskDetails.activityProperties.DecisionFullSerial &&
+      this.taskDetails.activityProperties.DecisionFullSerial.value
+    );
+  }
+
+  getReferralNumber(): string | null {
+    return this.hasReferralNumber()
+      ? this.taskDetails!.activityProperties!.DecisionFullSerial!.value
+      : null;
+  }
+
   /**
    * @description this method to return all concerned Offenders in the case even, but they should not have old Decisions
    * expect if you provide the penaltyKey if one of the offender has same decision return it no problem

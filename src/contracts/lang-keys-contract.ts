@@ -1,4 +1,12 @@
 export interface LangKeysContract {
+  investigation_result: string;
+  recommendation: string;
+  approve_memo: string;
+  memo_date: string;
+  view_memo: string;
+  referral_date: string;
+  referral_number: string;
+  investigation_result_legal_opinion: string;
   name: string;
   file_uploaded_successfully: string;
   download: string;

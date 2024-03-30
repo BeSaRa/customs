@@ -18,6 +18,10 @@ import { b64toBlob } from '@utils/utils';
 import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
 import { Violation } from '@models/violation';
 import { CaseAttachment } from '@models/case-attachment';
+import { HttpParams } from '@angular/common/http';
+import { Memorandum } from '@models/memorandum';
+import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
+import { OperationType } from '@enums/operation-type';
 
 @CastResponseContainer({
   $default: {
@@ -118,6 +122,7 @@ export class InvestigationService
       }),
     );
   }
+
   @CastResponse(() => OffenceNumberDetailsResult, { unwrap: 'rs' })
   private _getOffenceDetails(
     offenceNumber: string,
@@ -133,5 +138,77 @@ export class InvestigationService
     return this.http.get<CaseAttachment>(
       this.getUrlSegment() + `/document/latest/$${vsid}/content`,
     );
+  }
+
+  @CastResponse(() => Memorandum)
+  createMemorandum(model: Memorandum): Observable<Memorandum> {
+    return this.http.post<Memorandum>(
+      this.getUrlSegment() + '/document/inv-result',
+      model,
+    );
+  }
+
+  @CastResponse(() => Memorandum)
+  updateMemorandum(model: Memorandum): Observable<Memorandum> {
+    return this.http.post<Memorandum>(
+      this.getUrlSegment() + '/document/inv-result',
+      model,
+    );
+  }
+
+  approveMemorandum(docId: string): Observable<unknown> {
+    return this.http.post(
+      this.getUrlSegment() + '/document/inv-result/approve',
+      {},
+      {
+        params: new HttpParams({
+          fromObject: { docId },
+        }),
+      },
+    );
+  }
+
+  @CastResponse(() => Memorandum)
+  loadMemorandums(caseId: string): Observable<Memorandum[]> {
+    return this.http.get<Memorandum[]>(
+      this.getUrlSegment() + '/document/inv-result',
+      {
+        params: new HttpParams({
+          fromObject: { caseId },
+        }),
+      },
+    );
+  }
+
+  openCreateMemorandumDialog(
+    investigationModel: Investigation,
+    updateModel: InputSignal<EventEmitter<void>>,
+  ) {
+    return this.dialog.open(MemorandumPopupComponent, {
+      data: {
+        investigationModel,
+        model: new Memorandum().clone<Memorandum>({
+          requestCaseId: investigationModel.id,
+          decisionFullSerial: investigationModel.getReferralNumber(),
+        }),
+        operation: OperationType.CREATE,
+        updateModel,
+      },
+    });
+  }
+
+  openEditMemorandumDialog(
+    model: Memorandum,
+    investigationModel: Investigation,
+    updateModel: InputSignal<EventEmitter<void>>,
+  ) {
+    return this.dialog.open(MemorandumPopupComponent, {
+      data: {
+        investigationModel,
+        model,
+        operation: OperationType.UPDATE,
+        updateModel,
+      },
+    });
   }
 }

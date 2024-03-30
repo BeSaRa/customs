@@ -1,0 +1,107 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.investigation_result_legal_opinion }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content min-w-[700px]">
+    <table
+      mat-table
+      class="table-style table-primary"
+      [dataSource]="offenders()">
+      <!-- offenderName -->
+      <ng-container matColumnDef="offenderName">
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.offender_name }}</th>
+        <td mat-cell *matCellDef="let element">
+          {{ assertType(element).getNames() }}
+        </td>
+      </ng-container>
+      <!-- violations -->
+      <ng-container matColumnDef="violations">
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.violations }}</th>
+        <td mat-cell colSpan="2" *matCellDef="let element">
+          <div class="grid grid-cols-1 divide-y">
+            @for (
+              item of offenderViolationsMap()[assertType(element).id];
+              track item.id
+            ) {
+              <div class="flex items-center py-2">
+                <div
+                  class="flex-auto max-w-[350px] border bg-yellow-50 rounded text-sm p-2">
+                  {{ item.violationInfo.violationTypeInfo.getNames() }}
+                </div>
+                <div class="w-40 px-2 flex-shrink-0">
+                  <app-select-input
+                    label=""
+                    size="sm"
+                    [formControl]="controls[item.id]"
+                    (selectChange)="updateProof(item)"
+                    nullable="false"
+                    bindValue="lookupKey"
+                    bindLabel="getNames"
+                    noMargin="true"
+                    [options]="proofStatus" />
+                </div>
+              </div>
+            }
+          </div>
+        </td>
+      </ng-container>
+      <!-- violations -->
+      <ng-container matColumnDef="investigationResult">
+        <th class="w-40" mat-header-cell *matHeaderCellDef>
+          {{ lang.map.investigation_result }}
+        </th>
+        <td mat-cell *matCellDef="let element" [style.display]="'none'"></td>
+      </ng-container>
+      <!-- violations -->
+      <ng-container matColumnDef="recommendation">
+        <th mat-header-cell class="w-40" *matHeaderCellDef>
+          {{ lang.map.recommendation }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <div class="flex items-center">
+            <app-select-input
+              class="w-40"
+              size="sm"
+              nullable="false"
+              noMargin="true"
+              bindLabel="getNames"
+              label=""
+              (selectChange)="
+                takeDecision$.next({
+                  offender: assertType(element),
+                  decision: assertTypePenalty($event)
+                })
+              "
+              [options]="
+                (penaltiesMap[assertType(element).id] || { second: [] }).second
+              " />
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
+      </tr>
+    </table>
+    <div class="mt-2">
+      <app-textarea [label]="lang.map.comment" [formControl]="textControl" />
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

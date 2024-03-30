@@ -88,6 +88,7 @@ export const AppIcons = {
   FILE_EYE: 'file-eye',
   UPLOAD: 'upload',
   AUTO_FILL: 'window-shutter-auto',
+  APPROVE: 'check-decagram',
 };
 
 export type AppIconsType = typeof AppIcons;
