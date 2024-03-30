@@ -81,8 +81,6 @@ export class MemorandumOpinionListComponent
     this.listenToApprove();
     this.listenToEdit();
     this.reload$.next();
-    // testing purpose
-    this.add$.next();
   }
 
   private listenToAdd() {
