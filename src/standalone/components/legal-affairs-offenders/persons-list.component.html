@@ -129,7 +129,10 @@
         {{ lang.map.call_request }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <app-button buttonType="secondary" (click)="requestCall$.next(element)">
+        <app-button
+          buttonType="secondary"
+          (click)="requestCall$.next(element)"
+          [disabled]="!model().inMyInbox()">
           {{ lang.map.call_request }}
         </app-button>
       </td>
@@ -146,7 +149,8 @@
       <td mat-cell *matCellDef="let element">
         <app-button
           buttonType="secondary"
-          (click)="requestInvestigation$.next(element)">
+          (click)="requestInvestigation$.next(element)"
+          [disabled]="!model().inMyInbox()">
           {{
             isOffender()
               ? lang.map.investigation_request
