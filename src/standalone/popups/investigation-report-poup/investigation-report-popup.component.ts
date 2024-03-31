@@ -136,8 +136,11 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   });
 
   questionForm = this.fb.group({
-    question: ['', [CustomValidators.required]],
-    answer: ['', [CustomValidators.required]],
+    question: [
+      '',
+      [CustomValidators.required, CustomValidators.maxLength(3100)],
+    ],
+    answer: ['', [CustomValidators.required, CustomValidators.maxLength(3100)]],
   });
 
   questionsList: Signal<ElementRef<HTMLUListElement> | undefined> = viewChild(
