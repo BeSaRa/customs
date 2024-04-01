@@ -109,7 +109,10 @@ export class PenaltyDetailsComponent implements OnInit {
       ];
 
   viewDetails(penaltyDetails: PenaltyDetails) {
-    this.service.openViewDialog(penaltyDetails).afterClosed().subscribe();
+    this.service
+      .openViewDialog(penaltyDetails, { isEmployee: this.isEmployee })
+      .afterClosed()
+      .subscribe();
   }
 
   createDetails() {
