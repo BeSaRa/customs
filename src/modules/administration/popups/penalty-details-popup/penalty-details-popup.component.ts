@@ -175,8 +175,8 @@ export class PenaltyDetailsPopupComponent extends AdminDialogComponent<PenaltyDe
   }
 
   listenToPenaltySignerChange() {
-    this.form.get('penaltySigner')?.valueChanges.subscribe(() => {
-      this.form.get('offenderLevel')?.setValue(null);
+    this.penaltySigner?.valueChanges.subscribe(() => {
+      this.offenderLevel?.setValue(null);
       this.setFilteredOffenderLevels();
     });
   }
