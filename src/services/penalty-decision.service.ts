@@ -1,6 +1,6 @@
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
-import { EventEmitter, Injectable, InputSignal } from '@angular/core';
+import { EventEmitter, Injectable, InputSignal, Signal } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
@@ -14,6 +14,7 @@ import { ReferralPopupComponent } from '@standalone/popups/referral-popup/referr
 import { MatDialogRef } from '@angular/material/dialog';
 import { TaskResponses } from '@enums/task-responses';
 import { Pagination } from '@models/pagination';
+import { DcDecisionPopupComponent } from '@standalone/popups/dc-decision-popup/dc-decision-popup.component';
 
 @CastResponseContainer({
   $default: {
@@ -67,6 +68,21 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     });
   }
 
+  openDCDecisionDialog(
+    offender: Offender,
+    hasDecisionMinutes: boolean,
+    model: Signal<Investigation>,
+    offenderPenalties: { first: number | null; second: Penalty[] },
+  ) {
+    return this.dialog.open(DcDecisionPopupComponent, {
+      data: {
+        offender,
+        model,
+        hasDecisionMinutes,
+        offenderPenalties,
+      },
+    });
+  }
   openTerminateDialog(
     offenders: Offender[],
     model: InputSignal<Investigation>,

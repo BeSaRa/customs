@@ -33,10 +33,10 @@ import {
 import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
 import { EmployeeService } from '@services/employee.service';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
 import { Config } from '@constants/config';
 import { MeetingStatusEnum } from '@enums/meeting-status-enum';
 import { MeetingMinutesPopupComponent } from '@standalone/popups/meeting-minutes-popup/meeting-minutes-popup.component';
+import { MeetingMinutes } from '@models/meeting-minutes';
 
 @Component({
   selector: 'app-meetings-list',
@@ -80,6 +80,8 @@ export class MeetingsListComponent implements OnInit {
   askToReloadMeetingMinutes: EventEmitter<void> = new EventEmitter<void>();
   @Input()
   readonly: boolean = false;
+  @Input()
+  meetingMinutesList: MeetingMinutes[] = [];
   displayedColumns: string[] = [
     'title',
     'place',
@@ -207,5 +209,7 @@ export class MeetingsListComponent implements OnInit {
         this.askToReloadMeetingMinutes.emit();
       });
   }
-  protected readonly LDAPGroupNames = LDAPGroupNames;
+  hasNotHaveMeetingMinutes(id: number) {
+    return !this.meetingMinutesList.find(minutes => minutes.concernedId === id);
+  }
 }

@@ -92,6 +92,8 @@ export class DecisionMinutesComponent
   @Input()
   readonly: boolean = false;
   ngOnInit(): void {
+    // TODO: update decision if already created one
+    // TODO: test full cycle
     this._listenToReload();
     this._listenToLaunch();
     this.listenToDelete();
@@ -122,7 +124,7 @@ export class DecisionMinutesComponent
           );
         }),
       )
-      .subscribe();
+      .subscribe(() => this.reload$.next(null));
   }
   private listenToDelete() {
     this.delete$
@@ -132,7 +134,7 @@ export class DecisionMinutesComponent
           return this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
-                x: item.attachmentTypeInfo?.getNames(),
+                x: item.penaltyDecisionInfo?.penaltyInfo?.getNames(),
               }),
             )
             .afterClosed()
@@ -156,7 +158,7 @@ export class DecisionMinutesComponent
         tap(item =>
           this.toast.success(
             this.lang.map.msg_delete_x_success.change({
-              x: item.attachmentTypeInfo?.getNames(),
+              x: item.penaltyDecisionInfo?.penaltyInfo?.getNames(),
             }),
           ),
         ),
@@ -173,6 +175,7 @@ export class DecisionMinutesComponent
                 model: this.model,
                 extras: {
                   caseId: this.model().id,
+                  decisionMinutesList: this.dataList,
                 },
               },
             })
