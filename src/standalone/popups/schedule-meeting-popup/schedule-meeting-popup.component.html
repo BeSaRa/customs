@@ -34,7 +34,19 @@
             formControlName="meetingTime"
             [format]="24"
             [ngxMatTimepicker]="picker" />
-          <ngx-mat-timepicker [minutesGap]="5" #picker></ngx-mat-timepicker>
+          <ngx-mat-timepicker
+            [cancelBtnTmpl]="cancelBtn"
+            [confirmBtnTmpl]="confirmBtn"
+            [minutesGap]="5"
+            #picker></ngx-mat-timepicker>
+          <ng-template #cancelBtn>
+            <app-button class="me-2 inline-block" buttonType="primary-outline">
+              {{ lang.map.close }}
+            </app-button>
+          </ng-template>
+          <ng-template #confirmBtn>
+            <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+          </ng-template>
         </app-input>
       </div>
       <app-textarea [label]="lang.map.note" formControlName="note" />

@@ -15,7 +15,10 @@ export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
   }
 
   receive(model: Meeting): Meeting {
-    console.log(model);
+    model.meetingTime =
+      new Date(model.meetingDate).getHours() +
+      ':' +
+      new Date(model.meetingDate).getMinutes();
     return model;
   }
 }

@@ -33,8 +33,8 @@ import {
     MatDatepickerInput,
     MatDatepicker,
     ControlDirective,
-    NgxMatTimepickerComponent,
     NgxMatTimepickerDirective,
+    NgxMatTimepickerComponent,
   ],
   templateUrl: './schedule-meeting-popup.component.html',
   styleUrl: './schedule-meeting-popup.component.scss',
@@ -45,22 +45,26 @@ export class ScheduleMeetingPopupComponent
 {
   override data: CrudDialogDataContract<Meeting, { [index: string]: unknown }> =
     inject(MAT_DIALOG_DATA);
+  caseId = this.data.extras?.caseId;
+  concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   todayDate = new Date();
   form!: UntypedFormGroup;
+  _buildForm() {
+    this.form = this.fb.group(this.model.buildForm(true));
+  }
   protected override _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
   }
   protected override _prepareModel(): Meeting | Observable<Meeting> {
     const formValue = this.form.getRawValue();
     return new Meeting().clone<Meeting>({
+      ...this.model,
       ...formValue,
+      caseId: this.caseId,
+      offenderList: this.concernedOffendersIds,
     });
   }
   protected override _afterSave(model: Meeting): void {
     this.dialogRef.close(model);
-  }
-
-  _buildForm() {
-    this.form = this.fb.group(this.model.buildForm(true));
   }
 }
