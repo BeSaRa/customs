@@ -7,6 +7,8 @@ import { MawaredDepartmentPopupComponent } from '@modules/administration/popups/
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
+import { MawaredDepartmentIntegration } from '@models/mawared-department-integration';
 
 @CastResponseContainer({
   $pagination: {
@@ -52,9 +54,16 @@ export class MawaredDepartmentService extends BaseCrudWithDialogService<
   }
 
   @CastResponse()
-  syncForIntegration(): Observable<MawaredDepartment[]> {
-    return this.http.get<MawaredDepartment[]>(
-      this.getUrlSegment() + '/admin/integration',
+  syncForIntegration(
+    options: MawaredDepartmentIntegration,
+  ): Observable<MawaredDepartmentIntegration[]> {
+    return this.http.get<MawaredDepartmentIntegration[]>(
+      this.getUrlSegment() + `/admin/integration`,
+      {
+        params: new HttpParams({
+          fromObject: { ...options },
+        }),
+      },
     );
   }
 }

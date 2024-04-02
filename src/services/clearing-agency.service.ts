@@ -8,6 +8,7 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { NadeebIntegration } from '@models/nadeeb-integration';
 
 @CastResponseContainer({
   $pagination: {
@@ -46,11 +47,10 @@ export class ClearingAgencyService extends BaseCrudWithDialogService<
   }
 
   @CastResponse()
-  syncForIntegration(options: {
-    startDate: string;
-    endDate: string;
-  }): Observable<ClearingAgency[]> {
-    return this.http.get<ClearingAgency[]>(
+  syncForIntegration(
+    options: NadeebIntegration,
+  ): Observable<NadeebIntegration[]> {
+    return this.http.get<NadeebIntegration[]>(
       this.getUrlSegment() + `/integration`,
       {
         params: new HttpParams({

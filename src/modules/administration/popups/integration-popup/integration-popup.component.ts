@@ -38,6 +38,11 @@ import { CustomValidators } from '@validators/custom-validators';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { ClearingAgencyService } from '@services/clearing-agency.service';
 import { IntegrationsCases } from '@enums/integrations-cases';
+import { DatePipe } from '@angular/common';
+import { NadeebIntegration } from '@models/nadeeb-integration';
+import { MawaredDepartmentService } from '@services/mawared-department.service';
+import { MawaredEmployeeIntegration } from '@models/mawared-employee-integration';
+import { MawaredDepartmentIntegration } from '@models/mawared-department-integration';
 
 @Component({
   selector: 'app-integration-popup',
@@ -56,6 +61,7 @@ import { IntegrationsCases } from '@enums/integrations-cases';
     MatDatepicker,
     MatDatepickerInput,
   ],
+  providers: [DatePipe],
   templateUrl: './integration-popup.component.html',
   styleUrl: './integration-popup.component.scss',
 })
@@ -63,12 +69,14 @@ export class IntegrationPopupComponent implements OnInit {
   form!: UntypedFormGroup;
   lang = inject(LangService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
+  mawaredDepartmentService = inject(MawaredDepartmentService);
   clearingAgentService = inject(ClearingAgentService);
   clearingAgencyService = inject(ClearingAgencyService);
   sync$ = new ReplaySubject<void>(1);
   fb = inject(FormBuilder);
   dialogRef = inject(MatDialogRef);
   data = inject(MAT_DIALOG_DATA);
+  datePipe = inject(DatePipe);
 
   ngOnInit() {
     this.buildForm();
@@ -80,7 +88,10 @@ export class IntegrationPopupComponent implements OnInit {
       this.form = this.fb.group({
         startEmployeesDate: ['', CustomValidators.required],
         endEmployeesDate: ['', CustomValidators.required],
-        changeDepartmentsDate: ['', CustomValidators.required],
+      });
+    } else if (this.isMawaredDepartment) {
+      this.form = this.fb.group({
+        startDate: ['', CustomValidators.required],
       });
     } else {
       this.form = this.fb.group({
@@ -106,15 +117,31 @@ export class IntegrationPopupComponent implements OnInit {
         switchMap(() => {
           if (this.isMawaredEmployee) {
             return this.mawaredEmployeeService.syncForIntegration(
-              this.form.value,
+              this.formatDate<MawaredEmployeeIntegration>(
+                this.form.value,
+                'yyyyMMdd',
+              ),
+            );
+          } else if (this.isMawaredDepartment) {
+            return this.mawaredDepartmentService.syncForIntegration(
+              this.formatDate<MawaredDepartmentIntegration>(
+                this.form.value,
+                'yyyyMMdd',
+              ),
             );
           } else if (this.isClearingAgent) {
             return this.clearingAgentService.syncForIntegration(
-              this.form.value,
+              this.formatDate<NadeebIntegration>(
+                this.form.value,
+                'dd-MMM-yyyy',
+              ),
             );
           } else if (this.isClearingAgency) {
             return this.clearingAgencyService.syncForIntegration(
-              this.form.value,
+              this.formatDate<NadeebIntegration>(
+                this.form.value,
+                'dd-MMM-yyyy',
+              ),
             );
           } else {
             return EMPTY;
@@ -132,11 +159,27 @@ export class IntegrationPopupComponent implements OnInit {
     return this.data.fromComponent === IntegrationsCases.MAWARED_EMPLOYEE;
   }
 
+  get isMawaredDepartment() {
+    return this.data.fromComponent === IntegrationsCases.MAWARED_DEPARTMENT;
+  }
+
   get isClearingAgent() {
     return this.data.fromComponent === IntegrationsCases.CLEARING_AGENT;
   }
 
   get isClearingAgency() {
     return this.data.fromComponent === IntegrationsCases.CLEARING_AGENCY;
+  }
+
+  formatDate<T>(options: T, format: string): T {
+    const formattedOptions = { ...options };
+    for (const key in formattedOptions) {
+      const value = formattedOptions[key] as unknown as string;
+      formattedOptions[key] = this.datePipe.transform(
+        value,
+        format,
+      ) as unknown as T[Extract<keyof T, string>];
+    }
+    return formattedOptions;
   }
 }
