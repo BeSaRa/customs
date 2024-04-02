@@ -17,6 +17,7 @@ import { MatCalendar } from '@angular/material/datepicker';
 import { DialogService } from '@services/dialog.service';
 import { ScheduleMeetingPopupComponent } from '@standalone/popups/schedule-meeting-popup/schedule-meeting-popup.component';
 import { OperationType } from '@enums/operation-type';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-calendar',
@@ -33,6 +34,7 @@ export class CalendarComponent implements OnInit {
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   details$: Subject<Meeting> = new Subject();
   update$: Subject<Meeting> = new Subject<Meeting>();
+  config = Config;
   @ViewChild(MatCalendar) matCalendar!: MatCalendar<Date>;
   selectedDate = signal<Date | null>(null);
   filteredMeetings = computed(() => {
@@ -77,8 +79,9 @@ export class CalendarComponent implements OnInit {
             .open(ScheduleMeetingPopupComponent, {
               data: {
                 model: meeting,
+                operation: OperationType.VIEW,
                 extras: {
-                  showOffenders: true,
+                  fromCalendar: true,
                 },
               },
             })
@@ -97,7 +100,7 @@ export class CalendarComponent implements OnInit {
                 model,
                 operation: OperationType.UPDATE,
                 extras: {
-                  caseId: model.caseId,
+                  fromCalendar: true,
                 },
               },
             })

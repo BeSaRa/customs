@@ -20,10 +20,8 @@ import {
   NgxMatTimepickerDirective,
 } from 'ngx-mat-timepicker';
 import { EmployeeService } from '@services/employee.service';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
-import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
-import { Investigation } from '@models/investigation';
 import { OperationType } from '@enums/operation-type';
+import { MeetingAttendanceListComponent } from '@standalone/components/meeting-attendance-list/meeting-attendance-list.component';
 
 @Component({
   selector: 'app-schedule-meeting-popup',
@@ -40,7 +38,7 @@ import { OperationType } from '@enums/operation-type';
     ControlDirective,
     NgxMatTimepickerDirective,
     NgxMatTimepickerComponent,
-    OffenderListComponent,
+    MeetingAttendanceListComponent,
   ],
   templateUrl: './schedule-meeting-popup.component.html',
   styleUrl: './schedule-meeting-popup.component.scss',
@@ -53,27 +51,16 @@ export class ScheduleMeetingPopupComponent
     inject(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
   caseId = this.data.extras?.caseId;
-  investigationCase: Investigation = new Investigation().clone<Investigation>({
-    offenderInfo: [],
-  });
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
   form!: UntypedFormGroup;
-  isShowOffenders = this.data.extras?.showOffenders;
-
+  fromCalendar = this.data.extras?.fromCalendar;
   _buildForm() {
-    this.form = this.fb.group(
-      this.model.buildForm(
-        true,
-        this.employeeService.isTeamPresident(
-          LDAPGroupNames.Disciplinary_Committee,
-        ),
-      ),
-    );
-  }
-  isMeetingEnd(meeting: Meeting) {
-    return +new Date() > +new Date(meeting.meetingDate);
+    this.form = this.fb.group(this.model.buildForm(true));
+    if (this.operation === OperationType.VIEW) {
+      this.form.disable();
+    }
   }
   protected override _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
@@ -99,4 +86,6 @@ export class ScheduleMeetingPopupComponent
   protected override _afterSave(model: Meeting): void {
     this.dialogRef.close(model);
   }
+
+  protected readonly OperationType = OperationType;
 }

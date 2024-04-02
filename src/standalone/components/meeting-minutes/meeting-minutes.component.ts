@@ -25,6 +25,7 @@ import { Meeting } from '@models/meeting';
 import { MeetingMinutesPopupComponent } from '@standalone/popups/meeting-minutes-popup/meeting-minutes-popup.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-meeting-minutes',
@@ -56,12 +57,19 @@ export class MeetingMinutesComponent implements OnInit {
   model = input.required<Investigation>();
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
+  config = Config;
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
   view$: Subject<Meeting> = new Subject<Meeting>();
   update$: Subject<Meeting> = new Subject<Meeting>();
   dataList: Meeting[] = [];
-  displayedColumns: string[] = ['title', 'meetingDate', 'note', 'actions'];
+  displayedColumns: string[] = [
+    'title',
+    'place',
+    'meetingDate',
+    'note',
+    'actions',
+  ];
   ngOnInit(): void {
     this._listenToAddMeetingMinutes();
   }
