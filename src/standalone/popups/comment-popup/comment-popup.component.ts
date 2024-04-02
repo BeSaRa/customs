@@ -126,7 +126,7 @@ export class CommentPopupComponent
           if (this.response === this.taskResponses.DC_RETURN_PA) {
             return this.model.claim();
           }
-          return of();
+          return of(null);
         }),
       )
       .pipe(

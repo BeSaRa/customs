@@ -82,10 +82,6 @@
         [label]="lang.map.meeting_place"></app-input>
       <app-textarea [label]="lang.map.note" formControlName="note" />
     </ng-container>
-    @if (fromCalendar && operation === OperationType.VIEW) {
-      <app-meeting-attendance-list [attendances]="model.attendanceList">
-      </app-meeting-attendance-list>
-    }
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="save$.next()" buttonType="primary"

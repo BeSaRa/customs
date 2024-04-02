@@ -9,7 +9,6 @@ export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
   send(model: Partial<Meeting>): Partial<Meeting> {
     delete model.statusInfo;
     delete model.createdByInfo;
-    delete model.attendanceList;
     if (model.meetingTimeFrom) {
       const date = new Date();
       if (
@@ -38,6 +37,11 @@ export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
       );
       model.meetingTimeTo = date.getTime();
     }
+    model.attendanceList = model.attendanceList?.map(attendance => {
+      return new MeetingAttendance().clone(
+        meetingAttendanceInterceptor.send(attendance),
+      );
+    });
     return model;
   }
 

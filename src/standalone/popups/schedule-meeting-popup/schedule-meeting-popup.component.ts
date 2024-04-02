@@ -55,7 +55,6 @@ export class ScheduleMeetingPopupComponent
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
   form!: UntypedFormGroup;
-  fromCalendar = this.data.extras?.fromCalendar;
   _buildForm() {
     this.form = this.fb.group(this.model.buildForm(true));
     if (this.operation === OperationType.VIEW) {

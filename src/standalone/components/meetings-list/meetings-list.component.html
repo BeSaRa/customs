@@ -1,14 +1,12 @@
 <div class="mb-4">
   <div class="flex justify-start items-center">
     <h1 class="text-primary text-xl">{{ lang.map.lbl_meetings }}</h1>
-    @if (
-      employeeService.isTeamPresident(LDAPGroupNames.Disciplinary_Committee)
-    ) {
+    @if (!readonly) {
       <app-icon-button
         (click)="add$.next()"
         class="text-primary"
         [matTooltip]="lang.map.schedule_meeting"
-        icon="BOOK_CLOCK"></app-icon-button>
+        icon="PLUS_BOX"></app-icon-button>
     }
     <app-icon-button
       (click)="reload$.next(null)"
@@ -87,10 +85,17 @@
                 (click)="view$.next(element)"
                 icon="VIEW"></app-icon-button>
             </div>
-            @if (element.status === MeetingStatusEnum.held) {
+            @if (!readonly && element.status !== MeetingStatusEnum.held) {
               <div [matTooltip]="lang.map.edit">
                 <app-icon-button (click)="update$.next(element)" icon="EDIT" />
               </div>
+            }
+            @if (!readonly) {
+              <app-icon-button
+                (click)="addMeetingMinutes$.next(element)"
+                class="text-primary"
+                [matTooltip]="lang.map.add_meeting_minutes"
+                icon="BOOK_CLOCK"></app-icon-button>
             }
           </div>
         </td>

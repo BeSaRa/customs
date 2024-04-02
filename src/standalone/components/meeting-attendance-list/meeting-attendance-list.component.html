@@ -15,16 +15,11 @@
                 ? lang.map.set_as_not_attended
                 : lang.map.set_as_attended
             "
-            [formControl]="getControl(attendance.id)"
+            [formControl]="getControl(attendance.attendeeId)"
             [label]="
-              attendance.attendeeInfo ? attendance.attendeeInfo.getNames() : ''
+              attendance.status ? lang.map.attended : lang.map.not_attended
             "
-            (changed)="
-              changeAttendanceAttendStatus(
-                attendance.attendeeId,
-                attendance.status
-              )
-            "
+            (changed)="changeAttendanceAttendStatus(attendance)"
             [trueValue]="1"
             [falseValue]="0">
           </app-switch>

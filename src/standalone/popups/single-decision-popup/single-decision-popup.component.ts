@@ -232,7 +232,7 @@ export class SingleDecisionPopupComponent
         this.model().appendPenaltyDecision(model);
         this.updateModel().emit();
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
-        this.dialogRef.close();
+        this.dialogRef.close(model);
       });
   }
 

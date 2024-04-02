@@ -6,12 +6,14 @@
       (click)="openDecisionDialog(offender())"
       icon="GAVEL" />
   </div>
-  <app-icon-button
-    [disabled]="!canMakeSystemDecision(offender().id)"
-    [matMenuTriggerFor]="menu"
-    icon="DOTS_VERTICAL"
-    [matTooltip]="lang.map.take_action">
-  </app-icon-button>
+  @if (!noSystemPenalties) {
+    <app-icon-button
+      [disabled]="!canMakeSystemDecision(offender().id)"
+      [matMenuTriggerFor]="menu"
+      icon="DOTS_VERTICAL"
+      [matTooltip]="lang.map.take_action">
+    </app-icon-button>
+  }
   <mat-menu class="!max-w-[unset]" #menu="matMenu">
     @for (penalty of getSystemPenalties(offender().id); track penalty.id) {
       <button (click)="systemAction$.next(penalty.penaltyKey)" mat-menu-item>
@@ -30,5 +32,4 @@
       </button>
     }
   </mat-menu>
-  <!--  }-->
 </div>
