@@ -11,11 +11,12 @@ import { LangService } from '@services/lang.service';
 import { Meeting } from '@models/meeting';
 import { MeetingService } from '@services/meeting.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { BehaviorSubject, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, map, Subject, switchMap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatCalendar } from '@angular/material/datepicker';
 import { DialogService } from '@services/dialog.service';
-import { MeetingDetailsPopupComponent } from '@standalone/popups/meeting-details-popup/meeting-details-popup.component';
+import { ScheduleMeetingPopupComponent } from '@standalone/popups/schedule-meeting-popup/schedule-meeting-popup.component';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-calendar',
@@ -31,6 +32,7 @@ export class CalendarComponent implements OnInit {
   meetingsList = signal<Meeting[]>([] as Meeting[]);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   details$: Subject<Meeting> = new Subject();
+  update$: Subject<Meeting> = new Subject<Meeting>();
   @ViewChild(MatCalendar) matCalendar!: MatCalendar<Date>;
   selectedDate = signal<Date | null>(null);
   filteredMeetings = computed(() => {
@@ -50,6 +52,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this._listenToReload();
     this._listenToDetails();
+    this._listenToUpdateMeeting();
   }
   _listenToReload() {
     this.reload$
@@ -57,9 +60,12 @@ export class CalendarComponent implements OnInit {
         switchMap(() => {
           return this.meetingService.load();
         }),
+        map(list => {
+          return list.rs.filter(meeting => !this.isMeetingEnd(meeting));
+        }),
       )
       .subscribe(res => {
-        this.meetingsList.set(res.rs);
+        this.meetingsList.set(res);
         this.matCalendar?.updateTodaysDate();
       });
   }
@@ -68,11 +74,42 @@ export class CalendarComponent implements OnInit {
       .pipe(
         switchMap((meeting: Meeting) => {
           return this.dialog
-            .open(MeetingDetailsPopupComponent, { data: { model: meeting } })
+            .open(ScheduleMeetingPopupComponent, {
+              data: {
+                model: meeting,
+                extras: {
+                  showOffenders: true,
+                },
+              },
+            })
             .afterClosed();
         }),
       )
       .subscribe();
+  }
+  _listenToUpdateMeeting() {
+    this.update$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(ScheduleMeetingPopupComponent, {
+              data: {
+                model,
+                operation: OperationType.UPDATE,
+                extras: {
+                  caseId: model.caseId,
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        this.reload$.next(null);
+      });
+  }
+  isMeetingEnd(meeting: Meeting) {
+    return +new Date() > +new Date(meeting.meetingDate);
   }
   isSelected = (event: Date) => {
     if (

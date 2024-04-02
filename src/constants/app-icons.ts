@@ -85,6 +85,7 @@ export const AppIcons = {
   FILE_DOWNLOAD_OUTLINE: 'file-download-outline',
   FILE_UPLOAD_OUTLINE: 'file-upload-outline',
   CALENDAR: 'calendar-multiselect-outline',
+  BOOK_CLOCK: 'book-clock-outline',
   FILE_EYE: 'file-eye',
   UPLOAD: 'upload',
   CLEAR_FILTER: 'filter-off-outline',

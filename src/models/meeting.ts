@@ -23,12 +23,16 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
   reportList: MeetingReport[] = [];
   offenderList: number[] = [];
 
-  buildForm(controls: boolean = false) {
+  buildForm(controls: boolean = false, isPresent: boolean = true) {
     const { title, note, meetingDate, meetingTime } = this;
     return {
-      title: controls ? [title, CustomValidators.required] : title,
+      title: controls
+        ? [{ value: title, disabled: !isPresent }, CustomValidators.required]
+        : title,
 
-      note: controls ? [note, CustomValidators.required] : note,
+      note: controls
+        ? [{ value: note, disabled: !isPresent }, CustomValidators.required]
+        : note,
       meetingDate: controls
         ? [meetingDate, CustomValidators.required]
         : meetingDate,

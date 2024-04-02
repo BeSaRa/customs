@@ -68,6 +68,7 @@ export class CommentPopupComponent
     TaskResponses.TO_MANAGER,
     TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
     TaskResponses.REFERRAL_TO_PRESIDENT,
+    TaskResponses.DC_RETURN_PA,
   ];
   isPreviewForm = false;
 

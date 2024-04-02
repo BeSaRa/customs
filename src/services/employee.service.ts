@@ -14,6 +14,7 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { InternalUserInterceptor } from '@model-interceptors/internal-user-interceptor';
 import { ClearingAgency } from '@models/clearing-agency';
 import { UserTypes } from '@enums/user-types';
+import { DisciplinaryCommitteeCustomSettingContract } from '@contracts/disciplinary-committee-custom-setting-contract';
 
 const internalUserInterceptor = new InternalUserInterceptor();
 
@@ -159,6 +160,29 @@ export class EmployeeService
     );
   }
 
+  isTeamSecretary(ldapGroupName: LDAPGroupNames) {
+    const customSettings: string | undefined = (
+      this.loginData?.teams || []
+    ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
+
+    const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
+      JSON.parse(
+        (customSettings as string) || '{}',
+      ) as DisciplinaryCommitteeCustomSettingContract;
+    return parsedCustomSettings.secretary === this.getEmployee()?.id;
+  }
+
+  isTeamPresident(ldapGroupName: LDAPGroupNames) {
+    const customSettings: string | undefined = (
+      this.loginData?.teams || []
+    ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
+
+    const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
+      JSON.parse(
+        (customSettings as string) || '{}',
+      ) as DisciplinaryCommitteeCustomSettingContract;
+    return parsedCustomSettings.president === this.getEmployee()?.id;
+  }
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>

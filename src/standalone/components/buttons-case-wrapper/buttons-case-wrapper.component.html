@@ -53,13 +53,13 @@
   }
 
   <!-- disciplinary committee approve -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.DC_APPROVE)) {
+  @if (model().hasResponse(taskResponses.DC_APPROVE)) {
     <app-button (click)="responseAction$.next(taskResponses.DC_APPROVE)">
       {{ lang.map.lbl_approve }}
     </app-button>
   }
   <!-- disciplinary committee return president assistant  -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.DC_RETURN_PA)) {
+  @if (model().hasResponse(taskResponses.DC_RETURN_PA)) {
     <app-button
       [buttonType]="'secondary'"
       (click)="responseAction$.next(taskResponses.DC_RETURN_PA)">
@@ -338,6 +338,16 @@
           )
         ">
         {{ lang.map.launch_permanent_disciplinary_council }}
+      </button>
+    }
+    <!-- final launch disciplinary committee -->
+    @if (
+      model().inMyInbox() && model().hasResponse(taskResponses.PA_FNL_LAUNCH_DC)
+    ) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_DC)">
+        {{ lang.map.launch_disciplinary_committee }}
       </button>
     }
   </mat-menu>

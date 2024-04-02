@@ -536,7 +536,7 @@ export interface LangKeysContract {
   lbl_calendar: string;
   upcoming_meetings: string;
   at: string;
-  disciplinary_committee_meetings: string;
+  disciplinary_committee: string;
   lbl_meetings: string;
   schedule_meeting: string;
   lbl_title: string;
@@ -563,4 +563,8 @@ export interface LangKeysContract {
   lbl_date: string;
   lbl_hour: string;
   edit_memo: string;
+  update_meeting: string;
+  meeting_minutes: string;
+  launch_disciplinary_committee: string;
+  add_meeting_minutes: string;
 }

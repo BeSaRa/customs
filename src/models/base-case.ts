@@ -14,6 +14,7 @@ import { HasServiceNameContract } from '@contracts/has-service-name-contract';
 import { map } from 'rxjs/operators';
 import { ServiceRegistry } from '@services/service-registry';
 import { EmployeeService } from '@services/employee.service';
+import { ActivitiesName } from '@enums/activities-name';
 
 export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   extends HasServiceMixin(ClonerMixin(class {}))
@@ -85,15 +86,24 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED
     );
   }
-
   getTaskName() {
     return this.taskDetails?.name;
   }
 
+  getActivityName(): '' | ActivitiesName | undefined {
+    return (
+      this.taskDetails &&
+      this.taskDetails.processInstanceName &&
+      (this.taskDetails.processInstanceName.split(
+        ':',
+      )[0] as unknown as ActivitiesName)
+    );
+  }
   canClaim(): boolean {
     return (
       this.taskDetails &&
-      this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM)
+      this.taskDetails.actions.includes(ActionNames.ACTION_CLAIM) &&
+      this.getActivityName() !== ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL
     );
   }
 
@@ -113,6 +123,12 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return false;
   }
 
+  isClaimed(): boolean {
+    return (
+      this.canRelease() ||
+      this.getActivityName() === ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL
+    );
+  }
   $$getEmployeeService$$(): EmployeeService {
     return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
   }
@@ -125,7 +141,6 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
         this.taskDetails.owner.toLowerCase()
     );
   }
-
   hasComplete(): boolean {
     return (
       this?.inMyInbox() &&
