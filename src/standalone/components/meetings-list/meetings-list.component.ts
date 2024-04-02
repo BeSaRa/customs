@@ -1,4 +1,12 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MeetingService } from '@services/meeting.service';
 import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { Meeting } from '@models/meeting';
@@ -27,8 +35,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { EmployeeService } from '@services/employee.service';
 import { LDAPGroupNames } from '@enums/department-group-names.enum';
 import { Config } from '@constants/config';
-import { data } from 'autoprefixer';
 import { MeetingStatusEnum } from '@enums/meeting-status-enum';
+import { MeetingMinutesPopupComponent } from '@standalone/popups/meeting-minutes-popup/meeting-minutes-popup.component';
 
 @Component({
   selector: 'app-meetings-list',
@@ -59,12 +67,19 @@ export class MeetingsListComponent implements OnInit {
   MeetingStatusEnum = MeetingStatusEnum;
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
+  addMeetingMinutes$: Subject<Meeting | undefined> = new Subject<
+    Meeting | undefined
+  >();
   view$: Subject<Meeting> = new Subject<Meeting>();
   update$: Subject<Meeting> = new Subject<Meeting>();
   model = input.required<Investigation>();
   lang = inject(LangService);
   dialog = inject(DialogService);
   dataList: Meeting[] = [];
+  @Output()
+  askToReloadMeetingMinutes: EventEmitter<void> = new EventEmitter<void>();
+  @Input()
+  readonly: boolean = false;
   displayedColumns: string[] = [
     'title',
     'place',
@@ -80,6 +95,7 @@ export class MeetingsListComponent implements OnInit {
     this._listenToUpdateMeeting();
     this._listenToAddMeeting();
     this._listenToViewMeeting();
+    this._listenToAddMeetingMinutes();
   }
   _listenToReload() {
     this.reload$
@@ -168,6 +184,28 @@ export class MeetingsListComponent implements OnInit {
       });
   }
 
+  _listenToAddMeetingMinutes() {
+    this.addMeetingMinutes$
+      .pipe(
+        switchMap(meeting => {
+          return this.dialog
+            .open(MeetingMinutesPopupComponent, {
+              data: {
+                model: meeting,
+                extras: {
+                  readonly: true,
+                  caseId: this.model().id,
+                  concernedOffendersIds:
+                    this.model().getConcernedOffendersIds(),
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        this.askToReloadMeetingMinutes.emit();
+      });
+  }
   protected readonly LDAPGroupNames = LDAPGroupNames;
-  protected readonly data = data;
 }

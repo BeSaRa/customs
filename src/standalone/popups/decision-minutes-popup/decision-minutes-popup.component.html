@@ -1,0 +1,37 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.add_decision_minutes }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="flex items-center gap-4">
+      <div class="flex-grow">
+        <app-select-input
+          [label]="lang.map.offender_name"
+          [options]="model().offenderInfo"
+          [formControl]="offenderControl"
+          [bindLabel]="'getNames'">
+        </app-select-input>
+      </div>
+      @if (offenderControl.valid && offenderControl.value) {
+        <app-decision-maker
+          [model]="model()"
+          [offender]="offender"
+          [penalties]="penalties()"
+          [penaltyMap]="penaltyMap()"
+          [updateModel]="updateModel"
+          [noSystemPenalties]="true"
+          (decisionMade$)="save$.next($event)"></app-decision-maker>
+      }
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+  </div>
+</div>

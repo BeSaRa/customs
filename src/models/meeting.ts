@@ -29,7 +29,7 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
   meetingTimeFrom!: string | number;
   meetingTimeTo!: string | number;
   override status: number = MeetingStatusEnum.held;
-  buildForm(controls: boolean = false) {
+  buildForm(controls: boolean = false, disabled: boolean = false) {
     const {
       title,
       note,
@@ -41,16 +41,20 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
       status,
     } = this;
     return {
-      title: controls ? [title, CustomValidators.required] : title,
-      note: controls ? [note] : note,
+      title: controls
+        ? [{ value: title, disabled }, CustomValidators.required]
+        : title,
+      note: controls ? [{ value: note, disabled }] : note,
       meetingDate: controls
         ? [meetingDate, CustomValidators.required]
         : meetingDate,
-      place: controls ? [place, CustomValidators.required] : place,
+      place: controls
+        ? [{ value: place, disabled }, CustomValidators.required]
+        : place,
       meetingTimeFrom: controls
         ? [meetingTimeFrom, CustomValidators.required]
         : meetingTimeFrom,
-      status: controls ? [status] : status,
+      status: controls ? [{ value: status, disabled }] : status,
       meetingTimeTo: controls
         ? [meetingTimeTo, CustomValidators.required]
         : meetingTimeTo,

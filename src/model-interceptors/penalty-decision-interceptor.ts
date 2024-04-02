@@ -10,6 +10,8 @@ export class PenaltyDecisionInterceptor
     delete model.penaltyInfo;
     delete model.signerInfo;
     delete model.statusInfo;
+    delete model.offenderInfo;
+    delete model.decisionTypeInfo;
     delete model.id;
     return model;
   }
@@ -23,6 +25,12 @@ export class PenaltyDecisionInterceptor
     });
     model.statusInfo = new AdminResult().clone<AdminResult>({
       ...model.statusInfo,
+    });
+    model.offenderInfo = new AdminResult().clone<AdminResult>({
+      ...model.offenderInfo,
+    });
+    model.decisionTypeInfo = new AdminResult().clone<AdminResult>({
+      ...model.decisionTypeInfo,
     });
     return model;
   }

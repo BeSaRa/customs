@@ -90,6 +90,7 @@ export const AppIcons = {
   UPLOAD: 'upload',
   CLEAR_FILTER: 'filter-off-outline',
   AUTO_FILL: 'window-shutter-auto',
+  LAUNCH: 'rocket-launch-outline',
   APPROVE: 'check-decagram',
 };
 

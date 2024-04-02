@@ -80,9 +80,6 @@ export class CalendarComponent implements OnInit {
               data: {
                 model: meeting,
                 operation: OperationType.VIEW,
-                extras: {
-                  fromCalendar: true,
-                },
               },
             })
             .afterClosed();
@@ -99,9 +96,6 @@ export class CalendarComponent implements OnInit {
               data: {
                 model,
                 operation: OperationType.UPDATE,
-                extras: {
-                  fromCalendar: true,
-                },
               },
             })
             .afterClosed();

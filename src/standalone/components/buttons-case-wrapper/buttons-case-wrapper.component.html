@@ -52,10 +52,18 @@
     </app-button>
   }
 
-  <!-- disciplinary committee approve -->
-  @if (model().hasResponse(taskResponses.DC_APPROVE)) {
-    <app-button (click)="responseAction$.next(taskResponses.DC_APPROVE)">
-      {{ lang.map.lbl_approve }}
+  <!-- disciplinary committee SIGN -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.DC_SIGN)) {
+    <app-button (click)="responseAction$.next(taskResponses.DC_SIGN)">
+      {{ lang.map.sign }}
+    </app-button>
+  }
+  <!-- disciplinary committee DECISION SIGN -->
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.DC_DECISION_SIGN)
+  ) {
+    <app-button (click)="responseAction$.next(taskResponses.DC_DECISION_SIGN)">
+      {{ lang.map.decision_sign }}
     </app-button>
   }
   <!-- disciplinary committee return president assistant  -->
@@ -296,6 +304,7 @@
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
   }
+
   <mat-menu #sendToMenu="matMenu">
     <!-- launch legal affairs -->
     @if (

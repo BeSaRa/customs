@@ -1,17 +1,4 @@
 import { Component, inject, Input, input, OnInit } from '@angular/core';
-import {
-  BehaviorSubject,
-  exhaustMap,
-  filter,
-  map,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap,
-} from 'rxjs';
-import { Investigation } from '@models/investigation';
-import { LangService } from '@services/lang.service';
-import { DialogService } from '@services/dialog.service';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -27,22 +14,33 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { MatTooltip } from '@angular/material/tooltip';
 import { EmployeeService } from '@services/employee.service';
-import { MeetingMinutesPopupComponent } from '@standalone/popups/meeting-minutes-popup/meeting-minutes-popup.component';
+import { LangService } from '@services/lang.service';
+import { DialogService } from '@services/dialog.service';
 import { InvestigationService } from '@services/investigation.service';
+import { ToastService } from '@services/toast.service';
+import {
+  BehaviorSubject,
+  exhaustMap,
+  filter,
+  map,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
+import { Investigation } from '@models/investigation';
 import { Config } from '@constants/config';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatSort } from '@angular/material/sort';
+import { DecisionMinutes } from '@models/decision-minutes';
+import { DecisionMinutesPopupComponent } from '@standalone/popups/decision-minutes-popup/decision-minutes-popup.component';
 import { UserClick } from '@enums/user-click';
 import { ignoreErrors } from '@utils/utils';
-import { ToastService } from '@services/toast.service';
-import { combineLatest } from 'rxjs';
-import { MeetingMinutes } from '@models/meeting-minutes';
 import { GeneralStatusEnum } from '@enums/general-status-enum';
-
 @Component({
-  selector: 'app-meeting-minutes',
+  selector: 'app-decision-minutes',
   standalone: true,
   imports: [
     DatePipe,
@@ -51,20 +49,20 @@ import { GeneralStatusEnum } from '@enums/general-status-enum';
     MatCellDef,
     MatColumnDef,
     MatHeaderCell,
+    MatTooltip,
     MatTable,
     MatSort,
     MatHeaderCellDef,
-    MatTooltip,
     MatHeaderRow,
-    MatRowDef,
     MatHeaderRowDef,
+    MatRowDef,
     MatRow,
     MatNoDataRow,
   ],
-  templateUrl: './meeting-minutes.component.html',
-  styleUrl: './meeting-minutes.component.scss',
+  templateUrl: './decision-minutes.component.html',
+  styleUrl: './decision-minutes.component.scss',
 })
-export class MeetingMinutesComponent
+export class DecisionMinutesComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
@@ -75,14 +73,17 @@ export class MeetingMinutesComponent
   toast = inject(ToastService);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
-  view$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
-  delete$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
-  launch$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
+  view$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
+  delete$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
+  launch$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
   model = input.required<Investigation>();
-  dataList: MeetingMinutes[] = [];
+  dataList: DecisionMinutes[] = [];
   config = Config;
+  generalStatusEnum = GeneralStatusEnum;
   displayedColumns: string[] = [
-    'meeting',
+    'offender',
+    'penalty',
+    'decisionTypeInfo',
     'status',
     'creationDate',
     'creator',
@@ -90,18 +91,19 @@ export class MeetingMinutesComponent
   ];
   @Input()
   readonly: boolean = false;
-  generalStatusEnum = GeneralStatusEnum;
   ngOnInit(): void {
     this._listenToReload();
     this._listenToLaunch();
     this.listenToDelete();
-    this._listenToAddMeetingMinutes();
+    this._listenToAddDecision();
   }
   _listenToReload() {
     this.reload$
       .pipe(
         switchMap(() => {
-          return this.investigationService.getMeetingsMinutes(this.model().id);
+          return this.investigationService.getDisciplinaryDecisions(
+            this.model().id,
+          );
         }),
       )
       .subscribe(res => {
@@ -112,15 +114,11 @@ export class MeetingMinutesComponent
   _listenToLaunch() {
     this.launch$
       .pipe(
-        switchMap(draft => {
-          return combineLatest(
-            draft.offenderIds.map(offenderId => {
-              return this.investigationService.reviewTaskMeetingMinutes(
-                this.model().taskDetails.tkiid,
-                draft.concernedId,
-                offenderId,
-              );
-            }),
+        switchMap(decision => {
+          return this.investigationService.reviewTaskDecision(
+            this.model().taskDetails.tkiid,
+            decision.concernedId,
+            decision.offenderIds[0],
           );
         }),
       )
@@ -134,10 +132,7 @@ export class MeetingMinutesComponent
           return this.dialog
             .confirm(
               this.lang.map.msg_delete_x_confirm.change({
-                x:
-                  item.meetingInfo?.getNames() +
-                  ' - ' +
-                  new Date(item.createdOn).toLocaleDateString('GB-en'),
+                x: item.attachmentTypeInfo?.getNames(),
               }),
             )
             .afterClosed()
@@ -161,27 +156,23 @@ export class MeetingMinutesComponent
         tap(item =>
           this.toast.success(
             this.lang.map.msg_delete_x_success.change({
-              x:
-                item.meetingInfo?.getNames() +
-                ' - ' +
-                new Date(item.createdOn).toLocaleDateString('GB-en'),
+              x: item.attachmentTypeInfo?.getNames(),
             }),
           ),
         ),
       )
       .subscribe(() => this.reload$.next(null));
   }
-  _listenToAddMeetingMinutes() {
+  _listenToAddDecision() {
     this.add$
       .pipe(
         switchMap(() => {
           return this.dialog
-            .open(MeetingMinutesPopupComponent, {
+            .open(DecisionMinutesPopupComponent, {
               data: {
+                model: this.model,
                 extras: {
                   caseId: this.model().id,
-                  concernedOffendersIds:
-                    this.model().getConcernedOffendersIds(),
                 },
               },
             })

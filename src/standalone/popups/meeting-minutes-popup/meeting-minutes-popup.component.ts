@@ -10,10 +10,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { LangService } from '@services/lang.service';
-import { filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { Meeting } from '@models/meeting';
-import { MeetingService } from '@services/meeting.service';
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { InputComponent } from '@standalone/components/input/input.component';
 import {
@@ -30,6 +29,12 @@ import { CustomValidators } from '@validators/custom-validators';
 import { DialogService } from '@services/dialog.service';
 import { LookupService } from '@services/lookup.service';
 import { MeetingStatusEnum } from '@enums/meeting-status-enum';
+import { MeetingAttendance } from '@models/meeting-attendance';
+import { TeamService } from '@services/team.service';
+import { TeamNames } from '@enums/team-names';
+import { InternalUser } from '@models/internal-user';
+import { AdminResult } from '@models/admin-result';
+import { MeetingService } from '@services/meeting.service';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -59,18 +64,19 @@ export class MeetingMinutesPopupComponent
   data = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dialogRef = inject(MatDialogRef);
-  meetingService = inject(MeetingService);
   investigationService = inject(InvestigationService);
   fb = inject(FormBuilder);
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
+  teamService = inject(TeamService);
+  meetingService = inject(MeetingService);
   save$: Subject<void> = new Subject<void>();
-  saveMeeting$: Subject<void> = new Subject<void>();
   form: FormGroup = new FormGroup({});
-  meetings: Meeting[] = [];
-  selectedMeeting: Meeting | undefined;
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
+  caseId = this.data.extras?.caseId;
+  model: Meeting | undefined = this.data.model;
+  attendanceList: MeetingAttendance[] = [];
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   meetingStatus = this.lookupService.lookups.meetingStatus.filter(
     s => s.lookupKey !== MeetingStatusEnum.pending,
@@ -78,36 +84,47 @@ export class MeetingMinutesPopupComponent
   ngOnInit(): void {
     this.buildForm();
     this.listenToSave();
-    this.loadMeetings();
-    this.listenToSaveMeeting();
+    this.getAttendanceList();
   }
+  get readonlyMeetingData() {
+    return !!this.model;
+  }
+  getAttendanceList() {
+    this.teamService
+      .loadTeamMembers(TeamNames.Disciplinary_Committee)
+      .pipe(
+        map((users: InternalUser[]) => {
+          return users.map((user: InternalUser) => {
+            return new MeetingAttendance().clone<MeetingAttendance>({
+              attendeeId: user.id,
+              attendeeInfo: AdminResult.createInstance({
+                id: user.id,
+                arName: user.arName,
+                enName: user.enName,
+              }),
+              status: 0,
+            });
+          });
+        }),
+      )
+      .subscribe(rs => {
+        this.attendanceList = rs;
+      });
+  }
+
   buildForm() {
-    this.form = this.fb.group(new Meeting().buildForm(true));
+    this.form = this.fb.group(
+      new Meeting()
+        .clone<Meeting>(this.model)
+        .buildForm(true, this.readonlyMeetingData),
+    );
     this.form
       .get('meetingMinutesText')
       ?.setValidators([CustomValidators.required]);
     this.form.get('status')?.setValidators([CustomValidators.required]);
-  }
-  loadMeetings() {
-    this.meetingService.loadAsLookups().subscribe((rs: Meeting[]) => {
-      this.meetings = rs;
-    });
-  }
-  handleSelectMeeting(meeting: unknown) {
-    this.form.reset();
-    this.meetingService
-      .loadByIdComposite((meeting as Meeting).id)
-      .subscribe(res => {
-        this.selectedMeeting = new Meeting().clone<Meeting>(res);
-        this.form.patchValue({
-          title: this.selectedMeeting.title,
-          note: this.selectedMeeting.note,
-          meetingDate: this.selectedMeeting.meetingDate,
-          place: this.selectedMeeting.place,
-          meetingTimeFrom: this.selectedMeeting.meetingTimeFrom,
-          meetingTimeTo: this.selectedMeeting.meetingTimeTo,
-        });
-      });
+    if (!this.model) {
+      this.form.get('status')?.disable();
+    }
   }
   listenToSave() {
     this.save$
@@ -124,10 +141,34 @@ export class MeetingMinutesPopupComponent
       .pipe(filter(() => this.form.valid))
       .pipe(
         switchMap(() => {
+          if (!this.model) {
+            return this.meetingService.createFull(
+              new Meeting().clone<Meeting>({
+                caseId: this.caseId,
+                ...this.form.value,
+                offenderList: this.concernedOffendersIds,
+              }),
+            );
+          } else {
+            return of(this.model);
+          }
+        }),
+      )
+      .pipe(
+        switchMap(model => {
           return this.investigationService.addMeetingMinutes({
             ...this.form.value,
-            caseId: this.selectedMeeting?.caseId,
-            // offenderList: this.selectedMeeting?.offenderList,
+            caseId: model.caseId,
+            id: model.id,
+            attendanceList: model.attendanceList.map(attend => {
+              return {
+                ...attend,
+                status: this.attendanceList.find(
+                  localAttend => attend.attendeeId === localAttend.attendeeId,
+                )?.status,
+              };
+            }),
+            offenderList: this.concernedOffendersIds,
           });
         }),
       )
@@ -135,34 +176,4 @@ export class MeetingMinutesPopupComponent
         this.dialogRef.close(model);
       });
   }
-  listenToSaveMeeting() {
-    this.saveMeeting$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        tap(
-          () =>
-            this.form.invalid &&
-            this.dialog.error(
-              this.lang.map.msg_make_sure_all_required_fields_are_filled,
-            ),
-        ),
-      )
-      .pipe(filter(() => this.form.valid))
-      .pipe(
-        switchMap(() => {
-          return new Meeting()
-            .clone<Meeting>({
-              ...this.form.value,
-              caseId: this.selectedMeeting?.caseId,
-              offenderList: this.concernedOffendersIds,
-            })
-            .save();
-        }),
-      )
-      .subscribe(meeting => {
-        this.meetings.push(meeting);
-        this.handleSelectMeeting(meeting);
-      });
-  }
-  protected readonly Meeting = Meeting;
 }
