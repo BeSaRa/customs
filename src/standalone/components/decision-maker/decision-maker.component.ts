@@ -1,12 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, input, OnInit } from '@angular/core';
 import { AppIcons } from '@constants/app-icons';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatIcon } from '@angular/material/icon';
@@ -28,7 +20,6 @@ import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { PenaltyService } from '@services/penalty.service';
-import { PenaltyDecision } from '@models/penalty-decision';
 
 @Component({
   selector: 'app-decision-maker',
@@ -68,10 +59,9 @@ export class DecisionMakerComponent
       Record<number, { first: number | null; second: Penalty[] }>
     >();
   penalties = input.required<Record<number, PenaltyDecisionContract>>();
-  @Input() noSystemPenalties: boolean = false;
+
   systemAction$: Subject<SystemPenalties> = new Subject<SystemPenalties>();
-  @Output() decisionMade$: EventEmitter<PenaltyDecision> =
-    new EventEmitter<PenaltyDecision>();
+
   ngOnInit(): void {
     this.listenToSystemActionChanges();
   }
@@ -162,22 +152,13 @@ export class DecisionMakerComponent
             : of(null);
         }),
       )
-      .pipe(
-        switchMap(() => {
-          return this.penaltyDecisionService
-            .openSingleDecisionDialog(
-              offender,
-              this.model,
-              this.updateModel,
-              this.penaltyMap()[offender.id],
-            )
-            .afterClosed();
-        }),
-      )
-      .subscribe(decision => {
-        if (decision) {
-          this.decisionMade$.emit(decision as PenaltyDecision);
-        }
+      .subscribe(() => {
+        this.penaltyDecisionService.openSingleDecisionDialog(
+          offender,
+          this.model,
+          this.updateModel,
+          this.penaltyMap()[offender.id],
+        );
       });
   }
 

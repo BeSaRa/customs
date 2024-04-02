@@ -1,10 +1,9 @@
 import {
   Component,
   computed,
-  EventEmitter,
   inject,
-  InputSignal,
   OnInit,
+  Signal,
   signal,
 } from '@angular/core';
 import {
@@ -58,7 +57,7 @@ import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
 
 @Component({
-  selector: 'app-single-decision-popup',
+  selector: 'app-dc-decision-popup',
   standalone: true,
   imports: [
     ButtonComponent,
@@ -90,17 +89,17 @@ import { DialogService } from '@services/dialog.service';
     TextareaComponent,
     MatSelectTrigger,
   ],
-  templateUrl: './single-decision-popup.component.html',
-  styleUrl: './single-decision-popup.component.scss',
+  templateUrl: './dc-decision-popup.component.html',
+  styleUrl: './dc-decision-popup.component.scss',
 })
-export class SingleDecisionPopupComponent
+export class DcDecisionPopupComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
   data = inject<{
     offender: Offender;
-    model: InputSignal<Investigation>;
-    updateModel: InputSignal<EventEmitter<void>>;
+    hasDecisionMinutes: boolean;
+    model: Signal<Investigation>;
     offenderPenalties: { first: number; second: Penalty[] };
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
@@ -136,7 +135,6 @@ export class SingleDecisionPopupComponent
       return new FormControl(item.proofStatus);
     });
   });
-  updateModel = this.data.updateModel;
   oldPenaltyDecision = computed(() => {
     return this.model().getPenaltyDecisionByOffenderId(this.offender().id);
   });
@@ -217,22 +215,32 @@ export class SingleDecisionPopupComponent
       )
       .pipe(
         exhaustMap(model => {
-          return model.create().pipe(
-            map(saved => {
-              return new PenaltyDecision().clone<PenaltyDecision>({
-                ...model,
-                id: saved.id,
-              });
-            }),
-          );
+          if (this.data.hasDecisionMinutes) {
+            return model.save().pipe(
+              map(saved => {
+                return new PenaltyDecision().clone<PenaltyDecision>({
+                  ...model,
+                  id: saved.id,
+                });
+              }),
+            );
+          } else {
+            return model.create().pipe(
+              map(saved => {
+                return new PenaltyDecision().clone<PenaltyDecision>({
+                  ...model,
+                  id: saved.id,
+                });
+              }),
+            );
+          }
         }),
       )
       .subscribe(model => {
         this.model().removePenaltyDecision(this.oldPenaltyDecision());
         this.model().appendPenaltyDecision(model);
-        this.updateModel().emit();
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
-        this.dialogRef.close();
+        this.dialogRef.close(model);
       });
   }
 

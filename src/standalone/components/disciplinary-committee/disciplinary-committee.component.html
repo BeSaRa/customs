@@ -2,6 +2,7 @@
   <app-meetings-list
     (askToReloadMeetingMinutes)="meetingMinutes.reload$.next(null)"
     [model]="model()"
+    [meetingMinutesList]="meetingMinutesList"
     [readonly]="
       !model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)
     "></app-meetings-list>
@@ -10,6 +11,7 @@
   <app-meeting-minutes
     [model]="model()"
     [readonly]="!model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)"
+    (updateMeetingMinutesList)="meetingMinutesList = $event"
     #meetingMinutes></app-meeting-minutes>
 </div>
 <div class="p-4">
