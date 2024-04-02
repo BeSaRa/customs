@@ -1,2 +1,25 @@
-<app-meetings-list [model]="model()"></app-meetings-list>
-<app-meeting-minutes [model]="model()"></app-meeting-minutes>
+<div class="p-4">
+  <app-meetings-list
+    (askToReloadMeetingMinutes)="meetingMinutes.reload$.next(null)"
+    [model]="model()"
+    [readonly]="
+      !model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)
+    "></app-meetings-list>
+</div>
+<div class="p-4">
+  <app-meeting-minutes
+    [model]="model()"
+    [readonly]="!model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)"
+    #meetingMinutes></app-meeting-minutes>
+</div>
+<div class="p-4">
+  <app-decision-minutes
+    [readonly]="!model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)"
+    [model]="model()"></app-decision-minutes>
+</div>
+<div class="p-4">
+  <app-persons-list type="offender" [model]="model()" />
+</div>
+<div class="p-4">
+  <app-persons-list type="witness" [model]="model()" />
+</div>

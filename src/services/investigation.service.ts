@@ -26,6 +26,8 @@ import { Meeting } from '@models/meeting';
 import { HttpParams } from '@angular/common/http';
 import { CaseAttachment } from '@models/case-attachment';
 import { MeetingInterceptor } from '@model-interceptors/meeting-interceptor';
+import { MeetingMinutes } from '@models/meeting-minutes';
+import { DecisionMinutes } from '@models/decision-minutes';
 import { Memorandum } from '@models/memorandum';
 import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
 import { OperationType } from '@enums/operation-type';
@@ -37,8 +39,14 @@ import { OperationType } from '@enums/operation-type';
   suspend: {
     model: () => SuspendEmployee,
   },
-  meeting: {
+  $meeting: {
     model: () => Meeting,
+  },
+  $meetingMinutes: {
+    model: () => MeetingMinutes,
+  },
+  $decisionMinutes: {
+    model: () => DecisionMinutes,
   },
 })
 @Injectable({
@@ -141,7 +149,35 @@ export class InvestigationService
         `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
     );
   }
-  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
+
+  addDisciplinaryDecision(penaltyDecisionId: number) {
+    return this.http.post(
+      this.getUrlSegment() + '/document/dc/decision',
+      {},
+      {
+        params: new HttpParams({
+          fromObject: { penaltyDecisionId },
+        }),
+      },
+    );
+  }
+
+  @CastResponse(() => DecisionMinutes, {
+    unwrap: 'rs',
+    fallback: '$decisionMinutes',
+  })
+  getDisciplinaryDecisions(caseId: string): Observable<DecisionMinutes[]> {
+    return this.http.get<DecisionMinutes[]>(
+      this.getUrlSegment() + '/document/dc/decision',
+      {
+        params: new HttpParams({
+          fromObject: { caseId },
+        }),
+      },
+    );
+  }
+
+  @CastResponse(() => MeetingMinutes, { unwrap: 'rs', fallback: '$meeting' })
   @HasInterception
   addMeetingMinutes(
     @InterceptParam(new MeetingInterceptor().send) body: Meeting,
@@ -151,14 +187,56 @@ export class InvestigationService
       body,
     );
   }
-  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
-  addDisciplinaryDecision(penaltyDecisionId: number) {
-    return this.http.post(
-      this.getUrlSegment() + '/document/dc/decisions',
+
+  @CastResponse(() => MeetingMinutes, {
+    unwrap: 'rs',
+    fallback: '$meetingMinutes',
+  })
+  getMeetingsMinutes(caseId: string): Observable<MeetingMinutes[]> {
+    return this.http.get<MeetingMinutes[]>(
+      this.getUrlSegment() + '/document/dc/meeting-minutes',
+      {
+        params: new HttpParams({
+          fromObject: { caseId },
+        }),
+      },
+    );
+  }
+  reviewTaskMeetingMinutes(
+    tkiid: string,
+    meetingId: number,
+    offenderId: number,
+  ): Observable<MeetingMinutes> {
+    return this.http.post<MeetingMinutes>(
+      this.getUrlSegment() + '/review-task/dc/meeting-minutes',
       {},
       {
         params: new HttpParams({
-          fromObject: { penaltyDecisionId },
+          fromObject: {
+            tkiid,
+            meetingId,
+            offenderId,
+          },
+        }),
+      },
+    );
+  }
+
+  reviewTaskDecision(
+    tkiid: string,
+    penaltyDecisionId: number,
+    offenderId: number,
+  ) {
+    return this.http.post<CaseAttachment[]>(
+      this.getUrlSegment() + '/review-task/dc/decision',
+      {},
+      {
+        params: new HttpParams({
+          fromObject: {
+            tkiid,
+            penaltyDecisionId,
+            offenderId,
+          },
         }),
       },
     );

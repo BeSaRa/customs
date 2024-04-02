@@ -1,6 +1,6 @@
 <div class="mb-4">
   <div class="flex justify-start items-center">
-    <h1 class="text-primary text-xl">{{ lang.map.meetings_minutes }}</h1>
+    <h1 class="text-primary text-xl">{{ lang.map.decision_minutes }}</h1>
     <app-icon-button
       (click)="reload$.next(null)"
       class="text-primary"
@@ -9,7 +9,7 @@
       <app-icon-button
         (click)="add$.next()"
         class="text-primary"
-        [matTooltip]="lang.map.add_meeting_minutes"
+        [matTooltip]="lang.map.add_decision_minutes"
         icon="PLUS_BOX"></app-icon-button>
     }
   </div>
@@ -19,13 +19,25 @@
       matSort
       class="table-style table-primary"
       [dataSource]="dataList">
-      <!-- meeting -->
-      <ng-container matColumnDef="meeting">
-        <th mat-header-cell *matHeaderCellDef>
-          {{ lang.map.meeting_title }}
-        </th>
+      <!-- offender -->
+      <ng-container matColumnDef="offender">
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.offender_name }}</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.meetingInfo?.getNames() }}
+          {{ element.penaltyDecisionInfo?.offenderInfo?.getNames() }}
+        </td>
+      </ng-container>
+      <!-- penalty -->
+      <ng-container matColumnDef="penalty">
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.penalty }}</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.penaltyDecisionInfo?.penaltyInfo?.getNames() }}
+        </td>
+      </ng-container>
+      <!-- decisionTypeInfo -->
+      <ng-container matColumnDef="decisionTypeInfo">
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.decision_type }}</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.penaltyDecisionInfo?.decisionTypeInfo?.getNames() }}
         </td>
       </ng-container>
       <!-- status -->

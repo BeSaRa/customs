@@ -30,11 +30,12 @@ export enum TaskResponses {
   TO_INV_USER = 'to_inv_user',
   TO_INV_CHIEF = 'to_inv_chief',
   LA_FNL_APPROVE = 'la_fnl_approve',
-  DC_APPROVE = 'dc_approve',
   DC_RETURN_PA = 'dc_return_pa',
   PA_FNL_LAUNCH_DC = 'pa_fnl_launch_dc',
   TO_HR_DEP = 'to_hr_dep',
   CA_APPROVE = 'ca_approve',
   RETURN_TO_CA = 'return_to_ca',
   TO_CA_DEP = 'to_ca_dep',
+  DC_SIGN = 'dc_sign',
+  DC_DECISION_SIGN = 'dc_decision_sign',
 }

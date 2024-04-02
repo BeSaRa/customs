@@ -36,7 +36,6 @@ export class CaseAttachment extends ClonerMixin(class {}) {
   // not related to the model
 
   content?: File;
-
   setContent(file: File): void {
     this.content = file;
   }

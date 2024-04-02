@@ -61,7 +61,7 @@
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false">
-      @if (model.inLegalAffairsActivity() || model.inDisciplinaryCommittee()) {
+      @if (model.inLegalAffairsActivity()) {
         <mat-tab
           data-name="legal_procedures"
           [label]="lang.map.legal_procedures">

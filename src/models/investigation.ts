@@ -172,10 +172,6 @@ export class Investigation extends BaseCase<
     });
   }
 
-  loadPenalties() {
-    return this.getService().getCasePenalty(this.id, this.getActivityName()!);
-  }
-
   getTaskId(): string | undefined {
     return this.taskDetails && this.taskDetails.tkiid;
   }
@@ -368,7 +364,7 @@ export class Investigation extends BaseCase<
     );
   }
 
-  private inActivity(activityName: ActivitiesName): boolean {
+  inActivity(activityName: ActivitiesName): boolean {
     return activityName === this.getActivityName();
   }
 
@@ -381,6 +377,9 @@ export class Investigation extends BaseCase<
   }
 
   inDisciplinaryCommittee(): boolean {
-    return this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL);
+    return (
+      this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL) ||
+      this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL_SIGNATURE)
+    );
   }
 }

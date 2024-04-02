@@ -1,4 +1,12 @@
-import { Component, computed, inject, Input, input } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  Output,
+} from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
   MatCell,
@@ -34,8 +42,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
-import { MeetingService } from '@services/meeting.service';
-import { of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-meeting-attendance-list',
@@ -69,13 +75,14 @@ export class MeetingAttendanceListComponent extends OnDestroyMixin(class {}) {
   toast = inject(ToastService);
   lang = inject(LangService);
   lookupService = inject(LookupService);
-  meetingService = inject(MeetingService);
   dataSource: MatTableDataSource<CallRequest> = new MatTableDataSource();
   attendances = input([] as MeetingAttendance[]);
   @Input()
   meetingMinutes: boolean = false;
-  @Input()
-  meetingId!: number;
+  @Output()
+  updateAttend: EventEmitter<MeetingAttendance[]> = new EventEmitter<
+    MeetingAttendance[]
+  >();
   protected readonly config = Config;
   attendancesFormGroup = computed<
     FormGroup<{ [key: string]: AbstractControl }>
@@ -83,7 +90,7 @@ export class MeetingAttendanceListComponent extends OnDestroyMixin(class {}) {
     const formGroup = new FormGroup({});
     this.attendances().forEach(attend => {
       formGroup.addControl(
-        attend.id.toString(),
+        attend.attendeeId.toString(),
         new FormControl(attend.status),
       );
     });
@@ -94,23 +101,8 @@ export class MeetingAttendanceListComponent extends OnDestroyMixin(class {}) {
       attendanceId.toString(),
     ) as FormControl;
   }
-  changeAttendanceAttendStatus(attendanceId: number, currentStatus: number) {
-    of(null)
-      .pipe(
-        switchMap(() => {
-          if (currentStatus) {
-            return this.meetingService.setNotAttended(
-              this.meetingId,
-              attendanceId,
-            );
-          } else {
-            return this.meetingService.setAttended(
-              this.meetingId,
-              attendanceId,
-            );
-          }
-        }),
-      )
-      .subscribe();
+  changeAttendanceAttendStatus(attendance: MeetingAttendance) {
+    attendance.status = +!attendance.status;
+    this.updateAttend.emit(this.attendances());
   }
 }

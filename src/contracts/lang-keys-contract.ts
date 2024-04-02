@@ -580,4 +580,10 @@ export interface LangKeysContract {
   meeting_minutes_text: string;
   meeting_status: string;
   save_meeting: string;
+  decisions_minutes: string;
+  add_decision_minutes: string;
+  decision_minutes: string;
+  sign: string;
+  decision_sign: string;
+  meeting_title: string;
 }

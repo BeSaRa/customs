@@ -1,6 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.make_penalty_decision_action }}</h1>
+    <h1>{{ lang.map.meeting_minutes }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -9,11 +9,6 @@
   </div>
   <div class="dialog-content">
     <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
-      <app-select-input
-        [options]="meetings"
-        [label]="lang.map.meeting"
-        (selectChange)="handleSelectMeeting($event)"
-        bindLabel="title" />
       <form [formGroup]="form">
         <app-input
           formControlName="title"
@@ -25,9 +20,9 @@
             <input
               appControl
               formControlName="meetingDate"
-              [min]="todayDate"
-              [max]="maxDate"
-              (click)="datepicker.open()"
+              [min]="readonlyMeetingData ? null : todayDate"
+              [max]="readonlyMeetingData ? null : maxDate"
+              (click)="!readonlyMeetingData && datepicker.open()"
               [matDatepicker]="datepicker" />
             <mat-datepicker [touchUi]="true" #datepicker />
           </app-input>
@@ -45,6 +40,7 @@
               appControl
               [max]="form.get('meetingTimeTo')?.value"
               formControlName="meetingTimeFrom"
+              [disableClick]="readonlyMeetingData"
               [ngxMatTimepicker]="timePickerFrom" />
             <ngx-mat-timepicker
               [cancelBtnTmpl]="cancelBtn"
@@ -69,6 +65,7 @@
               appControl
               [min]="form.get('meetingTimeFrom')?.value"
               formControlName="meetingTimeTo"
+              [disableClick]="readonlyMeetingData"
               [ngxMatTimepicker]="timePickerTo" />
             <ngx-mat-timepicker
               [cancelBtnTmpl]="cancelBtn"
@@ -94,27 +91,17 @@
           [label]="lang.map.meeting_minutes_text"
           formControlName="meetingMinutesText" />
       </form>
-      @if (this.selectedMeeting) {
-        <app-meeting-attendance-list
-          [meetingId]="this.selectedMeeting.id"
-          [attendances]="selectedMeeting.attendanceList"
-          [meetingMinutes]="true">
-        </app-meeting-attendance-list>
-      }
+      <app-meeting-attendance-list
+        [attendances]="attendanceList"
+        [meetingMinutes]="true"
+        (updateAttend)="attendanceList = $event">
+      </app-meeting-attendance-list>
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button
-      (click)="save$.next()"
-      [disabled]="!selectedMeeting?.id"
-      buttonType="primary"
-      >{{ lang.map.save }}</app-button
-    >
-    @if (!selectedMeeting?.id) {
-      <app-button (click)="saveMeeting$.next()" buttonType="primary">{{
-        lang.map.save_meeting
-      }}</app-button>
-    }
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
       lang.map.close
     }}</app-button>
