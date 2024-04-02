@@ -5,6 +5,8 @@ import { MeetingService } from '@services/meeting.service';
 import { MeetingAttendance } from '@models/meeting-attendance';
 import { MeetingReport } from '@models/meeting-report';
 import { CustomValidators } from '@validators/custom-validators';
+import { MeetingStatusEnum } from '@enums/meeting-status-enum';
+import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new MeetingInterceptor();
 
@@ -15,30 +17,44 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
   caseId!: string;
   title!: string;
   note!: string;
+  meetingMinutesText!: string;
   meetingDate!: Date | string;
-  meetingTime!: string;
   createdBy!: number;
+  createdByInfo!: AdminResult;
   createdOn!: Date | string;
   attendanceList: MeetingAttendance[] = [];
   reportList: MeetingReport[] = [];
   offenderList: number[] = [];
-
-  buildForm(controls: boolean = false, isPresent: boolean = true) {
-    const { title, note, meetingDate, meetingTime } = this;
+  place!: string;
+  meetingTimeFrom!: string | number;
+  meetingTimeTo!: string | number;
+  override status: number = MeetingStatusEnum.held;
+  buildForm(controls: boolean = false) {
+    const {
+      title,
+      note,
+      meetingDate,
+      place,
+      meetingTimeFrom,
+      meetingTimeTo,
+      meetingMinutesText,
+      status,
+    } = this;
     return {
-      title: controls
-        ? [{ value: title, disabled: !isPresent }, CustomValidators.required]
-        : title,
-
-      note: controls
-        ? [{ value: note, disabled: !isPresent }, CustomValidators.required]
-        : note,
+      title: controls ? [title, CustomValidators.required] : title,
+      note: controls ? [note, CustomValidators.required] : note,
       meetingDate: controls
         ? [meetingDate, CustomValidators.required]
         : meetingDate,
-      meetingTime: controls
-        ? [meetingTime, CustomValidators.required]
-        : meetingTime,
+      place: controls ? [place, CustomValidators.required] : place,
+      meetingTimeFrom: controls
+        ? [meetingTimeFrom, CustomValidators.required]
+        : meetingTimeFrom,
+      status: controls ? [status] : status,
+      meetingTimeTo: controls
+        ? [meetingTimeTo, CustomValidators.required]
+        : meetingTimeTo,
+      meetingMinutesText: controls ? [meetingMinutesText] : meetingMinutesText,
     };
   }
 }

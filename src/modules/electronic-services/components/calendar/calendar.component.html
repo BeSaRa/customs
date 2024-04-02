@@ -46,11 +46,7 @@
               </h3>
               <small class="whitespace-nowrap">
                 <strong>{{ lang.map.lbl_date }}:</strong>
-                {{ meeting.meetingDate | date }}
-                {{ lang.map.lbl_hour }}
-                <span dir="ltr">
-                  {{ meeting.meetingTime }}
-                </span>
+                {{ meeting.meetingDate | date: config.DATE_FORMAT }}
               </small>
               <p class="ms-0 mt-2 text-sm text-gray-500">
                 {{ meeting.note }}

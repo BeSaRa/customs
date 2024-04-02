@@ -11,34 +11,60 @@
   </div>
   <div class="dialog-content max-w-[800px] space-y-4">
     <ng-container [formGroup]="form">
+      @if (operation !== OperationType.CREATE) {
+        <div>
+          <strong>{{ lang.map.creator }}</strong
+          >:
+          <span>{{ this.model.createdByInfo.getNames() }}</span>
+        </div>
+      }
       <app-input
         formControlName="title"
         [label]="lang.map.lbl_title"></app-input>
+      <app-input formControlName="meetingDate" [label]="lang.map.meeting_date">
+        <input
+          appControl
+          formControlName="meetingDate"
+          [min]="todayDate"
+          [max]="maxDate"
+          (click)="datepicker.open()"
+          [matDatepicker]="datepicker" />
+        <mat-datepicker [touchUi]="true" #datepicker />
+      </app-input>
       <div class="grid gap-4 grid-cols-2">
         <app-input
-          formControlName="meetingDate"
-          [label]="lang.map.meeting_date">
+          formControlName="meetingTimeFrom"
+          [label]="lang.map.meeting_time_from">
           <input
             appControl
-            formControlName="meetingDate"
-            [min]="todayDate"
-            [max]="maxDate"
-            (click)="datepicker.open()"
-            [matDatepicker]="datepicker" />
-          <mat-datepicker [touchUi]="true" #datepicker />
-        </app-input>
-        <app-input
-          formControlName="meetingTime"
-          [label]="lang.map.meeting_time">
-          <input
-            appControl
-            formControlName="meetingTime"
-            [ngxMatTimepicker]="picker" />
+            formControlName="meetingTimeFrom"
+            [ngxMatTimepicker]="timePickerFrom" />
           <ngx-mat-timepicker
             [cancelBtnTmpl]="cancelBtn"
             [confirmBtnTmpl]="confirmBtn"
             [minutesGap]="5"
-            #picker></ngx-mat-timepicker>
+            #timePickerFrom></ngx-mat-timepicker>
+          <ng-template #cancelBtn>
+            <app-button class="me-2 inline-block" buttonType="primary-outline">
+              {{ lang.map.close }}
+            </app-button>
+          </ng-template>
+          <ng-template #confirmBtn>
+            <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+          </ng-template>
+        </app-input>
+        <app-input
+          formControlName="meetingTimeTo"
+          [label]="lang.map.meeting_time_to">
+          <input
+            appControl
+            formControlName="meetingTimeTo"
+            [ngxMatTimepicker]="timePickerTo" />
+          <ngx-mat-timepicker
+            [cancelBtnTmpl]="cancelBtn"
+            [confirmBtnTmpl]="confirmBtn"
+            [minutesGap]="5"
+            #timePickerTo></ngx-mat-timepicker>
           <ng-template #cancelBtn>
             <app-button class="me-2 inline-block" buttonType="primary-outline">
               {{ lang.map.close }}
@@ -49,13 +75,14 @@
           </ng-template>
         </app-input>
       </div>
+      <app-input
+        formControlName="place"
+        [label]="lang.map.meeting_place"></app-input>
       <app-textarea [label]="lang.map.note" formControlName="note" />
     </ng-container>
-    @if (isShowOffenders || isMeetingEnd(model)) {
-      <app-offender-list
-        [model]="investigationCase"
-        [readonly]="true"
-        [canModifyOffenders]="false" />
+    @if (fromCalendar && operation === OperationType.VIEW) {
+      <app-meeting-attendance-list [attendances]="model.attendanceList">
+      </app-meeting-attendance-list>
     }
   </div>
   <div class="dialog-footer justify-end">
