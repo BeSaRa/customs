@@ -87,6 +87,7 @@ export const AppIcons = {
   CALENDAR: 'calendar-multiselect-outline',
   FILE_EYE: 'file-eye',
   UPLOAD: 'upload',
+  CLEAR_FILTER: 'filter-off-outline',
   AUTO_FILL: 'window-shutter-auto',
   APPROVE: 'check-decagram',
 };
