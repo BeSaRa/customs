@@ -542,6 +542,9 @@ export interface LangKeysContract {
   lbl_title: string;
   meeting_date: string;
   meeting_time: string;
+  meeting_place: string;
+  meeting_time_from: string;
+  meeting_time_to: string;
   send_to_hr_department: string;
   send_to_ca_department: string;
   return_to_ca_department: string;
@@ -567,4 +570,13 @@ export interface LangKeysContract {
   add_meeting_minutes: string;
   meeting_minutes: string;
   meetings_minutes: string;
+  to: string;
+  meeting: string;
+  lbl_meeting_attendances: string;
+  set_as_not_attended: string;
+  set_as_attended: string;
+  attended: string;
+  not_attended: string;
+  meeting_minutes_text: string;
+  meeting_status: string;
 }

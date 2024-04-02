@@ -52,4 +52,5 @@ export interface LookupMapContract {
   summonType: Lookup[];
   obligationToAttendStatus: Lookup[];
   decisionReportStatus: Lookup[];
+  meetingStatus: Lookup[];
 }

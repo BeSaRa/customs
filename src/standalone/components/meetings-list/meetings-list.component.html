@@ -35,15 +35,43 @@
         </th>
         <td mat-cell *matCellDef="let element">{{ element.note }}</td>
       </ng-container>
+      <!-- meeting place -->
+      <ng-container matColumnDef="place">
+        <th mat-header-cell mat-sort-header="place" *matHeaderCellDef>
+          {{ lang.map.meeting_place }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.place }}
+        </td>
+      </ng-container>
       <!-- meeting date -->
       <ng-container matColumnDef="meetingDate">
         <th mat-header-cell mat-sort-header="meetingDate" *matHeaderCellDef>
           {{ lang.map.meeting_date }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.meetingDate | date }} {{ lang.map.lbl_hour }}
-          <span dir="ltr">
-            {{ element.meetingTime }}
+          {{ element.meetingDate | date: config.DATE_FORMAT }}
+        </td>
+      </ng-container>
+
+      <!-- status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>
+          {{ lang.map.note }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.statusInfo.getNames() }}
+        </td>
+      </ng-container>
+      <!-- meeting time -->
+      <ng-container matColumnDef="meetingTime">
+        <th mat-header-cell mat-sort-header="meetingTime" *matHeaderCellDef>
+          {{ lang.map.meeting_time }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span dir="rtl">
+            {{ element.meetingTimeFrom }} {{ lang.map.to }}
+            {{ element.meetingTimeTo }}
           </span>
         </td>
       </ng-container>
@@ -59,9 +87,11 @@
                 (click)="view$.next(element)"
                 icon="VIEW"></app-icon-button>
             </div>
-            <div [matTooltip]="lang.map.edit">
-              <app-icon-button (click)="update$.next(element)" icon="EDIT" />
-            </div>
+            @if (element.status === MeetingStatusEnum.held) {
+              <div [matTooltip]="lang.map.edit">
+                <app-icon-button (click)="update$.next(element)" icon="EDIT" />
+              </div>
+            }
           </div>
         </td>
       </ng-container>

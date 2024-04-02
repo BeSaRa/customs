@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { Subject, takeUntil, filter, switchMap, of } from 'rxjs';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -121,6 +121,14 @@ export class CommentPopupComponent
     this.comment$
       .pipe(takeUntil(this.destroy$))
       .pipe(filter(() => this.form.valid))
+      .pipe(
+        switchMap(() => {
+          if (this.response === this.taskResponses.DC_RETURN_PA) {
+            return this.model.claim();
+          }
+          return of();
+        }),
+      )
       .pipe(
         switchMap(() => {
           const completeBody = {

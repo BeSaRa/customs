@@ -33,4 +33,19 @@ export class MeetingService extends BaseCrudService<Meeting> {
   getUrlSegment(): string {
     return this.urlService.URLS.MEETING;
   }
+
+  setAttended(meetingId: number, attendeeId: number) {
+    return this.http.put(
+      this.getUrlSegment() +
+        `/admin/${meetingId}/meeting-attendance/attended/${attendeeId}`,
+      {},
+    );
+  }
+  setNotAttended(meetingId: number, attendeeId: number) {
+    return this.http.put(
+      this.getUrlSegment() +
+        `/admin/${meetingId}/meeting-attendance/not-attended/${attendeeId}`,
+      {},
+    );
+  }
 }

@@ -26,6 +26,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
 import { EmployeeService } from '@services/employee.service';
 import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { Config } from '@constants/config';
+import { data } from 'autoprefixer';
+import { MeetingStatusEnum } from '@enums/meeting-status-enum';
 
 @Component({
   selector: 'app-meetings-list',
@@ -53,6 +56,7 @@ import { LDAPGroupNames } from '@enums/department-group-names.enum';
 export class MeetingsListComponent implements OnInit {
   meetingService = inject(MeetingService);
   employeeService = inject(EmployeeService);
+  MeetingStatusEnum = MeetingStatusEnum;
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
   view$: Subject<Meeting> = new Subject<Meeting>();
@@ -61,7 +65,16 @@ export class MeetingsListComponent implements OnInit {
   lang = inject(LangService);
   dialog = inject(DialogService);
   dataList: Meeting[] = [];
-  displayedColumns: string[] = ['title', 'meetingDate', 'note', 'actions'];
+  displayedColumns: string[] = [
+    'title',
+    'place',
+    'meetingDate',
+    'meetingTime',
+    'status',
+    'note',
+    'actions',
+  ];
+  config = Config;
   ngOnInit(): void {
     this._listenToReload();
     this._listenToUpdateMeeting();
@@ -156,4 +169,5 @@ export class MeetingsListComponent implements OnInit {
   }
 
   protected readonly LDAPGroupNames = LDAPGroupNames;
+  protected readonly data = data;
 }

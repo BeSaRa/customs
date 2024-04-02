@@ -1,0 +1,35 @@
+<div class="flex justify-start items-center">
+  <h1 class="text-primary text-xl">{{ lang.map.lbl_meeting_attendances }}</h1>
+</div>
+<ul class="divide-y divide-gray-200">
+  @for (attendance of attendances(); track attendance.id) {
+    <li class="mx-w-md flex py-3 px-3 hover:bg-gray-200">
+      <h3 class="font-medium text-gray-900 text-1xl truncate">
+        {{ attendance.attendeeInfo && attendance.attendeeInfo.getNames() }}
+      </h3>
+      @if (meetingMinutes) {
+        <div class="actions ms-auto">
+          <app-switch
+            [matTooltip]="
+              attendance.status
+                ? lang.map.set_as_not_attended
+                : lang.map.set_as_attended
+            "
+            [formControl]="getControl(attendance.id)"
+            [label]="
+              attendance.attendeeInfo ? attendance.attendeeInfo.getNames() : ''
+            "
+            (changed)="
+              changeAttendanceAttendStatus(
+                attendance.attendeeId,
+                attendance.status
+              )
+            "
+            [trueValue]="1"
+            [falseValue]="0">
+          </app-switch>
+        </div>
+      }
+    </li>
+  }
+</ul>

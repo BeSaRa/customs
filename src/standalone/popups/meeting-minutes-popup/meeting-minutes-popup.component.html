@@ -1,1 +1,112 @@
-<p>meeting-minutes-popup works!</p>
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.make_penalty_decision_action }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <app-select-input
+        [options]="meetings"
+        [label]="lang.map.meeting"
+        (selectChange)="handleSelectMeeting($event)"
+        bindLabel="title" />
+      <form [formGroup]="form">
+        <app-input
+          formControlName="title"
+          [label]="lang.map.lbl_title"></app-input>
+        <div class="grid gap-4 grid-cols-2">
+          <app-input
+            formControlName="meetingDate"
+            [label]="lang.map.meeting_date">
+            <input
+              appControl
+              formControlName="meetingDate"
+              [min]="todayDate"
+              [max]="maxDate"
+              (click)="datepicker.open()"
+              [matDatepicker]="datepicker" />
+            <mat-datepicker [touchUi]="true" #datepicker />
+          </app-input>
+          <app-select-input
+            [label]="lang.map.meeting_status"
+            [options]="meetingStatus"
+            formControlName="status"
+            [bindValue]="'lookupKey'"
+            [bindLabel]="'getNames'">
+          </app-select-input>
+          <app-input
+            formControlName="meetingTimeFrom"
+            [label]="lang.map.meeting_time_from">
+            <input
+              appControl
+              formControlName="meetingTimeFrom"
+              [ngxMatTimepicker]="timePickerFrom" />
+            <ngx-mat-timepicker
+              [cancelBtnTmpl]="cancelBtn"
+              [confirmBtnTmpl]="confirmBtn"
+              [minutesGap]="5"
+              #timePickerFrom></ngx-mat-timepicker>
+            <ng-template #cancelBtn>
+              <app-button
+                class="me-2 inline-block"
+                buttonType="primary-outline">
+                {{ lang.map.close }}
+              </app-button>
+            </ng-template>
+            <ng-template #confirmBtn>
+              <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+            </ng-template>
+          </app-input>
+          <app-input
+            formControlName="meetingTimeTo"
+            [label]="lang.map.meeting_time_to">
+            <input
+              appControl
+              formControlName="meetingTimeTo"
+              [ngxMatTimepicker]="timePickerTo" />
+            <ngx-mat-timepicker
+              [cancelBtnTmpl]="cancelBtn"
+              [confirmBtnTmpl]="confirmBtn"
+              [minutesGap]="5"
+              #timePickerTo></ngx-mat-timepicker>
+            <ng-template #cancelBtn>
+              <app-button
+                class="me-2 inline-block"
+                buttonType="primary-outline">
+                {{ lang.map.close }}
+              </app-button>
+            </ng-template>
+            <ng-template #confirmBtn>
+              <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+            </ng-template>
+          </app-input>
+        </div>
+        <app-input
+          formControlName="place"
+          [label]="lang.map.meeting_place"></app-input>
+        <app-textarea
+          [label]="lang.map.meeting_minutes_text"
+          formControlName="meetingMinutesText" />
+      </form>
+      @if (this.selectedMeeting) {
+        <app-meeting-attendance-list
+          [meetingId]="this.selectedMeeting.id"
+          [attendances]="selectedMeeting.attendanceList"
+          [meetingMinutes]="true">
+        </app-meeting-attendance-list>
+      }
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+  </div>
+</div>

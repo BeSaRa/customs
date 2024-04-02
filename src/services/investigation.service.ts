@@ -3,7 +3,12 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
 import { Investigation } from '@models/investigation';
-import { CastResponse, CastResponseContainer } from 'cast-response';
+import {
+  CastResponse,
+  CastResponseContainer,
+  HasInterception,
+  InterceptParam,
+} from 'cast-response';
 
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
@@ -20,7 +25,7 @@ import { Violation } from '@models/violation';
 import { Meeting } from '@models/meeting';
 import { HttpParams } from '@angular/common/http';
 import { CaseAttachment } from '@models/case-attachment';
-import { HttpParams } from '@angular/common/http';
+import { MeetingInterceptor } from '@model-interceptors/meeting-interceptor';
 import { Memorandum } from '@models/memorandum';
 import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
 import { OperationType } from '@enums/operation-type';
@@ -127,7 +132,6 @@ export class InvestigationService
       }),
     );
   }
-
   @CastResponse(() => OffenceNumberDetailsResult, { unwrap: 'rs' })
   private _getOffenceDetails(
     offenceNumber: string,
@@ -135,6 +139,16 @@ export class InvestigationService
     return this.http.get<OffenceNumberDetailsResult>(
       this.getUrlSegment() +
         `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
+    );
+  }
+  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
+  @HasInterception
+  addMeetingMinutes(
+    @InterceptParam(new MeetingInterceptor().send) body: Meeting,
+  ) {
+    return this.http.post(
+      this.getUrlSegment() + '/document/dc/meeting-minutes',
+      body,
     );
   }
   @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
@@ -147,13 +161,6 @@ export class InvestigationService
           fromObject: { penaltyDecisionId },
         }),
       },
-    );
-  }
-  @CastResponse(() => Meeting, { unwrap: 'rs', fallback: 'meeting' })
-  addMeetingMinutes(body: Meeting) {
-    return this.http.post(
-      this.getUrlSegment() + '/document/dc/meeting-minutes',
-      body,
     );
   }
 
