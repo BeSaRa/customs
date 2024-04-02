@@ -114,6 +114,10 @@ export class Investigation extends BaseCase<
     return decision ? decision.comment! : '';
   }
 
+  loadPenalties() {
+    return this.getService().getCasePenalty(this.id, this.getActivityName()!);
+  }
+
   getFirstEmployeeComment(penaltyKey: SystemPenalties): string {
     const employeesIds = this.getEmployeesOffenders().map(item => item.id);
     const decision = this.getPenaltyDecision().find(item => {
