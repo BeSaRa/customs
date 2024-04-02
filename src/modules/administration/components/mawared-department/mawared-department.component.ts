@@ -10,7 +10,10 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { StatusTypes } from '@enums/status-types';
-import { ReplaySubject, switchMap, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { IntegrationPopupComponent } from '@modules/administration/popups/integration-popup/integration-popup.component';
+import { IntegrationsCases } from '@enums/integrations-cases';
 
 @Component({
   selector: 'app-mawared-department',
@@ -26,7 +29,7 @@ export class MawaredDepartmentComponent
   implements OnInit
 {
   service = inject(MawaredDepartmentService);
-  sync$ = new ReplaySubject<void>(1);
+  openSyncPopup$ = new ReplaySubject<void>(1);
 
   actions: ContextMenuActionContract<MawaredDepartment>[] = [
     {
@@ -62,12 +65,16 @@ export class MawaredDepartmentComponent
   }
 
   protected listenToSync() {
-    this.sync$
+    this.openSyncPopup$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(() => {
-          return this.service.syncForIntegration();
-        }),
+        map(() =>
+          this.dialog
+            .open(IntegrationPopupComponent, {
+              data: { fromComponent: IntegrationsCases.MAWARED_DEPARTMENT },
+            })
+            .afterClosed(),
+        ),
       )
       .subscribe(() => this.reload$.next());
   }

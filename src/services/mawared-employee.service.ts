@@ -8,6 +8,7 @@ import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { MawaredEmployeeIntegration } from '@models/mawared-employee-integration';
 
 @CastResponseContainer({
   $pagination: {
@@ -46,12 +47,10 @@ export class MawaredEmployeeService extends BaseCrudWithDialogService<
   }
 
   @CastResponse()
-  syncForIntegration(options: {
-    startEmployeesDate: string;
-    endEmployeesDate: string;
-    changeDepartmentsDate: string;
-  }): Observable<MawaredEmployee[]> {
-    return this.http.get<MawaredEmployee[]>(
+  syncForIntegration(
+    options: MawaredEmployeeIntegration,
+  ): Observable<MawaredEmployeeIntegration[]> {
+    return this.http.get<MawaredEmployeeIntegration[]>(
       this.getUrlSegment() + `/admin/integration`,
       {
         params: new HttpParams({

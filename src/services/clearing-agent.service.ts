@@ -9,6 +9,7 @@ import { Pagination } from '@models/pagination';
 import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { ClearingAgentCriteriaContract } from '@contracts/clearing-agent-criteria-contract';
+import { NadeebIntegration } from '@models/nadeeb-integration';
 
 @CastResponseContainer({
   $pagination: {
@@ -47,11 +48,10 @@ export class ClearingAgentService extends BaseCrudWithDialogService<
   }
 
   @CastResponse()
-  syncForIntegration(options: {
-    startDate: string;
-    endDate: string;
-  }): Observable<ClearingAgent[]> {
-    return this.http.get<ClearingAgent[]>(
+  syncForIntegration(
+    options: NadeebIntegration,
+  ): Observable<NadeebIntegration[]> {
+    return this.http.get<NadeebIntegration[]>(
       this.getUrlSegment() + `/integration`,
       {
         params: new HttpParams({
