@@ -1,4 +1,12 @@
-import { Component, inject, Input, input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   BehaviorSubject,
   exhaustMap,
@@ -90,6 +98,10 @@ export class MeetingMinutesComponent
   ];
   @Input()
   readonly: boolean = false;
+  @Output()
+  updateMeetingMinutesList: EventEmitter<MeetingMinutes[]> = new EventEmitter<
+    MeetingMinutes[]
+  >();
   generalStatusEnum = GeneralStatusEnum;
   ngOnInit(): void {
     this._listenToReload();
@@ -106,6 +118,7 @@ export class MeetingMinutesComponent
       )
       .subscribe(res => {
         this.dataList = res;
+        this.updateMeetingMinutesList.emit(res);
       });
   }
 
@@ -124,7 +137,9 @@ export class MeetingMinutesComponent
           );
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.reload$.next(null);
+      });
   }
   private listenToDelete() {
     this.delete$

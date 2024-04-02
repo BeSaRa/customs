@@ -18,14 +18,10 @@
         </app-select-input>
       </div>
       @if (offenderControl.valid && offenderControl.value) {
-        <app-decision-maker
-          [model]="model()"
-          [offender]="offender"
-          [penalties]="penalties()"
-          [penaltyMap]="penaltyMap()"
-          [updateModel]="updateModel"
-          [noSystemPenalties]="true"
-          (decisionMade$)="save$.next($event)"></app-decision-maker>
+        <app-icon-button
+          [matTooltip]="lang.map.make_penalty_decision"
+          (click)="openDecisionDialog()"
+          icon="GAVEL" />
       }
     </div>
   </div>

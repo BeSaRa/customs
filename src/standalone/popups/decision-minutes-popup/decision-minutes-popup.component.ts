@@ -1,7 +1,6 @@
 import {
   Component,
   computed,
-  EventEmitter,
   inject,
   OnInit,
   signal,
@@ -38,6 +37,10 @@ import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { InvestigationService } from '@services/investigation.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { DialogService } from '@services/dialog.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { DecisionMinutes } from '@models/decision-minutes';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -50,6 +53,7 @@ import { InvestigationService } from '@services/investigation.service';
     SelectInputComponent,
     DecisionMakerComponent,
     ReactiveFormsModule,
+    MatTooltip,
   ],
   templateUrl: './decision-minutes-popup.component.html',
   styleUrl: './decision-minutes-popup.component.scss',
@@ -61,13 +65,13 @@ export class DecisionMinutesPopupComponent
   data = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dialogRef = inject(MatDialogRef);
+  dialog = inject(DialogService);
   investigationService = inject(InvestigationService);
-
+  penaltyDecisionService = inject(PenaltyDecisionService);
   caseId = this.data.extras?.caseId;
   model: Signal<Investigation> = this.data.model as Signal<Investigation>;
   save$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
-  updateModel: EventEmitter<void> = new EventEmitter<void>();
-
+  decisionMinutesList: DecisionMinutes[] = this.data.extras.decisionMinutesList;
   loadPenalties$ = new Subject<void>();
   penaltiesLoaded$ = this.loadPenalties$
     .pipe(filter(() => this.canLoadPenalties()))
@@ -107,6 +111,34 @@ export class DecisionMinutesPopupComponent
     this.listenToSave();
     this.listenToLoadPenalties();
     this.loadPenalties$.next();
+  }
+  hasDecisionMinutes(offenderId: number) {
+    return !!this.decisionMinutesList.find(
+      dm => dm.offenderIds[0] === offenderId,
+    );
+  }
+  openDecisionDialog() {
+    of(null)
+      .pipe(filter(() => !!this.offenderControl.value))
+      .pipe(
+        switchMap(() => {
+          return this.penaltyDecisionService
+            .openDCDecisionDialog(
+              this.offenderControl.value as Offender,
+              this.hasDecisionMinutes(
+                (this.offenderControl.value as Offender).id,
+              ),
+              this.model,
+              this.penaltyMap()[(this.offenderControl.value as Offender).id],
+            )
+            .afterClosed();
+        }),
+      )
+      .subscribe(penaltyDecision => {
+        if (penaltyDecision) {
+          this.save$.next(penaltyDecision as PenaltyDecision);
+        }
+      });
   }
 
   private listenToLoadPenalties() {

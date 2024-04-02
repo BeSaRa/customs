@@ -6,6 +6,7 @@ import { PersonsListComponent } from '@standalone/components/legal-affairs-offen
 import { MeetingMinutesComponent } from '@standalone/components/meeting-minutes/meeting-minutes.component';
 import { DecisionMinutesComponent } from '@standalone/components/decision-minutes/decision-minutes.component';
 import { ActivitiesName } from '@enums/activities-name';
+import { MeetingMinutes } from '@models/meeting-minutes';
 
 @Component({
   selector: 'app-disciplinary-committee',
@@ -22,4 +23,5 @@ import { ActivitiesName } from '@enums/activities-name';
 export class DisciplinaryCommitteeComponent extends OnDestroyMixin(class {}) {
   model = input.required<Investigation>();
   protected readonly ActivitiesName = ActivitiesName;
+  meetingMinutesList: MeetingMinutes[] = [];
 }
