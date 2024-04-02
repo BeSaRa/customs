@@ -79,16 +79,6 @@ export class Investigation extends BaseCase<
     };
   }
 
-  getActivityName(): '' | ActivitiesName | undefined {
-    return (
-      this.taskDetails &&
-      this.taskDetails.processInstanceName &&
-      (this.taskDetails.processInstanceName.split(
-        ':',
-      )[0] as unknown as ActivitiesName)
-    );
-  }
-
   hasTask(): boolean {
     return !!this.taskDetails;
   }

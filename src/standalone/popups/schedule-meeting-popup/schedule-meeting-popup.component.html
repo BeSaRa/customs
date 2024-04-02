@@ -1,7 +1,7 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>
-      {{ lang.map.schedule_meeting }}
+      {{ lang.map[label] }}
     </h1>
     <app-icon-button
       tabindex="-1"
@@ -22,6 +22,7 @@
             appControl
             formControlName="meetingDate"
             [min]="todayDate"
+            [max]="maxDate"
             (click)="datepicker.open()"
             [matDatepicker]="datepicker" />
           <mat-datepicker [touchUi]="true" #datepicker />
@@ -32,7 +33,6 @@
           <input
             appControl
             formControlName="meetingTime"
-            [format]="24"
             [ngxMatTimepicker]="picker" />
           <ngx-mat-timepicker
             [cancelBtnTmpl]="cancelBtn"
@@ -51,6 +51,13 @@
       </div>
       <app-textarea [label]="lang.map.note" formControlName="note" />
     </ng-container>
+    @if (isShowOffenders || isMeetingEnd(model)) {
+      <app-offender-list
+        [model]="investigationCase"
+        [readonly]="true"
+        [canModifyOffenders]="false" />
+      <app-attendance-list />
+    }
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="save$.next()" buttonType="primary"

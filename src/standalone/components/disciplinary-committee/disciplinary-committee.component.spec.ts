@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DisciplinaryCommitteeMeetingsComponent } from './disciplinary-committee-meetings.component';
+import { DisciplinaryCommitteeComponent } from './disciplinary-committee.component';
 
 describe('DisciplinaryCommitteeMeetingsComponent', () => {
-  let component: DisciplinaryCommitteeMeetingsComponent;
-  let fixture: ComponentFixture<DisciplinaryCommitteeMeetingsComponent>;
+  let component: DisciplinaryCommitteeComponent;
+  let fixture: ComponentFixture<DisciplinaryCommitteeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DisciplinaryCommitteeMeetingsComponent],
+      imports: [DisciplinaryCommitteeComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DisciplinaryCommitteeMeetingsComponent);
+    fixture = TestBed.createComponent(DisciplinaryCommitteeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
