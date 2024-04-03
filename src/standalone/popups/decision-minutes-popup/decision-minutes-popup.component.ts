@@ -170,9 +170,15 @@ export class DecisionMinutesPopupComponent
     this.save$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(decision =>
-          this.investigationService.addDisciplinaryDecision(decision.id),
-        ),
+        switchMap(decision => {
+          if (this.hasDecisionMinutes(decision.offenderId)) {
+            return of(null);
+          } else {
+            return this.investigationService.addDisciplinaryDecision(
+              decision.id,
+            );
+          }
+        }),
       )
       .subscribe(() => {
         this.dialogRef.close();
