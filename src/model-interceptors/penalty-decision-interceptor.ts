@@ -12,7 +12,10 @@ export class PenaltyDecisionInterceptor
     delete model.statusInfo;
     delete model.offenderInfo;
     delete model.decisionTypeInfo;
-    delete model.id;
+    if (!model.isUpdate) {
+      delete model.id;
+    }
+    delete model.isUpdate;
     return model;
   }
 

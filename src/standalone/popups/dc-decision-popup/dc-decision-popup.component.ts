@@ -216,6 +216,7 @@ export class DcDecisionPopupComponent
       .pipe(
         exhaustMap(model => {
           if (this.data.hasDecisionMinutes) {
+            model.isUpdate = true;
             return model.save().pipe(
               map(saved => {
                 return new PenaltyDecision().clone<PenaltyDecision>({

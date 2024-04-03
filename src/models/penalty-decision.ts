@@ -23,4 +23,5 @@ export class PenaltyDecision extends BaseModel<
   penaltyInfo!: Penalty;
   offenderInfo!: AdminResult;
   decisionTypeInfo!: AdminResult;
+  isUpdate: boolean = false;
 }
