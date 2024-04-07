@@ -98,7 +98,7 @@ export class DcDecisionPopupComponent
 {
   data = inject<{
     offender: Offender;
-    hasDecisionMinutes: boolean;
+    isUpdate: boolean;
     model: Signal<Investigation>;
     offenderPenalties: { first: number; second: Penalty[] };
   }>(MAT_DIALOG_DATA);
@@ -215,7 +215,7 @@ export class DcDecisionPopupComponent
       )
       .pipe(
         exhaustMap(model => {
-          if (this.data.hasDecisionMinutes) {
+          if (this.data.isUpdate) {
             model.isUpdate = true;
             return model.save().pipe(
               map(saved => {

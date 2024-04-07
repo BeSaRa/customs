@@ -1,4 +1,12 @@
-import { Component, inject, Input, input, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  Input,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -24,6 +32,8 @@ import {
   exhaustMap,
   filter,
   map,
+  of,
+  shareReplay,
   Subject,
   switchMap,
   takeUntil,
@@ -39,6 +49,11 @@ import { DecisionMinutesPopupComponent } from '@standalone/popups/decision-minut
 import { UserClick } from '@enums/user-click';
 import { ignoreErrors } from '@utils/utils';
 import { GeneralStatusEnum } from '@enums/general-status-enum';
+import { Offender } from '@models/offender';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { Penalty } from '@models/penalty';
+import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
+import { ManagerDecisions } from '@enums/manager-decisions';
 @Component({
   selector: 'app-decision-minutes',
   standalone: true,
@@ -71,11 +86,22 @@ export class DecisionMinutesComponent
   dialog = inject(DialogService);
   investigationService = inject(InvestigationService);
   toast = inject(ToastService);
+  penaltyDecisionService = inject(PenaltyDecisionService);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
   view$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
   delete$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
   launch$: Subject<DecisionMinutes> = new Subject<DecisionMinutes>();
+  editDecisionMinutes$: Subject<DecisionMinutes> =
+    new Subject<DecisionMinutes>();
+  loadPenalties$ = new Subject<void>();
+  penaltiesLoaded$ = this.loadPenalties$
+    .pipe(filter(() => this.canLoadPenalties()))
+    .pipe(switchMap(() => this.loadPenalties()))
+    .pipe(takeUntil(this.destroy$))
+    .pipe(tap(data => this.penaltyMap.set(data)))
+    .pipe(shareReplay(1));
+
   model = input.required<Investigation>();
   dataList: DecisionMinutes[] = [];
   config = Config;
@@ -91,13 +117,62 @@ export class DecisionMinutesComponent
   ];
   @Input()
   readonly: boolean = false;
+
+  penaltyMap = signal<
+    Record<number, { first: number | null; second: Penalty[] }>
+  >({});
+
+  penalties = computed(() => {
+    return Object.keys(this.penaltyMap()).reduce<
+      Record<string, PenaltyDecisionContract>
+    >((acc, offenderId) => {
+      if (!acc[offenderId]) {
+        acc[offenderId] = {
+          managerDecisionControl: this.penaltyMap()[Number(offenderId)].first,
+          system: this.penaltyMap()[Number(offenderId)].second.filter(
+            p => p.isSystem,
+          ),
+          normal: this.penaltyMap()[Number(offenderId)].second.filter(
+            p => !p.isSystem,
+          ),
+        };
+      }
+      return { ...acc };
+    }, {});
+  });
   ngOnInit(): void {
-    // TODO: update decision if already created one
-    // TODO: test full cycle
     this._listenToReload();
     this._listenToLaunch();
     this.listenToDelete();
     this._listenToAddDecision();
+    this.listenToLoadPenalties();
+    this.openEditDecisionDialog();
+    this.loadPenalties$.next();
+  }
+
+  private listenToLoadPenalties() {
+    this.penaltiesLoaded$.subscribe();
+  }
+  private canLoadPenalties(): boolean {
+    return !!(
+      this.model() &&
+      this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+      this.model().getActivityName() &&
+      this.model().getTaskName()
+    );
+  }
+
+  private loadPenalties() {
+    return this.model()
+      ? this.model()
+          .getService()
+          .getCasePenalty(
+            this.model().id as string,
+            this.model().getActivityName()!,
+          )
+      : of(
+          {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
+        );
   }
   _listenToReload() {
     this.reload$
@@ -110,6 +185,27 @@ export class DecisionMinutesComponent
       )
       .subscribe(res => {
         this.dataList = res;
+      });
+  }
+
+  openEditDecisionDialog() {
+    this.editDecisionMinutes$
+      .pipe(
+        switchMap(model => {
+          return this.penaltyDecisionService
+            .openDCDecisionDialog(
+              new Offender().clone<Offender>(
+                model.penaltyDecisionInfo.offenderInfo,
+              ),
+              true,
+              this.model,
+              this.penaltyMap()[model.penaltyDecisionInfo.offenderId],
+            )
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        this.reload$.next(null);
       });
   }
 
@@ -176,6 +272,7 @@ export class DecisionMinutesComponent
                 extras: {
                   caseId: this.model().id,
                   decisionMinutesList: this.dataList,
+                  penaltyMap: this.penaltyMap,
                 },
               },
             })
