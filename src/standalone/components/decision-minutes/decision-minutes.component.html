@@ -80,6 +80,11 @@
                   (click)="launch$.next(element)"
                   icon="LAUNCH"></app-icon-button>
               </div>
+              <div [matTooltip]="lang.map.edit">
+                <app-icon-button
+                  (click)="editDecisionMinutes$.next(element)"
+                  icon="EDIT"></app-icon-button>
+              </div>
               <div [matTooltip]="lang.map.delete">
                 <app-icon-button
                   (click)="delete$.next(element)"
