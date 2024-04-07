@@ -70,7 +70,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
 
   openDCDecisionDialog(
     offender: Offender,
-    hasDecisionMinutes: boolean,
+    isUpdate: boolean,
     model: Signal<Investigation>,
     offenderPenalties: { first: number | null; second: Penalty[] },
   ) {
@@ -78,7 +78,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
       data: {
         offender,
         model,
-        hasDecisionMinutes,
+        isUpdate,
         offenderPenalties,
       },
     });
