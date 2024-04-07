@@ -1,69 +1,44 @@
 <div class="container">
-  <div class="grid grid-cols-12 gap-4 meetings-calendar">
-    <div
-      class="col-span-4 meetings-container pb-6 bg-white border border-gray-200 rounded-lg shadow">
-      <div class="flex justify-start items-center">
-        <h3 class="font-semibold text-2xl px-3 py-3">
-          {{ lang.map.upcoming_meetings }}
+  <div class="meetings-calendar">
+    <div class="pb-6 bg-white border border-gray-200 rounded-lg shadow">
+      <div class="flex m-3">
+        <h3 class="font-semibold text-2xl px-3 py-2">
+          {{ lang.map.lbl_calendar }}
         </h3>
         <app-icon-button
           (click)="reload$.next(null)"
           class="text-primary"
           icon="RELOAD"></app-icon-button>
-        <app-icon-button
-          (click)="handleDateChange(null)"
-          class="text-gray"
-          [disabled]="!selectedDate()"
-          [matTooltip]="lang.map.clear_filter"
-          icon="CLEAR_FILTER"></app-icon-button>
       </div>
-      <ul class="divide-y divide-gray-200">
-        @if (selectedDate()) {
-          <li class="flex py-3 px-3">
-            {{ lang.map.meetings_on }} {{ selectedDate() | date }}
-          </li>
-        }
-        @for (meeting of filteredMeetings(); track meeting.id) {
-          <li class="mx-w-md flex py-3 px-3 hover:bg-gray-200">
-            <div>
-              <app-icon-button
-                [icon]="'VIEW'"
-                [matTooltip]="lang.map.meeting_details"
-                (click)="details$.next(meeting)">
-              </app-icon-button>
+      <div class="px-3 py-2">
+        <full-calendar [options]="calendarOptions">
+          <ng-template #eventContent let-meeting>
+            <li
+              class="w-full flex p-3 mx-1 hover:bg-gray-200 bg-blue-200 border border-dashed border-blue-500">
+              <div class="w-full">
+                <h2>
+                  {{ meeting.event.title }}
+                </h2>
+                <small>
+                  <strong>{{ lang.map.lbl_date }}:</strong>
+                  {{
+                    meeting.event.extendedProps.meetingDate
+                      | date: config.DATE_FORMAT
+                  }}
+                </small>
+                <p>
+                  {{ meeting.event.extendedProps.meetingTimeFrom }} -
+                  {{ meeting.event.extendedProps.meetingTimeTo }}
+                </p>
+              </div>
               <app-icon-button
                 [matTooltip]="lang.map.edit"
-                (click)="update$.next(meeting)"
+                (click)="handleEditMeeting($event, meeting.event.extendedProps)"
                 icon="EDIT" />
-            </div>
-            <div
-              class="inline-block h-auto min-h-[1em] ms-1 me-2 w-0.5 self-stretch bg-neutral-300"></div>
-            <div class="flex-grow max-w-72">
-              <h3
-                [matTooltip]="meeting.title"
-                class="font-medium text-gray-900 text-1xl truncate">
-                {{ meeting.title }}
-              </h3>
-              <small class="whitespace-nowrap">
-                <strong>{{ lang.map.lbl_date }}:</strong>
-                {{ meeting.meetingDate | date: config.DATE_FORMAT }}
-              </small>
-              <p class="ms-0 mt-2 text-sm text-gray-500">
-                {{ meeting.note }}
-              </p>
-            </div>
-          </li>
-        }
-      </ul>
-    </div>
-    <div
-      class="col-span-8 pb-6 bg-white border border-gray-200 rounded-lg shadow">
-      <h3 class="font-semibold text-2xl px-3 py-2">
-        {{ lang.map.lbl_calendar }}
-      </h3>
-      <mat-calendar
-        (selectedChange)="handleDateChange($event)"
-        [dateClass]="isSelected"></mat-calendar>
+            </li>
+          </ng-template>
+        </full-calendar>
+      </div>
     </div>
   </div>
 </div>
