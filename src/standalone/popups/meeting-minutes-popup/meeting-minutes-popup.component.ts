@@ -120,7 +120,10 @@ export class MeetingMinutesPopupComponent
     );
     this.form
       .get('meetingMinutesText')
-      ?.setValidators([CustomValidators.required]);
+      ?.setValidators([
+        CustomValidators.required,
+        CustomValidators.maxLength(3000),
+      ]);
     this.form.get('status')?.setValidators([CustomValidators.required]);
     if (!this.model) {
       this.form.get('status')?.disable();

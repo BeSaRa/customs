@@ -42,14 +42,20 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
     } = this;
     return {
       title: controls
-        ? [{ value: title, disabled }, CustomValidators.required]
+        ? [
+            { value: title, disabled },
+            [CustomValidators.required, CustomValidators.maxLength(300)],
+          ]
         : title,
       note: controls ? [{ value: note, disabled }] : note,
       meetingDate: controls
         ? [meetingDate, CustomValidators.required]
         : meetingDate,
       place: controls
-        ? [{ value: place, disabled }, CustomValidators.required]
+        ? [
+            { value: place, disabled },
+            [CustomValidators.required, CustomValidators.maxLength(300)],
+          ]
         : place,
       meetingTimeFrom: controls
         ? [meetingTimeFrom, CustomValidators.required]
