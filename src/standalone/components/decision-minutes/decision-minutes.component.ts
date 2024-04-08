@@ -194,9 +194,10 @@ export class DecisionMinutesComponent
         switchMap(model => {
           return this.penaltyDecisionService
             .openDCDecisionDialog(
-              new Offender().clone<Offender>(
-                model.penaltyDecisionInfo.offenderInfo,
-              ),
+              new Offender().clone<Offender>({
+                ...model.penaltyDecisionInfo.offenderInfo,
+                id: model.penaltyDecisionInfo.offenderId,
+              }),
               true,
               this.model,
               this.penaltyMap()[model.penaltyDecisionInfo.offenderId],
