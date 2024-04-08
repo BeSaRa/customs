@@ -132,7 +132,9 @@
         <app-button
           buttonType="secondary"
           (click)="requestCall$.next(element)"
-          [disabled]="!model().inMyInbox()">
+          [disabled]="
+            !model().inMyInbox() && !model().inDisciplinaryCommitteeReview()
+          ">
           {{ lang.map.call_request }}
         </app-button>
       </td>
@@ -150,7 +152,9 @@
         <app-button
           buttonType="secondary"
           (click)="requestInvestigation$.next(element)"
-          [disabled]="!model().inMyInbox()">
+          [disabled]="
+            !model().inMyInbox() && !model().inDisciplinaryCommitteeReview()
+          ">
           {{
             isOffender()
               ? lang.map.investigation_request
