@@ -141,7 +141,13 @@ export class MeetingMinutesPopupComponent
             ),
         ),
       )
-      .pipe(filter(() => this.form.valid))
+      .pipe(
+        filter(
+          () =>
+            this.form.valid &&
+            !!this.attendanceList.filter(attend => attend.status).length,
+        ),
+      )
       .pipe(
         switchMap(() => {
           if (!this.model) {
