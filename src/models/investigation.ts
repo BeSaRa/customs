@@ -379,7 +379,9 @@ export class Investigation extends BaseCase<
   inLegalAffairsActivity(): boolean {
     return this.inActivity(ActivitiesName.REVIEW_LEGAL_AFFAIRS);
   }
-
+  inDisciplinaryCommitteeReview() {
+    return this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL);
+  }
   inDisciplinaryCommittee(): boolean {
     return (
       this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL) ||
