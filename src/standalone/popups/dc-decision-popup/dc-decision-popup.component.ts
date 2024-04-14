@@ -35,9 +35,9 @@ import {
 import { OffenderViolation } from '@models/offender-violation';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { ToastService } from '@services/toast.service';
-import { exhaustMap, filter, map, takeUntil, tap } from 'rxjs/operators';
+import { exhaustMap, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { Subject } from 'rxjs';
+import { of, Subject, switchMap } from 'rxjs';
 import { MatRadioButton } from '@angular/material/radio';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
@@ -48,13 +48,15 @@ import {
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { LookupService } from '@services/lookup.service';
-import { Lookup } from '@models/lookup';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { CustomValidators } from '@validators/custom-validators';
 import { Penalty } from '@models/penalty';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
+import { ProofTypes } from '@enums/proof-types';
+import { OffenderViolationService } from '@services/offender-violation.service';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-dc-decision-popup',
@@ -109,6 +111,7 @@ export class DcDecisionPopupComponent
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
+  offenderViolationService = inject(OffenderViolationService);
   offender = computed(() => {
     return this.data.offender;
   });
@@ -125,16 +128,48 @@ export class DcDecisionPopupComponent
       .slice()
       .sort((a, b) => a.lookupKey - b.lookupKey),
   );
-  proofStatusMap = computed(() => {
-    return this.proofStatus().reduce<Record<number, Lookup>>((acc, current) => {
-      return { ...acc, [current.lookupKey]: current };
+  controls = computed<{ [key: number]: FormControl<ProofTypes> }>(() => {
+    return this.offenderViolations().reduce((previousValue, currentValue) => {
+      return {
+        ...previousValue,
+        [currentValue.id]: new FormControl(currentValue.proofStatus),
+      };
     }, {});
   });
-  controls = computed(() => {
-    return this.offenderViolations().map(item => {
-      return new FormControl(item.proofStatus);
-    });
+
+  offenderViolationsMap = computed(() => {
+    return this.model().offenderViolationInfo.reduce<
+      Record<number, OffenderViolation[]>
+    >((acc, current) => {
+      if (!Object.prototype.hasOwnProperty.call(acc, current.offenderId)) {
+        acc[current.offenderId] = [];
+      }
+      acc[current.offenderId] = [...acc[current.offenderId], current];
+      return { ...acc };
+    }, {});
   });
+  violationProofStatus = computed(() => {
+    return Object.entries(this.offenderViolationsMap()).reduce<
+      Record<number, FormControl<number | null>[]>
+    >((acc, [key, offenderViolation]) => {
+      acc[Number(key)] = offenderViolation.map(
+        i =>
+          new FormControl<number>({
+            value: i.proofStatus,
+            disabled: !this.model().hasTask() || !this.model().inMyInbox(),
+          }),
+      );
+      return acc;
+    }, {});
+  });
+  decisionMap = computed(() => {
+    return this.model().penaltyDecisions.reduce<
+      Record<number, PenaltyDecision>
+    >((acc, item) => {
+      return { ...acc, [item.offenderId]: item };
+    }, {});
+  });
+
   oldPenaltyDecision = computed(() => {
     return this.model().getPenaltyDecisionByOffenderId(this.offender().id);
   });
@@ -178,6 +213,76 @@ export class DcDecisionPopupComponent
     select.toggle();
   }
 
+  private displayConfirmMessage(penaltyDecision: null | PenaltyDecision) {
+    return penaltyDecision
+      ? this.dialog
+          .confirm(this.lang.map.action_will_effect_current_offender_decision)
+          .afterClosed()
+          .pipe(
+            map(click => {
+              return { click, penaltyDecision };
+            }),
+          )
+      : of({ click: UserClick.YES, penaltyDecision });
+  }
+
+  private resetProofStatusToOldValue(
+    click: UserClick | undefined,
+    item: OffenderViolation,
+    index: number,
+    oldValue: number,
+  ) {
+    if (click !== UserClick.YES) {
+      this.violationProofStatus()[item.offenderId][index].patchValue(oldValue, {
+        emitEvent: false,
+      });
+    }
+  }
+  private deleteOldDecision(penaltyDecision: PenaltyDecision | null) {
+    return penaltyDecision
+      ? penaltyDecision
+          .delete()
+          .pipe(tap(() => this.model().removePenaltyDecision(penaltyDecision)))
+      : of(null);
+  }
+
+  proofStatusChanged(item: OffenderViolation, index: number) {
+    const oldValue = this.violationProofStatus()[item.offenderId][index].value!;
+    of(this.decisionMap()[item.offenderId])
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(penaltyDecision =>
+          this.displayConfirmMessage(penaltyDecision),
+        ),
+        tap(({ click }) => {
+          this.resetProofStatusToOldValue(click, item, index, oldValue);
+        }),
+        filter(({ click }) => click === UserClick.YES),
+        switchMap(({ penaltyDecision }) => {
+          return this.deleteOldDecision(penaltyDecision);
+        }),
+      )
+      .subscribe(() => {
+        this.updateOffenderViolationProofStatus(item);
+      });
+  }
+  updateOffenderViolationProofStatus(item: OffenderViolation) {
+    Promise.resolve().then(() => {
+      item.proofStatus = this.controls()[item.id].value;
+      const violationIndex = this.model().offenderViolationInfo.findIndex(i => {
+        return i === item;
+      });
+      item
+        .save()
+        .pipe(takeUntil(this.destroy$), take(1))
+        .subscribe(model => {
+          this.model().offenderViolationInfo.splice(violationIndex, 1, model);
+          this.toast.success(
+            this.lang.map.is_proved_status_updated_successfully,
+          );
+        });
+    });
+  }
   private prepareModel(): PenaltyDecision {
     return new PenaltyDecision().clone<PenaltyDecision>({
       ...(this.oldPenaltyDecision() ? this.oldPenaltyDecision() : undefined),

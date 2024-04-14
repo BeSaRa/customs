@@ -12,7 +12,7 @@
       <div class="flex-grow">
         <app-select-input
           [label]="lang.map.offender_name"
-          [options]="model().offenderInfo"
+          [options]="filteredOffenders"
           [formControl]="offenderControl"
           [bindLabel]="'getNames'">
         </app-select-input>
