@@ -1,19 +1,27 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { MatTooltip } from '@angular/material/tooltip';
 import { LangService } from '@services/lang.service';
 import { Meeting } from '@models/meeting';
 import { MeetingService } from '@services/meeting.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { BehaviorSubject, map, Subject, switchMap } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { DatePipe, NgClass } from '@angular/common';
 import { DialogService } from '@services/dialog.service';
 import { ScheduleMeetingPopupComponent } from '@standalone/popups/schedule-meeting-popup/schedule-meeting-popup.component';
 import { OperationType } from '@enums/operation-type';
 import { Config } from '@constants/config';
-import { FullCalendarModule } from '@fullcalendar/angular';
+import {
+  FullCalendarComponent,
+  FullCalendarModule,
+} from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { LookupService } from '@services/lookup.service';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { CalendarFormats } from '@enums/calendar-formats';
 
 @Component({
   selector: 'app-calendar',
@@ -24,6 +32,8 @@ import interactionPlugin from '@fullcalendar/interaction';
     DatePipe,
     FullCalendarModule,
     NgClass,
+    SelectInputComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
@@ -31,18 +41,26 @@ import interactionPlugin from '@fullcalendar/interaction';
 export class CalendarComponent implements OnInit {
   lang = inject(LangService);
   meetingService = inject(MeetingService);
+  lookupService = inject(LookupService);
   dialog = inject(DialogService);
   meetingsList = signal<Meeting[]>([] as Meeting[]);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   details$: Subject<Meeting> = new Subject();
   update$: Subject<Meeting> = new Subject<Meeting>();
   config = Config;
+  calendarFormat = this.lookupService.lookups.calendarFormat;
+  selectedCalendarFormat = new FormControl(CalendarFormats.MONTH, {
+    nonNullable: true,
+  });
+  @ViewChild('calendarComponent') calendar!: FullCalendarComponent;
 
   ngOnInit(): void {
     this._listenToReload();
     this._listenToDetails();
     this._listenToUpdateMeeting();
     this.setMeetingsOnCalendar();
+    this.onSelectedCalendarFormatChanges();
+    this.onLangChanges();
   }
 
   _listenToReload() {
@@ -103,13 +121,16 @@ export class CalendarComponent implements OnInit {
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin],
+    plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
     eventClick: arg => this.handleViewMeeting(arg),
     headerToolbar: {
-      start: 'today prev,next',
+      start: 'prev,next',
       center: 'title',
       end: '',
     },
+    titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
+    locale: this.lang.getCurrent().code,
+    direction: this.lang.getCurrent().direction,
   };
 
   handleViewMeeting(arg: EventClickArg) {
@@ -126,12 +147,6 @@ export class CalendarComponent implements OnInit {
       return {
         title: meeting.title,
         date: new Date(meeting.meetingDate),
-        eventTimeFormat: {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: false,
-        },
         extendedProps: {
           ...meeting,
         },
@@ -141,5 +156,34 @@ export class CalendarComponent implements OnInit {
       ...this.calendarOptions,
       events,
     };
+  }
+
+  onLangChanges() {
+    this.lang.change$.subscribe(lang => {
+      this.calendarOptions.direction = lang.direction;
+      this.calendarOptions.locale = lang.code;
+    });
+  }
+
+  onSelectedCalendarFormatChanges() {
+    this.selectedCalendarFormat.valueChanges.subscribe(value => {
+      if (value === CalendarFormats.DAY) {
+        this.calendar.getApi().changeView('dayGridDay');
+      } else if (
+        value === CalendarFormats.WEEK ||
+        value === CalendarFormats.WORK_WEEK
+      ) {
+        this.calendar.getApi().changeView('dayGridWeek');
+      } else if (value === CalendarFormats.MONTH) {
+        this.calendar.getApi().changeView('dayGridMonth');
+      } else if (value === CalendarFormats.YEAR) {
+        this.calendar.getApi().changeView('dayGridYear');
+      }
+      if (value === CalendarFormats.WORK_WEEK) {
+        this.calendarOptions.hiddenDays = [5, 6];
+      } else {
+        this.calendarOptions.hiddenDays = [];
+      }
+    });
   }
 }

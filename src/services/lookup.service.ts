@@ -32,6 +32,33 @@ export class LookupService
         return lookup;
       });
     });
+    this.lookups.calendarFormat = [
+      new Lookup().clone<Lookup>({
+        arName: 'يوم',
+        enName: 'Day',
+        lookupKey: 0,
+      }),
+      new Lookup().clone<Lookup>({
+        arName: 'اسبوع',
+        enName: 'Week',
+        lookupKey: 1,
+      }),
+      new Lookup().clone<Lookup>({
+        arName: 'اسبوع عمل',
+        enName: 'Work week',
+        lookupKey: 2,
+      }),
+      new Lookup().clone<Lookup>({
+        arName: 'شهر',
+        enName: 'Month',
+        lookupKey: 3,
+      }),
+      new Lookup().clone<Lookup>({
+        arName: 'سنة',
+        enName: 'Year',
+        lookupKey: 4,
+      }),
+    ];
     return this.lookups;
   }
 }

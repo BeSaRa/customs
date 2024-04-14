@@ -1,54 +1,61 @@
-<div class="container">
-  <div class="meetings-calendar">
-    <div class="pb-6 bg-white border border-gray-200 rounded-lg shadow">
-      <div class="flex items-center content-center m-3">
-        <h3 class="font-semibold text-2xl mx-2">
-          {{ lang.map.lbl_calendar }}
-        </h3>
-        <div class="mx-2">
+<div
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+    {{ lang.map.lbl_calendar }}
+  </h1>
+
+  <div class="mx-4">
+    <app-select-input
+      [options]="calendarFormat"
+      [formControl]="selectedCalendarFormat"
+      bindValue="lookupKey"
+      bindLabel="getNames"
+      [label]="lang.map.calendar_format"
+      nullable="false"
+      labelColor="white"
+      size="sm"></app-select-input>
+  </div>
+  <div class="flex-auto"></div>
+</div>
+<div class="shadow relative overflow-auto">
+  <div class="p-1 pt-5 overflow-hidden max-h-[80vh]">
+    <full-calendar
+      [options]="calendarOptions"
+      #calendarComponent
+      class="max-h-[79vh]">
+      <ng-template #eventContent let-meeting>
+        <li
+          class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
+          [ngClass]="{
+            'bg-blue-200 border-blue-500': !isExpiredMeetingDate(
+              meeting.event.extendedProps.meetingDate
+            ),
+            'bg-red-200 border-red-500': isExpiredMeetingDate(
+              meeting.event.extendedProps.meetingDate
+            )
+          }">
+          <div class="w-full">
+            <h2>
+              {{ meeting.event.title }}
+            </h2>
+            <small>
+              <strong>{{ lang.map.lbl_date }}:</strong>
+              {{
+                meeting.event.extendedProps.meetingDate
+                  | date: config.DATE_FORMAT
+              }}
+            </small>
+            <p>
+              {{ meeting.event.extendedProps.meetingTimeFrom }} -
+              {{ meeting.event.extendedProps.meetingTimeTo }}
+            </p>
+          </div>
           <app-icon-button
-            (click)="reload$.next(null)"
-            class="text-primary"
-            icon="RELOAD"></app-icon-button>
-        </div>
-      </div>
-      <div class="px-3 py-2">
-        <full-calendar [options]="calendarOptions">
-          <ng-template #eventContent let-meeting>
-            <li
-              class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
-              [ngClass]="{
-                'bg-blue-200 border-blue-500': !isExpiredMeetingDate(
-                  meeting.event.extendedProps.meetingDate
-                ),
-                'bg-red-200 border-red-500': isExpiredMeetingDate(
-                  meeting.event.extendedProps.meetingDate
-                )
-              }">
-              <div class="w-full">
-                <h2>
-                  {{ meeting.event.title }}
-                </h2>
-                <small>
-                  <strong>{{ lang.map.lbl_date }}:</strong>
-                  {{
-                    meeting.event.extendedProps.meetingDate
-                      | date: config.DATE_FORMAT
-                  }}
-                </small>
-                <p>
-                  {{ meeting.event.extendedProps.meetingTimeFrom }} -
-                  {{ meeting.event.extendedProps.meetingTimeTo }}
-                </p>
-              </div>
-              <app-icon-button
-                [matTooltip]="lang.map.edit"
-                (click)="handleEditMeeting($event, meeting.event.extendedProps)"
-                icon="EDIT" />
-            </li>
-          </ng-template>
-        </full-calendar>
-      </div>
-    </div>
+            [matTooltip]="lang.map.edit"
+            (click)="handleEditMeeting($event, meeting.event.extendedProps)"
+            icon="EDIT" />
+        </li>
+      </ng-template>
+    </full-calendar>
   </div>
 </div>
