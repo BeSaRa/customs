@@ -84,8 +84,18 @@
         <th mat-header-cell *matHeaderCellDef>
           {{ lang.map.is_proved }}
         </th>
-        <td mat-cell class="w-40" *matCellDef="let element">
-          {{ assertType(element).proofStatusInfo.getNames() }}
+        <td mat-cell class="w-40" *matCellDef="let element; let i = index">
+          <div class="mt-3">
+            <app-select-input
+              [formControl]="controls()[assertType(element).id]"
+              [label]="''"
+              [options]="proofStatus()"
+              (selectChange)="proofStatusChanged(element, i)"
+              [bindLabel]="'getNames'"
+              [bindValue]="'lookupKey'"
+              [nullable]="false">
+            </app-select-input>
+          </div>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
