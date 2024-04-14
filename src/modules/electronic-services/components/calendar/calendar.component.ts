@@ -5,7 +5,7 @@ import { Meeting } from '@models/meeting';
 import { MeetingService } from '@services/meeting.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { BehaviorSubject, map, Subject, switchMap } from 'rxjs';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { DialogService } from '@services/dialog.service';
 import { ScheduleMeetingPopupComponent } from '@standalone/popups/schedule-meeting-popup/schedule-meeting-popup.component';
 import { OperationType } from '@enums/operation-type';
@@ -14,12 +14,17 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import timeGridPlugin from '@fullcalendar/timegrid';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [MatTooltip, IconButtonComponent, DatePipe, FullCalendarModule],
+  imports: [
+    MatTooltip,
+    IconButtonComponent,
+    DatePipe,
+    FullCalendarModule,
+    NgClass,
+  ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
 })
@@ -46,12 +51,9 @@ export class CalendarComponent implements OnInit {
         switchMap(() => {
           return this.meetingService.load();
         }),
-        map(list => {
-          return list.rs.filter(meeting => !this.isMeetingEnd(meeting));
-        }),
       )
-      .subscribe(res => {
-        this.meetingsList.set(res);
+      .subscribe(list => {
+        this.meetingsList.set(list.rs);
         this.setMeetingsOnCalendar();
       });
   }
@@ -95,13 +97,13 @@ export class CalendarComponent implements OnInit {
       });
   }
 
-  isMeetingEnd(meeting: Meeting) {
-    return +new Date() > +new Date(meeting.meetingDate);
+  isExpiredMeetingDate(meetingDate: Date) {
+    return +new Date() >= +new Date(meetingDate);
   }
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
+    plugins: [dayGridPlugin, interactionPlugin],
     eventClick: arg => this.handleViewMeeting(arg),
     headerToolbar: {
       start: 'today prev,next',
