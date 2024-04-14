@@ -1,20 +1,30 @@
 <div class="container">
   <div class="meetings-calendar">
     <div class="pb-6 bg-white border border-gray-200 rounded-lg shadow">
-      <div class="flex m-3">
-        <h3 class="font-semibold text-2xl px-3 py-2">
+      <div class="flex items-center content-center m-3">
+        <h3 class="font-semibold text-2xl mx-2">
           {{ lang.map.lbl_calendar }}
         </h3>
-        <app-icon-button
-          (click)="reload$.next(null)"
-          class="text-primary"
-          icon="RELOAD"></app-icon-button>
+        <div class="mx-2">
+          <app-icon-button
+            (click)="reload$.next(null)"
+            class="text-primary"
+            icon="RELOAD"></app-icon-button>
+        </div>
       </div>
       <div class="px-3 py-2">
         <full-calendar [options]="calendarOptions">
           <ng-template #eventContent let-meeting>
             <li
-              class="w-full flex p-3 mx-1 hover:bg-gray-200 bg-blue-200 border border-dashed border-blue-500">
+              class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
+              [ngClass]="{
+                'bg-blue-200 border-blue-500': !isExpiredMeetingDate(
+                  meeting.event.extendedProps.meetingDate
+                ),
+                'bg-red-200 border-red-500': isExpiredMeetingDate(
+                  meeting.event.extendedProps.meetingDate
+                )
+              }">
               <div class="w-full">
                 <h2>
                   {{ meeting.event.title }}

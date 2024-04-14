@@ -53,4 +53,5 @@ export interface LookupMapContract {
   obligationToAttendStatus: Lookup[];
   decisionReportStatus: Lookup[];
   meetingStatus: Lookup[];
+  calendarFormat: Lookup[];
 }
