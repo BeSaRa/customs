@@ -2,6 +2,7 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { AppIcons } from '@constants/app-icons';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { MenuIdes } from '@constants/menu-ides';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
 
 export const Menus: MenuItemContract[] = [
   {
@@ -218,5 +219,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.CALENDAR,
     path: AppFullRoutes.CALENDAR,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permissionFromTeam: LDAPGroupNames.Disciplinary_Committee,
   },
 ];

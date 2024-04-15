@@ -18,4 +18,5 @@ export interface MenuItemContract {
   arabicSearchText?: string;
   englishSearchText?: string;
   searchText?: string;
+  permissionFromTeam?: string;
 }
