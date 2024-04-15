@@ -21,17 +21,26 @@
       <app-input
         formControlName="title"
         [label]="lang.map.lbl_title"></app-input>
-      <app-input formControlName="meetingDate" [label]="lang.map.meeting_date">
-        <input
-          appControl
-          formControlName="meetingDate"
-          [min]="todayDate"
-          [max]="maxDate"
-          (click)="datepicker.open()"
-          [matDatepicker]="datepicker" />
-        <mat-datepicker [touchUi]="true" #datepicker />
-      </app-input>
       <div class="grid gap-4 grid-cols-2">
+        <app-input
+          formControlName="meetingDate"
+          [label]="lang.map.meeting_date">
+          <input
+            appControl
+            formControlName="meetingDate"
+            [min]="todayDate"
+            [max]="maxDate"
+            (click)="datepicker.open()"
+            [matDatepicker]="datepicker" />
+          <mat-datepicker [touchUi]="true" #datepicker />
+        </app-input>
+        <app-select-input
+          [label]="lang.map.meeting_status"
+          [options]="meetingStatus"
+          formControlName="status"
+          [bindValue]="'lookupKey'"
+          [bindLabel]="'getNames'">
+        </app-select-input>
         <app-input
           formControlName="meetingTimeFrom"
           [label]="lang.map.meeting_time_from">
