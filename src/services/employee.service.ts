@@ -108,6 +108,12 @@ export class EmployeeService
     return this.permissionMap.has(permission);
   }
 
+  hasPermissionFromTeam(teamName: LDAPGroupNames): boolean {
+    return !!this.getEmployeeTeams().find(
+      (t: Team) => t.ldapGroupName === teamName,
+    );
+  }
+
   /**
    * @description has Any permission to the given list means, at least one permission of the provided list to be exists to return true
    * @param permissions
@@ -183,6 +189,7 @@ export class EmployeeService
       ) as DisciplinaryCommitteeCustomSettingContract;
     return parsedCustomSettings.president === this.getEmployee()?.id;
   }
+
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>

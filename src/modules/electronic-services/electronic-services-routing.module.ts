@@ -13,6 +13,7 @@ import { investigationCanDeactivateGuard } from '@guards/investigation-can-deact
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
 import { CalendarComponent } from '@modules/electronic-services/components/calendar/calendar.component';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -50,6 +51,11 @@ const routes: Routes = [
   {
     path: AppRoutes.CALENDAR,
     component: CalendarComponent,
+    canActivate: [
+      accessPageGuard({
+        permissionFromTeam: LDAPGroupNames.Disciplinary_Committee,
+      }),
+    ],
   },
 ];
 

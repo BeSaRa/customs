@@ -7,6 +7,7 @@ import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { AppPermissionsType } from '@constants/app-permissions';
+import { LDAPGroupNames } from '@enums/department-group-names.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -39,9 +40,15 @@ export class MenuItemService {
   filterStaticMenu(): void {
     this.filteredStaticMenu = this.staticMenus.filter(item => {
       return (
-        (!item.permission && !item.permissionGroup) ||
+        (!item.permission &&
+          !item.permissionGroup &&
+          !item.permissionFromTeam) ||
         (item.permission &&
           this.employeeService.hasPermissionTo(item.permission)) ||
+        (item.permissionFromTeam &&
+          this.employeeService.hasPermissionFromTeam(
+            <LDAPGroupNames>item.permissionFromTeam,
+          )) ||
         (item.permissionGroup &&
           this.employeeService.hasAnyPermissions(
             AppPermissionsGroup[
