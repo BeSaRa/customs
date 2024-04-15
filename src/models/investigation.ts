@@ -238,7 +238,13 @@ export class Investigation extends BaseCase<
       this.taskDetails.activityProperties.OffenderIds.value.items.length
     );
   }
-
+  isDecision() {
+    return !!(
+      this.hasTask() &&
+      this.taskDetails.activityProperties &&
+      this.taskDetails.activityProperties.IsDecision
+    );
+  }
   getConcernedOffendersIds(): number[] {
     return this.hasConcernedOffenders()
       ? this.taskDetails.activityProperties!.OffenderIds.value.items
@@ -382,10 +388,9 @@ export class Investigation extends BaseCase<
   inDisciplinaryCommitteeReview() {
     return this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL);
   }
-  inDisciplinaryCommittee(): boolean {
-    return (
-      this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL) ||
-      this.inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL_SIGNATURE)
+  inDisciplinaryCommitteeReviewSign(): boolean {
+    return this.inActivity(
+      ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL_SIGNATURE,
     );
   }
 }

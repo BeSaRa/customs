@@ -68,6 +68,11 @@
           <ng-container [ngTemplateOutlet]="legal_procedures"></ng-container>
         </mat-tab>
       }
+      <!--      @if (model.inDisciplinaryCommitteeReviewSign()) {-->
+      <!--        <mat-tab data-name="review_minutes" [label]="lang.map.review_minutes">-->
+      <!--          <ng-container [ngTemplateOutlet]="review_minutes"></ng-container>-->
+      <!--        </mat-tab>-->
+      <!--      }-->
       @if (showSummaryElements()) {
         <mat-tab
           data-name="summary"
@@ -94,7 +99,7 @@
             [ngTemplateOutlet]="external_persons_tab"></ng-container>
         </mat-tab>
       }
-      @if (model.inDisciplinaryCommittee()) {
+      @if (model.inDisciplinaryCommitteeReview()) {
         <mat-tab
           data-name="disciplinary_committee_meetings"
           [label]="lang.map.disciplinary_committee">
@@ -231,6 +236,11 @@
   <ng-template #disciplinary_committee_meetings>
     <div class="p-4">
       <app-disciplinary-committee [model]="model" />
+    </div>
+  </ng-template>
+  <ng-template #review_minutes>
+    <div class="p-4">
+      <app-review-minutes [model]="model" />
     </div>
   </ng-template>
 </div>
