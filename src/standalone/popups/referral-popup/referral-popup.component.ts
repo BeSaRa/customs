@@ -53,6 +53,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { Violation } from '@models/violation';
 import { InfoService } from '@services/info.service';
 import { isFunction } from 'rxjs/internal/util/isFunction';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 @Component({
   selector: 'app-referral-popup',
@@ -96,7 +97,7 @@ export class ReferralPopupComponent
     offenders: Offender[];
     model: InputSignal<Investigation>;
     updateModel: InputSignal<EventEmitter<void>> | EventEmitter<void>;
-    selectedPenalty: Penalty;
+    selectedPenalty?: Penalty;
     isSingle: boolean;
     response?: TaskResponses;
   }>(MAT_DIALOG_DATA);
@@ -108,7 +109,9 @@ export class ReferralPopupComponent
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
   model = this.data.model;
-  penaltyKey = signal(this.data.selectedPenalty.penaltyKey);
+  penaltyKey = signal(
+    this.selectedPenalty ? this.selectedPenalty.penaltyKey : undefined,
+  );
   employeesOffenders = computed(() => {
     return this.offenders().filter(
       offender => offender.type === OffenderTypes.EMPLOYEE,
@@ -128,6 +131,7 @@ export class ReferralPopupComponent
   hasMixedOffenders = computed(() => {
     return this.hasBrokers() && this.hasEmployees();
   });
+
   updateModel: EventEmitter<void> = isSignal(this.data.updateModel)
     ? this.data.updateModel()
     : this.data.updateModel;
@@ -160,19 +164,36 @@ export class ReferralPopupComponent
       }, {});
   });
   isPresidentRequest = computed(
-    () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT,
+    () =>
+      (this.penaltyKey() &&
+        this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT) ||
+      [TaskResponses.RETURN_TO_PR_FROM_LA].includes(this.response!),
   );
   isAssistantRequest = computed(
-    () => this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+    () =>
+      (this.penaltyKey() &&
+        this.penaltyKey() ===
+          SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
+      [TaskResponses.RETURN_TO_PA_FROM_LA].includes(this.response!),
   );
+
   displayDefaultForm = computed(() => {
     return (
       !this.isAssistantRequest() ||
       (this.isAssistantRequest() && !this.hasMixedOffenders())
     );
   });
+
+  title = computed(() => {
+    return this.selectedPenalty
+      ? this.selectedPenalty.getNames()
+      : this.lang.map[this.responseTranslateMap[this.response!]];
+  });
+
   referralTextMap: Record<
-    SystemPenalties,
+    | SystemPenalties
+    | TaskResponses.RETURN_TO_PR_FROM_LA
+    | TaskResponses.RETURN_TO_PA_FROM_LA,
     {
       header: string;
       footer: string;
@@ -224,15 +245,37 @@ export class ReferralPopupComponent
       footer: '',
       whom: '',
     },
+    [TaskResponses.RETURN_TO_PR_FROM_LA]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
+    [TaskResponses.RETURN_TO_PA_FROM_LA]: {
+      header: '',
+      footer: '',
+      whom: '',
+    },
   };
 
+  responseTranslateMap: Record<string, keyof LangKeysContract> = {
+    [TaskResponses.RETURN_TO_PR_FROM_LA]: 'return_to_president',
+    [TaskResponses.RETURN_TO_PA_FROM_LA]: 'return_to_president_assistant',
+  };
+
+  referralKey() {
+    return this.selectedPenalty
+      ? this.selectedPenalty.penaltyKey
+      : (this.response as
+          | TaskResponses.RETURN_TO_PA_FROM_LA
+          | TaskResponses.RETURN_TO_PR_FROM_LA);
+  }
+
   getForWhom(tab?: 'employee' | 'broker'): string {
-    const method = this.referralTextMap[this.selectedPenalty.penaltyKey]
-      .whom as unknown as (tab?: 'employee' | 'broker') => string;
+    const method = this.referralTextMap[this.referralKey()].whom as unknown as (
+      tab?: 'employee' | 'broker',
+    ) => string;
     const stringValue = method as unknown as string;
-    return isFunction(
-      this.referralTextMap[this.selectedPenalty.penaltyKey].whom,
-    )
+    return isFunction(this.referralTextMap[this.referralKey()].whom)
       ? method(tab)
       : stringValue;
   }
@@ -280,11 +323,11 @@ export class ReferralPopupComponent
   });
 
   get formHeader() {
-    return this.referralTextMap[this.selectedPenalty.penaltyKey].header;
+    return this.referralTextMap[this.referralKey()].header;
   }
 
   get formFooter() {
-    return this.referralTextMap[this.selectedPenalty.penaltyKey].footer;
+    return this.referralTextMap[this.referralKey()].footer;
   }
 
   ngOnInit(): void {
@@ -324,7 +367,7 @@ export class ReferralPopupComponent
                 ...this.oldPenaltyDecisionsMap()[item.id],
                 signerId: this.employeeService.getEmployee()?.id,
                 caseId: this.model().id,
-                penaltyId: this.selectedPenalty.id,
+                penaltyId: this.selectedPenalty!.id,
                 offenderId: item.id,
                 status: 1,
                 tkiid: this.model().getTaskId(),
@@ -343,7 +386,7 @@ export class ReferralPopupComponent
           return forkJoin(penaltiesDecisions).pipe(
             map(values => {
               return values.map(item => {
-                item.penaltyInfo = this.selectedPenalty;
+                item.penaltyInfo = this.selectedPenalty!;
                 return item;
               });
             }),
@@ -400,16 +443,16 @@ export class ReferralPopupComponent
                   ])
                 : this.commentControl.value,
               selectedResponse: this.response!,
-              decisionIds: this.model()
-                .getPenaltyDecision()
-                .map(i => i.id),
+              // decisionIds: this.model()
+              //   .getPenaltyDecision()
+              //   .map(i => i.id),
             });
         }),
       )
       .subscribe(() => {
         this.toast.success(
           this.lang.map.msg_x_performed_successfully.change({
-            x: this.selectedPenalty.getNames(),
+            x: this.selectedPenalty ? this.selectedPenalty.getNames() : '',
           }),
         );
         this.dialogRef.close(UserClick.YES);

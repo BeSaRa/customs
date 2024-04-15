@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  return_to_president: string;
   investigation_result: string;
   recommendation: string;
   approve_memo: string;

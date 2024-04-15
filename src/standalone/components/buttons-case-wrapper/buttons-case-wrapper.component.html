@@ -9,6 +9,30 @@
       >{{ lang.map.save }}
     </app-button>
   }
+
+  <!-- return to president from legal affairs -->
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.RETURN_TO_PR_FROM_LA)
+  ) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="returnActions$.next(taskResponses.RETURN_TO_PR_FROM_LA)">
+      {{ lang.map.return_to_president }}
+    </app-button>
+  }
+  <!-- return to president assistant from legal affairs -->
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.RETURN_TO_PA_FROM_LA)
+  ) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="returnActions$.next(taskResponses.RETURN_TO_PA_FROM_LA)">
+      {{ lang.map.return_to_president_assistant }}
+    </app-button>
+  }
+
   <!-- manager approve -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.MANAGER_APPROVE)

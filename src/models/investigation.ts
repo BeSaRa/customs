@@ -107,7 +107,8 @@ export class Investigation extends BaseCase<
     return this.penaltyDecisions || [];
   }
 
-  getFirstPenaltyComment(penaltyKey: SystemPenalties): string {
+  getFirstPenaltyComment(penaltyKey?: SystemPenalties): string {
+    if (!penaltyKey) return '';
     const decision = this.getPenaltyDecision().find(
       item => item.penaltyInfo.penaltyKey === penaltyKey,
     );
@@ -118,7 +119,8 @@ export class Investigation extends BaseCase<
     return this.getService().getCasePenalty(this.id, this.getActivityName()!);
   }
 
-  getFirstEmployeeComment(penaltyKey: SystemPenalties): string {
+  getFirstEmployeeComment(penaltyKey?: SystemPenalties): string {
+    if (!penaltyKey) return '';
     const employeesIds = this.getEmployeesOffenders().map(item => item.id);
     const decision = this.getPenaltyDecision().find(item => {
       return (
@@ -129,7 +131,8 @@ export class Investigation extends BaseCase<
     return decision ? decision.comment! : '';
   }
 
-  getFirstBrokerComment(penaltyKey: SystemPenalties): string {
+  getFirstBrokerComment(penaltyKey?: SystemPenalties): string {
+    if (!penaltyKey) return '';
     const brokersIds = this.getBrokersOffenders().map(item => item.id);
     const decision = this.getPenaltyDecision().find(item => {
       return (

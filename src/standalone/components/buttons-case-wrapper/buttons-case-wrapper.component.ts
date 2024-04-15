@@ -76,11 +76,14 @@ export class ButtonsCaseWrapperComponent
     penaltyKey: SystemPenalties;
   }>();
 
+  returnActions$ = new Subject<TaskResponses>();
+
   isMandatoryToImposePenalty = input.required<boolean>();
 
   ngOnInit() {
     this.listenToResponseAction();
     this.listenToReferralActions();
+    this.listenToReturnActions();
   }
 
   listenToResponseAction() {
@@ -222,6 +225,28 @@ export class ButtonsCaseWrapperComponent
               this.model,
               this.updateModel,
               selectedPenalty,
+              response,
+            )
+            .afterClosed();
+        }),
+      )
+      .pipe(filter((click: UserClick) => click === UserClick.YES))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
+  }
+
+  listenToReturnActions(): void {
+    this.returnActions$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(response => {
+          return this.penaltyDecisionService
+            .openRequestReferralDialog(
+              this.model().getConcernedOffenders(),
+              this.model,
+              this.updateModel,
+              undefined,
               response,
             )
             .afterClosed();

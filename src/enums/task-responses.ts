@@ -38,4 +38,6 @@ export enum TaskResponses {
   TO_CA_DEP = 'to_ca_dep',
   DC_SIGN = 'dc_sign',
   DC_DECISION_SIGN = 'dc_decision_sign',
+  RETURN_TO_PR_FROM_LA = 'return_to_pr',
+  RETURN_TO_PA_FROM_LA = 'return_to_pa',
 }
