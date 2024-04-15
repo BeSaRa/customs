@@ -589,4 +589,5 @@ export interface LangKeysContract {
   decision_sign: string;
   meeting_title: string;
   calendar_format: string;
+  review_minutes: string;
 }

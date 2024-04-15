@@ -113,13 +113,14 @@ export class InvestigationComponent
     );
   });
   tabsArray = [
-    'disciplinary_committee_meetings',
     'legal_procedures',
+    'review_minutes',
     'summary',
     'basic_info',
     'offenders',
     'violations',
     'external_persons',
+    'disciplinary_committee_meetings',
     'attachments',
   ];
   caseFolders: CaseFolder[] = [];
