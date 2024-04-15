@@ -73,6 +73,11 @@
                   (click)="delete$.next(element)"
                   icon="DELETE"></app-icon-button>
               </div>
+              <div [matTooltip]="lang.map.view">
+                <app-icon-button
+                  (click)="view$.next(element)"
+                  icon="VIEW"></app-icon-button>
+              </div>
             </div>
           }
         </td>

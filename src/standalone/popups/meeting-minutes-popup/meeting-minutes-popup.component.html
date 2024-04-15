@@ -23,6 +23,7 @@
               [min]="readonlyMeetingData ? null : todayDate"
               [max]="readonlyMeetingData ? null : maxDate"
               (click)="!readonlyMeetingData && datepicker.open()"
+              [readonly]="readonlyMeetingData"
               [matDatepicker]="datepicker" />
             <mat-datepicker [touchUi]="true" #datepicker />
           </app-input>
@@ -41,6 +42,7 @@
               [max]="form.get('meetingTimeTo')?.value"
               formControlName="meetingTimeFrom"
               [disableClick]="readonlyMeetingData"
+              [readonly]="readonlyMeetingData"
               [ngxMatTimepicker]="timePickerFrom" />
             <ngx-mat-timepicker
               [cancelBtnTmpl]="cancelBtn"
@@ -66,6 +68,7 @@
               [min]="form.get('meetingTimeFrom')?.value"
               formControlName="meetingTimeTo"
               [disableClick]="readonlyMeetingData"
+              [readonly]="readonlyMeetingData"
               [ngxMatTimepicker]="timePickerTo" />
             <ngx-mat-timepicker
               [cancelBtnTmpl]="cancelBtn"
