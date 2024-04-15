@@ -199,7 +199,10 @@ export class OffendersViolationsPreviewComponent
         i =>
           new FormControl<number>({
             value: i.proofStatus,
-            disabled: !this.model().hasTask() || !this.model().inMyInbox(),
+            disabled:
+              this.model().inLegalAffairsActivity() ||
+              !this.model().hasTask() ||
+              !this.model().inMyInbox(),
           }),
       );
       return acc;
@@ -480,33 +483,6 @@ export class OffendersViolationsPreviewComponent
         }),
       )
       .subscribe();
-  }
-
-  // listenToReferralRequest() {
-  //   this.referralOrTerminateDecision$
-  //     .pipe(takeUntil(this.destroy$))
-  //     .pipe(
-  //       switchMap(({ offender, penaltyId }) => {
-  //         const penaltyDecision = new PenaltyDecision().clone<PenaltyDecision>({
-  //           caseId: this.model().id,
-  //           offenderId: offender.id,
-  //           signerId: this.employeeService.getEmployee()?.id,
-  //           penaltyId: penaltyId,
-  //           status: 1,
-  //         });
-  //         return penaltyDecision.save();
-  //       }),
-  //     )
-  //     .subscribe();
-  // }
-
-  canMakeDecision(offender: Offender): boolean {
-    return (
-      this.penaltyMap() &&
-      this.penaltyMap()[offender.id] &&
-      !!this.getOffenderPenalties(offender).length &&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')
-    );
   }
 
   rowClicked($event: MouseEvent, element: Offender) {

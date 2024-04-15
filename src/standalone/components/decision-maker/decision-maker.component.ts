@@ -92,7 +92,10 @@ export class DecisionMakerComponent
       (
         this.penalties() &&
         this.penalties()[offenderId] &&
-        this.penalties()[offenderId].normal.length
+        this.penalties()[offenderId].normal.length &&
+        (!this.model().hasConcernedOffenders() ||
+          (this.model().hasConcernedOffenders() &&
+            this.model().isOffenderConcerned(offenderId)))
       ) /*&&
       this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
     );
