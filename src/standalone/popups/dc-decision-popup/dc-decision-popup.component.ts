@@ -238,13 +238,6 @@ export class DcDecisionPopupComponent
       });
     }
   }
-  private deleteOldDecision(penaltyDecision: PenaltyDecision | null) {
-    return penaltyDecision
-      ? penaltyDecision
-          .delete()
-          .pipe(tap(() => this.model().removePenaltyDecision(penaltyDecision)))
-      : of(null);
-  }
 
   proofStatusChanged(item: OffenderViolation, index: number) {
     const oldValue = this.violationProofStatus()[item.offenderId][index].value!;
@@ -256,10 +249,6 @@ export class DcDecisionPopupComponent
         ),
         tap(({ click }) => {
           this.resetProofStatusToOldValue(click, item, index, oldValue);
-        }),
-        filter(({ click }) => click === UserClick.YES),
-        switchMap(({ penaltyDecision }) => {
-          return this.deleteOldDecision(penaltyDecision);
         }),
       )
       .subscribe(() => {
