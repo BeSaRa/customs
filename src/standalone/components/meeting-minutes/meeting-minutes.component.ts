@@ -48,6 +48,8 @@ import { ToastService } from '@services/toast.service';
 import { combineLatest } from 'rxjs';
 import { MeetingMinutes } from '@models/meeting-minutes';
 import { GeneralStatusEnum } from '@enums/general-status-enum';
+import { OperationType } from '@enums/operation-type';
+import { MeetingService } from '@services/meeting.service';
 
 @Component({
   selector: 'app-meeting-minutes',
@@ -81,6 +83,7 @@ export class MeetingMinutesComponent
   dialog = inject(DialogService);
   investigationService = inject(InvestigationService);
   toast = inject(ToastService);
+  meetingService = inject(MeetingService);
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
   view$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
@@ -107,6 +110,7 @@ export class MeetingMinutesComponent
     this._listenToReload();
     this._listenToLaunch();
     this.listenToDelete();
+    this.listenToView();
     this._listenToAddMeetingMinutes();
   }
   _listenToReload() {
@@ -206,5 +210,28 @@ export class MeetingMinutesComponent
       .subscribe(() => {
         this.reload$.next(null);
       });
+  }
+  listenToView() {
+    this.view$
+      .pipe(
+        switchMap(model => {
+          return this.meetingService.loadByIdComposite(model.concernedId);
+        }),
+      )
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(MeetingMinutesPopupComponent, {
+              data: {
+                model,
+                extras: {
+                  operation: OperationType.VIEW,
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }

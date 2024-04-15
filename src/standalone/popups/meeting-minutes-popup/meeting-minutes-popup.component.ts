@@ -34,6 +34,7 @@ import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
 import { AdminResult } from '@models/admin-result';
 import { MeetingService } from '@services/meeting.service';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -74,6 +75,7 @@ export class MeetingMinutesPopupComponent
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
   caseId = this.data.extras?.caseId;
+  operation = this.data.extras?.operation;
   model: Meeting | undefined = this.data.model;
   attendanceList: MeetingAttendance[] = [];
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
@@ -104,6 +106,20 @@ export class MeetingMinutesPopupComponent
           });
         }),
       )
+      .pipe(
+        map(list => {
+          return this.readonlyMeetingData
+            ? list.map(attend => {
+                return new MeetingAttendance().clone<MeetingAttendance>({
+                  ...attend,
+                  status:
+                    this.model?.attendanceList.find(att => att.id === attend.id)
+                      ?.status || 0,
+                });
+              })
+            : list;
+        }),
+      )
       .subscribe(rs => {
         this.attendanceList = rs;
       });
@@ -124,6 +140,9 @@ export class MeetingMinutesPopupComponent
     this.form.get('status')?.setValidators([CustomValidators.required]);
     if (!this.model) {
       this.form.get('status')?.disable();
+    }
+    if (this.operation === OperationType.VIEW) {
+      this.form.disable();
     }
   }
   listenToSave() {
