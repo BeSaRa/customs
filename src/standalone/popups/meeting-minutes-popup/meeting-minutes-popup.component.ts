@@ -28,7 +28,6 @@ import { InvestigationService } from '@services/investigation.service';
 import { CustomValidators } from '@validators/custom-validators';
 import { DialogService } from '@services/dialog.service';
 import { LookupService } from '@services/lookup.service';
-import { MeetingStatusEnum } from '@enums/meeting-status-enum';
 import { MeetingAttendance } from '@models/meeting-attendance';
 import { TeamService } from '@services/team.service';
 import { TeamNames } from '@enums/team-names';
@@ -78,9 +77,7 @@ export class MeetingMinutesPopupComponent
   model: Meeting | undefined = this.data.model;
   attendanceList: MeetingAttendance[] = [];
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
-  meetingStatus = this.lookupService.lookups.meetingStatus.filter(
-    s => s.lookupKey !== MeetingStatusEnum.pending,
-  );
+  meetingStatus = this.lookupService.lookups.meetingStatus;
   ngOnInit(): void {
     this.buildForm();
     this.listenToSave();

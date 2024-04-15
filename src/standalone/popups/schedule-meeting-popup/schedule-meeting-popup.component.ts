@@ -22,6 +22,8 @@ import {
 import { EmployeeService } from '@services/employee.service';
 import { OperationType } from '@enums/operation-type';
 import { MeetingAttendanceListComponent } from '@standalone/components/meeting-attendance-list/meeting-attendance-list.component';
+import { LookupService } from '@services/lookup.service';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 
 @Component({
   selector: 'app-schedule-meeting-popup',
@@ -39,6 +41,7 @@ import { MeetingAttendanceListComponent } from '@standalone/components/meeting-a
     NgxMatTimepickerDirective,
     NgxMatTimepickerComponent,
     MeetingAttendanceListComponent,
+    SelectInputComponent,
   ],
   templateUrl: './schedule-meeting-popup.component.html',
   styleUrl: './schedule-meeting-popup.component.scss',
@@ -50,23 +53,22 @@ export class ScheduleMeetingPopupComponent
   override data: CrudDialogDataContract<Meeting, { [index: string]: unknown }> =
     inject(MAT_DIALOG_DATA);
   employeeService = inject(EmployeeService);
+  lookupService = inject(LookupService);
   caseId = this.data.extras?.caseId;
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
   form!: UntypedFormGroup;
-
+  meetingStatus = this.lookupService.lookups.meetingStatus;
   _buildForm() {
     this.form = this.fb.group(this.model.buildForm(true));
     if (this.operation === OperationType.VIEW) {
       this.form.disable();
     }
   }
-
   protected override _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
   }
-
   protected override _prepareModel(): Meeting | Observable<Meeting> {
     const formValue = this.form.getRawValue();
     return new Meeting().clone<Meeting>({
@@ -76,7 +78,6 @@ export class ScheduleMeetingPopupComponent
       offenderList: this.concernedOffendersIds,
     });
   }
-
   get label() {
     if (this.operation === OperationType.CREATE) {
       return 'schedule_meeting';
@@ -86,7 +87,6 @@ export class ScheduleMeetingPopupComponent
       return 'meeting_details';
     }
   }
-
   protected override _afterSave(model: Meeting): void {
     this.dialogRef.close(model);
   }

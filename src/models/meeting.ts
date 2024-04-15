@@ -28,7 +28,7 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
   place!: string;
   meetingTimeFrom!: string | number;
   meetingTimeTo!: string | number;
-  override status: number = MeetingStatusEnum.held;
+  override status: number = MeetingStatusEnum.pending;
   buildForm(controls: boolean = false, disabled: boolean = false) {
     const {
       title,
