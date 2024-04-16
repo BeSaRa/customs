@@ -42,15 +42,15 @@ export class ReviewMinutesComponent
   meetingMinutesModel!: Meeting;
   decisionMinutesModel!: PenaltyDecision;
   offenderViolations: OffenderViolation[] = [];
-  ConcernedId = computed(() => {
+  concernedId = computed(() => {
     return this.model()?.taskDetails.activityProperties?.ConcernedId.value;
   });
   protected readonly ActivitiesName = ActivitiesName;
   ngOnInit() {
     if (this.model().isDecision()) {
-      this.ConcernedId() &&
+      this.concernedId() &&
         this.penaltyDecisionService
-          .loadByIdComposite(this.ConcernedId() as number)
+          .loadByIdComposite(this.concernedId() as number)
           .pipe(
             switchMap(rs => {
               this.decisionMinutesModel = rs;
@@ -63,9 +63,9 @@ export class ReviewMinutesComponent
             this.offenderViolations = rs;
           });
     } else {
-      this.ConcernedId() &&
+      this.concernedId() &&
         this.meetingService
-          .loadByIdComposite(this.ConcernedId() as number)
+          .loadByIdComposite(this.concernedId() as number)
           .subscribe(rs => {
             this.meetingMinutesModel = rs;
           });
