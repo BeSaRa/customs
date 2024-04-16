@@ -28,7 +28,7 @@
           <input
             appControl
             formControlName="meetingDate"
-            [min]="todayDate"
+            [min]="operation === OperationType.UPDATE ? minDate : todayDate"
             [max]="maxDate"
             (click)="datepicker.open()"
             [matDatepicker]="datepicker" />

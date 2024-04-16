@@ -194,6 +194,7 @@ export class MeetingMinutesComponent
     this.add$
       .pipe(
         switchMap(() => {
+          const minDate = new Date(this.model().taskDetails.dueTime);
           return this.dialog
             .open(MeetingMinutesPopupComponent, {
               data: {
@@ -201,6 +202,7 @@ export class MeetingMinutesComponent
                   caseId: this.model().id,
                   concernedOffendersIds:
                     this.model().getConcernedOffendersIds(),
+                  minDate,
                 },
               },
             })

@@ -20,8 +20,8 @@
             <input
               appControl
               formControlName="meetingDate"
-              [min]="readonlyMeetingData ? null : todayDate"
-              [max]="readonlyMeetingData ? null : maxDate"
+              [min]="readonlyMeetingData ? null : minDate"
+              [max]="readonlyMeetingData ? null : todayDate"
               (click)="!readonlyMeetingData && datepicker.open()"
               [readonly]="readonlyMeetingData"
               [matDatepicker]="datepicker" />

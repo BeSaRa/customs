@@ -35,6 +35,7 @@ import { InternalUser } from '@models/internal-user';
 import { AdminResult } from '@models/admin-result';
 import { MeetingService } from '@services/meeting.service';
 import { OperationType } from '@enums/operation-type';
+import { MeetingStatusEnum } from '@enums/meeting-status-enum';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -73,7 +74,7 @@ export class MeetingMinutesPopupComponent
   save$: Subject<void> = new Subject<void>();
   form: FormGroup = new FormGroup({});
   todayDate = new Date();
-  maxDate = this.data.extras?.maxDate;
+  minDate = this.data.extras?.minDate;
   caseId = this.data.extras?.caseId;
   operation = this.data.extras?.operation;
   model: Meeting | undefined = this.data.model;
@@ -113,8 +114,9 @@ export class MeetingMinutesPopupComponent
                 return new MeetingAttendance().clone<MeetingAttendance>({
                   ...attend,
                   status:
-                    this.model?.attendanceList.find(att => att.id === attend.id)
-                      ?.status || 0,
+                    this.model?.attendanceList.find(
+                      att => att.attendeeId === attend.attendeeId,
+                    )?.status || 0,
                 });
               })
             : list;
@@ -140,6 +142,7 @@ export class MeetingMinutesPopupComponent
     this.form.get('status')?.setValidators([CustomValidators.required]);
     if (!this.model) {
       this.form.get('status')?.disable();
+      this.form.get('status')?.setValue(MeetingStatusEnum.held);
     }
     if (this.operation === OperationType.VIEW) {
       this.form.disable();
@@ -182,6 +185,7 @@ export class MeetingMinutesPopupComponent
       .pipe(
         switchMap(model => {
           return this.investigationService.addMeetingMinutes({
+            ...model,
             ...this.form.value,
             caseId: model.caseId,
             id: model.id,

@@ -142,6 +142,7 @@ export class MeetingsListComponent implements OnInit {
     this.update$
       .pipe(
         switchMap(model => {
+          const minDate = new Date(this.model().taskDetails.dueTime);
           const maxDate = new Date(this.model().taskDetails.dueTime);
           maxDate.setDate(maxDate.getDate() + 14);
           return this.dialog
@@ -152,6 +153,7 @@ export class MeetingsListComponent implements OnInit {
                 extras: {
                   caseId: this.model().id,
                   maxDate,
+                  minDate,
                 },
               },
             })
@@ -190,6 +192,7 @@ export class MeetingsListComponent implements OnInit {
     this.addMeetingMinutes$
       .pipe(
         switchMap(meeting => {
+          const minDate = new Date(this.model().taskDetails.dueTime);
           return this.dialog
             .open(MeetingMinutesPopupComponent, {
               data: {
@@ -199,6 +202,7 @@ export class MeetingsListComponent implements OnInit {
                   caseId: this.model().id,
                   concernedOffendersIds:
                     this.model().getConcernedOffendersIds(),
+                  minDate,
                 },
               },
             })
