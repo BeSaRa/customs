@@ -58,6 +58,7 @@ export class ScheduleMeetingPopupComponent
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   todayDate = new Date();
   maxDate = this.data.extras?.maxDate;
+  minDate = this.data.extras?.minDate;
   form!: UntypedFormGroup;
   meetingStatus = this.lookupService.lookups.meetingStatus;
   _buildForm() {

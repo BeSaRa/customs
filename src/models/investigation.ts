@@ -245,7 +245,8 @@ export class Investigation extends BaseCase<
     return !!(
       this.hasTask() &&
       this.taskDetails.activityProperties &&
-      this.taskDetails.activityProperties.IsDecision
+      this.taskDetails.activityProperties.IsDecision &&
+      this.taskDetails.activityProperties.IsDecision.value
     );
   }
   getConcernedOffendersIds(): number[] {

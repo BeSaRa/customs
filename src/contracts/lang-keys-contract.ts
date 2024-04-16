@@ -590,4 +590,9 @@ export interface LangKeysContract {
   meeting_title: string;
   calendar_format: string;
   review_minutes: string;
+  meeting_minute: string;
+  decision_minute: string;
+  employee_grants: string;
+  the_following_penalty: string;
+  for_committing_the_following_violations: string;
 }

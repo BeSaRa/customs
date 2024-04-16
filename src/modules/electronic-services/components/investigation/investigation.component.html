@@ -68,11 +68,11 @@
           <ng-container [ngTemplateOutlet]="legal_procedures"></ng-container>
         </mat-tab>
       }
-      <!--      @if (model.inDisciplinaryCommitteeReviewSign()) {-->
-      <!--        <mat-tab data-name="review_minutes" [label]="lang.map.review_minutes">-->
-      <!--          <ng-container [ngTemplateOutlet]="review_minutes"></ng-container>-->
-      <!--        </mat-tab>-->
-      <!--      }-->
+      @if (model.inDisciplinaryCommitteeReviewSign()) {
+        <mat-tab data-name="review_minutes" [label]="lang.map.review_minutes">
+          <ng-container [ngTemplateOutlet]="review_minutes"></ng-container>
+        </mat-tab>
+      }
       @if (showSummaryElements()) {
         <mat-tab
           data-name="summary"

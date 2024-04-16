@@ -1,0 +1,83 @@
+<div class="flex justify-start items-center mb-4">
+  <h1 class="text-lg text-primary">
+    @if (this.model().isDecision()) {
+      {{ lang.map.decision_minute }}
+    } @else {
+      {{ lang.map.meeting_minute }}
+    }
+  </h1>
+</div>
+@if (this.model().isDecision() && this.decisionMinutesModel) {
+  <div>
+    <p class="mb-3">
+      {{ lang.map.employee_grants
+      }}<strong>
+        {{ this.decisionMinutesModel.offenderInfo?.getNames() }}
+      </strong>
+      {{ lang.map.the_following_penalty }} :
+      <strong>{{ this.decisionMinutesModel.penaltyInfo?.getNames() }}</strong>
+      {{ lang.map.for_committing_the_following_violations }}:
+    </p>
+    <div class="mb-3">
+      <app-offender-violations
+        [violations]="offenderViolations"></app-offender-violations>
+    </div>
+    <div class="mb-3">
+      <h6 class="text-sm">{{ lang.map.note }}</h6>
+      {{ this.decisionMinutesModel.comment! || '' }}
+    </div>
+  </div>
+} @else if (this.meetingMinutesModel) {
+  <div>
+    <div class="grid gap-4 grid-cols-2">
+      <div class="relative mb-6 px-3">
+        <div class="mb-3">
+          <h6 class="text-sm">{{ lang.map.meeting_title }}</h6>
+          {{ this.meetingMinutesModel.title }}
+        </div>
+        <div class="mb-3">
+          <h6 class="text-sm">{{ lang.map.meeting_place }}</h6>
+          {{ this.meetingMinutesModel.place }}
+        </div>
+        <div
+          class="absolute left-0 top-0 h-full min-h-[1em] w-px self-stretch border-t-0 bg-gradient-to-tr from-transparent via-neutral-500 to-transparent opacity-25 block"></div>
+      </div>
+      <div>
+        <div class="mb-3">
+          <h6 class="text-sm">{{ lang.map.meeting_date }}</h6>
+          {{ this.meetingMinutesModel.meetingDate | date: Config.DATE_FORMAT }}
+        </div>
+        <div class="mb-3">
+          <h6 class="text-sm">{{ lang.map.meeting_time }}</h6>
+          {{ lang.map.meeting_time_from }}
+          {{ this.meetingMinutesModel.meetingTimeFrom }}
+          {{ lang.map.to }}
+          {{ this.meetingMinutesModel.meetingTimeTo }}
+        </div>
+      </div>
+    </div>
+    <div class="mb-6">
+      <app-offender-list
+        [readonly]="true"
+        [model]="model()"></app-offender-list>
+    </div>
+    <div class="mb-3 w-[300px]">
+      <app-meeting-attendance-list
+        [attendances]="
+          meetingMinutesModel.attendanceList
+        "></app-meeting-attendance-list>
+    </div>
+    @if (this.meetingMinutesModel.meetingMinutesText) {
+      <div class="mb-3">
+        <h6 class="text-sm">{{ lang.map.meeting_minutes_text }}</h6>
+        {{ this.meetingMinutesModel.meetingMinutesText }}
+      </div>
+    }
+    @if (this.meetingMinutesModel.note) {
+      <div class="mb-3">
+        <h6 class="text-sm">{{ lang.map.note }}</h6>
+        {{ this.meetingMinutesModel.note }}
+      </div>
+    }
+  </div>
+}

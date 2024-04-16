@@ -1,4 +1,4 @@
-<div class="flex justify-start items-center">
+<div class="flex justify-start items-center mb-3">
   <h1 class="text-primary text-xl">{{ lang.map.lbl_meeting_attendances }}</h1>
 </div>
 <ul class="divide-y divide-gray-200">
@@ -23,6 +23,12 @@
             [trueValue]="1"
             [falseValue]="0">
           </app-switch>
+        </div>
+      } @else {
+        <div class="actions ms-auto">
+          <span>{{
+            attendance.status ? lang.map.attended : lang.map.not_attended
+          }}</span>
         </div>
       }
     </li>

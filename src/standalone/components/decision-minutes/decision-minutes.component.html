@@ -70,28 +70,28 @@
           {{ lang.map.actions }}
         </th>
         <td mat-cell *matCellDef="let element">
-          @if (
-            !readonly &&
-            element.generalStatus === generalStatusEnum.DC_M_PENDIND
-          ) {
-            <div class="flex gap-2">
+          <div class="flex gap-2">
+            @if (
+              !readonly &&
+              element.generalStatus === generalStatusEnum.DC_M_PENDIND
+            ) {
               <div [matTooltip]="lang.map.launch">
                 <app-icon-button
                   (click)="launch$.next(element)"
                   icon="LAUNCH"></app-icon-button>
               </div>
-              <div [matTooltip]="lang.map.edit">
-                <app-icon-button
-                  (click)="editDecisionMinutes$.next(element)"
-                  icon="EDIT"></app-icon-button>
-              </div>
-              <div [matTooltip]="lang.map.delete">
-                <app-icon-button
-                  (click)="delete$.next(element)"
-                  icon="DELETE"></app-icon-button>
-              </div>
+            }
+            <div [matTooltip]="lang.map.edit">
+              <app-icon-button
+                (click)="editDecisionMinutes$.next(element)"
+                icon="EDIT"></app-icon-button>
             </div>
-          }
+            <div [matTooltip]="lang.map.delete">
+              <app-icon-button
+                (click)="delete$.next(element)"
+                icon="DELETE"></app-icon-button>
+            </div>
+          </div>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
