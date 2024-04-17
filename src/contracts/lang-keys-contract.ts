@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  president_assistant: string;
+  static_footer_text_for_return_to_president: string;
+  static_footer_text_for_return_to_president_assistant: string;
+  static_header_text_for_return_to_president: string;
+  static_header_text_for_return_to_president_assistant: string;
   penalty_for_whom: string;
   return_to_president: string;
   investigation_result: string;

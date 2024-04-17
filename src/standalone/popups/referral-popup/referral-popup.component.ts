@@ -246,14 +246,26 @@ export class ReferralPopupComponent
       whom: '',
     },
     [TaskResponses.RETURN_TO_PR_FROM_LA]: {
-      header: '',
-      footer: '',
-      whom: '',
+      header: this.lang.map.static_header_text_for_return_to_president,
+      footer: this.lang.map.static_footer_text_for_return_to_president,
+      whom: this.lang.map.president,
     },
     [TaskResponses.RETURN_TO_PA_FROM_LA]: {
-      header: '',
-      footer: '',
-      whom: '',
+      header:
+        this.lang.map.static_header_text_for_return_to_president_assistant,
+      footer:
+        this.lang.map.static_footer_text_for_return_to_president_assistant,
+      whom: (tab?: string) => {
+        if (!tab) {
+          return this.offenders()[0].type === OffenderTypes.EMPLOYEE
+            ? this.lang.map.vice_president
+            : this.customsAffairsPAOUInfo.getNames();
+        } else {
+          return tab === 'broker'
+            ? this.customsAffairsPAOUInfo.getNames()
+            : this.lang.map.vice_president;
+        }
+      },
     },
   };
 
