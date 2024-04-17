@@ -39,7 +39,7 @@ import { ToastService } from '@services/toast.service';
 import { exhaustMap, filter, map, takeUntil, tap } from 'rxjs/operators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { Subject } from 'rxjs';
-import { MatRadioButton } from '@angular/material/radio';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
   MatOption,
@@ -56,6 +56,7 @@ import { Penalty } from '@models/penalty';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-single-decision-popup',
@@ -89,6 +90,7 @@ import { DialogService } from '@services/dialog.service';
     ReactiveFormsModule,
     TextareaComponent,
     MatSelectTrigger,
+    MatRadioGroup,
   ],
   templateUrl: './single-decision-popup.component.html',
   styleUrl: './single-decision-popup.component.scss',
@@ -110,12 +112,13 @@ export class SingleDecisionPopupComponent
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
-  offender = computed(() => {
-    return this.data.offender;
+  offender = signal(this.data.offender);
+
+  isBroker = computed(() => {
+    return this.offender().type === OffenderTypes.BROKER;
   });
-  model = computed(() => {
-    return this.data.model();
-  });
+
+  model = this.data.model;
   offenderViolations = computed(() => {
     return this.model().offenderViolationInfo.filter(item => {
       return item.offenderId === this.offender().id;
@@ -167,6 +170,16 @@ export class SingleDecisionPopupComponent
   );
   displayedColumns = ['violation', 'createdOn', 'proofStatus'];
 
+  violationEffect = this.lookupService.lookups.customsViolationEffect
+    .slice()
+    .sort((a, b) => a.lookupKey - b.lookupKey);
+
+  violationEffectControl: FormControl = new FormControl(
+    this.isBroker() && this.oldPenaltyDecision()
+      ? this.oldPenaltyDecision()?.customsViolationEffect
+      : 1,
+  );
+
   assertType(element: unknown): OffenderViolation {
     return element as OffenderViolation;
   }
@@ -181,6 +194,11 @@ export class SingleDecisionPopupComponent
   }
 
   private prepareModel(): PenaltyDecision {
+    console.log(
+      'this.violationEffectControl.value ',
+      this.violationEffectControl.value,
+      this.isBroker(),
+    );
     return new PenaltyDecision().clone<PenaltyDecision>({
       ...(this.oldPenaltyDecision() ? this.oldPenaltyDecision() : undefined),
       caseId: this.model().id,
@@ -189,6 +207,9 @@ export class SingleDecisionPopupComponent
       penaltyId: this.penaltyControl.value!,
       comment: this.textControl.value,
       status: 1,
+      ...(this.isBroker()
+        ? { customsViolationEffect: this.violationEffectControl.value }
+        : null),
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
       tkiid: this.model().getTaskId(),
     });

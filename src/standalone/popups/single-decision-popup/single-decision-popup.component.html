@@ -95,35 +95,54 @@
         <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
       </tr>
     </table>
-    <div class="flex flex-col">
-      <label (click)="focusOnSelect(select)">{{
-        lang.map.penalty_action
-      }}</label>
-      <div class="input-form">
-        <mat-select
-          #select="matSelect"
-          id="penalty"
-          [formControl]="penaltyControl"
-          class="min-h-[42px] input-select">
-          <mat-select-trigger>
-            {{
-              penaltyControl.value
-                ? selectedPenaltyText(penaltyControl.value)
-                : ''
-            }}
-          </mat-select-trigger>
-          @for (penalty of penalties(); track penalty.id) {
-            <mat-option [value]="penalty.id">
-              {{ penalty.getNames() }}
-              @if (penalty.penaltyGuidance) {
-                <span class="bg-emerald-400 rounded text-white px-2 mx-2">
-                  {{ penalty.penaltyGuidanceInfo.getNames() }}
-                </span>
-              }
-            </mat-option>
-          }
-        </mat-select>
+    <div class="flex gap-x-4">
+      <div class="flex flex-auto flex-col">
+        <label (click)="focusOnSelect(select)">{{
+          lang.map.penalty_action
+        }}</label>
+        <div class="input-form">
+          <mat-select
+            #select="matSelect"
+            id="penalty"
+            [formControl]="penaltyControl"
+            class="min-h-[42px] input-select">
+            <mat-select-trigger>
+              {{
+                penaltyControl.value
+                  ? selectedPenaltyText(penaltyControl.value)
+                  : ''
+              }}
+            </mat-select-trigger>
+            @for (penalty of penalties(); track penalty.id) {
+              <mat-option [value]="penalty.id">
+                {{ penalty.getNames() }}
+                @if (penalty.penaltyGuidance) {
+                  <span class="bg-emerald-400 rounded text-white px-2 mx-2">
+                    {{ penalty.penaltyGuidanceInfo.getNames() }}
+                  </span>
+                }
+              </mat-option>
+            }
+          </mat-select>
+        </div>
       </div>
+      @if (isBroker()) {
+        <div class="flex flex-col">
+          <label for="effect" class="ps-2">{{
+            lang.map.penalty_for_whom
+          }}</label>
+          <mat-radio-group
+            id="effect"
+            [formControl]="violationEffectControl"
+            class="flex flex-col">
+            @for (item of violationEffect; track item.id) {
+              <mat-radio-button [value]="item.lookupKey"
+                >{{ item.getNames() }}
+              </mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+      }
     </div>
     <div>
       <app-textarea [formControl]="textControl" [label]="lang.map.text" />

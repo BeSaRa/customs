@@ -54,4 +54,5 @@ export interface LookupMapContract {
   decisionReportStatus: Lookup[];
   meetingStatus: Lookup[];
   calendarFormat: Lookup[];
+  customsViolationEffect: Lookup[];
 }
