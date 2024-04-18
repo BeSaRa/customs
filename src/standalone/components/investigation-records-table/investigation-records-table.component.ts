@@ -36,6 +36,8 @@ import { ConfigService } from '@services/config.service';
 import { ToastService } from '@services/toast.service';
 import { Witness } from '@models/witness';
 import { InvestigationCategory } from '@enums/investigation-category';
+import { ReportStatus } from '@enums/report-status';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -66,6 +68,7 @@ export class InvestigationRecordsTableComponent
 {
   lang = inject(LangService);
   investigationReportService = inject(InvestigationReportService);
+  investigationService = inject(InvestigationService);
   models: InvestigationReport[] = [];
   person = input.required<Offender | Witness>();
   model = input.required<Investigation>();
@@ -152,14 +155,21 @@ export class InvestigationRecordsTableComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(report => {
-          return report
-            .openView({
-              ...(this.isOffender()
-                ? { offender: this.person() }
-                : { witness: this.person() }),
-              model: this.model(),
-            })
-            .afterClosed();
+          switch (report.status) {
+            case ReportStatus.APPROVED:
+              return this.investigationService
+                .viewAttachment(report.documentVsId!, '')
+                .pipe(ignoreErrors());
+            default:
+              return report
+                .openView({
+                  ...(this.isOffender()
+                    ? { offender: this.person() }
+                    : { witness: this.person() }),
+                  model: this.model(),
+                })
+                .afterClosed();
+          }
         }),
       )
       .subscribe();
@@ -209,13 +219,17 @@ export class InvestigationRecordsTableComponent
         }),
       )
       .subscribe(model => {
-        this.models.splice(
-          this.models.findIndex(item => item.id === model.id),
-          1,
-          model,
-        );
-        this.models = this.models.slice();
+        this.replaceReport(model);
       });
+  }
+
+  private replaceReport(model: InvestigationReport) {
+    this.models.splice(
+      this.models.findIndex(item => item.id === model.id),
+      1,
+      model,
+    );
+    this.models = this.models.slice();
   }
 
   private listenToUpload() {
@@ -226,10 +240,17 @@ export class InvestigationRecordsTableComponent
         switchMap(file => {
           return this.selectedUploadReport!.upload(file);
         }),
+        switchMap(() => {
+          return this.investigationReportService.loadById(
+            this.selectedUploadReport!.id,
+          );
+        }),
       )
-      .subscribe(() => {
+      .subscribe(model => {
         this.toast.success(this.lang.map.file_uploaded_successfully);
         this.uploader!.value = '';
+        this.replaceReport(model);
+        this.selectedUploadReport = undefined;
       });
   }
 
