@@ -259,7 +259,7 @@ export class InvestigationService
 
   @CastResponse(() => Memorandum)
   updateMemorandum(model: Memorandum): Observable<Memorandum> {
-    return this.http.post<Memorandum>(
+    return this.http.put<Memorandum>(
       this.getUrlSegment() + '/document/inv-result',
       model,
     );

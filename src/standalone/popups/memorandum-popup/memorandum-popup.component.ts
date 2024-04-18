@@ -140,6 +140,8 @@ export class MemorandumPopupComponent
     this.listenToTakeDecision();
     this.listenToLoadPenalties();
     this.loadPenalties$.next();
+
+    console.log(this.data);
   }
 
   private listenToSave() {
@@ -154,6 +156,7 @@ export class MemorandumPopupComponent
 
   private saveOperation() {
     return switchMap(() => {
+      console.log('OPERATION', this.operation());
       return this.operation() === OperationType.CREATE
         ? this.investigationService
             .createMemorandum(
