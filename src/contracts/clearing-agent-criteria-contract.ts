@@ -1,6 +1,6 @@
-interface FetchOptionsContracts {}
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 
-export interface ClearingAgentCriteriaContract extends FetchOptionsContracts {
+export interface ClearingAgentCriteriaContract extends FetchOptionsContract {
   code: string;
   arName: string;
   enName: string;
