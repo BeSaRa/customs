@@ -31,7 +31,7 @@ import { MatCardModule } from '@angular/material/card';
 import { DialogService } from '@services/dialog.service';
 import { UserClick } from '@enums/user-click';
 import { ToastService } from '@services/toast.service';
-import { ignoreErrors } from '@utils/utils';
+import { downloadLink, ignoreErrors } from '@utils/utils';
 import { Config } from '@constants/config';
 import { FolderType } from '@enums/folder-type.enum';
 
@@ -156,7 +156,15 @@ export class CaseAttachmentsComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         exhaustMap(item => {
-          return item.view(this.service);
+          if (item.mimeType === 'application/pdf') {
+            return item.view(this.service);
+          } else {
+            return this.service.downloadAttachment(item.id).pipe(
+              tap(blob => {
+                downloadLink(blob.url, item.mimeType);
+              }),
+            );
+          }
         }),
       )
       .subscribe();
