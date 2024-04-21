@@ -32,6 +32,7 @@ export class CaseAttachment extends ClonerMixin(class {}) {
   lockOwner!: string;
   attachmentTypeId!: number;
   description!: string;
+  isApproved!: boolean;
   attachmentTypeInfo!: AdminResult;
   // not related to the model
 
