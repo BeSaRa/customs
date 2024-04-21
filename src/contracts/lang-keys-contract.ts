@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  memorandum_approved_successfully: string;
   president_assistant: string;
   static_footer_text_for_return_to_president: string;
   static_footer_text_for_return_to_president_assistant: string;

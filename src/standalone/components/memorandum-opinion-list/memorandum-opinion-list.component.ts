@@ -24,6 +24,7 @@ import { Memorandum } from '@models/memorandum';
 import { DatePipe } from '@angular/common';
 import { ConfigService } from '@services/config.service';
 import { ignoreErrors } from '@utils/utils';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -69,6 +70,7 @@ export class MemorandumOpinionListComponent
   view$: Subject<Memorandum> = new Subject();
   approve$: Subject<Memorandum> = new Subject();
   edit$: Subject<Memorandum> = new Subject();
+  private toast = inject(ToastService);
 
   assertType(item: unknown): Memorandum {
     return item as Memorandum;
@@ -134,8 +136,9 @@ export class MemorandumOpinionListComponent
             .pipe(ignoreErrors()),
         ),
       )
-      .subscribe(value => {
-        console.log(value);
+      .subscribe(() => {
+        this.toast.success(this.lang.map.memorandum_approved_successfully);
+        this.reload$.next();
       });
   }
 
