@@ -154,10 +154,12 @@ export class MeetingMinutesPopupComponent
       .pipe(
         tap(
           () =>
-            this.form.invalid &&
-            this.dialog.error(
-              this.lang.map.msg_make_sure_all_required_fields_are_filled,
-            ),
+            (this.form.invalid &&
+              this.dialog.error(
+                this.lang.map.msg_make_sure_all_required_fields_are_filled,
+              )) ||
+            (!this.attendanceList.filter(attend => attend.status).length &&
+              this.dialog.error(this.lang.map.must_select_attendance)),
         ),
       )
       .pipe(
