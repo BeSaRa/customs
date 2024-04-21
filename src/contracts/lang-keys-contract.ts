@@ -601,4 +601,5 @@ export interface LangKeysContract {
   employee_grants: string;
   the_following_penalty: string;
   for_committing_the_following_violations: string;
+  must_select_attendance: string;
 }
