@@ -59,29 +59,42 @@
       </ng-container>
       <!-- violations -->
       <ng-container matColumnDef="recommendation">
-        <th mat-header-cell class="w-40" *matHeaderCellDef>
+        <th mat-header-cell class="w-[300px]" *matHeaderCellDef>
           {{ lang.map.recommendation }}
         </th>
         <td mat-cell *matCellDef="let element">
           <div class="flex items-center">
-            <app-select-input
-              class="w-40"
-              size="sm"
-              nullable="false"
-              noMargin="true"
-              bindLabel="getNames"
-              bindValue="id"
-              label=""
-              [formControl]="decisionControls[assertType(element).id]"
-              (selectChange)="
-                takeDecision$.next({
-                  offender: assertType(element),
-                  decision: assertNumber($event)
-                })
-              "
-              [options]="
-                (penaltiesMap[assertType(element).id] || { second: [] }).second
-              " />
+            <app-icon-button [matMenuTriggerFor]="menu" icon="DOTS_VERTICAL" />
+            <div>
+              {{
+                penaltiesDecisionsMap[
+                  assertType(element).id
+                ]?.penaltyInfo?.getNames()
+              }}
+            </div>
+            <mat-menu #menu="matMenu">
+              @for (
+                penalty of offenderPenalties(assertType(element).id);
+                track penalty.id
+              ) {
+                <button
+                  [disabled]="isSelectedPenalty(penalty, element)"
+                  (click)="
+                    takeDecision$.next({
+                      offender: assertType(element),
+                      decision: penalty
+                    })
+                  "
+                  mat-menu-item>
+                  {{ penalty.getNames() }}
+                  @if (penalty.penaltyGuidance) {
+                    <span class="bg-emerald-400 rounded text-white px-2 mx-2">
+                      {{ penalty.penaltyGuidanceInfo.getNames() }}
+                    </span>
+                  }
+                </button>
+              }
+            </mat-menu>
           </div>
         </td>
       </ng-container>

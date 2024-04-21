@@ -47,6 +47,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatSelect } from '@angular/material/select';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-memorandum-popup',
@@ -69,6 +72,11 @@ import { EmployeeService } from '@services/employee.service';
     SelectInputComponent,
     ReactiveFormsModule,
     TextareaComponent,
+    MatOption,
+    MatSelect,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
   ],
   templateUrl: './memorandum-popup.component.html',
   styleUrl: './memorandum-popup.component.scss',
@@ -94,35 +102,10 @@ export class MemorandumPopupComponent
   proofStatus = this.lookupService.lookups.proofStatus;
   controls: Record<number, FormControl> = {};
   investigationModel = signal(this.data.investigationModel);
-  decisionControls: Record<number, FormControl> = this.investigationModel()
-    .getConcernedOffenders()
-    .reduce(
-      (acc, item) => {
-        return {
-          ...acc,
-          [item.id]: new FormControl(
-            this.investigationModel().getPenaltyDecisionByOffenderId(
-              item.id,
-            )?.penaltyId,
-          ),
-        };
-      },
-      {} as Record<number, FormControl>,
-    );
-
   operation = signal(this.data.operation);
   model = signal(this.data.model);
   offenders = computed(() => this.investigationModel().getConcernedOffenders());
-  offendersIds = computed(() => {
-    return this.offenders().map(item => {
-      const decision = this.investigationModel().getPenaltyDecisionByOffenderId(
-        item.id,
-      );
-
-      this.decisionControls[item.id] = new FormControl(decision?.penaltyId);
-      return item.id;
-    });
-  });
+  offendersIds = computed(() => this.offenders().map(i => i.id));
   updateModel = this.data.updateModel;
   offenderViolationsMap = computed<Record<number, OffenderViolation[]>>(() => {
     return this.investigationModel().offenderViolationInfo.reduce(
@@ -134,16 +117,19 @@ export class MemorandumPopupComponent
       {} as Record<number, OffenderViolation[]>,
     );
   });
-
+  penaltiesDecisionsMap = this.investigationModel().penaltyDecisions.reduce(
+    (acc, item) => {
+      return { ...acc, [item.offenderId]: item };
+    },
+    {} as Record<number, PenaltyDecision>,
+  );
   penaltiesMap: Record<number, { first: number; second: Penalty[] }> = {};
-
-  penaltiesIdsMap: Record<number, Penalty> = {};
   // create only
   save$: Subject<void> = new Subject();
   // create and approve
   saveAndCreate$: Subject<void> = new Subject();
   offenderStatus$ = new Subject<Offender>();
-  takeDecision$ = new Subject<{ offender: Offender; decision: number }>();
+  takeDecision$ = new Subject<{ offender: Offender; decision: Penalty }>();
 
   loadPenalties$ = new Subject<void>();
 
@@ -252,7 +238,7 @@ export class MemorandumPopupComponent
               caseId: this.investigationModel().id,
               offenderId: offender.id,
               signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: decision,
+              penaltyId: decision.id,
               status: 1,
               tkiid: this.investigationModel().getTaskId(),
             })
@@ -260,13 +246,14 @@ export class MemorandumPopupComponent
             .pipe(
               map(item =>
                 item.clone<PenaltyDecision>({
-                  penaltyInfo: this.penaltiesIdsMap[decision],
+                  penaltyInfo: decision,
                 }),
               ),
             );
         }),
       )
       .subscribe(updated => {
+        this.penaltiesDecisionsMap[updated.offenderId] = updated;
         this.investigationModel().replaceDecisionBasedOnOffenderId(updated);
         this.updateModel().emit();
       });
@@ -293,26 +280,22 @@ export class MemorandumPopupComponent
         }),
       )
       .subscribe(value => {
-        // don't refactor this code. I made it like that for purpose
         this.penaltiesMap = value;
-        const penalties = Object.keys(value)
-          .map(item => {
-            return value[item].second;
-          })
-          .flat();
-        const penaltiesIds: number[] = [];
-
-        for (let i = 0; i < penalties.length; i++) {
-          if (penaltiesIds[penalties[i].id]) {
-            continue;
-          }
-          penaltiesIds.push(penalties[i].id);
-          this.penaltiesIdsMap[penalties[i].id] = penalties[i];
-        }
       });
   }
 
   assertTypePenalty($event: unknown): Penalty {
     return $event as Penalty;
+  }
+
+  offenderPenalties(offenderId: number): Penalty[] {
+    return (this.penaltiesMap[offenderId] || { second: [] }).second;
+  }
+
+  isSelectedPenalty(penalty: Penalty, element: Offender) {
+    return (
+      this.penaltiesDecisionsMap[element.id] &&
+      this.penaltiesDecisionsMap[element.id].penaltyId === penalty.id
+    );
   }
 }
