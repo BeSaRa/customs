@@ -520,7 +520,8 @@ export class OffendersViolationsPreviewComponent
       this.model() &&
       this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
       this.model().getActivityName() &&
-      this.model().getTaskName()
+      this.model().getTaskName() &&
+      !this.model().inLegalAffairsActivity()
     );
   }
 

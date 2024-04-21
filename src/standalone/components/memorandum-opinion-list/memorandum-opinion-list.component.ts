@@ -149,6 +149,8 @@ export class MemorandumOpinionListComponent
             .afterClosed();
         }),
       )
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.reload$.next();
+      });
   }
 }

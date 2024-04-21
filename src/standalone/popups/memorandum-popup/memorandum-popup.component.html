@@ -70,11 +70,13 @@
               nullable="false"
               noMargin="true"
               bindLabel="getNames"
+              bindValue="id"
               label=""
+              [formControl]="decisionControls[assertType(element).id]"
               (selectChange)="
                 takeDecision$.next({
                   offender: assertType(element),
-                  decision: assertTypePenalty($event)
+                  decision: assertNumber($event)
                 })
               "
               [options]="

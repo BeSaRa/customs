@@ -24,7 +24,7 @@ import { LangService } from '@services/lang.service';
 import { Subject } from 'rxjs';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { OffenderViolation } from '@models/offender-violation';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ignoreErrors } from '@utils/utils';
 import { Offender } from '@models/offender';
 import { Penalty } from '@models/penalty';
@@ -94,10 +94,36 @@ export class MemorandumPopupComponent
   proofStatus = this.lookupService.lookups.proofStatus;
   controls: Record<number, FormControl> = {};
   investigationModel = signal(this.data.investigationModel);
+  decisionControls: Record<number, FormControl> = this.investigationModel()
+    .getConcernedOffenders()
+    .reduce(
+      (acc, item) => {
+        return {
+          ...acc,
+          [item.id]: new FormControl(
+            this.investigationModel().getPenaltyDecisionByOffenderId(
+              item.id,
+            )?.penaltyId,
+          ),
+        };
+      },
+      {} as Record<number, FormControl>,
+    );
+
   operation = signal(this.data.operation);
   model = signal(this.data.model);
   offenders = computed(() => this.investigationModel().getConcernedOffenders());
-  offendersIds = computed(() => this.offenders().map(item => item.id));
+  offendersIds = computed(() => {
+    return this.offenders().map(item => {
+      const decision = this.investigationModel().getPenaltyDecisionByOffenderId(
+        item.id,
+      );
+
+      this.decisionControls[item.id] = new FormControl(decision?.penaltyId);
+      return item.id;
+    });
+  });
+  updateModel = this.data.updateModel;
   offenderViolationsMap = computed<Record<number, OffenderViolation[]>>(() => {
     return this.investigationModel().offenderViolationInfo.reduce(
       (acc, item) => {
@@ -110,12 +136,14 @@ export class MemorandumPopupComponent
   });
 
   penaltiesMap: Record<number, { first: number; second: Penalty[] }> = {};
+
+  penaltiesIdsMap: Record<number, Penalty> = {};
   // create only
   save$: Subject<void> = new Subject();
   // create and approve
   saveAndCreate$: Subject<void> = new Subject();
   offenderStatus$ = new Subject<Offender>();
-  takeDecision$ = new Subject<{ offender: Offender; decision: Penalty }>();
+  takeDecision$ = new Subject<{ offender: Offender; decision: number }>();
 
   loadPenalties$ = new Subject<void>();
 
@@ -131,6 +159,10 @@ export class MemorandumPopupComponent
 
   assertType(item: unknown): Offender {
     return item as Offender;
+  }
+
+  assertNumber(event: unknown): number {
+    return event as number;
   }
 
   ngOnInit(): void {
@@ -220,16 +252,23 @@ export class MemorandumPopupComponent
               caseId: this.investigationModel().id,
               offenderId: offender.id,
               signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: decision.id,
+              penaltyId: decision,
               status: 1,
-              penaltyInfo: decision,
               tkiid: this.investigationModel().getTaskId(),
             })
-            .create();
+            .create()
+            .pipe(
+              map(item =>
+                item.clone<PenaltyDecision>({
+                  penaltyInfo: this.penaltiesIdsMap[decision],
+                }),
+              ),
+            );
         }),
       )
       .subscribe(updated => {
-        console.log(updated);
+        this.investigationModel().replaceDecisionBasedOnOffenderId(updated);
+        this.updateModel().emit();
       });
   }
 
@@ -254,7 +293,22 @@ export class MemorandumPopupComponent
         }),
       )
       .subscribe(value => {
+        // don't refactor this code. I made it like that for purpose
         this.penaltiesMap = value;
+        const penalties = Object.keys(value)
+          .map(item => {
+            return value[item].second;
+          })
+          .flat();
+        const penaltiesIds: number[] = [];
+
+        for (let i = 0; i < penalties.length; i++) {
+          if (penaltiesIds[penalties[i].id]) {
+            continue;
+          }
+          penaltiesIds.push(penalties[i].id);
+          this.penaltiesIdsMap[penalties[i].id] = penalties[i];
+        }
       });
   }
 
