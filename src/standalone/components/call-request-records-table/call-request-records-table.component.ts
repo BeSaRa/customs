@@ -41,6 +41,7 @@ import { Lookup } from '@models/lookup';
 import { AdminResult } from '@models/admin-result';
 import { ToastService } from '@services/toast.service';
 import { Witness } from '@models/witness';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-call-request-records-table',
@@ -118,6 +119,8 @@ export class CallRequestRecordsTableComponent
     }>
   >();
 
+  private employeeService = inject(EmployeeService);
+
   ngOnInit(): void {
     this.listenToReload();
     this.listenToView();
@@ -132,6 +135,11 @@ export class CallRequestRecordsTableComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
+      .pipe(
+        filter(() =>
+          this.employeeService.hasPermissionTo('MANAGE_OBLIGATION_TO_ATTEND'),
+        ),
+      )
       .pipe(
         switchMap(() => {
           return this.service

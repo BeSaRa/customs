@@ -38,6 +38,7 @@ import { Witness } from '@models/witness';
 import { InvestigationCategory } from '@enums/investigation-category';
 import { ReportStatus } from '@enums/report-status';
 import { InvestigationService } from '@services/investigation.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -114,6 +115,8 @@ export class InvestigationRecordsTableComponent
         : InvestigationCategory.DISCIPLINARY_COMMITTEE_HEARING_TRANSCRIPT;
   });
 
+  private employeeService = inject(EmployeeService);
+
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
   }
@@ -131,6 +134,13 @@ export class InvestigationRecordsTableComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
+      .pipe(
+        filter(() =>
+          this.employeeService.hasPermissionTo(
+            'ADMINISTRATIVE_INVESTIGATION_REPORT',
+          ),
+        ),
+      )
       .pipe(
         switchMap(() => {
           return this.investigationReportService
