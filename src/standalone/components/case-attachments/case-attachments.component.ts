@@ -156,7 +156,7 @@ export class CaseAttachmentsComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         exhaustMap(item => {
-          if (item.mimeType === 'application/pdf') {
+          if (item.isApproved) {
             return item.view(this.service);
           } else {
             return this.service.downloadAttachment(item.id).pipe(
