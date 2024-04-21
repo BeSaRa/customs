@@ -47,7 +47,9 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
             [CustomValidators.required, CustomValidators.maxLength(300)],
           ]
         : title,
-      note: controls ? [{ value: note, disabled }] : note,
+      note: controls
+        ? [{ value: note, disabled }, CustomValidators.maxLength(3000)]
+        : note,
       meetingDate: controls
         ? [meetingDate, CustomValidators.required]
         : meetingDate,
@@ -64,7 +66,9 @@ export class Meeting extends BaseModel<Meeting, MeetingService> {
       meetingTimeTo: controls
         ? [meetingTimeTo, CustomValidators.required]
         : meetingTimeTo,
-      meetingMinutesText: controls ? [meetingMinutesText] : meetingMinutesText,
+      meetingMinutesText: controls
+        ? [meetingMinutesText, CustomValidators.maxLength(3000)]
+        : meetingMinutesText,
     };
   }
 }
