@@ -67,9 +67,10 @@
             <app-icon-button [matMenuTriggerFor]="menu" icon="DOTS_VERTICAL" />
             <div>
               {{
-                penaltiesDecisionsMap[
-                  assertType(element).id
-                ]?.penaltyInfo?.getNames()
+                penaltiesDecisionsMap[assertType(element).id] &&
+                  penaltiesDecisionsMap[
+                    assertType(element).id
+                  ].penaltyInfo.getNames()
               }}
             </div>
             <mat-menu #menu="matMenu">
