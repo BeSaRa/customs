@@ -120,8 +120,14 @@ export class InvestigationService
     declarationNumber: string,
   ): Observable<DeclarationNumberDetailsResult> {
     return this.http.get<DeclarationNumberDetailsResult>(
-      this.getUrlSegment() +
-        `/nadeeb/declaration-details/${encodeURIComponent(declarationNumber)}`,
+      this.getUrlSegment() + `/nadeeb/declaration-details`,
+      {
+        params: new HttpParams({
+          fromObject: {
+            declarationNumber: encodeURIComponent(declarationNumber),
+          },
+        }),
+      },
     );
   }
 
@@ -140,13 +146,20 @@ export class InvestigationService
       }),
     );
   }
+
   @CastResponse(() => OffenceNumberDetailsResult, { unwrap: 'rs' })
   private _getOffenceDetails(
     offenceNumber: string,
   ): Observable<OffenceNumberDetailsResult> {
     return this.http.get<OffenceNumberDetailsResult>(
-      this.getUrlSegment() +
-        `/nadeeb/offence-details/${encodeURIComponent(offenceNumber)}`,
+      this.getUrlSegment() + `/nadeeb/offence-details`,
+      {
+        params: new HttpParams({
+          fromObject: {
+            offenceNumber: encodeURIComponent(offenceNumber),
+          },
+        }),
+      },
     );
   }
 
@@ -202,6 +215,7 @@ export class InvestigationService
       },
     );
   }
+
   reviewTaskMeetingMinutes(
     tkiid: string,
     meetingId: number,
