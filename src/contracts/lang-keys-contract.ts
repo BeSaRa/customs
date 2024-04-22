@@ -603,4 +603,5 @@ export interface LangKeysContract {
   the_following_penalty: string;
   for_committing_the_following_violations: string;
   must_select_attendance: string;
+  establishment_id: string;
 }

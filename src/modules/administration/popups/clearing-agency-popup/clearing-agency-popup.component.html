@@ -16,6 +16,9 @@
         <app-input
           formControlName="enName"
           [label]="lang.map.en_name"></app-input>
+        <app-input
+          formControlName="establishmentId"
+          [label]="lang.map.establishment_id"></app-input>
         <app-input formControlName="email" [label]="lang.map.email"></app-input>
         <app-input
           formControlName="licenseNo"
@@ -53,19 +56,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>

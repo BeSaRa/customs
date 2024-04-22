@@ -17,7 +17,7 @@ export class ClearingAgencyPopupComponent extends AdminDialogComponent<ClearingA
   data: CrudDialogDataContract<ClearingAgency> = inject(MAT_DIALOG_DATA);
 
   _buildForm(): void {
-    this.form = this.fb.group(this.model.buildForm(true));
+    this.form = this.fb.group(this.model.buildForm());
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
