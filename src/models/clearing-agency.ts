@@ -2,7 +2,6 @@ import { BaseModel } from '@abstracts/base-model';
 import { ClearingAgencyService } from '@services/clearing-agency.service';
 import { ClearingAgencyInterceptor } from '@model-interceptors/clearing-agency-interceptor';
 import { InterceptModel } from 'cast-response';
-import { CustomValidators } from '@validators/custom-validators';
 
 const { send, receive } = new ClearingAgencyInterceptor();
 
@@ -28,7 +27,7 @@ export class ClearingAgency extends BaseModel<
   licenseExpiryDate!: string;
   previousLicenseFeePenalty!: number;
 
-  buildForm(controls = false): object {
+  buildForm(): object {
     const {
       enName,
       arName,
@@ -42,28 +41,22 @@ export class ClearingAgency extends BaseModel<
       accountAdminFullName,
       licenseIssueDate,
       licenseExpiryDate,
+      establishmentId,
     } = this;
     return {
-      enName: controls ? [enName, CustomValidators.required] : enName,
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      status: controls ? [status, CustomValidators.required] : status,
-      email: controls ? [email, CustomValidators.required] : email,
-      licenseNo: controls ? [licenseNo, CustomValidators.required] : licenseNo,
-      customCode: controls
-        ? [customCode, CustomValidators.required]
-        : customCode,
-      crNo: controls ? [crNo, CustomValidators.required] : crNo,
-      telNo: controls ? [telNo, CustomValidators.required] : telNo,
-      address: controls ? [address, CustomValidators.required] : address,
-      accountAdminFullName: controls
-        ? [accountAdminFullName, CustomValidators.required]
-        : accountAdminFullName,
-      licenseIssueDate: controls
-        ? [licenseIssueDate, CustomValidators.required]
-        : licenseIssueDate,
-      licenseExpiryDate: controls
-        ? [licenseExpiryDate, CustomValidators.required]
-        : licenseExpiryDate,
+      enName,
+      arName,
+      status,
+      email,
+      licenseNo,
+      customCode,
+      crNo,
+      telNo,
+      address,
+      accountAdminFullName,
+      licenseIssueDate,
+      licenseExpiryDate,
+      establishmentId,
     };
   }
 
