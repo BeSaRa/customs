@@ -72,6 +72,7 @@ export class ClearingAgencyComponent
     new NoneFilterColumn('select'),
     new TextFilterColumn('arabicCompanyName'),
     new TextFilterColumn('englishCompanyName'),
+    new TextFilterColumn('establishmentId'),
     new TextFilterColumn('licenseNo'),
     new TextFilterColumn('customCode'),
     new TextFilterColumn('crNo'),
