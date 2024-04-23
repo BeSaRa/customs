@@ -13,7 +13,7 @@
     icon="SYNC"></app-icon-button>
   <div class="flex-auto"></div>
 </div>
-<div class="shadow relative overflow-auto h-[77vh]">
+<div class="shadow relative overflow-auto">
   <table
     mat-table
     matSort
@@ -38,47 +38,35 @@
         </mat-checkbox>
       </td>
     </ng-container>
-
-    <!-- arName arName -->
-    <ng-container matColumnDef="arName">
-      <th mat-header-cell mat-sort-header="arName" *matHeaderCellDef>
+    <!-- arabicCompanyName -->
+    <ng-container matColumnDef="arabicCompanyName">
+      <th mat-header-cell mat-sort-header="arabicCompanyName" *matHeaderCellDef>
         {{ lang.map.ar_name }}
       </th>
       <td mat-cell *matCellDef="let element">
         <span
           [innerHTML]="
-            element.arName | highlight: getFilterStringColumn('arName')
+            element.arabicCompanyName
+              | highlight: getFilterStringColumn('arabicCompanyName')
           "></span>
       </td>
     </ng-container>
-
-    <!-- enName enName -->
-    <ng-container matColumnDef="enName">
-      <th mat-header-cell mat-sort-header="enName" *matHeaderCellDef>
+    <!-- englishCompanyName -->
+    <ng-container matColumnDef="englishCompanyName">
+      <th
+        mat-header-cell
+        mat-sort-header="englishCompanyName"
+        *matHeaderCellDef>
         {{ lang.map.en_name }}
       </th>
       <td mat-cell *matCellDef="let element">
         <span
           [innerHTML]="
-            element.enName | highlight: getFilterStringColumn('enName')
+            element.englishCompanyName
+              | highlight: getFilterStringColumn('englishCompanyName')
           "></span>
       </td>
     </ng-container>
-
-    <!-- establishmentId -->
-    <ng-container matColumnDef="establishmentId">
-      <th mat-header-cell mat-sort-header="establishmentId" *matHeaderCellDef>
-        {{ lang.map.establishment_id }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        <span
-          [innerHTML]="
-            element.establishmentId
-              | highlight: getFilterStringColumn('establishmentId')
-          "></span>
-      </td>
-    </ng-container>
-
     <!-- licenseNumber -->
     <ng-container matColumnDef="licenseNo">
       <th mat-header-cell mat-sort-header="licenseNo" *matHeaderCellDef>
@@ -91,7 +79,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- code -->
     <ng-container matColumnDef="customCode">
       <th mat-header-cell mat-sort-header="customCode" *matHeaderCellDef>
@@ -104,7 +91,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- commercialRecord -->
     <ng-container matColumnDef="crNo">
       <th mat-header-cell mat-sort-header="crNo" *matHeaderCellDef>
@@ -117,7 +103,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- phoneNumber -->
     <ng-container matColumnDef="telNo">
       <th mat-header-cell mat-sort-header="telNo" *matHeaderCellDef>
@@ -130,7 +115,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- address -->
     <ng-container matColumnDef="address">
       <th mat-header-cell mat-sort-header="address" *matHeaderCellDef>
@@ -143,7 +127,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- responsibleName -->
     <ng-container matColumnDef="accountAdminFullName">
       <th
@@ -160,7 +143,6 @@
           "></span>
       </td>
     </ng-container>
-
     <!-- status -->
     <ng-container matColumnDef="status">
       <th

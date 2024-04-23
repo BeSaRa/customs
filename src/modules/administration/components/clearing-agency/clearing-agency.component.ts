@@ -70,9 +70,8 @@ export class ClearingAgencyComponent
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ClearingAgency> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('arName'),
-    new TextFilterColumn('enName'),
-    new TextFilterColumn('establishmentId'),
+    new TextFilterColumn('arabicCompanyName'),
+    new TextFilterColumn('englishCompanyName'),
     new TextFilterColumn('licenseNo'),
     new TextFilterColumn('customCode'),
     new TextFilterColumn('crNo'),
