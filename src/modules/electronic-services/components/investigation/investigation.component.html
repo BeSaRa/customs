@@ -60,7 +60,7 @@
     'investigation-tab-group-preview': showSummaryElements()
   }">
   <mat-card>
-    <mat-tab-group [(selectedIndex)]="selectedTab" mat-stretch-tabs="false">
+    <mat-tab-group [(selectedIndex)]="selectedTab" [mat-stretch-tabs]="false">
       @if (model.inLegalAffairsActivity()) {
         <mat-tab
           data-name="legal_procedures"
@@ -146,7 +146,7 @@
           formControlName="createdOn"
           (click)="datepicker.open()"
           [matDatepicker]="datepicker" />
-        <mat-datepicker touchUi #datepicker />
+        <mat-datepicker touchUi="true" #datepicker />
       </app-input>
       <app-select-input
         formControlName="securityLevel"
@@ -172,6 +172,7 @@
         (askToReloadPenalties)="reloadPenalties()"
         [model]="model"
         [readonly]="readonly"
+        [openFrom]="openFrom"
         [reportType]="getReportType()"
         [canModifyOffenders]="canManageInvestigationElements"
         (askForSaveModel)="saveCase()"

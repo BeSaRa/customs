@@ -76,6 +76,13 @@
               <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
             </div>
           }
+          @if (canSuspendOffender(element)) {
+            <div [matTooltip]="lang.map.suspend_employee">
+              <app-icon-button
+                (click)="suspendEmployee$.next(element)"
+                icon="SUSPEND_EMPLOYEE" />
+            </div>
+          }
           @if (assertType(element).hasStatusSearch()) {
             <app-situation-search-btn
               [id]="

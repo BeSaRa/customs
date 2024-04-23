@@ -4,6 +4,7 @@ import { SuspendedEmployeeInterceptor } from '@model-interceptors/suspended-empl
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from './admin-result';
 import { MawaredEmployee } from './mawared-employee';
+import { CustomValidators } from '@validators/custom-validators';
 
 const { send, receive } = new SuspendedEmployeeInterceptor();
 
@@ -37,7 +38,7 @@ export class SuspendedEmployee extends BaseModel<
       enName,
       dateFrom,
       dateTo,
-      status,
+      status: [status ? status : 1, CustomValidators.required],
     };
   }
 }

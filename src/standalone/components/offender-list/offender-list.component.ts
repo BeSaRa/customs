@@ -40,6 +40,9 @@ import { OffenderTypes } from '@enums/offender-types';
 import { ignoreErrors } from '@utils/utils';
 import { ReportType } from '@app-types/validation-return-type';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
+import { SuspendEmployeePopupComponent } from '@standalone/popups/suspend-employee-popup/suspend-employee-popup.component';
+import { SuspendedEmployeeService } from '@services/suspended-employee.service';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-offender-list',
@@ -64,14 +67,19 @@ export class OffenderListComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
+  suspendedEmployeeService = inject(SuspendedEmployeeService);
+
   model = input.required<Investigation>();
   caseId = computed(() => this.model().id);
   @Input()
   readonly = false;
   @Input()
   canModifyOffenders = true;
+  @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   hasValidInvestigationSubject = input(false);
   add$: Subject<void> = new Subject<void>();
+  suspendEmployee$ = new Subject<Offender>();
+
   @Output()
   offenderAdded: EventEmitter<Offender> = new EventEmitter<Offender>();
   @Output()
@@ -109,6 +117,26 @@ export class OffenderListComponent
     this.listenToReload();
     this.listenToDelete();
     this.listenToOffenderViolation();
+    this.listenToSuspendEmployee();
+  }
+
+  private listenToSuspendEmployee() {
+    this.suspendEmployee$
+      .pipe(
+        switchMap(offender => {
+          const suspendedEmployee =
+            this.suspendedEmployeeService.ConvertOffenderToSuspendedEmployee(
+              offender,
+              this.model().id as string,
+            );
+          return this.dialog
+            .open(SuspendEmployeePopupComponent, {
+              data: suspendedEmployee,
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 
   private listenToAdd() {
@@ -216,11 +244,20 @@ export class OffenderListComponent
         this.askToReloadPenalties.emit();
       });
   }
+
   resetDataList() {
     this.data.next([]);
   }
 
   assertType(item: Offender): Offender {
     return new Offender().clone<Offender>(item);
+  }
+
+  canSuspendOffender(element: Offender) {
+    return (
+      this.employeeService.hasPermissionTo('SUSPENSION_FROM_WORK') &&
+      element.type === this.offenderTypes.EMPLOYEE &&
+      this.openFrom === OpenFrom.SEARCH
+    );
   }
 }
