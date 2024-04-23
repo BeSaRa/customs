@@ -41,6 +41,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
   serviceName = 'SuspendedEmployeeService';
   investigationService = inject(InvestigationService);
   employeeService = inject(EmployeeService);
+
   protected getModelClass(): Constructor<SuspendedEmployee> {
     return SuspendedEmployee;
   }
@@ -79,6 +80,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
       },
     });
   }
+
   ConvertOffenderToSuspendedEmployee(
     offender: Offender,
     caseId: string,
@@ -92,6 +94,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
     suspendedEmp.type = SuspensionTypes.SUSPENSION;
     return suspendedEmp;
   }
+
   @HasInterception
   saveSuspension(
     @InterceptParam() model: SuspendedEmployee,
@@ -101,6 +104,7 @@ export class SuspendedEmployeeService extends BaseCrudWithDialogService<
       model,
     );
   }
+
   @HasInterception
   saveExtendSuspension(
     @InterceptParam() suspendedEmployee: SuspendedEmployee,

@@ -92,6 +92,7 @@ export const AppIcons = {
   AUTO_FILL: 'window-shutter-auto',
   LAUNCH: 'rocket-launch-outline',
   APPROVE: 'check-decagram',
+  SUSPEND_EMPLOYEE: 'pause-octagon',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -35,6 +35,7 @@ import {
   takeUntil,
   throwError,
 } from 'rxjs';
+import { ControlDirective } from '@standalone/directives/control.directive';
 
 @Component({
   selector: 'app-suspend-employee-popup',
@@ -52,6 +53,7 @@ import {
     InputComponent,
     SwitchComponent,
     MatDialogModule,
+    ControlDirective,
   ],
 })
 export class SuspendEmployeePopupComponent
@@ -66,11 +68,13 @@ export class SuspendEmployeePopupComponent
   model: SuspendedEmployee = inject(MAT_DIALOG_DATA);
   form!: UntypedFormGroup;
   save$: Subject<void> = new Subject<void>();
+  today = new Date();
 
   protected _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm());
     this.form.controls['arName'].disable();
     this.form.controls['enName'].disable();
+    this.form.controls['dateFrom'].setValue(this.today);
   }
 
   ngOnInit() {
