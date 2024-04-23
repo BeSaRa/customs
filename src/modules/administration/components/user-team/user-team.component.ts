@@ -53,15 +53,13 @@ export class UserTeamComponent extends AdminComponent<
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
         switchMap(() => {
-          return combineLatest([this.reload$, this.paginate$]).pipe(
-            switchMap(([, paginationOptions]) => {
+          return combineLatest([this.reload$]).pipe(
+            switchMap(() => {
               this.loadingSubject.next(true);
-              return this.service
-                .loadUserTeams(this.internalUser.id, paginationOptions)
-                .pipe(
-                  finalize(() => this.loadingSubject.next(false)),
-                  ignoreErrors(),
-                );
+              return this.service.loadUserTeams(this.internalUser.id, {}).pipe(
+                finalize(() => this.loadingSubject.next(false)),
+                ignoreErrors(),
+              );
             }),
             tap(({ count }) => {
               this.length = count;
@@ -77,7 +75,7 @@ export class UserTeamComponent extends AdminComponent<
   columnsWrapper: ColumnsWrapper<UserTeam> = new ColumnsWrapper(
     new TextFilterColumn('teamName'),
     new NoneFilterColumn('actions'),
-  ).attacheFilter(this.filter$);
+  );
 
   override _getCreateExtras(): {
     mappedUserTeamsIds: number[];

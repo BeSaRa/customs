@@ -79,7 +79,7 @@ export class InternalUserOUComponent
     new TextFilterColumn('organizationUnitId'),
     new NoneFilterColumn('default'),
     new NoneFilterColumn('actions'),
-  ).attacheFilter(this.filter$);
+  );
 
   override _getCreateExtras(): unknown {
     return {
