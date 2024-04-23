@@ -10,8 +10,8 @@
       icon="PLUS"></app-icon-button>
   }
 </div>
-<div class="shadow relative overflow-y-auto">
-  <table mat-table matSort class="table-style" [dataSource]="dataSource">
+<div class="shadow relative max-h-[30vh] overflow-y-auto">
+  <table mat-table class="table-style" [dataSource]="dataSource">
     <ng-container matColumnDef="teamName">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.menu_team }}</th>
       <td mat-cell *matCellDef="let element">
@@ -43,13 +43,5 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  <mat-paginator
-    class="border-t border-gray-200"
-    (page)="paginate($event)"
-    [pageSizeOptions]="pageSizeOptions"
-    [pageSize]="limit"
-    [showFirstLastButtons]="showFirstLastButtons"
-    [length]="length">
-  </mat-paginator>
   <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
 </div>
