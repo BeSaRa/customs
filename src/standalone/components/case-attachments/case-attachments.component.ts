@@ -87,6 +87,7 @@ export class CaseAttachmentsComponent
     'creator',
     'actions',
   ];
+
   constructor() {
     super();
     effect(() => {
@@ -95,6 +96,7 @@ export class CaseAttachmentsComponent
       }
     });
   }
+
   ngOnInit(): void {
     this.listenToView();
     this.listenToDelete();
@@ -156,7 +158,7 @@ export class CaseAttachmentsComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         exhaustMap(item => {
-          if (item.isApproved) {
+          if (item.isApproved || item.mimeType === 'application/pdf') {
             return item.view(this.service);
           } else {
             return this.service.downloadAttachment(item.id).pipe(
@@ -209,6 +211,7 @@ export class CaseAttachmentsComponent
       )
       .subscribe(() => this.reload$.next());
   }
+
   resetDataList() {
     this.data.next([]);
   }
