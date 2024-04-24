@@ -7,10 +7,12 @@
       icon="RELOAD"
       class="text-primary"
       (click)="reload$.next()" />
-    <app-icon-button
-      icon="PLUS_BOX"
-      class="text-primary"
-      (click)="add$.next()" />
+    @if (model().inMyInbox()) {
+      <app-icon-button
+        icon="PLUS_BOX"
+        class="text-primary"
+        (click)="add$.next()" />
+    }
   </h2>
   <table mat-table class="table-style table-primary" [dataSource]="models">
     <!-- investigator -->
