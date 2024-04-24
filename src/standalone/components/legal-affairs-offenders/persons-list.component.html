@@ -14,7 +14,9 @@
         class="text-primary"
         (click)="reloadWitness$.next()"
         icon="RELOAD" />
-      @if (employeeService.hasPermissionTo('MANAGE_WITNESS')) {
+      @if (
+        employeeService.hasPermissionTo('MANAGE_WITNESS') && model().inMyInbox()
+      ) {
         <app-icon-button
           [matTooltip]="lang.map.add"
           class="text-primary"
