@@ -19,7 +19,7 @@
               formControlName="startEmployeesDate"
               (click)="startEmployeesDatePicker.open()"
               [matDatepicker]="startEmployeesDatePicker" />
-            <mat-datepicker touchUi="true" #startEmployeesDatePicker />
+            <mat-datepicker [touchUi]="true" #startEmployeesDatePicker />
           </app-input>
           <app-input
             formControlName="endEmployeesDate"
@@ -29,7 +29,7 @@
               formControlName="endEmployeesDate"
               (click)="endEmployeesDatepicker.open()"
               [matDatepicker]="endEmployeesDatepicker" />
-            <mat-datepicker touchUi="true" #endEmployeesDatepicker />
+            <mat-datepicker [touchUi]="true" #endEmployeesDatepicker />
           </app-input>
         }
         @if (isMawaredDepartment) {
@@ -39,7 +39,7 @@
               formControlName="startDate"
               (click)="startDatePicker.open()"
               [matDatepicker]="startDatePicker" />
-            <mat-datepicker touchUi="true" #startDatePicker />
+            <mat-datepicker [touchUi]="true" #startDatePicker />
           </app-input>
         }
         @if (isClearingAgency || isClearingAgent) {
@@ -49,7 +49,7 @@
               formControlName="startDate"
               (click)="startDatePicker.open()"
               [matDatepicker]="startDatePicker" />
-            <mat-datepicker touchUi="true" #startDatePicker />
+            <mat-datepicker [touchUi]="true" #startDatePicker />
           </app-input>
           <app-input formControlName="endDate" [label]="lang.map.end_date">
             <input
@@ -57,7 +57,7 @@
               formControlName="endDate"
               (click)="endDatepicker.open()"
               [matDatepicker]="endDatepicker" />
-            <mat-datepicker touchUi="true" #endDatepicker />
+            <mat-datepicker [touchUi]="true" #endDatepicker />
           </app-input>
         }
       </div>
