@@ -203,6 +203,17 @@
         {{ element.statusInfo?.getNames() || '' }}
       </td>
     </ng-container>
+    <!-- extendSuspendEmployee -->
+    <ng-container matColumnDef="extendSuspendEmployee">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ lang.map.extend_suspend_employee }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <app-button (click)="extendSuspension$.next(element)">
+          {{ lang.map.extend_suspend_employee }}
+        </app-button>
+      </td>
+    </ng-container>
     <!-- actions Column -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>

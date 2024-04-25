@@ -45,6 +45,7 @@ export class SuspendedEmployeeComponent
       },
     },
   ];
+
   override ngOnInit(): void {
     super.ngOnInit();
     this._listenToExtendSuspension();
@@ -69,12 +70,14 @@ export class SuspendedEmployeeComponent
         this.reload$.next();
       });
   }
+
   canExtendSuspension(): boolean {
     return (
       this.employeeService.isDisciplinaryCommittee() !== undefined ||
       this.employeeService.isPermanentDisciplinaryCommittee() !== undefined
     );
   }
+
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<SuspendedEmployee> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
@@ -103,5 +106,6 @@ export class SuspendedEmployeeComponent
       'getNames',
     ),
     new NoneFilterColumn('actions'),
+    new TextFilterColumn('extendSuspendEmployee'),
   ).attacheFilter(this.filter$);
 }

@@ -37,7 +37,7 @@
             formControlName="apologyReasonDate"
             (click)="datepicker.open()"
             [matDatepicker]="datepicker" />
-          <mat-datepicker touchUi #datepicker />
+          <mat-datepicker [touchUi]="true" #datepicker />
         </app-input>
       </ng-container>
     </div>

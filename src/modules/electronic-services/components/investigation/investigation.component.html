@@ -146,7 +146,7 @@
           formControlName="createdOn"
           (click)="datepicker.open()"
           [matDatepicker]="datepicker" />
-        <mat-datepicker touchUi="true" #datepicker />
+        <mat-datepicker [touchUi]="true" #datepicker />
       </app-input>
       <app-select-input
         formControlName="securityLevel"

@@ -23,7 +23,7 @@
             (click)="dateFrom.open()"
             [matDatepicker]="dateFrom"
             [min]="today" />
-          <mat-datepicker touchUi="true" #dateFrom />
+          <mat-datepicker [touchUi]="true" #dateFrom />
         </app-input>
         <app-input formControlName="dateTo" [label]="lang.map.date_to">
           <input
@@ -32,7 +32,7 @@
             (click)="dateTo.open()"
             [matDatepicker]="dateTo"
             [min]="today" />
-          <mat-datepicker touchUi="true" #dateTo />
+          <mat-datepicker [touchUi]="true" #dateTo />
         </app-input>
 
         <div class="flex flex-row pl-1 items-center justify-start">
