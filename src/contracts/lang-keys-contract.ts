@@ -563,7 +563,6 @@ export interface LangKeysContract {
   lbl_companies: string;
   view_decision_file: string;
   search_for_clearing_agent: string;
-  establishment_Id: string;
   select_clearing_agent: string;
   auto_fill: string;
   no_mawared_employee_with_this_employee_number: string;

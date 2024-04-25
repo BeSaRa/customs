@@ -67,6 +67,19 @@
           "></span>
       </td>
     </ng-container>
+    <!-- establishmentId -->
+    <ng-container matColumnDef="establishmentId">
+      <th mat-header-cell mat-sort-header="establishmentId" *matHeaderCellDef>
+        {{ lang.map.establishment_id }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span
+          [innerHTML]="
+            element.establishmentId
+              | highlight: getFilterStringColumn('establishmentId')
+          "></span>
+      </td>
+    </ng-container>
     <!-- licenseNumber -->
     <ng-container matColumnDef="licenseNo">
       <th mat-header-cell mat-sort-header="licenseNo" *matHeaderCellDef>
