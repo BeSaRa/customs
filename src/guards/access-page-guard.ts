@@ -4,12 +4,12 @@ import { EmployeeService } from '@services/employee.service';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { TeamNames } from '@enums/team-names';
 
 export const accessPageGuard: (options?: {
   permission?: string | keyof AppPermissionsType;
   permissionGroup?: string[] | (keyof AppPermissionsType)[];
-  permissionFromTeam?: LDAPGroupNames;
+  permissionFromTeam?: TeamNames;
 }) => CanActivateFn = options => {
   return () => {
     const employeeService = inject(EmployeeService);

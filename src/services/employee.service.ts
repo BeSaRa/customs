@@ -15,6 +15,7 @@ import { InternalUserInterceptor } from '@model-interceptors/internal-user-inter
 import { ClearingAgency } from '@models/clearing-agency';
 import { UserTypes } from '@enums/user-types';
 import { DisciplinaryCommitteeCustomSettingContract } from '@contracts/disciplinary-committee-custom-setting-contract';
+import { TeamNames } from '@enums/team-names';
 
 const internalUserInterceptor = new InternalUserInterceptor();
 
@@ -108,10 +109,8 @@ export class EmployeeService
     return this.permissionMap.has(permission);
   }
 
-  hasPermissionFromTeam(teamName: LDAPGroupNames): boolean {
-    return !!this.getEmployeeTeams().find(
-      (t: Team) => t.ldapGroupName === teamName,
-    );
+  hasPermissionFromTeam(teamName: TeamNames): boolean {
+    return !!this.getEmployeeTeams().find((t: Team) => t.authName === teamName);
   }
 
   /**

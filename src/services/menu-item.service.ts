@@ -7,7 +7,7 @@ import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { AppPermissionsType } from '@constants/app-permissions';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { TeamNames } from '@enums/team-names';
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +47,7 @@ export class MenuItemService {
           this.employeeService.hasPermissionTo(item.permission)) ||
         (item.permissionFromTeam &&
           this.employeeService.hasPermissionFromTeam(
-            <LDAPGroupNames>item.permissionFromTeam,
+            <TeamNames>item.permissionFromTeam,
           )) ||
         (item.permissionGroup &&
           this.employeeService.hasAnyPermissions(

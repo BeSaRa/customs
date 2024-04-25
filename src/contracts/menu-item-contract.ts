@@ -1,7 +1,7 @@
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroupType } from '@constants/app-permissions-group';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
+import { TeamNames } from '@enums/team-names';
 
 export interface MenuItemContract {
   id: number;
@@ -19,5 +19,5 @@ export interface MenuItemContract {
   arabicSearchText?: string;
   englishSearchText?: string;
   searchText?: string;
-  permissionFromTeam?: LDAPGroupNames;
+  permissionFromTeam?: TeamNames;
 }
