@@ -13,7 +13,7 @@
 
     <div class="mb-3">
       <span class="font-medium text-slate-700">{{ lang.map.subject }}</span>
-      <div class="block">
+      <div class="block whitespace-pre-wrap">
         {{ model().subject }}
       </div>
     </div>
@@ -21,7 +21,7 @@
       <span class="font-medium text-slate-700">{{
         lang.map.general_explanation_of_violations
       }}</span>
-      <div class="flex flex-auto flex-wrap">
+      <div class="flex flex-auto flex-wrap whitespace-pre-wrap">
         {{ model().description ? model().description : 'No description' }}
       </div>
     </div>
