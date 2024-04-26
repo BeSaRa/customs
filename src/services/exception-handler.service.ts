@@ -2,13 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { DialogService } from '@services/dialog.service';
 import { AdminResult } from '@models/admin-result';
+import { LangService } from '@services/lang.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExceptionHandlerService {
   private readonly dialog = inject(DialogService);
-
+  private readonly lang = inject(LangService);
   httpExceptionHandle(error: HttpErrorResponse): void {
     // this.dialog.error();
     const hasErrorObject = Object.prototype.hasOwnProperty.call(
@@ -20,9 +21,14 @@ export class ExceptionHandlerService {
 
     if (hasErrorObject) {
       // const content = ;
-
+      const message = new AdminResult()
+        .clone<AdminResult>({ ...error.error.eo })
+        .getNames();
       this.dialog.error(
-        new AdminResult().clone<AdminResult>({ ...error.error.eo }).getNames(),
+        message ||
+          this.lang.map.something_wrong_happened.change({
+            error_code: error.error.ec,
+          }),
       );
       return;
     }
