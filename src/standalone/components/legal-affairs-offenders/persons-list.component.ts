@@ -43,7 +43,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { InvestigationReportService } from '@services/investigation-report.service';
 import { InvestigationReport } from '@models/investigation-report';
 import { EmployeeService } from '@services/employee.service';
@@ -286,6 +286,9 @@ export class PersonsListComponent
   private listenToReloadWitness() {
     this.reloadWitness$
       .pipe(takeUntil(this.destroy$))
+      .pipe(
+        filter(() => this.employeeService.hasPermissionTo('MANAGE_WITNESS')),
+      )
       .pipe(switchMap(() => this.witnessService.loadForCase(this.model().id)))
       .subscribe(list => {
         this.witness.set(list);
@@ -294,6 +297,9 @@ export class PersonsListComponent
 
   private listenToAddWitness() {
     this.addWitness$
+      .pipe(
+        filter(() => this.employeeService.hasPermissionTo('MANAGE_WITNESS')),
+      )
       .pipe(
         exhaustMap(() =>
           this.witnessService.openCreateDialog(this.model().id).afterClosed(),
