@@ -1,6 +1,6 @@
 import { ModelInterceptorContract } from 'cast-response';
 import { CallRequest } from '@models/call-request';
-import { getTime, set } from 'date-fns';
+import { format, getTime, parseISO, set } from 'date-fns';
 import { AdminResult } from '@models/admin-result';
 
 export class CallRequestInterceptor
@@ -28,8 +28,12 @@ export class CallRequestInterceptor
   receive(model: CallRequest): CallRequest {
     model.statusInfo = AdminResult.createInstance(model.statusInfo);
     model.createdByInfo = AdminResult.createInstance(model.createdByInfo);
-
-    console.log(model.summonTime);
+    try {
+      const time = getTime(parseISO(model.summonTime as string));
+      model.summonTime = format(time, 'hh:mm a');
+    } catch (e) {
+      console.log('failed to parse call request', e);
+    }
     return model;
   }
 }

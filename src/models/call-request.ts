@@ -18,7 +18,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   summonedId!: number;
   summonedType!: number;
   summonDate!: string | Date;
-  summonTime!: string | number;
+  summonTime!: string | number | Date;
   summons!: string;
   summonsPlace!: string;
   note!: string;
@@ -36,6 +36,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
 
   buildForm(controls = false): object {
     const { note, summonsPlace, summonTime, summonDate } = this;
+
     return {
       note: controls
         ? [note, [CustomValidators.required, CustomValidators.maxLength(1300)]]

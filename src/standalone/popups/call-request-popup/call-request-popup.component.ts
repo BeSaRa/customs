@@ -82,6 +82,7 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
   });
 
   times = generateTimeList();
+
   today: Date = new Date();
 
   override _buildForm(): void {
