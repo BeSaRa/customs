@@ -55,6 +55,7 @@ export class ButtonsCaseWrapperComponent
   sendTypes = SendTypes;
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
+  approve$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
   model = input.required<Investigation>();
   @Output()
@@ -84,6 +85,7 @@ export class ButtonsCaseWrapperComponent
     this.listenToResponseAction();
     this.listenToReferralActions();
     this.listenToReturnActions();
+    this.listenToApproveAction();
   }
 
   listenToResponseAction() {
@@ -253,6 +255,23 @@ export class ButtonsCaseWrapperComponent
         }),
       )
       .pipe(filter((click: UserClick) => click === UserClick.YES))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
+  }
+
+  private listenToApproveAction() {
+    this.approve$
+      .pipe(
+        exhaustMap(() => {
+          return this.dialog
+            .confirm(this.lang.map.approve_msg_confirmation)
+            .afterClosed();
+        }),
+        filter(click => {
+          return click === UserClick.YES;
+        }),
+      )
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });

@@ -37,19 +37,19 @@
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.MANAGER_APPROVE)
   ) {
-    <app-button (click)="responseAction$.next(taskResponses.MANAGER_APPROVE)">
+    <app-button (click)="approve$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
   }
   <!-- hr manager approve -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.HR_APPROVE)) {
-    <app-button (click)="responseAction$.next(taskResponses.HR_APPROVE)">
+    <app-button (click)="approve$.next(taskResponses.HR_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
   }
   <!-- ca manager approve -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.CA_APPROVE)) {
-    <app-button (click)="responseAction$.next(taskResponses.CA_APPROVE)">
+    <app-button (click)="approve$.next(taskResponses.CA_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
   }

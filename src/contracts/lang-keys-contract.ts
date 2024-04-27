@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  approve_msg_confirmation: string;
   something_wrong_happened: string;
   memorandum_approved_successfully: string;
   president_assistant: string;
