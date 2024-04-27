@@ -1,6 +1,8 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.view }} : {{ data.title }}</h1>
+    @if (data.title) {
+      <h1>{{ lang.map.view }} : {{ data.title }}</h1>
+    }
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""

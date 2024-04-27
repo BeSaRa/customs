@@ -8,6 +8,8 @@ import { Observable, tap } from 'rxjs';
 import { BlobModel } from '@models/blob-model';
 import { downloadLink } from '@utils/utils';
 import { ReportStatus } from '@enums/report-status';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 
 const { send, receive } = new InvestigationReportInterceptor();
 
@@ -43,6 +45,13 @@ export class InvestigationReport extends BaseModel<
       {
         vsId: this.documentVsId!,
       },
+    );
+  }
+
+  view(): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+    return this.$$getService$$<InvestigationReportService>().viewReport(
+      this.id,
+      this.getLangService().map.investigation_report,
     );
   }
 

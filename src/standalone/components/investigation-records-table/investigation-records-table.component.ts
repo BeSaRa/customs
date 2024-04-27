@@ -167,9 +167,7 @@ export class InvestigationRecordsTableComponent
         switchMap(report => {
           switch (report.status) {
             case ReportStatus.APPROVED:
-              return this.investigationService
-                .viewAttachment(report.documentVsId!, '')
-                .pipe(ignoreErrors());
+              return report.view();
             default:
               return report
                 .openView({
@@ -261,6 +259,7 @@ export class InvestigationRecordsTableComponent
         this.uploader!.value = '';
         this.replaceReport(model);
         this.selectedUploadReport = undefined;
+        this.reload$.next();
       });
   }
 

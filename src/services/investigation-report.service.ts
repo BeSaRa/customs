@@ -11,6 +11,8 @@ import { BlobModel } from '@models/blob-model';
 import { map } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @CastResponseContainer({
   $default: {
@@ -75,6 +77,23 @@ export class InvestigationReportService extends BaseCrudWithDialogService<
           fromObject: { ...params },
         }),
       },
+    );
+  }
+
+  viewReport(
+    reportId: number,
+    title: string = '',
+  ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+    return this.downloadReport(reportId).pipe(
+      map(blob => {
+        return this.dialog.open(ViewAttachmentPopupComponent, {
+          disableClose: true,
+          data: {
+            model: blob,
+            title: title,
+          },
+        });
+      }),
     );
   }
 }
