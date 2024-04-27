@@ -200,6 +200,7 @@ export class OffendersViolationsPreviewComponent
           new FormControl<number>({
             value: i.proofStatus,
             disabled:
+              this.model().inHumanResource() ||
               this.model().inLegalAffairsActivity() ||
               !this.model().hasTask() ||
               !this.model().inMyInbox(),
