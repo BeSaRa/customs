@@ -263,13 +263,28 @@ export class ButtonsCaseWrapperComponent
   private listenToApproveAction() {
     this.approve$
       .pipe(
-        exhaustMap(() => {
+        exhaustMap(response => {
           return this.dialog
             .confirm(this.lang.map.approve_msg_confirmation)
-            .afterClosed();
+            .afterClosed()
+            .pipe(
+              map(userClick => {
+                return {
+                  click: userClick,
+                  response,
+                };
+              }),
+            );
         }),
-        filter(click => {
+        filter(({ click }) => {
           return click === UserClick.YES;
+        }),
+        switchMap(({ response }) => {
+          return this.model()
+            .getService()
+            .completeTask(this.model().getTaskId()!, {
+              selectedResponse: response,
+            });
         }),
       )
       .subscribe(() => {
