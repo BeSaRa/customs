@@ -2,7 +2,6 @@ import { BaseModel } from '@abstracts/base-model';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
 import { InterceptModel } from 'cast-response';
-import { CustomValidators } from '@validators/custom-validators';
 import { AdminResult } from './admin-result';
 import { Offender } from './offender';
 import { OffenderTypes } from '@enums/offender-types';
@@ -37,45 +36,38 @@ export class ClearingAgent extends BaseModel<
   phoneNumber!: string;
   email!: string;
   code?: string;
+
   // not related to the model
   jobTitleCode!: string;
 
-  buildForm(controls = false): object {
+  buildForm(): object {
     const {
       enName,
       arName,
+      phoneNumber,
       agentctLicenseNo,
-      status,
-      agentLicenseIssueDate,
       agentCustomCode,
+      agentLicenseIssueDate,
       agentLicenseExpiryDate,
+      agencyId,
+      status,
+      email,
+      qid,
+      agentPreviousLicenseFeePenalty,
+    } = this;
+    return {
+      enName,
+      arName,
+      agentctLicenseNo,
+      agentLicenseIssueDate,
+      agentLicenseExpiryDate,
+      agentCustomCode,
       phoneNumber,
       email,
       qid,
       agencyId,
-    } = this;
-    return {
-      enName: controls ? [enName, CustomValidators.required] : enName,
-      arName: controls ? [arName, CustomValidators.required] : arName,
-      agentctLicenseNo: controls
-        ? [agentctLicenseNo, CustomValidators.required]
-        : agentctLicenseNo,
-      agentLicenseIssueDate: controls
-        ? [agentLicenseIssueDate, CustomValidators.required]
-        : agentLicenseIssueDate,
-      agentLicenseExpiryDate: controls
-        ? [agentLicenseExpiryDate, CustomValidators.required]
-        : agentLicenseExpiryDate,
-      agentCustomCode: controls
-        ? [agentCustomCode, CustomValidators.required]
-        : agentCustomCode,
-      phoneNumber: controls
-        ? [phoneNumber, CustomValidators.required]
-        : phoneNumber,
-      email: controls ? [email, CustomValidators.required] : email,
-      qid: controls ? [qid, CustomValidators.required] : qid,
-      agencyId: controls ? [agencyId, CustomValidators.required] : agencyId,
-      status: controls ? [status] : status,
+      agentPreviousLicenseFeePenalty,
+      status,
     };
   }
 

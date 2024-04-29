@@ -605,6 +605,7 @@ export interface LangKeysContract {
   for_committing_the_following_violations: string;
   must_select_attendance: string;
   establishment_id: string;
+  agent_previous_license_fee_penalty: string;
   show_all: string;
   investigation_file_details: string;
   issued_by: string;
