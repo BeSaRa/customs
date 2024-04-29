@@ -15,7 +15,10 @@
       <mat-spinner Style="margin-top: 120px" [diameter]="75"></mat-spinner>
     </div>
   }
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" dynamicHeight>
+  <mat-tab-group
+    [mat-stretch-tabs]="false"
+    mat-align-tabs="start"
+    [dynamicHeight]="true">
     <!-- first tab -->
     <mat-tab [label]="lang.map.basic_settings">
       <ng-container [formGroup]="form">
@@ -124,13 +127,13 @@
               <app-input
                 [disabled]="(loading$ | async)!"
                 [formControlName]="i"
-                [label]="lang.map.email + ' ' + (i + 1)"
-                ><app-icon-button
+                [label]="lang.map.email + ' ' + (i + 1)">
+                <app-icon-button
                   appInputPrefix
                   icon="DELETE"
                   (click)="deleteEmail(i)"
-                  [matTooltip]="lang.map.delete + ' ' + lang.map.email"
-              /></app-input>
+                  [matTooltip]="lang.map.delete + ' ' + lang.map.email" />
+              </app-input>
             }
           </ng-container>
           <div class="w-full flex items-center justify-start">
@@ -146,8 +149,8 @@
     </mat-tab>
   </mat-tab-group>
   <div class="flex justify-end">
-    <app-button size="lg" (click)="save$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
+    <app-button size="lg" (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
   </div>
 </div>

@@ -49,8 +49,8 @@ export class HtmlEditorComponent
   @Input() placeHolder = '';
   @Input() editorId = '';
   @Input() displayErrors = true;
-  tabelRows = new FormControl(2);
-  tabelCols = new FormControl(2);
+  tableRows = new FormControl(2);
+  tableCols = new FormControl(2);
   headerBgColor = new FormControl('#8a1538');
 
   isTableWithTitle = false;
@@ -80,9 +80,11 @@ export class HtmlEditorComponent
   };
 
   control = new FormControl('');
+
   isTableHeader() {
     this.isTableWithTitle = !this.isTableWithTitle;
   }
+
   createTable() {
     // let table = document.createElement('table');
     // table.setAttribute("id", new Date().toString());
@@ -91,12 +93,12 @@ export class HtmlEditorComponent
     if (this.isTableWithTitle)
       tableString = tableString.concat(
         `<tr style="height:40px; word-wrap: break-word;"> <td style="color: white; outline: ${this.headerBgColor.value} solid thin;" colspan="${this
-          .tabelCols
+          .tableCols
           .value!}" align="center" bgcolor=${this.headerBgColor.value}></td></tr>`,
       );
-    for (let i = 1; i <= this.tabelRows.value!; i++) {
+    for (let i = 1; i <= this.tableRows.value!; i++) {
       tableString = tableString.concat('<tr>');
-      for (let j = 1; j <= this.tabelCols.value!; j++)
+      for (let j = 1; j <= this.tableCols.value!; j++)
         tableString = tableString.concat(
           '<td style=" height:40px; outline: lightgrey solid thin; " bgcolor="#EDEDED"></td>',
         );
@@ -105,6 +107,7 @@ export class HtmlEditorComponent
     tableString = tableString.concat('</tbody></table>');
     return tableString;
   }
+
   get errors(): Observable<ValidationErrors | null | undefined> {
     return of(null).pipe(
       debounceTime(200),
@@ -131,11 +134,13 @@ export class HtmlEditorComponent
     this.destroy$.complete();
     this.destroy$.unsubscribe();
   }
+
   writeValue(value: string): void {
     this.control.setValue(value, {
       emitEvent: true,
     });
   }
+
   registerOnChange(fn: (v: string | null) => void): void {
     this.onChange = fn;
   }

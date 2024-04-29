@@ -9,9 +9,9 @@
   </div>
   <div>
     <mat-tab-group
-      mat-stretch-tabs="false"
+      [mat-stretch-tabs]="false"
       mat-align-tabs="start"
-      dynamicHeight>
+      [dynamicHeight]="true">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <div class="grid grid-cols-2 gap-4 dialog-content" [formGroup]="form">
           <app-input formControlName="arName" [label]="lang.map.ar_name" />
@@ -100,19 +100,19 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>
