@@ -16,94 +16,99 @@ export class MawaredEmployee extends BaseModel<
   MawaredEmployeeService
 > {
   $$__service_name__$$ = 'MawaredEmployeeService';
-  username!: string;
   email!: string;
-  anotherEmail!: string;
-  phone!: string;
-  anotherPhone!: string;
   qid!: string;
-  adName!: string;
   employeeDepartmentId!: number;
   employeeDepartmentInfo!: AdminResult;
-  isDepMailManager!: boolean;
-  subDepartmentId!: number;
-  subDepartmentName!: string;
   gender!: string;
   employeeCareerLevelId!: number;
   employeeCareerLevelInfo!: AdminResult;
-  employeeCareerLevel!: string;
-  employeeQualificationId!: number;
-  employeeQualification!: string;
-  gradDate!: string;
-  totalAbsent!: number;
-  totalSickLeave!: number;
-  employeeNumberOfPenalties!: number;
-  employeeLastPenalties!: string;
-  employeeLastRatingScore!: string;
-  totalExams!: number;
-  totalThanksBooks!: number;
   gethDate!: string;
   address!: string;
   type!: number;
   phoneNumber!: string;
-  jobTitleCode?: string;
   typeInfo!: AdminResult;
   employeeNo!: number;
   isPrivateUser!: boolean;
+  arNationality!: string;
+  enNationality!: string;
+  city!: string;
+  country!: string;
+  postal!: string;
+  arCertificate!: string;
+  enCertificate!: string;
+  employeeSectionId!: string;
+  employeeSectionInfo!: AdminResult;
+  arPosition!: string;
+  enPosition!: string;
+  arJobDescription!: string;
+  enJobDescription!: string;
+  isSuspended!: boolean;
 
   // not related to the model
   code?: string;
+  jobTitleCode?: string;
 
   buildForm(): object {
     const {
       arName,
       enName,
-      username,
       email,
-      anotherEmail,
-      phone,
-      anotherPhone,
       qid,
       gender,
-      subDepartmentName,
-      employeeCareerLevel,
-      employeeQualification,
-      gradDate,
-      totalAbsent,
-      totalSickLeave,
-      employeeNumberOfPenalties,
-      employeeLastPenalties,
-      totalExams,
-      totalThanksBooks,
       isPrivateUser,
+      gethDate,
+      arNationality,
+      enNationality,
+      city,
+      country,
+      postal,
+      arCertificate,
+      enCertificate,
+      arPosition,
+      enPosition,
+      arJobDescription,
+      enJobDescription,
+      isSuspended,
+      phoneNumber,
     } = this;
     return {
       arName,
       enName,
-      username,
       email,
-      anotherEmail,
-      phone,
-      anotherPhone,
       qid,
       gender,
-      subDepartmentName,
-      employeeCareerLevel,
-      employeeQualification,
-      gradDate,
-      totalAbsent,
-      totalSickLeave,
-      employeeNumberOfPenalties,
-      employeeLastPenalties,
-      totalExams,
-      totalThanksBooks,
       isPrivateUser,
-      statusInfo: this.getStatusInfoName(),
+      statusInfo: this.getStatusInfoName(), //
+      employeeCareerLevelInfo: this.getEmployeeCareerLevelInfoName(), //
+      employeeSectionInfo: this.getEmployeeSectionInfoName(), //
+      gethDate,
+      arNationality,
+      enNationality,
+      city,
+      country,
+      postal,
+      arCertificate,
+      enCertificate,
+      arPosition,
+      enPosition,
+      arJobDescription,
+      enJobDescription,
+      isSuspended,
+      phoneNumber,
     };
   }
 
   getStatusInfoName() {
     return this.statusInfo?.getNames() || '';
+  }
+
+  getEmployeeCareerLevelInfoName() {
+    return this.employeeCareerLevelInfo?.getNames() || '';
+  }
+
+  getEmployeeSectionInfoName() {
+    return this.employeeSectionInfo?.getNames() || '';
   }
 
   convertToOffender(caseId: string): Offender {

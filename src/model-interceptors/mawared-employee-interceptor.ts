@@ -12,11 +12,14 @@ export class MawaredEmployeeInterceptor
 
   receive(model: MawaredEmployee): MawaredEmployee {
     model.statusInfo = AdminResult.createInstance(model.statusInfo);
-    model.employeeDepartmentInfo = AdminResult.createInstance(
-      model.employeeDepartmentInfo,
+    model.employeeSectionInfo = AdminResult.createInstance(
+      model.employeeSectionInfo,
     );
     model.employeeCareerLevelInfo = AdminResult.createInstance(
       model.employeeCareerLevelInfo,
+    );
+    model.employeeDepartmentInfo = AdminResult.createInstance(
+      model.employeeDepartmentInfo,
     );
     return model;
   }

@@ -606,6 +606,15 @@ export interface LangKeysContract {
   must_select_attendance: string;
   establishment_id: string;
   agent_previous_license_fee_penalty: string;
+  employee_section: string;
+  nationality: string;
+  is_suspended: string;
+  city: string;
+  country: string;
+  postal: string;
+  certificate: string;
+  position: string;
+  job_description: string;
   show_all: string;
   investigation_file_details: string;
   issued_by: string;

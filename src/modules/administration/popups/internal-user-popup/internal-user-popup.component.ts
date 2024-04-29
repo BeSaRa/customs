@@ -145,16 +145,8 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   setEmployee(employee: MawaredEmployee) {
-    const {
-      arName,
-      enName,
-      username,
-      qid,
-      employeeNo,
-      email,
-      phoneNumber,
-      status,
-    } = employee;
+    const { arName, enName, qid, employeeNo, email, phoneNumber, status } =
+      employee;
     this.form.patchValue({
       arName,
       enName,
@@ -162,7 +154,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       email,
       phoneNumber,
       status,
-      domainName: username,
       empNum: employeeNo,
     });
   }
