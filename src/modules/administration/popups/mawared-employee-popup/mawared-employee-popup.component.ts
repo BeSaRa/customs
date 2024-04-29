@@ -7,6 +7,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { LookupService } from '@services/lookup.service';
 import { Lookup } from '@models/lookup';
+import { LangCodes } from '@enums/lang-codes';
 
 @Component({
   selector: 'app-mawared-employee-popup',
@@ -19,6 +20,7 @@ export class MawaredEmployeePopupComponent extends AdminDialogComponent<MawaredE
 
   private lookupService = inject(LookupService);
   genderTypes: Lookup[] = this.lookupService.lookups.gender;
+  protected readonly langCodes = LangCodes;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm());
