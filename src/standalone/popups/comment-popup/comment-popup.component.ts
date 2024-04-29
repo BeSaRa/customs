@@ -65,7 +65,6 @@ export class CommentPopupComponent
   private employeeService = inject(EmployeeService);
 
   previewFormList: TaskResponses[] = [
-    TaskResponses.TO_MANAGER,
     TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
     TaskResponses.REFERRAL_TO_PRESIDENT,
     TaskResponses.DC_RETURN_PA,
@@ -82,9 +81,11 @@ export class CommentPopupComponent
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
   }
+
   get isSendToInvestigator() {
     return this.response === TaskResponses.TO_INV_USER;
   }
+
   private _loadUsersList() {
     if (this.isSendToUser) {
       this.internalUserOUService
