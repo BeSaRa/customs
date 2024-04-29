@@ -1,4 +1,114 @@
-<app-cases-for-external-users class="block mb-6"></app-cases-for-external-users>
+<div class="grid gap-4 py-4 lg:py-12 grid-cols-12">
+  <div
+    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    <app-icon-button
+      (click)="showAll('/external/investigations')"
+      [icon]="'ARROW_TOP_LEFT'"
+      [color]="'gray'"></app-icon-button>
+    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
+      <strong class="[font-size:42px] text-primary"> {{ casesLength }} </strong>
+      <h6>{{ lang.map.lbl_investigation_files }}</h6>
+    </div>
+  </div>
+  <div
+    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    <app-icon-button
+      [icon]="'ARROW_TOP_LEFT'"
+      (click)="showAll('/external/decisions')"
+      [color]="'gray'"></app-icon-button>
+    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
+      <strong class="[font-size:42px] text-primary">
+        {{ penaltyDecisionLength }}
+      </strong>
+      <h6>{{ lang.map.lbl_decisions }}</h6>
+    </div>
+  </div>
+  <div
+    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    <app-icon-button
+      [icon]="'ARROW_TOP_LEFT'"
+      (click)="showAll('/external/summons-to-attend')"
+      [color]="'gray'"></app-icon-button>
+    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
+      <strong class="[font-size:42px] text-primary">
+        {{ attendancesLength }}
+      </strong>
+      <h6>{{ lang.map.summons_to_attend }}</h6>
+    </div>
+  </div>
+  <div
+    class="hidden lg:block user-details-bg order-1 lg:order-2 col-span-12 lg:col-span-6 border text-end rounded-xl">
+    <div class="flex flex-col justify-around p-6 text-center h-full">
+      @if (person) {
+        <div class="grid grid-cols-12 gap-2 text-white h-full">
+          <div class="col-span-4 text-start flex flex-col justify-around">
+            <mat-icon
+              [style]="'color:white; opacity: .6;'"
+              [class]="'nav-profile-icon'"
+              [svgIcon]="
+                user?.type === UserTypes.EXTERNAL_EMPLOYEE
+                  ? AppIcons.EMPLOYEE
+                  : AppIcons.CLEARING_AGENT
+              "></mat-icon>
+            <div class="[margin-bottom:1rem]">
+              <h6 class="font-medium [font-size:14px]">
+                {{
+                  user?.type === UserTypes.EXTERNAL_EMPLOYEE
+                    ? lang.map.employee_number
+                    : lang.map.clearing_agent_code
+                }}
+              </h6>
+              <small>{{
+                user?.type === UserTypes.EXTERNAL_EMPLOYEE
+                  ? assertEmployee(person).jobTitleCode
+                  : assertClearingAgent(person).agentCustomCode
+              }}</small>
+            </div>
+          </div>
+          <div class="col-span-8 flex flex-col justify-center h-full">
+            <div class="mb-4">
+              <h1 class="font-bold">
+                {{ person.getNames() }}
+              </h1>
+            </div>
+            <div class="text-start grid grid-cols-5">
+              <div class="col-span-2">
+                <h6 class="font-medium [font-size:14px]">{{ lang.map.qid }}</h6>
+                <small>{{ person.qid }}</small>
+              </div>
+              <div class="col-span-2">
+                <h6 class="font-medium [font-size:14px]">
+                  {{ lang.map.email }}
+                </h6>
+                <small>{{ person.email }}</small>
+              </div>
+              <div class="col-span-1">
+                <h6 class="font-medium [font-size:14px]">
+                  {{ lang.map.phone_number }}
+                </h6>
+                <small>{{ person.phoneNumber }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <h6 class="font-medium text-white [font-size:20px]">
+          {{ lang.map.select_clearing_agent }}
+        </h6>
+      }
+    </div>
+  </div>
+</div>
+
+<app-cases-for-external-users
+  [hidePagination]="true"
+  class="block mb-12"
+  (setLength)="casesLength = $event"></app-cases-for-external-users>
 <app-penalty-decision-for-external-users
+  [hidePagination]="true"
+  (setLength)="penaltyDecisionLength = $event"
   class="block mb-6"></app-penalty-decision-for-external-users>
-<app-attendance class="block mb-6"></app-attendance>
+<app-attendance
+  [hidePagination]="true"
+  (setLength)="attendancesLength = $event"
+  class="block mb-12"></app-attendance>

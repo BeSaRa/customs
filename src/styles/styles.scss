@@ -78,7 +78,9 @@ mat-tab-body {
   max-height: calc(100vh - 300px);
   min-height: 400px;
 }
-
+.cases-tab-group mat-tab-body {
+  max-height: 100%;
+}
 .mdc-tab--active {
   background-color: theme("colors.primary-light/0.1") !important;
 }
@@ -165,4 +167,11 @@ input::-webkit-inner-spin-button {
 }
 .mat-toolbar.timepicker-header {
   direction: ltr;
+}
+mat-tab-group.cases-tab-group .mat-mdc-tab-header {
+  display: none !important;
+}
+.mat-button-toggle-appearance-standard.mat-button-toggle-checked {
+  color: #131c2b !important;
+  background-color: #dae2f9 !important;
 }

@@ -1,0 +1,39 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.grievance }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
+      <div dir="rtl">
+        <div class="flex justify-between">
+          <div>
+            <strong>السيد {{ sendToTitle }} المحترم</strong>
+          </div>
+          <div>
+            <label class="pb-3 block"> رقم ملف التحقيق:{{ 'الرقم' }} </label>
+            <label class="pb-3 block"> رقم القرار:(({{ 'الرقم' }})) </label>
+            <label class="pb-3 block"> تاريخ القرار: (({{ 'date' }})) </label>
+          </div>
+        </div>
+        <form [formGroup]="form" class="mb-3">
+          <app-textarea
+            formControlName="description"
+            [label]="lang.map.description"></app-textarea>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary">{{
+      lang.map.save
+    }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary">{{
+      lang.map.close
+    }}</app-button>
+  </div>
+</div>

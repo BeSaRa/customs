@@ -16,8 +16,14 @@ import { ClearingAgency } from '@models/clearing-agency';
 import { UserTypes } from '@enums/user-types';
 import { DisciplinaryCommitteeCustomSettingContract } from '@contracts/disciplinary-committee-custom-setting-contract';
 import { TeamNames } from '@enums/team-names';
+import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
+import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
+import { ClearingAgencyInterceptor } from '@model-interceptors/clearing-agency-interceptor';
 
 const internalUserInterceptor = new InternalUserInterceptor();
+const mawaredEmployeeInterceptor = new MawaredEmployeeInterceptor();
+const clearingAgentInterceptor = new ClearingAgentInterceptor();
+const clearingAgencyInterceptor = new ClearingAgencyInterceptor();
 
 @Injectable({
   providedIn: 'root',
@@ -62,22 +68,29 @@ export class EmployeeService
     data.lookupMap = this.lookupService.setLookups(data.lookupMap);
     // generate the permissions list
     this.generatePermissionMap(data.permissionSet);
-    if (data.person && data.person.type === UserTypes.EXTERNAL_EMPLOYEE) {
-      data.person = new MawaredEmployee().clone<MawaredEmployee>({
-        ...(data.person as MawaredEmployee),
-      });
+
+    if (data.type === UserTypes.EXTERNAL_EMPLOYEE) {
+      data.person = mawaredEmployeeInterceptor.receive(
+        new MawaredEmployee().clone<MawaredEmployee>({
+          ...(data.person as MawaredEmployee),
+        }),
+      );
     }
 
-    if (data.person && data.type === UserTypes.EXTERNAL_CLEARING_AGENT) {
-      data.person = new ClearingAgent().clone<ClearingAgent>({
-        ...(data.person as ClearingAgent),
-      });
+    if (data.type === UserTypes.EXTERNAL_CLEARING_AGENT) {
+      data.person = clearingAgentInterceptor.receive(
+        new ClearingAgent().clone<ClearingAgent>({
+          ...(data.person as ClearingAgent),
+        }),
+      );
     }
 
     data.clearingAgency &&
-      (data.clearingAgency = new ClearingAgency().clone<ClearingAgency>({
-        ...(data.clearingAgency as ClearingAgency),
-      }));
+      (data.clearingAgency = clearingAgencyInterceptor.receive(
+        new ClearingAgency().clone<ClearingAgency>({
+          ...(data.clearingAgency as ClearingAgency),
+        }),
+      ));
     // set user teams
     data.teams = (data.teams || []).map((item: Team) =>
       new Team().clone<Team>(item),
@@ -200,6 +213,12 @@ export class EmployeeService
     return this.loginData?.internalUser;
   }
 
+  getExternalPerson(): MawaredEmployee | ClearingAgent | undefined {
+    return this.loginData?.person;
+  }
+  getExternalClearingAgency(): ClearingAgency | undefined {
+    return this.loginData?.clearingAgency;
+  }
   getEmployeeTeams(): Team[] {
     return this.loginData?.teams || [];
   }
