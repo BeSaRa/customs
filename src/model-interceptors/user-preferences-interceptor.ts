@@ -12,11 +12,10 @@ export class UserPreferencesInterceptor
       }),
     );
     delete model.alternateEmailListParsed;
-    const toSendObj = {
+    return {
       ...model,
       alternateEmailList: model.alternateEmailList,
     };
-    return toSendObj;
   }
 
   receive(model: UserPreferences): UserPreferences {

@@ -28,14 +28,14 @@
         min="1"
         max="99"
         type="number"
-        [formControl]="tabelCols"
+        [formControl]="tableCols"
         title="table number of columns" />
       <input
         class="editor-input select-font-size"
         min="1"
         max="99"
         type="number"
-        [formControl]="tabelRows"
+        [formControl]="tableRows"
         title="table number of rows" />
       <ae-button
         #ctBtn
@@ -44,8 +44,9 @@
         [id]="'createTable_' + editorId"
         (buttonClick)="executeCommandFn('insertHtml', createTable())">
       </ae-button>
-    </ae-toolbar-set> </ng-template
-></angular-editor>
+    </ae-toolbar-set>
+  </ng-template>
+</angular-editor>
 @if (displayErrors) {
   <app-validation-errors
     class="block relative"
