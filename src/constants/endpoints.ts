@@ -51,6 +51,7 @@ export const EndPoints = {
   CALL_REQUEST: '/entity/obligation-to-attend',
   INVESTIGATION_REPORT: '/entity/administrative-investigation-report',
   MEETING: '/entity/meeting',
+  GRIEVANCE: '/grievance-case',
 };
 
 export type EndpointsType = typeof EndPoints;

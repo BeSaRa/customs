@@ -605,4 +605,8 @@ export interface LangKeysContract {
   for_committing_the_following_violations: string;
   must_select_attendance: string;
   establishment_id: string;
+  show_all: string;
+  investigation_file_details: string;
+  issued_by: string;
+  menu_grievances: string;
 }

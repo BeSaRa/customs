@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -27,8 +35,10 @@ import { MatSort } from '@angular/material/sort';
 import { OffenderService } from '@services/offender.service';
 import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserTypes } from '@enums/user-types';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { InvestigationFileDetailsForExternalUserPopupComponent } from '@standalone/popups/investigation-file-details-for-external-user-popup/investigation-file-details-for-external-user-popup.component';
 
 @Component({
   selector: 'app-cases-for-external-users',
@@ -50,6 +60,7 @@ import { UserTypes } from '@enums/user-types';
     MatHeaderCellDef,
     DatePipe,
     MatPaginator,
+    ButtonComponent,
   ],
   templateUrl: './cases-for-external-users.component.html',
   styleUrl: './cases-for-external-users.component.scss',
@@ -65,23 +76,26 @@ export class CasesForExternalUsersComponent
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   dataSource: MatTableDataSource<InvestigationForExternalUser> =
     new MatTableDataSource();
   reload$: Subject<null> = new Subject<null>();
   view$: Subject<InvestigationForExternalUser> =
     new Subject<InvestigationForExternalUser>();
   displayedColumns = ['fileNumber', 'dateCreated', 'status', 'actions'];
+  @Input() hidePagination: boolean = false;
+  @Output() setLength: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('paginator') paginator!: MatPaginator;
   userId!: number | undefined;
 
   ngOnInit(): void {
     this.listenToReload();
+    this.listenToView();
     this.route.queryParams.subscribe(params => {
       this.userId = params.id;
       this.reload$.next(null);
     });
   }
-
   private listenToReload() {
     this.reload$
       .pipe(
@@ -103,17 +117,41 @@ export class CasesForExternalUsersComponent
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.dataSource.data = list.rs;
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.getRangeLabel = (
-          page: number,
-          pageSize: number,
-          length: number,
-        ) => {
-          const start = page * pageSize + 1;
-          const end = Math.min((page + 1) * pageSize, length);
-          return `${start} - ${end} ${this.lang.map.of} ${length}`;
-        };
+        this.setLength.emit(list.rs.length);
+        this.dataSource.data = !this.hidePagination
+          ? list.rs
+          : list.rs.splice(0, 5);
+        if (!this.hidePagination) {
+          this.dataSource.paginator = this.paginator;
+          this.paginator._intl.getRangeLabel = (
+            page: number,
+            pageSize: number,
+            length: number,
+          ) => {
+            const start = page * pageSize + 1;
+            const end = Math.min((page + 1) * pageSize, length);
+            return `${start} - ${end} ${this.lang.map.of} ${length}`;
+          };
+        }
       });
+  }
+
+  showAll() {
+    this.router.navigate(['/external/investigations']);
+  }
+  private listenToView() {
+    this.view$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(InvestigationFileDetailsForExternalUserPopupComponent, {
+              data: {
+                id: model.caseId,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }

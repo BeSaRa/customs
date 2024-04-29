@@ -12,65 +12,8 @@
       </a>
     </div>
 
-    <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      <ul
-        class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0">
-        <li>
-          <a
-            [routerLink]="'/external/home'"
-            [ngClass]="{
-              'dark:text-white md:dark:text-blue-500':
-                isActive('/external/home')
-            }"
-            class="text-white"
-            >{{ lang.map.main }}</a
-          >
-        </li>
-        <li>
-          <a
-            [routerLink]="'/external/investigations'"
-            [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/investigations'
-              )
-            }"
-            class="text-white"
-            >{{ lang.map.lbl_investigation_files }}</a
-          >
-        </li>
-        <li>
-          <a
-            [routerLink]="'/external/decisions'"
-            [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/decisions'
-              )
-            }"
-            class="text-white"
-            >{{ lang.map.lbl_decisions }}</a
-          >
-        </li>
-        <li>
-          <a
-            [routerLink]="'/external/summons-to-attend'"
-            [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/summons-to-attend'
-              )
-            }"
-            class="text-white"
-            >{{ lang.map.summons_to_attend }}</a
-          >
-        </li>
-      </ul>
-    </div>
-    <app-icon-button
-      (click)="logout()"
-      [color]="'white'"
-      class="ms-5"
-      [matTooltip]="lang.map.logout"
-      icon="LOGOUT"></app-icon-button>
     <button
+      (click)="nav_ul.hidden = !nav_ul.hidden"
       data-collapse-toggle="navbar-default"
       type="button"
       class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -89,6 +32,92 @@
           stroke-width="2"
           d="M1 1h15M1 7h15M1 13h15" />
       </svg>
+    </button>
+    <div
+      class="w-full md:block md:w-auto"
+      [hidden]="true"
+      #nav_ul
+      id="navbar-default">
+      <ul
+        class="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0">
+        <li class="my-2 md:my-0">
+          <a
+            [routerLink]="'/external/home'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500':
+                isActive('/external/home')
+            }"
+            class="text-white"
+            >{{ lang.map.main }}</a
+          >
+        </li>
+        <li class="my-2 md:my-0">
+          <a
+            [routerLink]="'/external/investigations'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/investigations'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.lbl_investigation_files }}</a
+          >
+        </li>
+        <li class="my-2 md:my-0">
+          <a
+            [routerLink]="'/external/decisions'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/decisions'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.lbl_decisions }}</a
+          >
+        </li>
+        <li class="my-2 md:my-0">
+          <a
+            [routerLink]="'/external/summons-to-attend'"
+            [ngClass]="{
+              'dark:text-white md:dark:text-blue-500': isActive(
+                '/external/summons-to-attend'
+              )
+            }"
+            class="text-white"
+            >{{ lang.map.summons_to_attend }}</a
+          >
+        </li>
+      </ul>
+    </div>
+
+    <button
+      class="me-4 md:me-0 ms-8 flex items-center"
+      [matMenuTriggerFor]="userMenu">
+      <div class="rounded-full w-10">
+        <mat-icon
+          class="nav-profile-icon"
+          [style]="'color:white;'"
+          [svgIcon]="
+            user?.type === UserTypes.EXTERNAL_EMPLOYEE
+              ? AppIcons.EMPLOYEE
+              : user?.type === UserTypes.EXTERNAL_CLEARING_AGENT
+                ? AppIcons.CLEARING_AGENT
+                : AppIcons.CLEARING_AGENCY
+          "></mat-icon>
+      </div>
+      <div>
+        @if (person) {
+          <strong class="text-white">{{ person.getNames() }}</strong>
+        } @else if (agency) {
+          <strong class="text-white">{{ agency.getNames() }}</strong>
+        }
+        <mat-menu class="app-menu" #userMenu="matMenu">
+          <button class="text-slate-700" (click)="logout()" mat-menu-item>
+            <mat-icon [svgIcon]="AppIcons.LOGOUT"></mat-icon>
+            <span>{{ lang.map.logout }}</span>
+          </button>
+        </mat-menu>
+      </div>
     </button>
   </div>
 </nav>

@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
   MatCell,
@@ -28,8 +36,9 @@ import { CallRequest } from '@models/call-request';
 import { DatePipe } from '@angular/common';
 import { ApologyPopupComponent } from '@standalone/popups/apology-popup/apology-popup.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserTypes } from '@enums/user-types';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 
 @Component({
   selector: 'app-attendance',
@@ -51,6 +60,7 @@ import { UserTypes } from '@enums/user-types';
     MatHeaderCellDef,
     DatePipe,
     MatPaginator,
+    ButtonComponent,
   ],
   templateUrl: './attendance.component.html',
   styleUrl: './attendance.component.scss',
@@ -66,9 +76,12 @@ export class AttendanceComponent
   employeeService = inject(EmployeeService);
   callRequestService = inject(CallRequestService);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   dataSource: MatTableDataSource<CallRequest> = new MatTableDataSource();
   reload$: Subject<null> = new Subject<null>();
   apology$: Subject<CallRequest> = new Subject<CallRequest>();
+  @Input() hidePagination: boolean = false;
+  @Output() setLength: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('paginator') paginator!: MatPaginator;
   userId!: number | undefined;
   displayedColumns = [
@@ -76,6 +89,7 @@ export class AttendanceComponent
     'summonDateTime',
     'summons',
     'summonsPlace',
+    'status',
     'actions',
   ];
 
@@ -88,6 +102,9 @@ export class AttendanceComponent
     this._listenToApology();
   }
 
+  showAll() {
+    this.router.navigate(['/external/summons-to-attend']);
+  }
   private listenToReload() {
     this.reload$
       .pipe(
@@ -109,17 +126,22 @@ export class AttendanceComponent
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.dataSource.data = list.rs;
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.getRangeLabel = (
-          page: number,
-          pageSize: number,
-          length: number,
-        ) => {
-          const start = page * pageSize + 1;
-          const end = Math.min((page + 1) * pageSize, length);
-          return `${start} - ${end} ${this.lang.map.of} ${length}`;
-        };
+        this.setLength.emit(list.rs.length);
+        this.dataSource.data = !this.hidePagination
+          ? list.rs
+          : list.rs.splice(0, 5);
+        if (!this.hidePagination) {
+          this.dataSource.paginator = this.paginator;
+          this.paginator._intl.getRangeLabel = (
+            page: number,
+            pageSize: number,
+            length: number,
+          ) => {
+            const start = page * pageSize + 1;
+            const end = Math.min((page + 1) * pageSize, length);
+            return `${start} - ${end} ${this.lang.map.of} ${length}`;
+          };
+        }
       });
   }
   private _listenToApology() {

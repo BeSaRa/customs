@@ -92,6 +92,7 @@ export const AppIcons = {
   AUTO_FILL: 'window-shutter-auto',
   LAUNCH: 'rocket-launch-outline',
   APPROVE: 'check-decagram',
+  ARROW_TOP_LEFT: 'arrow-top-left',
   SUSPEND_EMPLOYEE: 'pause-octagon',
 };
 

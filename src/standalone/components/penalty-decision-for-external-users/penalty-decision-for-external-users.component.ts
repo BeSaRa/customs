@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
   MatCell,
@@ -25,14 +33,21 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserTypes } from '@enums/user-types';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { BlobModel } from '@models/blob-model';
 import { InvestigationService } from '@services/investigation.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import {
+  MatButtonToggle,
+  MatButtonToggleGroup,
+} from '@angular/material/button-toggle';
+import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -54,6 +69,12 @@ import { ActivatedRoute } from '@angular/router';
     MatRowDef,
     DatePipe,
     MatPaginator,
+    ButtonComponent,
+    MatTabGroup,
+    MatTab,
+    NgTemplateOutlet,
+    MatButtonToggle,
+    MatButtonToggleGroup,
   ],
   templateUrl: './penalty-decision-for-external-users.component.html',
   styleUrl: './penalty-decision-for-external-users.component.scss',
@@ -71,33 +92,38 @@ export class PenaltyDecisionForExternalUsersComponent
   investigationService = inject(InvestigationService);
   domSanitize = inject(DomSanitizer);
   route = inject(ActivatedRoute);
+  router = inject(Router);
   dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
   reload$: Subject<null> = new Subject<null>();
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
-  view$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   viewDecisionFile$ = new Subject<string>();
   pay$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
-  protected readonly userTypes = UserTypes;
+  @Input() hidePagination: boolean = false;
+  @Output() setLength: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('paginator') paginator!: MatPaginator;
+  user = this.employeeService.getLoginData();
   userId!: number | undefined;
   displayedColumns = [
     'decisionSerial',
     'decisionDate',
-    'status',
     'signer',
     'penalty',
+    'status',
     'actions',
   ];
 
   ngOnInit(): void {
     this.listenToReload();
+    this.listenGrievance();
     this.route.queryParams.subscribe(params => {
       this.userId = params.id;
       this.reload$.next(null);
     });
     this.listenToViewDecisionFile();
   }
-
+  showAll() {
+    this.router.navigate(['/external/decisions']);
+  }
   private listenToReload() {
     this.reload$
       .pipe(
@@ -119,20 +145,39 @@ export class PenaltyDecisionForExternalUsersComponent
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.dataSource.data = list.rs;
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.getRangeLabel = (
-          page: number,
-          pageSize: number,
-          length: number,
-        ) => {
-          const start = page * pageSize + 1;
-          const end = Math.min((page + 1) * pageSize, length);
-          return `${start} - ${end} ${this.lang.map.of} ${length}`;
-        };
+        this.setLength.emit(list.rs.length);
+        this.dataSource.data = !this.hidePagination
+          ? list.rs
+          : list.rs.splice(0, 5);
+        if (!this.hidePagination) {
+          this.dataSource.paginator = this.paginator;
+          this.paginator._intl.getRangeLabel = (
+            page: number,
+            pageSize: number,
+            length: number,
+          ) => {
+            const start = page * pageSize + 1;
+            const end = Math.min((page + 1) * pageSize, length);
+            return `${start} - ${end} ${this.lang.map.of} ${length}`;
+          };
+        }
       });
   }
-
+  private listenGrievance() {
+    this.grievance$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(GrievancePopupComponent, {
+              data: {
+                model: model,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
+  }
   private listenToViewDecisionFile() {
     this.viewDecisionFile$
       .pipe(
