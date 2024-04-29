@@ -9,9 +9,9 @@
   </div>
   <div class="dialog-content !p-0">
     <mat-tab-group
-      mat-stretch-tabs="false"
+      [mat-stretch-tabs]="false"
       mat-align-tabs="start"
-      dynamicHeight>
+      [dynamicHeight]="true">
       <mat-tab [label]="lang.map.lbl_basic_info">
         <div class="h-full overflow-auto">
           <!-- user info -->

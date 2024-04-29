@@ -48,11 +48,10 @@ export class EmailTemplatePopupComponent extends AdminDialogComponent<EmailTempl
   }
 
   protected _prepareModel(): EmailTemplate | Observable<EmailTemplate> {
-    const newModel = new EmailTemplate().clone<EmailTemplate>({
+    return new EmailTemplate().clone<EmailTemplate>({
       ...this.model,
       ...this.form.value,
     });
-    return newModel;
   }
 
   protected _afterSave(model: EmailTemplate): void {

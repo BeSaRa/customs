@@ -158,7 +158,7 @@ export class WitnessCriteriaPopupComponent
   private listenToWitnessTypeChange() {
     this.witnessTypeControl.valueChanges.subscribe(value => {
       this.isEmployee = value === WitnessTypes.EMPLOYEE;
-      this.isClearingAgent = value === WitnessTypes.ClEARING_AGENT;
+      this.isClearingAgent = value === WitnessTypes.CLEARING_AGENT;
       this.isExternal = value === WitnessTypes.EXTERNAL;
     });
   }

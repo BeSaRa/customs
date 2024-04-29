@@ -38,6 +38,7 @@ import { FilterArrayPipe } from '@standalone/pipes/filter-array.pipe';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
+import { MatRipple } from '@angular/material/core';
 
 @Component({
   selector: 'app-internal-user-permissions-popup',
@@ -57,6 +58,7 @@ import { InternalUserOU } from '@models/internal-user-ou';
     MatTooltip,
     FilterArrayPipe,
     HighlightPipe,
+    MatRipple,
   ],
   templateUrl: './internal-user-permissions-popup.component.html',
   styleUrl: './internal-user-permissions-popup.component.scss',
