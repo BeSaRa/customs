@@ -47,6 +47,11 @@ const routes: Routes = [
   {
     path: AppRoutes.INVESTIGATION_DRAFTS,
     component: InvestigationDraftsComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.SEARCH_FOR_DRAFTS,
+      }),
+    ],
   },
   {
     path: AppRoutes.CALENDAR,
