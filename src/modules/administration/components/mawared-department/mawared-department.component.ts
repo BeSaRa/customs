@@ -48,6 +48,7 @@ export class MawaredDepartmentComponent
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('ldapCode'),
+    new TextFilterColumn('parentInfo'),
     new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(

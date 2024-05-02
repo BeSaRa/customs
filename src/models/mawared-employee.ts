@@ -78,6 +78,7 @@ export class MawaredEmployee extends BaseModel<
       email,
       qid,
       gender,
+      employeeDepartmentInfo: this.getEmployeeDepartmentInfoName(),
       isPrivateUser,
       statusInfo: this.getStatusInfoName(), //
       employeeCareerLevelInfo: this.getEmployeeCareerLevelInfoName(), //
@@ -109,6 +110,10 @@ export class MawaredEmployee extends BaseModel<
 
   getEmployeeSectionInfoName() {
     return this.employeeSectionInfo?.getNames() || '';
+  }
+
+  getEmployeeDepartmentInfoName() {
+    return this.employeeDepartmentInfo?.getNames() || '';
   }
 
   convertToOffender(caseId: string): Offender {

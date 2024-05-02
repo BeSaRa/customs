@@ -76,6 +76,20 @@
       </td>
     </ng-container>
 
+    <!-- parentInfo parentInfo -->
+    <ng-container matColumnDef="parentInfo">
+      <th mat-header-cell mat-sort-header="parentInfo" *matHeaderCellDef>
+        {{ lang.map.parent_unit }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span
+          [innerHTML]="
+            element.parentInfo?.getNames() || ''
+              | highlight: getFilterStringColumn('ldapCode')
+          "></span>
+      </td>
+    </ng-container>
+
     <!-- status status -->
     <ng-container matColumnDef="status">
       <th
