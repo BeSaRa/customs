@@ -348,7 +348,12 @@ export class InvestigationComponent
         break;
       case OpenFrom.SEARCH:
         this.router
-          .navigate(['/home/electronic-services/investigation-search'])
+          .navigate(['/home/electronic-services/investigation-search'], {
+            state: {
+              ...this.info()?.searchCriteria,
+              returnedFromInvestigation: true,
+            },
+          })
           .then();
         break;
       case OpenFrom.DRAFT_SCREEN:
