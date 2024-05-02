@@ -59,4 +59,12 @@ export class MawaredEmployeeService extends BaseCrudWithDialogService<
       },
     );
   }
+
+  @CastResponse()
+  updateUserPrivacy(userId: number) {
+    return this.http.put(
+      this.getUrlSegment() + `/admin/${userId}/change-private-user`,
+      null,
+    );
+  }
 }

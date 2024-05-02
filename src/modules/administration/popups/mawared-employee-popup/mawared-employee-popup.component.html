@@ -50,7 +50,16 @@
         <ng-container [formGroup]="form">
           <div class="grid grid-cols-2 gap-4 p-4">
             <app-input
-              formControlName="employeeCareerLevelInfo"
+              [disabled]="true"
+              formControlName="employeeDepartmentInfo"
+              [label]="lang.map.lbl_department"></app-input>
+            <app-input
+              [disabled]="true"
+              formControlName="subDepartmentName"
+              [label]="lang.map.sub_department"></app-input>
+            <app-input
+              [disabled]="true"
+              formControlName="employeeCareerLevel"
               [label]="lang.map.career_level"></app-input>
             <app-input
               formControlName="employeeSectionInfo"

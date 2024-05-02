@@ -1,21 +1,21 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
-import { MawaredEmployee } from '@models/mawared-employee';
-import { MawaredEmployeeService } from '@services/mawared-employee.service';
-import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
-import { ColumnsWrapper } from '@models/columns-wrapper';
-import { TextFilterColumn } from '@models/text-filter-column';
-import { NoneFilterColumn } from '@models/none-filter-column';
-import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { Component, inject, OnInit } from '@angular/core';
 import { AppIcons } from '@constants/app-icons';
-import { SelectFilterColumn } from '@models/select-filter-column';
-import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
-import { StatusTypes } from '@enums/status-types';
-import { ReplaySubject, takeUntil } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { IntegrationPopupComponent } from '@modules/administration/popups/integration-popup/integration-popup.component';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { IntegrationsCases } from '@enums/integrations-cases';
+import { StatusTypes } from '@enums/status-types';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { Lookup } from '@models/lookup';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { IntegrationPopupComponent } from '@modules/administration/popups/integration-popup/integration-popup.component';
+import { MawaredEmployeePopupComponent } from '@modules/administration/popups/mawared-employee-popup/mawared-employee-popup.component';
+import { LookupService } from '@services/lookup.service';
+import { MawaredEmployeeService } from '@services/mawared-employee.service';
+import { ReplaySubject, takeUntil } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mawared-employee',
@@ -36,6 +36,20 @@ export class MawaredEmployeeComponent
   commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED,
   );
+
+  userPrivacy = [
+    new Lookup().clone<Lookup>({
+      arName: 'نعم',
+      enName: 'Yes',
+      status: true,
+    }),
+    new Lookup().clone<Lookup>({
+      arName: 'لا',
+      enName: 'No',
+      status: false,
+    }),
+  ];
+
   actions: ContextMenuActionContract<MawaredEmployee>[] = [
     {
       name: 'view',
@@ -63,11 +77,18 @@ export class MawaredEmployeeComponent
     new TextFilterColumn('enName'),
     new TextFilterColumn('qid'),
     new SelectFilterColumn(
+      'isPrivateUser',
+      this.userPrivacy,
+      'status',
+      'getNames',
+    ),
+    new SelectFilterColumn(
       'status',
       this.commonStatus,
       'lookupKey',
       'getNames',
     ),
+
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
@@ -89,5 +110,18 @@ export class MawaredEmployeeComponent
         ),
       )
       .subscribe();
+  }
+
+  updateUserPrivacy(user: MawaredEmployee) {
+    this.loadingSubject.next(true);
+    this.service
+      .updateUserPrivacy(user.id)
+      .pipe(
+        take(1),
+        finalize(() => this.loadingSubject.next(false)),
+      )
+      .subscribe(() => {
+        user.isPrivateUser = !user.isPrivateUser;
+      });
   }
 }

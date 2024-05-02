@@ -13,6 +13,8 @@ export class MawaredDepartmentInterceptor
   receive(model: MawaredDepartment): MawaredDepartment {
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
+    model.parentInfo &&
+      (model.parentInfo = AdminResult.createInstance(model.parentInfo));
     return model;
   }
 }
