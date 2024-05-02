@@ -188,6 +188,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.INVESTIGATION_DRAFTS,
     path: AppFullRoutes.INVESTIGATION_DRAFTS,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'SEARCH_FOR_DRAFTS',
   },
   {
     id: MenuIdes.CLEARING_AGENT,
