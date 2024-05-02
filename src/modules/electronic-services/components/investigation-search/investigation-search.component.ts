@@ -20,7 +20,7 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { EncryptionService } from '@services/encryption.service';
 import { INavigatedItem } from '@contracts/inavigated-item';
@@ -37,6 +37,7 @@ import { ActionsOnCaseComponent } from '@modules/electronic-services/components/
 export class InvestigationSearchComponent implements OnInit {
   investigationSearchService = inject(InvestigationSearchService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   encrypt = inject(EncryptionService);
   lookupService = inject(LookupService);
   dialog = inject(DialogService);
@@ -55,9 +56,14 @@ export class InvestigationSearchComponent implements OnInit {
       this.search$.next();
     }
   }
+
   ngOnInit(): void {
     this.form = this.fb.group(new Investigation().buildForm());
     this.listenToSearch();
+    if (history.state.returnedFromInvestigation) {
+      this.form.patchValue(history.state);
+      this.search$.next();
+    }
   }
 
   actions: ContextMenuActionContract<Investigation>[] = [
@@ -84,6 +90,7 @@ export class InvestigationSearchComponent implements OnInit {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
+
   resetForm() {
     this.form.reset();
   }
@@ -123,6 +130,7 @@ export class InvestigationSearchComponent implements OnInit {
       taskId: item.id,
       caseId: item.id,
       caseType: item.caseType,
+      searchCriteria: this.form.value,
     });
     this.router
       .navigate([AppFullRoutes.INVESTIGATION], {
@@ -130,6 +138,7 @@ export class InvestigationSearchComponent implements OnInit {
       })
       .then();
   }
+
   showActionsOnCase(item: Investigation) {
     this.dialog.open(ActionsOnCaseComponent, {
       data: { caseId: item.id },
