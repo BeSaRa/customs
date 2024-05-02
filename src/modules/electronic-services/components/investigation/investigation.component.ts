@@ -43,6 +43,8 @@ import { CaseAttachmentsComponent } from '@standalone/components/case-attachment
 import { ViolationClassificationService } from '@services/violation-classification.service';
 import { ViolationClassification } from '@models/violation-classification';
 import { MatTabGroup } from '@angular/material/tabs';
+import { TeamService } from '@services/team.service';
+import { Team } from '@models/team';
 
 @Component({
   selector: 'app-investigation',
@@ -72,6 +74,7 @@ export class InvestigationComponent
   form!: UntypedFormGroup;
   service = inject(InvestigationService);
   employeeService = inject(EmployeeService);
+  teamService = inject(TeamService);
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   toast = inject(ToastService);
@@ -141,6 +144,31 @@ export class InvestigationComponent
 
     this._listenToLoadOffendersViolations();
     this.listenToTabChange();
+    this.claimIfAutoClaim();
+  }
+
+  claimIfAutoClaim() {
+    this.teamService
+      .load()
+      .pipe(map(res => res.rs))
+      .subscribe((teams: Team[]) => {
+        const autoClaim = !!teams.find(
+          team => team.authName === this.model.getTeamAuthName(),
+        )?.autoClaim;
+        if (autoClaim) this.claimItem();
+      });
+  }
+
+  claimItem() {
+    this.model
+      .claim()
+      .pipe(take(1))
+      .subscribe((model: Investigation) => {
+        this.model.getPenaltyDecision().forEach(item => {
+          model.appendPenaltyDecision(item);
+        });
+        this._updateForm(model);
+      });
   }
 
   isHrManager() {
