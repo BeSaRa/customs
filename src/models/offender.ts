@@ -25,6 +25,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   linkedPid!: number;
   statusDateModified?: Date | string;
   ouId!: number;
+  employeeDepartmentId!: number;
   agentCustomCode!: string;
   attachmentCount: number = 0;
   offenderInfo?: MawaredEmployee | ClearingAgent;
@@ -54,21 +55,20 @@ export class Offender extends BaseModel<Offender, OffenderService> {
       );
     }
     return (
-      (this.type === OffenderTypes.BOTH &&
-        this.$$getEmployeeService$$().hasAnyPermissions([
-          'EMPLOYEE_SITUATION_SEARCH_IN_ALL_DEPARTMENTS',
-          'EMPLOYEE_SITUATION_SEARCH_IN_DEPARTMENT',
-          'CLEARING_AGENT_SITUATION_SEARCH',
-        ])) ||
-      (this.type === OffenderTypes.EMPLOYEE &&
-        this.$$getEmployeeService$$().hasAnyPermissions([
-          'EMPLOYEE_SITUATION_SEARCH_IN_ALL_DEPARTMENTS',
-          'EMPLOYEE_SITUATION_SEARCH_IN_DEPARTMENT',
-        ])) ||
       (this.type === OffenderTypes.BROKER &&
         this.$$getEmployeeService$$().hasPermissionTo(
           'CLEARING_AGENT_SITUATION_SEARCH',
-        ))
+        )) ||
+      (this.type === OffenderTypes.EMPLOYEE &&
+        this.$$getEmployeeService$$().hasPermissionTo(
+          'EMPLOYEE_SITUATION_SEARCH_IN_ALL_DEPARTMENTS',
+        )) ||
+      (this.type === OffenderTypes.EMPLOYEE &&
+        this.$$getEmployeeService$$().hasPermissionTo(
+          'EMPLOYEE_SITUATION_SEARCH_IN_DEPARTMENT',
+        ) &&
+        this.$$getEmployeeService$$().getEmployee()?.mawaredEmployeeInfo
+          .employeeDepartmentId === this.employeeDepartmentId)
     );
   }
 
