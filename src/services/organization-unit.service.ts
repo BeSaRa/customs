@@ -32,6 +32,7 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<
   OrganizationUnit
 > {
   override serviceName = 'OrganizationUnitService';
+
   protected getModelClass(): Constructor<OrganizationUnit> {
     return OrganizationUnit;
   }
@@ -70,8 +71,10 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<
 
   uploadOuLogo(ouLogo: OuLogo): Observable<unknown> {
     const formData = new FormData();
-    ouLogo.content ? formData.append('content', ouLogo.content) : null;
-    delete ouLogo.content;
+    if (ouLogo && ouLogo.content !== undefined) {
+      ouLogo.content ? formData.append('content', ouLogo.content) : null;
+      delete ouLogo.content;
+    }
     return this.http.post(this.getUrlSegment() + '/stamp', formData, {
       params: new HttpParams({
         fromObject: ouLogo as never,

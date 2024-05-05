@@ -69,21 +69,14 @@ export class OrganizationUnit extends BaseModel<
           ]
         : enName,
       type: controls ? [type, CustomValidators.required] : type,
-      managerId: controls ? [managerId, CustomValidators.required] : managerId,
-      parent: controls ? [parent, CustomValidators.required] : parent,
+      managerId: controls ? [managerId] : managerId,
+      parent: controls ? [parent] : parent,
       email: controls ? [email, CustomValidators.required] : email,
-      mawaredDepId: controls
-        ? [mawaredDepId, CustomValidators.required]
-        : mawaredDepId,
-      assistantOuId: controls
-        ? [assistantOuId, CustomValidators.required]
-        : assistantOuId,
-      managerAssistant: controls
-        ? [managerAssistant, CustomValidators.required]
-        : managerAssistant,
-      isCustoms: controls ? [isCustoms, CustomValidators.required] : isCustoms,
-
-      status: status,
+      mawaredDepId: controls ? [mawaredDepId] : mawaredDepId,
+      assistantOuId: controls ? [assistantOuId] : assistantOuId,
+      managerAssistant: controls ? [managerAssistant] : managerAssistant,
+      isCustoms: controls ? [isCustoms] : isCustoms,
+      status: controls ? [status, CustomValidators.required] : status,
     };
   }
 }

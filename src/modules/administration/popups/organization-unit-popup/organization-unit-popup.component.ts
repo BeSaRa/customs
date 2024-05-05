@@ -131,7 +131,9 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       const url = window.URL.createObjectURL(blob);
       this.ouLogoSafeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     };
-    reader.readAsArrayBuffer(this.ouLogo.content as File);
+    if (this.ouLogo && this.ouLogo.content !== undefined) {
+      reader.readAsArrayBuffer(this.ouLogo?.content as File);
+    }
   }
 
   getOuLogoStyle(): string {
