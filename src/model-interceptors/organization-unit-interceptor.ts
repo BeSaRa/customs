@@ -11,6 +11,7 @@ export class OrganizationUnitInterceptor
     delete model.typeInfo;
     delete model.parentInfo;
     delete model.mawaredDepInfo;
+    delete model.assistantInfo;
 
     return model;
   }
