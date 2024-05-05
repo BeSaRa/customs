@@ -161,8 +161,10 @@
     model().inMyInbox() &&
     model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
   ) {
-    <app-button buttonType="secondary" (click)="presidentToLegalAffairs()">
-      {{ lang.map.to_legal_affairs_manager }}
+    <app-button
+      buttonType="primary"
+      (click)="approve$.next(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)">
+      {{ lang.map.complete }}
     </app-button>
   }
   <!-- transfer report to staff president office -->
