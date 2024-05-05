@@ -27,6 +27,7 @@ import { LookupService } from '@services/lookup.service';
 import { Offender } from '@models/offender';
 import {
   filter,
+  iif,
   of,
   shareReplay,
   Subject,
@@ -545,15 +546,21 @@ export class OffendersViolationsPreviewComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(penaltyDecision =>
-          this.displayConfirmMessage(penaltyDecision),
+          iif(
+            () => this.model().inSubmitInvestigationActivity(),
+            of(true).pipe(
+              switchMap(() => this.displayConfirmMessage(penaltyDecision)),
+              tap(({ click }) => {
+                this.resetProofStatusToOldValue(click, item, index, oldValue);
+              }),
+              filter(({ click }) => click === UserClick.YES),
+              switchMap(({ penaltyDecision }) => {
+                return this.deleteOldDecision(penaltyDecision);
+              }),
+            ),
+            of(false),
+          ),
         ),
-        tap(({ click }) => {
-          this.resetProofStatusToOldValue(click, item, index, oldValue);
-        }),
-        filter(({ click }) => click === UserClick.YES),
-        switchMap(({ penaltyDecision }) => {
-          return this.deleteOldDecision(penaltyDecision);
-        }),
       )
       .subscribe(() => {
         this.updateOffenderViolationProofStatus(item, index);

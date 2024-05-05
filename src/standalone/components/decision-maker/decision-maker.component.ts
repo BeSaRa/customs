@@ -124,7 +124,8 @@ export class DecisionMakerComponent
       .pipe(
         switchMap(() => {
           return oldDecision &&
-            systemPenaltyKeys.includes(oldDecision.penaltyInfo.penaltyKey)
+            systemPenaltyKeys.includes(oldDecision.penaltyInfo.penaltyKey) &&
+            this.model().inSubmitInvestigationActivity()
             ? this.dialog
                 .confirm(
                   this.lang.map.action_will_effect_current_offender_decision,
@@ -257,7 +258,9 @@ export class DecisionMakerComponent
       )
       .pipe(
         switchMap(({ oldPenalty, offenders, penaltyKey }) => {
-          return oldPenalty && penaltyKey !== oldPenalty.penaltyInfo.penaltyKey
+          return oldPenalty &&
+            penaltyKey !== oldPenalty.penaltyInfo.penaltyKey &&
+            this.model().inSubmitInvestigationActivity()
             ? this.dialog
                 .confirm(
                   this.lang.map.action_will_effect_current_offender_decision,
