@@ -16,6 +16,7 @@ import {
   input,
   OnInit,
   signal,
+  untracked,
 } from '@angular/core';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { MatSortModule } from '@angular/material/sort';
@@ -192,15 +193,29 @@ export class OffendersViolationsPreviewComponent
     }, {});
   });
 
+  decisionMap = computed(() => {
+    return this.model().penaltyDecisions.reduce<
+      Record<number, PenaltyDecision>
+    >((acc, item) => {
+      return { ...acc, [item.offenderId]: item };
+    }, {});
+  });
+
   violationProofStatus = computed(() => {
     return Object.entries(this.offenderViolationsMap()).reduce<
       Record<number, FormControl<number | null>[]>
     >((acc, [key, offenderViolation]) => {
+      const decision = untracked(this.decisionMap)[Number(key)];
+      console.log(decision);
       acc[Number(key)] = offenderViolation.map(
         i =>
           new FormControl<number>({
             value: i.proofStatus,
             disabled:
+              (decision &&
+                decision.penaltyInfo &&
+                decision.penaltyInfo.penaltyKey === SystemPenalties.TERMINATE &&
+                !this.model().inSubmitInvestigationActivity()) ||
               this.model().inHumanResource() ||
               this.model().inLegalAffairsActivity() ||
               !this.model().hasTask() ||
@@ -224,14 +239,6 @@ export class OffendersViolationsPreviewComponent
       },
       {},
     );
-  });
-
-  decisionMap = computed(() => {
-    return this.model().penaltyDecisions.reduce<
-      Record<number, PenaltyDecision>
-    >((acc, item) => {
-      return { ...acc, [item.offenderId]: item };
-    }, {});
   });
   selectionChange = signal<Offender[]>([]);
   uniqSystemPenalties = computed(() => {
