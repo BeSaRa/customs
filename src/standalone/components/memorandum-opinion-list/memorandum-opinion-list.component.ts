@@ -25,6 +25,7 @@ import { DatePipe } from '@angular/common';
 import { ConfigService } from '@services/config.service';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -54,6 +55,7 @@ export class MemorandumOpinionListComponent
 {
   lang = inject(LangService);
   investigationService = inject(InvestigationService);
+  employeeService = inject(EmployeeService);
   config = inject(ConfigService);
   model = input.required<Investigation>();
   updateModel = input.required<EventEmitter<void>>();
@@ -155,5 +157,12 @@ export class MemorandumOpinionListComponent
       .subscribe(() => {
         this.reload$.next();
       });
+  }
+
+  hasAddMemoOpinionPermission() {
+    return (
+      this.model().inMyInbox() &&
+      this.employeeService.hasPermissionTo('ADD_MEMO_OPINION')
+    );
   }
 }
