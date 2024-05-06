@@ -1,9 +1,11 @@
 <div class="p-4">
   <app-persons-list type="offender" [model]="model()" />
 </div>
-<div class="p-4">
-  <app-persons-list type="witness" [model]="model()" />
-</div>
+@if (canViewWitness()) {
+  <div class="p-4">
+    <app-persons-list type="witness" [model]="model()" />
+  </div>
+}
 <div class="p-4">
   <!-- the new component goes here  -->
   <app-memorandum-opinion-list [updateModel]="updateModel" [model]="model()" />

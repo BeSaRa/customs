@@ -309,4 +309,11 @@ export class PersonsListComponent
         this.reloadWitness$.next();
       });
   }
+
+  canManageWitness() {
+    return (
+      this.employeeService.hasPermissionTo('MANAGE_WITNESS') &&
+      this.model().inMyInbox()
+    );
+  }
 }
