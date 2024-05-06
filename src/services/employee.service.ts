@@ -6,7 +6,6 @@ import { LookupService } from '@services/lookup.service';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { OrganizationUnit } from '@models/organization-unit';
 import { Team } from '@models/team';
-import { LDAPGroupNames } from '@enums/department-group-names.enum';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { ServiceContract } from '@contracts/service-contract';
 import { MawaredEmployee } from '@models/mawared-employee';
@@ -14,7 +13,6 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { InternalUserInterceptor } from '@model-interceptors/internal-user-interceptor';
 import { ClearingAgency } from '@models/clearing-agency';
 import { UserTypes } from '@enums/user-types';
-import { DisciplinaryCommitteeCustomSettingContract } from '@contracts/disciplinary-committee-custom-setting-contract';
 import { TeamNames } from '@enums/team-names';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
 import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
@@ -148,64 +146,61 @@ export class EmployeeService
 
   isApplicantUser() {
     return (this.loginData?.teams || []).find(
-      (t: Team) => t.ldapGroupName === LDAPGroupNames.Applicant_Department,
+      (t: Team) => t.authName === TeamNames.Applicant_Department,
     );
   }
 
   isApplicantChief() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === LDAPGroupNames.Applicant_Department_Chief,
+      (t: Team) => t.authName === TeamNames.Applicant_Department_Chief,
     );
   }
 
   isApplicantManager() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === LDAPGroupNames.Applicant_Department_Manager,
+      (t: Team) => t.authName === TeamNames.Applicant_Department_Manager,
     );
   }
 
   isHrManager() {
     return (this.loginData?.teams || []).find(
-      (t: Team) => t.ldapGroupName === LDAPGroupNames.Human_Resources_Manager,
+      (t: Team) => t.authName === TeamNames.Human_Resources_Manager,
     );
   }
 
   isDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
-      (t: Team) => t.ldapGroupName === LDAPGroupNames.Disciplinary_Committee,
+      (t: Team) => t.authName === TeamNames.Disciplinary_Committee,
     );
   }
 
-  isTeamSecretary(ldapGroupName: LDAPGroupNames) {
-    const customSettings: string | undefined = (
-      this.loginData?.teams || []
-    ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
+  // isTeamSecretary(ldapGroupName: LDAPGroupNames) {
+  //   const customSettings: string | undefined = (
+  //     this.loginData?.teams || []
+  //   ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
+  //
+  //   const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
+  //     JSON.parse(
+  //       (customSettings as string) || '{}',
+  //     ) as DisciplinaryCommitteeCustomSettingContract;
+  //   return parsedCustomSettings.secretary === this.getEmployee()?.id;
+  // }
 
-    const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
-      JSON.parse(
-        (customSettings as string) || '{}',
-      ) as DisciplinaryCommitteeCustomSettingContract;
-    return parsedCustomSettings.secretary === this.getEmployee()?.id;
-  }
-
-  isTeamPresident(ldapGroupName: LDAPGroupNames) {
-    const customSettings: string | undefined = (
-      this.loginData?.teams || []
-    ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
-
-    const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
-      JSON.parse(
-        (customSettings as string) || '{}',
-      ) as DisciplinaryCommitteeCustomSettingContract;
-    return parsedCustomSettings.president === this.getEmployee()?.id;
-  }
+  // isTeamPresident(ldapGroupName: LDAPGroupNames) {
+  //   const customSettings: string | undefined = (
+  //     this.loginData?.teams || []
+  //   ).find((t: Team) => t.ldapGroupName === ldapGroupName)?.customSettings;
+  //
+  //   const parsedCustomSettings: Partial<DisciplinaryCommitteeCustomSettingContract> =
+  //     JSON.parse(
+  //       (customSettings as string) || '{}',
+  //     ) as DisciplinaryCommitteeCustomSettingContract;
+  //   return parsedCustomSettings.president === this.getEmployee()?.id;
+  // }
 
   isPermanentDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
-      (t: Team) =>
-        t.ldapGroupName === LDAPGroupNames.Permanent_Disciplinary_Committee,
+      (t: Team) => t.authName === TeamNames.Permanent_Disciplinary_Committee,
     );
   }
 
@@ -216,9 +211,11 @@ export class EmployeeService
   getExternalPerson(): MawaredEmployee | ClearingAgent | undefined {
     return this.loginData?.person;
   }
+
   getExternalClearingAgency(): ClearingAgency | undefined {
     return this.loginData?.clearingAgency;
   }
+
   getEmployeeTeams(): Team[] {
     return this.loginData?.teams || [];
   }
