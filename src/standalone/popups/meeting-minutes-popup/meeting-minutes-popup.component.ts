@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -33,9 +33,11 @@ import { TeamService } from '@services/team.service';
 import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
 import { AdminResult } from '@models/admin-result';
-import { MeetingService } from '@services/meeting.service';
 import { OperationType } from '@enums/operation-type';
 import { MeetingStatusEnum } from '@enums/meeting-status-enum';
+import { Investigation } from '@models/investigation';
+import { MeetingMinutes } from '@models/meeting-minutes';
+import { GeneralStatusEnum } from '@enums/general-status-enum';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -70,7 +72,6 @@ export class MeetingMinutesPopupComponent
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   teamService = inject(TeamService);
-  meetingService = inject(MeetingService);
   save$: Subject<void> = new Subject<void>();
   form: FormGroup = new FormGroup({});
   todayDate = new Date();
@@ -78,6 +79,9 @@ export class MeetingMinutesPopupComponent
   caseId = this.data.extras?.caseId;
   operation = this.data.extras?.operation;
   model: Meeting | undefined = this.data.model;
+  minutesModel: MeetingMinutes = this.data.extras?.minutesModel;
+  investigationModel: Signal<Investigation> =
+    this.data.extras?.investigationModel;
   attendanceList: MeetingAttendance[] = [];
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   meetingStatus = this.lookupService.lookups.meetingStatus;
@@ -87,7 +91,7 @@ export class MeetingMinutesPopupComponent
     this.getAttendanceList();
   }
   get readonlyMeetingData() {
-    return !!this.model;
+    return this.operation === OperationType.VIEW;
   }
   getAttendanceList() {
     this.teamService
@@ -140,7 +144,7 @@ export class MeetingMinutesPopupComponent
         CustomValidators.maxLength(3000),
       ]);
     this.form.get('status')?.setValidators([CustomValidators.required]);
-    if (!this.model) {
+    if (!this.model || (this.minutesModel && this.minutesModel.id)) {
       this.form.get('status')?.disable();
       this.form.get('status')?.setValue(MeetingStatusEnum.held);
     }
@@ -171,40 +175,51 @@ export class MeetingMinutesPopupComponent
       )
       .pipe(
         switchMap(() => {
-          if (!this.model) {
-            return this.meetingService.createFull(
-              new Meeting().clone<Meeting>({
-                caseId: this.caseId,
-                ...this.form.value,
-                offenderList: this.concernedOffendersIds,
-              }),
-            );
-          } else {
-            return of(this.model);
-          }
+          return new Meeting()
+            .clone<Meeting>({
+              ...this.model,
+              caseId: this.caseId,
+              ...this.form.value,
+              offenderList: this.concernedOffendersIds,
+            })
+            .save();
         }),
       )
       .pipe(
         switchMap(model => {
-          return this.investigationService.addMeetingMinutes({
-            ...model,
-            ...this.form.value,
-            caseId: model.caseId,
-            id: model.id,
-            attendanceList: model.attendanceList.map(attend => {
-              return {
-                ...attend,
-                status: this.attendanceList.find(
-                  localAttend => attend.attendeeId === localAttend.attendeeId,
-                )?.status,
-              };
-            }),
-            offenderList: this.concernedOffendersIds,
-          });
+          if (
+            this.minutesModel &&
+            this.minutesModel.id &&
+            this.minutesModel.generalStatus === GeneralStatusEnum.DC_M_LAUNCHED
+          ) {
+            return this.investigationService.reviewTaskMeetingMinutes(
+              this.investigationModel().taskDetails.tkiid,
+              model.id,
+              true,
+            );
+          } else if (!this.minutesModel) {
+            return this.investigationService.addMeetingMinutes({
+              ...model,
+              ...this.form.value,
+              caseId: model.caseId,
+              id: model.id,
+              attendanceList: model.attendanceList.map(attend => {
+                return {
+                  ...attend,
+                  status: this.attendanceList.find(
+                    localAttend => attend.attendeeId === localAttend.attendeeId,
+                  )?.status,
+                };
+              }),
+              offenderList: this.concernedOffendersIds,
+            });
+          } else {
+            return of(null);
+          }
         }),
       )
-      .subscribe(model => {
-        this.dialogRef.close(model);
+      .subscribe(() => {
+        this.dialogRef.close();
       });
   }
 }

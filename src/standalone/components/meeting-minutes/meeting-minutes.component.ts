@@ -45,7 +45,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { UserClick } from '@enums/user-click';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
-import { combineLatest } from 'rxjs';
 import { MeetingMinutes } from '@models/meeting-minutes';
 import { GeneralStatusEnum } from '@enums/general-status-enum';
 import { OperationType } from '@enums/operation-type';
@@ -87,6 +86,7 @@ export class MeetingMinutesComponent
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
   add$: Subject<void> = new Subject<void>();
   view$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
+  editMeetingMinutes$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
   delete$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
   launch$: Subject<MeetingMinutes> = new Subject<MeetingMinutes>();
   model = input.required<Investigation>();
@@ -111,6 +111,7 @@ export class MeetingMinutesComponent
     this._listenToLaunch();
     this.listenToDelete();
     this.listenToView();
+    this.listenToEditMinutes();
     this._listenToAddMeetingMinutes();
   }
   _listenToReload() {
@@ -130,14 +131,9 @@ export class MeetingMinutesComponent
     this.launch$
       .pipe(
         switchMap(draft => {
-          return combineLatest(
-            draft.offenderIds.map(offenderId => {
-              return this.investigationService.reviewTaskMeetingMinutes(
-                this.model().taskDetails.tkiid,
-                draft.concernedId,
-                offenderId,
-              );
-            }),
+          return this.investigationService.reviewTaskMeetingMinutes(
+            this.model().taskDetails.tkiid,
+            draft.concernedId,
           );
         }),
       )
@@ -145,6 +141,46 @@ export class MeetingMinutesComponent
         this.reload$.next(null);
       });
   }
+  listenToEditMinutes() {
+    this.editMeetingMinutes$
+      .pipe(
+        switchMap(model => {
+          return this.meetingService.loadByIdComposite(model.concernedId).pipe(
+            map(meeting => {
+              return {
+                meeting,
+                minutes: model,
+              };
+            }),
+          );
+        }),
+      )
+      .pipe(
+        switchMap(payload => {
+          const minDate = new Date(this.model().taskDetails.dueTime);
+          return this.dialog
+            .open(MeetingMinutesPopupComponent, {
+              data: {
+                model: payload.meeting,
+                extras: {
+                  minutesModel: payload.minutes,
+                  investigationModel: this.model,
+                  operation: OperationType.UPDATE,
+                  caseId: this.model().id,
+                  concernedOffendersIds:
+                    this.model().getConcernedOffendersIds(),
+                  minDate,
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => {
+        this.reload$.next(null);
+      });
+  }
+
   private listenToDelete() {
     this.delete$
       .pipe(takeUntil(this.destroy$))
@@ -199,6 +235,7 @@ export class MeetingMinutesComponent
             .open(MeetingMinutesPopupComponent, {
               data: {
                 extras: {
+                  operation: OperationType.CREATE,
                   caseId: this.model().id,
                   concernedOffendersIds:
                     this.model().getConcernedOffendersIds(),

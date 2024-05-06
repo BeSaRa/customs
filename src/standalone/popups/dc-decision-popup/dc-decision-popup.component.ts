@@ -55,8 +55,8 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
 import { ProofTypes } from '@enums/proof-types';
-import { OffenderViolationService } from '@services/offender-violation.service';
 import { UserClick } from '@enums/user-click';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-dc-decision-popup',
@@ -111,7 +111,7 @@ export class DcDecisionPopupComponent
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
-  offenderViolationService = inject(OffenderViolationService);
+  investigationService = inject(InvestigationService);
   offender = computed(() => {
     return this.data.offender;
   });
@@ -331,9 +331,23 @@ export class DcDecisionPopupComponent
           }
         }),
       )
+      .pipe(
+        tap(model => {
+          this.model().removePenaltyDecision(this.oldPenaltyDecision());
+          this.model().appendPenaltyDecision(model);
+        }),
+      )
+      .pipe(
+        switchMap(model => {
+          return this.investigationService.reviewTaskDecision(
+            this.model().taskDetails.tkiid,
+            model.id,
+            model.offenderId,
+            this.data.isUpdate,
+          );
+        }),
+      )
       .subscribe(model => {
-        this.model().removePenaltyDecision(this.oldPenaltyDecision());
-        this.model().appendPenaltyDecision(model);
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
         this.dialogRef.close(model);
       });

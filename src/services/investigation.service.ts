@@ -219,7 +219,7 @@ export class InvestigationService
   reviewTaskMeetingMinutes(
     tkiid: string,
     meetingId: number,
-    offenderId: number,
+    isUpdate: boolean = false,
   ): Observable<MeetingMinutes> {
     return this.http.post<MeetingMinutes>(
       this.getUrlSegment() + '/review-task/dc/meeting-minutes',
@@ -229,7 +229,7 @@ export class InvestigationService
           fromObject: {
             tkiid,
             meetingId,
-            offenderId,
+            isUpdate,
           },
         }),
       },
@@ -240,6 +240,7 @@ export class InvestigationService
     tkiid: string,
     penaltyDecisionId: number,
     offenderId: number,
+    isUpdate: boolean = false,
   ) {
     return this.http.post<CaseAttachment[]>(
       this.getUrlSegment() + '/review-task/dc/decision',
@@ -250,6 +251,7 @@ export class InvestigationService
             tkiid,
             penaltyDecisionId,
             offenderId,
+            isUpdate,
           },
         }),
       },
