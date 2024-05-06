@@ -30,6 +30,7 @@ import { SystemPenalties } from '@enums/system-penalties';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Penalty } from '@models/penalty';
 import { PenaltyService } from '@services/penalty.service';
+import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -314,5 +315,11 @@ export class ButtonsCaseWrapperComponent
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });
+  }
+
+  showActionsOnCase() {
+    this.dialog.open(ActionsOnCaseComponent, {
+      data: { caseId: this.model().id },
+    });
   }
 }
