@@ -41,4 +41,5 @@ export enum TaskResponses {
   RETURN_TO_PR_FROM_LA = 'return_to_pr',
   RETURN_TO_PA_FROM_LA = 'return_to_pa',
   ASK_ANOTHER_DEPARTMENT = 'ask:ReviewDepartmentStatement', // طلب الافادة من ادارة اخري
+  TO_LA = 'to_la', // اعادة إلى مدير الشؤن القانونية
 }
