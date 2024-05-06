@@ -39,6 +39,21 @@
         </span>
       </td>
     </ng-container>
+
+    <!-- offender type -->
+    <ng-container matColumnDef="offenderType">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ lang.map.offender_type }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{
+          element.type === offenderTypes.EMPLOYEE
+            ? lang.map.lbl_employee
+            : lang.map.lbl_clearing_agent
+        }}
+      </td>
+    </ng-container>
+
     <!-- qid -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>
@@ -48,6 +63,7 @@
         {{ element.offenderInfo && element.offenderInfo.qid }}
       </td>
     </ng-container>
+
     <!-- departmentCompany -->
     <ng-container matColumnDef="departmentCompany">
       <th mat-header-cell mat-sort-header="departmentCompany" *matHeaderCellDef>
@@ -57,6 +73,7 @@
         {{ element.offenderOUInfo && element.offenderOUInfo?.getNames() }}
       </td>
     </ng-container>
+
     <!-- actions -->
     <ng-container matColumnDef="actions">
       <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
@@ -104,6 +121,7 @@
         </div>
       </td>
     </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
