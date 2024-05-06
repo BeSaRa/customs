@@ -159,7 +159,7 @@ export class MemorandumOpinionListComponent
       });
   }
 
-  hasAddMemoOpinionPermission() {
+  canManageMemoOpinion() {
     return (
       this.model().inMyInbox() &&
       this.employeeService.hasPermissionTo('ADD_MEMO_OPINION')
