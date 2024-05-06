@@ -100,7 +100,13 @@ export class OffenderListComponent
   reload$: Subject<void> = new Subject<void>();
   edit$ = new Subject<Offender>();
   delete$ = new Subject<Offender>();
-  displayedColumns = ['offenderName', 'qid', 'departmentCompany', 'actions'];
+  displayedColumns = [
+    'offenderName',
+    'offenderType',
+    'qid',
+    'departmentCompany',
+    'actions',
+  ];
   offenderViolation$: Subject<Offender> = new Subject<Offender>();
   offenderTypes = OffenderTypes;
   offenderTypesMap: Record<number, Lookup> =
