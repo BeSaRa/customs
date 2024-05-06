@@ -47,6 +47,18 @@
       {{ lang.map.manager_approve }}
     </app-button>
   }
+
+  <!-- transfer report to staff president office -->
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.ASK_ANOTHER_DEPARTMENT)
+  ) {
+    <app-button
+      buttonType="secondary"
+      (click)="ask$.next(taskResponses.ASK_ANOTHER_DEPARTMENT)">
+      {{ lang.map.request_for_department_statement }}
+    </app-button>
+  }
   <!-- ca manager approve -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.CA_APPROVE)) {
     <app-button (click)="approve$.next(taskResponses.CA_APPROVE)">

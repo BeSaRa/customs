@@ -1,4 +1,7 @@
 export interface LangKeysContract {
+  request_department_statement_footer: string;
+  request_department_statement_header: string;
+  request_for_department_statement: string;
   approve_msg_confirmation: string;
   something_wrong_happened: string;
   memorandum_approved_successfully: string;

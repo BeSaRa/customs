@@ -54,6 +54,9 @@ import { Violation } from '@models/violation';
 import { InfoService } from '@services/info.service';
 import { isFunction } from 'rxjs/internal/util/isFunction';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { OrganizationUnit } from '@models/organization-unit';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 
 @Component({
   selector: 'app-referral-popup',
@@ -80,6 +83,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
     MatTabGroup,
     MatTab,
     NgTemplateOutlet,
+    SelectInputComponent,
   ],
   templateUrl: './referral-popup.component.html',
   styleUrl: './referral-popup.component.scss',
@@ -91,6 +95,7 @@ export class ReferralPopupComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
+  organizationUnitService = inject(OrganizationUnitService);
   customsAffairsPAOUInfo =
     inject(InfoService).info.globalSetting.customsAffairsPAOUInfo;
   data = inject<{
@@ -100,6 +105,7 @@ export class ReferralPopupComponent
     selectedPenalty?: Penalty;
     isSingle: boolean;
     response?: TaskResponses;
+    ask?: boolean;
   }>(MAT_DIALOG_DATA);
   save$ = new Subject<void>();
   complete$ = new Subject<void>();
@@ -108,6 +114,10 @@ export class ReferralPopupComponent
   offenders = signal(this.data.offenders);
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
+  organizations: OrganizationUnit[] = [];
+  organizationControl = new FormControl('', {
+    validators: CustomValidators.required,
+  });
   model = this.data.model;
   penaltyKey = signal(
     this.selectedPenalty ? this.selectedPenalty.penaltyKey : undefined,
@@ -139,6 +149,14 @@ export class ReferralPopupComponent
   isCase = computed(() => {
     return !!(this.model() && this.response);
   });
+
+  isAsk = signal(this.data.ask);
+
+  isAskDepartment = computed(
+    () =>
+      this.isAsk() && this.response === TaskResponses.ASK_ANOTHER_DEPARTMENT,
+  );
+
   offendersViolationsMap = computed(() => {
     return this.model().offenderViolationInfo.reduce<
       Record<number, OffenderViolation[]>
@@ -193,7 +211,8 @@ export class ReferralPopupComponent
   referralTextMap: Record<
     | SystemPenalties
     | TaskResponses.RETURN_TO_PR_FROM_LA
-    | TaskResponses.RETURN_TO_PA_FROM_LA,
+    | TaskResponses.RETURN_TO_PA_FROM_LA
+    | TaskResponses.ASK_ANOTHER_DEPARTMENT,
     {
       header: string;
       footer: string;
@@ -267,11 +286,17 @@ export class ReferralPopupComponent
         }
       },
     },
+    [TaskResponses.ASK_ANOTHER_DEPARTMENT]: {
+      header: this.lang.map.request_department_statement_header,
+      footer: this.lang.map.request_department_statement_footer,
+      whom: '',
+    },
   };
 
   responseTranslateMap: Record<string, keyof LangKeysContract> = {
     [TaskResponses.RETURN_TO_PR_FROM_LA]: 'return_to_president',
     [TaskResponses.RETURN_TO_PA_FROM_LA]: 'return_to_president_assistant',
+    [TaskResponses.ASK_ANOTHER_DEPARTMENT]: 'request_for_department_statement',
   };
 
   referralKey() {
@@ -345,6 +370,7 @@ export class ReferralPopupComponent
   ngOnInit(): void {
     this.listenToSave();
     this.listenToComplete();
+    this.loadDepartmentsForAsk();
   }
 
   assertType(item: unknown): OffenderViolation {
@@ -424,7 +450,8 @@ export class ReferralPopupComponent
       .pipe(
         map(() =>
           this.displayDefaultForm()
-            ? this.commentControl.valid
+            ? this.commentControl.valid &&
+              (this.isAskDepartment() ? this.organizationControl.valid : true)
             : this.brokersComment.valid && this.employeesComment.valid,
         ),
       )
@@ -439,26 +466,26 @@ export class ReferralPopupComponent
       )
       .pipe(
         exhaustMap(() => {
-          return this.model()
-            .getService()
-            .completeTask(this.model().getTaskId()!, {
-              comment: this.isAssistantRequest()
-                ? JSON.stringify([
-                    {
-                      type: OffenderTypes.EMPLOYEE,
-                      comment: this.employeesComment.value,
-                    },
-                    {
-                      type: OffenderTypes.BROKER,
-                      comment: this.brokersComment.value,
-                    },
-                  ])
-                : this.commentControl.value,
-              selectedResponse: this.response!,
-              // decisionIds: this.model()
-              //   .getPenaltyDecision()
-              //   .map(i => i.id),
-            });
+          const service = this.model().getService();
+          return this.isAskDepartment()
+            ? service.askForDepartmentReview(this.model().getTaskId()!, [
+                Number(this.organizationControl.value),
+              ])
+            : service.completeTask(this.model().getTaskId()!, {
+                comment: this.isAssistantRequest()
+                  ? JSON.stringify([
+                      {
+                        type: OffenderTypes.EMPLOYEE,
+                        comment: this.employeesComment.value,
+                      },
+                      {
+                        type: OffenderTypes.BROKER,
+                        comment: this.brokersComment.value,
+                      },
+                    ])
+                  : this.commentControl.value,
+                selectedResponse: this.response!,
+              });
         }),
       )
       .subscribe(() => {
@@ -477,5 +504,15 @@ export class ReferralPopupComponent
 
   filterBrokerViolations(v: Violation) {
     return v.offenderTypeInfo.lookupKey === OffenderTypes.BROKER;
+  }
+
+  private loadDepartmentsForAsk() {
+    this.isAskDepartment() &&
+      this.organizationUnitService
+        .loadAsLookups()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(list => {
+          this.organizations = list;
+        });
   }
 }

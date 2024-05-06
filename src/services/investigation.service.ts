@@ -334,4 +334,14 @@ export class InvestigationService
       },
     });
   }
+
+  askForDepartmentReview(
+    taskId: string,
+    organizationIds: number[],
+  ): Observable<unknown> {
+    return this.http.post(
+      this.getUrlSegment() + `/la-review/${taskId}/start`,
+      organizationIds,
+    );
+  }
 }

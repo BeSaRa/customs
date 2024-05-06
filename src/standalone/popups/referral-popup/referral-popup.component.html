@@ -293,13 +293,26 @@
 
     <ng-template #all>
       <div class="flex justify-between">
-        <p>
-          <span> {{ lang.map.mr }} : </span>
-          <span class="font-semibold">
-            {{ getForWhom() }}
-          </span>
-          <span>{{ lang.map.respected }}</span>
-        </p>
+        @if (!isAsk()) {
+          <p>
+            <span> {{ lang.map.mr }} : </span>
+            <span class="font-semibold">
+              {{ getForWhom() }}
+            </span>
+            <span>{{ lang.map.respected }}</span>
+          </p>
+        }
+        @if (isAskDepartment()) {
+          <div class="w-[400px]">
+            <app-select-input
+              bindValue="id"
+              bindLabel="getNames"
+              [formControl]="organizationControl"
+              [label]="lang.map.lbl_department"
+              [options]="organizations" />
+          </div>
+        }
+
         <p class="flex flex-col">
           <span>
             <span>{{ lang.map.investigation_file_number }} : </span>
@@ -403,28 +416,30 @@
       <div class="flex">
         {{ formFooter }}
       </div>
-      <div class="flex justify-between">
-        <p class="flex flex-col">
-          @if (hasEmployees()) {
-            <span>{{ lang.map.copy_to_hr_department }} </span>
-          }
-          @if (hasBrokers()) {
-            <span>{{ lang.map.copy_to_legal_affairs }} </span>
-          }
-        </p>
-        <p class="flex flex-col">
-          <span>
-            <span>{{ lang.map.lbl_department }} : </span>
-            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
-          </span>
-          <span>
-            <span>{{ lang.map.decision_signer }} : </span>
-            <span class="font-semibold"
-              >(({{ lang.map.decision_signer }}))</span
-            >
-          </span>
-        </p>
-      </div>
+      @if (!isAsk()) {
+        <div class="flex justify-between">
+          <p class="flex flex-col">
+            @if (hasEmployees()) {
+              <span>{{ lang.map.copy_to_hr_department }} </span>
+            }
+            @if (hasBrokers()) {
+              <span>{{ lang.map.copy_to_legal_affairs }} </span>
+            }
+          </p>
+          <p class="flex flex-col">
+            <span>
+              <span>{{ lang.map.lbl_department }} : </span>
+              <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+            </span>
+            <span>
+              <span>{{ lang.map.decision_signer }} : </span>
+              <span class="font-semibold"
+                >(({{ lang.map.decision_signer }}))</span
+              >
+            </span>
+          </p>
+        </div>
+      }
     </ng-template>
   </div>
   <div class="dialog-footer justify-end">

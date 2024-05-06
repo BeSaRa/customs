@@ -78,6 +78,7 @@ export class ButtonsCaseWrapperComponent
   }>();
 
   returnActions$ = new Subject<TaskResponses>();
+  ask$ = new Subject<TaskResponses>();
 
   isMandatoryToImposePenalty = input.required<boolean>();
 
@@ -86,6 +87,7 @@ export class ButtonsCaseWrapperComponent
     this.listenToReferralActions();
     this.listenToReturnActions();
     this.listenToApproveAction();
+    this.listenToAskAction();
   }
 
   listenToResponseAction() {
@@ -287,6 +289,28 @@ export class ButtonsCaseWrapperComponent
             });
         }),
       )
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
+  }
+
+  private listenToAskAction() {
+    this.ask$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(response => {
+          return this.penaltyDecisionService
+            .openRequestReferralDialog(
+              this.model().getConcernedOffenders(),
+              this.model,
+              this.updateModel,
+              undefined,
+              response,
+            )
+            .afterClosed();
+        }),
+      )
+      .pipe(filter((click: UserClick) => click === UserClick.YES))
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });

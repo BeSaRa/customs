@@ -117,6 +117,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
           (offenders.length === 1 && !response) ||
           (response && !model().hasUnlinkedViolations()),
         response,
+        ask: response && response.includes('ask'),
       },
     });
   }
