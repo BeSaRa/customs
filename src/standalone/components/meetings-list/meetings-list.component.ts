@@ -200,6 +200,7 @@ export class MeetingsListComponent implements OnInit {
                 extras: {
                   readonly: true,
                   caseId: this.model().id,
+                  operation: OperationType.UPDATE,
                   concernedOffendersIds:
                     this.model().getConcernedOffendersIds(),
                   minDate,

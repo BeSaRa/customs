@@ -146,7 +146,7 @@ export class DecisionMinutesComponent
     this.listenToDelete();
     this._listenToAddDecision();
     this.listenToLoadPenalties();
-    this.openEditDecisionDialog();
+    this.listenToEditDecisionDialog();
     this.loadPenalties$.next();
   }
 
@@ -188,7 +188,7 @@ export class DecisionMinutesComponent
       });
   }
 
-  openEditDecisionDialog() {
+  listenToEditDecisionDialog() {
     this.editDecisionMinutes$
       .pipe(
         switchMap(model => {
