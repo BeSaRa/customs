@@ -181,7 +181,7 @@ export class DcDecisionPopupComponent
   });
   offenderPenalties = signal(this.data.offenderPenalties);
   penalties = computed(() => {
-    return this.offenderPenalties().second.filter(item => !item.isSystem);
+    return this.offenderPenalties().second;
   });
   penaltiesMap = computed<Record<number, Penalty>>(() => {
     return this.offenderPenalties().second.reduce((acc, item) => {
