@@ -311,9 +311,12 @@ export class PersonsListComponent
   }
 
   canManageWitness() {
-    return (
-      this.employeeService.hasPermissionTo('MANAGE_WITNESS') &&
-      this.model().inMyInbox()
-    );
+    const hasPermission =
+      this.employeeService.hasPermissionTo('MANAGE_WITNESS');
+    const isDisciplinaryCommittee =
+      !!this.employeeService.isDisciplinaryCommittee();
+    const isInMyInbox = this.model().inMyInbox();
+
+    return hasPermission && (isDisciplinaryCommittee || isInMyInbox);
   }
 }
