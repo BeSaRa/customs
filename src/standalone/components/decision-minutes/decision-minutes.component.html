@@ -85,11 +85,13 @@
                     (click)="editDecisionMinutes$.next(element)"
                     icon="EDIT"></app-icon-button>
                 </div>
-                <div [matTooltip]="lang.map.delete">
-                  <app-icon-button
-                    (click)="delete$.next(element)"
-                    icon="DELETE"></app-icon-button>
-                </div>
+                @if (element.generalStatus === generalStatusEnum.DC_M_PENDIND) {
+                  <div [matTooltip]="lang.map.delete">
+                    <app-icon-button
+                      (click)="delete$.next(element)"
+                      icon="DELETE"></app-icon-button>
+                  </div>
+                }
               }
             </div>
           }
