@@ -7,7 +7,7 @@
       icon="RELOAD"
       class="text-primary"
       (click)="reload$.next()" />
-    @if (model().inMyInbox()) {
+    @if (hasAddMemoOpinionPermission()) {
       <app-icon-button
         icon="PLUS_BOX"
         class="text-primary"
