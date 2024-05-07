@@ -93,9 +93,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
         ? [phoneNumber, CustomValidators.pattern('PHONE_NUMBER')]
         : phoneNumber,
       status: controls ? [status, CustomValidators.required] : status,
-      permissionRoleId: controls
-        ? [permissionRoleId, CustomValidators.required]
-        : permissionRoleId,
+      permissionRoleId: controls ? [permissionRoleId] : permissionRoleId,
     };
   }
 
