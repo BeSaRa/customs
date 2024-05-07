@@ -148,15 +148,12 @@ export class InvestigationComponent
   }
 
   claimIfAutoClaim() {
-    this.teamService
-      .load()
-      .pipe(map(res => res.rs))
-      .subscribe((teams: Team[]) => {
-        const autoClaim = !!teams.find(
-          team => team.authName === this.model.getTeamAuthName(),
-        )?.autoClaim;
-        if (autoClaim) this.claimItem();
-      });
+    this.teamService.loadAsLookups().subscribe((teams: Team[]) => {
+      const autoClaim = !!teams.find(
+        team => team.authName === this.model.getTeamAuthName(),
+      )?.autoClaim;
+      if (autoClaim) this.claimItem();
+    });
   }
 
   claimItem() {
