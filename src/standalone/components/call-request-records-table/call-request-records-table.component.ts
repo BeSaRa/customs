@@ -95,6 +95,7 @@ export class CallRequestRecordsTableComponent
   config = inject(ConfigService);
   displayedColumns = [
     'call_request_date',
+    'call_request_time',
     'call_request_creator',
     'status',
     'actions',

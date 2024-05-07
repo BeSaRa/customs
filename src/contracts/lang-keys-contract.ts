@@ -622,4 +622,5 @@ export interface LangKeysContract {
   investigation_file_details: string;
   issued_by: string;
   menu_grievances: string;
+  call_request_time: string;
 }
