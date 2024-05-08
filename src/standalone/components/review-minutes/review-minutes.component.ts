@@ -45,6 +45,12 @@ export class ReviewMinutesComponent
   concernedId = computed(() => {
     return this.model()?.taskDetails.activityProperties?.ConcernedId.value;
   });
+  modelWithOnlyConcernedOffenders = computed(() => {
+    return new Investigation().clone<Investigation>({
+      ...this.model().offenderInfo,
+      offenderInfo: this.model().getConcernedOffenders(),
+    });
+  });
   protected readonly ActivitiesName = ActivitiesName;
   ngOnInit() {
     if (this.model().isDecision()) {
