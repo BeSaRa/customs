@@ -45,6 +45,7 @@ import { ViolationClassification } from '@models/violation-classification';
 import { MatTabGroup } from '@angular/material/tabs';
 import { TeamService } from '@services/team.service';
 import { Team } from '@models/team';
+import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 
 @Component({
   selector: 'app-investigation',
@@ -96,6 +97,9 @@ export class InvestigationComponent
   generalAttachments!: CaseAttachmentsComponent;
   @ViewChild('officialAttachments')
   officialAttachments!: CaseAttachmentsComponent;
+  legalAffairsProceduresComponent = viewChild<LegalAffairsProceduresComponent>(
+    'legalAffairsProceduresComponent',
+  );
 
   tabsComponent = viewChild(MatTabGroup);
 

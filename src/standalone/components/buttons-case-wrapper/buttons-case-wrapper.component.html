@@ -83,7 +83,8 @@
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.LA_FNL_APPROVE)
   ) {
-    <app-button (click)="responseAction$.next(taskResponses.LA_FNL_APPROVE)">
+    <app-button
+      (click)="legalAffairsFinalApprove$.next(taskResponses.LA_FNL_APPROVE)">
       {{ lang.map.final_complete }}
     </app-button>
   }

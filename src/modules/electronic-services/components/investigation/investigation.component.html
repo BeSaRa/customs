@@ -121,6 +121,7 @@
     (launch)="launchCase($event)"
     (claim)="_updateForm($event)"
     (release)="_updateForm($event)"
+    [legalAffairsProceduresComponent]="legalAffairsProceduresComponent()"
     [isMandatoryToImposePenalty]="isMandatoryToImposePenalty()"
     (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
   </app-buttons-case-wrapper>
@@ -231,6 +232,7 @@
   </ng-template>
   <ng-template #legal_procedures>
     <app-legal-affairs-procedures
+      #legalAffairsProceduresComponent
       (updateModel)="updateModel$.next(null)"
       [model]="model" />
   </ng-template>

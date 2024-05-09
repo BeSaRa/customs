@@ -7,11 +7,12 @@ import {
   input,
   OnInit,
   Output,
+  signal,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { LangService } from '@services/lang.service';
 import { SendTypes } from '@enums/send-types';
-import { exhaustMap, filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { exhaustMap, filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Investigation } from '@models/investigation';
 import { TaskResponses } from '@enums/task-responses';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
@@ -31,6 +32,9 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Penalty } from '@models/penalty';
 import { PenaltyService } from '@services/penalty.service';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
+import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { MemorandumCategories } from '@enums/memorandum-categories';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -50,13 +54,15 @@ export class ButtonsCaseWrapperComponent
   penaltyService = inject(PenaltyService);
   router = inject(Router);
   protected readonly OpenFromEnum = OpenFrom;
-
+  toast = inject(ToastService);
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
   sendTypes = SendTypes;
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
   approve$: Subject<TaskResponses> = new Subject<TaskResponses>();
+
+  legalAffairsProceduresComponent = input<LegalAffairsProceduresComponent>();
 
   model = input.required<Investigation>();
   @Output()
@@ -89,6 +95,8 @@ export class ButtonsCaseWrapperComponent
     this.listenToReturnActions();
     this.listenToApproveAction();
     this.listenToAskAction();
+
+    this.listenToLegalAffairsFinalApprove();
   }
 
   listenToResponseAction() {
@@ -152,6 +160,7 @@ export class ButtonsCaseWrapperComponent
   }
 
   protected readonly SystemPenalties = SystemPenalties;
+  legalAffairsFinalApprove$ = new Subject<TaskResponses>();
 
   requestReferralPresidentAssistant() {
     this.referralTo(
@@ -321,5 +330,55 @@ export class ButtonsCaseWrapperComponent
     this.dialog.open(ActionsOnCaseComponent, {
       data: { caseId: this.model().id },
     });
+  }
+
+  private listenToLegalAffairsFinalApprove() {
+    this.legalAffairsFinalApprove$
+      .pipe(
+        switchMap(response => {
+          return this.legalAffairsProceduresComponent()!
+            .memorandumMasterComponent()!
+            .models$.pipe(
+              map(models =>
+                models.find(
+                  item => item.category === MemorandumCategories.LEGAL_RESULT,
+                ),
+              ),
+            )
+            .pipe(
+              map(model => {
+                return { model, response };
+              }),
+            );
+        }),
+      )
+      .pipe(
+        tap(
+          ({ model }) =>
+            !model &&
+            this.dialog.error(
+              this.lang.map
+                .there_is_no_investigation_result_to_perform_this_action,
+            ),
+        ),
+      )
+      .pipe(filter(({ model }) => !!model))
+      .pipe(
+        switchMap(({ model, response }) => {
+          return this.model()
+            .getService()
+            .openEditMemorandumDialog(
+              model!,
+              this.model(),
+              signal(this.updateModel),
+              response,
+            )
+            .afterClosed();
+        }),
+      )
+      .pipe(filter(value => !!value))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
   }
 }

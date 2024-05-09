@@ -1,4 +1,10 @@
-import { EventEmitter, inject, Injectable, InputSignal } from '@angular/core';
+import {
+  EventEmitter,
+  inject,
+  Injectable,
+  InputSignal,
+  WritableSignal,
+} from '@angular/core';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
@@ -32,6 +38,7 @@ import { Memorandum } from '@models/memorandum';
 import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
 import { OperationType } from '@enums/operation-type';
 import { MemorandumCategories } from '@enums/memorandum-categories';
+import { TaskResponses } from '@enums/task-responses';
 
 @CastResponseContainer({
   $default: {
@@ -329,7 +336,10 @@ export class InvestigationService
   openEditMemorandumDialog(
     model: Memorandum,
     investigationModel: Investigation,
-    updateModel: InputSignal<EventEmitter<void>>,
+    updateModel:
+      | InputSignal<EventEmitter<void>>
+      | WritableSignal<EventEmitter<void>>,
+    response?: TaskResponses,
   ) {
     return this.dialog.open(MemorandumPopupComponent, {
       data: {
@@ -337,6 +347,7 @@ export class InvestigationService
         model,
         operation: OperationType.UPDATE,
         updateModel,
+        response,
       },
     });
   }

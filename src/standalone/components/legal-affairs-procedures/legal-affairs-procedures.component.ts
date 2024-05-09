@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  input,
+  Output,
+  viewChild,
+} from '@angular/core';
 import { PersonsListComponent } from '@standalone/components/legal-affairs-offenders/persons-list.component';
 import { Investigation } from '@models/investigation';
 import { MemorandumOpinionListComponent } from '@standalone/components/memorandum-opinion-list/memorandum-opinion-list.component';
@@ -16,6 +23,8 @@ export class LegalAffairsProceduresComponent {
   employeeService = inject(EmployeeService);
   @Output()
   updateModel = new EventEmitter<void>();
+  memorandumMasterComponent =
+    viewChild<MemorandumOpinionListComponent>('master');
 
   canViewWitness() {
     return this.employeeService.hasAnyPermissions([

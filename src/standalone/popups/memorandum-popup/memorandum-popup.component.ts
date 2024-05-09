@@ -21,7 +21,7 @@ import { InvestigationService } from '@services/investigation.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { LangService } from '@services/lang.service';
-import { Subject } from 'rxjs';
+import { of, Subject, tap } from 'rxjs';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { OffenderViolation } from '@models/offender-violation';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
@@ -50,6 +50,8 @@ import { EmployeeService } from '@services/employee.service';
 import { MatOption } from '@angular/material/autocomplete';
 import { MatSelect } from '@angular/material/select';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { TaskResponses } from '@enums/task-responses';
+import { ToastService } from '@services/toast.service';
 
 @Component({
   selector: 'app-memorandum-popup',
@@ -90,6 +92,7 @@ export class MemorandumPopupComponent
     model: Memorandum;
     operation: OperationType;
     updateModel: InputSignal<EventEmitter<void>>;
+    response?: TaskResponses;
   }>(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dialogRef = inject(MatDialogRef);
@@ -142,6 +145,7 @@ export class MemorandumPopupComponent
     'recommendation',
   ];
   private employeeService = inject(EmployeeService);
+  private toast = inject(ToastService);
 
   assertType(item: unknown): Offender {
     return item as Offender;
@@ -164,9 +168,31 @@ export class MemorandumPopupComponent
     this.save$
       .pipe(takeUntil(this.destroy$))
       .pipe(this.saveOperation())
+      .pipe(
+        switchMap(model =>
+          this.data.response
+            ? this.investigationModel()
+                .getService()
+                .completeTask(this.investigationModel().getTaskId()!, {
+                  selectedResponse: this.data.response,
+                })
+                .pipe(ignoreErrors())
+                .pipe(
+                  tap(() => {
+                    this.toast.success(
+                      this.lang.map.msg_x_performed_successfully.change({
+                        x: this.lang.map.final_complete,
+                      }),
+                    );
+                  }),
+                )
+                .pipe(map(() => model))
+            : of(model),
+        ),
+      )
       .subscribe(model => {
         this.model.set(model);
-        this.dialogRef.close();
+        this.dialogRef.close(this.data.response);
       });
   }
 
