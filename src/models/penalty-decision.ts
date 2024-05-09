@@ -24,5 +24,6 @@ export class PenaltyDecision extends BaseModel<
   offenderInfo!: AdminResult;
   decisionTypeInfo!: AdminResult;
   isUpdate: boolean = false;
+  declare roleAuthName: string;
   declare customsViolationEffect: number;
 }

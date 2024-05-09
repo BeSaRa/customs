@@ -409,6 +409,7 @@ export class ReferralPopupComponent
                 offenderId: item.id,
                 status: 1,
                 tkiid: this.model().getTaskId(),
+                roleAuthName: this.model().getTeamDisplayName(),
                 comment: this.displayDefaultForm()
                   ? this.commentControl.value
                   : item.type === OffenderTypes.BROKER

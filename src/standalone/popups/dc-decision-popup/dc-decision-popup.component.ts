@@ -283,6 +283,7 @@ export class DcDecisionPopupComponent
       status: 1,
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
       tkiid: this.model().getTaskId(),
+      roleAuthName: this.model().getTeamDisplayName(),
     });
   }
 

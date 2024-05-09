@@ -206,7 +206,6 @@ export class OffendersViolationsPreviewComponent
       Record<number, FormControl<number | null>[]>
     >((acc, [key, offenderViolation]) => {
       const decision = untracked(this.decisionMap)[Number(key)];
-      console.log(decision);
       acc[Number(key)] = offenderViolation.map(
         i =>
           new FormControl<number>({

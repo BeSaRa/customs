@@ -146,6 +146,7 @@ export class TerminatePopupComponent implements OnInit {
               comment: this.control.value,
               offenderId: offender.id,
               tkiid: this.model().getTaskId(),
+              roleAuthName: this.model().getTeamDisplayName(),
             });
           });
         }),

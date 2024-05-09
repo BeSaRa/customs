@@ -427,4 +427,8 @@ export class Investigation extends BaseCase<
   getTeamAuthName() {
     return this.taskDetails?.assignedToDisplayName;
   }
+
+  getTeamDisplayName(): string {
+    return this.taskDetails.teamDisplayName;
+  }
 }

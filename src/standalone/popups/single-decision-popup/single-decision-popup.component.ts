@@ -194,11 +194,6 @@ export class SingleDecisionPopupComponent
   }
 
   private prepareModel(): PenaltyDecision {
-    console.log(
-      'this.violationEffectControl.value ',
-      this.violationEffectControl.value,
-      this.isBroker(),
-    );
     return new PenaltyDecision().clone<PenaltyDecision>({
       ...(this.oldPenaltyDecision() ? this.oldPenaltyDecision() : undefined),
       caseId: this.model().id,
@@ -212,6 +207,7 @@ export class SingleDecisionPopupComponent
         : null),
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
       tkiid: this.model().getTaskId(),
+      roleAuthName: this.model().getTeamDisplayName(),
     });
   }
 
