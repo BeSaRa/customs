@@ -59,8 +59,9 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
                 team.id,
               ),
           );
-          return filteredTeams.filter(team =>
-            organizationUnitIds.includes(team.ouId),
+          return filteredTeams.filter(
+            team =>
+              organizationUnitIds.includes(team.ouId) || team.ouId === null,
           );
         }),
       )
