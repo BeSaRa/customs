@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  input,
+  OnInit,
+} from '@angular/core';
 import { Investigation } from '@models/investigation';
 import {
   MatCell,
@@ -13,12 +20,12 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { Subject } from 'rxjs';
+import { ReplaySubject, Subject, tap } from 'rxjs';
 import { LangService } from '@services/lang.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 import { InvestigationService } from '@services/investigation.service';
 import { Memorandum } from '@models/memorandum';
 import { DatePipe } from '@angular/common';
@@ -26,6 +33,7 @@ import { ConfigService } from '@services/config.service';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { EmployeeService } from '@services/employee.service';
+import { MemorandumCategories } from '@enums/memorandum-categories';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -73,18 +81,28 @@ export class MemorandumOpinionListComponent
   approve$: Subject<Memorandum> = new Subject();
   edit$: Subject<Memorandum> = new Subject();
   private toast = inject(ToastService);
+  isManager = input.required<boolean>();
+  masterComponent = input<MemorandumOpinionListComponent>();
+  models$ = new ReplaySubject<Memorandum[]>(1);
+  masterComponentEffect = effect(() => {
+    if (this.masterComponent()) {
+      this.listenToModelsChangeFromMaster();
+    }
+  });
 
   assertType(item: unknown): Memorandum {
     return item as Memorandum;
   }
 
   ngOnInit(): void {
-    this.listenToAdd();
+    !this.isManager() && this.listenToAdd();
     this.listenToReload();
     this.listenToView();
-    this.listenToApprove();
+    !this.isManager() && this.listenToApprove();
     this.listenToEdit();
-    this.reload$.next();
+    !this.isManager() && this.reload$.next();
+
+    !this.isManager() && this.listenToModelsChange();
   }
 
   private listenToAdd() {
@@ -106,12 +124,21 @@ export class MemorandumOpinionListComponent
     this.reload$
       .pipe(takeUntil(this.destroy$))
       .pipe(
+        tap(() => this.isManager() && this.masterComponent()?.reload$.next()),
+      )
+      .pipe(filter(() => !this.isManager()))
+      .pipe(
         switchMap(() =>
-          this.investigationService.loadMemorandums(this.model().id),
+          this.investigationService.loadMemorandums(
+            this.model().id,
+            this.isManager()
+              ? MemorandumCategories.LEGAL_RESULT
+              : MemorandumCategories.LEGAL_MEMORANDUM,
+          ),
         ),
       )
       .subscribe(models => {
-        this.models = models;
+        this.models$.next(models);
       });
   }
 
@@ -121,7 +148,7 @@ export class MemorandumOpinionListComponent
       .pipe(
         switchMap(model =>
           this.investigationService
-            .viewAttachment(model.id, '')
+            .viewAttachment(model.id, this.lang.map.view_memo)
             .pipe(ignoreErrors()),
         ),
       )
@@ -161,8 +188,27 @@ export class MemorandumOpinionListComponent
 
   canManageMemoOpinion() {
     return (
+      !this.isManager() &&
       this.model().inMyInbox() &&
       this.employeeService.hasPermissionTo('ADD_MEMO_OPINION')
     );
+  }
+
+  private listenToModelsChange() {
+    this.models$.pipe(takeUntil(this.destroy$)).subscribe(models => {
+      this.models = models.filter(item => {
+        return item.category === MemorandumCategories.LEGAL_MEMORANDUM;
+      });
+    });
+  }
+
+  private listenToModelsChangeFromMaster() {
+    this.masterComponent()
+      ?.models$.pipe(takeUntil(this.destroy$))
+      .subscribe(models => {
+        this.models = models.filter(
+          item => item.category === MemorandumCategories.LEGAL_RESULT,
+        );
+      });
   }
 }

@@ -8,5 +8,15 @@
 }
 <div class="p-4">
   <!-- the new component goes here  -->
-  <app-memorandum-opinion-list [updateModel]="updateModel" [model]="model()" />
+  <app-memorandum-opinion-list
+    [isManager]="false"
+    #master
+    [updateModel]="updateModel"
+    [model]="model()" />
+  <!-- the new component goes here  -->
+  <app-memorandum-opinion-list
+    [masterComponent]="master"
+    [isManager]="true"
+    [updateModel]="updateModel"
+    [model]="model()" />
 </div>

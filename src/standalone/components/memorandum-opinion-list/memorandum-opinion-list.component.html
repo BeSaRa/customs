@@ -1,7 +1,11 @@
 <div class="flex flex-col gap-2">
   <h2 class="flex items-center gap-2">
     <span class="text-primary">
-      {{ lang.map.investigation_result_legal_opinion }}
+      {{
+        isManager()
+          ? lang.map.investigation_result
+          : lang.map.investigation_result_legal_opinion
+      }}
     </span>
     <app-icon-button
       icon="RELOAD"
@@ -62,10 +66,12 @@
               (click)="view$.next(element)"
               icon="VIEW" />
           } @else {
-            <app-icon-button
-              [matTooltip]="lang.map.approve_memo"
-              (click)="approve$.next(element)"
-              icon="APPROVE" />
+            @if (!isManager()) {
+              <app-icon-button
+                [matTooltip]="lang.map.approve_memo"
+                (click)="approve$.next(element)"
+                icon="APPROVE" />
+            }
             <app-icon-button
               [matTooltip]="lang.map.edit_memo"
               (click)="edit$.next(element)"

@@ -178,7 +178,6 @@ export class MemorandumPopupComponent
               this.model().clone<Memorandum>({
                 note: this.textControl.value!,
                 offenderIds: this.offendersIds(),
-                category: 11,
                 decisionFullSerial:
                   this.investigationModel().getReferralNumber(),
               }),
@@ -189,7 +188,6 @@ export class MemorandumPopupComponent
               this.model().clone<Memorandum>({
                 note: this.textControl.value!,
                 offenderIds: this.offendersIds(),
-                category: 11,
                 decisionFullSerial:
                   this.investigationModel().getReferralNumber(),
               }),

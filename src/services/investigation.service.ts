@@ -31,6 +31,7 @@ import { DecisionMinutes } from '@models/decision-minutes';
 import { Memorandum } from '@models/memorandum';
 import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
 import { OperationType } from '@enums/operation-type';
+import { MemorandumCategories } from '@enums/memorandum-categories';
 
 @CastResponseContainer({
   $default: {
@@ -294,12 +295,15 @@ export class InvestigationService
   }
 
   @CastResponse(() => Memorandum)
-  loadMemorandums(caseId: string): Observable<Memorandum[]> {
+  loadMemorandums(
+    caseId: string,
+    category: MemorandumCategories = MemorandumCategories.LEGAL_MEMORANDUM,
+  ): Observable<Memorandum[]> {
     return this.http.get<Memorandum[]>(
       this.getUrlSegment() + '/document/inv-result',
       {
         params: new HttpParams({
-          fromObject: { caseId },
+          fromObject: { caseId, category },
         }),
       },
     );
