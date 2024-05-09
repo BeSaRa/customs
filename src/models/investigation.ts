@@ -122,6 +122,17 @@ export class Investigation extends BaseCase<
     return decision ? decision.comment! : '';
   }
 
+  getFirstConcernedPenaltyComment(penaltyKey?: SystemPenalties): string {
+    const ids = this.getConcernedOffendersIds();
+    if (!penaltyKey) return '';
+    const decision = this.getPenaltyDecision().find(
+      item =>
+        item.penaltyInfo.penaltyKey === penaltyKey &&
+        ids.includes(item.offenderId),
+    );
+    return decision ? decision.comment! : '';
+  }
+
   loadPenalties() {
     return this.getService().getCasePenalty(this.id, this.getActivityName()!);
   }

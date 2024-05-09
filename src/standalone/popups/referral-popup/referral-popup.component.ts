@@ -319,7 +319,7 @@ export class ReferralPopupComponent
 
   defaultComment = computed(() => {
     return this.displayDefaultForm()
-      ? this.model().getFirstPenaltyComment(this.penaltyKey())
+      ? this.model().getFirstConcernedPenaltyComment(this.penaltyKey())
       : '';
   });
 
