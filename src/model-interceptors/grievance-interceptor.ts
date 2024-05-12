@@ -21,7 +21,6 @@ export class GrievanceInterceptor
     delete model.penaltySignerInfo;
     delete model.penaltySignerRoleInfo;
     delete model.presidentAssistantOuInfo;
-    delete model.securityLevelInfo;
     return model;
   }
 
