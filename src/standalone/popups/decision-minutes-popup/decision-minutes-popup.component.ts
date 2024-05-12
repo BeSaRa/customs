@@ -24,6 +24,7 @@ import { DialogService } from '@services/dialog.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { DecisionMinutes } from '@models/decision-minutes';
 import { Penalty } from '@models/penalty';
+import { GeneralStatusEnum } from '@enums/general-status-enum';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -79,7 +80,10 @@ export class DecisionMinutesPopupComponent
     this.listenToSave();
   }
   hasDecisionMinutes(offenderId: number) {
-    return !!this.decisionMinutesList.find(
+    return !!this.getDecisionMinutes(offenderId);
+  }
+  getDecisionMinutes(offenderId: number) {
+    return this.decisionMinutesList.find(
       dm => dm.offenderIds[0] === offenderId,
     );
   }
@@ -111,6 +115,17 @@ export class DecisionMinutesPopupComponent
       .pipe(
         switchMap(decision => {
           if (this.hasDecisionMinutes(decision.offenderId)) {
+            if (
+              this.getDecisionMinutes(decision.offenderId)?.generalStatus ===
+              GeneralStatusEnum.DC_M_LAUNCHED
+            ) {
+              return this.investigationService.reviewTaskDecision(
+                this.model().taskDetails.tkiid,
+                decision.id,
+                decision.offenderId,
+                this.data.isUpdate,
+              );
+            }
             return of(null);
           } else {
             return this.investigationService.addDisciplinaryDecision(

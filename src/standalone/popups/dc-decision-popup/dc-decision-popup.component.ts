@@ -338,16 +338,6 @@ export class DcDecisionPopupComponent
           this.model().appendPenaltyDecision(model);
         }),
       )
-      .pipe(
-        switchMap(model => {
-          return this.investigationService.reviewTaskDecision(
-            this.model().taskDetails.tkiid,
-            model.id,
-            model.offenderId,
-            this.data.isUpdate,
-          );
-        }),
-      )
       .subscribe(model => {
         this.toast.success(this.lang.map.the_penalty_saved_successfully);
         this.dialogRef.close(model);
