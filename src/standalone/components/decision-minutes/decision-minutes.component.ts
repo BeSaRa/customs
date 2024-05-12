@@ -54,6 +54,7 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Penalty } from '@models/penalty';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { ManagerDecisions } from '@enums/manager-decisions';
+import { PenaltyDecision } from '@models/penalty-decision';
 @Component({
   selector: 'app-decision-minutes',
   standalone: true,
@@ -202,7 +203,29 @@ export class DecisionMinutesComponent
               this.model,
               this.penaltyMap()[model.penaltyDecisionInfo.offenderId],
             )
-            .afterClosed();
+            .afterClosed()
+            .pipe(
+              map(penaltyDecision => {
+                return { penaltyDecision, decisionMinutes: model };
+              }),
+            );
+        }),
+      )
+      .pipe(
+        switchMap(payload => {
+          if (
+            payload.decisionMinutes.generalStatus ===
+            GeneralStatusEnum.DC_M_LAUNCHED
+          ) {
+            return this.investigationService.reviewTaskDecision(
+              this.model().taskDetails.tkiid,
+              (payload.penaltyDecision as PenaltyDecision).id,
+              (payload.penaltyDecision as PenaltyDecision).offenderId,
+              true,
+            );
+          } else {
+            return of(null);
+          }
         }),
       )
       .subscribe(() => {
