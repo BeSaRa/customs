@@ -189,7 +189,6 @@ export class ButtonsCaseWrapperComponent
       // this.referralTo(TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT);
     }
   }
-
   requestReferralPresident() {
     this.referralTo(
       TaskResponses.REFERRAL_TO_PRESIDENT,
@@ -349,7 +348,9 @@ export class ButtonsCaseWrapperComponent
         switchMap(response => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
-              (this.model() as Investigation).getConcernedOffenders(),
+              (
+                this.model() as unknown as Investigation
+              ).getConcernedOffenders(),
               this.model as unknown as InputSignal<Investigation>,
               this.updateModel,
               undefined,
