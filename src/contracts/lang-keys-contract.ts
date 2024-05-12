@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_manager_delegation: string;
   static_header_text_for_disciplinary_committee: string;
   static_footer_text_for_disciplinary_committee: string;
   disciplinary_council_director: string;

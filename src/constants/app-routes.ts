@@ -35,4 +35,5 @@ export const AppRoutes = {
   CLEARING_AGENCY: 'clearing-agency',
   SUSPENDED_EMPLOYEE: 'suspended-employee',
   CALENDAR: 'calendar',
+  MANAGER_DELEGATION: 'manager-delegation',
 };

@@ -25,6 +25,7 @@ import { ClearingAgencyComponent } from '@modules/administration/components/clea
 import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
+import { ManagerDelegationComponent } from '@modules/administration/components/manager-delegation/manager-delegation.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -225,6 +226,10 @@ const routes: Routes = [
         permission: AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
       }),
     ],
+  },
+  {
+    path: AppRoutes.MANAGER_DELEGATION,
+    component: ManagerDelegationComponent,
   },
 ];
 
