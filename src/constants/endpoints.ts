@@ -52,6 +52,7 @@ export const EndPoints = {
   INVESTIGATION_REPORT: '/entity/administrative-investigation-report',
   MEETING: '/entity/meeting',
   GRIEVANCE: '/grievance-case',
+  MANAGER_DELEGATION: '/entity/manager-delegation',
 };
 
 export type EndpointsType = typeof EndPoints;

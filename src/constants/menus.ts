@@ -222,4 +222,11 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
     permissionFromTeam: TeamNames.Disciplinary_Committee,
   },
+  {
+    id: MenuIdes.MANAGER_DELEGATION,
+    langKey: 'menu_manager_delegation',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.MANAGER_DELEGATION,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];
