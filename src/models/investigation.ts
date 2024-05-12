@@ -149,6 +149,20 @@ export class Investigation extends BaseCase<
     return decision ? decision.comment! : '';
   }
 
+  getFirstConcernedEmployeeComment(penaltyKey?: SystemPenalties): string {
+    const ids = this.getConcernedOffendersIds();
+    if (!penaltyKey) return '';
+    const employeesIds = this.getEmployeesOffenders().map(item => item.id);
+    const decision = this.getPenaltyDecision().find(item => {
+      return (
+        item.penaltyInfo.penaltyKey === penaltyKey &&
+        employeesIds.includes(item.offenderId) &&
+        ids.includes(item.offenderId)
+      );
+    });
+    return decision ? decision.comment! : '';
+  }
+
   getFirstBrokerComment(penaltyKey?: SystemPenalties): string {
     if (!penaltyKey) return '';
     const brokersIds = this.getBrokersOffenders().map(item => item.id);
@@ -156,6 +170,20 @@ export class Investigation extends BaseCase<
       return (
         item.penaltyInfo.penaltyKey === penaltyKey &&
         brokersIds.includes(item.offenderId)
+      );
+    });
+    return decision ? decision.comment! : '';
+  }
+
+  getFirstConcernedBrokerComment(penaltyKey?: SystemPenalties): string {
+    const ids = this.getConcernedOffendersIds();
+    if (!penaltyKey) return '';
+    const brokersIds = this.getBrokersOffenders().map(item => item.id);
+    const decision = this.getPenaltyDecision().find(item => {
+      return (
+        item.penaltyInfo.penaltyKey === penaltyKey &&
+        brokersIds.includes(item.offenderId) &&
+        ids.includes(item.offenderId)
       );
     });
     return decision ? decision.comment! : '';

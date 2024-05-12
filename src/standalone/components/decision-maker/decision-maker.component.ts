@@ -174,6 +174,9 @@ export class DecisionMakerComponent
     const referrals = [
       SystemPenalties.REFERRAL_TO_PRESIDENT,
       SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
+      SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL,
+      SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL,
     ];
 
     const toggleReferrals = {
@@ -181,6 +184,10 @@ export class DecisionMakerComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
         SystemPenalties.REFERRAL_TO_PRESIDENT,
+      [SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL]:
+        SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL,
+      [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]:
+        SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL,
     };
 
     this.model().itHasReferralRequestBefore(this.offender().id);

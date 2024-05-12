@@ -326,13 +326,13 @@ export class ReferralPopupComponent
   employeeComment = computed(() => {
     return this.displayDefaultForm()
       ? ''
-      : this.model().getFirstEmployeeComment(this.penaltyKey());
+      : this.model().getFirstConcernedEmployeeComment(this.penaltyKey());
   });
 
   brokerComment = computed(() => {
     return this.displayDefaultForm()
       ? ''
-      : this.model().getFirstBrokerComment(this.penaltyKey());
+      : this.model().getFirstConcernedBrokerComment(this.penaltyKey());
   });
 
   commentControl = new FormControl(this.defaultComment(), {
