@@ -6,6 +6,7 @@ import { CastResponseContainer } from 'cast-response';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 import { Grievance } from '@models/grievance';
+import { Observable } from 'rxjs';
 
 @CastResponseContainer({
   $default: {
@@ -32,5 +33,9 @@ export class GrievanceService
 
   getModelClass(): Constructor<Grievance> {
     return Grievance;
+  }
+
+  getCasesAsList(): Observable<Grievance[]> {
+    return this.http.post<Grievance[]>(this.getUrlSegment() + '/cases', {});
   }
 }

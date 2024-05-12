@@ -28,7 +28,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MatSort } from '@angular/material/sort';
@@ -119,8 +119,8 @@ export class PenaltyDecisionForExternalUsersComponent
     'actions',
   ];
   dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
-  GrievanceDataSource: MatTableDataSource<Grievance> = new MatTableDataSource();
-  GrievanceDisplayedColumns = ['actions'];
+  grievanceDataSource: MatTableDataSource<Grievance> = new MatTableDataSource();
+  grievanceDisplayedColumns = ['actions'];
 
   ngOnInit(): void {
     this.listenToReload();
@@ -136,6 +136,7 @@ export class PenaltyDecisionForExternalUsersComponent
   }
   private listenToReload() {
     this.reload$
+      .pipe(takeUntil(this.destroy$))
       .pipe(
         filter(
           () =>
@@ -145,29 +146,40 @@ export class PenaltyDecisionForExternalUsersComponent
       )
       .pipe(
         switchMap(() => {
-          // if (this.isGrievanceTab) {
-          //   // return UserTypes.EXTERNAL_CLEARING_AGENCY ===
-          //   //   this.employeeService.getLoginData()?.type
-          //   //   ? this.grievanceService.load({
-          //   //       offenderId: this.userId as number,
-          //   //     })
-          //   //   : this.grievanceService.loadExternal();
-          // } else {
-          return UserTypes.EXTERNAL_CLEARING_AGENCY ===
-            this.employeeService.getLoginData()?.type
-            ? this.penaltyDecisionService.loadExternal({
-                offenderId: this.userId as number,
-              })
-            : this.penaltyDecisionService.loadExternal();
-          // }
+          if (this.isGrievanceTab) {
+            return this.grievanceService.getCasesAsList();
+          } else {
+            return UserTypes.EXTERNAL_CLEARING_AGENCY ===
+              this.employeeService.getLoginData()?.type
+              ? this.penaltyDecisionService
+                  .loadExternal({
+                    offenderId: this.userId as number,
+                  })
+                  .pipe(
+                    map(page => {
+                      return page.rs;
+                    }),
+                  )
+              : this.penaltyDecisionService.loadExternal().pipe(
+                  map(page => {
+                    return page.rs;
+                  }),
+                );
+          }
         }),
       )
-      .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.setLength.emit(list.rs.length);
-        this.dataSource.data = !this.hidePagination
-          ? list.rs
-          : list.rs.splice(0, 5);
+        this.setLength.emit(list.length);
+
+        if (this.isGrievanceTab) {
+          this.grievanceDataSource.data = !this.hidePagination
+            ? (list as Grievance[])
+            : (list.splice(0, 5) as Grievance[]);
+        } else {
+          this.dataSource.data = !this.hidePagination
+            ? (list as PenaltyDecision[])
+            : (list.splice(0, 5) as PenaltyDecision[]);
+        }
         if (!this.hidePagination) {
           this.dataSource.paginator = this.paginator;
           this.paginator._intl.getRangeLabel = (
