@@ -122,7 +122,9 @@ export class MemorandumPopupComponent
   });
   penaltiesDecisionsMap = this.investigationModel().penaltyDecisions.reduce(
     (acc, item) => {
-      return { ...acc, [item.offenderId]: item };
+      return this.offendersIds().includes(item.offenderId)
+        ? { ...acc, [item.offenderId]: item }
+        : { ...acc };
     },
     {} as Record<number, PenaltyDecision>,
   );
@@ -137,6 +139,8 @@ export class MemorandumPopupComponent
   loadPenalties$ = new Subject<void>();
 
   textControl = new FormControl(this.model().note);
+
+  employee = inject(EmployeeService).getEmployee();
 
   displayedColumns: string[] = [
     'offenderName',
@@ -170,30 +174,58 @@ export class MemorandumPopupComponent
       .pipe(this.saveOperation())
       .pipe(
         switchMap(model =>
-          this.data.response
-            ? this.investigationModel()
-                .getService()
-                .completeTask(this.investigationModel().getTaskId()!, {
-                  selectedResponse: this.data.response,
-                })
-                .pipe(ignoreErrors())
-                .pipe(
-                  tap(() => {
-                    this.toast.success(
-                      this.lang.map.msg_x_performed_successfully.change({
-                        x: this.lang.map.final_complete,
-                      }),
-                    );
-                  }),
-                )
-                .pipe(map(() => model))
-            : of(model),
+          this.data.response ? this.completeTask(model) : of(model),
         ),
       )
       .subscribe(model => {
         this.model.set(model);
         this.dialogRef.close(this.data.response);
       });
+  }
+
+  private completeTask(model: Memorandum) {
+    return of(this.investigationModel().getService())
+      .pipe(
+        switchMap(service => {
+          const decisionsNeedUpdates = Object.values(
+            this.penaltiesDecisionsMap,
+          ).filter(item => {
+            return item.signerId !== this.employee!.id;
+          });
+          return decisionsNeedUpdates.length
+            ? this.penaltyDecisionService
+                .createBulkFull(
+                  decisionsNeedUpdates.map(item => {
+                    return item.clone<PenaltyDecision>({
+                      ...item,
+                      signerId: this.employee!.id,
+                      tkiid: this.investigationModel().getTaskId(),
+                      roleAuthName:
+                        this.investigationModel().getTeamDisplayName(),
+                    });
+                  }),
+                )
+                .pipe(map(() => service))
+            : of(service);
+        }),
+        switchMap(service => {
+          return service
+            .completeTask(this.investigationModel().getTaskId()!, {
+              selectedResponse: this.data.response!,
+            })
+            .pipe(ignoreErrors());
+        }),
+      )
+      .pipe(
+        tap(() => {
+          this.toast.success(
+            this.lang.map.msg_x_performed_successfully.change({
+              x: this.lang.map.final_complete,
+            }),
+          );
+        }),
+      )
+      .pipe(map(() => model));
   }
 
   private saveOperation() {
@@ -265,6 +297,7 @@ export class MemorandumPopupComponent
               penaltyId: decision.id,
               status: 1,
               tkiid: this.investigationModel().getTaskId(),
+              roleAuthName: this.investigationModel().getTeamDisplayName(),
             })
             .create()
             .pipe(
