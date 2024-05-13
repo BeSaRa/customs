@@ -85,6 +85,12 @@ import { SuspendedEmployeeComponent } from '@modules/administration/components/s
 import { SuspendedEmployeePopupComponent } from '@modules/administration/popups/suspended-employee-popup/suspended-employee-popup.component';
 import { ManagerDelegationComponent } from '@modules/administration/components/manager-delegation/manager-delegation.component';
 import { ManagerDelegationPopupComponent } from '@modules/administration/popups/manager-delegation-popup/manager-delegation-popup.component';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+} from '@angular/material/datepicker';
+import { ManagerDelegationManagementComponent } from '@standalone/components/manager-delegation-management/manager-delegation-management.component';
 
 @NgModule({
   declarations: [
@@ -187,6 +193,10 @@ import { ManagerDelegationPopupComponent } from '@modules/administration/popups/
     HtmlEditorComponent,
     MenuItemListComponent,
     NgOptimizedImage,
+    ControlDirective,
+    MatDatepicker,
+    MatDatepickerInput,
+    ManagerDelegationManagementComponent,
   ],
 })
 export class AdministrationModule {}

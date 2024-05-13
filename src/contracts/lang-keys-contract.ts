@@ -633,6 +633,12 @@ export interface LangKeysContract {
   issued_by: string;
   menu_grievances: string;
   call_request_time: string;
+  delegator: string;
+  delegated: string;
+  delegated_penalties: string;
+  department: string;
+  records: string;
+  is_delegated: string;
   chevron_down: string;
   chevron_up: string;
 }

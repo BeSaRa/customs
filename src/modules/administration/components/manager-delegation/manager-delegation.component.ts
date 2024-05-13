@@ -8,6 +8,7 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { ConfigService } from '@services/config.service';
 
 @Component({
   selector: 'app-manager-delegation',
@@ -19,6 +20,7 @@ export class ManagerDelegationComponent extends AdminComponent<
   ManagerDelegation,
   ManagerDelegationService
 > {
+  config = inject(ConfigService);
   service = inject(ManagerDelegationService);
   actions: ContextMenuActionContract<ManagerDelegation>[] = [
     {
@@ -30,29 +32,15 @@ export class ManagerDelegationComponent extends AdminComponent<
         this.view$.next(item);
       },
     },
-    {
-      name: 'edit',
-      type: 'action',
-      label: 'edit',
-      icon: AppIcons.EDIT,
-      callback: item => {
-        this.edit$.next(item);
-      },
-    },
-    {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: item => {
-        this.delete$.next(item);
-      },
-    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ManagerDelegation> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('arName'),
+    new TextFilterColumn('delegated'),
+    new TextFilterColumn('department'),
+    // new TextFilterColumn('startDate'),
+    // new TextFilterColumn('endDate'),
+    // new TextFilterColumn('penalties'),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

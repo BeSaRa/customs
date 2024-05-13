@@ -6,6 +6,8 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { Penalty } from '@models/penalty';
+import { PenaltyService } from '@services/penalty.service';
 
 @Component({
   selector: 'app-manager-delegation-popup',
@@ -15,9 +17,22 @@ import { OperationType } from '@enums/operation-type';
 export class ManagerDelegationPopupComponent extends AdminDialogComponent<ManagerDelegation> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ManagerDelegation> = inject(MAT_DIALOG_DATA);
+  penalties!: Penalty[];
+  penaltyService = inject(PenaltyService);
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.loadPenalties();
+  }
+
+  loadPenalties() {
+    this.penaltyService
+      .loadAsLookups()
+      .subscribe(penalties => (this.penalties = penalties));
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
