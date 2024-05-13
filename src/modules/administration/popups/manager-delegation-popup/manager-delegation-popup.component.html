@@ -8,17 +8,42 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4">your dialog content here</div>
+    <ng-container [formGroup]="form">
+      <div class="grid grid-cols-2 gap-4">
+        <app-input
+          formControlName="delegated"
+          [label]="lang.map.delegated"></app-input>
+        <app-input
+          formControlName="department"
+          [label]="lang.map.department"></app-input>
+        <app-input formControlName="startDate" [label]="lang.map.start_date">
+          <input
+            appControl
+            formControlName="startDate"
+            (click)="startDatepicker.open()"
+            [matDatepicker]="startDatepicker" />
+          <mat-datepicker [touchUi]="true" #startDatepicker />
+        </app-input>
+        <app-input formControlName="endDate" [label]="lang.map.end_date">
+          <input
+            appControl
+            formControlName="endDate"
+            (click)="endDatepicker.open()"
+            [matDatepicker]="endDatepicker" />
+          <mat-datepicker [touchUi]="true" #endDatepicker />
+        </app-input>
+        <app-select-input
+          class="col-span-2"
+          formControlName="delegatedPenaltiesList"
+          [options]="penalties"
+          [label]="lang.map.delegated_penalties"
+          bindValue="id"
+          [isMultiple]="true"
+          bindLabel="getNames" />
+      </div>
+    </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary"
-        >{{ lang.map.save }}
-      </app-button>
-      <app-button mat-dialog-close="" buttonType="primary-outline"
-        >{{ lang.map.close }}
-      </app-button>
-    }
     @if (inViewMode()) {
       <app-button mat-dialog-close="" buttonType="primary"
         >{{ lang.map.close }}

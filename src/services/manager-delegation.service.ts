@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ManagerDelegation } from '@models/manager-delegation';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
 import { ManagerDelegationPopupComponent } from '@modules/administration/popups/manager-delegation-popup/manager-delegation-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
+import { ManagerDelegated } from '@models/manager-delegated';
 
 @CastResponseContainer({
   $pagination: {
@@ -41,5 +42,12 @@ export class ManagerDelegationService extends BaseCrudWithDialogService<
 
   getUrlSegment(): string {
     return this.urlService.URLS.MANAGER_DELEGATION;
+  }
+
+  @CastResponse(() => ManagerDelegated)
+  loadManagers() {
+    return this.http.get<ManagerDelegated[]>(
+      this.urlService.URLS.MANAGER_DELEGATION + '/admin/manager',
+    );
   }
 }
