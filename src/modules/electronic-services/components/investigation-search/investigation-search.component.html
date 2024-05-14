@@ -76,7 +76,7 @@
           <!-- draft full serial -->
           <ng-container matColumnDef="draftFullSerial">
             <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.serial_number }}
+              {{ lang.map.report_draft_number }}
             </th>
             <td mat-cell *matCellDef="let element">
               <button
@@ -86,18 +86,24 @@
               </button>
             </td>
           </ng-container>
+          <!-- investigation full serial -->
+          <ng-container matColumnDef="investigationFullSerial">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.investigation_file_number }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                class="text-blue-700 hover:underline focus:outline-none"
+                (click)="view(element)">
+                {{ element.investigationFullSerial }}
+              </button>
+            </td>
+          </ng-container>
           <!-- case status -->
           <ng-container matColumnDef="caseStatus">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.status }}</th>
             <td mat-cell *matCellDef="let element">
               <span>{{ element.caseStatusInfo?.getNames() || '' }}</span>
-            </td>
-          </ng-container>
-          <!-- creator -->
-          <ng-container matColumnDef="creator">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.creator }}</th>
-            <td mat-cell *matCellDef="let element">
-              <span>{{ element.creatorInfo?.getNames() || '' }}</span>
             </td>
           </ng-container>
           <!-- security Level -->
@@ -113,7 +119,7 @@
           <!-- department -->
           <ng-container matColumnDef="department">
             <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.department_company }}
+              {{ lang.map.lbl_department }}
             </th>
             <td mat-cell *matCellDef="let element">
               <span>{{ element.departmentInfo?.getNames() || '' }}</span>
