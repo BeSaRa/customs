@@ -51,6 +51,7 @@ export class AuthService
       credentials,
     );
   }
+
   @CastResponse(undefined, { unwrap: 'rs' })
   private _externalLogin(
     credentials: Partial<ExternalCredentialsContract>,
@@ -71,6 +72,7 @@ export class AuthService
       );
     }
   }
+
   @CastResponse()
   private _verifyExternalLogin(
     credentials: Partial<VerifyExternalCredentialsContract>,
@@ -79,6 +81,7 @@ export class AuthService
       .post<LoginDataContract>(this.urlService.URLS.AUTH_VERIFY, credentials)
       .pipe(ignoreErrors());
   }
+
   @CastResponse()
   private _verifyExternalAgencyLogin(
     credentials: Partial<VerifyExternalCredentialsContract>,
@@ -90,16 +93,19 @@ export class AuthService
       )
       .pipe(ignoreErrors());
   }
+
   login(
     credentials: Partial<CredentialsContract>,
   ): Observable<LoginDataContract> {
     return this._login(credentials).pipe(this.setDateAfterAuthenticate());
   }
+
   externalLogin(
     credentials: Partial<ExternalCredentialsContract>,
   ): Observable<ExternalLoginDataContract> {
     return this._externalLogin(credentials);
   }
+
   verifyExternalLogin(credentials: Partial<VerifyExternalCredentialsContract>) {
     if (credentials.userType === UserTypes.EXTERNAL_CLEARING_AGENCY) {
       delete credentials.userType;
@@ -115,6 +121,7 @@ export class AuthService
       );
     }
   }
+
   validateToken(): Observable<boolean> {
     return of(false)
       .pipe(
@@ -190,6 +197,8 @@ export class AuthService
   }
 
   switchOrganization(organizationId: number): Observable<LoginDataContract> {
-    return this._switchOrganization(organizationId);
+    return this._switchOrganization(organizationId).pipe(
+      this.setDateAfterAuthenticate(),
+    );
   }
 }
