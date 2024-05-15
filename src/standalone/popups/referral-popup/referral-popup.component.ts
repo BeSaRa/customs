@@ -212,6 +212,7 @@ export class ReferralPopupComponent
     | SystemPenalties
     | TaskResponses.RETURN_TO_PR_FROM_LA
     | TaskResponses.RETURN_TO_PA_FROM_LA
+    | TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS
     | TaskResponses.ASK_ANOTHER_DEPARTMENT,
     {
       header: string;
@@ -291,12 +292,18 @@ export class ReferralPopupComponent
       footer: this.lang.map.request_department_statement_footer,
       whom: '',
     },
+    [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: {
+      header: this.lang.map.static_header_text_for_legal_affairs,
+      footer: this.lang.map.static_footer_text_for_legal_affairs,
+      whom: this.lang.map.director_of_legal_affairs_department,
+    },
   };
 
   responseTranslateMap: Record<string, keyof LangKeysContract> = {
     [TaskResponses.RETURN_TO_PR_FROM_LA]: 'return_to_president',
     [TaskResponses.RETURN_TO_PA_FROM_LA]: 'return_to_president_assistant',
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: 'request_for_department_statement',
+    [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: 'referral_to_legal_affairs',
   };
 
   referralKey() {
@@ -304,7 +311,8 @@ export class ReferralPopupComponent
       ? this.selectedPenalty.penaltyKey
       : (this.response as
           | TaskResponses.RETURN_TO_PA_FROM_LA
-          | TaskResponses.RETURN_TO_PR_FROM_LA);
+          | TaskResponses.RETURN_TO_PR_FROM_LA
+          | TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS);
   }
 
   getForWhom(tab?: 'employee' | 'broker'): string {

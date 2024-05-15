@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  referral_to_legal_affairs: string;
   there_is_no_investigation_result_to_perform_this_action: string;
   request_department_statement_footer: string;
   request_department_statement_header: string;
