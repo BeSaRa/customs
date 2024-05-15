@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
 
   form: UntypedFormGroup = this.fb.nonNullable.group({
     lang: ['AR'],
-    userName: ['cdiuser1', Validators.required],
-    userPassword: ['P@ssw0rd', Validators.required],
+    userName: ['', Validators.required],
+    userPassword: ['', Validators.required],
   });
 
   login$: Subject<void> = new Subject<void>();
@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/' + AppRoutes.EXTERNAL_LOGIN]).then();
     }
   }
+
   ngOnInit(): void {
     this.listenToLogin();
   }
