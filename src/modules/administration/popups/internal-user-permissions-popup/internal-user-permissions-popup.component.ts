@@ -39,6 +39,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
 import { MatRipple } from '@angular/material/core';
+import { OrganizationUnitService } from '@services/organization-unit.service';
 
 @Component({
   selector: 'app-internal-user-permissions-popup',
@@ -68,11 +69,12 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
     this.loadPermissionsRoles();
     this.loadGroups();
     this.listenToPermissionRoleChange();
-    this.loadUserPermissions();
+    this.loadOrganizationUnit();
   }
 
   lang = inject(LangService);
   permissionService = inject(PermissionService);
+  organizationUnitService = inject(OrganizationUnitService);
   lookupService = inject(LookupService);
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
@@ -115,6 +117,16 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
     });
   }
 
+  loadOrganizationUnit() {
+    this.organizationUnitService
+      .loadById(this.data.model.organizationUnitId)
+      .subscribe(ou =>
+        ou.parent
+          ? this.loadUserPermissions(ou.parent)
+          : this.loadUserPermissions(ou.id),
+      );
+  }
+
   private load(): Observable<CheckGroup<Permission>[]> {
     return combineLatest({
       permissions: this.permissionService.loadAsLookups(),
@@ -148,13 +160,13 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
     );
   }
 
-  private loadUserPermissions() {
+  private loadUserPermissions(id: number) {
     this.permissionService
       .loadUserPermissions(this.data.model.internalUserId)
       .subscribe(val => {
         const ids: number[] = [];
         val
-          .filter(permission => permission.ouId === this.ouId)
+          .filter(permission => permission.ouId === id)
           .forEach(permission => {
             ids.push(permission.permissionId);
           });
