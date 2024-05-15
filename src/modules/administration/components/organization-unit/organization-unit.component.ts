@@ -96,7 +96,7 @@ export class OrganizationUnitComponent extends AdminComponent<
     new TextFilterColumn('mawaredDepId'),
     new SelectFilterColumn(
       'assistantOuId',
-      this.service.loadOUsByType(OrganizationUnitType.ASSiSTENT_DEPARTMENT),
+      this.service.loadOUsByType(OrganizationUnitType.ASSISTANT_DEPARTMENT),
       'id',
       'getNames',
     ),
