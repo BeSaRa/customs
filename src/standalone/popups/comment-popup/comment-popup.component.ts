@@ -108,7 +108,7 @@ export class CommentPopupComponent
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [
         // CustomValidators.required,
-        CustomValidators.maxLength(1300),
+        CustomValidators.maxLength(100000),
       ]),
       userId: new UntypedFormControl(null, []),
     });
