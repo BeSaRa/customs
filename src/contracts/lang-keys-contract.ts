@@ -624,4 +624,6 @@ export interface LangKeysContract {
   issued_by: string;
   menu_grievances: string;
   call_request_time: string;
+  chevron_down: string;
+  chevron_up: string;
 }
