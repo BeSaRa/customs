@@ -106,7 +106,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   protected loadAssistantOus() {
     this.organizationUnitService
-      .loadOUsByType(OrganizationUnitType.ASSiSTENT_DEPARTMENT)
+      .loadOUsByType(OrganizationUnitType.ASSISTANT_DEPARTMENT)
       .subscribe(ous => (this.assistantOus = ous));
   }
 
