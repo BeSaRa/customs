@@ -366,7 +366,7 @@
       <button
         mat-menu-item
         (click)="
-          responseAction$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
+          returnActions$.next(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
         ">
         {{ lang.map.launch_disciplinary_council }}
       </button>
@@ -381,7 +381,7 @@
       <button
         mat-menu-item
         (click)="
-          responseAction$.next(
+          returnActions$.next(
             taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
           )
         ">
@@ -394,7 +394,7 @@
     ) {
       <button
         mat-menu-item
-        (click)="responseAction$.next(taskResponses.PA_FNL_LAUNCH_DC)">
+        (click)="returnActions$.next(taskResponses.PA_FNL_LAUNCH_DC)">
         {{ lang.map.launch_disciplinary_committee }}
       </button>
     }

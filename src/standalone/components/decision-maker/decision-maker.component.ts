@@ -175,7 +175,7 @@ export class DecisionMakerComponent
       SystemPenalties.REFERRAL_TO_PRESIDENT,
       SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
-      SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL,
+      SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE,
       SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL,
     ];
 
@@ -184,10 +184,10 @@ export class DecisionMakerComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
         SystemPenalties.REFERRAL_TO_PRESIDENT,
-      [SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL]:
+      [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]:
         SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL,
       [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]:
-        SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL,
+        SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE,
     };
 
     this.model().itHasReferralRequestBefore(this.offender().id);

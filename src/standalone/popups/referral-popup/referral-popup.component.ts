@@ -207,13 +207,17 @@ export class ReferralPopupComponent
       ? this.selectedPenalty.getNames()
       : this.lang.map[this.responseTranslateMap[this.response!]];
   });
-
+  // referral_to_the_permanent_disciplinary_council
+  // referral_to_the_disciplinary_committee
   referralTextMap: Record<
     | SystemPenalties
     | TaskResponses.RETURN_TO_PR_FROM_LA
     | TaskResponses.RETURN_TO_PA_FROM_LA
     | TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS
-    | TaskResponses.ASK_ANOTHER_DEPARTMENT,
+    | TaskResponses.ASK_ANOTHER_DEPARTMENT
+    | TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL
+    | TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
+    | TaskResponses.PA_FNL_LAUNCH_DC,
     {
       header: string;
       footer: string;
@@ -250,15 +254,15 @@ export class ReferralPopupComponent
       footer: '',
       whom: '',
     },
-    [SystemPenalties.REFERRAL_TO_DISCIPLINARY_COUNCIL]: {
-      header: '',
-      footer: '',
-      whom: '',
+    [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]: {
+      header: this.lang.map.static_header_text_for_disciplinary_committee,
+      footer: this.lang.map.static_footer_text_for_disciplinary_committee,
+      whom: this.lang.map.chairman_of_the_disciplinary_committee,
     },
     [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]: {
-      header: '',
-      footer: '',
-      whom: '',
+      header: this.lang.map.static_header_text_for_disciplinary_council,
+      footer: this.lang.map.static_footer_text_for_disciplinary_council,
+      whom: this.lang.map.disciplinary_council_director,
     },
     [SystemPenalties.SAVE]: {
       header: '',
@@ -297,6 +301,21 @@ export class ReferralPopupComponent
       footer: this.lang.map.static_footer_text_for_legal_affairs,
       whom: this.lang.map.director_of_legal_affairs_department,
     },
+    [TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL]: {
+      header: this.lang.map.static_header_text_for_disciplinary_council,
+      footer: this.lang.map.static_footer_text_for_disciplinary_council,
+      whom: this.lang.map.disciplinary_council_director,
+    },
+    [TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL]: {
+      header: this.lang.map.static_header_text_for_disciplinary_council,
+      footer: this.lang.map.static_footer_text_for_disciplinary_council,
+      whom: this.lang.map.disciplinary_council_director,
+    },
+    [TaskResponses.PA_FNL_LAUNCH_DC]: {
+      header: this.lang.map.static_header_text_for_disciplinary_committee,
+      footer: this.lang.map.static_footer_text_for_disciplinary_committee,
+      whom: this.lang.map.chairman_of_the_disciplinary_committee,
+    },
   };
 
   responseTranslateMap: Record<string, keyof LangKeysContract> = {
@@ -304,6 +323,11 @@ export class ReferralPopupComponent
     [TaskResponses.RETURN_TO_PA_FROM_LA]: 'return_to_president_assistant',
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: 'request_for_department_statement',
     [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: 'referral_to_legal_affairs',
+    [TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL]:
+      'referral_to_the_permanent_disciplinary_council',
+    [TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL]:
+      'referral_to_the_permanent_disciplinary_council',
+    [TaskResponses.PA_FNL_LAUNCH_DC]: 'referral_to_the_disciplinary_committee',
   };
 
   referralKey() {
@@ -312,7 +336,10 @@ export class ReferralPopupComponent
       : (this.response as
           | TaskResponses.RETURN_TO_PA_FROM_LA
           | TaskResponses.RETURN_TO_PR_FROM_LA
-          | TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS);
+          | TaskResponses.ASK_ANOTHER_DEPARTMENT
+          | TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL
+          | TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
+          | TaskResponses.PA_FNL_LAUNCH_DC);
   }
 
   getForWhom(tab?: 'employee' | 'broker'): string {

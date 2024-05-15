@@ -1,4 +1,9 @@
 export interface LangKeysContract {
+  static_header_text_for_disciplinary_committee: string;
+  static_footer_text_for_disciplinary_committee: string;
+  disciplinary_council_director: string;
+  referral_to_the_disciplinary_committee: string;
+  referral_to_the_permanent_disciplinary_council: string;
   referral_to_legal_affairs: string;
   there_is_no_investigation_result_to_perform_this_action: string;
   request_department_statement_footer: string;
@@ -65,6 +70,8 @@ export interface LangKeysContract {
   send: string;
   chairman_of_the_disciplinary_committee: string;
   director_of_legal_affairs_department: string;
+  static_header_text_for_disciplinary_council: string;
+  static_footer_text_for_disciplinary_council: string;
   static_header_text_for_legal_affairs: string;
   static_footer_text_for_legal_affairs: string;
   msg_unsaved_changes: string;
