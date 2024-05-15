@@ -28,6 +28,24 @@
     [multiTemplateDataRows]="true"
     class="table-style table-primary"
     [dataSource]="models()">
+    <!-- arrows -->
+    <ng-container matColumnDef="arrows">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        @if (selectedOffender !== element) {
+          <mat-icon
+            [matTooltip]="lang.map.chevron_down"
+            [svgIcon]="AppIcons.CHEVRON_DOWN">
+          </mat-icon>
+        }
+        @if (selectedOffender === element) {
+          <mat-icon
+            [matTooltip]="lang.map.chevron_up"
+            [svgIcon]="AppIcons.CHEVRON_UP">
+          </mat-icon>
+        }
+      </td>
+    </ng-container>
     <!-- offenderName -->
     <ng-container matColumnDef="offenderName">
       <th mat-header-cell *matHeaderCellDef>

@@ -155,8 +155,14 @@ export class PersonsListComponent
     return ([] as string[])
       .concat(
         this.isOffender()
-          ? ['offenderName', 'qid', 'departmentCompany', 'jobGrade']
-          : ['witnessName', 'witnessQid', 'witnessType', 'personType'],
+          ? ['arrows', 'offenderName', 'qid', 'departmentCompany', 'jobGrade']
+          : [
+              'arrows',
+              'witnessName',
+              'witnessQid',
+              'witnessType',
+              'personType',
+            ],
       )
       .concat(buttons);
   });
