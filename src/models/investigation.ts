@@ -60,7 +60,7 @@ export class Investigation extends BaseCase<
       description: controls
         ? [
             { value: description, disabled: disabled },
-            [CustomValidators.maxLength(1333)],
+            [CustomValidators.maxLength(100000)],
           ]
         : description,
       securityLevel: controls
