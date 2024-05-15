@@ -230,6 +230,11 @@ const routes: Routes = [
   {
     path: AppRoutes.MANAGER_DELEGATION,
     component: ManagerDelegationComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_MANAGER_DELEGATION,
+      }),
+    ],
   },
 ];
 

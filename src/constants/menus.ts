@@ -230,5 +230,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SETTINGS,
     path: AppFullRoutes.MANAGER_DELEGATION,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_MANAGER_DELEGATION',
   },
 ];
