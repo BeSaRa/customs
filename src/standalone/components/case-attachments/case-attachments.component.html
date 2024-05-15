@@ -21,20 +21,36 @@
     [dataSource]="dataSource">
     <!-- documentTitle -->
     <ng-container matColumnDef="documentTitle">
-      <th mat-header-cell *matHeaderCellDef>{{ lang.map.document_name }}</th>
-      <td mat-cell *matCellDef="let element">{{ element.documentTitle }}</td>
+      <th mat-header-cell *matHeaderCellDef>
+        {{ lang.map.document_name }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          class="text-blue-700 hover:underline focus:outline-none"
+          (click)="view$.next(element)">
+          {{ element.documentTitle }}
+        </button>
+      </td>
     </ng-container>
     <!-- attachmentType -->
     <ng-container matColumnDef="attachmentType">
       <th mat-header-cell *matHeaderCellDef>
         {{
-          this.folderType === FolderType.OFFICIAL
+          folderType === FolderType.OFFICIAL
             ? lang.map.movement
             : lang.map.attachment_type
         }}
       </th>
       <td mat-cell *matCellDef="let element">
-        {{ element.attachmentTypeInfo?.getNames() }}
+        @if (folderType === FolderType.OFFICIAL) {
+          <button
+            class="text-blue-700 hover:underline focus:outline-none"
+            (click)="view$.next(element)">
+            {{ element.attachmentTypeInfo?.getNames() }}
+          </button>
+        } @else {
+          {{ element.attachmentTypeInfo?.getNames() }}
+        }
       </td>
     </ng-container>
     <!-- creationDate -->
