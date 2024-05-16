@@ -24,7 +24,6 @@ export class InvestigationInterceptor
     delete model.departmentInfo;
     delete model.securityLevelInfo;
     delete model.ouInfo;
-    delete model.caseStatusInfo;
     delete model.creatorInfo;
     delete model.sectionInfo;
     delete model.offenderInfo;

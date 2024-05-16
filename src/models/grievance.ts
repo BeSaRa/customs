@@ -2,7 +2,12 @@ import { BaseCase } from '@models/base-case';
 import { GrievanceService } from '@services/grievance.service';
 import { AdminResult } from '@models/admin-result';
 import { CustomValidators } from '@validators/custom-validators';
+import { InterceptModel } from 'cast-response';
+import { GrievanceInterceptor } from '@model-interceptors/grievance-interceptor';
 
+const { send, receive } = new GrievanceInterceptor();
+
+@InterceptModel({ send, receive })
 export class Grievance extends BaseCase<GrievanceService, Grievance> {
   override $$__service_name__$$: string = 'GrievanceService';
 
@@ -35,6 +40,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   penaltySignerRoleInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
   officeRecommendationInfo!: AdminResult;
+
   override buildForm() {
     return {
       description: ['', [CustomValidators.maxLength(3000)]],

@@ -60,6 +60,10 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     return this.caseStatus;
   }
 
+  getTaskId(): string | undefined {
+    return this.taskDetails && this.taskDetails.tkiid;
+  }
+
   hasResponse(responses: TaskResponses) {
     return this.getResponses() && this.getResponses().includes(responses);
   }
@@ -86,6 +90,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED
     );
   }
+
   getTaskName() {
     return this.taskDetails?.name;
   }
@@ -99,6 +104,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       )[0] as unknown as ActivitiesName)
     );
   }
+
   canClaim(): boolean {
     return (
       this.taskDetails &&
@@ -129,6 +135,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getActivityName() === ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL
     );
   }
+
   $$getEmployeeService$$(): EmployeeService {
     return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
   }
@@ -141,6 +148,7 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
         this.taskDetails.owner.toLowerCase()
     );
   }
+
   hasComplete(): boolean {
     return (
       this?.inMyInbox() &&

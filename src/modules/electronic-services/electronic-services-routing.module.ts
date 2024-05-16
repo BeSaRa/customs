@@ -14,6 +14,7 @@ import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
 import { CalendarComponent } from '@modules/electronic-services/components/calendar/calendar.component';
 import { TeamNames } from '@enums/team-names';
+import { GrievanceComponent } from '@modules/electronic-services/components/grievance/grievance.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -22,6 +23,11 @@ const routes: Routes = [
     component: InvestigationComponent,
     resolve: { info: itemResolver },
     canDeactivate: [investigationCanDeactivateGuard],
+  },
+  {
+    path: 'grievance',
+    component: GrievanceComponent,
+    resolve: { info: itemResolver },
   },
   {
     path: AppRoutes.USER_INBOX,

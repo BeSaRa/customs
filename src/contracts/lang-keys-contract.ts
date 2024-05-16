@@ -646,4 +646,11 @@ export interface LangKeysContract {
   edit_delegate: string;
   chevron_down: string;
   chevron_up: string;
+  grievance_date: string;
+  grievance_information: string;
+  lbl_applicant_type: string;
+  lbl_office_recommendation: string;
+  penalty_signer_role: string;
+  lbl_comments: string;
+  no_comments_yet: string;
 }

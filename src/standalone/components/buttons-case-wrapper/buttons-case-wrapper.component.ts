@@ -5,6 +5,7 @@ import {
   inject,
   Input,
   input,
+  InputSignal,
   OnInit,
   Output,
   signal,
@@ -35,6 +36,10 @@ import { ActionsOnCaseComponent } from '@modules/electronic-services/components/
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 import { MemorandumCategories } from '@enums/memorandum-categories';
 import { ToastService } from '@services/toast.service';
+import { Grievance } from '@models/grievance';
+import { BaseCase } from '@models/base-case';
+import { CaseTypes } from '@enums/case-types';
+import { BaseCaseService } from '@abstracts/base-case.service';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -64,21 +69,31 @@ export class ButtonsCaseWrapperComponent
 
   legalAffairsProceduresComponent = input<LegalAffairsProceduresComponent>();
 
-  model = input.required<Investigation>();
+  model: InputSignal<
+    BaseCase<
+      BaseCaseService<Investigation | Grievance>,
+      Investigation | Grievance
+    >
+  > =
+    input.required<
+      BaseCase<
+        BaseCaseService<Investigation | Grievance>,
+        Investigation | Grievance
+      >
+    >();
   @Output()
   updateModel = new EventEmitter<void>();
   @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   @Output() save = new EventEmitter<SaveTypes>();
   @Output() launch = new EventEmitter<SendTypes>();
-  @Output() claim = new EventEmitter<Investigation>();
-  @Output() release = new EventEmitter<Investigation>();
+  @Output() claim = new EventEmitter<Investigation | Grievance>();
+  @Output() release = new EventEmitter<Investigation | Grievance>();
   @Output() navigateToSamePageThatUserCameFrom = new EventEmitter<void>();
 
-  penaltyMap =
-    input.required<Record<number, { first: number; second: Penalty[] }>>();
+  penaltyMap = input<Record<number, { first: number; second: Penalty[] }>>();
 
   systemPenaltiesMap = computed(() => this.penaltyService.systemPenaltiesMap());
-
+  referGrievanceRequest$: Subject<TaskResponses> = new Subject<TaskResponses>();
   referralRequest$ = new Subject<{
     response: TaskResponses;
     penaltyKey: SystemPenalties;
@@ -136,12 +151,14 @@ export class ButtonsCaseWrapperComponent
     this.model()
       .claim()
       .pipe(take(1))
-      .subscribe((model: Investigation) => {
-        this.model()
-          .getPenaltyDecision()
-          .forEach(item => {
-            model.appendPenaltyDecision(item);
-          });
+      .subscribe((model: Investigation | Grievance) => {
+        if (this.model().caseType === CaseTypes.INVESTIGATION) {
+          (this.model() as unknown as Investigation)
+            .getPenaltyDecision()
+            .forEach(item => {
+              (model as unknown as Investigation).appendPenaltyDecision(item);
+            });
+        }
         this.claim.emit(model);
       });
   }
@@ -154,7 +171,7 @@ export class ButtonsCaseWrapperComponent
     this.model()
       .release()
       .pipe(take(1))
-      .subscribe(model => {
+      .subscribe((model: Investigation | Grievance) => {
         this.release.emit(model);
       });
   }
@@ -163,10 +180,14 @@ export class ButtonsCaseWrapperComponent
   legalAffairsFinalApprove$ = new Subject<TaskResponses>();
 
   requestReferralPresidentAssistant() {
-    this.referralTo(
-      TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
-      SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
-    );
+    if (this.model().caseType === CaseTypes.INVESTIGATION) {
+      this.referralTo(
+        TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
+        SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      );
+    } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
+      // this.referralTo(TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT);
+    }
   }
 
   requestReferralPresident() {
@@ -210,13 +231,17 @@ export class ButtonsCaseWrapperComponent
       )
       .pipe(
         map(({ selectedPenalty, response }) => {
-          const offenders = this.model().hasConcernedOffenders()
-            ? this.model().getConcernedOffendersWithOutOldDecision(
+          const offenders = (
+            this.model() as unknown as Investigation
+          ).hasConcernedOffenders()
+            ? (
+                this.model() as unknown as Investigation
+              ).getConcernedOffendersWithOutOldDecision(
                 selectedPenalty.penaltyKey,
               )
-            : this.model().getOffendersWithOldDecisions(
-                selectedPenalty.penaltyKey,
-              );
+            : (
+                this.model() as unknown as Investigation
+              ).getOffendersWithOldDecisions(selectedPenalty.penaltyKey);
           return {
             selectedPenalty,
             response,
@@ -224,19 +249,25 @@ export class ButtonsCaseWrapperComponent
           };
         }),
         filter(({ offenders }) => {
-          if (!offenders.length && !this.model().hasUnlinkedViolations()) {
+          if (
+            !offenders.length &&
+            !(this.model() as unknown as Investigation).hasUnlinkedViolations()
+          ) {
             this.dialog.error(
               this.lang.map
                 .there_is_no_offenders_or_unlinked_violations_to_take_this_action,
             );
           }
-          return !!offenders.length || this.model().hasUnlinkedViolations();
+          return (
+            !!offenders.length ||
+            (this.model() as unknown as Investigation).hasUnlinkedViolations()
+          );
         }),
         exhaustMap(({ offenders, selectedPenalty, response }) => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
               offenders,
-              this.model,
+              this.model as unknown as InputSignal<Investigation>,
               this.updateModel,
               selectedPenalty,
               response,
@@ -257,8 +288,10 @@ export class ButtonsCaseWrapperComponent
         switchMap(response => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
-              this.model().getConcernedOffenders(),
-              this.model,
+              (
+                this.model() as unknown as Investigation
+              ).getConcernedOffenders(),
+              this.model as unknown as InputSignal<Investigation>,
               this.updateModel,
               undefined,
               response,
@@ -292,11 +325,16 @@ export class ButtonsCaseWrapperComponent
           return click === UserClick.YES;
         }),
         switchMap(({ response }) => {
-          return this.model()
-            .getService()
-            .completeTask(this.model().getTaskId()!, {
+          return (
+            this.model().getService() as BaseCaseService<
+              Investigation | Grievance
+            >
+          ).completeTask(
+            (this.model() as BaseCase<never, never>).getTaskId()!,
+            {
               selectedResponse: response,
-            });
+            },
+          );
         }),
       )
       .subscribe(() => {
@@ -311,8 +349,8 @@ export class ButtonsCaseWrapperComponent
         switchMap(response => {
           return this.penaltyDecisionService
             .openRequestReferralDialog(
-              this.model().getConcernedOffenders(),
-              this.model,
+              (this.model() as Investigation).getConcernedOffenders(),
+              this.model as unknown as InputSignal<Investigation>,
               this.updateModel,
               undefined,
               response,
@@ -365,11 +403,11 @@ export class ButtonsCaseWrapperComponent
       .pipe(filter(({ model }) => !!model))
       .pipe(
         switchMap(({ model, response }) => {
-          return this.model()
+          return (this.model() as Investigation)
             .getService()
             .openEditMemorandumDialog(
               model!,
-              this.model(),
+              this.model() as Investigation,
               signal(this.updateModel),
               response,
             )

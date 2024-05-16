@@ -46,6 +46,7 @@ import { MatTabGroup } from '@angular/material/tabs';
 import { TeamService } from '@services/team.service';
 import { Team } from '@models/team';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { Grievance } from '@models/grievance';
 
 @Component({
   selector: 'app-investigation',
@@ -258,10 +259,10 @@ export class InvestigationComponent
     // TODO: add manager launch logic
   }
 
-  _updateForm(model: Investigation): void {
+  _updateForm(model: Investigation | Grievance): void {
     if (!model.id) this.resetForm();
-    this.model = model;
-    this._handleReadOnly(model);
+    this.model = model as Investigation;
+    this._handleReadOnly(this.model);
     this.form = this.fb.group(model.buildForm(model.canSave(), this.readonly));
     this._afterBuildForm();
   }

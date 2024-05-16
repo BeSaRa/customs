@@ -63,7 +63,7 @@ export class CaseAttachmentsComponent
   @Input()
   folderType!: FolderType;
   @Input()
-  type: 'folder' | 'offender' = 'folder';
+  type: 'folder' | 'offender' | 'attachment' = 'folder';
   @Input()
   entityId!: number;
   @Input()

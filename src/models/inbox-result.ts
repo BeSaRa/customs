@@ -8,6 +8,7 @@ import { InboxService } from '@services/inbox.services';
 import { ServiceRegistry } from '@services/service-registry';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { CaseTypes } from '@enums/case-types';
 
 const { send, receive } = new InboxInterceptor();
 
@@ -42,7 +43,11 @@ export class InboxResult extends ClonerMixin(class {}) {
   }
 
   setItemRoute(): void {
-    this.itemRoute = '/' + this.service.getServiceRoute(this.BD_CASE_TYPE);
+    if (this.BD_CASE_TYPE !== CaseTypes.GRIEVANCE) {
+      this.itemRoute = '/' + this.service.getServiceRoute(this.BD_CASE_TYPE);
+    } else {
+      this.itemRoute = '/home/electronic-services/grievance';
+    }
     this.itemDetails = this.encrypt.encrypt<INavigatedItem>({
       openFrom: !this.OWNER ? OpenFrom.TEAM_INBOX : OpenFrom.USER_INBOX,
       taskId: this.TKIID,
