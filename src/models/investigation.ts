@@ -225,10 +225,6 @@ export class Investigation extends BaseCase<
     });
   }
 
-  getTaskId(): string | undefined {
-    return this.taskDetails && this.taskDetails.tkiid;
-  }
-
   hasUnlinkedViolations(): boolean {
     const relatedViolationsIds = this.offenderViolationInfo.map(
       i => i.violationId,

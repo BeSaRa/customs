@@ -48,6 +48,8 @@ import {
   MatButtonToggleGroup,
 } from '@angular/material/button-toggle';
 import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
+import { Grievance } from '@models/grievance';
+import { GrievanceService } from '@services/grievance.service';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -88,12 +90,13 @@ export class PenaltyDecisionForExternalUsersComponent
   lang = inject(LangService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
+  grievanceService = inject(GrievanceService);
   penaltyDecisionService = inject(PenaltyDecisionService);
   investigationService = inject(InvestigationService);
   domSanitize = inject(DomSanitizer);
   route = inject(ActivatedRoute);
   router = inject(Router);
-  dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
+  selectedTabIndex: number = 0;
   reload$: Subject<null> = new Subject<null>();
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   viewDecisionFile$ = new Subject<string>();
@@ -103,6 +106,10 @@ export class PenaltyDecisionForExternalUsersComponent
   @ViewChild('paginator') paginator!: MatPaginator;
   user = this.employeeService.getLoginData();
   userId!: number | undefined;
+  tabsIndexes: { [key: string]: number } = {
+    decisions: 0,
+    grievance: 1,
+  };
   displayedColumns = [
     'decisionSerial',
     'decisionDate',
@@ -111,6 +118,9 @@ export class PenaltyDecisionForExternalUsersComponent
     'status',
     'actions',
   ];
+  dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
+  GrievanceDataSource: MatTableDataSource<Grievance> = new MatTableDataSource();
+  GrievanceDisplayedColumns = ['actions'];
 
   ngOnInit(): void {
     this.listenToReload();
@@ -134,14 +144,23 @@ export class PenaltyDecisionForExternalUsersComponent
         ),
       )
       .pipe(
-        switchMap(() =>
-          UserTypes.EXTERNAL_CLEARING_AGENCY ===
-          this.employeeService.getLoginData()?.type
+        switchMap(() => {
+          // if (this.isGrievanceTab) {
+          //   // return UserTypes.EXTERNAL_CLEARING_AGENCY ===
+          //   //   this.employeeService.getLoginData()?.type
+          //   //   ? this.grievanceService.load({
+          //   //       offenderId: this.userId as number,
+          //   //     })
+          //   //   : this.grievanceService.loadExternal();
+          // } else {
+          return UserTypes.EXTERNAL_CLEARING_AGENCY ===
+            this.employeeService.getLoginData()?.type
             ? this.penaltyDecisionService.loadExternal({
                 offenderId: this.userId as number,
               })
-            : this.penaltyDecisionService.loadExternal(),
-        ),
+            : this.penaltyDecisionService.loadExternal();
+          // }
+        }),
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
@@ -162,6 +181,9 @@ export class PenaltyDecisionForExternalUsersComponent
           };
         }
       });
+  }
+  get isGrievanceTab() {
+    return this.selectedTabIndex === this.tabsIndexes.grievance;
   }
   private listenGrievance() {
     this.grievance$

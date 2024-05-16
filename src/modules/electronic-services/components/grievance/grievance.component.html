@@ -1,0 +1,161 @@
+<div
+  class="bg-gradient-to-br mb-5 from-primary to-primary-light px-3 rounded-lg py-2">
+  <div class="flex items-center justify-start text-white">
+    <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+      {{ lang.map.menu_grievances }}
+    </h1>
+    <div class="flex-auto"></div>
+  </div>
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.report_number }}</span>
+      <div class="input-form p-2 block">
+        {{ model.draftFullSerial ? model.draftFullSerial : '---' }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.file_number }}</span>
+      <div class="input-form p-2 block">
+        {{
+          model.investigationFullSerial ? model.investigationFullSerial : '---'
+        }}
+      </div>
+    </div>
+    <div class="mb-3">
+      <span class="font-medium text-white">{{ lang.map.grievance_date }}</span>
+      <div class="input-form p-2 block">
+        {{ model.createdOn ? (model.createdOn | date) : '---' }}
+      </div>
+    </div>
+    <div class="mb-3 col-span-1 md:col-span-3">
+      <span class="font-medium text-white">{{ lang.map.subject }}</span>
+      <div class="input-form min-h-[40px] p-2 block">
+        {{ model.subject }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="relative">
+  <mat-card>
+    <div class="px-3 pb-3">
+      <h3
+        class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
+        {{ lang.map.grievance_information }}
+      </h3>
+      <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.lbl_applicant_type }}</span>
+          <div class="input-form p-2 block">
+            {{ model.applicantTypeInfo.getNames() }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.offender_type }}</span>
+          <div class="input-form p-2 block">
+            {{ model.offenderTypeInfo.getNames() }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.offender_name }}</span>
+          <div class="input-form p-2 block">
+            {{ model.offenderInfo.getNames() }}
+          </div>
+        </div>
+        @if (model.officeRecommendation) {
+          <div class="mb-3">
+            <span class="font-medium">{{
+              lang.map.lbl_office_recommendation
+            }}</span>
+            <div class="input-form p-2 block">
+              {{ model.officeRecommendationInfo.getNames() }}
+            </div>
+          </div>
+        }
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.penalty }}</span>
+          <div class="input-form p-2 block">
+            {{ model.penaltyInfo.getNames() }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.penalty_signer_role }}</span>
+          <div class="input-form p-2 block">
+            {{ model.penaltySignerRoleInfo.getNames() }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <span class="font-medium">{{ lang.map.penalty_signer }}</span>
+          <div class="input-form p-2 block">
+            {{ model.penaltySignerInfo.getNames() }}
+          </div>
+        </div>
+
+        <div class="col-span-1 md:col-span-3">
+          <div class="mb-3 col-span-1 md:col-span-3">
+            <span class="font-medium">{{ lang.map.description }}</span>
+            <div class="input-form min-h-[40px] p-2 block">
+              {{ model.description }}
+            </div>
+          </div>
+        </div>
+        <div class="col-span-1 md:col-span-3">
+          <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
+            <div>
+              <h3
+                class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
+                {{ lang.map.lbl_comments }}
+              </h3>
+              <ul class="divide-y divide-gray-200">
+                @for (comment of model.commentList; track $index) {
+                  <li class="pb-3 sm:pb-4">
+                    <div
+                      class="flex items-center space-x-4 rtl:space-x-reverse">
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">
+                          {{ comment }}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                } @empty {
+                  <li class="pb-3 sm:pb-4">
+                    <div
+                      class="flex items-center space-x-4 rtl:space-x-reverse">
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">
+                          {{ lang.map.no_comments_yet }}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </div>
+
+            <div>
+              <h3
+                class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
+                {{ lang.map.attachments }}
+              </h3>
+              <app-case-attachments
+                [caseId]="model.id"
+                [type]="'attachment'"
+                [service]="service"
+                [readonly]="true"></app-case-attachments>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+  <app-buttons-case-wrapper
+    [model]="model"
+    [openFrom]="openFrom"
+    (save)="save$.next($event)"
+    (claim)="_updateForm($event)"
+    (release)="_updateForm($event)"
+    (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()"
+    [isMandatoryToImposePenalty]="false">
+  </app-buttons-case-wrapper>
+</div>

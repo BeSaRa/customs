@@ -11,6 +11,7 @@ import { CaseTypes } from '@enums/case-types';
 import { UrlService } from './url.service';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { QueryResultSet } from '@models/query-result-set';
+import { GrievanceService } from '@services/grievance.service';
 
 @CastResponseContainer({
   $pagination: {
@@ -32,10 +33,12 @@ export class InboxService extends RegisterServiceMixin(class {}) {
   urlService = inject(UrlService);
   private http = inject(HttpClient);
   private investigationService = inject(InvestigationService);
+  private grievanceService = inject(GrievanceService);
 
   constructor() {
     super();
     this.services.set(CaseTypes.INVESTIGATION, this.investigationService);
+    this.services.set(CaseTypes.GRIEVANCE, this.grievanceService);
   }
 
   protected getModelClass(): Constructor<InboxResult> {

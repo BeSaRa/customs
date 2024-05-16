@@ -61,6 +61,7 @@ export class GrievancePopupComponent implements OnInit {
           return this.grievanceService.create({
             ...this.form.value,
             offenderId: this.model.offenderId,
+            applicantType: this.employeeService.getLoginData()?.type,
           });
         }),
       )

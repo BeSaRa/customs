@@ -56,7 +56,7 @@ export class ExternalHomeComponent implements OnInit {
   }
 
   showAll(url: string) {
-    this.router.navigate([url]);
+    this.router?.navigate([url]);
   }
   assertEmployee(item: MawaredEmployee | ClearingAgent | undefined) {
     return item as MawaredEmployee;
