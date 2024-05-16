@@ -18,6 +18,8 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ShrinkAnimation } from '@animations/shrink-animation';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
+import { Common } from '@models/common';
+import { CommonService } from '@services/common.service';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -48,6 +50,7 @@ export class SidebarMenuItemComponent
   menuStatus: 'opened' | 'closed' = 'closed';
   cd = inject(ChangeDetectorRef);
   lang = inject(LangService);
+  commonService = inject(CommonService);
   @Input()
   shrinkMode = false;
 
@@ -66,7 +69,12 @@ export class SidebarMenuItemComponent
   get hasChildren(): boolean {
     return !!(this.item.children && this.item.children.length);
   }
-
+  hasCounter(s: keyof Common['counters'] | undefined): boolean {
+    return s ? this.commonService.hasCounter(s) : false;
+  }
+  getCounter(s: keyof Common['counters'] | undefined): string {
+    return s ? this.commonService.getCounter(s) : '';
+  }
   trackByLangKey(index: number, item: MenuItemContract) {
     return item.langKey;
   }

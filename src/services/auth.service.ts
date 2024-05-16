@@ -25,6 +25,7 @@ import { VerifyExternalCredentialsContract } from '@contracts/verify-external-cr
 import { UserTypes } from '@enums/user-types';
 import { ignoreErrors } from '@utils/utils';
 import { ExternalLoginDataContract } from '@contracts/external-login-data-contract';
+import { CommonService } from '@services/common.service';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,8 @@ export class AuthService
   private readonly tokenService = inject(TokenService);
   private readonly menuItemService = inject(MenuItemService);
   private readonly langService = inject(LangService);
+  private readonly commonService = inject(CommonService);
+
   private authenticated = false;
 
   @CastResponse()
@@ -142,6 +145,7 @@ export class AuthService
           ),
         ),
       )
+      .pipe(switchMap(() => this.commonService.loadCounters()))
       .pipe(map(() => true))
       .pipe(
         catchError(() => {

@@ -32,11 +32,29 @@
       class="flex-auto flex items-center justify-start">
       <span
         [innerHTML]="item.translate! | highlight: searchText"
+        [class.pe-4]="
+          level === 1 &&
+          item.children &&
+          item.children.length &&
+          !hasCounter(item.counter)
+        "
+        [class.pe-5]="
+          level === 1 &&
+          item.children &&
+          item.children.length &&
+          hasCounter(item.counter)
+        "
         class="flex-auto item-label"></span>
       @if (hasChildren) {
         <mat-icon
           class="flex-none size-18 transition-transform children-indicator"
           svgIcon="menu-right"></mat-icon>
+      }
+      @if (hasCounter(item.counter)) {
+        <span
+          class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
+          {{ getCounter(item.counter) }}
+        </span>
       }
     </div>
   </ng-template>

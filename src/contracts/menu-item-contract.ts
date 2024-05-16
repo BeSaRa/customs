@@ -2,6 +2,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroupType } from '@constants/app-permissions-group';
 import { TeamNames } from '@enums/team-names';
+import { Common } from '@models/common';
 
 export interface MenuItemContract {
   id: number;
@@ -14,6 +15,7 @@ export interface MenuItemContract {
   arName?: string;
   enName?: string;
   order?: number;
+  counter?: keyof Common['counters'];
   children?: MenuItemContract[];
   translate?: string;
   arabicSearchText?: string;

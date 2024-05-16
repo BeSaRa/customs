@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { InboxResult } from '@models/inbox-result';
-import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
 import { LangService } from '@services/lang.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxService } from '@services/inbox.services';
@@ -19,6 +19,7 @@ import { DialogService } from '@services/dialog.service';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { CommonService } from '@services/common.service';
 
 @Component({
   selector: 'app-user-inbox',
@@ -34,6 +35,7 @@ export class UserInboxComponent
   lang = inject(LangService);
   router = inject(Router);
   dialog = inject(DialogService);
+  commonService = inject(CommonService);
 
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
@@ -86,6 +88,7 @@ export class UserInboxComponent
         }),
         takeUntil(this.destroy$),
       )
+      .pipe(tap(() => this.commonService.loadCounters().subscribe()))
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };

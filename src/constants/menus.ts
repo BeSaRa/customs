@@ -136,6 +136,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.TEAM_INBOX,
     path: AppFullRoutes.TEAM_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    counter: 'teamInbox',
   },
   {
     id: MenuIdes.USER_INBOX,
@@ -143,6 +144,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.USER_INBOX,
     path: AppFullRoutes.USER_INBOX,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    counter: 'personalInbox',
   },
   {
     id: MenuIdes.INVESTIGATION,
