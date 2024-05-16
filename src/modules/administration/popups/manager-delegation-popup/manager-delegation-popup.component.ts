@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { ManagerDelegation } from '@models/manager-delegation';
@@ -18,7 +18,10 @@ import { MawaredDepartment } from '@models/mawared-department';
   templateUrl: './manager-delegation-popup.component.html',
   styleUrls: ['./manager-delegation-popup.component.scss'],
 })
-export class ManagerDelegationPopupComponent extends AdminDialogComponent<ManagerDelegation> {
+export class ManagerDelegationPopupComponent
+  extends AdminDialogComponent<ManagerDelegation>
+  implements OnInit
+{
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<ManagerDelegation> = inject(MAT_DIALOG_DATA);
   penalties!: Penalty[];
@@ -37,23 +40,49 @@ export class ManagerDelegationPopupComponent extends AdminDialogComponent<Manage
 
   override ngOnInit() {
     super.ngOnInit();
+    this.loadInitialData();
+    this.setupFormControls();
+  }
+
+  private loadInitialData() {
     this.loadPenalties();
     this.loadInternalUsers();
     this.loadDepartment();
+  }
+
+  private setupFormControls() {
     if (!this.inViewMode()) {
-      this.form.get('delegatedId')?.setValue(this.data.extras?.delegatedId);
-      this.form.get('departmentId')?.setValue(this.data.extras?.departmentId);
-      this.form.get('startDate')?.setValue(this.today);
-      this.form
-        .get('delegatedPenaltiesList')
-        ?.setValue(this.data.extras?.penalties);
-      this.form.get('delegatedId')?.disable();
-      this.form.get('departmentId')?.disable();
+      this.setupFormForCreation();
     }
     if (this.inEditMode()) {
-      this.form.get('startDate')?.setValue(this.data.extras?.startDate);
-      this.form.get('endDate')?.setValue(this.data.extras?.endDate);
+      this.setupFormForEdit();
     }
+  }
+
+  private setupFormForCreation() {
+    const delegatedId = this.data.extras?.delegatedId;
+    const departmentId = this.data.extras?.departmentId;
+
+    this.form.patchValue({
+      delegatedId: delegatedId,
+      departmentId: departmentId,
+      startDate: this.today,
+    });
+
+    this.form.get('delegatedId')?.disable();
+    this.form.get('departmentId')?.disable();
+  }
+
+  private setupFormForEdit() {
+    const startDate = this.data.extras?.startDate;
+    const endDate = this.data.extras?.endDate;
+    const penalties = this.data.extras?.penalties;
+
+    this.form.patchValue({
+      startDate: startDate,
+      endDate: endDate,
+      delegatedPenaltiesList: penalties,
+    });
   }
 
   loadPenalties() {
