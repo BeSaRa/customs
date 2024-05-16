@@ -639,6 +639,11 @@ export interface LangKeysContract {
   department: string;
   records: string;
   is_delegated: string;
+  delegate_manager: string;
+  cancel_delegate: string;
+  delegation_dates: string;
+  delegate: string;
+  edit_delegate: string;
   chevron_down: string;
   chevron_up: string;
 }

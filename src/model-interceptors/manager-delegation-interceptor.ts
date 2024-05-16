@@ -9,6 +9,7 @@ export class ManagerDelegationInterceptor
     delete model.statusInfo;
     delete model.delegatedInfo;
     delete model.typeInfo;
+    delete model.delegatedPenaltiesInfo;
     return model;
   }
 
@@ -17,9 +18,12 @@ export class ManagerDelegationInterceptor
     model.typeInfo = AdminResult.createInstance(model.typeInfo);
     model.statusInfo = AdminResult.createInstance(model.statusInfo);
     model.departmentInfo = AdminResult.createInstance(model.departmentInfo);
-    model.delegatedPenaltiesInfo = model.delegatedPenaltiesInfo.map(penalty => {
-      return AdminResult.createInstance(penalty);
-    });
+    model.delegatedPenaltiesInfo &&
+      (model.delegatedPenaltiesInfo = model.delegatedPenaltiesInfo?.map(
+        penalty => {
+          return AdminResult.createInstance(penalty);
+        },
+      ));
     return model;
   }
 }

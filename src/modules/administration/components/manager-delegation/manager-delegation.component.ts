@@ -6,9 +6,11 @@ import { ManagerDelegationPopupComponent } from '@modules/administration/popups/
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
-import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { ConfigService } from '@services/config.service';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { InternalUserService } from '@services/internal-user.service';
+import { MawaredDepartmentService } from '@services/mawared-department.service';
 
 @Component({
   selector: 'app-manager-delegation',
@@ -22,6 +24,8 @@ export class ManagerDelegationComponent extends AdminComponent<
 > {
   config = inject(ConfigService);
   service = inject(ManagerDelegationService);
+  internalUserService = inject(InternalUserService);
+  mawaredDepartmentService = inject(MawaredDepartmentService);
   actions: ContextMenuActionContract<ManagerDelegation>[] = [
     {
       name: 'view',
@@ -36,11 +40,25 @@ export class ManagerDelegationComponent extends AdminComponent<
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ManagerDelegation> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('delegated'),
-    new TextFilterColumn('department'),
-    // new TextFilterColumn('startDate'),
-    // new TextFilterColumn('endDate'),
-    // new TextFilterColumn('penalties'),
+
+    new SelectFilterColumn(
+      'delegatedId',
+      this.internalUserService.loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'departmentId',
+      this.mawaredDepartmentService.loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'type',
+      this.lookupService.lookups.DelegationType,
+      'lookupKey',
+      'getNames',
+    ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 }

@@ -11,23 +11,13 @@
   </div>
   <div class="shadow relative">
     <table mat-table class="table-style" [dataSource]="dataSource">
-      <!-- arName -->
-      <ng-container matColumnDef="arName">
+      <!-- name -->
+      <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>
-          {{ lang.map.ar_name }}
+          {{ lang.map.name }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.arName }}
-        </td>
-      </ng-container>
-
-      <!-- enName -->
-      <ng-container matColumnDef="enName">
-        <th mat-header-cell *matHeaderCellDef>
-          {{ lang.map.en_name }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.enName }}
+          {{ element.getNames() }}
         </td>
       </ng-container>
 
@@ -56,7 +46,33 @@
           {{ lang.map.is_delegated }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.isDelegated ? this.lang.map.yes : this.lang.map.no }}
+          {{
+            element.managerDelegation.isDelegated
+              ? this.lang.map.yes
+              : this.lang.map.no
+          }}
+        </td>
+      </ng-container>
+
+      <!-- delegationDates -->
+      <ng-container matColumnDef="delegationDates">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ lang.map.delegation_dates }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          @if (element.managerDelegation.isDelegated) {
+            {{
+              element.managerDelegation.startDate
+                | date: config.CONFIG.DATE_FORMAT
+            }}
+            -
+            {{
+              element.managerDelegation.endDate
+                | date: config.CONFIG.DATE_FORMAT
+            }}
+          } @else {
+            -
+          }
         </td>
       </ng-container>
 
@@ -66,8 +82,15 @@
         <td mat-cell *matCellDef="let element">
           <div class="flex">
             <app-icon-button
-              [matTooltip]="lang.map.view"
-              icon="VIEW"></app-icon-button>
+              [matTooltip]="lang.map.delegate_manager"
+              (click)="delegateManager$.next(element)"
+              icon="DELEGATE_MANAGER"></app-icon-button>
+            @if (element.managerDelegation.isDelegated) {
+              <app-icon-button
+                [matTooltip]="lang.map.cancel_delegate"
+                (click)="cancelDelegate$.next(element)"
+                icon="CANCEL_DELEGATE"></app-icon-button>
+            }
           </div>
         </td>
       </ng-container>
