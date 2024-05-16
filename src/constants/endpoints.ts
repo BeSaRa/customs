@@ -2,6 +2,7 @@ export const EndPoints = {
   BASE_URL: '',
   INFO: '/auth/login/info',
   LOCALIZATION: '/entity/localization',
+  COMMON: '/common',
   AUTH: '/auth/internal/login',
   AUTH_EXTERNAL: '/auth/external/login',
   AUTH_CLEARING_AGENCY: '/auth/external/login/clearing-agency',
