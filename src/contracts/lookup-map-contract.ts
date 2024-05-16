@@ -55,4 +55,5 @@ export interface LookupMapContract {
   meetingStatus: Lookup[];
   calendarFormat: Lookup[];
   customsViolationEffect: Lookup[];
+  DelegationType: Lookup[];
 }

@@ -7,6 +7,7 @@ import { CustomValidators } from '@validators/custom-validators';
 import { UserPreferences } from './user-preferences';
 import { StatusTypes } from '@enums/status-types';
 import { MawaredEmployee } from '@models/mawared-employee';
+import { ManagerDelegation } from '@models/manager-delegation';
 
 const { send, receive } = new InternalUserInterceptor();
 
@@ -30,6 +31,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   mawaredEmployeeInfo!: MawaredEmployee;
   userPreferences!: UserPreferences;
   override status = StatusTypes.ACTIVE;
+  managerDelegation!: ManagerDelegation;
 
   buildForm(controls = false): object {
     const {

@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { ManagerDelegationPopupComponent } from '@modules/administration/popups/manager-delegation-popup/manager-delegation-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { ManagerDelegated } from '@models/manager-delegated';
+import { InternalUser } from '@models/internal-user';
 
 @CastResponseContainer({
   $pagination: {
@@ -44,10 +44,17 @@ export class ManagerDelegationService extends BaseCrudWithDialogService<
     return this.urlService.URLS.MANAGER_DELEGATION;
   }
 
-  @CastResponse(() => ManagerDelegated)
+  @CastResponse(() => InternalUser)
   loadManagers() {
-    return this.http.get<ManagerDelegated[]>(
+    return this.http.get<InternalUser[]>(
       this.urlService.URLS.MANAGER_DELEGATION + '/admin/manager',
+    );
+  }
+
+  cancelDelegated(id: number) {
+    return this.http.put<number>(
+      `${this.urlService.URLS.MANAGER_DELEGATION}/admin/${id}/cancel-delegate`,
+      { id },
     );
   }
 }

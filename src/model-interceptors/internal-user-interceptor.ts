@@ -5,9 +5,12 @@ import { UserPreferencesInterceptor } from './user-preferences-interceptor';
 import { AdminResult } from '@models/admin-result';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
+import { ManagerDelegationInterceptor } from '@model-interceptors/manager-delegation-interceptor';
+import { ManagerDelegation } from '@models/manager-delegation';
 
 const userPreferencesInterceptor = new UserPreferencesInterceptor();
 const mawaredEmployeeInterceptor = new MawaredEmployeeInterceptor();
+const managerDelegationInterceptor = new ManagerDelegationInterceptor();
 
 export class InternalUserInterceptor
   implements ModelInterceptorContract<InternalUser>
@@ -17,6 +20,10 @@ export class InternalUserInterceptor
       (model.userPreferences = userPreferencesInterceptor.send(
         model.userPreferences,
       ) as UserPreferences);
+    model.managerDelegation &&
+      (model.managerDelegation = managerDelegationInterceptor.send(
+        model.managerDelegation,
+      ) as ManagerDelegation);
     delete model.defaultDepartmentInfo;
     delete model.jobTitleInfo;
     return model;
@@ -34,6 +41,12 @@ export class InternalUserInterceptor
     model.userPreferences &&
       (model.userPreferences = userPreferencesInterceptor.receive(
         new UserPreferences().clone<UserPreferences>(model.userPreferences),
+      ));
+    model.managerDelegation &&
+      (model.managerDelegation = managerDelegationInterceptor.receive(
+        new ManagerDelegation().clone<ManagerDelegation>(
+          model.managerDelegation,
+        ),
       ));
     return model;
   }

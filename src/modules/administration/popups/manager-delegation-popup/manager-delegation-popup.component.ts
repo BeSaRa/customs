@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Penalty } from '@models/penalty';
 import { PenaltyService } from '@services/penalty.service';
+import { InternalUser } from '@models/internal-user';
+import { InternalUserService } from '@services/internal-user.service';
+import { MawaredDepartmentService } from '@services/mawared-department.service';
+import { MawaredDepartment } from '@models/mawared-department';
 
 @Component({
   selector: 'app-manager-delegation-popup',
@@ -20,6 +24,13 @@ export class ManagerDelegationPopupComponent extends AdminDialogComponent<Manage
   penalties!: Penalty[];
   penaltyService = inject(PenaltyService);
 
+  internalUsers!: InternalUser[];
+  internalUsersService = inject(InternalUserService);
+
+  departments!: MawaredDepartment[];
+  departmentService = inject(MawaredDepartmentService);
+  today = new Date();
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
   }
@@ -27,12 +38,40 @@ export class ManagerDelegationPopupComponent extends AdminDialogComponent<Manage
   override ngOnInit() {
     super.ngOnInit();
     this.loadPenalties();
+    this.loadInternalUsers();
+    this.loadDepartment();
+    if (!this.inViewMode()) {
+      this.form.get('delegatedId')?.setValue(this.data.extras?.delegatedId);
+      this.form.get('departmentId')?.setValue(this.data.extras?.departmentId);
+      this.form.get('startDate')?.setValue(this.today);
+      this.form
+        .get('delegatedPenaltiesList')
+        ?.setValue(this.data.extras?.penalties);
+      this.form.get('delegatedId')?.disable();
+      this.form.get('departmentId')?.disable();
+    }
+    if (this.inEditMode()) {
+      this.form.get('startDate')?.setValue(this.data.extras?.startDate);
+      this.form.get('endDate')?.setValue(this.data.extras?.endDate);
+    }
   }
 
   loadPenalties() {
     this.penaltyService
       .loadAsLookups()
       .subscribe(penalties => (this.penalties = penalties));
+  }
+
+  loadInternalUsers() {
+    this.internalUsersService
+      .loadAsLookups()
+      .subscribe(users => (this.internalUsers = users));
+  }
+
+  loadDepartment() {
+    this.departmentService
+      .loadAsLookups()
+      .subscribe(departments => (this.departments = departments));
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -43,7 +82,7 @@ export class ManagerDelegationPopupComponent extends AdminDialogComponent<Manage
   protected _prepareModel(): ManagerDelegation | Observable<ManagerDelegation> {
     return new ManagerDelegation().clone<ManagerDelegation>({
       ...this.model,
-      ...this.form.value,
+      ...this.form.getRawValue(),
     });
   }
 
@@ -54,6 +93,15 @@ export class ManagerDelegationPopupComponent extends AdminDialogComponent<Manage
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
     // you can close the dialog after save here
-    // this.dialogRef.close(this.model);
+    this.dialogRef.close(this.model);
+  }
+
+  endDateMinDate() {
+    return this.form.get('startDate')?.value || this.today;
+  }
+
+  endDateMaxDate() {
+    const startDateAsDate = new Date(this.form.get('startDate')?.value);
+    return new Date(startDateAsDate.getTime() + 30 * 24 * 60 * 60 * 1000);
   }
 }

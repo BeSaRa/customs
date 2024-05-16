@@ -10,18 +10,26 @@
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4">
-        <app-input
-          formControlName="delegated"
-          [label]="lang.map.delegated"></app-input>
-        <app-input
-          formControlName="department"
-          [label]="lang.map.department"></app-input>
+        <app-select-input
+          formControlName="delegatedId"
+          [options]="internalUsers"
+          [label]="lang.map.delegated"
+          bindValue="id"
+          bindLabel="getNames" />
+        <app-select-input
+          formControlName="departmentId"
+          [options]="departments"
+          [label]="lang.map.department"
+          bindValue="id"
+          bindLabel="getNames" />
+
         <app-input formControlName="startDate" [label]="lang.map.start_date">
           <input
             appControl
             formControlName="startDate"
             (click)="startDatepicker.open()"
-            [matDatepicker]="startDatepicker" />
+            [matDatepicker]="startDatepicker"
+            [min]="today" />
           <mat-datepicker [touchUi]="true" #startDatepicker />
         </app-input>
         <app-input formControlName="endDate" [label]="lang.map.end_date">
@@ -29,7 +37,9 @@
             appControl
             formControlName="endDate"
             (click)="endDatepicker.open()"
-            [matDatepicker]="endDatepicker" />
+            [matDatepicker]="endDatepicker"
+            [min]="endDateMinDate()"
+            [max]="endDateMaxDate()" />
           <mat-datepicker [touchUi]="true" #endDatepicker />
         </app-input>
         <app-select-input
@@ -44,8 +54,23 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
+    @if (inCreateMode()) {
+      <app-button (click)="save$.next()" buttonType="primary">
+        {{ lang.map.delegate }}
+      </app-button>
+    }
+    @if (inEditMode()) {
+      <app-button (click)="save$.next()" buttonType="primary">
+        {{ lang.map.edit_delegate }}
+      </app-button>
+    }
     @if (inViewMode()) {
       <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline"
         >{{ lang.map.close }}
       </app-button>
     }

@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 import { FilterColumnComponent } from '@standalone/components/filter-column/filter-column.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -23,9 +23,11 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { LangService } from '@services/lang.service';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ReplaySubject, switchMap } from 'rxjs';
+import { ReplaySubject, Subject, switchMap } from 'rxjs';
 import { ManagerDelegationService } from '@services/manager-delegation.service';
-import { ManagerDelegated } from '@models/manager-delegated';
+import { ManagerDelegation } from '@models/manager-delegation';
+import { ConfigService } from '@services/config.service';
+import { InternalUser } from '@models/internal-user';
 
 @Component({
   selector: 'app-manager-delegation-management',
@@ -52,27 +54,66 @@ import { ManagerDelegated } from '@models/manager-delegated';
     MatTooltip,
     MatHeaderCellDef,
     MatNoDataRow,
+    DatePipe,
   ],
   templateUrl: './manager-delegation-management.component.html',
   styleUrl: './manager-delegation-management.component.scss',
 })
 export class ManagerDelegationManagementComponent implements OnInit {
   lang = inject(LangService);
-  dataSource: MatTableDataSource<ManagerDelegated> = new MatTableDataSource();
+  config = inject(ConfigService);
+  dataSource: MatTableDataSource<InternalUser> = new MatTableDataSource();
   managerDelegationService = inject(ManagerDelegationService);
   reload$ = new ReplaySubject<void>(1);
+  @Output() reload = new EventEmitter<void>();
+
+  delegateManager$ = new Subject<InternalUser>();
+  cancelDelegate$ = new Subject<InternalUser>();
   displayedColumns = [
-    'arName',
-    'enName',
+    'name',
     'domainName',
     'defaultDepartment',
     'isDelegated',
+    'delegationDates',
     'actions',
   ];
 
   ngOnInit() {
     this.listenToReload();
+    this.listenToDelegateManager();
+    this.listenToCancelDelegate();
     this.reload$.next();
+  }
+
+  listenToDelegateManager() {
+    this.delegateManager$.subscribe(user => {
+      user.managerDelegation.isDelegated
+        ? this.managerDelegationService
+            .openEditDialog(new ManagerDelegation(), {
+              delegatedId: user.id,
+              departmentId: user.defaultDepartmentInfo.id,
+              startDate: user.managerDelegation.startDate,
+              endDate: user.managerDelegation.endDate,
+              penalties: user.managerDelegation.delegatedPenaltiesList,
+            })
+            .afterClosed()
+            .subscribe(() => this.reload$.next())
+        : this.managerDelegationService
+            .openCreateDialog(new ManagerDelegation(), {
+              delegatedId: user.id,
+              departmentId: user.defaultDepartmentInfo.id,
+            })
+            .afterClosed()
+            .subscribe(() => this.reload$.next());
+    });
+  }
+
+  listenToCancelDelegate() {
+    this.cancelDelegate$.subscribe(user => {
+      this.managerDelegationService
+        .cancelDelegated(user.id)
+        .subscribe(() => this.reload$.next());
+    });
   }
 
   listenToReload() {
@@ -82,8 +123,9 @@ export class ManagerDelegationManagementComponent implements OnInit {
           return this.managerDelegationService.loadManagers();
         }),
       )
-      .subscribe((value: ManagerDelegated[]) => {
+      .subscribe((value: InternalUser[]) => {
         this.dataSource.data = value;
+        this.reload.emit();
       });
   }
 }

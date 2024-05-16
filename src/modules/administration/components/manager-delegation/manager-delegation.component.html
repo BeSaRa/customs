@@ -4,7 +4,8 @@
     mat-align-tabs="start"
     [dynamicHeight]="true">
     <mat-tab [label]="lang.map.menu_manager_delegation">
-      <app-manager-delegation-management></app-manager-delegation-management>
+      <app-manager-delegation-management
+        (reload)="this.reload$.next()"></app-manager-delegation-management>
     </mat-tab>
     <mat-tab [label]="lang.map.records">
       <div class="m-2 mb-0">
@@ -18,7 +19,7 @@
             (click)="reload$.next()"
             icon="RELOAD"></app-icon-button>
         </div>
-        <div class="shadow relative">
+        <div class="shadow relative h-[76vh] overflow-auto">
           <table
             mat-table
             matSort
@@ -44,9 +45,12 @@
               </td>
             </ng-container>
 
-            <!-- delegated -->
-            <ng-container matColumnDef="delegated">
-              <th mat-header-cell mat-sort-header="delegated" *matHeaderCellDef>
+            <!-- delegatedId -->
+            <ng-container matColumnDef="delegatedId">
+              <th
+                mat-header-cell
+                mat-sort-header="delegatedId"
+                *matHeaderCellDef>
                 {{ lang.map.delegated }}
               </th>
               <td mat-cell *matCellDef="let element">
@@ -54,11 +58,21 @@
               </td>
             </ng-container>
 
+            <!-- type -->
+            <ng-container matColumnDef="type">
+              <th mat-header-cell mat-sort-header="type" *matHeaderCellDef>
+                {{ lang.map.type }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.typeInfo.getNames() }}
+              </td>
+            </ng-container>
+
             <!-- department -->
-            <ng-container matColumnDef="department">
+            <ng-container matColumnDef="departmentId">
               <th
                 mat-header-cell
-                mat-sort-header="department"
+                mat-sort-header="departmentId"
                 *matHeaderCellDef>
                 {{ lang.map.department }}
               </th>

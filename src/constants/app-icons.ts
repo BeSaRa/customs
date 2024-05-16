@@ -94,6 +94,8 @@ export const AppIcons = {
   APPROVE: 'check-decagram',
   ARROW_TOP_LEFT: 'arrow-top-left',
   SUSPEND_EMPLOYEE: 'pause-octagon',
+  DELEGATE_MANAGER: 'account-arrow-up-outline',
+  CANCEL_DELEGATE: 'pen-remove',
 };
 
 export type AppIconsType = typeof AppIcons;
