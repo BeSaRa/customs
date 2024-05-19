@@ -92,6 +92,7 @@ export class MeetingsListComponent implements OnInit {
     'actions',
   ];
   config = Config;
+
   ngOnInit(): void {
     this._listenToReload();
     this._listenToUpdateMeeting();
@@ -99,6 +100,7 @@ export class MeetingsListComponent implements OnInit {
     this._listenToViewMeeting();
     this._listenToAddMeetingMinutes();
   }
+
   _listenToReload() {
     this.reload$
       .pipe(
@@ -112,6 +114,7 @@ export class MeetingsListComponent implements OnInit {
         this.dataList = res.rs.sort((a, b) => +b.meetingDate - +a.meetingDate);
       });
   }
+
   _listenToAddMeeting() {
     this.add$
       .pipe(
@@ -138,6 +141,7 @@ export class MeetingsListComponent implements OnInit {
         this.reload$.next(null);
       });
   }
+
   _listenToUpdateMeeting() {
     this.update$
       .pipe(
@@ -214,7 +218,12 @@ export class MeetingsListComponent implements OnInit {
         this.askToReloadMeetingMinutes.emit();
       });
   }
+
   hasNotHaveMeetingMinutes(id: number) {
     return !this.meetingMinutesList.find(minutes => minutes.concernedId === id);
+  }
+
+  meetingDateIsNotToday(element: Meeting) {
+    return new Date(element.meetingDate) > new Date();
   }
 }
