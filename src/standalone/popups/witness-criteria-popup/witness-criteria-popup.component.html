@@ -149,7 +149,7 @@
               <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
               <td mat-cell *matCellDef="let element">
                 <div class="flex">
-                  <div [matTooltip]="lang.map.add_offender">
+                  <div [matTooltip]="lang.map.add_external_person">
                     <app-icon-button
                       (click)="addEmployee$.next(element)"
                       icon="PLUS_BOX" />
@@ -219,7 +219,7 @@
               <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
               <td mat-cell *matCellDef="let element">
                 <div class="flex">
-                  <div [matTooltip]="lang.map.add_offender">
+                  <div [matTooltip]="lang.map.add_external_person">
                     <app-icon-button
                       (click)="addClearingAgent$.next(element)"
                       icon="PLUS_BOX" />
