@@ -54,6 +54,10 @@ export class Offender extends BaseModel<Offender, OffenderService> {
         )
       );
     }
+    const employeeDepartmentId =
+      this.employeeDepartmentId && this.type === OffenderTypes.EMPLOYEE
+        ? this.employeeDepartmentId
+        : (this.offenderInfo as MawaredEmployee).employeeDepartmentId;
     return (
       (this.type === OffenderTypes.BROKER &&
         this.$$getEmployeeService$$().hasPermissionTo(
@@ -68,7 +72,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
           'EMPLOYEE_SITUATION_SEARCH_IN_DEPARTMENT',
         ) &&
         this.$$getEmployeeService$$().getEmployee()?.mawaredEmployeeInfo
-          .employeeDepartmentId === this.employeeDepartmentId)
+          .employeeDepartmentId === employeeDepartmentId)
     );
   }
 
