@@ -17,6 +17,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { GrievanceService } from '@services/grievance.service';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '@services/employee.service';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -31,6 +32,7 @@ import { EmployeeService } from '@services/employee.service';
     TextareaComponent,
     Dir,
     NgClass,
+    CaseAttachmentsComponent,
   ],
   templateUrl: './grievance-popup.component.html',
   styleUrl: './grievance-popup.component.scss',

@@ -94,7 +94,7 @@
         <div class="col-span-1 md:col-span-3">
           <div class="mb-3 col-span-1 md:col-span-3">
             <span class="font-medium">{{ lang.map.description }}</span>
-            <div class="input-form min-h-[40px] p-2 block">
+            <div class="input-form min-h-[100px] p-2 block">
               {{ model.description }}
             </div>
           </div>
@@ -140,7 +140,7 @@
               </h3>
               <app-case-attachments
                 [caseId]="model.id"
-                [type]="'attachment'"
+                [type]="'folder'"
                 [service]="service"
                 [readonly]="true"></app-case-attachments>
             </div>

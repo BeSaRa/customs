@@ -232,4 +232,12 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGE_MANAGER_DELEGATION',
   },
+  {
+    id: MenuIdes.GRIEVANCE,
+    langKey: 'menu_grievances',
+    icon: AppIcons.HAND_BACK_RIGHT,
+    path: AppFullRoutes.GRIEVANCE_ARCHIVE,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'GRIEVANCE_ARCHIVE',
+  },
 ];

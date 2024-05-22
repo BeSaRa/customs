@@ -98,7 +98,9 @@ export class ButtonsCaseWrapperComponent
     response: TaskResponses;
     penaltyKey: SystemPenalties;
   }>();
-
+  referralGrievanceRequest$ = new Subject<{
+    response: TaskResponses;
+  }>();
   returnActions$ = new Subject<TaskResponses>();
   ask$ = new Subject<TaskResponses>();
 
@@ -186,7 +188,9 @@ export class ButtonsCaseWrapperComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       );
     } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
-      // this.referralTo(TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT);
+      this.referralGrievanceRequest$.next({
+        response: TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      });
     }
   }
   requestReferralPresident() {
@@ -215,6 +219,16 @@ export class ButtonsCaseWrapperComponent
       penaltyKey,
       response,
     });
+  }
+
+  private listenToReferralGrievanceAction() {
+    this.referralGrievanceRequest$.pipe(takeUntil(this.destroy$)).pipe(
+      map(({ response }) => {
+        return {
+          response,
+        };
+      }),
+    );
   }
 
   private listenToReferralActions() {

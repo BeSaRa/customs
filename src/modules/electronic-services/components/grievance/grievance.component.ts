@@ -57,7 +57,6 @@ export class GrievanceComponent extends BaseCaseComponent<
   _handleReadOnly(): void {
     this.readonly = true;
   }
-
   _updateForm(model: Investigation | Grievance): void {
     this.model = model as Grievance;
     this._handleReadOnly();

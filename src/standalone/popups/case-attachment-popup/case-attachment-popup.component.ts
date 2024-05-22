@@ -175,7 +175,6 @@ export class CaseAttachmentPopupComponent
           );
         }),
         filter(() => {
-          console.log(this.data.type);
           return this.data.type === 'apology' || this.validData();
         }),
       )

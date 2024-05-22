@@ -319,7 +319,6 @@ export abstract class BaseCaseService<M>
     );
   }
 
-  @CastResponse(() => CaseAttachment)
   addCaseAttachment(
     caseId: string,
     attachment: CaseAttachment,
@@ -377,7 +376,7 @@ export abstract class BaseCaseService<M>
   openAddAttachmentDialog(
     caseId: string,
     service: BaseCaseService<unknown> | unknown,
-    type: 'folder' | 'offender' | 'attachment' | 'apology',
+    type: 'folder' | 'offender' | 'apology',
     entityId: number,
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {
