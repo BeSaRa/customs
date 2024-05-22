@@ -18,6 +18,7 @@ import { GrievanceService } from '@services/grievance.service';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '@services/employee.service';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { UserClick } from '@enums/user-click';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -68,7 +69,7 @@ export class GrievancePopupComponent implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.dialogRef.close();
+        this.dialogRef.close(UserClick.YES);
       });
   }
 

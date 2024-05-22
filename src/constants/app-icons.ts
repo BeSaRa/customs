@@ -96,6 +96,7 @@ export const AppIcons = {
   SUSPEND_EMPLOYEE: 'pause-octagon',
   DELEGATE_MANAGER: 'account-arrow-up-outline',
   CANCEL_DELEGATE: 'pen-remove',
+  COMMENT: 'comment-text-multiple-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

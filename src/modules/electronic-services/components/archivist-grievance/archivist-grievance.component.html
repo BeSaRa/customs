@@ -10,6 +10,9 @@
       [mat-stretch-tabs]="false"
       [(selectedIndex)]="selectedTabIndex"
       [dynamicHeight]="true">
+      <mat-tab [label]="lang.map.lbl_applied_grievances">
+        <ng-container [ngTemplateOutlet]="grievances"></ng-container>
+      </mat-tab>
       <mat-tab [label]="lang.map.search_for_decision">
         <ng-container [ngTemplateOutlet]="search_for_decision"></ng-container>
       </mat-tab>
@@ -21,6 +24,10 @@
       </mat-tab>
     </mat-tab-group>
   </mat-card>
+
+  <ng-template #grievances>
+    <app-grievance-list [hidePagination]="true"></app-grievance-list>
+  </ng-template>
   <ng-template #search_for_decision>
     <div class="p-4 overflow-auto" style="height: 100%">
       <form [formGroup]="form" class="flex flex-col justify-between h-full">
