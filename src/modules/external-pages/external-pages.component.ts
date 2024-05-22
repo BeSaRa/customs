@@ -3,7 +3,7 @@ import { UserTypes } from '@enums/user-types';
 import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { FormControl } from '@angular/forms';
-import { filter, Subject, switchMap } from 'rxjs';
+import { filter, Subject, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { DialogService } from '@services/dialog.service';
@@ -33,19 +33,27 @@ export class ExternalPagesComponent implements OnInit {
     this.search$
       .pipe(
         switchMap(query =>
-          this.clearingAgentService.load(undefined, {
+          this.clearingAgentService.loadCriteria({
             agencyId:
               this.employeeService.getLoginData()?.clearingAgency.agencyId,
-            qid: query,
+            qId: query,
           }),
         ),
       )
       .pipe(
-        switchMap(page =>
+        tap(
+          list =>
+            !list.length &&
+            this.dialog.error(this.lang.map.no_records_to_display),
+        ),
+        filter(list => !!list.length),
+      )
+      .pipe(
+        switchMap(list =>
           this.dialog
             .open(SelectAgentPopupComponent, {
               data: {
-                list: page.rs,
+                list: list,
               },
             })
             .afterClosed()
