@@ -56,4 +56,5 @@ export interface LookupMapContract {
   calendarFormat: Lookup[];
   customsViolationEffect: Lookup[];
   DelegationType: Lookup[];
+  officeRecommendation: Lookup[];
 }

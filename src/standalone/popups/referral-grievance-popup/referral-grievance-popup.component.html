@@ -1,1 +1,32 @@
-<p>referral-grievance-popup works!</p>
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map[title] }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content w-[900px]">
+    <form [formGroup]="form">
+      <app-select-input
+        class="flex-auto w-0"
+        formControlName="officeRecommendation"
+        [label]="lang.map.lbl_office_recommendation"
+        bindLabel="getNames"
+        bindValue="lookupKey"
+        [options]="officeRecommendations">
+      </app-select-input>
+
+      <app-textarea [label]="lang.map.comment" formControlName="comment" />
+    </form>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary-outline"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

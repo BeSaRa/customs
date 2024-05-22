@@ -40,6 +40,7 @@ import { Grievance } from '@models/grievance';
 import { BaseCase } from '@models/base-case';
 import { CaseTypes } from '@enums/case-types';
 import { BaseCaseService } from '@abstracts/base-case.service';
+import { ReferralGrievancePopupComponent } from '@standalone/popups/referral-grievance-popup/referral-grievance-popup.component';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -93,14 +94,11 @@ export class ButtonsCaseWrapperComponent
   penaltyMap = input<Record<number, { first: number; second: Penalty[] }>>();
 
   systemPenaltiesMap = computed(() => this.penaltyService.systemPenaltiesMap());
-  referGrievanceRequest$: Subject<TaskResponses> = new Subject<TaskResponses>();
   referralRequest$ = new Subject<{
     response: TaskResponses;
     penaltyKey: SystemPenalties;
   }>();
-  referralGrievanceRequest$ = new Subject<{
-    response: TaskResponses;
-  }>();
+  referralGrievanceRequest$ = new Subject<TaskResponses>();
   returnActions$ = new Subject<TaskResponses>();
   ask$ = new Subject<TaskResponses>();
 
@@ -111,6 +109,7 @@ export class ButtonsCaseWrapperComponent
     this.listenToReferralActions();
     this.listenToReturnActions();
     this.listenToApproveAction();
+    this.listenToReferralGrievanceAction();
     this.listenToAskAction();
 
     this.listenToLegalAffairsFinalApprove();
@@ -188,16 +187,20 @@ export class ButtonsCaseWrapperComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       );
     } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
-      this.referralGrievanceRequest$.next({
-        response: TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
-      });
+      this.referralGrievanceRequest$.next(
+        TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
+      );
     }
   }
   requestReferralPresident() {
-    this.referralTo(
-      TaskResponses.REFERRAL_TO_PRESIDENT,
-      SystemPenalties.REFERRAL_TO_PRESIDENT,
-    );
+    if (this.model().caseType === CaseTypes.INVESTIGATION) {
+      this.referralTo(
+        TaskResponses.REFERRAL_TO_PRESIDENT,
+        SystemPenalties.REFERRAL_TO_PRESIDENT,
+      );
+    } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
+      this.referralGrievanceRequest$.next(TaskResponses.REFERRAL_TO_PRESIDENT);
+    }
   }
 
   referralToLegalAffairs() {
@@ -222,13 +225,26 @@ export class ButtonsCaseWrapperComponent
   }
 
   private listenToReferralGrievanceAction() {
-    this.referralGrievanceRequest$.pipe(takeUntil(this.destroy$)).pipe(
-      map(({ response }) => {
-        return {
-          response,
-        };
-      }),
-    );
+    this.referralGrievanceRequest$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(response => {
+          return this.dialog
+            .open(ReferralGrievancePopupComponent, {
+              data: {
+                model: this.model,
+                extras: {
+                  response,
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .pipe(filter(click => click === UserClick.YES))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
   }
 
   private listenToReferralActions() {
