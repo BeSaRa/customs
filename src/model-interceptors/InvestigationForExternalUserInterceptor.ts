@@ -12,7 +12,8 @@ export class InvestigationForExternalUserInterceptor
   }
 
   receive(model: InvestigationForExternalUser): InvestigationForExternalUser {
-    model.caseStatusInfo = new AdminResult().clone(model.caseStatusInfo);
+    model.caseStatusInfo &&
+      (model.caseStatusInfo = AdminResult.createInstance(model.caseStatusInfo));
 
     return model;
   }

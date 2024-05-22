@@ -117,7 +117,7 @@ export class CasesForExternalUsersComponent
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {
-        this.setLength.emit(list.rs.length);
+        this.setLength.emit(list.count);
         this.dataSource.data = !this.hidePagination
           ? list.rs
           : list.rs.splice(0, 5);
@@ -146,7 +146,7 @@ export class CasesForExternalUsersComponent
           return this.dialog
             .open(InvestigationFileDetailsForExternalUserPopupComponent, {
               data: {
-                id: model.caseId,
+                model,
               },
             })
             .afterClosed();

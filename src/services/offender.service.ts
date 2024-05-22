@@ -20,6 +20,12 @@ import { InvestigationForExternalUser } from '@models/investigation-for-external
       'rs.*': () => Offender,
     },
   },
+  $paginationForCases: {
+    model: () => Pagination,
+    shape: {
+      'rs.*': () => InvestigationForExternalUser,
+    },
+  },
   $default: {
     model: () => Offender,
   },
@@ -63,6 +69,9 @@ export class OffenderService extends BaseCrudService<Offender> {
     );
   }
 
+  @CastResponse(undefined, {
+    fallback: '$paginationForCases',
+  })
   loadCasesForExternal(
     extra: { [key: string]: unknown } = {},
     options: FetchOptionsContract = {

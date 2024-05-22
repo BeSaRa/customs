@@ -28,7 +28,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MatSort } from '@angular/material/sort';
@@ -112,7 +112,7 @@ export class PenaltyDecisionForExternalUsersComponent
   };
   displayedColumns = [
     'decisionSerial',
-    'decisionDate',
+    'date',
     'signer',
     'penalty',
     'status',
@@ -130,6 +130,10 @@ export class PenaltyDecisionForExternalUsersComponent
       this.reload$.next(null);
     });
     this.listenToViewDecisionFile();
+  }
+  tabChange($event: number) {
+    this.selectedTabIndex = $event;
+    this.reload$.next(null);
   }
   showAll() {
     this.router.navigate(['/external/decisions']);
@@ -156,21 +160,31 @@ export class PenaltyDecisionForExternalUsersComponent
                     offenderId: this.userId as number,
                   })
                   .pipe(
+                    tap(page => {
+                      this.setLength.emit(page.count);
+                    }),
+                  )
+                  .pipe(
                     map(page => {
                       return page.rs;
                     }),
                   )
-              : this.penaltyDecisionService.loadExternal().pipe(
-                  map(page => {
-                    return page.rs;
-                  }),
-                );
+              : this.penaltyDecisionService
+                  .loadExternal()
+                  .pipe(
+                    tap(page => {
+                      this.setLength.emit(page.count);
+                    }),
+                  )
+                  .pipe(
+                    map(page => {
+                      return page.rs;
+                    }),
+                  );
           }
         }),
       )
       .subscribe(list => {
-        this.setLength.emit(list.length);
-
         if (this.isGrievanceTab) {
           this.grievanceDataSource.data = !this.hidePagination
             ? (list as Grievance[])

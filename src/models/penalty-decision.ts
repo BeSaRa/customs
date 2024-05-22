@@ -20,6 +20,8 @@ export class PenaltyDecision extends BaseModel<
   tkiid?: string;
   comment?: string;
   decisionType!: number;
+  docVsId!: string;
+  decisionDate!: string;
   signerInfo!: AdminResult;
   penaltyInfo!: Penalty;
   offenderInfo!: AdminResult;
@@ -27,8 +29,4 @@ export class PenaltyDecision extends BaseModel<
   isUpdate: boolean = false;
   declare roleAuthName: string;
   declare customsViolationEffect: number;
-
-  buildSearchForm() {
-    return {};
-  }
 }

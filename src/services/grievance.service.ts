@@ -36,6 +36,6 @@ export class GrievanceService
   }
 
   getCasesAsList(): Observable<Grievance[]> {
-    return this.http.post<Grievance[]>(this.getUrlSegment() + '/cases', {});
+    return this.http.get<Grievance[]>(this.getUrlSegment() + '/cases');
   }
 }

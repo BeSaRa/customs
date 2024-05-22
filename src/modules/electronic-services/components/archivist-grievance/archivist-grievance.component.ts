@@ -53,6 +53,9 @@ import { ignoreErrors } from '@utils/utils';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Pagination } from '@models/pagination';
+import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
 
 @Component({
   selector: 'app-archivist-grievance',
@@ -101,7 +104,7 @@ export class ArchivistGrievanceComponent implements OnInit {
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<PenaltyDecision>();
-  selectedTab = 0;
+  selectedTabIndex = 0;
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
 
   @HostListener('document:keypress', ['$event'])
@@ -112,11 +115,18 @@ export class ArchivistGrievanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group(new PenaltyDecision().buildSearchForm());
+    this.form = this.fb.group(new PenaltyDecisionCriteria().buildForm());
     this.listenToSearch();
+    this.listenGrievance();
   }
 
   columnsWrapper: ColumnsWrapper<PenaltyDecision> = new ColumnsWrapper(
+    new TextFilterColumn('decisionSerial'),
+    new NoneFilterColumn('offenderInfo'),
+    new NoneFilterColumn('decisionType'),
+    new NoneFilterColumn('penaltyInfo'),
+    new NoneFilterColumn('signerInfo'),
+    new NoneFilterColumn('statusInfo'),
     new NoneFilterColumn('actions'),
   );
 
@@ -141,7 +151,7 @@ export class ArchivistGrievanceComponent implements OnInit {
       .pipe(
         exhaustMap(() => {
           return this.penaltyDecisionService
-            .loadComposite(this.form.value)
+            .loadByCriteria(this.form.value)
             .pipe(
               catchError(error => {
                 return throwError(error);
@@ -152,11 +162,27 @@ export class ArchivistGrievanceComponent implements OnInit {
       )
       .subscribe((data: Pagination<PenaltyDecision[]>) => {
         if (data.rs.length) {
-          this.selectedTab = 1;
+          this.selectedTabIndex = 1;
           this.displayedList = new MatTableDataSource(data.rs);
         } else {
           this.dialog.info(this.lang.map.no_records_to_display);
         }
       });
+  }
+
+  private listenGrievance() {
+    this.grievance$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(GrievancePopupComponent, {
+              data: {
+                model: model,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }
