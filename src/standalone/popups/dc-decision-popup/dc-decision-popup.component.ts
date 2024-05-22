@@ -195,7 +195,10 @@ export class DcDecisionPopupComponent
   textControl: FormControl = new FormControl<string>(
     this.oldPenaltyComment()!,
     {
-      validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+      validators: [
+        CustomValidators.required,
+        CustomValidators.maxLength(10000),
+      ],
     },
   );
   displayedColumns = ['violation', 'createdOn', 'proofStatus'];
@@ -255,6 +258,7 @@ export class DcDecisionPopupComponent
         this.updateOffenderViolationProofStatus(item);
       });
   }
+
   updateOffenderViolationProofStatus(item: OffenderViolation) {
     Promise.resolve().then(() => {
       item.proofStatus = this.controls()[item.id].value;
@@ -272,6 +276,7 @@ export class DcDecisionPopupComponent
         });
     });
   }
+
   private prepareModel(): PenaltyDecision {
     return new PenaltyDecision().clone<PenaltyDecision>({
       ...(this.oldPenaltyDecision() ? this.oldPenaltyDecision() : undefined),

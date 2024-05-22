@@ -107,7 +107,10 @@ export class TerminatePopupComponent implements OnInit {
     this.samePenalty() ? this.oldPenaltiesMap()[this.offender.id]?.comment : '',
     {
       nonNullable: true,
-      validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+      validators: [
+        CustomValidators.required,
+        CustomValidators.maxLength(10000),
+      ],
     },
   );
 

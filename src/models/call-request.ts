@@ -39,7 +39,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
 
     return {
       note: controls
-        ? [note, [CustomValidators.required, CustomValidators.maxLength(1300)]]
+        ? [note, [CustomValidators.required, CustomValidators.maxLength(10000)]]
         : note,
       summonsPlace: controls
         ? [
