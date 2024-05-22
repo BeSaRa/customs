@@ -26,6 +26,8 @@ import { UserTypes } from '@enums/user-types';
 import { ignoreErrors } from '@utils/utils';
 import { ExternalLoginDataContract } from '@contracts/external-login-data-contract';
 import { CommonService } from '@services/common.service';
+import { ECookieService } from '@services/e-cookie.service';
+import { ConfigService } from '@services/config.service';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +44,8 @@ export class AuthService
   private readonly menuItemService = inject(MenuItemService);
   private readonly langService = inject(LangService);
   private readonly commonService = inject(CommonService);
+  private readonly eCookieService = inject(ECookieService);
+  private readonly configurationService = inject(ConfigService);
 
   private authenticated = false;
 
@@ -125,6 +129,12 @@ export class AuthService
     }
   }
 
+  getTokenFromStore(): string | undefined {
+    return this.eCookieService.getE(
+      this.configurationService.CONFIG.TOKEN_STORE_KEY,
+    );
+  }
+
   validateToken(): Observable<boolean> {
     return of(false)
       .pipe(
@@ -145,7 +155,13 @@ export class AuthService
           ),
         ),
       )
-      .pipe(switchMap(() => this.commonService.loadCounters()))
+      .pipe(
+        switchMap(() =>
+          !this.getTokenFromStore()
+            ? of(null)
+            : this.commonService.loadCounters(),
+        ),
+      )
       .pipe(map(() => true))
       .pipe(
         catchError(() => {

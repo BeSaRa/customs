@@ -8,6 +8,7 @@ import { ToastService } from '@services/toast.service';
 import { Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppRoutes } from '@constants/app-routes';
+import { CommonService } from '@services/common.service';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
   fb = inject(FormBuilder);
   toast = inject(ToastService);
   router = inject(Router);
+  commonService = inject(CommonService);
 
   eyeIcons: Record<
     'eye' | 'eye-off',
@@ -69,6 +71,11 @@ export class LoginComponent implements OnInit {
         switchMap(() =>
           this.authService.login(this.form.value).pipe(ignoreErrors()),
         ),
+      )
+      .pipe(
+        switchMap(() => {
+          return this.commonService.loadCounters();
+        }),
       )
       .subscribe(() => {
         this.toast.success('logged in successfully!');
