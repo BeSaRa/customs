@@ -56,6 +56,8 @@ import { Pagination } from '@models/pagination';
 import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
+import { UserClick } from '@enums/user-click';
+import { GrievanceListComponent } from '@standalone/components/grievance-list/grievance-list.component';
 
 @Component({
   selector: 'app-archivist-grievance',
@@ -86,6 +88,7 @@ import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grie
     SelectInputComponent,
     MatDatepicker,
     MatDatepickerInput,
+    GrievanceListComponent,
   ],
   templateUrl: './archivist-grievance.component.html',
   styleUrl: './archivist-grievance.component.scss',
@@ -162,7 +165,7 @@ export class ArchivistGrievanceComponent implements OnInit {
       )
       .subscribe((data: Pagination<PenaltyDecision[]>) => {
         if (data.rs.length) {
-          this.selectedTabIndex = 1;
+          this.selectedTabIndex = 2;
           this.displayedList = new MatTableDataSource(data.rs);
         } else {
           this.dialog.info(this.lang.map.no_records_to_display);
@@ -183,6 +186,9 @@ export class ArchivistGrievanceComponent implements OnInit {
             .afterClosed();
         }),
       )
-      .subscribe();
+      .pipe(filter(click => click === UserClick.YES))
+      .subscribe(() => {
+        this.selectedTabIndex = 0;
+      });
   }
 }

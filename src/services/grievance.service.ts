@@ -2,15 +2,22 @@ import { Injectable } from '@angular/core';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 
 import { Grievance } from '@models/grievance';
 import { Observable } from 'rxjs';
+import { Pagination } from '@models/pagination';
 
 @CastResponseContainer({
   $default: {
     model: () => Grievance,
+  },
+  $pagination: {
+    model: () => Pagination,
+    shape: {
+      'rs.*': () => Grievance,
+    },
   },
 })
 @Injectable({
@@ -35,7 +42,12 @@ export class GrievanceService
     return Grievance;
   }
 
-  getCasesAsList(): Observable<Grievance[]> {
-    return this.http.get<Grievance[]>(this.getUrlSegment() + '/cases');
+  @CastResponse(undefined, {
+    fallback: '$pagination',
+  })
+  getCasesAsList(): Observable<Pagination<Grievance[]>> {
+    return this.http.get<Pagination<Grievance[]>>(
+      this.getUrlSegment() + '/cases',
+    );
   }
 }

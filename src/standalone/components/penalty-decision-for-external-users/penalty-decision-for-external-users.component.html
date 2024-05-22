@@ -8,7 +8,7 @@
       lang.map.lbl_decisions
     }}</mat-button-toggle>
     <mat-button-toggle [value]="2">{{
-      lang.map.lbl_grievances
+      lang.map.lbl_applied_grievances
     }}</mat-button-toggle>
   </mat-button-toggle-group>
   <div class="flex items-center justify-between">
@@ -138,45 +138,7 @@
   </div>
 </ng-template>
 <ng-template #grievances_tab_template>
-  <div class="shadow relative overflow-auto">
-    <table
-      mat-table
-      matSort
-      class="table-style"
-      [dataSource]="grievanceDataSource">
-      <!-- status -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>
-          {{ lang.map.status }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.statusInfo && element.statusInfo?.getNames() }}
-        </td>
-      </ng-container>
-      <!-- actions -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
-          {{ lang.map.actions }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="flex gap-2"></div>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="grievanceDisplayedColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let element; columns: grievanceDisplayedColumns"></tr>
-      <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
-      </tr>
-    </table>
-    @if (!hidePagination) {
-      <mat-paginator
-        #paginator
-        [pageSizeOptions]="[10, 25, 50, 100, 150, 200]"
-        showFirstLastButtons="true"
-        [length]="grievanceDataSource.data.length || 0"></mat-paginator>
-    }
-  </div>
+  <app-grievance-list
+    [userId]="userId"
+    [hidePagination]="hidePagination"></app-grievance-list>
 </ng-template>
