@@ -29,4 +29,5 @@ export const MenuIdes = {
   SUSPENDED_EMPLOYEE: 30,
   CALENDAR: 31,
   MANAGER_DELEGATION: 32,
+  GRIEVANCE: 33,
 };

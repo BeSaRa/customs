@@ -15,6 +15,7 @@ import { AppPermissions } from '@constants/app-permissions';
 import { CalendarComponent } from '@modules/electronic-services/components/calendar/calendar.component';
 import { TeamNames } from '@enums/team-names';
 import { GrievanceComponent } from '@modules/electronic-services/components/grievance/grievance.component';
+import { ArchivistGrievanceComponent } from '@modules/electronic-services/components/archivist-grievance/archivist-grievance.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -65,6 +66,15 @@ const routes: Routes = [
     canActivate: [
       accessPageGuard({
         permissionFromTeam: TeamNames.Disciplinary_Committee,
+      }),
+    ],
+  },
+  {
+    path: AppRoutes.GRIEVANCE,
+    component: ArchivistGrievanceComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.GRIEVANCE_ARCHIVE,
       }),
     ],
   },
