@@ -54,10 +54,12 @@ export class Offender extends BaseModel<Offender, OffenderService> {
         )
       );
     }
-    const employeeDepartmentId =
-      this.employeeDepartmentId && this.type === OffenderTypes.EMPLOYEE
+    let employeeDepartmentId;
+    if (this.type === OffenderTypes.EMPLOYEE) {
+      employeeDepartmentId = this.employeeDepartmentId
         ? this.employeeDepartmentId
         : (this.offenderInfo as MawaredEmployee).employeeDepartmentId;
+    }
     return (
       (this.type === OffenderTypes.BROKER &&
         this.$$getEmployeeService$$().hasPermissionTo(
