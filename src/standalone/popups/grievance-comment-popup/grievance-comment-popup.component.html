@@ -1,1 +1,46 @@
-<p>grievance-comment-popup works!</p>
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.grievance_details }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <h2 class="mb-2 text-lg font-semibold text-gray-900">
+      {{ lang.map.grievance_comments }}
+    </h2>
+    <ul
+      class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+      @for (comment of model.commentList; track comment) {
+        <li>{{ comment }}</li>
+      } @empty {
+        <li>{{ lang.map.no_comments_yet }}</li>
+      }
+    </ul>
+    <hr class="my-4" />
+    <div class="flex">
+      <app-textarea
+        class="me-3 grow"
+        [formControl]="commentControl"
+        [label]="lang.map.comment"
+        rows="5">
+      </app-textarea>
+      <app-button
+        [disabled]="commentControl.invalid"
+        class="mt-5"
+        (click)="comment$.next()"
+        [buttonType]="'primary'">
+        <mat-icon
+          [style]="'color: white'"
+          [svgIcon]="AppIcons.CONTENT_SAVE_OUTLINE"></mat-icon>
+      </app-button>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

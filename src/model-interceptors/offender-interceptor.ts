@@ -6,6 +6,7 @@ import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
 import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
+import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 
 export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
   send(model: Partial<Offender>): Partial<Offender> {
@@ -14,7 +15,13 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
     delete model.offenderInfo;
     delete model.typeInfo;
     delete model.agencyInfo;
+    delete model.penaltyInfo;
     delete model.statusInfo;
+    delete model.penaltySignerInfo;
+    delete model.penaltySignerInfo;
+    delete model.penaltySignerRoleInfo;
+    delete model.penaltyStatusInfo;
+    delete model.directedToInfo;
     return model;
   }
 
@@ -28,6 +35,32 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
       (model.offenderInfo.typeInfo = AdminResult.createInstance(
         model.offenderInfo.typeInfo,
       ));
+
+    model.penaltySignerInfo &&
+      (model.penaltySignerInfo = AdminResult.createInstance(
+        model.penaltySignerInfo,
+      ));
+    model.penaltySignerRoleInfo &&
+      (model.penaltySignerRoleInfo = AdminResult.createInstance(
+        model.penaltySignerRoleInfo,
+      ));
+    model.penaltyStatusInfo &&
+      (model.penaltyStatusInfo = AdminResult.createInstance(
+        model.penaltyStatusInfo,
+      ));
+    model.directedToInfo =
+      model.penaltySignerRoleInfo.lookupKey ===
+      PenaltySignerTypes.MANAGER_DIRECTOR
+        ? AdminResult.createInstance({
+            arName: 'مساعد الرئيس',
+            enName: 'President assistant',
+          })
+        : AdminResult.createInstance({
+            arName: 'الرئيس',
+            enName: 'President',
+          });
+    model.penaltyInfo &&
+      (model.penaltyInfo = AdminResult.createInstance(model.penaltyInfo));
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
     model.typeInfo &&

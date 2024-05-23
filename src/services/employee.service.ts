@@ -41,13 +41,18 @@ export class EmployeeService
   getLoginData() {
     return this.loginData;
   }
-
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
 
     return this.loginData;
   }
-
+  get loggedInUserId(): number | undefined {
+    return this.getLoginData()?.type === UserTypes.EXTERNAL_CLEARING_AGENCY
+      ? this.getExternalClearingAgency()?.id
+      : this.getLoginData()?.type === UserTypes.INTERNAL
+        ? this.getEmployee()?.id
+        : this.getExternalPerson()?.id;
+  }
   private intercept(data: LoginDataContract): LoginDataContract {
     data.internalUser &&
       (data.internalUser = internalUserInterceptor.receive(

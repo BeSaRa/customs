@@ -28,7 +28,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CallRequestService } from '@services/call-request.service';
@@ -39,6 +39,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserTypes } from '@enums/user-types';
 import { ButtonComponent } from '@standalone/components/button/button.component';
+import { Pagination } from '@models/pagination';
 
 @Component({
   selector: 'app-attendance',
@@ -123,6 +124,16 @@ export class AttendanceComponent
               })
             : this.callRequestService.loadExternal(),
         ),
+      )
+      .pipe(
+        map((list: Pagination<CallRequest[]>) => {
+          list.rs = list.rs.sort(
+            (a, b) =>
+              new Date(b.summonDate).getTime() -
+              new Date(a.summonDate).getTime(),
+          );
+          return list;
+        }),
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe(list => {

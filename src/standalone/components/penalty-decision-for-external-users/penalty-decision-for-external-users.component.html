@@ -59,7 +59,7 @@
           {{ lang.map.decision_date }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.date }}
+          {{ element.penaltyAppliedDate | date: Config.DATE_FORMAT }}
         </td>
       </ng-container>
       <!-- signer -->
@@ -68,7 +68,18 @@
           {{ lang.map.issued_by }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.signerInfo?.getNames() }}
+          {{
+            element.penaltySignerInfo && element.penaltySignerInfo?.getNames()
+          }}
+        </td>
+      </ng-container>
+      <!-- directed to -->
+      <ng-container matColumnDef="directedTo">
+        <th mat-header-cell mat-sort-header="directedTo" *matHeaderCellDef>
+          {{ lang.map.directed_to }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.directedToInfo && element.directedToInfo.getNames() }}
         </td>
       </ng-container>
       <!-- penalty -->
@@ -78,7 +89,7 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <span class="font-bold text-primary">{{
-            element.penaltyInfo?.getNames()
+            element.penaltyInfo && element.penaltyInfo?.getNames()
           }}</span>
         </td>
       </ng-container>
@@ -88,7 +99,9 @@
           {{ lang.map.status }}
         </th>
         <td mat-cell *matCellDef="let element">
-          {{ element.statusInfo && element.statusInfo?.getNames() }}
+          {{
+            element.penaltyStatusInfo && element.penaltyStatusInfo?.getNames()
+          }}
         </td>
       </ng-container>
       <!-- actions -->
@@ -107,14 +120,15 @@
                 <app-icon-button icon="HAND_COIN" />
               </div>
             }
+            @if (!element.hasRunningGrievance) {
+              <div
+                (click)="grievance$.next(element)"
+                [matTooltip]="lang.map.grievance">
+                <app-icon-button icon="HAND_BACK_RIGHT" />
+              </div>
+            }
             <div
-              (click)="grievance$.next(element)"
-              [matTooltip]="lang.map.grievance">
-              <app-icon-button icon="HAND_BACK_RIGHT" />
-            </div>
-            <!--            // handle pass vsId after add it from be-->
-            <div
-              (click)="viewDecisionFile$.next(element.docVsId)"
+              (click)="viewDecisionFile$.next(element.vsid)"
               [matTooltip]="lang.map.view_decision_file">
               <app-icon-button icon="FILE_EYE" />
             </div>

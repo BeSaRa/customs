@@ -20,7 +20,6 @@ export class PenaltyDecision extends BaseModel<
   tkiid?: string;
   comment?: string;
   decisionType!: number;
-  docVsId!: string;
   decisionDate!: string;
   signerInfo!: AdminResult;
   penaltyInfo!: Penalty;

@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { DialogService } from '@services/dialog.service';
 import { LookupService } from '@services/lookup.service';
@@ -51,13 +51,14 @@ import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { ignoreErrors } from '@utils/utils';
 import { PenaltyDecision } from '@models/penalty-decision';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { Pagination } from '@models/pagination';
 import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
 import { UserClick } from '@enums/user-click';
 import { GrievanceListComponent } from '@standalone/components/grievance-list/grievance-list.component';
+import { OffenderService } from '@services/offender.service';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-archivist-grievance',
@@ -94,7 +95,7 @@ import { GrievanceListComponent } from '@standalone/components/grievance-list/gr
   styleUrl: './archivist-grievance.component.scss',
 })
 export class ArchivistGrievanceComponent implements OnInit {
-  penaltyDecisionService = inject(PenaltyDecisionService);
+  offenderService = inject(OffenderService);
   router = inject(Router);
   route = inject(ActivatedRoute);
   lookupService = inject(LookupService);
@@ -103,19 +104,11 @@ export class ArchivistGrievanceComponent implements OnInit {
   fb = inject(UntypedFormBuilder);
 
   offenderType = this.lookupService.lookups.offenderType;
-  decisionReportStatus = this.lookupService.lookups.decisionReportStatus;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
-  displayedList = new MatTableDataSource<PenaltyDecision>();
+  displayedList = new MatTableDataSource<Offender>();
   selectedTabIndex = 0;
   grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
-
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
-      this.search$.next();
-    }
-  }
 
   ngOnInit(): void {
     this.form = this.fb.group(new PenaltyDecisionCriteria().buildForm());
@@ -126,7 +119,6 @@ export class ArchivistGrievanceComponent implements OnInit {
   columnsWrapper: ColumnsWrapper<PenaltyDecision> = new ColumnsWrapper(
     new TextFilterColumn('decisionSerial'),
     new NoneFilterColumn('offenderInfo'),
-    new NoneFilterColumn('decisionType'),
     new NoneFilterColumn('penaltyInfo'),
     new NoneFilterColumn('signerInfo'),
     new NoneFilterColumn('statusInfo'),
@@ -153,17 +145,15 @@ export class ArchivistGrievanceComponent implements OnInit {
       .pipe(filter(value => value))
       .pipe(
         exhaustMap(() => {
-          return this.penaltyDecisionService
-            .loadByCriteria(this.form.value)
-            .pipe(
-              catchError(error => {
-                return throwError(error);
-              }),
-              ignoreErrors(),
-            );
+          return this.offenderService.loadByCriteria(this.form.value).pipe(
+            catchError(error => {
+              return throwError(error);
+            }),
+            ignoreErrors(),
+          );
         }),
       )
-      .subscribe((data: Pagination<PenaltyDecision[]>) => {
+      .subscribe((data: Pagination<Offender[]>) => {
         if (data.rs.length) {
           this.selectedTabIndex = 2;
           this.displayedList = new MatTableDataSource(data.rs);
