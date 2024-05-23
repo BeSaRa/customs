@@ -27,6 +27,9 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { MatTooltip } from '@angular/material/tooltip';
 import { DialogService } from '@services/dialog.service';
 import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-comment-popup/grievance-comment-popup.component';
+import { GrievanceAttachmentsPopupComponent } from '@standalone/popups/grievance-attachments-popup/grievance-attachments-popup.component';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-grievance-list',
@@ -47,6 +50,7 @@ import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-com
     MatSort,
     IconButtonComponent,
     MatTooltip,
+    ButtonComponent,
   ],
   templateUrl: './grievance-list.component.html',
   styleUrl: './grievance-list.component.scss',
@@ -59,7 +63,7 @@ export class GrievanceListComponent
   employeeService = inject(EmployeeService);
   grievanceService = inject(GrievanceService);
   dialog = inject(DialogService);
-
+  router = inject(Router);
   @Input() hidePagination: boolean = false;
   @Input() userId!: number | undefined;
   @ViewChild('paginator') paginator!: MatPaginator;
@@ -96,7 +100,10 @@ export class GrievanceListComponent
       )
       .pipe(
         switchMap(() => {
-          return this.grievanceService.getCasesAsList();
+          return this.grievanceService.getCasesAsList(
+            this.employeeService.loggedInUserId as number,
+            this.employeeService.getLoginData()?.type as number,
+          );
         }),
       )
       .subscribe((list: Pagination<Grievance[]>) => {
@@ -133,6 +140,21 @@ export class GrievanceListComponent
       .subscribe();
   }
   listenToAttachment() {
-    this.attachment$.pipe().subscribe();
+    this.attachment$
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(GrievanceAttachmentsPopupComponent, {
+              data: {
+                model,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
+  }
+  showAll() {
+    this.router.navigate(['/external/grievances']);
   }
 }

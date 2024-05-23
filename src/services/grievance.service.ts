@@ -8,6 +8,7 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Grievance } from '@models/grievance';
 import { Observable } from 'rxjs';
 import { Pagination } from '@models/pagination';
+import { HttpParams } from '@angular/common/http';
 
 @CastResponseContainer({
   $default: {
@@ -45,9 +46,25 @@ export class GrievanceService
   @CastResponse(undefined, {
     fallback: '$pagination',
   })
-  getCasesAsList(): Observable<Pagination<Grievance[]>> {
-    return this.http.get<Pagination<Grievance[]>>(
-      this.getUrlSegment() + '/cases',
+  getCasesAsList(
+    userId: number,
+    applicantType: number,
+  ): Observable<Pagination<Grievance[]>> {
+    return this.http.post<Pagination<Grievance[]>>(
+      this.getUrlSegment() + `/cases/${userId}/applicant/${applicantType}`,
+      {},
+    );
+  }
+
+  addComment(payload: { comment: string; caseId: string }) {
+    return this.http.post(
+      this.getUrlSegment() + '/comment',
+      {},
+      {
+        params: new HttpParams({
+          fromObject: payload,
+        }),
+      },
     );
   }
 }

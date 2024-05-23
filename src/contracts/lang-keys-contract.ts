@@ -656,4 +656,8 @@ export interface LangKeysContract {
   search_for_decision: string;
   add_grievance_description_placeholder: string;
   lbl_applied_grievances: string;
+  grievance_comments: string;
+  grievance_details: string;
+  grievance_attachments: string;
+  directed_to: string;
 }

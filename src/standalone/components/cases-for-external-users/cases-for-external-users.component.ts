@@ -29,7 +29,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
+import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatSort } from '@angular/material/sort';
 import { OffenderService } from '@services/offender.service';
@@ -39,6 +39,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserTypes } from '@enums/user-types';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { InvestigationFileDetailsForExternalUserPopupComponent } from '@standalone/popups/investigation-file-details-for-external-user-popup/investigation-file-details-for-external-user-popup.component';
+import { Pagination } from '@models/pagination';
 
 @Component({
   selector: 'app-cases-for-external-users',
@@ -98,6 +99,7 @@ export class CasesForExternalUsersComponent
   }
   private listenToReload() {
     this.reload$
+      .pipe(takeUntil(this.destroy$))
       .pipe(
         filter(
           () =>
@@ -115,7 +117,16 @@ export class CasesForExternalUsersComponent
             : this.offenderService.loadCasesForExternal(),
         ),
       )
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        map((list: Pagination<InvestigationForExternalUser[]>) => {
+          list.rs = list.rs.sort(
+            (a, b) =>
+              new Date(b.dateCreated).getTime() -
+              new Date(a.dateCreated).getTime(),
+          );
+          return list;
+        }),
+      )
       .subscribe(list => {
         this.setLength.emit(list.count);
         this.dataSource.data = !this.hidePagination

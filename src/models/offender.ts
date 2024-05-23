@@ -36,7 +36,14 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   typeInfo!: AdminResult;
   penaltyInfo!: AdminResult;
   agencyInfo!: AdminResult;
-
+  penaltySignerInfo!: AdminResult;
+  penaltySignerRoleInfo!: AdminResult;
+  penaltyStatusInfo!: AdminResult;
+  directedToInfo!: AdminResult;
+  penaltySignerId!: number;
+  penaltyAppliedDate!: string;
+  hasRunningGrievance!: number;
+  vsid!: string;
   override getNames(): string {
     return this.offenderInfo?.getNames() || '';
   }

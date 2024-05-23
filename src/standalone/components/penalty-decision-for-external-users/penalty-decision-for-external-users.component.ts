@@ -28,9 +28,7 @@ import { ToastService } from '@services/toast.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { EmployeeService } from '@services/employee.service';
-import { filter, Subject, switchMap, takeUntil } from 'rxjs';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { PenaltyDecision } from '@models/penalty-decision';
+import { filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
@@ -49,6 +47,10 @@ import {
 } from '@angular/material/button-toggle';
 import { GrievancePopupComponent } from '@standalone/popups/grievance-popup/grievance-popup.component';
 import { GrievanceListComponent } from '@standalone/components/grievance-list/grievance-list.component';
+import { OffenderService } from '@services/offender.service';
+import { Offender } from '@models/offender';
+import { Config } from '@constants/config';
+import { Pagination } from '@models/pagination';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -90,19 +92,22 @@ export class PenaltyDecisionForExternalUsersComponent
   lang = inject(LangService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
-  penaltyDecisionService = inject(PenaltyDecisionService);
+  offenderService = inject(OffenderService);
   investigationService = inject(InvestigationService);
   domSanitize = inject(DomSanitizer);
   route = inject(ActivatedRoute);
   router = inject(Router);
   selectedTabIndex: number = 0;
   reload$: Subject<null> = new Subject<null>();
-  grievance$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  grievance$: Subject<Offender> = new Subject<Offender>();
   viewDecisionFile$ = new Subject<string>();
-  pay$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
+  pay$: Subject<Offender> = new Subject<Offender>();
   @Input() hidePagination: boolean = false;
   @Output() setLength: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('paginator') paginator!: MatPaginator;
+  @ViewChild(GrievanceListComponent)
+  grievanceListComponent!: GrievanceListComponent;
+
   user = this.employeeService.getLoginData();
   userId!: number | undefined;
   tabsIndexes: { [key: string]: number } = {
@@ -113,11 +118,12 @@ export class PenaltyDecisionForExternalUsersComponent
     'decisionSerial',
     'date',
     'signer',
+    'directedTo',
     'penalty',
     'status',
     'actions',
   ];
-  dataSource: MatTableDataSource<PenaltyDecision> = new MatTableDataSource();
+  dataSource: MatTableDataSource<Offender> = new MatTableDataSource();
 
   ngOnInit(): void {
     this.listenToReload();
@@ -130,7 +136,11 @@ export class PenaltyDecisionForExternalUsersComponent
   }
   tabChange($event: number) {
     this.selectedTabIndex = $event;
-    this.reload$.next(null);
+    if (this.isGrievanceTab) {
+      this.grievanceListComponent.reload$.next(null);
+    } else {
+      this.reload$.next(null);
+    }
   }
   showAll() {
     this.router.navigate(['/external/decisions']);
@@ -149,17 +159,27 @@ export class PenaltyDecisionForExternalUsersComponent
         switchMap(() => {
           return UserTypes.EXTERNAL_CLEARING_AGENCY ===
             this.employeeService.getLoginData()?.type
-            ? this.penaltyDecisionService.loadExternal({
+            ? this.offenderService.loadExternal({
                 offenderId: this.userId as number,
               })
-            : this.penaltyDecisionService.loadExternal();
+            : this.offenderService.loadExternal();
+        }),
+      )
+      .pipe(
+        map((list: Pagination<Offender[]>) => {
+          list.rs = list.rs.sort(
+            (a, b) =>
+              new Date(b.penaltyAppliedDate).getTime() -
+              new Date(a.penaltyAppliedDate).getTime(),
+          );
+          return list;
         }),
       )
       .subscribe(page => {
         this.setLength.emit(page.count);
         this.dataSource.data = !this.hidePagination
-          ? (page.rs as PenaltyDecision[])
-          : (page.rs.splice(0, 5) as PenaltyDecision[]);
+          ? (page.rs as Offender[])
+          : (page.rs.splice(0, 5) as Offender[]);
         if (!this.hidePagination) {
           this.dataSource.paginator = this.paginator;
           this.paginator._intl.getRangeLabel = (
@@ -213,5 +233,9 @@ export class PenaltyDecisionForExternalUsersComponent
       )
       .subscribe();
   }
+  get isGrievanceTab() {
+    return this.selectedTabIndex === this.tabsIndexes.grievance;
+  }
   protected readonly UserTypes = UserTypes;
+  protected readonly Config = Config;
 }

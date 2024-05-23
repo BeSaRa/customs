@@ -89,4 +89,33 @@ export class OffenderService extends BaseCrudService<Offender> {
       },
     );
   }
+
+  @CastResponse(undefined, {
+    fallback: '$pagination',
+  })
+  loadByCriteria(
+    criteria: Partial<{
+      offenderType: number;
+      decisionSerial: string;
+      decisionDate: string;
+    }>,
+  ): Observable<Pagination<Offender[]>> {
+    if (!criteria.offenderType) {
+      delete criteria.offenderType;
+    }
+    if (!criteria.decisionSerial) {
+      delete criteria.decisionSerial;
+    }
+    if (!criteria.decisionDate) {
+      delete criteria.decisionDate;
+    }
+    return this.http.get<Pagination<Offender[]>>(
+      this.getUrlSegment() + '/admin/criteria',
+      {
+        params: new HttpParams({
+          fromObject: criteria,
+        }),
+      },
+    );
+  }
 }

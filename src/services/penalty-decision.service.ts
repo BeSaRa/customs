@@ -4,7 +4,7 @@ import { EventEmitter, Injectable, InputSignal, Signal } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { MakePenaltyDecisionPopupComponent } from '@standalone/popups/make-penalty-decision-popup/make-penalty-decision-popup.component';
-import { CastResponse, CastResponseContainer } from 'cast-response';
+import { CastResponseContainer } from 'cast-response';
 import { SingleDecisionPopupComponent } from '@standalone/popups/single-decision-popup/single-decision-popup.component';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
@@ -15,10 +15,6 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { TaskResponses } from '@enums/task-responses';
 import { Pagination } from '@models/pagination';
 import { DcDecisionPopupComponent } from '@standalone/popups/dc-decision-popup/dc-decision-popup.component';
-import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
-import { HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
 @CastResponseContainer({
   $default: {
     model: () => PenaltyDecision,
@@ -123,25 +119,5 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         ask: response && response.includes('ask'),
       },
     });
-  }
-  @CastResponse(undefined, {
-    fallback: '$pagination',
-  })
-  loadByCriteria(
-    criteria: PenaltyDecisionCriteria,
-  ): Observable<Pagination<PenaltyDecision[]>> {
-    return this.http.get<Pagination<PenaltyDecision[]>>(
-      this.getUrlSegment() + '/admin/criteria',
-      {
-        params: new HttpParams({
-          fromObject: {
-            offenderType: criteria.offenderType ? criteria.offenderType : '',
-            decisionSerial: criteria.decisionSerial,
-            decisionType: criteria.decisionType ? criteria.decisionType : '',
-            date: criteria.date.toString(),
-          },
-        }),
-      },
-    );
   }
 }

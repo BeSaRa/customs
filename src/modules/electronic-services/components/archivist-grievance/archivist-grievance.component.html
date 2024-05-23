@@ -31,7 +31,7 @@
   <ng-template #search_for_decision>
     <div class="p-4 overflow-auto" style="height: 100%">
       <form [formGroup]="form" class="flex flex-col justify-between h-full">
-        <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+        <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3">
           <app-select-input
             formControlName="offenderType"
             [label]="lang.map.offender_type"
@@ -41,16 +41,12 @@
           <app-input
             formControlName="decisionSerial"
             [label]="lang.map.decision_number" />
-          <app-select-input
-            formControlName="decisionType"
-            [label]="lang.map.penalty_type"
-            bindValue="lookupKey"
-            bindLabel="getNames"
-            [options]="decisionReportStatus" />
-          <app-input formControlName="date" [label]="lang.map.decision_date">
+          <app-input
+            formControlName="decisionDate"
+            [label]="lang.map.decision_date">
             <input
               appControl
-              formControlName="date"
+              formControlName="decisionDate"
               (click)="datepicker.open()"
               [matDatepicker]="datepicker" />
             <mat-datepicker [touchUi]="true" #datepicker />
@@ -104,7 +100,8 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span>{{
-                element.signerInfo && element.signerInfo.getNames()
+                element.penaltySignerInfo &&
+                  element.penaltySignerInfo.getNames()
               }}</span>
             </td>
           </ng-container>
@@ -140,7 +137,8 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span>{{
-                element.statusInfo && element.statusInfo.getNames()
+                element.penaltyStatusInfo &&
+                  element.penaltyStatusInfo.getNames()
               }}</span>
             </td>
           </ng-container>
