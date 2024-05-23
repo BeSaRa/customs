@@ -78,9 +78,11 @@ mat-tab-body {
   max-height: calc(100vh - 300px);
   min-height: 400px;
 }
+
 .cases-tab-group mat-tab-body {
   max-height: 100%;
 }
+
 .mdc-tab--active {
   background-color: theme("colors.primary-light/0.1") !important;
 }
@@ -109,35 +111,35 @@ input::-webkit-inner-spin-button {
   }
 
   .mat-mdc-radio-button
-    .mdc-radio
-    .mdc-radio__native-control:enabled:not(:checked)
-    + .mdc-radio__background
-    .mdc-radio__outer-circle {
+  .mdc-radio
+  .mdc-radio__native-control:enabled:not(:checked)
+  + .mdc-radio__background
+  .mdc-radio__outer-circle {
     border-color: white !important;
   }
 
   .mat-mdc-radio-button
-    .mdc-radio
-    .mdc-radio__native-control:enabled:checked
-    + .mdc-radio__background
-    .mdc-radio__outer-circle {
+  .mdc-radio
+  .mdc-radio__native-control:enabled:checked
+  + .mdc-radio__background
+  .mdc-radio__outer-circle {
     border-color: rgb(208 162 57 / 0.8) !important;
   }
 
   .mat-mdc-radio-button
-    .mdc-radio
-    .mdc-radio__native-control:enabled
-    + .mdc-radio__background
-    .mdc-radio__inner-circle {
+  .mdc-radio
+  .mdc-radio__native-control:enabled
+  + .mdc-radio__background
+  .mdc-radio__inner-circle {
     color: rgb(208 162 57 / 0.8) !important;
     background-color: rgb(208 162 57 / 0.8) !important;
   }
 
   .mat-mdc-radio-button
-    .mdc-radio
-    .mdc-radio__native-control:enabled
-    + .mdc-radio__background
-    .mdc-radio__inner-circle {
+  .mdc-radio
+  .mdc-radio__native-control:enabled
+  + .mdc-radio__background
+  .mdc-radio__inner-circle {
     border-color: rgb(208 162 57 / 0.8) !important;
   }
 
@@ -150,14 +152,17 @@ input::-webkit-inner-spin-button {
   .mat-calendar-controls {
     margin: 0 0 1rem;
   }
+
   .mat-calendar-body-cell-content {
     border-radius: 0 !important;
     border-color: #e5e7eb !important;
   }
+
   .mat-calendar-body-today {
     border-width: 2px !important;
     border-color: theme("colors.primary-light") !important;
   }
+
   .mat-calendar-body-cell.selected {
     .mat-calendar-body-cell-content {
       background-color: theme("colors.primary") !important;
@@ -165,13 +170,20 @@ input::-webkit-inner-spin-button {
     }
   }
 }
+
 .mat-toolbar.timepicker-header {
   direction: ltr;
 }
+
 mat-tab-group.cases-tab-group .mat-mdc-tab-header {
   display: none !important;
 }
+
 .mat-button-toggle-appearance-standard.mat-button-toggle-checked {
   color: #131c2b !important;
   background-color: #dae2f9 !important;
+}
+
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #ffffff !important;
 }
