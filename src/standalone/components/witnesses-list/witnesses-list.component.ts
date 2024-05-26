@@ -172,6 +172,7 @@ export class WitnessesListComponent
   resetDataList() {
     this.data.next([]);
   }
+
   private listenToAssignmentToAttend() {
     this.assignmentToAttend$
       .pipe(
@@ -180,7 +181,7 @@ export class WitnessesListComponent
             .open(AssignmentToAttendPopupComponent, {
               data: {
                 witness: witness,
-                caseId: this.caseId,
+                caseId: this.model().id,
                 type: WitnessTypes.EXTERNAL,
               },
             })
@@ -189,6 +190,7 @@ export class WitnessesListComponent
       )
       .subscribe();
   }
+
   canManageWitness() {
     return this.employeeService.hasPermissionTo('MANAGE_WITNESS');
   }
