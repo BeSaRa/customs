@@ -33,6 +33,7 @@
         (click)="comment$.next()"
         [buttonType]="'primary'">
         <mat-icon
+          [matTooltip]="lang.map.save"
           [style]="'color: white'"
           [svgIcon]="AppIcons.CONTENT_SAVE_OUTLINE"></mat-icon>
       </app-button>
