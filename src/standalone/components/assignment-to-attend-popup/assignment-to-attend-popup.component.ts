@@ -79,21 +79,27 @@ export class AssignmentToAttendPopupComponent
   get caseId() {
     return this.form.get('caseId');
   }
+
   get summonedType() {
     return this.form.get('summonedType');
   }
+
   get summonedId() {
     return this.form.get('summonedId');
   }
+
   get type() {
     return this.form.get('type');
   }
+
   get arName() {
     return this.form.get('arName');
   }
+
   get enName() {
     return this.form.get('enName');
   }
+
   isInternal() {
     return this.data.type === UserTypes.INTERNAL;
   }
@@ -112,8 +118,6 @@ export class AssignmentToAttendPopupComponent
             );
         }),
       )
-      .subscribe(() => {
-        console.log('done');
-      });
+      .subscribe();
   }
 }
