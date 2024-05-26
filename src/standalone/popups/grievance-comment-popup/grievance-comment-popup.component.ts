@@ -12,6 +12,7 @@ import { filter, Subject, switchMap, takeUntil } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CustomValidators } from '@validators/custom-validators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-grievance-comment-popup',
@@ -24,6 +25,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
     TextareaComponent,
     MatIcon,
     ReactiveFormsModule,
+    MatTooltip,
   ],
   templateUrl: './grievance-comment-popup.component.html',
   styleUrl: './grievance-comment-popup.component.scss',
