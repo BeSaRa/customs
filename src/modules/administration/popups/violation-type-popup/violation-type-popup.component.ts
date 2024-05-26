@@ -144,10 +144,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   }
 
   isClearingAgent(): boolean {
-    let isClearingAgent = false;
-    if (this.offenderType?.value === OffenderTypes.BROKER)
-      isClearingAgent = true;
-    return isClearingAgent;
+    return this.offenderType?.value === OffenderTypes.BROKER;
   }
 
   onViolationClassificationChange() {
