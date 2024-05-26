@@ -10,15 +10,13 @@ import { LangService } from '@services/lang.service';
 import { filter, Subject, switchMap } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 import { Grievance } from '@models/grievance';
-import { TaskResponses } from '@enums/task-responses';
-import { Dir } from '@angular/cdk/bidi';
 import { NgClass } from '@angular/common';
-import { PenaltyDecision } from '@models/penalty-decision';
 import { GrievanceService } from '@services/grievance.service';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '@services/employee.service';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { UserClick } from '@enums/user-click';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -31,7 +29,6 @@ import { UserClick } from '@enums/user-click';
     InputComponent,
     ReactiveFormsModule,
     TextareaComponent,
-    Dir,
     NgClass,
     CaseAttachmentsComponent,
   ],
@@ -48,7 +45,7 @@ export class GrievancePopupComponent implements OnInit {
   employeeService = inject(EmployeeService);
   form!: FormGroup;
   save$: Subject<void> = new Subject();
-  model: PenaltyDecision = this.data.model;
+  model: Offender = this.data.model;
   ngOnInit(): void {
     this._listenToSave();
     this.buildForm();
@@ -63,7 +60,7 @@ export class GrievancePopupComponent implements OnInit {
         switchMap(() => {
           return this.grievanceService.create({
             ...this.form.value,
-            offenderId: this.model.offenderId,
+            offenderId: this.model.id,
             applicantType: this.employeeService.getLoginData()?.type,
           });
         }),
@@ -83,10 +80,4 @@ export class GrievancePopupComponent implements OnInit {
     // }
     return '';
   }
-
-  get isEmployee() {
-    return true;
-  }
-
-  protected readonly taskResponses = TaskResponses;
 }
