@@ -49,7 +49,7 @@
                   bindValue="lookupKey"
                   bindLabel="getNames" />
               }
-              @if (isCustom()) {
+              @if (!isCustom()) {
                 <app-select-input
                   formControlName="responsibilityRepeatViolations"
                   [options]="responsibilityRepeatViolations"
