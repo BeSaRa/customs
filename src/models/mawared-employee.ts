@@ -62,6 +62,7 @@ export class MawaredEmployee extends BaseModel<
       enNationality,
       city,
       country,
+      jobTitleCode,
       postal,
       arCertificate,
       enCertificate,
@@ -78,6 +79,7 @@ export class MawaredEmployee extends BaseModel<
       email,
       qid,
       gender,
+      jobTitleCode,
       employeeDepartmentInfo: this.getEmployeeDepartmentInfoName(),
       isPrivateUser,
       statusInfo: this.getStatusInfoName(), //
