@@ -102,6 +102,9 @@ export class MeetingMinutesPopupComponent
       .pipe(
         map((users: InternalUser[]) => {
           return users.map((user: InternalUser) => {
+            const attendance = this.model?.attendanceList?.find(
+              attend => attend.attendeeId === user.id,
+            );
             return new MeetingAttendance().clone<MeetingAttendance>({
               attendeeId: user.id,
               attendeeInfo: AdminResult.createInstance({
@@ -109,7 +112,7 @@ export class MeetingMinutesPopupComponent
                 arName: user.arName,
                 enName: user.enName,
               }),
-              status: 0,
+              status: attendance?.status || 0,
             });
           });
         }),
