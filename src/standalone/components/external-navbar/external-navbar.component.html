@@ -44,10 +44,9 @@
           <a
             [routerLink]="'/external/home'"
             [ngClass]="{
-              'dark:text-white md:dark:text-blue-500':
-                isActive('/external/home')
+              'text-secondary': isActive('/external/home'),
+              'text-white': !isActive('/external/home')
             }"
-            class="text-white"
             >{{ lang.map.main }}</a
           >
         </li>
@@ -55,11 +54,9 @@
           <a
             [routerLink]="'/external/investigations'"
             [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/investigations'
-              )
+              'text-secondary': isActive('/external/investigations'),
+              'text-white': !isActive('/external/investigations')
             }"
-            class="text-white"
             >{{ lang.map.lbl_investigation_files }}</a
           >
         </li>
@@ -67,11 +64,9 @@
           <a
             [routerLink]="'/external/decisions'"
             [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/decisions'
-              )
+              'text-secondary': isActive('/external/decisions'),
+              'text-white': !isActive('/external/decisions')
             }"
-            class="text-white"
             >{{ lang.map.lbl_decisions }}</a
           >
         </li>
@@ -79,11 +74,9 @@
           <a
             [routerLink]="'/external/summons-to-attend'"
             [ngClass]="{
-              'dark:text-white md:dark:text-blue-500': isActive(
-                '/external/summons-to-attend'
-              )
+              'text-secondary': isActive('/external/summons-to-attend'),
+              'text-white': !isActive('/external/summons-to-attend')
             }"
-            class="text-white"
             >{{ lang.map.summons_to_attend }}</a
           >
         </li>

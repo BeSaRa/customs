@@ -14,6 +14,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { OpenFrom } from '@enums/open-from';
 import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { FolderType } from '@enums/folder-type.enum';
 
 @Component({
   selector: 'app-grievance',
@@ -74,4 +75,6 @@ export class GrievanceComponent extends BaseCaseComponent<
         break;
     }
   }
+
+  protected readonly FolderType = FolderType;
 }

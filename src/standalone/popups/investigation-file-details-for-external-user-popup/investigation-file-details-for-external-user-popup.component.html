@@ -8,27 +8,38 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content gap-4 w-[1000px]">
-    <div class="grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
       <div class="mb-3">
-        <span class="font-medium text-white">{{
-          lang.map.report_draft_number
-        }}</span>
+        <span class="font-medium">{{ lang.map.file_number }}</span>
         <label class="input-form p-2 block">
-          {{ model.draftFullSerial ? model.draftFullSerial : '---' }}
+          {{
+            model.investigationFullSerial
+              ? model.investigationFullSerial
+              : model.draftFullSerial
+          }}
+        </label>
+      </div>
+      <div class="mb-3">
+        <span class="font-medium">{{ lang.map.status }}</span>
+        <label class="input-form p-2 block">
+          {{ model.caseStatusInfo && model.caseStatusInfo.getNames() }}
+        </label>
+      </div>
+      <div class="mb-3">
+        <span class="font-medium">{{ lang.map.creation_date }}</span>
+        <label class="input-form p-2 block">
+          {{ model.dateCreated | date: Config.DATE_FORMAT }}
         </label>
       </div>
     </div>
-
-    caseStatusInfo dateCreated draftFullSerial investigationFullSerial
-    offenderViolationInfo
-    offenderViolationInfo.violationInfo.offenderViolationInfo
-    offenderViolationInfo.violationInfo.violationTypeInfo
-    offenderViolationInfo.violationInfo.violationsDate
-    offenderViolationInfo.violationInfo.violationsDateFrom
-    offenderViolationInfo.violationInfo.violationsDateTo
-    offenderViolationInfo.proofStatusInfo
+    <div class="mb-3">
+      <app-offender-violations
+        [violations]="model.offenderViolationInfo"></app-offender-violations>
+    </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button matDialogClose="">{{ lang.map.close }}</app-button>
+    <app-button matDialogClose="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import { InvestigationForExternalUserInterceptor } from '@model-interceptors/InvestigationForExternalUserInterceptor';
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from '@models/admin-result';
+import { OffenderViolation } from '@models/offender-violation';
 
 const { send, receive } = new InvestigationForExternalUserInterceptor();
 
@@ -13,4 +14,5 @@ export class InvestigationForExternalUser {
   draftFullSerial!: string;
   investigationFullSerial!: string;
   updatedOn!: string;
+  offenderViolationInfo!: OffenderViolation[];
 }
