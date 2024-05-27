@@ -85,14 +85,17 @@ export class MeetingMinutesPopupComponent
   attendanceList: MeetingAttendance[] = [];
   concernedOffendersIds = this.data.extras?.concernedOffendersIds;
   meetingStatus = this.lookupService.lookups.meetingStatus;
+
   ngOnInit(): void {
     this.buildForm();
     this.listenToSave();
     this.getAttendanceList();
   }
+
   get readonlyMeetingData() {
     return this.operation === OperationType.VIEW;
   }
+
   getAttendanceList() {
     this.teamService
       .loadTeamMembers(TeamNames.Disciplinary_Committee)
@@ -152,6 +155,7 @@ export class MeetingMinutesPopupComponent
       this.form.disable();
     }
   }
+
   listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))

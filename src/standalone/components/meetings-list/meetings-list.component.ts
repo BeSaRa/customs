@@ -226,4 +226,8 @@ export class MeetingsListComponent implements OnInit {
   meetingDateIsNotToday(element: Meeting) {
     return new Date(element.meetingDate) > new Date();
   }
+
+  itWasHeld(element: Meeting) {
+    return element.status === MeetingStatusEnum.held;
+  }
 }

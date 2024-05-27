@@ -61,15 +61,18 @@ export class ScheduleMeetingPopupComponent
   minDate = this.data.extras?.minDate;
   form!: UntypedFormGroup;
   meetingStatus = this.lookupService.lookups.meetingStatus;
+
   _buildForm() {
     this.form = this.fb.group(this.model.buildForm(true));
     if (this.operation === OperationType.VIEW) {
       this.form.disable();
     }
   }
+
   protected override _beforeSave(): boolean | Observable<boolean> {
     return this.form.valid;
   }
+
   protected override _prepareModel(): Meeting | Observable<Meeting> {
     const formValue = this.form.getRawValue();
     return new Meeting().clone<Meeting>({
@@ -79,6 +82,7 @@ export class ScheduleMeetingPopupComponent
       offenderList: this.concernedOffendersIds,
     });
   }
+
   get label() {
     if (this.operation === OperationType.CREATE) {
       return 'schedule_meeting';
@@ -88,6 +92,7 @@ export class ScheduleMeetingPopupComponent
       return 'meeting_details';
     }
   }
+
   protected override _afterSave(model: Meeting): void {
     this.dialogRef.close(model);
   }

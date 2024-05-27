@@ -90,7 +90,11 @@
                 <app-icon-button (click)="update$.next(element)" icon="EDIT" />
               </div>
             }
-            @if (!readonly && hasNotHaveMeetingMinutes(element.id)) {
+            @if (
+              !readonly &&
+              hasNotHaveMeetingMinutes(element.id) &&
+              !itWasHeld(element)
+            ) {
               <app-icon-button
                 (click)="addMeetingMinutes$.next(element)"
                 [disabled]="meetingDateIsNotToday(element)"
