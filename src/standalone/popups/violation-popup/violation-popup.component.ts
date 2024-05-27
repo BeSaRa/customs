@@ -229,6 +229,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       },
     );
   }
+
   alreadyAddedViolation() {
     return this.violationsList.find(v => {
       return (
@@ -245,6 +246,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       );
     });
   }
+
   protected _beforeSave(): boolean | Observable<boolean> {
     if (this.form.invalid) {
       this.dialog.error(
@@ -315,6 +317,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       }, {}),
     );
   }
+
   private prepareClassificationMap() {
     this.classificationsMap = this.classifications.reduce((acc, item) => {
       return { ...acc, [item.id]: item };
@@ -335,6 +338,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         });
       });
   }
+
   showReportNumberDetails() {
     this.caseModel()
       .getService()
@@ -364,12 +368,11 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
 
       this.maxEndDate = maxDate > this.todayDate ? this.todayDate : maxDate;
       this.minEndDate = minDate;
-    } else {
-      const selectedType =
-        this.typesMap()[this.controls.violationType()?.value];
-      const date = new Date();
-      date.setDate(date.getDate() - selectedType.numericFrom + 1);
-      this.maxEndDate = date;
+    } else if (
+      this.controls.violationsDateFrom()?.value &&
+      this.controls.violationsDateTo()?.value
+    ) {
+      this.maxEndDate = new Date();
       this.minEndDate = undefined;
     }
   }
@@ -414,6 +417,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.minEndDate = undefined;
     this.form.updateValueAndValidity();
   }
+
   filterDependingOnReportTypeClassification(classificationKey: string) {
     return (
       this.reportType() === 'None' ||
@@ -423,6 +427,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
         classificationKey !== ClassificationTypes.criminal)
     );
   }
+
   private loadClassifications(): void {
     this.violationClassificationService.loadAsLookups().subscribe(list => {
       this.classifications = list.filter(vc =>
@@ -431,6 +436,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
       this.prepareClassificationMap();
     });
   }
+
   private loadViolationTypes() {
     return this.violationTypeService.loadAsLookups().subscribe(types => {
       this._types.set(
@@ -449,6 +455,13 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
               .classificationId,
             { emitEvent: false },
           );
+      }
+      if (this.inEditMode() && this.controls.violationType().value) {
+        const selectedType =
+          this.typesMap()[this.controls.violationType()?.value];
+        const date = new Date();
+        date.setDate(date.getDate() - selectedType.numericFrom + 1);
+        this.maxEndDate = date;
       }
     });
   }
