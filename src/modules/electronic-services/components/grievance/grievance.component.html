@@ -139,6 +139,7 @@
                 {{ lang.map.attachments }}
               </h3>
               <app-case-attachments
+                [folderType]="FolderType.GENERAL"
                 [caseId]="model.id"
                 [type]="'folder'"
                 [service]="service"

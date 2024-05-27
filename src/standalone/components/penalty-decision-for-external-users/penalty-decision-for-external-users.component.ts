@@ -107,7 +107,7 @@ export class PenaltyDecisionForExternalUsersComponent
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(GrievanceListComponent)
   grievanceListComponent!: GrievanceListComponent;
-
+  _30Day = 30 * 24 * 60 * 60 * 1000;
   user = this.employeeService.getLoginData();
   userId!: number | undefined;
   tabsIndexes: { [key: string]: number } = {
@@ -207,7 +207,9 @@ export class PenaltyDecisionForExternalUsersComponent
             .afterClosed();
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.reload$.next(null);
+      });
   }
   private listenToViewDecisionFile() {
     this.viewDecisionFile$
@@ -235,6 +237,12 @@ export class PenaltyDecisionForExternalUsersComponent
   }
   get isGrievanceTab() {
     return this.selectedTabIndex === this.tabsIndexes.grievance;
+  }
+  createdOver30Day(element: Offender) {
+    return (
+      new Date().getTime() - new Date(element.penaltyAppliedDate).getTime() >
+      this._30Day
+    );
   }
   protected readonly UserTypes = UserTypes;
   protected readonly Config = Config;

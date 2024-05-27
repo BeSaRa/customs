@@ -7,6 +7,9 @@ import { MatIcon } from '@angular/material/icon';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { LangService } from '@services/lang.service';
+import { Config } from '@constants/config';
+import { DatePipe } from '@angular/common';
+import { OffenderViolationsComponent } from '@standalone/components/offender-violations/offender-violations.component';
 
 @Component({
   selector: 'app-investigation-file-details-for-external-user-popup',
@@ -19,6 +22,8 @@ import { LangService } from '@services/lang.service';
     MatIcon,
     ReactiveFormsModule,
     TextareaComponent,
+    DatePipe,
+    OffenderViolationsComponent,
   ],
   templateUrl:
     './investigation-file-details-for-external-user-popup.component.html',
@@ -29,4 +34,5 @@ export class InvestigationFileDetailsForExternalUserPopupComponent {
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   model = this.data.model;
+  protected readonly Config = Config;
 }
