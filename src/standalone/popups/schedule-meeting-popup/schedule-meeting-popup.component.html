@@ -39,7 +39,8 @@
           [options]="meetingStatus"
           formControlName="status"
           [bindValue]="'lookupKey'"
-          [bindLabel]="'getNames'">
+          [bindLabel]="'getNames'"
+          nullable="false">
         </app-select-input>
         <app-input
           formControlName="meetingTimeFrom"

@@ -57,7 +57,7 @@
               </app-button>
             </ng-template>
             <ng-template #confirmBtn>
-              <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+              <app-button buttonType="primary">{{ lang.map.save }}</app-button>
             </ng-template>
           </app-input>
           <app-input
@@ -83,7 +83,7 @@
               </app-button>
             </ng-template>
             <ng-template #confirmBtn>
-              <app-button buttonType="primary">{{ lang.map.save }} </app-button>
+              <app-button buttonType="primary">{{ lang.map.save }}</app-button>
             </ng-template>
           </app-input>
         </div>
@@ -102,11 +102,11 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>
