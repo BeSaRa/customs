@@ -1,6 +1,9 @@
 import '@utils/prototypes/custom-prototypes';
 import { NgOptimizedImage } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -67,9 +70,9 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
     ExternalLoginComponent,
     HomeComponent,
   ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule,
     CookieModule.withOptions(),
     BrowserAnimationsModule,
@@ -135,13 +138,12 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
         verticalPosition: 'top',
       },
     },
-
     httpInterceptors,
     provideNgxMask(),
     { provide: MAT_DATE_LOCALE, useValue: enUS },
     { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {
   constructor(registry: MatIconRegistry, domSanitizer: DomSanitizer) {
