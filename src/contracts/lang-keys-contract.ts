@@ -646,6 +646,8 @@ export interface LangKeysContract {
   edit_delegate: string;
   chevron_down: string;
   chevron_up: string;
+  declaration_no_does_not_exist: string;
+  offence_no_does_not_exist: string;
   grievance_date: string;
   grievance_information: string;
   lbl_applicant_type: string;
