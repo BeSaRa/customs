@@ -46,6 +46,7 @@
         }
       </td>
     </ng-container>
+
     <!-- offenderName -->
     <ng-container matColumnDef="offenderName">
       <th mat-header-cell *matHeaderCellDef>
@@ -82,6 +83,7 @@
         {{ element.offenderInfo && element.offenderInfo.qid }}
       </td>
     </ng-container>
+
     <!-- departmentCompany -->
     <ng-container matColumnDef="departmentCompany">
       <th mat-header-cell *matHeaderCellDef>
@@ -91,6 +93,7 @@
         {{ assertType(element).getDepartmentCompanyNames() }}
       </td>
     </ng-container>
+
     <!-- jobGrade -->
     <ng-container matColumnDef="jobGrade">
       <th mat-header-cell *matHeaderCellDef>
@@ -181,6 +184,7 @@
         </app-button>
       </td>
     </ng-container>
+
     <ng-container matColumnDef="extra-row">
       <td mat-cell colspan="100" class="!px-2" *matCellDef="let element">
         <div

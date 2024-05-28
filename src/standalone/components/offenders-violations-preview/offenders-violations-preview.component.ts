@@ -135,6 +135,7 @@ export class OffendersViolationsPreviewComponent
   isClaimed = input(false, { transform: booleanAttribute });
   selection = new SelectionModel<Offender>(true);
   offenderDisplayedColumns = [
+    'arrows',
     'offenderName',
     'qid',
     'departmentCompany',
@@ -147,13 +148,19 @@ export class OffendersViolationsPreviewComponent
   isClaimedEffect = effect(() => {
     if (this.isClaimed()) {
       this.offenderDisplayedColumns = [
+        'arrows',
         'select',
-        ...this.offenderDisplayedColumns,
+        ...this.offenderDisplayedColumns.filter(
+          column => column !== 'select' && column !== 'arrows',
+        ),
       ];
     } else {
-      this.offenderDisplayedColumns = this.offenderDisplayedColumns.filter(
-        column => column !== 'select',
-      );
+      this.offenderDisplayedColumns = [
+        'arrows',
+        ...this.offenderDisplayedColumns.filter(
+          column => column !== 'select' && column !== 'arrows',
+        ),
+      ];
     }
   });
   penaltyIcons = PenaltyIcons;
