@@ -328,7 +328,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.caseModel()
       .getService()
       .getDeclarationDetails(this.controls.customsDeclarationNumber()?.value)
-      .subscribe(({ blob, title }) => {
+      .subscribe(({ blob, title, status }) => {
+        if (status !== 'success') {
+          return this.dialog.error(this.lang.map.declaration_no_does_not_exist);
+        }
         return this.dialog.open(ViewAttachmentPopupComponent, {
           disableClose: true,
           data: {
@@ -343,7 +346,10 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     this.caseModel()
       .getService()
       .getOffenceDetails(this.controls.controlReportNumber()?.value)
-      .subscribe(({ blob, title }) => {
+      .subscribe(({ blob, title, status }) => {
+        if (status !== 'success') {
+          return this.dialog.error(this.lang.map.offence_no_does_not_exist);
+        }
         return this.dialog.open(ViewAttachmentPopupComponent, {
           disableClose: true,
           data: {

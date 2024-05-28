@@ -107,9 +107,11 @@ export class InvestigationService
     );
   }
 
-  getDeclarationDetails(
-    declarationNumber: string,
-  ): Observable<{ blob: BlobModel; title: string }> {
+  getDeclarationDetails(declarationNumber: string): Observable<{
+    blob: BlobModel;
+    title: string;
+    status: string;
+  }> {
     return this._getDeclarationDetails(declarationNumber).pipe(
       map(payload => {
         return {
@@ -118,6 +120,7 @@ export class InvestigationService
             this.domSanitizer,
           ),
           title: payload.declarationNumber,
+          status: payload.status,
         };
       }),
     );
@@ -132,7 +135,7 @@ export class InvestigationService
       {
         params: new HttpParams({
           fromObject: {
-            declarationNumber: encodeURIComponent(declarationNumber),
+            declarationNumber: decodeURIComponent(declarationNumber),
           },
         }),
       },
@@ -141,7 +144,7 @@ export class InvestigationService
 
   getOffenceDetails(
     offenceNumber: string,
-  ): Observable<{ blob: BlobModel; title: string }> {
+  ): Observable<{ blob: BlobModel; title: string; status: string }> {
     return this._getOffenceDetails(offenceNumber).pipe(
       map(payload => {
         return {
@@ -150,6 +153,7 @@ export class InvestigationService
             this.domSanitizer,
           ),
           title: payload.offenceNumber,
+          status: payload.status,
         };
       }),
     );
@@ -164,7 +168,7 @@ export class InvestigationService
       {
         params: new HttpParams({
           fromObject: {
-            offenceNumber: encodeURIComponent(offenceNumber),
+            offenceNumber: decodeURIComponent(offenceNumber),
           },
         }),
       },
