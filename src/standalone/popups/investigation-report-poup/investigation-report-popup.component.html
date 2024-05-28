@@ -35,11 +35,13 @@
           </div>
           <div class="p-2 relative">
             <b>{{ lang.map.answer }}</b> : {{ question.answer }}
-            <div class="absolute -top-7 end-2">
-              <app-icon-button
-                (click)="deleteQuestion$.next(question)"
-                icon="DELETE" />
-            </div>
+            @if (!inViewMode()) {
+              <div class="absolute -top-7 end-2">
+                <app-icon-button
+                  (click)="deleteQuestion$.next(question)"
+                  icon="DELETE" />
+              </div>
+            }
           </div>
         </li>
       } @empty {
