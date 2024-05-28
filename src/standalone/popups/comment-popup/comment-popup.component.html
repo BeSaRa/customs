@@ -117,7 +117,7 @@
           <div class="col-12 mb-3">
             <app-select-input
               formControlName="userId"
-              [label]="lang.map.send_to_user_x"
+              [label]="lang.map.send_to"
               bindValue="internalUserId"
               bindLabel="getOUUserNames"
               [options]="usersList" />
@@ -127,7 +127,7 @@
           <div class="col-12 mb-3">
             <app-select-input
               formControlName="userId"
-              [label]="lang.map.send_to_user_x"
+              [label]="lang.map.send_to_investigator"
               bindValue="id"
               bindLabel="getNames"
               [options]="usersList" />
@@ -143,11 +143,11 @@
     }
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="comment$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button (click)="comment$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>
