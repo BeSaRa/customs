@@ -97,6 +97,8 @@ export const AppIcons = {
   DELEGATE_MANAGER: 'account-arrow-up-outline',
   CANCEL_DELEGATE: 'pen-remove',
   COMMENT: 'comment-text-multiple-outline',
+  EXPAND: 'arrow-expand-all',
+  SHRINK: 'arrow-collapse-all',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -667,4 +667,6 @@ export interface LangKeysContract {
   send_to_hr_user: string;
   return_to_same_hr: string;
   approve: string;
+  expand: string;
+  shrink: string;
 }

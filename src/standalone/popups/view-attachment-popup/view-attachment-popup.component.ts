@@ -4,11 +4,16 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { LangService } from '@services/lang.service';
 import { BlobModel } from '@models/blob-model';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-view-attachment-popup',
@@ -22,6 +27,7 @@ import { BlobModel } from '@models/blob-model';
     ReactiveFormsModule,
     SelectInputComponent,
     SwitchComponent,
+    MatTooltip,
   ],
   templateUrl: './view-attachment-popup.component.html',
   styleUrls: ['./view-attachment-popup.component.scss'],
@@ -29,8 +35,22 @@ import { BlobModel } from '@models/blob-model';
 export class ViewAttachmentPopupComponent implements OnDestroy {
   lang = inject(LangService);
   data: { title: string; model: BlobModel } = inject(MAT_DIALOG_DATA);
-
+  dialogRef = inject(MatDialogRef<ViewAttachmentPopupComponent>);
+  isFullScreen = true;
   ngOnDestroy(): void {
     this.data.model.dispose();
+  }
+  toggleSize() {
+    this.isFullScreen = !this.isFullScreen;
+
+    this.dialogRef.updateSize(
+      this.isFullScreen ? '100vw' : '800px',
+      this.isFullScreen ? '100vh' : '800px',
+    );
+
+    this.dialogRef.updatePosition({
+      top: this.isFullScreen ? '0' : 'calc(50vh - 400px)',
+      left: this.isFullScreen ? '0' : 'calc(50vw - 400px)',
+    });
   }
 }
