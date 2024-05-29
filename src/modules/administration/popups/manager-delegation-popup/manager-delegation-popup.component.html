@@ -38,8 +38,7 @@
             formControlName="endDate"
             (click)="endDatepicker.open()"
             [matDatepicker]="endDatepicker"
-            [min]="endDateMinDate()"
-            [max]="endDateMaxDate()" />
+            [min]="endDateMinDate()" />
           <mat-datepicker [touchUi]="true" #endDatepicker />
         </app-input>
         <app-select-input

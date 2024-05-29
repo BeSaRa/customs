@@ -128,9 +128,4 @@ export class ManagerDelegationPopupComponent
   endDateMinDate() {
     return this.form.get('startDate')?.value || this.today;
   }
-
-  endDateMaxDate() {
-    const startDateAsDate = new Date(this.form.get('startDate')?.value);
-    return new Date(startDateAsDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-  }
 }
