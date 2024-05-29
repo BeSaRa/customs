@@ -353,9 +353,11 @@ export class ReferralPopupComponent
   }
 
   defaultComment = computed(() => {
-    return this.displayDefaultForm()
-      ? this.model().getFirstConcernedPenaltyComment(this.penaltyKey())
-      : '';
+    return this.model().inSubmitInvestigationActivity()
+      ? this.model().getFirstPenaltyComment(this.penaltyKey())
+      : this.displayDefaultForm()
+        ? this.model().getFirstConcernedPenaltyComment(this.penaltyKey())
+        : '';
   });
 
   employeeComment = computed(() => {
