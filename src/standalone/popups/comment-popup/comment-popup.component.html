@@ -37,7 +37,7 @@
             response === taskResponses.TO_MANAGER ||
             response === taskResponses.REFERRAL_TO_PRESIDENT ||
             response === taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-            ) {
+          ) {
             <div class="mb-4">
               @for (offender of offenders; track offender) {
                 <div>
@@ -148,10 +148,10 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary"
-    >{{ lang.map.save }}
+      >{{ lang.map.save }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline"
-    >{{ lang.map.close }}
+      >{{ lang.map.close }}
     </app-button>
   </div>
 </div>

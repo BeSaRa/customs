@@ -109,9 +109,7 @@ export class CommentPopupComponent
 
   buildForm() {
     this.form = new UntypedFormGroup({
-      comment: new UntypedFormControl('', [
-        CustomValidators.maxLength(100000),
-      ]),
+      comment: new UntypedFormControl('', [CustomValidators.maxLength(100000)]),
       userId: new UntypedFormControl(null, []),
     });
     if (this.isSendToUser || this.isSendToInvestigator || this.isSendToHrUser) {
@@ -218,13 +216,11 @@ export class CommentPopupComponent
   }
 
   get formName() {
-    if (
-      this.response === this.taskResponses.TO_MANAGER
-    ) {
+    if (this.response === this.taskResponses.TO_MANAGER) {
       return 'اسم النموذج';
     }
-      // else if (this.response === this.taskResponses) {
-      //   return 'نوع القرار';
+    // else if (this.response === this.taskResponses) {
+    //   return 'نوع القرار';
     // }
     else if (
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
