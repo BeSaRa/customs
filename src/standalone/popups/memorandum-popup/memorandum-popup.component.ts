@@ -178,6 +178,7 @@ export class MemorandumPopupComponent
         ),
       )
       .subscribe(model => {
+        this.updateModel().emit();
         this.model.set(model);
         this.dialogRef.close(this.data.response);
       });
@@ -312,7 +313,6 @@ export class MemorandumPopupComponent
       .subscribe(updated => {
         this.penaltiesDecisionsMap[updated.offenderId] = updated;
         this.investigationModel().replaceDecisionBasedOnOffenderId(updated);
-        this.updateModel().emit();
       });
   }
 
