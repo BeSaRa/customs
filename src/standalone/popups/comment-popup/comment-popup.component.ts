@@ -1,5 +1,5 @@
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -28,6 +28,8 @@ import { InternalUserOU } from '@models/internal-user-ou';
 import { TeamService } from '@services/team.service';
 import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
 
 @Component({
   selector: 'app-comment-popup',
@@ -52,6 +54,8 @@ export class CommentPopupComponent
   lang = inject(LangService);
   data = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
+  employee = inject(EmployeeService).getEmployee();
+  penaltyDecisionService = inject(PenaltyDecisionService);
   comment$ = new Subject<void>();
   form!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
@@ -70,6 +74,18 @@ export class CommentPopupComponent
     TaskResponses.DC_RETURN_PA,
   ];
   isPreviewForm = false;
+
+  concernedOffenders = computed(() => this.model.getConcernedOffenders());
+  offendersIds = computed(() => this.concernedOffenders().map(i => i.id));
+
+  penaltiesDecisionsMap = this.model.penaltyDecisions.reduce(
+    (acc, item) => {
+      return this.offendersIds().includes(item.offenderId)
+        ? { ...acc, [item.offenderId]: item }
+        : { ...acc };
+    },
+    {} as Record<number, PenaltyDecision>,
+  );
 
   ngOnInit() {
     this.buildForm();
@@ -128,6 +144,27 @@ export class CommentPopupComponent
             return this.model.claim();
           }
           return of(null);
+        }),
+      )
+      .pipe(
+        switchMap(() => {
+          const decisionsNeedUpdates = Object.values(
+            this.penaltiesDecisionsMap,
+          ).filter(item => {
+            return item.signerId !== this.employee!.id;
+          });
+          return decisionsNeedUpdates.length
+            ? this.penaltyDecisionService.createBulkFull(
+                decisionsNeedUpdates.map(item => {
+                  return item.clone<PenaltyDecision>({
+                    ...item,
+                    signerId: this.employee!.id,
+                    tkiid: this.model.getTaskId(),
+                    roleAuthName: this.model.getTeamDisplayName(),
+                  });
+                }),
+              )
+            : of(null);
         }),
       )
       .pipe(
