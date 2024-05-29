@@ -81,13 +81,16 @@ export class CommentPopupComponent
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
   }
+  get isSendToHrUser() {
+    return this.response === TaskResponses.TO_HR_USER;
+  }
 
   get isSendToInvestigator() {
     return this.response === TaskResponses.TO_INV_USER;
   }
 
   private _loadUsersList() {
-    if (this.isSendToUser) {
+    if (this.isSendToUser || this.isSendToHrUser) {
       this.internalUserOUService
         .internalUserOUCriteria({
           organizationUnitId: this.employeeService.getOrganizationUnit()?.id,
@@ -107,12 +110,11 @@ export class CommentPopupComponent
   buildForm() {
     this.form = new UntypedFormGroup({
       comment: new UntypedFormControl('', [
-        // CustomValidators.required,
         CustomValidators.maxLength(100000),
       ]),
       userId: new UntypedFormControl(null, []),
     });
-    if (this.isSendToUser || this.isSendToInvestigator) {
+    if (this.isSendToUser || this.isSendToInvestigator || this.isSendToHrUser) {
       this.form.get('userId')?.setValidators([CustomValidators.required]);
       this.form.get('userId')?.updateValueAndValidity();
     }
@@ -137,7 +139,11 @@ export class CommentPopupComponent
             comment: this.form.value.comment,
             userId: this.form.value.userId,
           };
-          if (!this.isSendToUser && !this.isSendToInvestigator) {
+          if (
+            !this.isSendToUser &&
+            !this.isSendToInvestigator &&
+            !this.isSendToHrUser
+          ) {
             delete completeBody.userId;
           }
           return this.model
@@ -158,7 +164,7 @@ export class CommentPopupComponent
     ) {
       return '';
     }
-    return 'احمد';
+    return '';
   }
 
   get sendToTitle() {
@@ -176,13 +182,8 @@ export class CommentPopupComponent
     if (this.response === this.taskResponses.TO_MANAGER) {
       return 'رقم مسودة التحقيق: ((الرقم))';
     } else if (
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM4 ||
-      // this.response === this.taskResponses.FORM5 ||
-      // this.response === this.taskResponses.FORM6 ||
-      // this.response === this.taskResponses.FORM7
     ) {
       return 'رقم ملف التحقيق:' + this.model.caseIdentifier;
     }
@@ -191,16 +192,14 @@ export class CommentPopupComponent
 
   get decisionNumberAndType() {
     if (
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM7
     ) {
       return 'رقم القرار:((الرقم))';
     }
-    // else if (this.response === this.taskResponses.FORM5) {
+    // else if (this.response === this.taskResponses) {
     //   return 'رقم القرار السحب:((الرقم))';
-    // } else if (this.response === this.taskResponses.FORM6) {
+    // } else if (this.response === this.taskResponses) {
     //   return 'رقم القرار الاحالة:((الرقم))';
     // }
     return '';
@@ -210,35 +209,22 @@ export class CommentPopupComponent
     if (this.response === this.taskResponses.TO_MANAGER) {
       return 'تاريخ مسودة التحقيق: ((التاريخ))';
     } else if (
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM7
     ) {
       return 'تاريخ القرار: ((التاريخ))';
     }
-    // else if (this.response === this.taskResponses.FORM4) {
-    //   return 'تاريخ الطلب: ((التاريخ))';
-    // } else if (this.response === this.taskResponses.FORM5) {
-    //   return 'تاريخ القرار السحب: ((التاريخ))';
-    // } else if (this.response === this.taskResponses.FORM6) {
-    //   return 'تاريخ القرار الاحالة: ((التاريخ))';
-    // }
     return '';
   }
 
   get formName() {
     if (
       this.response === this.taskResponses.TO_MANAGER
-      // ||
-      // this.response === this.taskResponses.FORM4 ||
-      // this.response === this.taskResponses.FORM5 ||
-      // this.response === this.taskResponses.FORM6
     ) {
       return 'اسم النموذج';
     }
-    // else if (this.response === this.taskResponses.FORM2) {
-    //   return 'نوع القرار';
+      // else if (this.response === this.taskResponses) {
+      //   return 'نوع القرار';
     // }
     else if (
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
@@ -252,13 +238,8 @@ export class CommentPopupComponent
   get upperFixedText() {
     if (
       this.response === this.taskResponses.TO_MANAGER ||
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM4 ||
-      // this.response === this.taskResponses.FORM5 ||
-      // this.response === this.taskResponses.FORM6 ||
-      // this.response === this.taskResponses.FORM7
     )
       return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
     return '';
@@ -267,13 +248,8 @@ export class CommentPopupComponent
   get lowerFixedText() {
     if (
       this.response === this.taskResponses.TO_MANAGER ||
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM4 ||
-      // this.response === this.taskResponses.FORM5 ||
-      // this.response === this.taskResponses.FORM6 ||
-      // this.response === this.taskResponses.FORM7
     )
       return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
     return '';
@@ -298,19 +274,13 @@ export class CommentPopupComponent
   violation = { name: 'مخالفة ١', date: '1/1/2021' };
 
   get justifyEnd() {
-    return (
-      this.response === this.taskResponses.TO_MANAGER
-      // || this.response === this.taskResponses.FORM4 || this.response === this.taskResponses.FORM5
-    );
+    return this.response === this.taskResponses.TO_MANAGER;
   }
 
   get justifyBetween() {
     return (
-      // this.response === this.taskResponses.FORM2 ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-      // this.response === this.taskResponses.FORM6 ||
-      // this.response === this.taskResponses.FORM7
     );
   }
 
