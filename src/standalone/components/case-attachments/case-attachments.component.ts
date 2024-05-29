@@ -120,7 +120,10 @@ export class CaseAttachmentsComponent
                     .pipe(
                       map(docs =>
                         docs.filter(
-                          doc => doc.isApproved === null || doc.isApproved,
+                          doc =>
+                            doc.isApproved === null ||
+                            doc.isApproved ||
+                            !doc.isExportable,
                         ),
                       ),
                     )
