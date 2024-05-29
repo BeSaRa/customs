@@ -4,12 +4,20 @@
       <h1>{{ lang.map.view }} : {{ data.title }}</h1>
     }
     <app-icon-button
+      [matTooltip]="lang.map.close"
       tabindex="-1"
       mat-dialog-close=""
       class="close-btn"
       icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      class="mx-12"
+      [icon]="isFullScreen ? 'SHRINK' : 'EXPAND'"
+      (click)="toggleSize()"
+      [matTooltip]="
+        isFullScreen ? lang.map.shrink : lang.map.expand
+      "></app-icon-button>
   </div>
-  <div class="dialog-content !p-0 w-[800px] h-[800px]">
+  <div class="dialog-content !p-0 h-[86vh]">
     <iframe class="w-full h-full" [src]="data.model.safeUrl"></iframe>
   </div>
   <div class="dialog-footer justify-end">
