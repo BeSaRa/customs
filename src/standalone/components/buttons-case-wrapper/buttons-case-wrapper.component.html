@@ -429,7 +429,11 @@
 
   @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_LA)) {
     <app-button (click)="responseAction$.next(taskResponses.TO_LA)">
-      {{ lang.map.return_to_legal_affairs_manager }}
+      {{
+        model().getTaskName() === TaskNames.INV_FNL_INV
+          ? lang.map.complete_to_legal_affairs_manager
+          : lang.map.return_to_legal_affairs_manager
+      }}
     </app-button>
   }
   <!-- issuing referral decision -->
