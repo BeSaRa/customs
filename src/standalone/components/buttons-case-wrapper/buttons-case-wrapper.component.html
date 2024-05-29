@@ -4,9 +4,9 @@
     !model().id ||
     (model().inMyInbox() && model().canEdit()) ||
     model().creatorInfo.id === employeeService.getEmployee()?.id
-  ) {
+    ) {
     <app-button (click)="save.emit(SaveTypes.FINAL)"
-      >{{ lang.map.save }}
+    >{{ lang.map.save }}
     </app-button>
   }
 
@@ -14,7 +14,7 @@
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.RETURN_TO_PR_FROM_LA)
-  ) {
+    ) {
     <app-button
       [buttonType]="'secondary'"
       (click)="returnActions$.next(taskResponses.RETURN_TO_PR_FROM_LA)">
@@ -25,7 +25,7 @@
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.RETURN_TO_PA_FROM_LA)
-  ) {
+    ) {
     <app-button
       [buttonType]="'secondary'"
       (click)="returnActions$.next(taskResponses.RETURN_TO_PA_FROM_LA)">
@@ -36,7 +36,7 @@
   <!-- manager approve -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.MANAGER_APPROVE)
-  ) {
+    ) {
     <app-button (click)="approve$.next(taskResponses.MANAGER_APPROVE)">
       {{ lang.map.manager_approve }}
     </app-button>
@@ -52,7 +52,7 @@
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.ASK_ANOTHER_DEPARTMENT)
-  ) {
+    ) {
     <app-button
       buttonType="secondary"
       (click)="ask$.next(taskResponses.ASK_ANOTHER_DEPARTMENT)">
@@ -82,10 +82,10 @@
   <!-- to legal affairs chief -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.LA_FNL_APPROVE)
-  ) {
+    ) {
     <app-button
       (click)="legalAffairsFinalApprove$.next(taskResponses.LA_FNL_APPROVE)">
-      {{ lang.map.final_complete }}
+      {{ lang.map.approve }}
     </app-button>
   }
 
@@ -98,7 +98,7 @@
   <!-- disciplinary committee DECISION SIGN -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.DC_DECISION_SIGN)
-  ) {
+    ) {
     <app-button (click)="responseAction$.next(taskResponses.DC_DECISION_SIGN)">
       {{ lang.map.decision_sign }}
     </app-button>
@@ -139,7 +139,7 @@
   <!-- final complete action -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.PA_FNL_COMPLETE)
-  ) {
+    ) {
     <app-button (click)="responseAction$.next(taskResponses.PA_FNL_COMPLETE)">
       {{ lang.map.final_complete }}
     </app-button>
@@ -149,7 +149,7 @@
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.PA_FNL_APPLY_AND_RETURN)
-  ) {
+    ) {
     <app-button
       buttonType="secondary"
       (click)="responseAction$.next(taskResponses.PA_FNL_APPLY_AND_RETURN)">
@@ -159,7 +159,7 @@
   <!-- Issuing a referral decision to study in the president assistant office -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.PA_FNL_TO_PAE)
-  ) {
+    ) {
     <app-button
       buttonType="secondary"
       (click)="responseAction$.next(taskResponses.PA_FNL_TO_PAE)">
@@ -173,7 +173,7 @@
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
-  ) {
+    ) {
     <app-button
       buttonType="primary"
       (click)="approve$.next(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)">
@@ -196,7 +196,7 @@
       taskResponses.TO_MANAGER,
       taskResponses.CHIEF_APPROVE
     ])
-  ) {
+    ) {
     <app-button
       (click)="
         responseAction$.next(
@@ -221,7 +221,7 @@
   <!-- return to same HR employee -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_SAME_HR)
-  ) {
+    ) {
     <app-button
       buttonType="primary"
       (click)="responseAction$.next(taskResponses.RETURN_TO_SAME_HR)">
@@ -238,7 +238,7 @@
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
       model().hasResponse(taskResponses.RETURN_APP_MANAGER) ||
       model().hasResponse(taskResponses.RETURN_TO_CA))
-  ) {
+    ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
@@ -248,7 +248,7 @@
       @if (
         model().inMyInbox() &&
         model().hasResponse(taskResponses.RETURN_APP_MANAGER)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
@@ -257,7 +257,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_HR)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_HR)">
@@ -266,7 +266,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_CA)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_CA)">
@@ -282,7 +282,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.TO_HR_DEP)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.TO_HR_DEP)">
@@ -291,7 +291,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.TO_CA_DEP)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.TO_CA_DEP)">
@@ -300,7 +300,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_SAME)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_SAME)">
@@ -309,7 +309,7 @@
       }
       @if (
         model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_APP)
-      ) {
+        ) {
         <button
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_APP)">
@@ -325,7 +325,7 @@
     !isMandatoryToImposePenalty() &&
     (model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT) ||
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT))
-  ) {
+    ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="referralMenu">
       {{ lang.map.referral_request }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
@@ -335,7 +335,7 @@
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT)
-    ) {
+      ) {
       <button mat-menu-item (click)="requestReferralPresident()">
         {{ lang.map.referral_request_to_presodent }}
       </button>
@@ -343,7 +343,7 @@
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT)
-    ) {
+      ) {
       <button mat-menu-item (click)="requestReferralPresidentAssistant()">
         {{ lang.map.referral_request_to_presodent_assistant }}
       </button>
@@ -358,7 +358,7 @@
       model().hasResponse(
         taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
       ))
-  ) {
+    ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="sendToMenu">
       {{ lang.map.send_to }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
@@ -370,7 +370,7 @@
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS)
-    ) {
+      ) {
       <button
         mat-menu-item
         (click)="
@@ -383,7 +383,7 @@
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL)
-    ) {
+      ) {
       <button
         mat-menu-item
         (click)="
@@ -398,7 +398,7 @@
       model().hasResponse(
         taskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
       )
-    ) {
+      ) {
       <button
         mat-menu-item
         (click)="
@@ -412,7 +412,7 @@
     <!-- final launch disciplinary committee -->
     @if (
       model().inMyInbox() && model().hasResponse(taskResponses.PA_FNL_LAUNCH_DC)
-    ) {
+      ) {
       <button
         mat-menu-item
         (click)="returnActions$.next(taskResponses.PA_FNL_LAUNCH_DC)">
@@ -436,11 +436,11 @@
   @if (
     model().inMyInbox() &&
     (model().hasResponse(
-      taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
-    ) ||
+        taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
+      ) ||
       model().hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS) ||
       model().hasResponse(taskResponses.TO_PAE))
-  ) {
+    ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
       {{ lang.map.issuing_referral_decision }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
@@ -453,7 +453,7 @@
       model().hasResponse(
         taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
       )
-    ) {
+      ) {
       <button mat-menu-item (click)="referralToLegalAffairs()">
         {{ lang.map.to_legal_affairs_manager }}
       </button>
@@ -462,7 +462,7 @@
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS)
-    ) {
+      ) {
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.LAUNCH_LEGAL_AFFAIRS)">
@@ -489,7 +489,7 @@
             : sendTypes.DIRECTOR_ADMIN
         )
       "
-      >{{ lang.map.send_to_manager }}
+    >{{ lang.map.send_to_manager }}
     </app-button>
   }
   <!-- send to chief -->
@@ -498,9 +498,9 @@
     !isApplicantManager() &&
     model().sectionId &&
     model().sectionId !== -1
-  ) {
+    ) {
     <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
-      >{{ lang.map.send_to_chief }}
+    >{{ lang.map.send_to_chief }}
     </app-button>
   }
 
@@ -536,7 +536,7 @@
   <!-- action on case -->
   @if (model().id) {
     <app-button (click)="showActionsOnCase()" buttonType="primary-outline"
-      >{{ lang.map.view + ' ' + lang.map.actions }}
+    >{{ lang.map.view + ' ' + lang.map.actions }}
     </app-button>
   }
 </div>

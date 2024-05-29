@@ -666,4 +666,5 @@ export interface LangKeysContract {
   select_employee_to_archive_in_mawared: string;
   send_to_hr_user: string;
   return_to_same_hr: string;
+  approve: string;
 }
