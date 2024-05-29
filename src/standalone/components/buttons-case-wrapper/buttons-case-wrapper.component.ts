@@ -41,6 +41,7 @@ import { BaseCase } from '@models/base-case';
 import { CaseTypes } from '@enums/case-types';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { ReferralGrievancePopupComponent } from '@standalone/popups/referral-grievance-popup/referral-grievance-popup.component';
+import { TaskNames } from '@enums/task-names';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -450,4 +451,6 @@ export class ButtonsCaseWrapperComponent
         this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
+
+  protected readonly TaskNames = TaskNames;
 }

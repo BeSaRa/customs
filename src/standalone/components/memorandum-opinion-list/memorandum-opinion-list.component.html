@@ -65,7 +65,7 @@
               [matTooltip]="lang.map.view_memo"
               (click)="view$.next(element)"
               icon="VIEW" />
-          } @else {
+          } @else if (model().inMyInbox()) {
             @if (!isManager()) {
               <app-icon-button
                 [matTooltip]="lang.map.approve_memo"
