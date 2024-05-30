@@ -68,6 +68,7 @@
           } @else if (model().inMyInbox()) {
             @if (!isManager()) {
               <app-icon-button
+                [disabled]="hasUnDecidedProofStatusItem()"
                 [matTooltip]="lang.map.approve_memo"
                 (click)="approve$.next(element)"
                 icon="APPROVE" />

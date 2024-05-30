@@ -108,11 +108,16 @@
       </tr>
     </table>
     <div class="mt-2">
-      <app-textarea [label]="lang.map.comment" [formControl]="textControl" />
+      <app-textarea
+        [label]="lang.map.general_description"
+        [formControl]="textControl" />
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary">
+    <app-button
+      (click)="save$.next()"
+      [disabled]="hasUnDecidedProofStatusItem"
+      buttonType="primary">
       @if (data.response) {
         {{ lang.map.final_complete }}
       } @else {

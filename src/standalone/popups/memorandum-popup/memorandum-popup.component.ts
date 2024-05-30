@@ -52,6 +52,8 @@ import { MatSelect } from '@angular/material/select';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { TaskResponses } from '@enums/task-responses';
 import { ToastService } from '@services/toast.service';
+import { CustomValidators } from '@validators/custom-validators';
+import { ProofTypes } from '@enums/proof-types';
 
 @Component({
   selector: 'app-memorandum-popup',
@@ -138,7 +140,7 @@ export class MemorandumPopupComponent
 
   loadPenalties$ = new Subject<void>();
 
-  textControl = new FormControl(this.model().note);
+  textControl = new FormControl(this.model().note, [CustomValidators.required]);
 
   employee = inject(EmployeeService).getEmployee();
 
@@ -183,7 +185,11 @@ export class MemorandumPopupComponent
         this.dialogRef.close(this.data.response);
       });
   }
-
+  get hasUnDecidedProofStatusItem() {
+    return !!Object.values(this.controls).filter(
+      item => item.value === ProofTypes.UNDEFINED,
+    ).length;
+  }
   private completeTask(model: Memorandum) {
     return of(this.investigationModel().getService())
       .pipe(
