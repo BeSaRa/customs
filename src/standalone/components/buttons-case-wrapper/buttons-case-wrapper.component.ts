@@ -144,6 +144,9 @@ export class ButtonsCaseWrapperComponent
   isApplicantManager() {
     return this.employeeService.isApplicantManager();
   }
+  isLegalAffairsManager() {
+    return this.employeeService.isLegalAffairsManager();
+  }
 
   canLaunch() {
     return this.model().canStart();

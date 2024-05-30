@@ -172,6 +172,11 @@ export class EmployeeService
       (t: Team) => t.authName === TeamNames.Human_Resources_Manager,
     );
   }
+  isLegalAffairsManager() {
+    return (this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.Legal_Affairs_Manager,
+    );
+  }
 
   isDisciplinaryCommittee() {
     return (this.loginData?.teams || []).find(
