@@ -72,14 +72,6 @@
     </app-button>
   }
   <!-- to legal affairs chief -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_CHIEF)) {
-    <app-button
-      [buttonType]="'secondary'"
-      (click)="responseAction$.next(taskResponses.TO_INV_CHIEF)">
-      {{ lang.map.send_to_legal_affairs_chief }}
-    </app-button>
-  }
-  <!-- to legal affairs chief -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.LA_FNL_APPROVE)
   ) {
@@ -112,22 +104,79 @@
     </app-button>
   }
 
-  <!-- to legal affairs manager -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_USER)) {
-    <app-button
-      [buttonType]="'secondary'"
-      (click)="responseAction$.next(taskResponses.TO_INV_USER)">
-      {{ lang.map.send_to_investigator }}
-    </app-button>
-  }
+  @if (!isLegalAffairsManager()) {
+    <!-- to legal affairs chief -->
+    @if (
+      model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_CHIEF)
+    ) {
+      <app-button
+        [buttonType]="'secondary'"
+        (click)="responseAction$.next(taskResponses.TO_INV_CHIEF)">
+        {{ lang.map.send_to_legal_affairs_chief }}
+      </app-button>
+    }
 
-  <!-- to investigator -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV)) {
-    <app-button
-      [buttonType]="'secondary'"
-      (click)="responseAction$.next(taskResponses.TO_INV)">
-      {{ lang.map.transfer_to_investigators_automatic_distribution }}
-    </app-button>
+    <!-- to legal affairs manager ###-->
+    @if (
+      model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_USER)
+    ) {
+      <app-button
+        [buttonType]="'secondary'"
+        (click)="responseAction$.next(taskResponses.TO_INV_USER)">
+        {{ lang.map.send_to_investigator }}
+      </app-button>
+    }
+
+    <!-- to investigator ###-->
+    @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV)) {
+      <app-button
+        [buttonType]="'secondary'"
+        (click)="responseAction$.next(taskResponses.TO_INV)">
+        {{ lang.map.transfer_to_investigators_automatic_distribution }}
+      </app-button>
+    }
+  } @else {
+    @if (
+      model().inMyInbox() &&
+      (model().hasResponse(taskResponses.TO_INV_CHIEF) ||
+        model().hasResponse(taskResponses.TO_INV_USER) ||
+        model().hasResponse(taskResponses.TO_INV))
+    ) {
+      <app-button
+        buttonType="secondary"
+        [matMenuTriggerFor]="legalAffairsManager">
+        {{ lang.map.send }}
+        <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+      </app-button>
+
+      <mat-menu #legalAffairsManager="matMenu">
+        @if (
+          model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_CHIEF)
+        ) {
+          <button
+            mat-menu-item
+            (click)="responseAction$.next(taskResponses.TO_INV_CHIEF)">
+            {{ lang.map.send_to_legal_affairs_chief }}
+          </button>
+        }
+        @if (
+          model().inMyInbox() && model().hasResponse(taskResponses.TO_INV_USER)
+        ) {
+          <button
+            mat-menu-item
+            (click)="responseAction$.next(taskResponses.TO_INV_USER)">
+            {{ lang.map.send_to_investigator }}
+          </button>
+        }
+        @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_INV)) {
+          <button
+            mat-menu-item
+            (click)="responseAction$.next(taskResponses.TO_INV)">
+            {{ lang.map.transfer_to_investigators_automatic_distribution }}
+          </button>
+        }
+      </mat-menu>
+    }
   }
 
   <!-- complete action -->
