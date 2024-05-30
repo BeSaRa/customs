@@ -23,6 +23,7 @@ import {
   switchMap,
   takeUntil,
   tap,
+  combineLatest,
 } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -59,7 +60,9 @@ export class CaseAttachmentsComponent
   dialog = inject(DialogService);
   toast = inject(ToastService);
   protected readonly FolderType = FolderType;
-  caseId: InputSignal<string | undefined> = input();
+  caseId: InputSignal<
+    string | string[] | undefined | undefined[] | (string | undefined)[]
+  > = input();
   @Input()
   folderType!: FolderType;
   @Input()
@@ -113,21 +116,52 @@ export class CaseAttachmentsComponent
       .pipe(
         switchMap(() => {
           switch (this.type) {
-            case 'folder':
-              return this.caseId()
-                ? this.service
-                    .loadFolderAttachments(this.caseId() as string)
-                    .pipe(
-                      map(docs =>
-                        docs.filter(
-                          doc =>
-                            doc.isApproved === null ||
-                            doc.isApproved ||
-                            !doc.isExportable,
-                        ),
+            case 'folder': {
+              if (this.folderType === FolderType.OFFICIAL) {
+                return combineLatest([
+                  this.caseId() && (this.caseId() as unknown[])[0]
+                    ? this.service.loadFolderAttachments(
+                        (this.caseId() as string[])[0],
+                      )
+                    : of([]),
+                  this.caseId() && (this.caseId() as unknown[])[1]
+                    ? this.service.loadFolderAttachments(
+                        (this.caseId() as string[])[1],
+                      )
+                    : of([]),
+                ]).pipe(
+                  map(docs => {
+                    return docs
+                      .flat()
+                      .sort(
+                        (a, b) =>
+                          new Date(b.createdOn).getTime() -
+                          new Date(a.createdOn).getTime(),
+                      )
+                      .filter(
+                        doc =>
+                          doc.isApproved === null ||
+                          doc.isApproved ||
+                          !doc.isExportable,
+                      );
+                  }),
+                );
+              } else {
+                if (!this.caseId()) return of([]);
+                return this.service
+                  .loadFolderAttachments(this.caseId() as string)
+                  .pipe(
+                    map(docs =>
+                      docs.filter(
+                        doc =>
+                          doc.isApproved === null ||
+                          doc.isApproved ||
+                          !doc.isExportable,
                       ),
-                    )
-                : of([]);
+                    ),
+                  );
+              }
+            }
             case 'offender':
               return this.entityId
                 ? this.service.getOffenderAttachments(this.entityId)
