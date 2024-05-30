@@ -670,4 +670,5 @@ export interface LangKeysContract {
   expand: string;
   shrink: string;
   complete_to_legal_affairs_manager: string;
+  general_description: string;
 }

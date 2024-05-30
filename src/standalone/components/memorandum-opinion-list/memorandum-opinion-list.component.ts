@@ -34,6 +34,7 @@ import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
 import { EmployeeService } from '@services/employee.service';
 import { MemorandumCategories } from '@enums/memorandum-categories';
+import { ProofTypes } from '@enums/proof-types';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -186,6 +187,11 @@ export class MemorandumOpinionListComponent
       });
   }
 
+  hasUnDecidedProofStatusItem() {
+    return !!this.model().offenderViolationInfo.filter(
+      ov => ov.proofStatus === ProofTypes.UNDEFINED,
+    ).length;
+  }
   canManageMemoOpinion() {
     return (
       !this.isManager() &&
