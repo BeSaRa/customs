@@ -111,7 +111,6 @@ export class ReferralPopupComponent
   complete$ = new Subject<void>();
   isSingle = this.data.isSingle;
   selectedPenalty = this.data.selectedPenalty;
-  offenders = signal(this.data.offenders);
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
   organizations: OrganizationUnit[] = [];
@@ -121,6 +120,13 @@ export class ReferralPopupComponent
   model = this.data.model;
   penaltyKey = signal(
     this.selectedPenalty ? this.selectedPenalty.penaltyKey : undefined,
+  );
+  offenders = signal(
+    this.data.offenders.filter(
+      offender =>
+        !this.model().getConcernedOffendersType() ||
+        offender.type === this.model().getConcernedOffendersType(),
+    ),
   );
   employeesOffenders = computed(() => {
     return this.offenders().filter(

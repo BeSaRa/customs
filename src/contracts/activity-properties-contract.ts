@@ -16,4 +16,7 @@ export interface ActivityPropertiesContract {
       items: number[];
     };
   };
+  OffenderType: {
+    value: number;
+  };
 }
