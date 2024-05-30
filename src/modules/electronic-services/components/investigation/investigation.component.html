@@ -218,7 +218,10 @@
         class="col-span-1 md:col-span-2 lg:col-span-4" />
       <app-case-attachments
         #officialAttachments
-        [caseId]="getCaseFolderIdByName(folderType.OFFICIAL)"
+        [caseId]="[
+          getCaseFolderIdByName(folderType.OFFICIAL),
+          getCaseFolderIdByName(folderType.LEGAL)
+        ]"
         [service]="service"
         [readonly]="true"
         [folderType]="folderType.OFFICIAL"

@@ -299,6 +299,10 @@ export class Investigation extends BaseCase<
       : [];
   }
 
+  getConcernedOffendersType(): number {
+    return this.taskDetails.activityProperties!.OffenderType.value;
+  }
+
   getConcernedOffenders(): Offender[] {
     const offendersIds = this.getConcernedOffendersIds();
     return this.offenderInfo.filter(offender =>
