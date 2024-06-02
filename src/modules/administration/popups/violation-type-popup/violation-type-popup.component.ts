@@ -157,7 +157,7 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.criminalType?.setValidators(CustomValidators.required);
       }
 
-      if (!this.isCustom()) {
+      if (this.isCustom()) {
         this.responsibilityRepeatViolation?.setValue(null);
         this.responsibilityRepeatViolation?.clearValidators();
         this.responsibilityRepeatViolation?.updateValueAndValidity();
