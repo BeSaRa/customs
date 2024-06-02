@@ -1,4 +1,4 @@
-import { Component, inject, Input, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Investigation } from '@models/investigation';
 import { EmployeeService } from '@services/employee.service';
 import { PersonsListComponent } from '@standalone/components/legal-affairs-offenders/persons-list.component';
