@@ -113,14 +113,18 @@ export class MemorandumPopupComponent
   offendersIds = computed(() => this.offenders().map(i => i.id));
   updateModel = this.data.updateModel;
   offenderViolationsMap = computed<Record<number, OffenderViolation[]>>(() => {
-    return this.investigationModel().offenderViolationInfo.reduce(
-      (acc, item) => {
-        acc[item.offenderId] = (acc[item.offenderId] || []).concat(item);
-        this.controls[item.id] = new FormControl(item.proofStatus);
-        return acc;
-      },
-      {} as Record<number, OffenderViolation[]>,
-    );
+    return this.investigationModel()
+      .offenderViolationInfo.filter(offenderViolation =>
+        this.offendersIds().includes(offenderViolation.offenderId),
+      )
+      .reduce(
+        (acc, item) => {
+          acc[item.offenderId] = (acc[item.offenderId] || []).concat(item);
+          this.controls[item.id] = new FormControl(item.proofStatus);
+          return acc;
+        },
+        {} as Record<number, OffenderViolation[]>,
+      );
   });
   penaltiesDecisionsMap = this.investigationModel().penaltyDecisions.reduce(
     (acc, item) => {

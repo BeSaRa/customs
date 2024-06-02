@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   effect,
   EventEmitter,
   inject,
@@ -67,6 +68,11 @@ export class MemorandumOpinionListComponent
   employeeService = inject(EmployeeService);
   config = inject(ConfigService);
   model = input.required<Investigation>();
+  offendersIds = computed(() =>
+    this.model()
+      .getConcernedOffenders()
+      .map(i => i.id),
+  );
   updateModel = input.required<EventEmitter<void>>();
   models: unknown[] = [];
   displayedColumns: string[] = [
@@ -188,9 +194,11 @@ export class MemorandumOpinionListComponent
   }
 
   hasUnDecidedProofStatusItem() {
-    return !!this.model().offenderViolationInfo.filter(
-      ov => ov.proofStatus === ProofTypes.UNDEFINED,
-    ).length;
+    return !!this.model()
+      .offenderViolationInfo.filter(offenderViolation =>
+        this.offendersIds().includes(offenderViolation.offenderId),
+      )
+      .filter(ov => ov.proofStatus === ProofTypes.UNDEFINED).length;
   }
   canManageMemoOpinion() {
     return (
