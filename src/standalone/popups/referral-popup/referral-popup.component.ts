@@ -380,16 +380,16 @@ export class ReferralPopupComponent
 
   commentControl = new FormControl(this.defaultComment(), {
     nonNullable: true,
-    validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+    validators: [CustomValidators.required, CustomValidators.maxLength(10000)],
   });
 
   employeesComment = new FormControl(this.employeeComment(), {
     nonNullable: true,
-    validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+    validators: [CustomValidators.required, CustomValidators.maxLength(10000)],
   });
   brokersComment = new FormControl(this.brokerComment(), {
     nonNullable: true,
-    validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+    validators: [CustomValidators.required, CustomValidators.maxLength(10000)],
   });
   displayedColumns = ['violation', 'violationDate'];
   unlikedViolations = computed(() => {

@@ -165,7 +165,10 @@ export class SingleDecisionPopupComponent
   textControl: FormControl = new FormControl<string>(
     this.oldPenaltyComment()!,
     {
-      validators: [CustomValidators.required, CustomValidators.maxLength(1300)],
+      validators: [
+        CustomValidators.required,
+        CustomValidators.maxLength(10000),
+      ],
     },
   );
   displayedColumns = ['violation', 'createdOn', 'proofStatus'];
