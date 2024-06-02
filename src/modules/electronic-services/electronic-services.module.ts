@@ -45,6 +45,7 @@ import { PersonsListComponent } from '@standalone/components/legal-affairs-offen
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 import { DisciplinaryCommitteeComponent } from '@standalone/components/disciplinary-committee/disciplinary-committee.component';
 import { ReviewMinutesComponent } from '@standalone/components/review-minutes/review-minutes.component';
+import { CallRequestsComponent } from '@standalone/components/call-requests/call-requests.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { ReviewMinutesComponent } from '@standalone/components/review-minutes/re
     LegalAffairsProceduresComponent,
     DisciplinaryCommitteeComponent,
     ReviewMinutesComponent,
+    CallRequestsComponent,
   ],
 })
 export class ElectronicServicesModule {}

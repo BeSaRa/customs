@@ -130,6 +130,7 @@ export class InvestigationComponent
     'external_persons',
     'disciplinary_committee_meetings',
     'attachments',
+    'call_requests',
   ];
   caseFolders: CaseFolder[] = [];
   caseFoldersMap?: Record<string, CaseFolder>;
