@@ -110,6 +110,9 @@
       <mat-tab data-name="attachments" [label]="lang.map.attachments">
         <ng-container [ngTemplateOutlet]="attachments_tab"></ng-container>
       </mat-tab>
+      <mat-tab data-name="call_requests" [label]="lang.map.call_requests_tab">
+        <ng-container [ngTemplateOutlet]="call_requests"></ng-container>
+      </mat-tab>
     </mat-tab-group>
   </mat-card>
   <app-buttons-case-wrapper
@@ -248,5 +251,9 @@
     <div class="p-4">
       <app-review-minutes [model]="model" />
     </div>
+  </ng-template>
+
+  <ng-template #call_requests>
+    <app-call-requests [model]="model" />
   </ng-template>
 </div>

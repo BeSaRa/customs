@@ -14,7 +14,7 @@
         class="text-primary"
         (click)="reloadWitness$.next()"
         icon="RELOAD" />
-      @if (canManageWitness()) {
+      @if (canManageWitness() && !fromCallRequestTab()) {
         <app-icon-button
           [matTooltip]="lang.map.add"
           class="text-primary"
@@ -193,13 +193,15 @@
           ">
           <div class="flex gap-4 p-4 justify-between items-start">
             <div class="w-3/5 flex flex-col gap-2">
-              <div>
-                <app-investigation-records-table
-                  [reloadInput]="reload$"
-                  [model]="model()"
-                  [selected]="selectedOffender"
-                  [person]="element" />
-              </div>
+              @if (!fromCallRequestTab()){
+                <div>
+                  <app-investigation-records-table
+                    [reloadInput]="reload$"
+                    [model]="model()"
+                    [selected]="selectedOffender"
+                    [person]="element" />
+                </div>
+              }
               <div>
                 <app-call-request-records-table
                   [reloadInput]="reload$"

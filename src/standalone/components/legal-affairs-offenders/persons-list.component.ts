@@ -112,6 +112,7 @@ export class PersonsListComponent
   callRequestService = inject(CallRequestService);
   witnessService = inject(WitnessService);
   model = input.required<Investigation>();
+  fromCallRequestTab = input<boolean>(false);
   concernedOffenders = computed(() => {
     return (this.model() && this.model().getConcernedOffenders()) || [];
   });
@@ -151,7 +152,9 @@ export class PersonsListComponent
       buttons.push('call');
     this.employeeService.hasPermissionTo(
       'ADMINISTRATIVE_INVESTIGATION_REPORT',
-    ) && buttons.push('investigation');
+    ) &&
+      !this.fromCallRequestTab() &&
+      buttons.push('investigation');
     return ([] as string[])
       .concat(
         this.isOffender()
