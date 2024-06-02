@@ -299,8 +299,8 @@ export class Investigation extends BaseCase<
       : [];
   }
 
-  getConcernedOffendersType(): number {
-    return this.taskDetails.activityProperties!.OffenderType.value;
+  getConcernedOffendersType(): number | undefined {
+    return this.taskDetails?.activityProperties?.OffenderType.value;
   }
 
   getConcernedOffenders(): Offender[] {
