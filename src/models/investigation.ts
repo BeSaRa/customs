@@ -300,7 +300,7 @@ export class Investigation extends BaseCase<
   }
 
   getConcernedOffendersType(): number | undefined {
-    return this.taskDetails?.activityProperties?.OffenderType.value;
+    return this.taskDetails?.activityProperties?.OffenderType?.value;
   }
 
   getConcernedOffenders(): Offender[] {
