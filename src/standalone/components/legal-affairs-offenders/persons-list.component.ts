@@ -116,12 +116,17 @@ export class PersonsListComponent
   concernedOffenders = computed(() => {
     return (this.model() && this.model().getConcernedOffenders()) || [];
   });
+  allOffenders = computed(() => {
+    return (this.model() && this.model().offenderInfo) || [];
+  });
 
   witness = signal<Witness[]>([]);
 
   models = computed(() => {
     return this.isOffender()
-      ? this.concernedOffenders()
+      ? this.fromCallRequestTab()
+        ? this.allOffenders()
+        : this.concernedOffenders()
       : (this.witness() as unknown as Offender[]);
   });
 
@@ -300,7 +305,7 @@ export class PersonsListComponent
       )
       .pipe(switchMap(() => this.witnessService.loadForCase(this.model().id)))
       .subscribe(list => {
-        this.witness.set(list);
+        this.model().id ? this.witness.set(list) : this.witness.set([]);
       });
   }
 
