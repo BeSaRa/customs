@@ -58,6 +58,8 @@
     </div>
     <div class="mb-6">
       <app-offender-list
+        [canModifyOffenders]="false"
+        [review]="true"
         [readonly]="true"
         [model]="modelWithOnlyConcernedOffenders()"></app-offender-list>
     </div>
