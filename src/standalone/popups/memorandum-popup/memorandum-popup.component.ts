@@ -21,7 +21,7 @@ import { InvestigationService } from '@services/investigation.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { LangService } from '@services/lang.service';
-import { of, Subject, tap } from 'rxjs';
+import { filter, of, Subject, tap } from 'rxjs';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { OffenderViolation } from '@models/offender-violation';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
@@ -54,6 +54,7 @@ import { TaskResponses } from '@enums/task-responses';
 import { ToastService } from '@services/toast.service';
 import { CustomValidators } from '@validators/custom-validators';
 import { ProofTypes } from '@enums/proof-types';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-memorandum-popup',
@@ -102,6 +103,8 @@ export class MemorandumPopupComponent
   penaltyDecisionService = inject(PenaltyDecisionService);
   investigationService = inject(InvestigationService);
   lookupService = inject(LookupService);
+  dialog = inject(DialogService);
+
   //TODO: only display attended or not attended
   offenderStatus = this.lookupService.lookups.offenderStatus;
   proofStatus = this.lookupService.lookups.proofStatus;
@@ -177,6 +180,16 @@ export class MemorandumPopupComponent
   private listenToSave() {
     this.save$
       .pipe(takeUntil(this.destroy$))
+      .pipe(
+        tap(
+          () =>
+            this.textControl.invalid &&
+            this.dialog.error(
+              this.lang.map.msg_make_sure_all_required_fields_are_filled,
+            ),
+        ),
+        filter(() => this.textControl.valid),
+      )
       .pipe(this.saveOperation())
       .pipe(
         switchMap(model =>
