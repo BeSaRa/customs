@@ -673,4 +673,6 @@ export interface LangKeysContract {
   general_description: string;
   legal_attachments: string;
   call_requests_tab: string;
+  president_assessment_decision: string;
+  president_decision: string;
 }
