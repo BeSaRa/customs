@@ -31,7 +31,8 @@ export class OrganizationUnit extends BaseModel<
   managerInfo!: AdminResult;
   mawaredDepInfo!: AdminResult;
   assistantInfo!: AdminResult;
-  isCustoms!: number;
+  managerAssistantInfo!: AdminResult;
+  isCustoms!: boolean;
 
   buildForm(controls = false): object {
     const {
@@ -73,7 +74,9 @@ export class OrganizationUnit extends BaseModel<
       parent: controls ? [parent] : parent,
       email: controls ? [email, CustomValidators.required] : email,
       mawaredDepId: controls ? [mawaredDepId] : mawaredDepId,
-      assistantOuId: controls ? [assistantOuId] : assistantOuId,
+      assistantOuId: controls
+        ? [assistantOuId, CustomValidators.required]
+        : assistantOuId,
       managerAssistant: controls ? [managerAssistant] : managerAssistant,
       isCustoms: controls ? [isCustoms] : isCustoms,
       status: controls ? [status, CustomValidators.required] : status,

@@ -12,6 +12,7 @@ export class OrganizationUnitInterceptor
     delete model.parentInfo;
     delete model.mawaredDepInfo;
     delete model.assistantInfo;
+    delete model.managerAssistantInfo;
 
     return model;
   }
@@ -29,7 +30,9 @@ export class OrganizationUnitInterceptor
       (model.mawaredDepInfo = AdminResult.createInstance(model.mawaredDepInfo));
     model.assistantInfo &&
       (model.assistantInfo = AdminResult.createInstance(model.assistantInfo));
-
+    model.managerAssistantInfo &&
+      (model.managerAssistantInfo = AdminResult.createInstance(model.managerAssistantInfo));
+    model.isCustoms = model.isCustoms !== null;
     return model;
   }
 }
