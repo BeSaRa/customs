@@ -367,15 +367,19 @@ export class ReferralPopupComponent
   });
 
   employeeComment = computed(() => {
-    return this.displayDefaultForm()
-      ? ''
-      : this.model().getFirstConcernedEmployeeComment(this.penaltyKey());
+    return this.model().inSubmitInvestigationActivity()
+      ? this.model().getFirstEmployeeComment(this.penaltyKey())
+      : this.displayDefaultForm()
+        ? ''
+        : this.model().getFirstConcernedEmployeeComment(this.penaltyKey());
   });
 
   brokerComment = computed(() => {
-    return this.displayDefaultForm()
-      ? ''
-      : this.model().getFirstConcernedBrokerComment(this.penaltyKey());
+    return this.model().inSubmitInvestigationActivity()
+      ? this.model().getFirstBrokerComment(this.penaltyKey())
+      : this.displayDefaultForm()
+        ? ''
+        : this.model().getFirstConcernedBrokerComment(this.penaltyKey());
   });
 
   commentControl = new FormControl(this.defaultComment(), {
