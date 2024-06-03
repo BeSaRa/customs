@@ -23,7 +23,6 @@ export class ViolationType extends BaseModel<
   numericTo!: number;
   isAbsence = false;
   criminalType!: number;
-  responsibilityRepeatViolations!: number;
   level!: number;
   managerDecision!: number;
 
@@ -32,7 +31,6 @@ export class ViolationType extends BaseModel<
   violationLevelInfo!: AdminResult;
   customsViolationEffectInfo!: AdminResult;
   managerDecisionInfo!: AdminResult;
-  responsibilityRepeatViolationsInfo!: AdminResult;
   criminalTypeInfo!: AdminResult;
   violationClassificationInfo!: ViolationClassification;
   override status = StatusTypes.ACTIVE;
@@ -49,7 +47,6 @@ export class ViolationType extends BaseModel<
       numericTo,
       isAbsence,
       criminalType,
-      responsibilityRepeatViolations,
       managerDecision,
       level,
     } = this;
@@ -85,9 +82,6 @@ export class ViolationType extends BaseModel<
       numericTo: controls ? [numericTo] : numericTo,
       isAbsence: controls ? [isAbsence] : isAbsence,
       criminalType: controls ? [criminalType] : criminalType,
-      responsibilityRepeatViolations: controls
-        ? [responsibilityRepeatViolations]
-        : responsibilityRepeatViolations,
       level: controls ? [level, CustomValidators.required] : level,
       managerDecision: controls
         ? [managerDecision, CustomValidators.required]

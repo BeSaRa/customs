@@ -129,18 +129,6 @@ export class ViolationTypeComponent extends AdminComponent<
       'getNames',
     ),
     new SelectFilterColumn(
-      'responsibilityRepeatViolations',
-      this.lookupService.lookups.responsibilityRepeatViolations,
-      'lookupKey',
-      'getNames',
-    ),
-    new SelectFilterColumn(
-      'criminalType',
-      this.lookupService.lookups.criminalType,
-      'lookupKey',
-      'getNames',
-    ),
-    new SelectFilterColumn(
       'status',
       this.lookupService.lookups.commonStatus.filter(
         item => item.lookupKey !== StatusTypes.DELETED,

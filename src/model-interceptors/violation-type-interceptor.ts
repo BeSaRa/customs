@@ -24,9 +24,6 @@ export class ViolationTypeInterceptor
     model.managerDecisionInfo = new AdminResult().clone(
       model.managerDecisionInfo,
     );
-    model.responsibilityRepeatViolationsInfo = new AdminResult().clone(
-      model.responsibilityRepeatViolationsInfo,
-    );
     model.criminalTypeInfo = new AdminResult().clone(model.criminalTypeInfo);
     return model;
   }

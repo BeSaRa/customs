@@ -385,7 +385,6 @@ export interface LangKeysContract {
   absence: string;
   level: string;
   manager_decision: string;
-  responsibility_repeat_violations: string;
   criminal_type: string;
   is_numeric: string;
   key_code: string;
