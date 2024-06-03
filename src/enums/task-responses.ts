@@ -44,4 +44,6 @@ export enum TaskResponses {
   TO_LA = 'to_la', // اعادة إلى مدير الشؤن القانونية
   TO_HR_USER = 'to_hr_user', //اختيار موظف للارشفة في موارد
   RETURN_TO_SAME_HR = 'return_to_same_hr', //اختيار موظف للارشفة في موارد
+  PA_FRST_APPROVE = 'pa_frst_approve',
+  PR_FRST_APPROVE = 'pr_frst_approve',
 }

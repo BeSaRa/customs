@@ -48,6 +48,24 @@
     </app-button>
   }
 
+  <!-- President approve -->
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.PR_FRST_APPROVE)
+  ) {
+    <app-button (click)="approve$.next(taskResponses.PR_FRST_APPROVE)">
+      {{ lang.map.approve }}
+    </app-button>
+  }
+
+  <!-- president assistant approve -->
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.PA_FRST_APPROVE)
+  ) {
+    <app-button (click)="approve$.next(taskResponses.PA_FRST_APPROVE)">
+      {{ lang.map.approve }}
+    </app-button>
+  }
+
   <!-- transfer report to staff president office -->
   @if (
     model().inMyInbox() &&
@@ -216,25 +234,6 @@
         lang.map
           .final_issuing_referral_decision_to_study_in_the_president_assistant_office
       }}
-    </app-button>
-  }
-  <!-- issuing referral decision to legal affairs manager by President -->
-  @if (
-    model().inMyInbox() &&
-    model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
-  ) {
-    <app-button
-      buttonType="primary"
-      (click)="approve$.next(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)">
-      {{ lang.map.complete }}
-    </app-button>
-  }
-  <!-- transfer report to staff president office -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PO)) {
-    <app-button
-      buttonType="secondary"
-      (click)="responseAction$.next(taskResponses.TO_PO)">
-      {{ lang.map.transfer_report_to_staff_president_office }}
     </app-button>
   }
 
@@ -485,7 +484,7 @@
       }}
     </app-button>
   }
-  <!-- issuing referral decision -->
+  <!-- president assessment decision -->
   @if (
     model().inMyInbox() &&
     (model().hasResponse(
@@ -495,10 +494,22 @@
       model().hasResponse(taskResponses.TO_PAE))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
-      {{ lang.map.issuing_referral_decision }}
+      {{ lang.map.president_assessment_decision }}
       <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
     </app-button>
   }
+  <!-- president decision -->
+  @if (
+    model().inMyInbox() &&
+    (model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS) ||
+      model().hasResponse(taskResponses.TO_PO))
+  ) {
+    <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
+      {{ lang.map.president_decision }}
+      <mat-icon class="ms-auto" [svgIcon]="AppIcons.CHEVRON_UP"></mat-icon>
+    </app-button>
+  }
+
   <mat-menu #issuingMenu="matMenu">
     <!-- issuing referral decision to legal affairs manager by President assistant -->
     @if (
@@ -528,6 +539,22 @@
         mat-menu-item
         (click)="responseAction$.next(taskResponses.TO_PAE)">
         {{ lang.map.to_study_in_the_president_assistant_office }}
+      </button>
+    }
+    <!-- issuing referral decision to legal affairs manager by President -->
+    @if (
+      model().inMyInbox() &&
+      model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS)
+    ) {
+      <button mat-menu-item (click)="presidentToLegalAffairs()">
+        {{ lang.map.launch_legal_affairs }}
+      </button>
+    }
+
+    <!-- transfer report to staff president office -->
+    @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PO)) {
+      <button mat-menu-item (click)="responseAction$.next(taskResponses.TO_PO)">
+        {{ lang.map.transfer_report_to_staff_president_office }}
       </button>
     }
   </mat-menu>
