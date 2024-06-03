@@ -49,15 +49,6 @@
                   bindValue="lookupKey"
                   bindLabel="getNames" />
               }
-              @if (!isCustom()) {
-                <app-select-input
-                  formControlName="responsibilityRepeatViolations"
-                  [options]="responsibilityRepeatViolations"
-                  [label]="lang.map.responsibility_repeat_violations"
-                  bindValue="lookupKey"
-                  bindLabel="getNames" />
-              }
-
               <app-select-input
                 formControlName="level"
                 [options]="violationLevels"

@@ -101,19 +101,6 @@
       </td>
     </ng-container>
 
-    <!-- responsibilityRepeatViolations -->
-    <ng-container matColumnDef="responsibilityRepeatViolations">
-      <th
-        mat-header-cell
-        mat-sort-header="responsibilityRepeatViolations"
-        *matHeaderCellDef>
-        {{ lang.map.responsibility_repeat_violations }}
-      </th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.responsibilityRepeatViolationsInfo?.getNames() || '' }}
-      </td>
-    </ng-container>
-
     <!-- criminalType -->
     <ng-container matColumnDef="criminalType">
       <th mat-header-cell mat-sort-header="criminalType" *matHeaderCellDef>

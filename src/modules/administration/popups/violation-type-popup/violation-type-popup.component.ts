@@ -29,8 +29,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
   offenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   filteredOffenderTypes: Lookup[] = this.lookupService.lookups.offenderType;
   criminalTypes: Lookup[] = this.lookupService.lookups.criminalType;
-  responsibilityRepeatViolations: Lookup[] =
-    this.lookupService.lookups.responsibilityRepeatViolations;
   violationLevels: Lookup[] = this.lookupService.lookups.violationLevel;
   managerDecisions: Lookup[] =
     this.lookupService.lookups.managerDecisionControl;
@@ -93,10 +91,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     return this.form.get('offenderType');
   }
 
-  get responsibilityRepeatViolation() {
-    return this.form.get('responsibilityRepeatViolations');
-  }
-
   get criminalType() {
     return this.form.get('criminalType');
   }
@@ -130,19 +124,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
     return isCriminal;
   }
 
-  isCustom(): boolean {
-    if (this.violationClassifications === undefined) return false;
-    let isCustom = false;
-    this.violationClassifications.forEach(classification => {
-      if (
-        classification.id === this.classificationId?.value &&
-        classification.key === 'custom'
-      )
-        isCustom = true;
-    });
-    return isCustom;
-  }
-
   isClearingAgent(): boolean {
     return this.offenderType?.value === OffenderTypes.BROKER;
   }
@@ -155,16 +136,6 @@ export class ViolationTypePopupComponent extends AdminDialogComponent<ViolationT
         this.criminalType?.updateValueAndValidity();
       } else {
         this.criminalType?.setValidators(CustomValidators.required);
-      }
-
-      if (this.isCustom()) {
-        this.responsibilityRepeatViolation?.setValue(null);
-        this.responsibilityRepeatViolation?.clearValidators();
-        this.responsibilityRepeatViolation?.updateValueAndValidity();
-      } else {
-        this.responsibilityRepeatViolation?.setValidators(
-          CustomValidators.required,
-        );
       }
 
       const offenderOfClassification = this.violationClassifications.find(
