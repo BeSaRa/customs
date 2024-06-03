@@ -75,6 +75,8 @@ export class OffenderListComponent
   readonly = false;
   @Input()
   canModifyOffenders = true;
+  @Input()
+  review = false;
   @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   hasValidInvestigationSubject = input(false);
   add$: Subject<void> = new Subject<void>();

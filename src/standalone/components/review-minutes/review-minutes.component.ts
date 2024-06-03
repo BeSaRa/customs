@@ -47,7 +47,7 @@ export class ReviewMinutesComponent
   });
   modelWithOnlyConcernedOffenders = computed(() => {
     return new Investigation().clone<Investigation>({
-      ...this.model().offenderInfo,
+      ...this.model(),
       offenderInfo: this.model().getConcernedOffenders(),
     });
   });
