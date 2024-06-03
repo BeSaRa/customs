@@ -233,7 +233,7 @@
       <app-offender-attachments
         [model]="model"
         class="col-span-1 md:col-span-2 lg:col-span-4"
-        [readonly]="readonly" />
+        [readonly]="!canManageOffendersAttachments" />
     </div>
   </ng-template>
   <ng-template #legal_procedures>
