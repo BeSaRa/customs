@@ -47,6 +47,7 @@ import { TeamService } from '@services/team.service';
 import { Team } from '@models/team';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 import { Grievance } from '@models/grievance';
+import { AppPermissions } from '@constants/app-permissions';
 
 @Component({
   selector: 'app-investigation',
@@ -267,7 +268,12 @@ export class InvestigationComponent
     this.form = this.fb.group(model.buildForm(model.canSave(), this.readonly));
     this._afterBuildForm();
   }
-
+  get canManageOffendersAttachments() {
+    return (
+      this.employeeService.hasPermissionTo('EDIT_ATTACHMENTS') &&
+      (this.model.inMyInbox() || this.model.inDisciplinaryCommitteeReview())
+    );
+  }
   _handleReadOnly(model: Investigation) {
     // reset readonly and canTakeAction
     this.readonly = false;
@@ -498,4 +504,6 @@ export class InvestigationComponent
         this.tabChange(tabName);
       });
   }
+
+  protected readonly AppPermissions = AppPermissions;
 }
