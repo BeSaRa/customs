@@ -34,6 +34,7 @@ export class CaseAttachment extends ClonerMixin(class {}) {
   description!: string;
   isApproved!: boolean;
   isExportable!: boolean;
+  isLegal!: boolean;
   attachmentTypeInfo!: AdminResult;
   // not related to the model
 

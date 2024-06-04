@@ -35,6 +35,7 @@ import { ToastService } from '@services/toast.service';
 import { ignoreErrors } from '@utils/utils';
 import { Config } from '@constants/config';
 import { FolderType } from '@enums/folder-type.enum';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-case-attachments',
@@ -57,8 +58,10 @@ export class CaseAttachmentsComponent
   view$ = new Subject<CaseAttachment>();
   reload$ = new ReplaySubject<void>(1);
   delete$ = new Subject<CaseAttachment>();
+  lang = inject(LangService);
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  employeeService = inject(EmployeeService);
   protected readonly FolderType = FolderType;
   caseId: InputSignal<
     string | string[] | undefined | undefined[] | (string | undefined)[]
@@ -78,7 +81,6 @@ export class CaseAttachmentsComponent
   @Input()
   readonly = false;
 
-  lang = inject(LangService);
   data: Subject<CaseAttachment[]> = new Subject<CaseAttachment[]>();
   dataSource: AppTableDataSource<CaseAttachment> =
     new AppTableDataSource<CaseAttachment>(this.data);
@@ -140,9 +142,11 @@ export class CaseAttachmentsComponent
                       )
                       .filter(
                         doc =>
-                          doc.isApproved === null ||
-                          doc.isApproved ||
-                          !doc.isExportable,
+                          (doc.isLegal &&
+                            (doc.isExportable ||
+                              this.employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief())) ||
+                          (!doc.isLegal && doc.isApproved === null) ||
+                          doc.isApproved,
                       );
                   }),
                 );
