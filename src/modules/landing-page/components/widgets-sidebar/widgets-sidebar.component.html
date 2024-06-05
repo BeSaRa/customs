@@ -1,0 +1,18 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
+
+<div
+  class="side-bar"
+  [ngStyle]="getSideBarStyles()"
+  [ngClass]="{
+    'side-bar-collapsed': !isOpened,
+    'side-bar-opened': isOpened
+  }">
+  <div
+    class="side-bar-menu-container bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
+    <div class="side-bar-content-container">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

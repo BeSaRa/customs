@@ -3,6 +3,7 @@ export const AppRoutes = {
   EXTERNAL_LOGIN: 'external-login',
   HOME: 'home',
   EXTERNAL_PAGES: 'external',
+  LANDING_PAGE: 'landing-page',
   ADMINISTRATION: 'administration',
   LOCALIZATION: 'localization',
   INTERNAL_USER: 'internal-user',

@@ -20,6 +20,8 @@ export class IconButtonComponent {
   @Input()
   color = '';
   @Input()
+  bgColor = 'bg-transparent';
+  @Input()
   set disabled(value: boolean | unknown) {
     this._disabled = coerceBooleanProperty(value);
   }

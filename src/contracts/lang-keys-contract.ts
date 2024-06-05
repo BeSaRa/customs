@@ -673,4 +673,5 @@ export interface LangKeysContract {
   call_requests_tab: string;
   president_assessment_decision: string;
   president_decision: string;
+  widgets_list: string;
 }

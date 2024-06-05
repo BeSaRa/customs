@@ -1,0 +1,35 @@
+.side-bar {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  bottom: 0;
+  width: 300px;
+  transition: all 0.25s;
+
+  .side-bar-menu-container {
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    .side-bar-close {
+      display: inline-block;
+      font-size: 2.5em;
+      margin: 24px 0px 0px 24px;
+      cursor: pointer;
+    }
+  }
+
+  .side-bar-content-container {
+    padding: 32px 8px;
+  }
+}
+
+.side-bar-overlay-collapsed {
+  background: transparent !important;
+}
+
+.side-bar-collapsed {
+  visibility: collapse !important;
+}
