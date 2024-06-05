@@ -273,7 +273,7 @@ export class InvestigationService
   @CastResponse(() => CaseAttachment)
   getDecisionFileAttachments(vsid: string): Observable<CaseAttachment> {
     return this.http.get<CaseAttachment>(
-      this.getUrlSegment() + `/document/latest/$${vsid}/content`,
+      this.getUrlSegment() + `/document/latest/${vsid}/content`,
     );
   }
 
