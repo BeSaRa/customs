@@ -39,6 +39,7 @@ import { InvestigationCategory } from '@enums/investigation-category';
 import { ReportStatus } from '@enums/report-status';
 import { InvestigationService } from '@services/investigation.service';
 import { EmployeeService } from '@services/employee.service';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -59,6 +60,7 @@ import { EmployeeService } from '@services/employee.service';
     DatePipe,
     JsonPipe,
     IconButtonComponent,
+    MatCheckbox,
   ],
   templateUrl: './investigation-records-table.component.html',
   styleUrl: './investigation-records-table.component.scss',
@@ -114,8 +116,9 @@ export class InvestigationRecordsTableComponent
         ? InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD
         : InvestigationCategory.DISCIPLINARY_COMMITTEE_HEARING_TRANSCRIPT;
   });
-
-  private employeeService = inject(EmployeeService);
+  changeIsExportableStatus$: Subject<InvestigationReport> =
+    new Subject<InvestigationReport>();
+  protected employeeService = inject(EmployeeService);
 
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
@@ -127,10 +130,22 @@ export class InvestigationRecordsTableComponent
     this.listenToEdit();
     this.listenToDownload();
     this.listenToUpload();
-
+    this.listenToChangeIsExportableStatus();
     this.listenToReloadInput();
   }
-
+  listenToChangeIsExportableStatus() {
+    this.changeIsExportableStatus$
+      .pipe(filter(element => !!element.documentVsId))
+      .pipe(
+        switchMap(element => {
+          return this.investigationService.updateIsExportable(
+            element.documentVsId as string,
+            !element.isExportable,
+          );
+        }),
+      )
+      .subscribe(() => this.reload$.next());
+  }
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))

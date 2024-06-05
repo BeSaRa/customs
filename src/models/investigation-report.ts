@@ -30,6 +30,7 @@ export class InvestigationReport extends BaseModel<
   creatorInfo!: AdminResult;
   location?: string;
   documentVsId?: string;
+  isExportable?: boolean;
   override status: number = 1;
 
   download(download = true): Observable<BlobModel> {

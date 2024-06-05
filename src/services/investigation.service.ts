@@ -141,7 +141,12 @@ export class InvestigationService
       },
     );
   }
-
+  updateIsExportable(vsId: string, isExportable: boolean) {
+    return this.http.put(this.getUrlSegment() + '/document/isExportable', {
+      vsId,
+      isExportable,
+    });
+  }
   getOffenceDetails(
     offenceNumber: string,
   ): Observable<{ blob: BlobModel; title: string; status: string }> {

@@ -36,6 +36,7 @@ import { ToastService } from '@services/toast.service';
 import { EmployeeService } from '@services/employee.service';
 import { MemorandumCategories } from '@enums/memorandum-categories';
 import { ProofTypes } from '@enums/proof-types';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -55,6 +56,7 @@ import { ProofTypes } from '@enums/proof-types';
     MatRowDef,
     MatTooltip,
     DatePipe,
+    MatCheckbox,
   ],
   templateUrl: './memorandum-opinion-list.component.html',
   styleUrl: './memorandum-opinion-list.component.scss',
@@ -67,6 +69,7 @@ export class MemorandumOpinionListComponent
   investigationService = inject(InvestigationService);
   employeeService = inject(EmployeeService);
   config = inject(ConfigService);
+  private toast = inject(ToastService);
   model = input.required<Investigation>();
   offendersIds = computed(() =>
     this.model()
@@ -87,7 +90,7 @@ export class MemorandumOpinionListComponent
   view$: Subject<Memorandum> = new Subject();
   approve$: Subject<Memorandum> = new Subject();
   edit$: Subject<Memorandum> = new Subject();
-  private toast = inject(ToastService);
+  changeIsExportableStatus$: Subject<Memorandum> = new Subject<Memorandum>();
   isManager = input.required<boolean>();
   masterComponent = input<MemorandumOpinionListComponent>();
   models$ = new ReplaySubject<Memorandum[]>(1);
@@ -110,8 +113,22 @@ export class MemorandumOpinionListComponent
     !this.isManager() && this.reload$.next();
 
     !this.isManager() && this.listenToModelsChange();
+    !this.isManager() && this.listenToChangeIsExportableStatus();
   }
 
+  listenToChangeIsExportableStatus() {
+    this.changeIsExportableStatus$
+      .pipe(filter(element => !!element.vsId))
+      .pipe(
+        switchMap(element => {
+          return this.investigationService.updateIsExportable(
+            element.vsId,
+            !element.isExportable,
+          );
+        }),
+      )
+      .subscribe(() => this.reload$.next());
+  }
   private listenToAdd() {
     this.add$
       .pipe(
