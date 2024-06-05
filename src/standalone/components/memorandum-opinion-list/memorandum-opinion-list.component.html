@@ -72,6 +72,16 @@
                 [matTooltip]="lang.map.approve_memo"
                 (click)="approve$.next(element)"
                 icon="APPROVE" />
+              @if (
+                !!element.vsId &&
+                employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
+              ) {
+                <mat-checkbox
+                  class="mt-1"
+                  [checked]="element.isExportable"
+                  (change)="changeIsExportableStatus$.next(element)">
+                </mat-checkbox>
+              }
             }
             <app-icon-button
               [matTooltip]="lang.map.edit_memo"

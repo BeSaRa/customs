@@ -75,6 +75,17 @@
               (click)="clickOnUploadButton(uploader, assertType(element))"
               icon="FILE_UPLOAD_OUTLINE" />
           }
+          @if (
+            assertType(element).hasDocumentVsId() &&
+            model().inMyInbox() &&
+            employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
+          ) {
+            <mat-checkbox
+              [checked]="false"
+              class="mt-1"
+              (change)="changeIsExportableStatus$.next(element)">
+            </mat-checkbox>
+          }
         </div>
       </td>
     </ng-container>

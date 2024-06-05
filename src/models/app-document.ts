@@ -22,4 +22,5 @@ export abstract class AppDocument {
   declare lockOwner: string;
   declare arName: string;
   declare enName: string;
+  declare isExportable: boolean;
 }
