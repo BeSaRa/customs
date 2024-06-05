@@ -81,13 +81,15 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    this.organizationUnitService
-      .uploadOuLogo(this.ouLogo)
-      .pipe(
-        catchError(() => of(null)),
-        filter(response => response !== null),
-      )
-      .subscribe();
+    if (this.ouLogo && this.ouLogo.content !== undefined) {
+      this.organizationUnitService
+        .uploadOuLogo(this.ouLogo)
+        .pipe(
+          catchError(() => of(null)),
+          filter(response => response !== null)
+        )
+        .subscribe();
+    }
     // you can close the dialog after save here
     this.dialogRef.close(this.model);
   }
