@@ -13,7 +13,15 @@ import {
 import { ButtonComponent } from '../button/button.component';
 import { LangService } from '@services/lang.service';
 import { SendTypes } from '@enums/send-types';
-import { exhaustMap, filter, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  exhaustMap,
+  filter,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { Investigation } from '@models/investigation';
 import { TaskResponses } from '@enums/task-responses';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
@@ -42,6 +50,7 @@ import { CaseTypes } from '@enums/case-types';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { ReferralGrievancePopupComponent } from '@standalone/popups/referral-grievance-popup/referral-grievance-popup.component';
 import { TaskNames } from '@enums/task-names';
+import { PenaltyDecision } from '@models/penalty-decision';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -62,6 +71,7 @@ export class ButtonsCaseWrapperComponent
   router = inject(Router);
   protected readonly OpenFromEnum = OpenFrom;
   toast = inject(ToastService);
+  employee = this.employeeService.getEmployee();
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
   sendTypes = SendTypes;
@@ -356,6 +366,28 @@ export class ButtonsCaseWrapperComponent
         }),
         filter(({ click }) => {
           return click === UserClick.YES;
+        }),
+        switchMap(response => {
+          if ((this.model() as Investigation).inSubmitInvestigationActivity()) {
+            return (this.model() as Investigation).penaltyDecisions.length
+              ? this.penaltyDecisionService
+                  .createBulkFull(
+                    (this.model() as Investigation).penaltyDecisions.map(
+                      item => {
+                        return item.clone<PenaltyDecision>({
+                          ...item,
+                          signerId: this.employee!.id,
+                          tkiid: this.model().getTaskId(),
+                          roleAuthName: (
+                            this.model() as Investigation
+                          ).getTeamDisplayName(),
+                        });
+                      },
+                    ),
+                  )
+                  .pipe(map(() => response))
+              : of(response);
+          } else return of(response);
         }),
         switchMap(({ response }) => {
           return (
