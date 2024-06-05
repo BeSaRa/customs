@@ -26,6 +26,13 @@ const routes: Routes = [
           import('@standalone/components/main/main.component'),
       },
       {
+        path: AppRoutes.LANDING_PAGE,
+        loadChildren: () =>
+          import('@modules/landing-page/landing-page.module').then(
+            m => m.LandingPageModule,
+          ),
+      },
+      {
         path: AppRoutes.ADMINISTRATION,
         loadChildren: () =>
           import('@modules/administration/administration.module').then(

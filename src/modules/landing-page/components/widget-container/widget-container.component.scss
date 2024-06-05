@@ -1,0 +1,36 @@
+:host {
+  @apply shadow overflow-hidden border rounded-md;
+}
+
+:host.fade-out {
+  animation: fadeOut 200ms;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    pointer-events: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+:host.draggable-animation {
+  animation: draggable 0.5s ease-in-out infinite;
+}
+
+@keyframes draggable {
+  0% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(1px);
+  }
+  80% {
+    transform: translateY(-1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

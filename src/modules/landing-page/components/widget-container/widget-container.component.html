@@ -1,0 +1,23 @@
+<div
+  [ngClass]="{
+    'bg-gray-100 border-gray-400/15': gridService.isStatic,
+    'bg-gray-200 border-gray-400/50 cursor-move': !gridService.isStatic
+  }"
+  class="relative w-full h-full pt-6 pb-2 px-2 border rounded-md overflow-hidden flex items-center justify-center">
+  @if (!gridService.isStatic) {
+    <button
+      (click)="removeSelf()"
+      class="absolute rtl:left-1 ltr:right-1 top-1 w-4 h-4 border border-gray-700/50 text-gray-700/50 rounded-full flex items-center justify-center text-xs">
+      x
+    </button>
+  }
+  @if (getWidgetComponentType()) {
+    <div
+      class="w-full h-full"
+      [ngClass]="{ 'pointer-events-none': !gridService.isStatic }">
+      <ng-container
+        [ngComponentOutlet]="getWidgetComponentType()"
+        [ngComponentOutletInjector]="injector"></ng-container>
+    </div>
+  }
+</div>

@@ -1,0 +1,68 @@
+<app-widgets-sidebar>
+  <h3 class="text-center text-3xl text-white">{{ lang.map.widgets_list }}</h3>
+  <div class="px-8 mt-6 grid grid-cols-2 items-center justify-center gap-6">
+    @for (widget of widgetService.getWidgets(); track widget) {
+      <div class="w-full h-full flex justify-center items-center">
+        <app-new-widget [widget]="widget"></app-new-widget>
+      </div>
+    }
+  </div>
+</app-widgets-sidebar>
+<div class="flex justify-between items-center">
+  @if (isStatic) {
+    <div class="flex justify-center items-center gap-2">
+      <app-select-input
+        class="min-w-60"
+        [formControl]="selectedLayout"
+        [options]="layouts"
+        marginBottom=""
+        label=""
+        bindValue="value"
+        bindLabel="label"></app-select-input>
+
+      <app-icon-button
+        class="text-primary rounded-full border border-primary"
+        icon="PLUS"></app-icon-button>
+      <app-icon-button
+        (click)="enableEdit()"
+        bgColor="!bg-primary"
+        class="text-white"
+        icon="EDIT"></app-icon-button>
+    </div>
+  } @else {
+    <div>
+      <!-- <app-icon-button
+        bgColor="!bg-secondary"
+        class="text-white"
+        icon="PLUS"></app-icon-button> -->
+      <div class="flex justify-center items-center gap-2"></div>
+    </div>
+    <div class="flex items-center justify-center gap-2">
+      <app-icon-button
+        (click)="cancel()"
+        class="text-primary rounded-full border border-primary"
+        icon="CLOSE_THICK"></app-icon-button>
+      <app-icon-button
+        (click)="save()"
+        bgColor="!bg-primary"
+        class="text-white"
+        icon="CHECK"></app-icon-button>
+    </div>
+  }
+</div>
+<div
+  class="min-h-full mt-2"
+  [ngClass]="{
+    'bg-gray-400/10 rounded-md': !gridService.isStatic
+  }">
+  <gridstack
+    #grid
+    class="min-h-full w-full"
+    [options]="gridOptions"
+    (changeCB)="change($event)"
+    (droppedCB)="drop($event)">
+    @for (widgetData of gridService.widgets(); track widgetData) {
+      <app-widget-container [widgetData]="widgetData"></app-widget-container>
+    }
+  </gridstack>
+</div>

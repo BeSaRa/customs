@@ -33,4 +33,5 @@ export const AppFullRoutes = {
   CALENDAR: '/home/electronic-services/calendar',
   MANAGER_DELEGATION: '/home/administration/manager-delegation',
   GRIEVANCE_ARCHIVE: '/home/electronic-services/archivist-grievance',
+  LANDING_PAGE: '/home/landing-page',
 };
