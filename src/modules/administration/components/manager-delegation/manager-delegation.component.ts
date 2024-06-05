@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { ManagerDelegation } from '@models/manager-delegation';
 import { ManagerDelegationService } from '@services/manager-delegation.service';
@@ -11,17 +11,32 @@ import { ConfigService } from '@services/config.service';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { InternalUserService } from '@services/internal-user.service';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
+import { Subject, switchMap, tap } from "rxjs";
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { BlobModel } from '@models/blob-model';
+import { InvestigationService } from '@services/investigation.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-manager-delegation',
   templateUrl: './manager-delegation.component.html',
   styleUrls: ['./manager-delegation.component.scss'],
 })
-export class ManagerDelegationComponent extends AdminComponent<
-  ManagerDelegationPopupComponent,
-  ManagerDelegation,
-  ManagerDelegationService
-> {
+export class ManagerDelegationComponent
+  extends AdminComponent<
+    ManagerDelegationPopupComponent,
+    ManagerDelegation,
+    ManagerDelegationService
+  >
+  implements OnInit
+{
+  override ngOnInit() {
+    super.ngOnInit();
+    this.listenToViewDecisionFile();
+  }
+  investigationService = inject(InvestigationService);
+  viewDecisionFile$ = new Subject<string>();
+  domSanitize = inject(DomSanitizer);
   config = inject(ConfigService);
   service = inject(ManagerDelegationService);
   internalUserService = inject(InternalUserService);
@@ -37,10 +52,8 @@ export class ManagerDelegationComponent extends AdminComponent<
       },
     },
   ];
-  // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<ManagerDelegation> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-
     new SelectFilterColumn(
       'delegatedId',
       this.internalUserService.loadAsLookups(),
@@ -61,4 +74,32 @@ export class ManagerDelegationComponent extends AdminComponent<
     ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  private listenToViewDecisionFile() {
+    this.viewDecisionFile$
+      .pipe(
+        switchMap(delegationVsId => {
+          return this.investigationService.getDecisionFileAttachments(
+            delegationVsId,
+          );
+        }),
+      )
+      .pipe(tap(console.log))
+      .pipe(
+        switchMap(model => {
+          return this.dialog
+            .open(ViewAttachmentPopupComponent, {
+              data: {
+                model: new BlobModel(
+                  model.content as unknown as Blob,
+                  this.domSanitize,
+                ),
+                title: model.documentTitle,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
+  }
 }
