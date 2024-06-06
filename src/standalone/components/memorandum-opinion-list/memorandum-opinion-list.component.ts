@@ -124,6 +124,7 @@ export class MemorandumOpinionListComponent
           return this.investigationService.updateIsExportable(
             element.vsId,
             !element.isExportable,
+            true,
           );
         }),
       )

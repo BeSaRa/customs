@@ -141,10 +141,15 @@ export class InvestigationService
       },
     );
   }
-  updateIsExportable(vsId: string, isExportable: boolean) {
+  updateIsExportable(
+    vsId: string,
+    isExportable: boolean,
+    isAdminReport: boolean = false,
+  ) {
     return this.http.put(this.getUrlSegment() + '/document/isExportable', {
       vsId,
       isExportable,
+      isAdminReport,
     });
   }
   getOffenceDetails(
