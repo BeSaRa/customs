@@ -73,6 +73,7 @@ export class CommentPopupComponent
     TaskResponses.REFERRAL_TO_PRESIDENT,
     TaskResponses.DC_RETURN_PA,
     TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL,
+    TaskResponses.RETURN_APP_MANAGER,
   ];
   isPreviewForm = false;
 
