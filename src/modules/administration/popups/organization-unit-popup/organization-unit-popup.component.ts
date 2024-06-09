@@ -18,7 +18,6 @@ import { OrganizationUnitType } from '@enums/organization-unit-type';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
 import { DialogService } from '@services/dialog.service';
 import { MawaredDepartment } from '@models/mawared-department';
-import { MawaredDepartmentResultPopupComponent } from '@modules/administration/popups/mawared-department-result-popup/mawared-department-result-popup.component';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -49,11 +48,13 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   managerAssistants!: InternalUser[];
 
   protected readonly AppIcons = AppIcons;
+  mawaredDepartments!: MawaredDepartment[];
 
   protected override _initPopup(): void {
     super._initPopup();
     this.getInternalUsers();
     this.getOrganizationUnits();
+    this.getMawaredDepartments();
     this.loadAssistantOus();
     this.loadManagerAssistants(this.model.id);
     this.getouLogoSafeURL();
@@ -61,6 +62,12 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    Object.keys(this.form.controls).forEach(control => {
+      if (control !== 'mawaredDepId') {
+        this.form.get(control)?.disable();
+      }
+    });
+    this.listenToMawaredDepChanges();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -86,7 +93,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
         .uploadOuLogo(this.ouLogo)
         .pipe(
           catchError(() => of(null)),
-          filter(response => response !== null)
+          filter(response => response !== null),
         )
         .subscribe();
     }
@@ -103,6 +110,12 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   protected getOrganizationUnits() {
     this.organizationUnitService.loadAsLookups().subscribe(data => {
       this.organizationUnits = data;
+    });
+  }
+
+  protected getMawaredDepartments() {
+    this.mawaredDepartmentService.loadAsLookups().subscribe(data => {
+      this.mawaredDepartments = data;
     });
   }
 
@@ -159,32 +172,21 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     return this.form.get('mawaredDepId');
   }
 
-  autoFillFields() {
-    this.mawaredDepartmentService.loadAsLookups().subscribe(departments => {
-      const res = departments.filter(dep => {
-        return dep?.departmentId
-          .toString()
-          .includes(this.mawaredDepIdCtrl?.value);
+  listenToMawaredDepChanges() {
+    this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
+      Object.keys(this.form.controls).forEach(control => {
+        if (control !== 'mawaredDepId') {
+          this.form.get(control)?.enable();
+        }
       });
-      if (!res.length) {
-        this.dialog.warning(
-          this.lang.map.no_mawared_department_with_this_department_id,
-        );
-      } else if (res.length === 1) {
-        this.setDepartment(res[0]);
-      } else {
-        this.dialog
-          .open(MawaredDepartmentResultPopupComponent, {
-            data: { mawaredDepartments: res },
-          })
-          .afterClosed()
-          .subscribe(res => {
-            if (res) {
-              this.setDepartment(res as unknown as MawaredDepartment);
-            }
-          });
-      }
+      this.autoFillFields();
     });
+  }
+  autoFillFields() {
+    const department = this.mawaredDepartments.find(
+      department => department.departmentId === this.mawaredDepIdCtrl?.value,
+    );
+    if (department) this.setDepartment(department);
   }
 
   setDepartment(department: MawaredDepartment) {
