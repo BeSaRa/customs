@@ -50,10 +50,12 @@
               {{ meeting.event.extendedProps.meetingTimeTo }}
             </p>
           </div>
-          <app-icon-button
-            [matTooltip]="lang.map.edit"
-            (click)="handleEditMeeting($event, meeting.event.extendedProps)"
-            icon="EDIT" />
+          @if (meeting.event.extendedProps.status !== meetingStatusEnum.held) {
+            <app-icon-button
+              [matTooltip]="lang.map.edit"
+              (click)="handleEditMeeting($event, meeting.event.extendedProps)"
+              icon="EDIT" />
+          }
         </li>
       </ng-template>
     </full-calendar>

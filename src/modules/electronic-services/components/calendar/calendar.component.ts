@@ -22,6 +22,7 @@ import { LookupService } from '@services/lookup.service';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CalendarFormats } from '@enums/calendar-formats';
+import { MeetingStatusEnum } from '@enums/meeting-status-enum';
 
 @Component({
   selector: 'app-calendar',
@@ -52,6 +53,8 @@ export class CalendarComponent implements OnInit {
   selectedCalendarFormat = new FormControl(CalendarFormats.MONTH, {
     nonNullable: true,
   });
+  protected readonly meetingStatusEnum = MeetingStatusEnum;
+
   @ViewChild('calendarComponent') calendar!: FullCalendarComponent;
 
   ngOnInit(): void {
