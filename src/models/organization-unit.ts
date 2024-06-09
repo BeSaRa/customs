@@ -73,7 +73,9 @@ export class OrganizationUnit extends BaseModel<
       managerId: controls ? [managerId] : managerId,
       parent: controls ? [parent] : parent,
       email: controls ? [email, CustomValidators.required] : email,
-      mawaredDepId: controls ? [mawaredDepId] : mawaredDepId,
+      mawaredDepId: controls
+        ? [mawaredDepId, CustomValidators.required]
+        : mawaredDepId,
       assistantOuId: controls
         ? [assistantOuId, CustomValidators.required]
         : assistantOuId,
