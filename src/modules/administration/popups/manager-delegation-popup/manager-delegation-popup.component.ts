@@ -62,7 +62,8 @@ export class ManagerDelegationPopupComponent
   private setupFormForCreation() {
     const delegatedId = this.data.extras?.delegatedId;
     const departmentId = this.data.extras?.departmentId;
-
+    console.log(departmentId);
+    console.log(this.departments);
     this.form.patchValue({
       delegatedId: delegatedId,
       departmentId: departmentId,

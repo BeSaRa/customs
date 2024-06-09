@@ -44,7 +44,7 @@ import { MatTooltip } from '@angular/material/tooltip';
   styleUrl: './mawared-employee-result-popup.component.scss',
 })
 export class MawaredEmployeeResultPopupComponent {
-  displayedColumns = ['arName', 'enName', 'qid', 'actions'];
+  displayedColumns = ['arName', 'enName', 'qid', 'employeeNo', 'actions'];
   data = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
   dataSource = this.data.mawaredEmployee;

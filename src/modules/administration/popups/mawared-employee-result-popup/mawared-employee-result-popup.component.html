@@ -40,6 +40,14 @@
           <td mat-cell *matCellDef="let element">{{ element.qid }}</td>
         </ng-container>
 
+        <!-- employeeNo -->
+        <ng-container matColumnDef="employeeNo">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ lang.map.employee_number }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.employeeNo }}</td>
+        </ng-container>
+
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>

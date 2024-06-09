@@ -33,6 +33,9 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   override status = StatusTypes.ACTIVE;
   managerDelegation!: ManagerDelegation;
 
+  // extra
+  mawaredEmployeeId!: number;
+  userType = 1;
   buildForm(controls = false): object {
     const {
       domainName,
@@ -44,6 +47,8 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       status,
       qid,
       permissionRoleId,
+      mawaredEmployeeId,
+      userType
     } = this;
 
     return {
@@ -96,6 +101,10 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
         : phoneNumber,
       status: controls ? [status, CustomValidators.required] : status,
       permissionRoleId: controls ? [permissionRoleId] : permissionRoleId,
+      mawaredEmployeeId: controls
+        ? [mawaredEmployeeId, CustomValidators.required]
+        : mawaredEmployeeId,
+      userType: controls ? [userType] : userType,
     };
   }
 
