@@ -34,7 +34,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   signatureSafeUrl: SafeResourceUrl | null = null;
   userSignature!: UserSignature;
   statusList!: Lookup[];
-
   protected readonly AppIcons = AppIcons;
 
   _buildForm(): void {
@@ -42,6 +41,14 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       ...this.model.buildForm(true),
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
     });
+    if (this.inCreateMode()){
+      Object.keys(this.form.controls).forEach(control => {
+        if (control !== 'empNum') {
+          this.form.get(control)?.disable();
+        }
+      });
+      this.listenToEmpNumChange();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -114,10 +121,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     return '';
   }
 
-  get empNumControl() {
-    return this.form.get('empNum');
-  }
-
   autoFillFields() {
     this.mawaredEmployeeService.loadAsLookups().subscribe(employees => {
       const res = employees.filter(emp => {
@@ -128,7 +131,8 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
           this.lang.map.no_mawared_employee_with_this_employee_number,
         );
       } else if (res.length === 1) {
-        this.setEmployee(res[0]);
+        const employee = res[0] as MawaredEmployee;
+        this.setEmployee(employee.id, employee);
       } else {
         this.dialog
           .open(MawaredEmployeeResultPopupComponent, {
@@ -137,14 +141,16 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
           .afterClosed()
           .subscribe(res => {
             if (res) {
-              this.setEmployee(res as unknown as MawaredEmployee);
+              const employee = res as MawaredEmployee;
+              this.setEmployee(employee.id, employee);
             }
           });
       }
     });
   }
 
-  setEmployee(employee: MawaredEmployee) {
+  setEmployee(mawaredEmployeeId: number, employee: MawaredEmployee) {
+    this.mawaredEmployeeId?.setValue(mawaredEmployeeId);
     const { arName, enName, qid, employeeNo, email, phoneNumber, status } =
       employee;
     this.form.patchValue({
@@ -155,6 +161,24 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       phoneNumber,
       status,
       empNum: employeeNo,
+    });
+  }
+
+  get mawaredEmployeeId() {
+    return this.form.get('mawaredEmployeeId');
+  }
+
+  get empNumControl() {
+    return this.form.get('empNum');
+  }
+
+  listenToEmpNumChange() {
+    this.empNumControl?.valueChanges.subscribe(() => {
+      Object.keys(this.form.controls).forEach(control => {
+        if (control !== 'empNum') {
+          this.form.get(control)?.enable();
+        }
+      });
     });
   }
 }

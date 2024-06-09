@@ -47,13 +47,13 @@ export class ManagerDelegationService extends BaseCrudWithDialogService<
   @CastResponse(() => InternalUser)
   loadManagers() {
     return this.http.get<InternalUser[]>(
-      this.urlService.URLS.MANAGER_DELEGATION + '/admin/manager',
+      this.getUrlSegment() + '/admin/manager',
     );
   }
 
   cancelDelegated(id: number) {
     return this.http.put<number>(
-      `${this.urlService.URLS.MANAGER_DELEGATION}/admin/${id}/cancel-delegate`,
+      `${this.getUrlSegment()}/admin/${id}/cancel-delegate`,
       { id },
     );
   }
