@@ -61,7 +61,9 @@ export class WidgetContainerComponent
 
     // wait to animating element remove
     setTimeout(() => {
-      this.gridService.removeWidget(this.widgetData().id);
+      this.gridService.removeWidget(
+        this.widgetData().id ?? this.widgetData().widgetDomId,
+      );
       this.gridService
         .activeGrid()
         ?.removeWidget(this.elementRef.nativeElement);
@@ -118,7 +120,7 @@ export class WidgetContainerComponent
           ? this.widgetData().getPosition()?.x
           : (this.widgetData().getPosition()?.x ?? 0) -
             (this.widgetData().getPosition()?.w ?? 0) +
-            1
+            6
         : isLoaded
           ? isLtr
             ? GridService.COLUMNS_COUNT -

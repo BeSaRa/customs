@@ -1,11 +1,13 @@
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
-import { WidgetTypeToComponentMap } from '@contracts/widgets-map';
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
+import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { WidgetTypes } from '@enums/widget-types';
 import { Pagination } from '@models/pagination';
 import { WidgetModel } from '@models/widget-model';
 import { CastResponseContainer } from 'cast-response';
+import { Observable, tap } from 'rxjs';
 
 @CastResponseContainer({
   $pagination: {
@@ -24,44 +26,14 @@ import { CastResponseContainer } from 'cast-response';
 export class WidgetService extends BaseCrudService<WidgetModel> {
   serviceName = 'WidgetService';
 
-  widgets = {
-    [WidgetTypes.BAR_CHART]: new WidgetModel().clone<WidgetModel>({
-      id: 1,
-      type: WidgetTypes.BAR_CHART,
-      defaultSize: {
-        w: WidgetTypeToComponentMap[WidgetTypes.BAR_CHART].initialSize.w!,
-        h: WidgetTypeToComponentMap[WidgetTypes.BAR_CHART].initialSize.h!,
-      },
-      status: 1,
-    }),
-    [WidgetTypes.PIE_CHART]: new WidgetModel().clone<WidgetModel>({
-      id: 2,
-      type: WidgetTypes.PIE_CHART,
-      defaultSize: {
-        w: WidgetTypeToComponentMap[WidgetTypes.PIE_CHART].initialSize.w!,
-        h: WidgetTypeToComponentMap[WidgetTypes.PIE_CHART].initialSize.h!,
-      },
-      status: 1,
-    }),
-    [WidgetTypes.COUNTER]: new WidgetModel().clone<WidgetModel>({
-      id: 3,
-      type: WidgetTypes.COUNTER,
-      defaultSize: {
-        w: WidgetTypeToComponentMap[WidgetTypes.COUNTER].initialSize.w!,
-        h: WidgetTypeToComponentMap[WidgetTypes.COUNTER].initialSize.h!,
-      },
-      status: 1,
-    }),
-  };
+  widgets: WidgetModel[] = [];
 
-  getWidget(type: WidgetTypes) {
-    return new WidgetModel().clone<WidgetModel>(
-      structuredClone(this.widgets[type]),
-    );
-  }
+  private _widgetsByTypeMap = {} as Record<WidgetTypes, WidgetModel>;
+  private _widgetsByIdMap = {} as Record<number, WidgetModel>;
 
-  getWidgets() {
-    return Object.values(this.widgets);
+  constructor() {
+    super();
+    this._setMaps();
   }
 
   protected getModelClass(): Constructor<WidgetModel> {
@@ -74,5 +46,52 @@ export class WidgetService extends BaseCrudService<WidgetModel> {
 
   getUrlSegment(): string {
     return this.urlService.URLS.WIDGET;
+  }
+
+  override load(
+    options?: FetchOptionsContract,
+    criteria?: Partial<WidgetModel> | undefined,
+    sortOptions?: SortOptionsContract | undefined,
+  ): Observable<Pagination<WidgetModel[]>> {
+    return super.load(options, criteria, sortOptions).pipe(
+      tap(rs => {
+        this.widgets = rs.rs;
+        this._setMaps();
+      }),
+    );
+  }
+
+  getWidgetByType(type: WidgetTypes) {
+    return new WidgetModel().clone<WidgetModel>(
+      structuredClone(this._widgetsByTypeMap[type]),
+    );
+  }
+
+  getWidgetById(id: number) {
+    return new WidgetModel().clone<WidgetModel>(
+      structuredClone(this._widgetsByIdMap[id]),
+    );
+  }
+
+  getWidgets() {
+    return this.widgets;
+  }
+
+  private _setMaps() {
+    this._widgetsByTypeMap = this.widgets.reduce(
+      (acc, cur) => {
+        acc[cur.type] = cur;
+        return acc;
+      },
+      {} as Record<WidgetTypes, WidgetModel>,
+    );
+
+    this._widgetsByIdMap = this.widgets.reduce(
+      (acc, cur) => {
+        acc[cur.id] = cur;
+        return acc;
+      },
+      {} as Record<number, WidgetModel>,
+    );
   }
 }

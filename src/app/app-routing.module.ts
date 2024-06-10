@@ -17,7 +17,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: AppRoutes.MAIN,
+        redirectTo: AppRoutes.LANDING_PAGE,
         pathMatch: 'full',
       },
       {

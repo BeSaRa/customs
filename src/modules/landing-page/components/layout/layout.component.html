@@ -14,20 +14,28 @@
       <app-select-input
         class="min-w-60"
         [formControl]="selectedLayout"
-        [options]="layouts"
+        [options]="layouts()"
         marginBottom=""
         label=""
-        bindValue="value"
-        bindLabel="label"></app-select-input>
+        bindValue="id"
+        bindLabel="getNames"></app-select-input>
 
       <app-icon-button
         class="text-primary rounded-full border border-primary"
+        (click)="openCreateLayout()"
         icon="PLUS"></app-icon-button>
-      <app-icon-button
-        (click)="enableEdit()"
-        bgColor="!bg-primary"
-        class="text-white"
-        icon="EDIT"></app-icon-button>
+      @if (layoutService.currentLayout()?.id) {
+        <app-icon-button
+          (click)="enableEdit()"
+          bgColor="!bg-primary"
+          class="text-white"
+          icon="EDIT"></app-icon-button>
+        <app-icon-button
+          (click)="deleteLayout()"
+          bgColor="!bg-secondary"
+          class="text-white"
+          icon="DELETE"></app-icon-button>
+      }
     </div>
   } @else {
     <div>
@@ -51,13 +59,13 @@
   }
 </div>
 <div
-  class="min-h-full mt-2"
+  class="my-2"
   [ngClass]="{
     'bg-gray-400/10 rounded-md': !gridService.isStatic
   }">
   <gridstack
     #grid
-    class="min-h-full w-full"
+    class="min-h-[540px] w-full"
     [options]="gridOptions"
     (changeCB)="change($event)"
     (droppedCB)="drop($event)">

@@ -1,5 +1,5 @@
 export enum WidgetTypes {
-  BAR_CHART = 'bar-chart',
-  PIE_CHART = 'pie-chart',
-  COUNTER = 'counter',
+  BAR_CHART = 'BAR_CHART',
+  PIE_CHART = 'PIE_CHART',
+  COUNTER = 'COUNTER',
 }

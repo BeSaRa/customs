@@ -3,7 +3,12 @@ import { WidgetState } from '@abstracts/widget-state';
 import { LayoutWidgetService } from '@services/layout-widget.service';
 import { GridStackPosition } from 'gridstack';
 import { WidgetModel } from './widget-model';
+import { LayoutWidgetInterceptor } from '@model-interceptors/layout-widget-interceptor';
+import { InterceptModel } from 'cast-response';
 
+const { send, receive } = new LayoutWidgetInterceptor();
+
+@InterceptModel({ send, receive })
 export class LayoutWidgetModel extends BaseModel<
   LayoutWidgetModel,
   LayoutWidgetService
@@ -16,7 +21,7 @@ export class LayoutWidgetModel extends BaseModel<
   position!: GridStackPosition;
 
   // corresponds the widget state
-  options!: WidgetState;
+  stateOptions!: WidgetState;
 
   statusDateModified!: string;
 

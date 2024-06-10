@@ -29,18 +29,18 @@ export const WidgetTypeToComponentMap: Record<
     component: BarChartWidgetComponent,
     stateOptions: BarChartWidgetState,
     initialSize: { w: 40, h: 24 },
-    iconUrl: `assets/images/widgets-icons/${WidgetTypes.BAR_CHART}.png`,
+    iconUrl: `assets/images/widgets-icons/bar-chart.png`,
   },
   [WidgetTypes.PIE_CHART]: {
     component: PieChartWidgetComponent,
     stateOptions: PieChartWidgetState,
     initialSize: { w: 24, h: 24 },
-    iconUrl: `assets/images/widgets-icons/${WidgetTypes.PIE_CHART}.png`,
+    iconUrl: `assets/images/widgets-icons/pie-chart.png`,
   },
   [WidgetTypes.COUNTER]: {
     component: CounterWidgetComponent,
     stateOptions: CounterWidgetState,
     initialSize: { w: 24, h: 12 },
-    iconUrl: `assets/images/widgets-icons/${WidgetTypes.COUNTER}.png`,
+    iconUrl: `assets/images/widgets-icons/counter.png`,
   },
 };
