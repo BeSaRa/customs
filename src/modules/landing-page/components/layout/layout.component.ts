@@ -1,3 +1,4 @@
+import { WidgetState } from '@abstracts/widget-state';
 import {
   AfterViewInit,
   Component,
@@ -6,12 +7,17 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { UserClick } from '@enums/user-click';
 import { WidgetTypes } from '@enums/widget-types';
+import { LayoutModel } from '@models/layout-model';
+import { DialogService } from '@services/dialog.service';
 import { GridService } from '@services/grid.service';
 import { LangService } from '@services/lang.service';
+import { LayoutService } from '@services/layout.service';
 import { WidgetService } from '@services/widget.service';
 import { GridStackOptions, GridStackPosition } from 'gridstack';
 import { droppedCB, GridstackComponent, nodesCB } from 'gridstack/dist/angular';
+import { filter, switchMap, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -21,9 +27,11 @@ import { droppedCB, GridstackComponent, nodesCB } from 'gridstack/dist/angular';
 export class LayoutComponent implements AfterViewInit, OnDestroy {
   @ViewChild('grid') grid!: GridstackComponent;
 
+  layoutService = inject(LayoutService);
   gridService = inject(GridService);
   widgetService = inject(WidgetService);
   lang = inject(LangService);
+  dialog = inject(DialogService);
 
   readonly WidgetTypes = WidgetTypes;
 
@@ -40,11 +48,8 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
     column: GridService.COLUMNS_COUNT,
   };
 
-  selectedLayout = new FormControl(0);
-  layouts = [
-    { value: 0, label: 'first layout' },
-    { value: 1, label: 'second layout' },
-  ];
+  selectedLayout = new FormControl(this.layoutService.currentLayout()?.id);
+  layouts = this.layoutService.layouts;
 
   change(event: nodesCB) {
     const _updates = event.nodes.reduce(
@@ -70,46 +75,92 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
       },
       {} as Record<string | number, GridStackPosition>,
     );
-    this.gridService.patchWidgetsUpdates(_updates);
-    console.log(_updates);
+    this.gridService.updateWidgets(_updates);
   }
 
   drop(event: droppedCB) {
+    const _widgetDetails = this.widgetService.getWidgetByType(
+      (
+        event.newNode.el?.attributes[
+          'widget-type' as keyof NamedNodeMap
+        ] as unknown as { nodeValue: WidgetTypes }
+      ).nodeValue,
+    );
     this.gridService.addWidget({
-      widgetDetails: this.widgetService.getWidget(
-        (
-          event.newNode.el?.attributes[
-            'widget-type' as keyof NamedNodeMap
-          ] as unknown as { nodeValue: WidgetTypes }
-        ).nodeValue,
-      ),
+      widgetDetails: _widgetDetails,
+      widgetId: _widgetDetails?.id,
+      layoutId: this.layoutService.currentLayout()?.id,
       position: { x: event.newNode.x, y: event.newNode.y },
+      stateOptions: {} as WidgetState,
     });
+
     this.grid.grid?.removeWidget(event.newNode.el!);
-    console.log(event);
   }
 
   enableEdit() {
-    this.gridService.enable();
+    this.gridService.enableEdit();
   }
 
   save() {
-    this.gridService.disable();
+    this.gridService.saveChanges();
   }
 
   cancel() {
-    this.gridService.revert();
+    this.gridService.revertChanges();
   }
 
   ngAfterViewInit(): void {
     this.gridService.setActiveGrid(this.grid.grid);
-    this.gridService.disable();
+    setTimeout(() => {
+      this.gridService.disableEdit();
+    }, 0);
     this.selectedLayout.valueChanges.subscribe(v => {
-      this.gridService.switch(v ?? 0);
+      this.layoutService.setCurrentLayout(this.layoutService.layoutsMap[v!]);
     });
   }
 
   ngOnDestroy(): void {
     this.gridService.setActiveGrid(undefined);
+  }
+
+  openCreateLayout() {
+    let _new: LayoutModel;
+    this.layoutService
+      .openCreateDialog(undefined)
+      .afterClosed()
+      .pipe(
+        filter((model): model is LayoutModel => {
+          return model instanceof LayoutModel;
+        }),
+        tap(model => (_new = model)),
+        switchMap(() => this.layoutService.load()),
+        take(1),
+      )
+      .subscribe(() => {
+        this.selectedLayout.setValue(_new.id);
+      });
+  }
+
+  deleteLayout() {
+    this.dialog
+      .confirm(
+        this.lang.map.msg_delete_x_confirm.change({
+          x: this.layoutService.currentLayout()?.getNames(),
+        }),
+      )
+      .afterClosed()
+      .pipe(
+        filter(value => value === UserClick.YES),
+        switchMap(() =>
+          this.layoutService.delete(this.layoutService.currentLayout()!.id),
+        ),
+        switchMap(() => this.layoutService.load()),
+        take(1),
+      )
+      .subscribe(() => {
+        this.selectedLayout.setValue(this.layoutService.currentLayout()?.id, {
+          emitEvent: false,
+        });
+      });
   }
 }

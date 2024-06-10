@@ -22,8 +22,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { WidgetsSidebarComponent } from './components/widgets-sidebar/widgets-sidebar.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CountUpModule } from 'ngx-countup';
+import { layoutWidgetResolver } from '@resolvers/layout-widget.resolver';
+import { LayoutPopupComponent } from './popupss/layout-popup/layout-popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
-const routes: Routes = [{ path: '', component: LandingPageComponent }];
+const routes: Routes = [
+  {
+    path: '',
+    component: LandingPageComponent,
+    resolve: { info: layoutWidgetResolver },
+  },
+];
 
 @NgModule({
   declarations: [
@@ -35,6 +44,7 @@ const routes: Routes = [{ path: '', component: LandingPageComponent }];
     WidgetContainerComponent,
     LayoutComponent,
     WidgetsSidebarComponent,
+    LayoutPopupComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +58,7 @@ const routes: Routes = [{ path: '', component: LandingPageComponent }];
     ReactiveFormsModule,
     MatTooltipModule,
     CountUpModule,
+    MatDialogModule,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
 })

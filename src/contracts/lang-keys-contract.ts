@@ -674,4 +674,8 @@ export interface LangKeysContract {
   president_assessment_decision: string;
   president_decision: string;
   widgets_list: string;
+  new_page: string;
+  edit_page: string;
+  new_dashboard: string;
+  edit_dashboard: string;
 }

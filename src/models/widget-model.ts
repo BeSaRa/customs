@@ -19,10 +19,10 @@ export class WidgetModel extends BaseModel<WidgetModel, WidgetService> {
   getDefaultSize() {
     return {
       w:
-        this.defaultSize?.w ??
+        this.defaultSize?.w ||
         WidgetTypeToComponentMap[this.type].initialSize.w,
       h:
-        this.defaultSize?.h ??
+        this.defaultSize?.h ||
         WidgetTypeToComponentMap[this.type].initialSize.h,
     };
   }
