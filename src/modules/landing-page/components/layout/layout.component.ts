@@ -79,6 +79,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
   }
 
   drop(event: droppedCB) {
+    const isLtr = this.lang.getCurrent().direction === 'ltr';
     const _widgetDetails = this.widgetService.getWidgetByType(
       (
         event.newNode.el?.attributes[
@@ -90,7 +91,14 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
       widgetDetails: _widgetDetails,
       widgetId: _widgetDetails?.id,
       layoutId: this.layoutService.currentLayout()?.id,
-      position: { x: event.newNode.x, y: event.newNode.y },
+      position: {
+        x: isLtr
+          ? GridService.COLUMNS_COUNT -
+            (event.newNode.x ?? 0) -
+            (_widgetDetails.defaultSize.w ?? 0)
+          : (event.newNode?.x ?? 0) - (_widgetDetails.defaultSize.w ?? 0) + 6,
+        y: event.newNode.y,
+      },
       stateOptions: {} as WidgetState,
     });
 
