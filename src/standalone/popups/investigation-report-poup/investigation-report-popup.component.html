@@ -28,7 +28,11 @@
     <ul
       #questionsList
       class="flex flex-col gap-2 rounded-lg border min-h-[300px] max-h-[300px] overflow-y-auto p-2">
-      @for (question of model.detailsList; track question.id) {
+      @for (
+        question of model.detailsList;
+        let index = $index;
+        track question.id
+      ) {
         <li @addRemoveQuestion class="bg-gray-100 p-2 rounded-lg divide-y-2">
           <div class="p-2">
             <b>{{ lang.map.question }}</b> : {{ question.question }}
@@ -36,7 +40,11 @@
           <div class="p-2 relative">
             <b>{{ lang.map.answer }}</b> : {{ question.answer }}
             @if (!inViewMode()) {
-              <div class="absolute -top-7 end-2">
+              <div
+                class="absolute -top-7 end-2 flex items-center justify-center gap-2">
+                <app-icon-button
+                  (click)="editQuestion$.next({ index, question })"
+                  icon="EDIT" />
                 <app-icon-button
                   (click)="deleteQuestion$.next(question)"
                   icon="DELETE" />
@@ -84,7 +92,11 @@
             matTooltipPosition="above"
             [matTooltip]="lang.map.save"
             (click)="saveQuestion$.next()"
-            icon="CONTENT_SAVE_OUTLINE" />
+            [icon]="
+              editedQuestion()
+                ? 'CONTENT_SAVE_EDIT_OUTLINE'
+                : 'CONTENT_SAVE_OUTLINE'
+            " />
           <app-icon-button
             matTooltipPosition="above"
             [matTooltip]="lang.map.reset"
