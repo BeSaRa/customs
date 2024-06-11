@@ -82,10 +82,7 @@ export class WidgetContainerComponent
       .activeGrid()
       ?.makeWidget(this.elementRef.nativeElement, {
         ...this.widgetData().getPosition(),
-        ...this._getPosition(
-          !this.widgetData().status,
-          !!this.widgetData().status,
-        ),
+        ...this._getPosition(),
       })?.gridstackNode;
     this.isCurrentComponentWidget = !!this.widgetGridStackNode;
   }
@@ -104,32 +101,25 @@ export class WidgetContainerComponent
     this.lang.change$.pipe(takeUntil(this.destroy$)).subscribe(_lang => {
       this.gridService
         .activeGrid()
-        ?.engine.moveNode(this.widgetGridStackNode!, this._getPosition());
+        ?.engine.moveNode(this.widgetGridStackNode!, this._getPosition(true));
     });
   }
 
-  private _getPosition(isDropped?: boolean, isLoaded?: boolean) {
+  private _getPosition(isLangChanged?: boolean) {
     const isLtr = this.lang.getCurrent().direction === 'ltr';
     return {
-      y:
-        isDropped || isLoaded
-          ? this.widgetData().getPosition()?.y
-          : this.widgetGridStackNode?.y,
-      x: isDropped
+      y: !isLangChanged
+        ? this.widgetData().getPosition()?.y
+        : this.widgetGridStackNode?.y,
+      x: !isLangChanged
         ? isLtr
-          ? this.widgetData().getPosition()?.x
-          : (this.widgetData().getPosition()?.x ?? 0) -
-            (this.widgetData().getPosition()?.w ?? 0) +
-            6
-        : isLoaded
-          ? isLtr
-            ? GridService.COLUMNS_COUNT -
-              (this.widgetData().getPosition().x ?? 0) -
-              (this.widgetData().getPosition().w ?? 0)
-            : this.widgetData().getPosition().x
-          : GridService.COLUMNS_COUNT -
-            (this.widgetGridStackNode?.x ?? 0) -
-            (this.widgetGridStackNode?.w ?? 0),
+          ? GridService.COLUMNS_COUNT -
+            (this.widgetData().getPosition().x ?? 0) -
+            (this.widgetData().getPosition().w ?? 0)
+          : this.widgetData().getPosition()?.x
+        : GridService.COLUMNS_COUNT -
+          (this.widgetGridStackNode?.x ?? 0) -
+          (this.widgetGridStackNode?.w ?? 0),
     };
   }
 }
