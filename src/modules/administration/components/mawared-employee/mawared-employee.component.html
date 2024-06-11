@@ -55,6 +55,16 @@
     </ng-container>
 
     <!-- employeeQId Column -->
+    <ng-container matColumnDef="jobTitleCode">
+      <th mat-header-cell mat-sort-header="jobTitleCode" *matHeaderCellDef>
+        {{ lang.map.employee_number }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.jobTitleCode }}
+      </td>
+    </ng-container>
+
+    <!-- jobTitleCode Column -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>
         {{ lang.map.qid }}

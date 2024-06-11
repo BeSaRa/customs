@@ -76,6 +76,7 @@ export class MawaredEmployeeComponent
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new TextFilterColumn('qid'),
+    new TextFilterColumn('jobTitleCode'),
     new SelectFilterColumn(
       'isPrivateUser',
       this.userPrivacy,
