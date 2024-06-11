@@ -1,13 +1,5 @@
 import { BaseCrudService } from '@abstracts/base-crud-service';
-import {
-  computed,
-  effect,
-  inject,
-  Injectable,
-  Injector,
-  runInInjectionContext,
-  signal,
-} from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { LayoutWidgetModel } from '@models/layout-widget-model';
 import { Pagination } from '@models/pagination';
@@ -34,17 +26,27 @@ export class LayoutWidgetService extends BaseCrudService<LayoutWidgetModel> {
   serviceName = 'LayoutWidgetService';
 
   layoutService = inject(LayoutService);
-  injector = inject(Injector);
 
   layoutWidgets: LayoutWidgetModel[] = [];
   private _layoutWidgetsMap: Record<string | number, LayoutWidgetModel> = {};
   private _layoutWidgetsMapSignal = signal(this._layoutWidgetsMap);
   layoutWidgetsMap = computed(this._layoutWidgetsMapSignal);
 
-  constructor() {
-    super();
-    this.listenToLayoutChange();
-  }
+  private _layoutWidgetEffect = effect(
+    () => {
+      (this.layoutService.currentLayout()?.id
+        ? this.load(
+            undefined,
+            { layoutId: this.layoutService.currentLayout()?.id },
+            undefined,
+          )
+        : of({ count: 0, rs: [] })
+      )
+        .pipe(take(1))
+        .subscribe(res => this.setLayoutWidgets(res.rs));
+    },
+    { allowSignalWrites: true },
+  );
 
   protected getModelClass(): Constructor<LayoutWidgetModel> {
     return LayoutWidgetModel;
@@ -56,26 +58,6 @@ export class LayoutWidgetService extends BaseCrudService<LayoutWidgetModel> {
 
   getUrlSegment(): string {
     return this.urlService.URLS.LAYOUT_WIDGET;
-  }
-
-  listenToLayoutChange() {
-    runInInjectionContext(this.injector, () =>
-      effect(
-        () => {
-          (this.layoutService.currentLayout()?.id
-            ? this.load(
-                undefined,
-                { layoutId: this.layoutService.currentLayout()?.id },
-                undefined,
-              )
-            : of({ count: 0, rs: [] })
-          )
-            .pipe(take(1))
-            .subscribe(res => this.setLayoutWidgets(res.rs));
-        },
-        { allowSignalWrites: true },
-      ),
-    );
   }
 
   patchLayoutWidgetsUpdate(layoutWidgets: LayoutWidgetModel[]) {

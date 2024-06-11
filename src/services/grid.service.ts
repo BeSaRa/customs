@@ -4,7 +4,6 @@ import {
   inject,
   Injectable,
   Injector,
-  runInInjectionContext,
   signal,
 } from '@angular/core';
 import { LayoutWidgetModel } from '@models/layout-widget-model';
@@ -38,22 +37,14 @@ export class GridService {
     return this._isStatic;
   }
 
-  constructor() {
-    this.listenToLayoutWidgetsChange();
-  }
-
-  listenToLayoutWidgetsChange() {
-    runInInjectionContext(this._injector, () =>
-      effect(
-        () => {
-          this._activeGrid()?.removeAll(false, true);
-          this._widgetsMap = this.layoutWidgetService.layoutWidgetsMap();
-          this._setWidgetsSignal();
-        },
-        { allowSignalWrites: true },
-      ),
-    );
-  }
+  private _layoutWidgetsChangeEffect = effect(
+    () => {
+      this._activeGrid()?.removeAll(false, true);
+      this._widgetsMap = this.layoutWidgetService.layoutWidgetsMap();
+      this._setWidgetsSignal();
+    },
+    { allowSignalWrites: true },
+  );
 
   setActiveGrid(grid: GridStack | undefined) {
     this._activeGrid.set(grid);
