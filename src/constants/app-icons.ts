@@ -101,6 +101,7 @@ export const AppIcons = {
   SHRINK: 'arrow-collapse-all',
   CHECK: 'check-bold',
   CLOSE_THICK: 'close-thick',
+  CONTENT_SAVE_EDIT_OUTLINE: 'content-save-edit-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

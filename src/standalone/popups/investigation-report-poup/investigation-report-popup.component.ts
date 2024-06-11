@@ -1,3 +1,6 @@
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -8,38 +11,35 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { InvestigationReport } from '@models/investigation-report';
 import {
   FormControl,
   ReactiveFormsModule,
   UntypedFormGroup,
 } from '@angular/forms';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { Observable, of, Subject, tap } from 'rxjs';
-import { Offender } from '@models/offender';
-import { Witness } from '@models/witness';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { DatePipe } from '@angular/common';
-import { ConfigService } from '@services/config.service';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { Question } from '@models/question';
-import { CustomValidators } from '@validators/custom-validators';
-import { animate, style, transition, trigger } from '@angular/animations';
-import { DialogService } from '@services/dialog.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { InvestigationCategory } from '@enums/investigation-category';
-import { SummonType } from '@enums/summon-type';
-import { OperationType } from '@enums/operation-type';
+import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
 import { AppIcons } from '@constants/app-icons';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { InvestigationCategory } from '@enums/investigation-category';
+import { OperationType } from '@enums/operation-type';
+import { SummonType } from '@enums/summon-type';
 import { UserClick } from '@enums/user-click';
-import { InvestigationReportService } from '@services/investigation-report.service';
 import { Investigation } from '@models/investigation';
+import { InvestigationReport } from '@models/investigation-report';
+import { Offender } from '@models/offender';
+import { Question } from '@models/question';
+import { Witness } from '@models/witness';
+import { ConfigService } from '@services/config.service';
+import { DialogService } from '@services/dialog.service';
+import { InvestigationReportService } from '@services/investigation-report.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { CustomValidators } from '@validators/custom-validators';
+import { Observable, of, Subject, tap } from 'rxjs';
+import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -120,6 +120,11 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   });
   currentLanguage = signal(this.lang.getCurrent());
   saveQuestion$: Subject<void> = new Subject<void>();
+  editQuestion$ = new Subject<{ index: number; question: Question }>();
+
+  editedQuestion = signal<undefined | { index: number; question: Question }>(
+    undefined,
+  );
 
   personNameEffect = effect(() => {
     this.currentLanguage();
@@ -168,6 +173,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       : this.locationCtrl.enable();
     this.locationCtrl.patchValue(this.model.location!);
     this.listenToSaveQuestion();
+    this.listenToEditQuestion();
     this.listenToDeleteQuestion();
     this.listenToSavePDF();
     this.listenToUploadPDF();
@@ -233,17 +239,59 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       .pipe(filter(value => value))
       .pipe(map(() => this.prepareQuestionModel()))
       .subscribe(question => {
-        this.model.detailsList = [...this.model.detailsList, question];
+        this.model.detailsList = this.editedQuestion()
+          ? this._insertAtIndex(
+              this.model.detailsList,
+              question,
+              this.editedQuestion()!.index,
+            )
+          : [...this.model.detailsList, question];
         this.questionForm.reset();
-        setTimeout(() => {
-          const element = this.questionsList()?.nativeElement;
-          element &&
-            element.scrollTo({
-              top: element?.scrollHeight,
-              behavior: 'smooth',
-            });
-        }, 200);
+
+        !this.editedQuestion() &&
+          setTimeout(() => {
+            const element = this.questionsList()?.nativeElement;
+            element &&
+              element.scrollTo({
+                top: element?.scrollHeight,
+                behavior: 'smooth',
+              });
+          }, 200);
+        this.editedQuestion.set(undefined);
       });
+  }
+
+  private listenToEditQuestion() {
+    this.editQuestion$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ question, index }) => {
+        let _insertionIndex = index;
+        if (this.editedQuestion()) {
+          this.model.detailsList = this._insertAtIndex(
+            this.model.detailsList,
+            this.editedQuestion()!.question,
+            this.editedQuestion()!.index,
+          );
+          index >= this.editedQuestion()!.index && (_insertionIndex += 1);
+        }
+        this.model.detailsList = this._removeAtIndex(
+          this.model.detailsList,
+          _insertionIndex,
+        );
+        this.editedQuestion.set({ question, index: _insertionIndex });
+        this.questionForm.setValue({
+          question: question.question,
+          answer: question.answer,
+        });
+      });
+  }
+
+  private _insertAtIndex(list: Question[], item: Question, index: number) {
+    return [...list.slice(0, index), item, ...list.slice(index, list.length)];
+  }
+
+  private _removeAtIndex(list: Question[], index: number) {
+    return [...list.slice(0, index), ...list.slice(index + 1, list.length)];
   }
 
   clearForm() {
