@@ -52,6 +52,7 @@ export const AppPermissions = {
   ADD_MEMO_OPINION: 'ADD_MEMO_OPINION',
   SEARCH_FOR_DRAFTS: 'SEARCH_FOR_DRAFTS',
   EDIT_ATTACHMENTS: 'EDIT_ATTACHMENTS',
+  OFFLINE_PAYMENT: 'OFFLINE_PAYMENT',
 
   // run time permissions don't remove
   DATA_ENTRY: 'DATA_ENTRY',

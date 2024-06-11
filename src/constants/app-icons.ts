@@ -99,6 +99,7 @@ export const AppIcons = {
   COMMENT: 'comment-text-multiple-outline',
   EXPAND: 'arrow-expand-all',
   SHRINK: 'arrow-collapse-all',
+  CASH: 'cash',
 };
 
 export type AppIconsType = typeof AppIcons;

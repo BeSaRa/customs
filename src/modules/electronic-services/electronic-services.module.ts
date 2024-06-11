@@ -46,6 +46,7 @@ import { LegalAffairsProceduresComponent } from '@standalone/components/legal-af
 import { DisciplinaryCommitteeComponent } from '@standalone/components/disciplinary-committee/disciplinary-committee.component';
 import { ReviewMinutesComponent } from '@standalone/components/review-minutes/review-minutes.component';
 import { CallRequestsComponent } from '@standalone/components/call-requests/call-requests.component';
+import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { CallRequestsComponent } from '@standalone/components/call-requests/call
     InvestigationSearchComponent,
     SituationSearchComponent,
     InvestigationDraftsComponent,
+    FinesComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,221 @@
+<div
+  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+    {{ lang.map.menu_fines }}
+  </h1>
+</div>
+<div class="relative">
+  <mat-card>
+    <mat-tab-group
+      [(selectedIndex)]="selectedTab"
+      [mat-stretch-tabs]="false"
+      [dynamicHeight]="true">
+      <mat-tab [label]="lang.map.search_for_fines">
+        <ng-container [ngTemplateOutlet]="search_for_payment"></ng-container>
+      </mat-tab>
+      <mat-tab
+        [label]="
+          lang.map.search_result + ' (' + this.lang.map.menu_fines + ')'
+        ">
+        <ng-container [ngTemplateOutlet]="search_result"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+  <ng-template #search_for_payment>
+    <div class="p-4 overflow-auto" style="height: 100%">
+      <form [formGroup]="form">
+        <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+          <app-input
+            formControlName="investigationFileNumber"
+            [label]="lang.map.investigation_file_number" />
+          <app-input
+            formControlName="penaltyFrom"
+            [label]="lang.map.penalty_from">
+            <input
+              appControl
+              formControlName="penaltyFrom"
+              (click)="datepickerFrom.open()"
+              [matDatepicker]="datepickerFrom" />
+            <mat-datepicker [touchUi]="true" #datepickerFrom />
+          </app-input>
+          <app-input formControlName="penaltyTo" [label]="lang.map.penalty_to">
+            <input
+              appControl
+              formControlName="penaltyTo"
+              (click)="datepickerTo.open()"
+              [matDatepicker]="datepickerTo" />
+            <mat-datepicker [touchUi]="true" #datepickerTo />
+          </app-input>
+          <app-input
+            formControlName="penaltyDecisionNumber"
+            [label]="lang.map.penalty_decision_number" />
+          <app-input
+            formControlName="agencyNumber"
+            [label]="lang.map.clearing_agency_number" />
+          <app-input
+            formControlName="agencyName"
+            [label]="lang.map.clearing_agency_name" />
+          <app-input
+            formControlName="commercialRegistryNumber"
+            [label]="lang.map.commercial_registry_number" />
+          <app-input
+            formControlName="establishmentRegistry"
+            [label]="lang.map.establishment_registry" />
+          <app-input
+            formControlName="agentName"
+            [label]="lang.map.clearing_agent_name" />
+          <app-input formControlName="getqId" [label]="lang.map.qid" />
+        </div>
+        <div
+          class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
+          <app-button (click)="search$.next()" buttonType="primary">
+            {{ lang.map.search }}
+          </app-button>
+          <app-button (click)="resetForm()" buttonType="primary"
+            >{{ lang.map.reset }}
+          </app-button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #search_result>
+    <div class="p-4 overflow-auto" style="height: 100%">
+      <div class="shadow relative" style="max-height: 62vh">
+        <table
+          mat-table
+          matSort
+          class="table-style"
+          [dataSource]="displayedList">
+          <!-- qid -->
+          <ng-container matColumnDef="qId">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.qid }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.qId }}
+            </td>
+          </ng-container>
+
+          <!-- agentName -->
+          <ng-container matColumnDef="agentName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agent_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agentName }}
+            </td>
+          </ng-container>
+
+          <!-- agencyName -->
+          <ng-container matColumnDef="agencyName">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agency_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agencyName }}
+            </td>
+          </ng-container>
+
+          <!-- agencyNumber -->
+          <ng-container matColumnDef="agencyNumber">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.clearing_agency_number }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.agencyNumber }}
+            </td>
+          </ng-container>
+
+          <!-- investigationFileNumber -->
+          <ng-container matColumnDef="investigationFileNumber">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.investigation_file_number }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.investigationFileNumber }}
+            </td>
+          </ng-container>
+
+          <!-- penaltyDecisionNumber -->
+          <ng-container matColumnDef="penaltyDecisionNumber">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.penalty_decision_number }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.penaltyDecisionNumber }}
+            </td>
+          </ng-container>
+
+          <!-- penaltyDecisionDate -->
+          <ng-container matColumnDef="penaltyDecisionDate">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.decision_date }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.penaltyDecisionDate }}
+            </td>
+          </ng-container>
+
+          <!-- penaltyAmount -->
+          <ng-container matColumnDef="penaltyAmount">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.penalty_amount }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.penaltyAmount }}
+            </td>
+          </ng-container>
+
+          <!-- status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.status }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{
+                !element.paymentDocId
+                  ? this.lang.map.not_paid
+                  : this.lang.map.paid
+              }}
+            </td>
+          </ng-container>
+
+          <!-- actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex">
+                @if (!!element.paymentDocId) {
+                  <app-icon-button
+                    [matTooltip]="lang.map.view"
+                    (click)="view$.next(element)"
+                    icon="VIEW"></app-icon-button>
+                } @else {
+                  <app-icon-button
+                    [matTooltip]="lang.map.pay"
+                    (click)="pay$.next(element)"
+                    icon="CASH"></app-icon-button>
+                }
+              </div>
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let element;
+              columns: columnsWrapper.displayedColumns
+            "></tr>
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -54,6 +54,7 @@ export const EndPoints = {
   MEETING: '/entity/meeting',
   GRIEVANCE: '/grievance-case',
   MANAGER_DELEGATION: '/entity/manager-delegation',
+  OFFLINE_PAYMENT: '/internal/offline/payment',
 };
 
 export type EndpointsType = typeof EndPoints;
