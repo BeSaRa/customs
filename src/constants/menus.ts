@@ -240,4 +240,12 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
     permission: 'GRIEVANCE_ARCHIVE',
   },
+  {
+    id: MenuIdes.FINES,
+    langKey: 'menu_fines',
+    icon: AppIcons.HAND_COIN,
+    path: AppFullRoutes.FINES,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'OFFLINE_PAYMENT',
+  },
 ];

@@ -678,4 +678,15 @@ export interface LangKeysContract {
   edit_page: string;
   new_dashboard: string;
   edit_dashboard: string;
+  menu_fines: string;
+  commercial_registry_number: string;
+  establishment_registry: string;
+  penalty_decision_number: string;
+  penalty_from: string;
+  penalty_to: string;
+  search_for_fines: string;
+  penalty_amount: string;
+  not_paid: string;
+  paid: string;
+  transaction_number: string;
 }

@@ -102,6 +102,7 @@ export const AppIcons = {
   CHECK: 'check-bold',
   CLOSE_THICK: 'close-thick',
   CONTENT_SAVE_EDIT_OUTLINE: 'content-save-edit-outline',
+  CASH: 'cash',
 };
 
 export type AppIconsType = typeof AppIcons;
