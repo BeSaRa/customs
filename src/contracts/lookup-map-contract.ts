@@ -34,6 +34,7 @@ export interface LookupMapContract {
   offenderLevel: Lookup[];
   penaltyGuidance: Lookup[];
   offenderType: Lookup[];
+  offenderTypeWithNone: Lookup[];
   managerDecisionControl: Lookup[];
   violationLevel: Lookup[];
   criminalType: Lookup[];

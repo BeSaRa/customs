@@ -689,4 +689,8 @@ export interface LangKeysContract {
   not_paid: string;
   paid: string;
   transaction_number: string;
+  created_to: string;
+  created_from: string;
+  mawared_empl_id: string;
+  clearing_agent_id: string;
 }

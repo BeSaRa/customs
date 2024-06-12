@@ -141,6 +141,7 @@ export class InvestigationService
       },
     );
   }
+
   updateIsExportable(
     vsId: string,
     isExportable: boolean,
@@ -152,6 +153,7 @@ export class InvestigationService
       isAdminReport,
     });
   }
+
   getOffenceDetails(
     offenceNumber: string,
   ): Observable<{ blob: BlobModel; title: string; status: string }> {

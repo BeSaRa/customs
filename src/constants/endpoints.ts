@@ -58,6 +58,7 @@ export const EndPoints = {
   LAYOUT: '/entity/layout',
   LAYOUT_WIDGET: '/entity/layout-widget',
   OFFLINE_PAYMENT: '/internal/offline/payment',
+  CASE_ENTITY_VIEW: '/entity/case-entity-view/search/criteria',
 };
 
 export type EndpointsType = typeof EndPoints;

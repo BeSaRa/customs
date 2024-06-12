@@ -28,6 +28,15 @@ import { OpenFrom } from '@enums/open-from';
 import { LookupService } from '@services/lookup.service';
 import { DialogService } from '@services/dialog.service';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
+import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { Penalty } from '@models/penalty';
+import { PenaltyService } from '@services/penalty.service';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { MawaredEmployeeService } from '@services/mawared-employee.service';
+import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgentService } from '@services/clearing-agent.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -45,10 +54,21 @@ export class InvestigationSearchComponent implements OnInit {
   fb = inject(UntypedFormBuilder);
 
   securityLevels = this.lookupService.lookups.securityLevel;
+  departments!: OrganizationUnit[];
+  offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
+  caseStatus = this.lookupService.lookups.commonCaseStatus;
+  penalties!: Penalty[];
+  mawaredEmployees!: MawaredEmployee[];
+  clearingAgents!: ClearingAgent[];
+  penaltyService = inject(PenaltyService);
+  mawaredEmployeeService = inject(MawaredEmployeeService);
+  clearingAgentService = inject(ClearingAgentService);
+  departmentService = inject(OrganizationUnitService);
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Investigation>();
   selectedTab = 0;
+  today = new Date();
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -58,7 +78,13 @@ export class InvestigationSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group(new Investigation().buildForm());
+    this.loadDepartments();
+    this.loadPenalties();
+    this.loadMawaredEmployees();
+    this.loadClearingAgents();
+    this.form = this.fb.group(
+      new InvestigationSearchCriteria().buildForm(true),
+    );
     this.listenToSearch();
     if (history.state.returnedFromInvestigation) {
       this.form.patchValue(history.state);
@@ -143,5 +169,31 @@ export class InvestigationSearchComponent implements OnInit {
     this.dialog.open(ActionsOnCaseComponent, {
       data: { caseId: item.id },
     });
+  }
+
+  loadDepartments() {
+    this.departmentService
+      .loadAsLookups()
+      .subscribe(departments => (this.departments = departments));
+  }
+
+  loadPenalties() {
+    this.penaltyService
+      .loadAsLookups()
+      .subscribe(penalties => (this.penalties = penalties));
+  }
+
+  loadMawaredEmployees() {
+    this.mawaredEmployeeService
+      .loadAsLookups()
+      .subscribe(
+        mawaredEmployees => (this.mawaredEmployees = mawaredEmployees),
+      );
+  }
+
+  loadClearingAgents() {
+    this.clearingAgentService
+      .loadAsLookups()
+      .subscribe(clearingAgents => (this.clearingAgents = clearingAgents));
   }
 }
