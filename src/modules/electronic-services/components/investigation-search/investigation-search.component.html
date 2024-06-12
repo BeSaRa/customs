@@ -27,27 +27,95 @@
       <form [formGroup]="form">
         <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
           <app-input
-            formControlName="draftFullSerial"
-            [label]="lang.map.report_draft_number" />
-          <app-input
-            formControlName="investigationFullSerial"
-            [label]="lang.map.investigation_file_number" />
-          <app-input
-            formControlName="createdOn"
-            [label]="lang.map.report_entry_date">
+            formControlName="createdFrom"
+            [label]="lang.map.created_from">
             <input
               appControl
-              formControlName="createdOn"
-              (click)="datepicker.open()"
-              [matDatepicker]="datepicker" />
-            <mat-datepicker [touchUi]="true" #datepicker />
+              formControlName="createdFrom"
+              (click)="createdFrom.open()"
+              [matDatepicker]="createdFrom"
+              [max]="today" />
+            <mat-datepicker [touchUi]="true" #createdFrom />
           </app-input>
+
+          <app-input formControlName="createdTo" [label]="lang.map.created_to">
+            <input
+              appControl
+              formControlName="createdTo"
+              (click)="createdTo.open()"
+              [matDatepicker]="createdTo"
+              [max]="today" />
+            <mat-datepicker [touchUi]="true" #createdTo />
+          </app-input>
+
+          <app-input
+            formControlName="draftNumber"
+            [label]="lang.map.report_draft_number" />
+
           <app-select-input
             formControlName="securityLevel"
             [label]="lang.map.level_of_secrecy"
             bindValue="lookupKey"
             bindLabel="getNames"
             [options]="securityLevels" />
+
+          <app-input
+            formControlName="decisionNumber"
+            [label]="lang.map.decision_number" />
+
+          <app-select-input
+            formControlName="departmentId"
+            [label]="lang.map.department"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="departments" />
+
+          <app-select-input
+            formControlName="offenderType"
+            [label]="lang.map.offender_type"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="offenderTypes" />
+
+          <app-select-input
+            formControlName="caseStatus"
+            [label]="lang.map.status"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="caseStatus" />
+
+          <app-select-input
+            formControlName="violationTypeId"
+            [label]="lang.map.violation_type"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="caseStatus"
+            [enableFilter]="true" />
+
+          <app-select-input
+            formControlName="penaltyId"
+            [label]="lang.map.penalty"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="penalties"
+            [enableFilter]="true" />
+
+          <app-select-input
+            formControlName="mawaredEmployeeId"
+            [label]="lang.map.mawared_empl_id"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="mawaredEmployees"
+            [enableFilter]="true" />
+
+          <app-select-input
+            formControlName="clearingAgentId"
+            [label]="lang.map.clearing_agent_id"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="clearingAgents"
+            [enableFilter]="true" />
+
           <app-textarea
             formControlName="description"
             class="col-span-1 md:col-span-2 lg:col-span-4"

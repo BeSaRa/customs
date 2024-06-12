@@ -4,6 +4,7 @@ import { Investigation } from '@models/investigation';
 import { Observable } from 'rxjs';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Pagination } from '@models/pagination';
+import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
 
 @CastResponseContainer({
   $pagination: {
@@ -22,11 +23,17 @@ import { Pagination } from '@models/pagination';
 export class InvestigationSearchService extends InvestigationService {
   override serviceName: string = 'InvestigationSearchService';
 
-  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$default' })
-  search(criteria: Partial<Investigation>): Observable<Investigation[]> {
-    return this.http.post<Investigation[]>(
-      this.getUrlSegment() + '/search',
-      criteria,
-    );
+  override getUrlSegment(): string {
+    return this.urlService.URLS.CASE_ENTITY_VIEW;
+  }
+
+  @CastResponse(() => InvestigationSearchCriteria, {
+    unwrap: 'rs',
+    fallback: '$default',
+  })
+  search(
+    criteria: Partial<InvestigationSearchCriteria>,
+  ): Observable<Investigation[]> {
+    return this.http.post<Investigation[]>(this.getUrlSegment(), criteria);
   }
 }
