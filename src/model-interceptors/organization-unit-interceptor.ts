@@ -31,7 +31,9 @@ export class OrganizationUnitInterceptor
     model.assistantInfo &&
       (model.assistantInfo = AdminResult.createInstance(model.assistantInfo));
     model.managerAssistantInfo &&
-      (model.managerAssistantInfo = AdminResult.createInstance(model.managerAssistantInfo));
+      (model.managerAssistantInfo = AdminResult.createInstance(
+        model.managerAssistantInfo,
+      ));
     model.isCustoms = model.isCustoms !== null;
     return model;
   }

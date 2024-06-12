@@ -10,8 +10,8 @@ import { Penalty } from '@models/penalty';
 import { PenaltyService } from '@services/penalty.service';
 import { InternalUser } from '@models/internal-user';
 import { InternalUserService } from '@services/internal-user.service';
-import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { MawaredDepartment } from '@models/mawared-department';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { OrganizationUnit } from '@models/organization-unit';
 
 @Component({
   selector: 'app-manager-delegation-popup',
@@ -30,8 +30,8 @@ export class ManagerDelegationPopupComponent
   internalUsers!: InternalUser[];
   internalUsersService = inject(InternalUserService);
 
-  departments!: MawaredDepartment[];
-  departmentService = inject(MawaredDepartmentService);
+  departments!: OrganizationUnit[];
+  departmentService = inject(OrganizationUnitService);
   today = new Date();
 
   _buildForm(): void {
@@ -62,8 +62,6 @@ export class ManagerDelegationPopupComponent
   private setupFormForCreation() {
     const delegatedId = this.data.extras?.delegatedId;
     const departmentId = this.data.extras?.departmentId;
-    console.log(departmentId);
-    console.log(this.departments);
     this.form.patchValue({
       delegatedId: delegatedId,
       departmentId: departmentId,
