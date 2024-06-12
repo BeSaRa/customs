@@ -57,6 +57,7 @@ export const EndPoints = {
   WIDGET: '/entity/widget',
   LAYOUT: '/entity/layout',
   LAYOUT_WIDGET: '/entity/layout-widget',
+  OFFLINE_PAYMENT: '/internal/offline/payment',
 };
 
 export type EndpointsType = typeof EndPoints;

@@ -38,4 +38,5 @@ export const AppRoutes = {
   CALENDAR: 'calendar',
   MANAGER_DELEGATION: 'manager-delegation',
   GRIEVANCE: 'archivist-grievance',
+  FINES: 'fines',
 };

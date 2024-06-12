@@ -30,4 +30,5 @@ export const MenuIdes = {
   CALENDAR: 31,
   MANAGER_DELEGATION: 32,
   GRIEVANCE: 33,
+  FINES: 34,
 };

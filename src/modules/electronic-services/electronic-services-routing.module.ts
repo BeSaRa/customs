@@ -16,6 +16,7 @@ import { CalendarComponent } from '@modules/electronic-services/components/calen
 import { TeamNames } from '@enums/team-names';
 import { GrievanceComponent } from '@modules/electronic-services/components/grievance/grievance.component';
 import { ArchivistGrievanceComponent } from '@modules/electronic-services/components/archivist-grievance/archivist-grievance.component';
+import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -75,6 +76,15 @@ const routes: Routes = [
     canActivate: [
       accessPageGuard({
         permission: AppPermissions.GRIEVANCE_ARCHIVE,
+      }),
+    ],
+  },
+  {
+    path: AppRoutes.FINES,
+    component: FinesComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.OFFLINE_PAYMENT,
       }),
     ],
   },
