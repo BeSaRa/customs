@@ -48,7 +48,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       qid,
       permissionRoleId,
       mawaredEmployeeId,
-      userType
+      userType,
     } = this;
 
     return {
