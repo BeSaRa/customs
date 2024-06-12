@@ -11,7 +11,7 @@ import { ConfigService } from '@services/config.service';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { InternalUserService } from '@services/internal-user.service';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { Subject, switchMap, tap } from "rxjs";
+import { Subject, switchMap, tap } from 'rxjs';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { BlobModel } from '@models/blob-model';
 import { InvestigationService } from '@services/investigation.service';
@@ -34,6 +34,7 @@ export class ManagerDelegationComponent
     super.ngOnInit();
     this.listenToViewDecisionFile();
   }
+
   investigationService = inject(InvestigationService);
   viewDecisionFile$ = new Subject<string>();
   domSanitize = inject(DomSanitizer);

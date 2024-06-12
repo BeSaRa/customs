@@ -41,7 +41,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
       ...this.model.buildForm(true),
       userPreferences: this.fb.group(this.model.buildUserPreferencesForm(true)),
     });
-    if (this.inCreateMode()){
+    if (this.inCreateMode()) {
       Object.keys(this.form.controls).forEach(control => {
         if (control !== 'empNum') {
           this.form.get(control)?.disable();
