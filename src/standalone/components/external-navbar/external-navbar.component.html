@@ -112,5 +112,17 @@
         </mat-menu>
       </div>
     </button>
+    <button mat-button (click)="switchLang()" class="ms-2">
+      <div class="flex items-center justify-center gap-x-2">
+        <div class="w-7">
+          <img
+            alt="language-switcher"
+            ngSrc="assets/images/lang.png"
+            height="512"
+            width="512" />
+        </div>
+        <span class="text-white">{{ lang.toggleToLangName() }}</span>
+      </div>
+    </button>
   </div>
 </nav>

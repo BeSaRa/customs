@@ -15,6 +15,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { EmployeeService } from '@services/employee.service';
 import { UserTypes } from '@enums/user-types';
+import { MatButton } from '@angular/material/button';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 
 @Component({
   selector: 'app-external-navbar',
@@ -29,6 +31,8 @@ import { UserTypes } from '@enums/user-types';
     MatMenu,
     MatMenuTrigger,
     MatMenuItem,
+    MatButton,
+    ButtonComponent,
   ],
   templateUrl: './external-navbar.component.html',
   styleUrls: ['./external-navbar.component.scss'],
@@ -58,10 +62,15 @@ export class ExternalNavbarComponent {
         this.router.navigate([AppRoutes.EXTERNAL_LOGIN]).then();
       });
   }
+
   isActive(url: string) {
     return this.router.url === url;
   }
 
   protected readonly AppIcons = AppIcons;
   protected readonly UserTypes = UserTypes;
+
+  switchLang() {
+    this.lang.toggleLang();
+  }
 }
