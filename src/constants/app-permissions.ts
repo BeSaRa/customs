@@ -57,5 +57,6 @@ export const AppPermissions = {
   // run time permissions don't remove
   DATA_ENTRY: 'DATA_ENTRY',
   OPEN_AI_CHAT: 'OPEN_AI_CHAT',
+  MANAGE_LAYOUT_WIDGET: 'MANAGE_LAYOUT_WIDGET',
 };
 export type AppPermissionsType = typeof AppPermissions;

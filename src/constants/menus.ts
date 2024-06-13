@@ -248,4 +248,11 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
     permission: 'OFFLINE_PAYMENT',
   },
+  {
+    id: MenuIdes.LANDING_PAGE,
+    langKey: 'landing_page',
+    icon: AppIcons.DASHBOARD,
+    path: AppFullRoutes.LANDING_PAGE,
+    permission: 'MANAGE_LAYOUT_WIDGET',
+  },
 ];

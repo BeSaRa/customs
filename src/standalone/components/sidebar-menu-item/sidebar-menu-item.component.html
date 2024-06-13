@@ -25,7 +25,12 @@
   }
   <ng-template #itemContent>
     @if (item.icon) {
-      <mat-icon class="flex-none" [svgIcon]="item.icon"></mat-icon>
+      <mat-icon
+        class="flex-none"
+        [svgIcon]="item.icon"
+        [ngClass]="{
+          'ltr:ml-2 rtl:mr-2': level === 1 && !hasChildren
+        }"></mat-icon>
     }
     <div
       [@shrink]="shrinkMode"
