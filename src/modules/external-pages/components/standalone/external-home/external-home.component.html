@@ -1,6 +1,7 @@
 <div class="grid gap-4 py-4 lg:py-12 grid-cols-12">
   <div
-    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    [ngStyle]="getCountingBg()"
+    class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
     <app-icon-button
       (click)="showAll('/external/investigations')"
       [icon]="'ARROW_TOP_LEFT'"
@@ -11,7 +12,8 @@
     </div>
   </div>
   <div
-    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    [ngStyle]="getCountingBg()"
+    class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
     <app-icon-button
       [icon]="'ARROW_TOP_LEFT'"
       (click)="showAll('/external/decisions')"
@@ -24,7 +26,8 @@
     </div>
   </div>
   <div
-    class="counting-bg order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
+    [ngStyle]="getCountingBg()"
+    class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
     <app-icon-button
       [icon]="'ARROW_TOP_LEFT'"
       (click)="showAll('/external/summons-to-attend')"
@@ -37,7 +40,8 @@
     </div>
   </div>
   <div
-    class="hidden lg:block user-details-bg order-1 lg:order-2 col-span-12 lg:col-span-6 border text-end rounded-xl">
+    [ngStyle]="getUserDetailsBg()"
+    class="hidden lg:block order-1 lg:order-2 col-span-12 lg:col-span-6 border text-end rounded-xl">
     <div class="flex flex-col justify-around p-6 text-center h-full">
       @if (person) {
         <div class="grid grid-cols-12 gap-2 text-white h-full">
