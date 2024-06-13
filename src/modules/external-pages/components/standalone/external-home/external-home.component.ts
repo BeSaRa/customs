@@ -14,6 +14,7 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { UserTypes } from '@enums/user-types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClearingAgentService } from '@services/clearing-agent.service';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-external-home',
@@ -26,6 +27,7 @@ import { ClearingAgentService } from '@services/clearing-agent.service';
     ReactiveFormsModule,
     IconButtonComponent,
     MatIcon,
+    NgStyle,
   ],
   templateUrl: './external-home.component.html',
   styleUrl: './external-home.component.scss',
@@ -42,6 +44,7 @@ export class ExternalHomeComponent implements OnInit {
   casesLength: number = 0;
   penaltyDecisionLength: number = 0;
   attendancesLength: number = 0;
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.id) {
@@ -49,6 +52,7 @@ export class ExternalHomeComponent implements OnInit {
       }
     });
   }
+
   loadAgentData(id: number) {
     this.clearingAgentService.loadByIdComposite(id).subscribe(rs => {
       this.person = rs;
@@ -58,12 +62,31 @@ export class ExternalHomeComponent implements OnInit {
   showAll(url: string) {
     this.router?.navigate([url]);
   }
+
   assertEmployee(item: MawaredEmployee | ClearingAgent | undefined) {
     return item as MawaredEmployee;
   }
+
   assertClearingAgent(item: MawaredEmployee | ClearingAgent | undefined) {
     return item as ClearingAgent;
   }
+
   protected readonly AppIcons = AppIcons;
   protected readonly UserTypes = UserTypes;
+
+  getCountingBg() {
+    const imageUrl = 'assets/images/external-counting-bg.png';
+    return {
+      background: `url(${imageUrl}) no-repeat center center, linear-gradient(to bottom, #f1f0ef, #bbbab7)`,
+      'background-size': 'cover',
+    };
+  }
+
+  getUserDetailsBg() {
+    const imageUrl = 'assets/images/external-user-details-bg.png';
+    return {
+      background: `url(${imageUrl}) no-repeat center center, linear-gradient(to bottom, #95835b, #a29475)`,
+      'background-size': 'cover',
+    };
+  }
 }
