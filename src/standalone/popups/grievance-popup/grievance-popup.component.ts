@@ -10,13 +10,14 @@ import { LangService } from '@services/lang.service';
 import { filter, Subject, switchMap } from 'rxjs';
 import { DialogRef } from '@angular/cdk/dialog';
 import { Grievance } from '@models/grievance';
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { GrievanceService } from '@services/grievance.service';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '@services/employee.service';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { UserClick } from '@enums/user-click';
-import { Offender } from '@models/offender';
+import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -31,6 +32,7 @@ import { Offender } from '@models/offender';
     TextareaComponent,
     NgClass,
     CaseAttachmentsComponent,
+    DatePipe,
   ],
   templateUrl: './grievance-popup.component.html',
   styleUrl: './grievance-popup.component.scss',
@@ -45,14 +47,17 @@ export class GrievancePopupComponent implements OnInit {
   employeeService = inject(EmployeeService);
   form!: FormGroup;
   save$: Subject<void> = new Subject();
-  model: Offender = this.data.model;
+  model: PenaltyDecisionCriteria = this.data.model;
+
   ngOnInit(): void {
     this._listenToSave();
     this.buildForm();
   }
+
   buildForm() {
     this.form = this.fb.group(new Grievance().buildForm());
   }
+
   private _listenToSave() {
     this.save$
       .pipe(filter(() => !!this.form.value))
@@ -80,4 +85,6 @@ export class GrievancePopupComponent implements OnInit {
     // }
     return '';
   }
+
+  protected readonly config = Config;
 }

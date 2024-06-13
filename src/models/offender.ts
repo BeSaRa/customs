@@ -44,6 +44,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   penaltyAppliedDate!: string;
   hasRunningGrievance!: number;
   vsid!: string;
+
   override getNames(): string {
     return this.offenderInfo?.getNames() || '';
   }

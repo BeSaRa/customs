@@ -15,9 +15,18 @@
             <strong>السيد {{ sendToTitle }} المحترم</strong>
           </div>
           <div>
-            <label class="pb-3 block"> رقم ملف التحقيق:{{ 'الرقم' }} </label>
-            <label class="pb-3 block"> رقم القرار:(({{ 'الرقم' }})) </label>
-            <label class="pb-3 block"> تاريخ القرار: (({{ 'date' }})) </label>
+            <label class="pb-3 block">
+              رقم ملف التحقيق:{{
+                model.decisionSerial.split('/').slice(0, 3).join('/')
+              }}
+            </label>
+            <label class="pb-3 block">
+              رقم القرار:{{ model.decisionSerial }}</label
+            >
+            <label class="pb-3 block">
+              تاريخ القرار:
+              {{ model.penaltyAppliedDate | date: config.DATE_FORMAT }}
+            </label>
           </div>
         </div>
         <form [formGroup]="form" class="mb-3">
@@ -30,11 +39,11 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary">{{
-      lang.map.save
-    }}</app-button>
-    <app-button mat-dialog-close="" buttonType="primary-outline">{{
-      lang.map.close
-    }}</app-button>
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
   </div>
 </div>
