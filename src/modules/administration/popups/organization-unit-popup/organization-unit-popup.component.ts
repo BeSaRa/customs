@@ -18,6 +18,7 @@ import { OrganizationUnitType } from '@enums/organization-unit-type';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
 import { DialogService } from '@services/dialog.service';
 import { MawaredDepartment } from '@models/mawared-department';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -62,12 +63,14 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
-    Object.keys(this.form.controls).forEach(control => {
-      if (control !== 'mawaredDepId') {
-        this.form.get(control)?.disable();
-      }
-    });
-    this.listenToMawaredDepChanges();
+    if (this.inCreateMode()) {
+      Object.keys(this.form.controls).forEach(control => {
+        if (control !== 'mawaredDepId') {
+          this.form.get(control)?.disable();
+        }
+      });
+      this.listenToMawaredDepChanges();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -173,19 +176,24 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   listenToMawaredDepChanges() {
-    this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
+    this.mawaredDepIdCtrl?.valueChanges.pipe(take(1)).subscribe(() => {
       Object.keys(this.form.controls).forEach(control => {
         if (control !== 'mawaredDepId') {
           this.form.get(control)?.enable();
         }
       });
+    });
+
+    this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
       this.autoFillFields();
     });
   }
+
   autoFillFields() {
     const department = this.mawaredDepartments.find(
       department => department.departmentId === this.mawaredDepIdCtrl?.value,
     );
+
     if (department) this.setDepartment(department);
   }
 
