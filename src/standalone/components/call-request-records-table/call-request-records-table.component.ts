@@ -84,7 +84,6 @@ export class CallRequestRecordsTableComponent
   lang = inject(LangService);
   models: CallRequest[] = [];
   reload$ = new Subject<void>();
-  edit$ = new Subject<CallRequest>();
   view$ = new Subject<CallRequest>();
   service = inject(CallRequestService);
   selectedChange = effect(() => {
@@ -120,12 +119,11 @@ export class CallRequestRecordsTableComponent
     }>
   >();
 
-  private employeeService = inject(EmployeeService);
+  employeeService = inject(EmployeeService);
 
   ngOnInit(): void {
     this.listenToReload();
     this.listenToView();
-    this.listenToEdit();
     this.listenToReloadInput();
   }
 
@@ -136,11 +134,6 @@ export class CallRequestRecordsTableComponent
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(
-        filter(() =>
-          this.employeeService.hasPermissionTo('MANAGE_OBLIGATION_TO_ATTEND'),
-        ),
-      )
       .pipe(
         switchMap(() => {
           return this.service
@@ -166,24 +159,6 @@ export class CallRequestRecordsTableComponent
         switchMap(callRequest => {
           return callRequest
             .openView({
-              ...(this.isOffender()
-                ? { offender: this.person() }
-                : { witness: this.person() }),
-              caseId: this.model().id,
-            })
-            .afterClosed();
-        }),
-      )
-      .subscribe();
-  }
-
-  private listenToEdit() {
-    this.edit$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        switchMap(callRequest => {
-          return callRequest
-            .openEdit({
               ...(this.isOffender()
                 ? { offender: this.person() }
                 : { witness: this.person() }),

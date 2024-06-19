@@ -51,17 +51,19 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <div class="flex items-center">
-          <app-icon-button [matMenuTriggerFor]="menu" icon="DOTS_VERTICAL" />
-          <mat-menu #menu>
-            @for (status of statuses(); track status.lookupKey) {
-              <button
-                [disabled]="assertType(element).status === status.lookupKey"
-                (click)="updateCallRequestStatus(assertType(element), status)"
-                mat-menu-item>
-                {{ status.getNames() }}
-              </button>
-            }
-          </mat-menu>
+          @if (employeeService.hasPermissionTo('MANAGE_OBLIGATION_TO_ATTEND')) {
+            <app-icon-button [matMenuTriggerFor]="menu" icon="DOTS_VERTICAL" />
+            <mat-menu #menu>
+              @for (status of statuses(); track status.lookupKey) {
+                <button
+                  [disabled]="assertType(element).status === status.lookupKey"
+                  (click)="updateCallRequestStatus(assertType(element), status)"
+                  mat-menu-item>
+                  {{ status.getNames() }}
+                </button>
+              }
+            </mat-menu>
+          }
           <span class="status status-key-{{ assertType(element).status }}">{{
             assertType(element).statusInfo.getNames()
           }}</span>
