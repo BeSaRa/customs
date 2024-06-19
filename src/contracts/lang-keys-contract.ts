@@ -694,4 +694,5 @@ export interface LangKeysContract {
   mawared_empl_id: string;
   clearing_agent_id: string;
   landing_page: string;
+  code: string;
 }

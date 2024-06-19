@@ -21,7 +21,7 @@
                 formControlName="mawaredDepId"
                 [options]="mawaredDepartments"
                 [label]="lang.map.mawared_dep_id"
-                bindValue="departmentId"
+                bindValue="id"
                 bindLabel="getNames"
                 [enableFilter]="true"
                 bindFilter="getNames"
@@ -31,6 +31,7 @@
               <app-input formControlName="arName" [label]="lang.map.ar_name" />
               <app-input formControlName="enName" [label]="lang.map.en_name" />
               <app-input formControlName="email" [label]="lang.map.email" />
+              <app-input formControlName="code" [label]="lang.map.code" />
               <app-select-input
                 formControlName="type"
                 [options]="unitTypes"

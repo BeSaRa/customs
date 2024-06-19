@@ -47,6 +47,7 @@ export class OrganizationUnit extends BaseModel<
       parent,
       isCustoms,
       status,
+      code,
     } = this;
     return {
       arName: controls
@@ -82,6 +83,7 @@ export class OrganizationUnit extends BaseModel<
       managerAssistant: controls ? [managerAssistant] : managerAssistant,
       isCustoms: controls ? [isCustoms] : isCustoms,
       status: controls ? [status, CustomValidators.required] : status,
+      code: controls ? [code, CustomValidators.required] : code,
     };
   }
 }
