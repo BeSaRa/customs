@@ -190,23 +190,41 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   autoFillFields() {
-    const department = this.mawaredDepartments.find(
-      department => department.departmentId === this.mawaredDepIdCtrl?.value,
+    const department = this.organizationUnits.find(
+      department => department.id === this.mawaredDepIdCtrl?.value,
     );
 
     if (department) this.setDepartment(department);
   }
 
-  setDepartment(department: MawaredDepartment) {
-    const { arName, enName, status, departmentId, ldapCode, parentId } =
-      department;
+  setDepartment(department: OrganizationUnit) {
+    const {
+      arName,
+      enName,
+      status,
+      managerId,
+      email,
+      type,
+      ldapGroupName,
+      ldapLimitedGroupName,
+      managerAssistant,
+      parent,
+      isCustoms,
+      code,
+    } = department;
     this.form.patchValue({
       arName,
       enName,
       status,
-      ldapGroupName: ldapCode,
-      mawaredDepId: departmentId,
-      parent: parentId,
+      managerId,
+      email,
+      type,
+      ldapGroupName,
+      ldapLimitedGroupName,
+      managerAssistant,
+      parent,
+      isCustoms,
+      code,
     });
   }
 }
