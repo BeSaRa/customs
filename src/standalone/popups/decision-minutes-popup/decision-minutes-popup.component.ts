@@ -25,6 +25,7 @@ import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { DecisionMinutes } from '@models/decision-minutes';
 import { Penalty } from '@models/penalty';
 import { GeneralStatusEnum } from '@enums/general-status-enum';
+import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -64,7 +65,10 @@ export class DecisionMinutesPopupComponent
 
   offenderInfo = computed(() => {
     return this.model().offenderInfo.filter(
-      offender => !this.hasDecisionMinutes(offender.id),
+      offender =>
+        !this.hasDecisionMinutes(offender.id) &&
+        offender.status !== OffenderStatusEnum.THE_PENALTY_WAS_IMPOSED &&
+        offender.status !== OffenderStatusEnum.SAVED,
     );
   });
   offenderControl = new FormControl<Offender | null>(
