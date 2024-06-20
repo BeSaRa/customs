@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Pagination } from '@models/pagination';
 import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
+import { HttpParams } from '@angular/common/http';
 
 @CastResponseContainer({
   $pagination: {
@@ -31,9 +32,21 @@ export class InvestigationSearchService extends InvestigationService {
     unwrap: 'rs',
     fallback: '$default',
   })
-  search(
-    criteria: Partial<InvestigationSearchCriteria>,
-  ): Observable<Investigation[]> {
-    return this.http.post<Investigation[]>(this.getUrlSegment(), criteria);
+  search(criteria: {
+    [key: string]: string | number | boolean;
+  }): Observable<Investigation[]> {
+    if (criteria) {
+      Object.keys(criteria as unknown as object).forEach(key => {
+        if (
+          criteria &&
+          (criteria[key] === null || criteria[key] === undefined)
+        ) {
+          delete criteria[key];
+        }
+      });
+    }
+    return this.http.get<Investigation[]>(this.getUrlSegment(), {
+      params: new HttpParams({ fromObject: criteria }),
+    });
   }
 }
