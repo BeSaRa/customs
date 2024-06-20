@@ -214,7 +214,7 @@
               <div class="w-2/5">
                 <app-offender-violations
                   [violations]="
-                    offenderViolationsMap()[assertType(element).id]
+                    offenderViolationsMap()[assertType(element).id] || []
                   " />
               </div>
             }
