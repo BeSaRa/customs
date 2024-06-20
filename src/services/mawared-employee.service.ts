@@ -67,4 +67,11 @@ export class MawaredEmployeeService extends BaseCrudWithDialogService<
       null,
     );
   }
+
+  @CastResponse()
+  getEmployeeByNumber(employeeNumber: number) {
+    return this.http.get<MawaredEmployee[]>(this.getUrlSegment() + `/emp-no`, {
+      params: new HttpParams({ fromObject: { employeeNo: employeeNumber } }),
+    });
+  }
 }
