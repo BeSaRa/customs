@@ -8,7 +8,6 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Grievance } from '@models/grievance';
 import { Observable } from 'rxjs';
 import { Pagination } from '@models/pagination';
-import { HttpParams } from '@angular/common/http';
 
 @CastResponseContainer({
   $default: {
@@ -58,13 +57,9 @@ export class GrievanceService
 
   addComment(payload: { comment: string; caseId: string }) {
     return this.http.post(
-      this.getUrlSegment() + '/comment',
+      this.getUrlSegment() +
+        `/case/${payload.caseId}/comment/${payload.comment}`,
       {},
-      {
-        params: new HttpParams({
-          fromObject: payload,
-        }),
-      },
     );
   }
 }
