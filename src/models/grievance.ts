@@ -4,6 +4,7 @@ import { AdminResult } from '@models/admin-result';
 import { CustomValidators } from '@validators/custom-validators';
 import { InterceptModel } from 'cast-response';
 import { GrievanceInterceptor } from '@model-interceptors/grievance-interceptor';
+import { GrievanceComment } from '@models/grievance-comment';
 
 const { send, receive } = new GrievanceInterceptor();
 
@@ -32,7 +33,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   penaltySigner!: number;
   penaltySignerId!: number;
   officeRecommendation!: number;
-  commentList: string[] = [];
+  commentList: GrievanceComment[] = [];
   offenderInfo!: AdminResult;
   applicantTypeInfo!: AdminResult;
   offenderTypeInfo!: AdminResult;

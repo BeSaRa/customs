@@ -11,10 +11,9 @@
     <h2 class="mb-2 text-lg font-semibold text-gray-900">
       {{ lang.map.grievance_comments }}
     </h2>
-    <ul
-      class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
-      @for (comment of model.commentList; track comment) {
-        <li>{{ comment }}</li>
+    <ul class="max-w-md space-y-1 list-disc list-inside">
+      @for (commentObj of model.commentList; track commentObj) {
+        <li>{{ commentObj.comment }}</li>
       } @empty {
         <li>{{ lang.map.no_comments_yet }}</li>
       }

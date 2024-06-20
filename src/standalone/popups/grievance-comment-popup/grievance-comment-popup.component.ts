@@ -13,6 +13,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CustomValidators } from '@validators/custom-validators';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { MatTooltip } from '@angular/material/tooltip';
+import { GrievanceComment } from '@models/grievance-comment';
 
 @Component({
   selector: 'app-grievance-comment-popup',
@@ -62,6 +63,13 @@ export class GrievanceCommentPopupComponent
         }),
       )
       .subscribe(() => {
+        this.model.commentList = [
+          new GrievanceComment().clone<GrievanceComment>({
+            comment: this.commentControl.value,
+            commentDate: new Date().toLocaleDateString(),
+          }),
+          ...this.model.commentList,
+        ];
         this.commentControl.reset();
       });
   }
