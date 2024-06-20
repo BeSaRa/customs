@@ -15,7 +15,6 @@ import { UserSignature } from '@models/user-signature';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { DialogService } from '@services/dialog.service';
 import { MawaredEmployee } from '@models/mawared-employee';
-import { MawaredEmployeeResultPopupComponent } from '@modules/administration/popups/mawared-employee-result-popup/mawared-employee-result-popup.component';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -122,31 +121,18 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   }
 
   autoFillFields() {
-    this.mawaredEmployeeService.loadAsLookups().subscribe(employees => {
-      const res = employees.filter(emp => {
-        return emp.employeeNo?.toString().includes(this.empNumControl?.value);
+    this.mawaredEmployeeService
+      .getEmployeeByNumber(this.empNumControl?.value)
+      .subscribe(employees => {
+        if (employees.length === 0) {
+          this.dialog.warning(
+            this.lang.map.no_mawared_employee_with_this_employee_number,
+          );
+        } else {
+          const employee = employees[0] as MawaredEmployee;
+          this.setEmployee(employee.id, employee);
+        }
       });
-      if (!res.length) {
-        this.dialog.warning(
-          this.lang.map.no_mawared_employee_with_this_employee_number,
-        );
-      } else if (res.length === 1) {
-        const employee = res[0] as MawaredEmployee;
-        this.setEmployee(employee.id, employee);
-      } else {
-        this.dialog
-          .open(MawaredEmployeeResultPopupComponent, {
-            data: { mawaredEmployee: res },
-          })
-          .afterClosed()
-          .subscribe(res => {
-            if (res) {
-              const employee = res as MawaredEmployee;
-              this.setEmployee(employee.id, employee);
-            }
-          });
-      }
-    });
   }
 
   setEmployee(mawaredEmployeeId: number, employee: MawaredEmployee) {
