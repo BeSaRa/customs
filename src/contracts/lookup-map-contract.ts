@@ -58,4 +58,5 @@ export interface LookupMapContract {
   customsViolationEffect: Lookup[];
   DelegationType: Lookup[];
   officeRecommendation: Lookup[];
+  attendeeType: Lookup[];
 }

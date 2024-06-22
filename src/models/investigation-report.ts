@@ -10,6 +10,7 @@ import { downloadLink } from '@utils/utils';
 import { ReportStatus } from '@enums/report-status';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { InvestigationAttendance } from '@models/investigation-attendance';
 
 const { send, receive } = new InvestigationReportInterceptor();
 
@@ -25,6 +26,7 @@ export class InvestigationReport extends BaseModel<
   detailsList: Question[] = [];
   summonedTypeInfo!: AdminResult;
   summonedInfo!: AdminResult;
+  attendanceList: InvestigationAttendance[] = [];
   category!: number;
   createdBy!: number;
   creatorInfo!: AdminResult;

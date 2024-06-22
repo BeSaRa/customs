@@ -81,6 +81,7 @@
             employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
           ) {
             <mat-checkbox
+              [matTooltip]="lang.map.is_exportable"
               [checked]="false"
               class="mt-1"
               (change)="changeIsExportableStatus$.next(element)">
