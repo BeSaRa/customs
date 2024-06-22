@@ -702,4 +702,7 @@ export interface LangKeysContract {
   entered_court_decisions: string;
   created_date: string;
   is_exportable: string;
+  investigation_writer_type: string;
+  investigation_writer_name: string;
+  investigation_writer: string;
 }

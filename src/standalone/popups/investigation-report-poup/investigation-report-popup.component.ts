@@ -40,6 +40,13 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 import { CustomValidators } from '@validators/custom-validators';
 import { Observable, of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { LookupService } from '@services/lookup.service';
+import { AttendeeTypeEnum } from '@enums/attendee-type.enum';
+import { TeamService } from '@services/team.service';
+import { TeamNames } from '@enums/team-names';
+import { InternalUser } from '@models/internal-user';
+import { InvestigationAttendance } from '@models/investigation-attendance';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -53,6 +60,7 @@ import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
     TextareaComponent,
     MatTooltip,
     MatIcon,
+    SelectInputComponent,
   ],
   providers: [DatePipe],
   templateUrl: './investigation-report-popup.component.html',
@@ -81,7 +89,10 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   datePipe = inject(DatePipe);
   dialog = inject(DialogService);
   investigationReportService = inject(InvestigationReportService);
+  lookupService = inject(LookupService);
+  teamService = inject(TeamService);
   override form!: UntypedFormGroup;
+  attendeeTypes = this.lookupService.lookups.attendeeType;
   investigationModel = signal(this.data.extras!.model!);
   offender = signal(this.data.extras!.offender);
   witness = signal(this.data.extras!.witness);
@@ -113,11 +124,19 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   investigatorCtrl = new FormControl({ disabled: true, value: '' });
 
   locationCtrl = new FormControl();
+  attendeeCategoryCtrl = new FormControl(
+    AttendeeTypeEnum.Internal,
+    CustomValidators.required,
+  );
+  attendeeCtrl = new FormControl(null);
+  qidCtrl = new FormControl('');
+  attendeeNameCtrl = new FormControl('');
 
   creationDate = new FormControl({
     disabled: true,
     value: this.datePipe.transform(Date.now(), this.config.CONFIG.DATE_FORMAT),
   });
+  investigators: InternalUser[] = [];
   currentLanguage = signal(this.lang.getCurrent());
   saveQuestion$: Subject<void> = new Subject<void>();
   editQuestion$ = new Subject<{ index: number; question: Question }>();
@@ -165,8 +184,29 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.lang.change$.subscribe(current => {
       this.currentLanguage.set(current);
     });
+    this.loadInvestigatorsTeam();
+    this.handleAttendeeTypeChange(AttendeeTypeEnum.Internal);
   }
-
+  loadInvestigatorsTeam() {
+    this.teamService
+      .loadTeamMembers(TeamNames.Investigator)
+      .subscribe((investigators: InternalUser[]) => {
+        this.investigators = investigators;
+      });
+  }
+  handleAttendeeTypeChange(type: unknown) {
+    this.attendeeCtrl.setValidators([]);
+    this.qidCtrl.setValidators([]);
+    this.attendeeNameCtrl.setValidators([]);
+    if (this.isOffender()) {
+      if (type === AttendeeTypeEnum.External) {
+        this.qidCtrl.setValidators([CustomValidators.required]);
+        this.attendeeNameCtrl.setValidators([CustomValidators.required]);
+      } else {
+        this.attendeeCtrl.setValidators([CustomValidators.required]);
+      }
+    }
+  }
   override _buildForm(): void {
     this.inViewMode()
       ? this.locationCtrl.disable()
@@ -186,7 +226,12 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.lang.map.need_questions_and_answers_to_take_this_action,
       );
     }
-    return !!this.model.detailsList.length;
+    return (
+      !!this.model.detailsList.length &&
+      this.attendeeCtrl.valid &&
+      this.qidCtrl.valid &&
+      this.attendeeNameCtrl.valid
+    );
   }
 
   protected override _prepareModel():
@@ -199,6 +244,15 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       summonedType: this.summonedType(),
       summonedId: this.personId(),
       location: this.locationCtrl.getRawValue()!,
+      attendanceList: [
+        new InvestigationAttendance().clone<InvestigationAttendance>({
+          attendeeId: this.attendeeCtrl.getRawValue() as unknown as number,
+          attendeeName: this.attendeeNameCtrl.getRawValue() as string,
+          qid: this.qidCtrl.getRawValue() as string,
+          category:
+            this.attendeeCategoryCtrl.getRawValue() as unknown as number,
+        }),
+      ],
     });
   }
 
@@ -355,4 +409,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.toast.success(this.lang.map.file_uploaded_successfully);
       });
   }
+
+  protected readonly AttendeeTypeEnum = AttendeeTypeEnum;
 }

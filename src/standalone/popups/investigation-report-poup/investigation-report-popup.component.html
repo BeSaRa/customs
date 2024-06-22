@@ -25,6 +25,40 @@
         <app-input [formControl]="locationCtrl" [label]="lang.map.location" />
       </div>
     </div>
+    <div class="flex gap-16">
+      <div class="flex-grow">
+        <app-select-input
+          [options]="attendeeTypes"
+          bindValue="lookupKey"
+          bindLabel="getNames"
+          [formControl]="attendeeCategoryCtrl"
+          [isMultiple]="false"
+          [nullable]="false"
+          (selectChange)="handleAttendeeTypeChange($event)"
+          [label]="lang.map.investigation_writer_type" />
+      </div>
+      @if (attendeeCategoryCtrl.value === AttendeeTypeEnum.External) {
+        <div class="flex-grow">
+          <app-input [formControl]="qidCtrl" [label]="lang.map.qid" />
+        </div>
+        <div class="flex-grow">
+          <app-input
+            [formControl]="attendeeNameCtrl"
+            [label]="lang.map.investigation_writer_name" />
+        </div>
+      } @else {
+        <div class="flex-grow">
+          <app-select-input
+            [options]="investigators"
+            bindValue="id"
+            bindLabel="getNames"
+            [formControl]="attendeeCtrl"
+            [isMultiple]="false"
+            [nullable]="false"
+            [label]="lang.map.investigation_writer" />
+        </div>
+      }
+    </div>
     <ul
       #questionsList
       class="flex flex-col gap-2 rounded-lg border min-h-[300px] max-h-[300px] overflow-y-auto p-2">
