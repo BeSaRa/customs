@@ -38,12 +38,15 @@ export enum TaskResponses {
   TO_CA_DEP = 'to_ca_dep',
   DC_SIGN = 'dc_sign',
   DC_DECISION_SIGN = 'dc_decision_sign',
-  RETURN_TO_PR_FROM_LA = 'return_to_pr',
-  RETURN_TO_PA_FROM_LA = 'return_to_pa',
+  RETURN_TO_PR = 'return_to_pr',
+  RETURN_TO_PA = 'return_to_pa',
   ASK_ANOTHER_DEPARTMENT = 'ask:ReviewDepartmentStatement', // طلب الافادة من ادارة اخري
   TO_LA = 'to_la', // اعادة إلى مدير الشؤن القانونية
   TO_HR_USER = 'to_hr_user', //اختيار موظف للارشفة في موارد
   RETURN_TO_SAME_HR = 'return_to_same_hr', //اختيار موظف للارشفة في موارد
   PA_FRST_APPROVE = 'pa_frst_approve',
   PR_FRST_APPROVE = 'pr_frst_approve',
+  RETURN_TO_PO = 'return_to_po',
+  RETURN_TO_PAO = 'return_to_pao',
+  GR_COMPLETE = 'gr_complete',
 }

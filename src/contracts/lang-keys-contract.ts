@@ -705,4 +705,8 @@ export interface LangKeysContract {
   investigation_writer_type: string;
   investigation_writer_name: string;
   investigation_writer: string;
+  grievance_number: string;
+  return_to_president_office: string;
+  return_to_president_assistant_office: string;
+  final_decision: string;
 }

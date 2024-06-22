@@ -6,7 +6,7 @@
     </h1>
     <div class="flex-auto"></div>
   </div>
-  <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-4">
     <div class="mb-3">
       <span class="font-medium text-white">{{ lang.map.report_number }}</span>
       <div class="input-form p-2 block">
@@ -22,12 +22,20 @@
       </div>
     </div>
     <div class="mb-3">
+      <span class="font-medium text-white">{{
+        lang.map.grievance_number
+      }}</span>
+      <div class="input-form p-2 block">
+        {{ model.grievanceFullSerial ? model.grievanceFullSerial : '---' }}
+      </div>
+    </div>
+    <div class="mb-3">
       <span class="font-medium text-white">{{ lang.map.grievance_date }}</span>
       <div class="input-form p-2 block">
         {{ model.createdOn ? (model.createdOn | date) : '---' }}
       </div>
     </div>
-    <div class="mb-3 col-span-1 md:col-span-3">
+    <div class="mb-3 col-span-1 md:col-span-4">
       <span class="font-medium text-white">{{ lang.map.subject }}</span>
       <div class="input-form min-h-[40px] p-2 block">
         {{ model.subject }}
@@ -90,6 +98,39 @@
             {{ model.penaltySignerInfo.getNames() }}
           </div>
         </div>
+        @if (
+          this.model.getActivityName() ===
+          ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
+        ) {
+          <div class="mb-3">
+            <app-select-input
+              [label]="lang.map.final_decision"
+              [options]="grievanceFinalDecisions"
+              [formControl]="grievanceFinalDecisionsCtrl"
+              [bindLabel]="'getNames'"
+              [bindValue]="'lookupKey'"
+              (selectChange)="handleFinalDecisionChanged($event)"
+              [nullable]="false"
+              [isMultiple]="false">
+            </app-select-input>
+          </div>
+          @if (
+            grievanceFinalDecisionsCtrl.value ===
+            GrievanceFinalDecisionsEnum.UPDATE_PENALTY
+          ) {
+            <div class="mb-3">
+              <app-select-input
+                [label]="lang.map.penalty"
+                [options]="penaltiesList"
+                [formControl]="penaltyCtrl"
+                [bindLabel]="'getNames'"
+                [bindValue]="'id'"
+                [nullable]="false"
+                [isMultiple]="false">
+              </app-select-input>
+            </div>
+          }
+        }
 
         <div class="col-span-1 md:col-span-3">
           <div class="mb-3 col-span-1 md:col-span-3">
@@ -153,6 +194,7 @@
   <app-buttons-case-wrapper
     [model]="model"
     [openFrom]="openFrom"
+    (updateModel)="updateModel$.next()"
     (save)="save$.next($event)"
     (claim)="_updateForm($event)"
     (release)="_updateForm($event)"

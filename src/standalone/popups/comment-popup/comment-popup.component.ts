@@ -80,14 +80,15 @@ export class CommentPopupComponent
   concernedOffenders = computed(() => this.model.getConcernedOffenders());
   offendersIds = computed(() => this.concernedOffenders().map(i => i.id));
 
-  penaltiesDecisionsMap = this.model.penaltyDecisions.reduce(
-    (acc, item) => {
-      return this.offendersIds().includes(item.offenderId)
-        ? { ...acc, [item.offenderId]: item }
-        : { ...acc };
-    },
-    {} as Record<number, PenaltyDecision>,
-  );
+  penaltiesDecisionsMap =
+    this.model.penaltyDecisions?.reduce(
+      (acc, item) => {
+        return this.offendersIds().includes(item.offenderId)
+          ? { ...acc, [item.offenderId]: item }
+          : { ...acc };
+      },
+      {} as Record<number, PenaltyDecision>,
+    ) || {};
 
   ngOnInit() {
     this.buildForm();

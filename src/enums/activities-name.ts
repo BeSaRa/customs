@@ -10,4 +10,5 @@ export enum ActivitiesName {
   REVIEW_LEGAL_AFFAIRS = 'Review Legal Affairs',
   REVIEW_PRESIDENT = 'Review President',
   REVIEW_PRESIDENT_ASSISTANT = 'Review President Assistant',
+  SUBMIT_GRIEVANCE_PRESIDENT = 'Submit Grievance President',
 }

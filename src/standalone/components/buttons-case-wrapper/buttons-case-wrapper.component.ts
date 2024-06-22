@@ -77,6 +77,8 @@ export class ButtonsCaseWrapperComponent
   sendTypes = SendTypes;
   SaveTypes = SaveTypes;
   responseAction$: Subject<TaskResponses> = new Subject<TaskResponses>();
+  grievanceCompleteAction$: Subject<TaskResponses> =
+    new Subject<TaskResponses>();
   approve$: Subject<TaskResponses> = new Subject<TaskResponses>();
 
   legalAffairsProceduresComponent = input<LegalAffairsProceduresComponent>();
@@ -122,6 +124,7 @@ export class ButtonsCaseWrapperComponent
     this.listenToApproveAction();
     this.listenToReferralGrievanceAction();
     this.listenToAskAction();
+    this.listenToGrievanceCompleteAction();
 
     this.listenToLegalAffairsFinalApprove();
   }
@@ -329,17 +332,22 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(response => {
-          return this.penaltyDecisionService
-            .openRequestReferralDialog(
-              (
-                this.model() as unknown as Investigation
-              ).getConcernedOffenders(),
-              this.model as unknown as InputSignal<Investigation>,
-              this.updateModel,
-              undefined,
-              response,
-            )
-            .afterClosed();
+          if (this.model().getCaseType() === CaseTypes.GRIEVANCE) {
+            this.referralGrievanceRequest$.next(response);
+            return of(UserClick.NO);
+          } else {
+            return this.penaltyDecisionService
+              .openRequestReferralDialog(
+                (
+                  this.model() as unknown as Investigation
+                ).getConcernedOffenders(),
+                this.model as unknown as InputSignal<Investigation>,
+                this.updateModel,
+                undefined,
+                response,
+              )
+              .afterClosed();
+          }
         }),
       )
       .pipe(filter((click: UserClick) => click === UserClick.YES))
@@ -406,7 +414,31 @@ export class ButtonsCaseWrapperComponent
         this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
-
+  listenToGrievanceCompleteAction() {
+    this.grievanceCompleteAction$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        tap(() => {
+          this.updateModel.emit();
+        }),
+      )
+      .pipe(
+        switchMap((response: TaskResponses) => {
+          return this.dialog
+            .open(CommentPopupComponent, {
+              data: {
+                model: this.model(),
+                response,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .pipe(filter((click: unknown) => click === UserClick.YES))
+      .subscribe(() => {
+        this.navigateToSamePageThatUserCameFrom.emit();
+      });
+  }
   private listenToAskAction() {
     this.ask$
       .pipe(takeUntil(this.destroy$))
