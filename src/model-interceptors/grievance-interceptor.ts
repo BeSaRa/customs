@@ -21,10 +21,15 @@ export class GrievanceInterceptor
     delete model.penaltySignerInfo;
     delete model.penaltySignerRoleInfo;
     delete model.presidentAssistantOuInfo;
+    delete model.finalDecisionInfo;
     return model;
   }
 
   receive(model: Grievance): Grievance {
+    model.finalDecisionInfo &&
+      (model.finalDecisionInfo = AdminResult.createInstance(
+        model.finalDecisionInfo,
+      ));
     model.caseStatusInfo &&
       (model.caseStatusInfo = AdminResult.createInstance(model.caseStatusInfo));
     model.sectionInfo &&

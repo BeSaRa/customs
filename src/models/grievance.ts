@@ -18,6 +18,8 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   draftFullSerial!: string;
   investigationSerial!: number;
   investigationFullSerial!: string;
+  grievanceSerial!: number;
+  grievanceFullSerial!: string;
   departmentId!: number;
   presidentAssistantOuId!: number;
   isDrafted!: boolean;
@@ -34,6 +36,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   penaltySignerId!: number;
   officeRecommendation!: number;
   commentList: GrievanceComment[] = [];
+  finalDecision!: number;
   offenderInfo!: AdminResult;
   applicantTypeInfo!: AdminResult;
   offenderTypeInfo!: AdminResult;
@@ -41,7 +44,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   penaltySignerRoleInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
   officeRecommendationInfo!: AdminResult;
-
+  finalDecisionInfo!: AdminResult;
   override buildForm() {
     return {
       description: ['', [CustomValidators.maxLength(3000)]],

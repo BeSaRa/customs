@@ -11,24 +11,18 @@
   }
 
   <!-- return to president from legal affairs -->
-  @if (
-    model().inMyInbox() &&
-    model().hasResponse(taskResponses.RETURN_TO_PR_FROM_LA)
-  ) {
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PR)) {
     <app-button
       [buttonType]="'secondary'"
-      (click)="returnActions$.next(taskResponses.RETURN_TO_PR_FROM_LA)">
+      (click)="returnActions$.next(taskResponses.RETURN_TO_PR)">
       {{ lang.map.return_to_president }}
     </app-button>
   }
   <!-- return to president assistant from legal affairs -->
-  @if (
-    model().inMyInbox() &&
-    model().hasResponse(taskResponses.RETURN_TO_PA_FROM_LA)
-  ) {
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PA)) {
     <app-button
       [buttonType]="'secondary'"
-      (click)="returnActions$.next(taskResponses.RETURN_TO_PA_FROM_LA)">
+      (click)="returnActions$.next(taskResponses.RETURN_TO_PA)">
       {{ lang.map.return_to_president_assistant }}
     </app-button>
   }
@@ -211,6 +205,13 @@
       {{ lang.map.final_complete }}
     </app-button>
   }
+  <!-- grievance complete action -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.GR_COMPLETE)) {
+    <app-button
+      (click)="grievanceCompleteAction$.next(taskResponses.GR_COMPLETE)">
+      {{ lang.map.complete }}
+    </app-button>
+  }
 
   <!-- apply and return -->
   @if (
@@ -285,7 +286,9 @@
       model().hasResponse(taskResponses.RETURN_TO_SAME) ||
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
       model().hasResponse(taskResponses.RETURN_APP_MANAGER) ||
-      model().hasResponse(taskResponses.RETURN_TO_CA))
+      model().hasResponse(taskResponses.RETURN_TO_CA) ||
+      model().hasResponse(taskResponses.RETURN_TO_PO) ||
+      model().hasResponse(taskResponses.RETURN_TO_PAO))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -293,6 +296,24 @@
     </app-button>
 
     <mat-menu #returnMenu="matMenu">
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PO)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_PO)">
+          {{ lang.map.return_to_president_office }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PAO)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_PAO)">
+          {{ lang.map.return_to_president_assistant_office }}
+        </button>
+      }
       @if (
         model().inMyInbox() &&
         model().hasResponse(taskResponses.RETURN_APP_MANAGER)

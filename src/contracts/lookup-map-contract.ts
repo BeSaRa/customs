@@ -59,4 +59,5 @@ export interface LookupMapContract {
   DelegationType: Lookup[];
   officeRecommendation: Lookup[];
   attendeeType: Lookup[];
+  GrievanceFinalDecision: Lookup[];
 }

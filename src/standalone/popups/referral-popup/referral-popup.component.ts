@@ -191,14 +191,14 @@ export class ReferralPopupComponent
     () =>
       (this.penaltyKey() &&
         this.penaltyKey() === SystemPenalties.REFERRAL_TO_PRESIDENT) ||
-      [TaskResponses.RETURN_TO_PR_FROM_LA].includes(this.response!),
+      [TaskResponses.RETURN_TO_PR].includes(this.response!),
   );
   isAssistantRequest = computed(
     () =>
       (this.penaltyKey() &&
         this.penaltyKey() ===
           SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
-      [TaskResponses.RETURN_TO_PA_FROM_LA].includes(this.response!),
+      [TaskResponses.RETURN_TO_PA].includes(this.response!),
   );
 
   displayDefaultForm = computed(() => {
@@ -217,8 +217,8 @@ export class ReferralPopupComponent
   // referral_to_the_disciplinary_committee
   referralTextMap: Record<
     | SystemPenalties
-    | TaskResponses.RETURN_TO_PR_FROM_LA
-    | TaskResponses.RETURN_TO_PA_FROM_LA
+    | TaskResponses.RETURN_TO_PR
+    | TaskResponses.RETURN_TO_PA
     | TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS
     | TaskResponses.ASK_ANOTHER_DEPARTMENT
     | TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL
@@ -275,12 +275,12 @@ export class ReferralPopupComponent
       footer: '',
       whom: '',
     },
-    [TaskResponses.RETURN_TO_PR_FROM_LA]: {
+    [TaskResponses.RETURN_TO_PR]: {
       header: this.lang.map.static_header_text_for_return_to_president,
       footer: this.lang.map.static_footer_text_for_return_to_president,
       whom: this.lang.map.president,
     },
-    [TaskResponses.RETURN_TO_PA_FROM_LA]: {
+    [TaskResponses.RETURN_TO_PA]: {
       header:
         this.lang.map.static_header_text_for_return_to_president_assistant,
       footer:
@@ -325,8 +325,8 @@ export class ReferralPopupComponent
   };
 
   responseTranslateMap: Record<string, keyof LangKeysContract> = {
-    [TaskResponses.RETURN_TO_PR_FROM_LA]: 'return_to_president',
-    [TaskResponses.RETURN_TO_PA_FROM_LA]: 'return_to_president_assistant',
+    [TaskResponses.RETURN_TO_PR]: 'return_to_president',
+    [TaskResponses.RETURN_TO_PA]: 'return_to_president_assistant',
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: 'request_for_department_statement',
     [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: 'referral_to_legal_affairs',
     [TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL]:
@@ -340,8 +340,8 @@ export class ReferralPopupComponent
     return this.selectedPenalty
       ? this.selectedPenalty.penaltyKey
       : (this.response as
-          | TaskResponses.RETURN_TO_PA_FROM_LA
-          | TaskResponses.RETURN_TO_PR_FROM_LA
+          | TaskResponses.RETURN_TO_PA
+          | TaskResponses.RETURN_TO_PR
           | TaskResponses.ASK_ANOTHER_DEPARTMENT
           | TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL
           | TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL
