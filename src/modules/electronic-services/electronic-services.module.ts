@@ -47,6 +47,7 @@ import { DisciplinaryCommitteeComponent } from '@standalone/components/disciplin
 import { ReviewMinutesComponent } from '@standalone/components/review-minutes/review-minutes.component';
 import { CallRequestsComponent } from '@standalone/components/call-requests/call-requests.component';
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
+import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { FinesComponent } from '@modules/electronic-services/components/fines/fi
     SituationSearchComponent,
     InvestigationDraftsComponent,
     FinesComponent,
+    CourtDecisionsComponent,
   ],
   imports: [
     CommonModule,

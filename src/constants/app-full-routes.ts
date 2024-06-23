@@ -35,4 +35,5 @@ export const AppFullRoutes = {
   GRIEVANCE_ARCHIVE: '/home/electronic-services/archivist-grievance',
   LANDING_PAGE: '/home/landing-page',
   FINES: '/home/electronic-services/fines',
+  COURT_DECISIONS: '/home/electronic-services/court-decisions',
 };

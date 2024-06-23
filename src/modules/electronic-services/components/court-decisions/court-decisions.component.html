@@ -1,0 +1,172 @@
+<div
+  class="flex bg-gradient-to-br mb-5 from-primary to-primary-light px-3 text-white rounded-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
+    {{ lang.map.court_decisions }}
+  </h1>
+</div>
+<div class="relative">
+  <mat-card>
+    <mat-tab-group
+      [mat-stretch-tabs]="false"
+      [(selectedIndex)]="selectedTabIndex"
+      [dynamicHeight]="true">
+      <mat-tab [label]="lang.map.search_for_decision">
+        <ng-container [ngTemplateOutlet]="search_for_decision"></ng-container>
+      </mat-tab>
+      <mat-tab
+        [label]="
+          lang.map.search_result + ' (' + this.lang.map.lbl_decisions + ')'
+        ">
+        <ng-container [ngTemplateOutlet]="search_result"></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+
+  <ng-template #search_for_decision>
+    <div class="p-4 overflow-auto" style="height: 100%">
+      <form [formGroup]="form" class="flex flex-col justify-between h-full">
+        <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3">
+          <app-select-input
+            formControlName="offenderType"
+            [label]="lang.map.offender_type"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="offenderType" />
+          <app-input
+            formControlName="decisionSerial"
+            [label]="lang.map.decision_number" />
+          <app-input
+            formControlName="decisionDate"
+            [label]="lang.map.decision_date">
+            <input
+              appControl
+              formControlName="decisionDate"
+              (click)="datepicker.open()"
+              [matDatepicker]="datepicker" />
+            <mat-datepicker [touchUi]="true" #datepicker />
+          </app-input>
+        </div>
+        <div
+          class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
+          <app-button (click)="search$.next()" buttonType="primary">
+            {{ lang.map.search }}
+          </app-button>
+          <app-button (click)="resetForm()" buttonType="primary"
+            >{{ lang.map.reset }}
+          </app-button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+  <ng-template #search_result>
+    <div class="p-4 overflow-auto" style="height: 100%">
+      <div class="shadow relative" style="max-height: 62vh">
+        <table
+          mat-table
+          matSort
+          class="table-style"
+          [dataSource]="displayedList">
+          <!-- decision Serial Column -->
+          <ng-container matColumnDef="decisionSerial">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.decision_serial }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{ element.decisionSerial }}</span>
+            </td>
+          </ng-container>
+          <!-- decision Type Column -->
+          <ng-container matColumnDef="decisionType">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.decision_type }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{
+                element.decisionTypeInfo && element.decisionTypeInfo.getNames()
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- signerInfo Column -->
+          <ng-container matColumnDef="signerInfo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.penalty_signer }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{
+                element.penaltySignerInfo &&
+                  element.penaltySignerInfo.getNames()
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- offenderInfo Column -->
+          <ng-container matColumnDef="offenderInfo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.offender_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{
+                element.offenderInfo && element.offenderInfo.getNames()
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- penaltyInfo Column -->
+          <ng-container matColumnDef="penaltyInfo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.penalty_name }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{
+                element.penaltyInfo && element.penaltyInfo.getNames()
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- statusInfo Column -->
+          <ng-container matColumnDef="statusInfo">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.lbl_status }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span>{{
+                element.penaltyStatusInfo &&
+                  element.penaltyStatusInfo.getNames()
+              }}</span>
+            </td>
+          </ng-container>
+
+          <!-- actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex">
+                <div
+                  (click)="openCourtDecisionPopup(element)"
+                  [matTooltip]="lang.map.court_decision">
+                  <app-icon-button icon="SCALE_BALANCE" />
+                </div>
+              </div>
+            </td>
+          </ng-container>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let element;
+              columns: columnsWrapper.displayedColumns
+            "></tr>
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="p-4" colspan="100">
+              {{ lang.map.no_records_to_display }}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </ng-template>
+</div>

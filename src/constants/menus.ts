@@ -6,6 +6,13 @@ import { TeamNames } from '@enums/team-names';
 
 export const Menus: MenuItemContract[] = [
   {
+    id: MenuIdes.LANDING_PAGE,
+    langKey: 'landing_page',
+    icon: AppIcons.DASHBOARD,
+    path: AppFullRoutes.LANDING_PAGE,
+    permission: 'MANAGE_LAYOUT_WIDGET',
+  },
+  {
     id: MenuIdes.ADMINISTRATION,
     langKey: 'menu_administration',
     icon: AppIcons.SETTINGS,
@@ -249,10 +256,10 @@ export const Menus: MenuItemContract[] = [
     permission: 'OFFLINE_PAYMENT',
   },
   {
-    id: MenuIdes.LANDING_PAGE,
-    langKey: 'landing_page',
-    icon: AppIcons.DASHBOARD,
-    path: AppFullRoutes.LANDING_PAGE,
-    permission: 'MANAGE_LAYOUT_WIDGET',
+    id: MenuIdes.COURT_DECISIONS,
+    langKey: 'court_decisions',
+    icon: AppIcons.GAVEL,
+    path: AppFullRoutes.COURT_DECISIONS,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
   },
 ];

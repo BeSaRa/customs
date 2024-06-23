@@ -1,6 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.grievance }}</h1>
+    <h1>{{ lang.map.court_decision }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -12,7 +12,7 @@
       <div dir="rtl">
         <div class="flex justify-between">
           <div>
-            <strong>السيد {{ sendToTitle }} المحترم</strong>
+            <!-- <strong>السيد {{ sendToTitle }} المحترم</strong> -->
           </div>
           <div>
             <label class="pb-3 block">
@@ -31,10 +31,32 @@
           </div>
         </div>
         <form [formGroup]="form" class="mb-3">
+          <app-select-input
+            [label]="lang.map.penalty_name"
+            formControlName="penaltyId"
+            [options]="penalties"
+            bindLabel="getNames"
+            bindValue="id" />
+          <app-input
+            formControlName="maxApplyDate"
+            [label]="lang.map.maximum_application_date">
+            <input
+              appControl
+              readonly
+              formControlName="maxApplyDate"
+              (click)="datepicker.open()"
+              [matDatepicker]="datepicker" />
+            <mat-datepicker [touchUi]="true" #datepicker />
+          </app-input>
           <app-textarea
-            formControlName="description"
-            [placeholder]="lang.map.add_grievance_description_placeholder"
-            [label]="lang.map.description"></app-textarea>
+            formControlName="comment"
+            [label]="lang.map.the_comment"></app-textarea>
+          <app-case-attachments
+            [title]="lang.map.attachments"
+            [caseId]="'1'"
+            [entityId]="1"
+            [service]="courtDecisionService">
+          </app-case-attachments>
         </form>
       </div>
     </div>

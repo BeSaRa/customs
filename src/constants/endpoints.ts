@@ -59,6 +59,7 @@ export const EndPoints = {
   LAYOUT_WIDGET: '/entity/layout-widget',
   OFFLINE_PAYMENT: '/internal/offline/payment',
   CASE_ENTITY_VIEW: '/entity/case-entity-view/search/criteria',
+  COURT_DECISION: '/court-decision-case', // until implemented from BE side
 };
 
 export type EndpointsType = typeof EndPoints;

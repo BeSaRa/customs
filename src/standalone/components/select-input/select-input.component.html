@@ -63,7 +63,7 @@
         </mat-option>
       </ng-template>
     </mat-select>
-    @if (!isRequired && control.value && nullable()) {
+    @if (showDeleteSelected && !isRequired && control.value && nullable()) {
       <mat-icon
         class="me-2"
         (click)="delete($event, control.value)"
