@@ -245,7 +245,7 @@ export class ReferralPopupComponent
       footer: this.lang.map.request_static_footer_for_president_assistant,
       whom: (tab?: 'employee' | 'broker') => {
         if (!tab) {
-          return this.offenders()[0].type === OffenderTypes.EMPLOYEE
+          return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
             ? this.lang.map.vice_president
             : this.customsAffairsPAOUInfo.getNames();
         } else {
