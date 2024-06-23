@@ -17,9 +17,7 @@ export class MawaredDepartment extends BaseModel<
   departmentId!: number;
   parentId!: number;
   parentInfo!: AdminResult;
-
-  // extra
-  email!: string;
+  type!: number;
 
   buildForm(): object {
     const { arName, enName, ldapCode, status } = this;
