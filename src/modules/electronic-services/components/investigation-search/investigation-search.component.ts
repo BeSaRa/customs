@@ -8,17 +8,18 @@ import { Investigation } from '@models/investigation';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { InvestigationSearchService } from '@services/investigation-search.service';
 import { LangService } from '@services/lang.service';
-import { ignoreErrors } from '@utils/utils';
 import {
-  catchError,
-  exhaustMap,
+  BehaviorSubject,
+  combineLatest,
+  delay,
   filter,
   isObservable,
+  map,
   Observable,
   of,
   Subject,
   switchMap,
-  throwError,
+  tap,
 } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
@@ -37,6 +38,7 @@ import { MawaredEmployee } from '@models/mawared-employee';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { ClearingAgent } from '@models/clearing-agent';
 import { ClearingAgentService } from '@services/clearing-agent.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-investigation-search',
@@ -69,6 +71,11 @@ export class InvestigationSearchComponent implements OnInit {
   displayedList = new MatTableDataSource<Investigation>();
   selectedTab = 0;
   today = new Date();
+  public paginate$ = new BehaviorSubject({
+    offset: 0,
+    limit: 50,
+  });
+  length = 50;
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -123,6 +130,7 @@ export class InvestigationSearchComponent implements OnInit {
 
   private listenToSearch() {
     this.search$
+      .pipe(delay(0))
       .pipe(
         switchMap(() => {
           const result = this._beforeSearch();
@@ -131,12 +139,18 @@ export class InvestigationSearchComponent implements OnInit {
       )
       .pipe(filter(value => value))
       .pipe(
-        exhaustMap(() => {
-          return this.investigationSearchService.search(this.form.value).pipe(
-            catchError(error => {
-              return throwError(error);
+        switchMap(() => {
+          return combineLatest([this.paginate$]).pipe(
+            switchMap(([paginationOptions]) => {
+              return this.investigationSearchService.search({
+                ...this.form.value,
+                ...paginationOptions,
+              });
             }),
-            ignoreErrors(),
+            tap(({ count }) => {
+              this.length = count;
+            }),
+            map(response => response.rs),
           );
         }),
       )
@@ -195,5 +209,16 @@ export class InvestigationSearchComponent implements OnInit {
     this.clearingAgentService
       .loadAsLookups()
       .subscribe(clearingAgents => (this.clearingAgents = clearingAgents));
+  }
+
+  paginate($event: PageEvent) {
+    this.paginate$.next({
+      offset: $event.pageSize * $event.pageIndex,
+      limit: $event.pageSize,
+    });
+  }
+
+  get limit(): number {
+    return this.paginate$.value.limit;
   }
 }
