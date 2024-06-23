@@ -29,6 +29,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { SelectInputComponent } from '../select-input/select-input.component';
 import { TooltipListPipe } from '@standalone/pipes/tooltip-list.pipe';
 import { OrganizationUnit } from '@models/organization-unit';
+import { NavbarService } from '@services/navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -64,7 +65,7 @@ export class NavbarComponent
   editUserPreferences$: Subject<void> = new Subject<void>();
 
   switchOrganization$ = new Subject<OrganizationUnit>();
-
+  navBarService = inject(NavbarService);
   selectedOrganization = signal(this.employeeService.getOrganizationUnit());
 
   ngOnInit(): void {
@@ -148,6 +149,7 @@ export class NavbarComponent
       .subscribe(dep => {
         this.toast.success(this.lang.map.organization_switched_successfully);
         this.selectedOrganization.set(dep);
+        this.navBarService.departmentChange$.next();
       });
   }
 }

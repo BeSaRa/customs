@@ -23,6 +23,7 @@ import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.compo
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { CommonService } from '@services/common.service';
+import { NavbarService } from '@services/navbar.service';
 
 @Component({
   selector: 'app-team-inbox',
@@ -40,6 +41,7 @@ export class TeamInboxComponent
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
   commonService = inject(CommonService);
+  navbarService = inject(NavbarService);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
@@ -84,6 +86,11 @@ export class TeamInboxComponent
   ngOnInit(): void {
     this.listenToReload(this.employeeService.getEmployeeTeams()[0].id);
     this.listenToSelectedTeamIdChange();
+    this.listenToDepartmentChange();
+  }
+
+  override ngOnDestroy() {
+    this.navbarService.departmentChange$.unsubscribe();
   }
 
   listenToReload(teamId: number = -1) {
@@ -160,5 +167,9 @@ export class TeamInboxComponent
     this.dialog.open(ActionsOnCaseComponent, {
       data: { caseId: item.PI_PARENT_CASE_ID },
     });
+  }
+
+  listenToDepartmentChange() {
+    this.navbarService.departmentChange$.subscribe(() => this.listenToReload());
   }
 }
