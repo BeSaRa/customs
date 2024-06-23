@@ -26,6 +26,9 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
 import { Penalty } from '@models/penalty';
 import { DialogService } from '@services/dialog.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-comment-popup/grievance-comment-popup.component';
 
 @Component({
   selector: 'app-grievance',
@@ -39,6 +42,8 @@ import { DialogService } from '@services/dialog.service';
     CaseAttachmentsComponent,
     SelectInputComponent,
     ReactiveFormsModule,
+    IconButtonComponent,
+    MatTooltip,
   ],
   templateUrl: './grievance.component.html',
   styleUrl: './grievance.component.scss',
@@ -60,10 +65,12 @@ export class GrievanceComponent extends BaseCaseComponent<
   form!: UntypedFormGroup;
   penaltiesList: Penalty[] = [];
   updateModel$ = new Subject<void>();
+  comment$: Subject<Grievance> = new Subject<Grievance>();
 
   protected override _init() {
     super._init();
     this.listenToUpdateModel();
+    this.listenToComment();
     // this.loadPenalties().subscribe();
     if (
       this.model.getActivityName() === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
@@ -72,6 +79,21 @@ export class GrievanceComponent extends BaseCaseComponent<
         CustomValidators.required,
       ]);
     }
+  }
+  listenToComment() {
+    this.comment$
+      .pipe(
+        switchMap((model: Grievance) => {
+          return this.dialog
+            .open(GrievanceCommentPopupComponent, {
+              data: {
+                model,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
   listenToUpdateModel() {
     this.updateModel$
