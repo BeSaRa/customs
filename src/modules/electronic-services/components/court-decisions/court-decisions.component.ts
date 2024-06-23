@@ -89,7 +89,7 @@ export class CourtDecisionsComponent implements OnInit {
       )
       .subscribe((data: Pagination<Offender[]>) => {
         if (data.rs.length) {
-          this.selectedTabIndex = 1;
+          this.selectedTabIndex = 2;
           this.displayedList = new MatTableDataSource(data.rs);
         } else {
           this.dialog.info(this.lang.map.no_records_to_display);

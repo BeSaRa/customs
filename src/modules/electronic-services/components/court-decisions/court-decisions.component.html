@@ -10,6 +10,12 @@
       [mat-stretch-tabs]="false"
       [(selectedIndex)]="selectedTabIndex"
       [dynamicHeight]="true">
+      <mat-tab [label]="lang.map.entered_court_decisions">
+        <ng-container [ngTemplateOutlet]="court_decisions">
+          <app-court-decision-list
+            [hidePagination]="true"></app-court-decision-list>
+        </ng-container>
+      </mat-tab>
       <mat-tab [label]="lang.map.search_for_decision">
         <ng-container [ngTemplateOutlet]="search_for_decision"></ng-container>
       </mat-tab>
@@ -22,6 +28,7 @@
     </mat-tab-group>
   </mat-card>
 
+  <ng-template #court_decisions></ng-template>
   <ng-template #search_for_decision>
     <div class="p-4 overflow-auto" style="height: 100%">
       <form [formGroup]="form" class="flex flex-col justify-between h-full">
