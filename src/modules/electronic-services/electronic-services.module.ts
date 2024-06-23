@@ -48,6 +48,7 @@ import { ReviewMinutesComponent } from '@standalone/components/review-minutes/re
 import { CallRequestsComponent } from '@standalone/components/call-requests/call-requests.component';
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
+import { CourtDecisionListComponent } from '@standalone/components/court-decision-list/court-decision-list.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { CourtDecisionsComponent } from './components/court-decisions/court-deci
     DisciplinaryCommitteeComponent,
     ReviewMinutesComponent,
     CallRequestsComponent,
+    CourtDecisionListComponent,
   ],
 })
 export class ElectronicServicesModule {}
