@@ -17,6 +17,7 @@ import { TeamNames } from '@enums/team-names';
 import { GrievanceComponent } from '@modules/electronic-services/components/grievance/grievance.component';
 import { ArchivistGrievanceComponent } from '@modules/electronic-services/components/archivist-grievance/archivist-grievance.component';
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
+import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -87,6 +88,15 @@ const routes: Routes = [
         permission: AppPermissions.OFFLINE_PAYMENT,
       }),
     ],
+  },
+  {
+    path: AppRoutes.COURT_DECISIONS,
+    component: CourtDecisionsComponent,
+    // canActivate: [
+    //   accessPageGuard({
+    //     permission: AppPermissions.OFFLINE_PAYMENT,
+    //   }),
+    // ],
   },
 ];
 

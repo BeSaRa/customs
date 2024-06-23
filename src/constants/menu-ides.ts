@@ -32,4 +32,5 @@ export const MenuIdes = {
   GRIEVANCE: 33,
   FINES: 34,
   LANDING_PAGE: 35,
+  COURT_DECISIONS: 36,
 };

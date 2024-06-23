@@ -114,6 +114,8 @@ export class SelectInputComponent
   enableFilter = false;
   @Input()
   divider = false;
+  @Input()
+  showDeleteSelected = true;
 
   nullable = input(true, { transform: booleanAttribute });
 

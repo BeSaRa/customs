@@ -695,4 +695,8 @@ export interface LangKeysContract {
   clearing_agent_id: string;
   landing_page: string;
   code: string;
+  court_decisions: string;
+  menu_court_decisions: string;
+  the_comment: string;
+  maximum_application_date: string;
 }
