@@ -228,6 +228,14 @@
           </tr>
         </table>
         <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+        <mat-paginator
+          class="border-t border-gray-200"
+          (page)="paginate($event)"
+          [pageSizeOptions]="[50, 100, 150, 200]"
+          [pageSize]="limit"
+          [showFirstLastButtons]="true"
+          [length]="length">
+        </mat-paginator>
       </div>
     </div>
   </ng-template>

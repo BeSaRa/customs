@@ -28,13 +28,13 @@ export class InvestigationSearchService extends InvestigationService {
     return this.urlService.URLS.CASE_ENTITY_VIEW;
   }
 
-  @CastResponse(() => InvestigationSearchCriteria, {
-    unwrap: 'rs',
-    fallback: '$default',
+  @CastResponse(undefined, {
+    unwrap: '',
+    fallback: '$pagination',
   })
   search(criteria: {
     [key: string]: string | number | boolean;
-  }): Observable<Investigation[]> {
+  }): Observable<Pagination<Investigation[]>> {
     if (criteria) {
       Object.keys(criteria as unknown as object).forEach(key => {
         if (
@@ -45,7 +45,7 @@ export class InvestigationSearchService extends InvestigationService {
         }
       });
     }
-    return this.http.get<Investigation[]>(this.getUrlSegment(), {
+    return this.http.get<Pagination<Investigation[]>>(this.getUrlSegment(), {
       params: new HttpParams({ fromObject: criteria }),
     });
   }
