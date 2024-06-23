@@ -18,7 +18,6 @@ import { OrganizationUnitType } from '@enums/organization-unit-type';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
 import { DialogService } from '@services/dialog.service';
 import { MawaredDepartment } from '@models/mawared-department';
-import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -176,55 +175,32 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   listenToMawaredDepChanges() {
-    this.mawaredDepIdCtrl?.valueChanges.pipe(take(1)).subscribe(() => {
+    this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
       Object.keys(this.form.controls).forEach(control => {
         if (control !== 'mawaredDepId') {
           this.form.get(control)?.enable();
         }
       });
-    });
-
-    this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
       this.autoFillFields();
     });
   }
 
   autoFillFields() {
-    const department = this.organizationUnits.find(
-      department => department.id === this.mawaredDepIdCtrl?.value,
+    const department = this.mawaredDepartments.find(
+      department => department.departmentId === this.mawaredDepIdCtrl?.value,
     );
 
     if (department) this.setDepartment(department);
   }
 
-  setDepartment(department: OrganizationUnit) {
-    const {
-      arName,
-      enName,
-      status,
-      managerId,
-      email,
-      type,
-      ldapGroupName,
-      ldapLimitedGroupName,
-      managerAssistant,
-      parent,
-      isCustoms,
-      code,
-    } = department;
+  setDepartment(department: MawaredDepartment) {
+    const { arName, enName, status, type, parentId } = department;
     this.form.patchValue({
       arName,
       enName,
       status,
-      managerId,
-      email,
       type,
-      ldapGroupName,
-      ldapLimitedGroupName,
-      managerAssistant,
-      parent,
-      isCustoms,
-      code,
+      parent: parentId,
     });
   }
 }
