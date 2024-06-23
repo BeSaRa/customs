@@ -146,15 +146,22 @@
               <h3
                 class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
                 {{ lang.map.lbl_comments }}
+                @if (model.inMyInbox()) {
+                  <app-icon-button
+                    [icon]="'COMMENT'"
+                    (click)="comment$.next(model)"
+                    [matTooltip]="lang.map.lbl_comments">
+                  </app-icon-button>
+                }
               </h3>
               <ul class="divide-y divide-gray-200">
-                @for (comment of model.commentList; track $index) {
+                @for (commentObj of model.commentList; track $index) {
                   <li class="pb-3 sm:pb-4">
                     <div
                       class="flex items-center space-x-4 rtl:space-x-reverse">
                       <div class="flex-1 min-w-0">
                         <p class="text-sm font-medium text-gray-900 truncate">
-                          {{ comment }}
+                          {{ commentObj.comment }}
                         </p>
                       </div>
                     </div>
@@ -184,7 +191,7 @@
                 [caseId]="model.id"
                 [type]="'folder'"
                 [service]="service"
-                [readonly]="true"></app-case-attachments>
+                [readonly]="!model.inMyInbox()"></app-case-attachments>
             </div>
           </div>
         </div>
