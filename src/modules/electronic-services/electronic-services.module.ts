@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ElectronicServicesRoutingModule } from './electronic-services-routing.module';
 import { ElectronicServicesComponent } from './electronic-services.component';
 import { InvestigationComponent } from './components/investigation/investigation.component';
@@ -104,6 +104,7 @@ import { CourtDecisionListComponent } from '@standalone/components/court-decisio
     ReviewMinutesComponent,
     CallRequestsComponent,
     CourtDecisionListComponent,
+    DatePipe,
   ],
 })
 export class ElectronicServicesModule {}

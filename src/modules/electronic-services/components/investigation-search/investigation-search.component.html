@@ -26,28 +26,24 @@
     <div class="p-4 overflow-auto" style="height: 100%">
       <form [formGroup]="form">
         <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-          <app-input
-            formControlName="createdFrom"
-            [label]="lang.map.created_from">
-            <input
-              appControl
-              formControlName="createdFrom"
-              (click)="createdFrom.open()"
-              [matDatepicker]="createdFrom"
-              [max]="today" />
-            <mat-datepicker [touchUi]="true" #createdFrom />
-          </app-input>
-
-          <app-input formControlName="createdTo" [label]="lang.map.created_to">
-            <input
-              appControl
-              formControlName="createdTo"
-              (click)="createdTo.open()"
-              [matDatepicker]="createdTo"
-              [max]="today" />
-            <mat-datepicker [touchUi]="true" #createdTo />
-          </app-input>
-
+          <div class="mb-3">
+            <label class="font-medium">{{ lang.map.created_date }} </label>
+            <div
+              (click)="rangePicker.open()"
+              class="flex read-only input-form p-2">
+              <mat-date-range-input [max]="today" [rangePicker]="rangePicker">
+                <input
+                  [placeholder]="lang.map.date_from"
+                  matStartDate
+                  formControlName="createdFrom" />
+                <input
+                  [placeholder]="lang.map.date_to"
+                  matEndDate
+                  formControlName="createdTo" />
+              </mat-date-range-input>
+            </div>
+            <mat-date-range-picker hidden #rangePicker></mat-date-range-picker>
+          </div>
           <app-input
             formControlName="draftNumber"
             [label]="lang.map.report_draft_number" />
