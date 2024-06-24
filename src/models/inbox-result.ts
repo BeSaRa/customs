@@ -15,6 +15,7 @@ const { send, receive } = new InboxInterceptor();
 @InterceptModel({ send, receive })
 export class InboxResult extends ClonerMixin(class {}) {
   BD_INVESTIGATION_FULL_SERIAL!: string;
+  DB_GRIEVANCE_FULL_SERIAL!: string;
   BD_IS_DRAFTED!: string;
   BD_SUBJECT!: string;
   BD_CASE_TYPE!: number;

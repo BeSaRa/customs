@@ -172,4 +172,6 @@ export class TeamInboxComponent
   listenToDepartmentChange() {
     this.navbarService.departmentChange$.subscribe(() => this.listenToReload());
   }
+
+  protected readonly CaseTypes = CaseTypes;
 }
