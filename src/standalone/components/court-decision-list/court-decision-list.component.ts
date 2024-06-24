@@ -16,17 +16,15 @@ import {
   MatTableDataSource,
 } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { UserTypes } from '@enums/user-types';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { CourtDecision } from '@models/court-decision';
 import { Pagination } from '@models/pagination';
 import { CourtDecisionService } from '@services/court-decision.service';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
-import { BehaviorSubject, filter, of, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, of, switchMap, takeUntil } from 'rxjs';
 import { ButtonComponent } from '../button/button.component';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
-import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-court-decision-list',
@@ -58,16 +56,14 @@ export class CourtDecisionListComponent
 {
   lang = inject(LangService);
   courtDecisionService = inject(CourtDecisionService);
-  employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
-  @Input() hidePagination: boolean = false;
   @Input() userId!: number | undefined;
   @ViewChild('paginator') paginator!: MatPaginator;
 
   reload$: BehaviorSubject<null> = new BehaviorSubject<null>(null);
 
   dataSource: MatTableDataSource<CourtDecision> = new MatTableDataSource();
-  grievanceDisplayedColumns = [
+  courtDecisionDisplayedColumns = [
     'caseIdentifier',
     'investigationFullSerial',
     'caseStatus',
@@ -84,33 +80,23 @@ export class CourtDecisionListComponent
     this.reload$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        filter(
-          () =>
-            UserTypes.EXTERNAL_CLEARING_AGENCY !==
-              this.employeeService.getLoginData()?.type || !!this.userId,
-        ),
-      )
-      .pipe(
         switchMap(() => {
           return of({ count: 0, rs: [] });
         }),
       )
       .subscribe((list: Pagination<CourtDecision[]>) => {
-        this.dataSource.data = !this.hidePagination
-          ? (list.rs as CourtDecision[])
-          : (list.rs.splice(0, 5) as CourtDecision[]);
+        this.dataSource.data = list.rs;
       });
-    if (!this.hidePagination) {
-      this.dataSource.paginator = this.paginator;
-      this.paginator._intl.getRangeLabel = (
-        page: number,
-        pageSize: number,
-        length: number,
-      ) => {
-        const start = page * pageSize + 1;
-        const end = Math.min((page + 1) * pageSize, length);
-        return `${start} - ${end} ${this.lang.map.of} ${length}`;
-      };
-    }
+
+    this.dataSource.paginator = this.paginator;
+    this.paginator._intl.getRangeLabel = (
+      page: number,
+      pageSize: number,
+      length: number,
+    ) => {
+      const start = page * pageSize + 1;
+      const end = Math.min((page + 1) * pageSize, length);
+      return `${start} - ${end} ${this.lang.map.of} ${length}`;
+    };
   }
 }
