@@ -39,11 +39,13 @@ import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { ClearingAgent } from '@models/clearing-agent';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { PageEvent } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-investigation-search',
   templateUrl: './investigation-search.component.html',
   styleUrls: ['./investigation-search.component.scss'],
+  providers: [DatePipe],
 })
 export class InvestigationSearchComponent implements OnInit {
   investigationSearchService = inject(InvestigationSearchService);
@@ -54,6 +56,7 @@ export class InvestigationSearchComponent implements OnInit {
   dialog = inject(DialogService);
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
+  datePipe = inject(DatePipe);
 
   securityLevels = this.lookupService.lookups.securityLevelsWithAll;
   departments!: OrganizationUnit[];
@@ -124,6 +127,31 @@ export class InvestigationSearchComponent implements OnInit {
     return this.form.valid;
   }
 
+  private _prepareModel() {
+    if (
+      this.form.get('createdFrom')?.value &&
+      this.form.get('createdTo')?.value
+    ) {
+      this.form
+        .get('createdFrom')
+        ?.setValue(
+          this.datePipe.transform(
+            new Date(this.form.get('createdFrom')?.value),
+            'yyyy-MM-dd',
+          ),
+        );
+      this.form
+        .get('createdTo')
+        ?.setValue(
+          this.datePipe.transform(
+            new Date(this.form.get('createdTo')?.value),
+            'yyyy-MM-dd',
+          ),
+        );
+    }
+    return this.form.value;
+  }
+
   resetForm() {
     this.form.reset();
   }
@@ -140,12 +168,19 @@ export class InvestigationSearchComponent implements OnInit {
       .pipe(filter(value => value))
       .pipe(
         switchMap(() => {
+          const result = this._prepareModel();
+          return isObservable(result) ? result : of(result);
+        }),
+      )
+      .pipe(
+        switchMap(() => {
           return combineLatest([this.paginate$]).pipe(
             switchMap(([paginationOptions]) => {
-              return this.investigationSearchService.search({
+              const criteria = {
                 ...this.form.value,
                 ...paginationOptions,
-              });
+              };
+              return this.investigationSearchService.search(criteria);
             }),
             tap(({ count }) => {
               this.length = count;

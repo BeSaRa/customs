@@ -700,4 +700,5 @@ export interface LangKeysContract {
   the_comment: string;
   maximum_application_date: string;
   entered_court_decisions: string;
+  created_date: string;
 }
