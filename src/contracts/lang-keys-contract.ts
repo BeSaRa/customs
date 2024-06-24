@@ -701,4 +701,5 @@ export interface LangKeysContract {
   maximum_application_date: string;
   entered_court_decisions: string;
   created_date: string;
+  is_exportable: string;
 }
