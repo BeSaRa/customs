@@ -55,7 +55,7 @@ export class InvestigationSearchComponent implements OnInit {
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
 
-  securityLevels = this.lookupService.lookups.securityLevel;
+  securityLevels = this.lookupService.lookups.securityLevelsWithAll;
   departments!: OrganizationUnit[];
   offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
   caseStatus = this.lookupService.lookups.commonCaseStatus;
