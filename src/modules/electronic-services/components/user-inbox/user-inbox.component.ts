@@ -149,4 +149,6 @@ export class UserInboxComponent
       data: { caseId: item.PI_PARENT_CASE_ID },
     });
   }
+
+  protected readonly CaseTypes = CaseTypes;
 }

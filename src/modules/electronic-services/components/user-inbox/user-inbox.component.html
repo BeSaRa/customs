@@ -24,9 +24,11 @@
           class="text-blue-700 hover:underline focus:outline-none"
           (click)="view(element)">
           {{
-            element.BD_IS_DRAFTED
-              ? element.BD_DRAFT_FULL_SERIAL
-              : element.BD_INVESTIGATION_FULL_SERIAL
+            element.getNames() === CaseTypes.GRIEVANCE
+              ? element.DB_GRIEVANCE_FULL_SERIAL
+              : element.BD_IS_DRAFTED
+                ? element.BD_DRAFT_FULL_SERIAL
+                : element.BD_INVESTIGATION_FULL_SERIAL
           }}
         </button>
       </td>
