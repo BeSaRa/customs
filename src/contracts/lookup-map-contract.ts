@@ -44,6 +44,7 @@ export interface LookupMapContract {
   personType: Lookup[];
   witnessType: Lookup[];
   securityLevel: Lookup[];
+  securityLevelsWithAll: Lookup[];
   proofStatus: Lookup[];
   careerLevel: Lookup[];
   apologyReason: Lookup[];
