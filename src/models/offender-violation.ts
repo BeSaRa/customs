@@ -19,6 +19,7 @@ export class OffenderViolation extends BaseModel<
   caseId!: string;
   violationId!: number;
   offenderId!: number;
+  offenderRefId!: number;
   violationInfo!: Violation;
   offenderInfo!: Offender;
   proofStatus: ProofTypes = ProofTypes.UNDEFINED;
