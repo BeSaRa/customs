@@ -58,7 +58,7 @@ export const EndPoints = {
   LAYOUT: '/entity/layout',
   LAYOUT_WIDGET: '/entity/layout-widget',
   OFFLINE_PAYMENT: '/internal/offline/payment',
-  CASE_ENTITY_VIEW: '/investigation-case/investigation/search/criteria',
+  INVESTIGATION_SEARCH: '/investigation-case/search/criteria',
   COURT_DECISION: '/court-decision-case', // until implemented from BE side
 };
 

@@ -4,7 +4,6 @@ import { Investigation } from '@models/investigation';
 import { Observable } from 'rxjs';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Pagination } from '@models/pagination';
-import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
 import { HttpParams } from '@angular/common/http';
 
 @CastResponseContainer({
@@ -25,7 +24,7 @@ export class InvestigationSearchService extends InvestigationService {
   override serviceName: string = 'InvestigationSearchService';
 
   override getUrlSegment(): string {
-    return this.urlService.URLS.CASE_ENTITY_VIEW;
+    return this.urlService.URLS.INVESTIGATION_SEARCH;
   }
 
   @CastResponse(undefined, {
