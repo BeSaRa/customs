@@ -194,13 +194,11 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   setDepartment(department: MawaredDepartment) {
-    const { arName, enName, status, type, parentId } = department;
+    const { arName, enName, departmentId } = department;
     this.form.patchValue({
       arName,
       enName,
-      status,
-      type,
-      parent: parentId,
+      mawaredDepId: departmentId,
     });
   }
 }
