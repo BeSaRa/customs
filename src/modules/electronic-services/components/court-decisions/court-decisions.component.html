@@ -12,8 +12,7 @@
       [dynamicHeight]="true">
       <mat-tab [label]="lang.map.entered_court_decisions">
         <ng-container [ngTemplateOutlet]="court_decisions">
-          <app-court-decision-list
-            [hidePagination]="true"></app-court-decision-list>
+          <app-court-decision-list></app-court-decision-list>
         </ng-container>
       </mat-tab>
       <mat-tab [label]="lang.map.search_for_decision">
