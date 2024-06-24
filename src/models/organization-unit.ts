@@ -45,7 +45,6 @@ export class OrganizationUnit extends BaseModel<
       assistantOuId,
       managerAssistant,
       parent,
-      isCustoms,
       status,
       code,
     } = this;
@@ -81,7 +80,6 @@ export class OrganizationUnit extends BaseModel<
         ? [assistantOuId, CustomValidators.required]
         : assistantOuId,
       managerAssistant: controls ? [managerAssistant] : managerAssistant,
-      isCustoms: controls ? [isCustoms] : isCustoms,
       status: controls ? [status, CustomValidators.required] : status,
       code: controls ? [code, CustomValidators.required] : code,
     };
