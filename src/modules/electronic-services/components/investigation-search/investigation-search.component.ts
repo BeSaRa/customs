@@ -40,6 +40,8 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { ClearingAgentService } from '@services/clearing-agent.service';
 import { PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
+import { ViolationType } from '@models/violation-type';
+import { ViolationTypeService } from '@services/violation-type.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -62,10 +64,12 @@ export class InvestigationSearchComponent implements OnInit {
   departments!: OrganizationUnit[];
   offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
   caseStatus = this.lookupService.lookups.commonCaseStatus;
+  violations!: ViolationType[];
   penalties!: Penalty[];
   mawaredEmployees!: MawaredEmployee[];
   clearingAgents!: ClearingAgent[];
   penaltyService = inject(PenaltyService);
+  violationTypeService = inject(ViolationTypeService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
   clearingAgentService = inject(ClearingAgentService);
   departmentService = inject(OrganizationUnitService);
@@ -90,6 +94,7 @@ export class InvestigationSearchComponent implements OnInit {
   ngOnInit(): void {
     this.loadDepartments();
     this.loadPenalties();
+    this.loadViolationTypes();
     this.loadMawaredEmployees();
     this.loadClearingAgents();
     this.form = this.fb.group(
@@ -230,6 +235,12 @@ export class InvestigationSearchComponent implements OnInit {
     this.penaltyService
       .loadAsLookups()
       .subscribe(penalties => (this.penalties = penalties));
+  }
+
+  loadViolationTypes() {
+    this.violationTypeService
+      .loadAsLookups()
+      .subscribe(violations => (this.violations = violations));
   }
 
   loadMawaredEmployees() {
