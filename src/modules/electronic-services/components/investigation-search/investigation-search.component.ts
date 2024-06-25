@@ -42,6 +42,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { ViolationType } from '@models/violation-type';
 import { ViolationTypeService } from '@services/violation-type.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -73,6 +74,7 @@ export class InvestigationSearchComponent implements OnInit {
   mawaredEmployeeService = inject(MawaredEmployeeService);
   clearingAgentService = inject(ClearingAgentService);
   departmentService = inject(OrganizationUnitService);
+  employeeService = inject(EmployeeService);
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Investigation>();
@@ -226,9 +228,13 @@ export class InvestigationSearchComponent implements OnInit {
   }
 
   loadDepartments() {
-    this.departmentService
-      .loadAsLookups()
-      .subscribe(departments => (this.departments = departments));
+    this.departmentService.loadAsLookups().subscribe(departments => {
+      this.departments = departments;
+      const userOU = this.employeeService.getOrganizationUnit();
+      if (userOU) {
+        this.form.get('departmentId')?.setValue(userOU.id);
+      }
+    });
   }
 
   loadPenalties() {

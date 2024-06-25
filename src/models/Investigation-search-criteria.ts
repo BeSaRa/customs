@@ -1,5 +1,6 @@
 import { Investigation } from './investigation';
 import { CustomValidators } from '@validators/custom-validators';
+import { OffenderTypeWithNone } from '@enums/offender-type-with-none';
 
 export class InvestigationSearchCriteria extends Investigation {
   override $$__service_name__$$: string = 'InvestigationSearchCriteria';
@@ -13,7 +14,7 @@ export class InvestigationSearchCriteria extends Investigation {
   departmentId!: number;
   penaltyId!: number;
   violationTypeId!: number;
-  offenderType!: number;
+  offenderType: number = OffenderTypeWithNone.ALL;
 
   override buildForm(
     controls: boolean = false,
