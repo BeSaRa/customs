@@ -83,9 +83,9 @@
           <app-select-input
             formControlName="violationTypeId"
             [label]="lang.map.violation_type"
-            bindValue="lookupKey"
+            bindValue="id"
             bindLabel="getNames"
-            [options]="caseStatus"
+            [options]="violations"
             [enableFilter]="true" />
 
           <app-select-input
