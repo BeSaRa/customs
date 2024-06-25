@@ -8,6 +8,8 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { Grievance } from '@models/grievance';
 import { Observable } from 'rxjs';
 import { Pagination } from '@models/pagination';
+import { HttpParams } from '@angular/common/http';
+import { Penalty } from '@models/penalty';
 
 @CastResponseContainer({
   $default: {
@@ -18,6 +20,9 @@ import { Pagination } from '@models/pagination';
     shape: {
       'rs.*': () => Grievance,
     },
+  },
+  $penalty: {
+    model: () => Penalty,
   },
 })
 @Injectable({
@@ -60,6 +65,19 @@ export class GrievanceService
       this.getUrlSegment() +
         `/case/${payload.caseId}/comment/${payload.comment}`,
       {},
+    );
+  }
+
+  @CastResponse(undefined, {
+    unwrap: 'rs',
+    fallback: '$penalty',
+  })
+  grievancePenalty(offenderId: number): Observable<Penalty[]> {
+    return this.http.get<Penalty[]>(
+      this.getUrlSegment() + '/grievance/penalty',
+      {
+        params: new HttpParams({ fromObject: { offenderId } }),
+      },
     );
   }
 }

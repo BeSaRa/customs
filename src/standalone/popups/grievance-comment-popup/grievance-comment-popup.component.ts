@@ -66,7 +66,7 @@ export class GrievanceCommentPopupComponent
         this.model.commentList = [
           new GrievanceComment().clone<GrievanceComment>({
             comment: this.commentControl.value,
-            commentDate: new Date().toLocaleDateString(),
+            commentDate: new Date(),
           }),
           ...this.model.commentList,
         ];
