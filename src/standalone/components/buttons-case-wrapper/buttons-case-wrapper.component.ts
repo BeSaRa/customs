@@ -51,6 +51,7 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { ReferralGrievancePopupComponent } from '@standalone/popups/referral-grievance-popup/referral-grievance-popup.component';
 import { TaskNames } from '@enums/task-names';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-complete-popup/grievance-complete-popup.component';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -157,6 +158,7 @@ export class ButtonsCaseWrapperComponent
   isApplicantManager() {
     return this.employeeService.isApplicantManager();
   }
+
   isLegalAffairsManager() {
     return this.employeeService.isLegalAffairsManager();
   }
@@ -209,6 +211,7 @@ export class ButtonsCaseWrapperComponent
       );
     }
   }
+
   requestReferralPresident() {
     if (this.model().caseType === CaseTypes.INVESTIGATION) {
       this.referralTo(
@@ -414,31 +417,44 @@ export class ButtonsCaseWrapperComponent
         this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
+
   listenToGrievanceCompleteAction() {
     this.grievanceCompleteAction$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        tap(() => {
-          this.updateModel.emit();
-        }),
-      )
-      .pipe(
-        switchMap((response: TaskResponses) => {
+        switchMap(response => {
           return this.dialog
-            .open(CommentPopupComponent, {
+            .open(GrievanceCompletePopupComponent, {
               data: {
                 model: this.model(),
-                response,
               },
             })
-            .afterClosed();
+            .afterClosed()
+            .pipe(
+              map(click => {
+                return { response, click };
+              }),
+            );
         }),
       )
-      .pipe(filter((click: unknown) => click === UserClick.YES))
+      .pipe(filter(({ click }) => click === UserClick.YES))
+      .pipe(
+        switchMap(({ response }) => {
+          return (
+            this.model().getService() as BaseCaseService<Grievance>
+          ).completeTask(
+            (this.model() as BaseCase<never, never>).getTaskId()!,
+            {
+              selectedResponse: response,
+            },
+          );
+        }),
+      )
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
+
   private listenToAskAction() {
     this.ask$
       .pipe(takeUntil(this.destroy$))

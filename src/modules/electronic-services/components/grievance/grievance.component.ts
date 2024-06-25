@@ -1,17 +1,11 @@
 import { Component, inject, input } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { LangService } from '@services/lang.service';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
 import { Investigation } from '@models/investigation';
 import { Grievance } from '@models/grievance';
 import { GrievanceService } from '@services/grievance.service';
-import {
-  FormControl,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, switchMap, tap } from 'rxjs';
+import { Observable, Subject, switchMap } from 'rxjs';
 import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
 import { MatCard } from '@angular/material/card';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
@@ -20,30 +14,26 @@ import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { FolderType } from '@enums/folder-type.enum';
 import { LookupService } from '@services/lookup.service';
-import { ActivitiesName } from '@enums/activities-name';
-import { CustomValidators } from '@validators/custom-validators';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
-import { Penalty } from '@models/penalty';
 import { DialogService } from '@services/dialog.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
 import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-comment-popup/grievance-comment-popup.component';
+import { UntypedFormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
 
 @Component({
   selector: 'app-grievance',
   standalone: true,
   imports: [
-    DatePipe,
     ButtonsCaseWrapperComponent,
     MatCard,
     MatTab,
     MatTabGroup,
     CaseAttachmentsComponent,
-    SelectInputComponent,
-    ReactiveFormsModule,
     IconButtonComponent,
     MatTooltip,
+    DatePipe,
   ],
   templateUrl: './grievance.component.html',
   styleUrl: './grievance.component.scss',
@@ -58,27 +48,13 @@ export class GrievanceComponent extends BaseCaseComponent<
   service = inject(GrievanceService);
   lookupService = inject(LookupService);
   dialog = inject(DialogService);
-  grievanceFinalDecisions = this.lookupService.lookups.GrievanceFinalDecision;
-  grievanceFinalDecisionsCtrl = new FormControl(null);
-  penaltyCtrl = new FormControl(null);
   info = input<OpenedInfoContract | null>(null);
   form!: UntypedFormGroup;
-  penaltiesList: Penalty[] = [];
-  updateModel$ = new Subject<void>();
   comment$: Subject<Grievance> = new Subject<Grievance>();
 
   protected override _init() {
     super._init();
-    this.listenToUpdateModel();
     this.listenToComment();
-    // this.loadPenalties().subscribe();
-    if (
-      this.model.getActivityName() === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
-    ) {
-      this.grievanceFinalDecisionsCtrl.setValidators([
-        CustomValidators.required,
-      ]);
-    }
   }
   listenToComment() {
     this.comment$
@@ -95,42 +71,12 @@ export class GrievanceComponent extends BaseCaseComponent<
       )
       .subscribe();
   }
-  listenToUpdateModel() {
-    this.updateModel$
-      .pipe(
-        tap(() => {
-          this.model = new Grievance().clone<Grievance>({
-            ...this.model,
-            penaltyId: this.penaltyCtrl.value as unknown as number,
-            finalDecision: this.grievanceFinalDecisionsCtrl
-              .value as unknown as number,
-          });
-        }),
-      )
-      .pipe(switchMap(() => this.model.save()))
-      .subscribe();
-  }
+
   _buildForm(): void {}
-  // private loadPenalties() {
-  //   return this.model
-  //     ? this.model
-  //         .getService()
-  //         .getCasePenalty(
-  //           this.model.id as string,
-  //           this.model.getActivityName()!,
-  //         )
-  //     : of(
-  //         {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
-  //       );
-  // }
+
   _afterBuildForm(): void {}
   _beforeSave(): boolean | Observable<boolean> {
-    if (this.grievanceFinalDecisionsCtrl.valid || this.penaltyCtrl.valid) {
-      this.dialog.error(
-        this.lang.map.msg_make_sure_all_required_fields_are_filled,
-      );
-    }
-    return this.grievanceFinalDecisionsCtrl.valid && this.penaltyCtrl.valid;
+    return true;
   }
   _beforeLaunch(): boolean | Observable<boolean> {
     return true;
@@ -144,17 +90,6 @@ export class GrievanceComponent extends BaseCaseComponent<
   _afterLaunch(): void {}
   _handleReadOnly(): void {
     this.readonly = true;
-    if (!this.model.inMyInbox()) {
-      this.grievanceFinalDecisionsCtrl.disable();
-    } else {
-      this.grievanceFinalDecisionsCtrl.enable();
-    }
-  }
-  handleFinalDecisionChanged(decision: unknown) {
-    this.penaltyCtrl.setValidators([]);
-    if (decision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY) {
-      this.penaltyCtrl.setValidators([CustomValidators.required]);
-    }
   }
   _updateForm(model: Investigation | Grievance): void {
     this.model = model as Grievance;
@@ -175,6 +110,5 @@ export class GrievanceComponent extends BaseCaseComponent<
   }
 
   protected readonly FolderType = FolderType;
-  protected readonly ActivitiesName = ActivitiesName;
   protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
 }

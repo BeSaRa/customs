@@ -98,40 +98,34 @@
             {{ model.penaltySignerInfo.getNames() }}
           </div>
         </div>
-        @if (
-          this.model.getActivityName() ===
-          ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
-        ) {
+        @if (model.finalDecision) {
           <div class="mb-3">
-            <app-select-input
-              [label]="lang.map.final_decision"
-              [options]="grievanceFinalDecisions"
-              [formControl]="grievanceFinalDecisionsCtrl"
-              [bindLabel]="'getNames'"
-              [bindValue]="'lookupKey'"
-              (selectChange)="handleFinalDecisionChanged($event)"
-              [nullable]="false"
-              [isMultiple]="false">
-            </app-select-input>
+            <span class="font-medium">{{ lang.map.final_decision }}</span>
+            <div class="input-form p-2 block">
+              {{
+                model.finalDecisionInfo
+                  ? model.finalDecisionInfo.getNames()
+                  : ' --- '
+              }}
+            </div>
           </div>
           @if (
-            grievanceFinalDecisionsCtrl.value ===
-            GrievanceFinalDecisionsEnum.UPDATE_PENALTY
+            model.finalDecision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY
           ) {
             <div class="mb-3">
-              <app-select-input
-                [label]="lang.map.penalty"
-                [options]="penaltiesList"
-                [formControl]="penaltyCtrl"
-                [bindLabel]="'getNames'"
-                [bindValue]="'id'"
-                [nullable]="false"
-                [isMultiple]="false">
-              </app-select-input>
+              <span class="font-medium">{{ lang.map.penalty }}</span>
+              <div class="input-form p-2 block">
+                {{ model.penaltyInfo ? model.penaltyInfo.getNames() : ' --- ' }}
+              </div>
             </div>
           }
+          <div class="mb-3 col-span-1 md:col-span-3">
+            <span class="font-medium">{{ lang.map.lbl_justification }}</span>
+            <div class="input-form min-h-[60px] p-2 block">
+              {{ model.justification }}
+            </div>
+          </div>
         }
-
         <div class="col-span-1 md:col-span-3">
           <div class="mb-3 col-span-1 md:col-span-3">
             <span class="font-medium">{{ lang.map.description }}</span>
@@ -201,7 +195,6 @@
   <app-buttons-case-wrapper
     [model]="model"
     [openFrom]="openFrom"
-    (updateModel)="updateModel$.next()"
     (save)="save$.next($event)"
     (claim)="_updateForm($event)"
     (release)="_updateForm($event)"

@@ -1,0 +1,52 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.complete }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content" [formGroup]="form">
+    <div class="mb-3">
+      <app-select-input
+        [label]="lang.map.final_decision"
+        [options]="grievanceFinalDecisions"
+        formControlName="finalDecision"
+        [bindLabel]="'getNames'"
+        [bindValue]="'lookupKey'"
+        (selectChange)="handleFinalDecisionChanged($event)"
+        [nullable]="false"
+        [isMultiple]="false">
+      </app-select-input>
+    </div>
+    @if (
+      finalDecisionsCtrl.value === GrievanceFinalDecisionsEnum.UPDATE_PENALTY
+    ) {
+      <div class="mb-3">
+        <app-select-input
+          [label]="lang.map.penalty"
+          [options]="penaltiesList"
+          formControlName="penaltyId"
+          [bindLabel]="'getNames'"
+          [bindValue]="'id'"
+          [nullable]="false"
+          [isMultiple]="false">
+        </app-select-input>
+      </div>
+    }
+    <div class="mb-3">
+      <app-textarea
+        formControlName="justification"
+        [label]="lang.map.description"></app-textarea>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="save$.next()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>

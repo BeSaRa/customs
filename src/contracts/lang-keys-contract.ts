@@ -709,4 +709,5 @@ export interface LangKeysContract {
   return_to_president_office: string;
   return_to_president_assistant_office: string;
   final_decision: string;
+  lbl_justification: string;
 }
