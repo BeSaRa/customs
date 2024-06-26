@@ -86,7 +86,8 @@
             bindValue="id"
             bindLabel="getNames"
             [options]="violations"
-            [enableFilter]="true" />
+            [enableFilter]="true"
+            bindFilter="getNames" />
 
           <app-select-input
             formControlName="penaltyId"
@@ -94,7 +95,8 @@
             bindValue="id"
             bindLabel="getNames"
             [options]="penalties"
-            [enableFilter]="true" />
+            [enableFilter]="true"
+            bindFilter="getNames" />
 
           <app-select-input
             formControlName="mawaredEmployeeId"
@@ -102,7 +104,8 @@
             bindValue="id"
             bindLabel="getNames"
             [options]="mawaredEmployees"
-            [enableFilter]="true" />
+            [enableFilter]="true"
+            bindFilter="getNames" />
 
           <app-select-input
             formControlName="clearingAgentId"
@@ -110,7 +113,8 @@
             bindValue="id"
             bindLabel="getNames"
             [options]="clearingAgents"
-            [enableFilter]="true" />
+            [enableFilter]="true"
+            bindFilter="getNames" />
 
           <app-textarea
             formControlName="description"
