@@ -102,6 +102,10 @@ export class InvestigationSearchComponent implements OnInit {
     this.form = this.fb.group(
       new InvestigationSearchCriteria().buildForm(true),
     );
+    this.form
+      .get('createdFrom')
+      ?.setValue(new Date(new Date().getFullYear(), 0, 1));
+    this.form.get('createdTo')?.setValue(this.today);
     this.listenToSearch();
     if (history.state.returnedFromInvestigation) {
       this.form.patchValue(history.state);
