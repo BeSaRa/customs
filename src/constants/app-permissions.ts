@@ -58,5 +58,6 @@ export const AppPermissions = {
   DATA_ENTRY: 'DATA_ENTRY',
   OPEN_AI_CHAT: 'OPEN_AI_CHAT',
   MANAGE_LAYOUT_WIDGET: 'MANAGE_LAYOUT_WIDGET',
+  COURT_DECISIONS: 'COURT_DECISIONS',
 };
 export type AppPermissionsType = typeof AppPermissions;
