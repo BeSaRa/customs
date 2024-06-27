@@ -261,5 +261,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.GAVEL,
     path: AppFullRoutes.COURT_DECISIONS,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'COURT_DECISIONS',
   },
 ];
