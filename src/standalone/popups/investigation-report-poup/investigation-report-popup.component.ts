@@ -124,10 +124,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   investigatorCtrl = new FormControl({ disabled: true, value: '' });
 
   locationCtrl = new FormControl();
-  attendeeCategoryCtrl = new FormControl(
-    AttendeeTypeEnum.Internal,
-    CustomValidators.required,
-  );
+  attendeeCategoryCtrl = new FormControl(null, CustomValidators.required);
   attendeeCtrl = new FormControl(null);
   qidCtrl = new FormControl('');
   attendeeNameCtrl = new FormControl('');

@@ -33,7 +33,6 @@
           bindLabel="getNames"
           [formControl]="attendeeCategoryCtrl"
           [isMultiple]="false"
-          [nullable]="false"
           (selectChange)="handleAttendeeTypeChange($event)"
           [label]="lang.map.investigation_writer_type" />
       </div>
@@ -54,7 +53,6 @@
             bindLabel="getNames"
             [formControl]="attendeeCtrl"
             [isMultiple]="false"
-            [nullable]="false"
             [label]="lang.map.investigation_writer" />
         </div>
       }
