@@ -47,6 +47,6 @@ export enum TaskResponses {
   PA_FRST_APPROVE = 'pa_frst_approve',
   PR_FRST_APPROVE = 'pr_frst_approve',
   RETURN_TO_PO = 'return_to_po',
-  RETURN_TO_PAO = 'return_to_pao',
+  RETURN_TO_PAE = 'return_to_pae',
   GR_COMPLETE = 'gr_complete',
 }

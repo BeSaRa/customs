@@ -288,7 +288,7 @@
       model().hasResponse(taskResponses.RETURN_APP_MANAGER) ||
       model().hasResponse(taskResponses.RETURN_TO_CA) ||
       model().hasResponse(taskResponses.RETURN_TO_PO) ||
-      model().hasResponse(taskResponses.RETURN_TO_PAO))
+      model().hasResponse(taskResponses.RETURN_TO_PAE))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -306,11 +306,11 @@
         </button>
       }
       @if (
-        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PAO)
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PAE)
       ) {
         <button
           mat-menu-item
-          (click)="responseAction$.next(taskResponses.RETURN_TO_PAO)">
+          (click)="responseAction$.next(taskResponses.RETURN_TO_PAE)">
           {{ lang.map.return_to_president_assistant_office }}
         </button>
       }
