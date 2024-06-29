@@ -182,7 +182,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.currentLanguage.set(current);
     });
     this.loadInvestigatorsTeam();
-    this.handleAttendeeTypeChange(AttendeeTypeEnum.Internal);
   }
   loadInvestigatorsTeam() {
     this.teamService
@@ -203,6 +202,9 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.attendeeCtrl.setValidators([CustomValidators.required]);
       }
     }
+    this.attendeeCtrl.updateValueAndValidity();
+    this.qidCtrl.updateValueAndValidity();
+    this.attendeeNameCtrl.updateValueAndValidity();
   }
   override _buildForm(): void {
     this.inViewMode()
@@ -272,6 +274,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
           : this.lang.map.hearing_minutes_subject,
       }),
     );
+    this.dialogRef.close(this.model);
   }
 
   private listenToSaveQuestion() {
