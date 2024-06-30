@@ -104,6 +104,8 @@ export const AppIcons = {
   CONTENT_SAVE_EDIT_OUTLINE: 'content-save-edit-outline',
   CASH: 'cash',
   DASHBOARD: 'view-dashboard',
+  REFERRAL_DISCIPLINARY_COMMITTEE: 'account-alert',
+  REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL: 'account-cancel',
 };
 
 export type AppIconsType = typeof AppIcons;
