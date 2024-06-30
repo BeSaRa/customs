@@ -35,6 +35,38 @@
             </td>
           </ng-container>
 
+          <!-- violationDate -->
+          <ng-container matColumnDef="violationDate">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ lang.map.violation_date }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              @if (element.violationInfo.violationsDate) {
+                <span>{{
+                  element.violationInfo.violationsDate
+                    | date: config.DATE_FORMAT
+                }}</span>
+              } @else {
+                <div class="flex flex-col">
+                  <span
+                    >{{ lang.map.date_from }}:
+                    {{
+                      element.violationInfo.violationsDateFrom
+                        | date: config.DATE_FORMAT
+                    }}</span
+                  >
+                  <span
+                    >{{ lang.map.date_to }}:
+                    {{
+                      element.violationInfo.violationsDateTo
+                        | date: config.DATE_FORMAT
+                    }}</span
+                  >
+                </div>
+              }
+            </td>
+          </ng-container>
+
           <!-- offender -->
           <ng-container matColumnDef="offender">
             <th mat-header-cell *matHeaderCellDef>

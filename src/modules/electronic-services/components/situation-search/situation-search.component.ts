@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Config } from '@constants/config';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ColumnsWrapper } from '@models/columns-wrapper';
@@ -32,6 +33,7 @@ export class SituationSearchComponent
   columnsWrapper: ColumnsWrapper<SituationSearch> = new ColumnsWrapper(
     new NoneFilterColumn('repeat'),
     new NoneFilterColumn('violationType'),
+    new NoneFilterColumn('violationDate'),
     new NoneFilterColumn('offender'),
     new NoneFilterColumn('isProved'),
     new NoneFilterColumn('status'),
@@ -39,6 +41,8 @@ export class SituationSearchComponent
   displayedList = new MatTableDataSource<SituationSearch>();
 
   actions: ContextMenuActionContract<SituationSearch>[] = [];
+
+  config = Config;
 
   private loadSituation() {
     of(null)
