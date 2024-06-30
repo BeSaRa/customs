@@ -244,6 +244,7 @@ export class PersonsListComponent
                 ...(this.isOffender()
                   ? { offender: person }
                   : { witness: person }),
+                model: this.model(),
                 caseId: this.model().id,
               },
             )

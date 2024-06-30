@@ -124,8 +124,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   investigatorCtrl = new FormControl({ disabled: true, value: '' });
 
   locationCtrl = new FormControl();
-  attendeeCategoryCtrl = new FormControl(null, CustomValidators.required);
-  attendeeCtrl = new FormControl(null);
+  attendeeCategoryCtrl = new FormControl<number | null>(null);
+  attendeeCtrl = new FormControl<number | null>(null);
   qidCtrl = new FormControl('');
   attendeeNameCtrl = new FormControl('');
 
@@ -182,7 +182,12 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.currentLanguage.set(current);
     });
     this.loadInvestigatorsTeam();
+    if (this.offender()) {
+      this.attendeeCategoryCtrl.setValidators([CustomValidators.required]);
+      this.attendeeCategoryCtrl.updateValueAndValidity();
+    }
   }
+
   loadInvestigatorsTeam() {
     this.teamService
       .loadTeamMembers(TeamNames.Investigator)
@@ -190,6 +195,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.investigators = investigators;
       });
   }
+
   handleAttendeeTypeChange(type: unknown) {
     this.attendeeCtrl.setValidators([]);
     this.qidCtrl.setValidators([]);
@@ -206,11 +212,34 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.qidCtrl.updateValueAndValidity();
     this.attendeeNameCtrl.updateValueAndValidity();
   }
+
   override _buildForm(): void {
-    this.inViewMode()
-      ? this.locationCtrl.disable()
-      : this.locationCtrl.enable();
+    if (this.inViewMode()) {
+      this.locationCtrl.disable();
+      this.attendeeCategoryCtrl.disable();
+      this.attendeeCtrl.disable();
+      this.qidCtrl.disable();
+      this.attendeeNameCtrl.disable();
+    } else {
+      this.locationCtrl.enable();
+      this.attendeeCategoryCtrl.enable();
+      this.attendeeCtrl.enable();
+      this.qidCtrl.enable();
+      this.attendeeNameCtrl.enable();
+    }
     this.locationCtrl.patchValue(this.model.location!);
+    this.model.attendanceList[0] &&
+      this.attendeeCategoryCtrl.patchValue(
+        this.model.attendanceList[0].category,
+      );
+    this.model.attendanceList[0] &&
+      this.attendeeCtrl.patchValue(this.model.attendanceList[0].attendeeId);
+    this.model.attendanceList[0] &&
+      this.qidCtrl.patchValue(this.model.attendanceList[0].qid);
+    this.model.attendanceList[0] &&
+      this.attendeeNameCtrl.patchValue(
+        this.model.attendanceList[0].attendeeName,
+      );
     this.listenToSaveQuestion();
     this.listenToEditQuestion();
     this.listenToDeleteQuestion();
@@ -236,6 +265,17 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   protected override _prepareModel():
     | InvestigationReport
     | Observable<InvestigationReport> {
+    const attendanceObj: Partial<InvestigationAttendance> =
+      new InvestigationAttendance().clone<InvestigationAttendance>({
+        attendeeId: this.attendeeCtrl.getRawValue() as unknown as number,
+        attendeeName: this.attendeeNameCtrl.getRawValue() as string,
+        qid: this.qidCtrl.getRawValue() as string,
+        category: this.attendeeCategoryCtrl.getRawValue() as unknown as number,
+      });
+    !this.attendeeCategoryCtrl && delete attendanceObj.category;
+    !this.qidCtrl && delete attendanceObj.qid;
+    !this.attendeeNameCtrl && delete attendanceObj.attendeeName;
+    !this.attendeeCtrl && delete attendanceObj.attendeeId;
     return new InvestigationReport().clone<InvestigationReport>({
       ...this.model,
       category: this.category(),
@@ -243,15 +283,9 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       summonedType: this.summonedType(),
       summonedId: this.personId(),
       location: this.locationCtrl.getRawValue()!,
-      attendanceList: [
-        new InvestigationAttendance().clone<InvestigationAttendance>({
-          attendeeId: this.attendeeCtrl.getRawValue() as unknown as number,
-          attendeeName: this.attendeeNameCtrl.getRawValue() as string,
-          qid: this.qidCtrl.getRawValue() as string,
-          category:
-            this.attendeeCategoryCtrl.getRawValue() as unknown as number,
-        }),
-      ],
+      attendanceList: this.attendeeCategoryCtrl.value
+        ? [attendanceObj as InvestigationAttendance]
+        : [],
     });
   }
 

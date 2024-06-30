@@ -25,6 +25,7 @@ import {
 import { ControlDirective } from '@standalone/directives/control.directive';
 import { OperationType } from '@enums/operation-type';
 import { CallRequestStatus } from '@enums/call-request-status';
+import { Investigation } from '@models/investigation';
 
 @Component({
   selector: 'app-call-request-popup',
@@ -52,6 +53,7 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
     CrudDialogDataContract<
       CallRequest,
       {
+        model: Investigation;
         offender?: Offender;
         witness?: Witness;
         caseId: string;
@@ -65,10 +67,15 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
   witness = signal(this.data.extras!.witness);
   isOffender = signal(!!this.offender());
   isWitness = signal(!!this.witness());
+  investigationModel = signal(this.data.extras!.model!);
   category = computed(() =>
     this.isOffender()
-      ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
-      : InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT,
+      ? this.investigationModel().inLegalAffairsActivity()
+        ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD
+      : this.investigationModel().inLegalAffairsActivity()
+        ? InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_HEARING_TRANSCRIPT,
   );
   summonedType = computed(() =>
     this.isOffender() ? SummonType.OFFENDER : SummonType.WITNESS,

@@ -213,7 +213,9 @@ export class InvestigationRecordsTableComponent
             .afterClosed();
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.reload$.next();
+      });
   }
 
   private listenToDownload() {
