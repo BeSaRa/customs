@@ -274,7 +274,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
           : this.lang.map.hearing_minutes_subject,
       }),
     );
-    this.dialogRef.close(this.model);
   }
 
   private listenToSaveQuestion() {
