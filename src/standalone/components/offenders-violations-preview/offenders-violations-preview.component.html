@@ -187,7 +187,10 @@
             [penalties]="penalties()"
             [offender]="element"
             [updateModel]="updateModel()"
-            [model]="model()" />
+            [model]="model()"
+            [isOffenderViolationsProofed]="
+              isOffenderViolationsProofed(element.id)
+            " />
         </div>
       }
     </td>
