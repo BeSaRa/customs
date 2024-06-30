@@ -1,7 +1,11 @@
 <div class="flex gap-y-2 flex-col">
   <h2 class="flex items-center gap-2">
     <span class="text-lg text-primary">
-      {{ lang.map.investigation_records }}
+      {{
+        this.isOffender()
+          ? this.lang.map.investigation_records
+          : this.lang.map.hearing_minutes_subject
+      }}
     </span>
     <span
       matTooltipPosition="above"
