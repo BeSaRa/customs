@@ -3,8 +3,15 @@
   z-index: 10;
   top: 0;
   bottom: 0;
-  width: 300px;
   transition: all 0.25s;
+
+  &.opened {
+    width: 300px;
+  }
+
+  &.collapsed {
+    width: 75px;
+  }
 
   .side-bar-menu-container {
     min-width: 100%;

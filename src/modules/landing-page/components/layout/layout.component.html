@@ -1,13 +1,4 @@
-<app-widgets-sidebar>
-  <h3 class="text-center text-3xl text-white">{{ lang.map.widgets_list }}</h3>
-  <div class="px-8 mt-6 grid grid-cols-2 items-center justify-center gap-6">
-    @for (widget of widgetService.getWidgets(); track widget) {
-      <div class="w-full h-full flex justify-center items-center">
-        <app-new-widget [widget]="widget"></app-new-widget>
-      </div>
-    }
-  </div>
-</app-widgets-sidebar>
+<app-widgets-sidebar> </app-widgets-sidebar>
 <div class="flex justify-between items-center">
   @if (isStatic) {
     <div class="flex justify-center items-center gap-2">

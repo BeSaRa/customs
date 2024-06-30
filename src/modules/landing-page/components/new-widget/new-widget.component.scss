@@ -1,3 +1,7 @@
 :host {
-  @apply h-20 w-20 p-2 rounded-lg flex items-center justify-center border border-gray-300 cursor-grab;
+  @apply p-2 rounded-lg border border-gray-300 cursor-grab;
+
+  &.collapsed {
+    @apply p-0 rounded-md overflow-hidden;
+  }
 }

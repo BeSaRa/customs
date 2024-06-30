@@ -5,14 +5,27 @@
 <div
   class="side-bar"
   [ngStyle]="getSideBarStyles()"
-  [ngClass]="{
-    'side-bar-collapsed': !isOpened,
-    'side-bar-opened': isOpened
-  }">
+  [ngClass]="{ opened: isOpened, collapsed: !isOpened }">
   <div
     class="side-bar-menu-container bg-primary bg-gradient-to-br from-primary via-sky-700/20 to-primary-dark">
     <div class="side-bar-content-container">
-      <ng-content></ng-content>
+      @if (isOpened) {
+        <h3 class="text-center text-3xl text-white">
+          {{ lang.map.widgets_list }}
+        </h3>
+      }
+      <div
+        class="mt-6 grid items-center justify-center gap-6"
+        [ngClass]="{
+          'grid-cols-2 px-8': isOpened,
+          'grid-cols-1 px-1': !isOpened
+        }">
+        @for (widget of widgetService.getWidgets(); track widget) {
+          <app-new-widget
+            [ngClass]="{ collapsed: !isOpened }"
+            [widget]="widget"></app-new-widget>
+        }
+      </div>
     </div>
   </div>
 </div>
