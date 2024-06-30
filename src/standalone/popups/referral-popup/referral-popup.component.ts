@@ -287,7 +287,7 @@ export class ReferralPopupComponent
         this.lang.map.static_footer_text_for_return_to_president_assistant,
       whom: (tab?: string) => {
         if (!tab) {
-          return this.offenders()[0].type === OffenderTypes.EMPLOYEE
+          return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
             ? this.lang.map.vice_president
             : this.customsAffairsPAOUInfo.getNames();
         } else {
