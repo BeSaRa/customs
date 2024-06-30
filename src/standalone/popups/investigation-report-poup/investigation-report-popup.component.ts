@@ -102,10 +102,10 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.isOffender()
       ? this.investigationModel().inLegalAffairsActivity()
         ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
-        : InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD
       : this.investigationModel().inLegalAffairsActivity()
         ? InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT
-        : InvestigationCategory.DISCIPLINARY_COMMITTEE_INVESTIGATION_RECORD,
+        : InvestigationCategory.DISCIPLINARY_COMMITTEE_HEARING_TRANSCRIPT,
   );
   summonedType = computed(() =>
     this.isOffender() ? SummonType.OFFENDER : SummonType.WITNESS,
