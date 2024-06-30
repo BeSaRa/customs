@@ -166,6 +166,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.SEARCH,
     path: AppFullRoutes.INVESTIGATION_SEARCH,
     parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'SEARCH_FOR_REPORTS',
   },
   {
     id: MenuIdes.LEGAL_RULE,

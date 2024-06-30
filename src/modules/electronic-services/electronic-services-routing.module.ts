@@ -52,6 +52,11 @@ const routes: Routes = [
   {
     path: AppRoutes.INVESTIGATION_SEARCH,
     component: InvestigationSearchComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.SEARCH_FOR_REPORTS,
+      }),
+    ],
   },
   {
     path: AppRoutes.INVESTIGATION_DRAFTS,
