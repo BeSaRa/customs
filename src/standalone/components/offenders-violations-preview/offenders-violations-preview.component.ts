@@ -181,6 +181,9 @@ export class OffendersViolationsPreviewComponent
     .pipe(shareReplay(1));
 
   offenders = computed(() => {
+    if (this.employeeService.isHumanResourceTeam())
+      return this.model().getConcernedOffenders();
+
     const offendersIds = this.model().offenderViolationInfo.map(
       i => i.offenderId,
     );
