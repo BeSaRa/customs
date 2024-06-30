@@ -32,6 +32,7 @@ export class SituationSearchComponent
   columnsWrapper: ColumnsWrapper<SituationSearch> = new ColumnsWrapper(
     new NoneFilterColumn('repeat'),
     new NoneFilterColumn('violationType'),
+    new NoneFilterColumn('violationDate'),
     new NoneFilterColumn('offender'),
     new NoneFilterColumn('isProved'),
     new NoneFilterColumn('status'),

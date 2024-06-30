@@ -34,7 +34,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { SaveTypes } from '@enums/save-types';
 import { EmployeeService } from '@services/employee.service';
 import { Router } from '@angular/router';
-import { map, take } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
 import { OpenFrom } from '@enums/open-from';
 import { SystemPenalties } from '@enums/system-penalties';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
@@ -405,14 +405,21 @@ export class ButtonsCaseWrapperComponent
             this.model().getService() as BaseCaseService<
               Investigation | Grievance
             >
-          ).completeTask(
-            (this.model() as BaseCase<never, never>).getTaskId()!,
-            {
-              selectedResponse: response,
-            },
-          );
+          )
+            .completeTask(
+              (this.model() as BaseCase<never, never>).getTaskId()!,
+              {
+                selectedResponse: response,
+              },
+            )
+            .pipe(
+              catchError(() => {
+                return of();
+              }),
+            );
         }),
       )
+      .pipe(filter(res => !!res))
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });

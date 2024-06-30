@@ -1,25 +1,25 @@
 import { Component, EventEmitter, inject, input, OnInit } from '@angular/core';
-import { AppIcons } from '@constants/app-icons';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatTooltip } from '@angular/material/tooltip';
-import { SystemPenalties } from '@enums/system-penalties';
+import { AppIcons } from '@constants/app-icons';
 import { PenaltyIcons } from '@constants/penalty-icons';
-import { Investigation } from '@models/investigation';
-import { Penalty } from '@models/penalty';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { SystemPenalties } from '@enums/system-penalties';
+import { UserClick } from '@enums/user-click';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Investigation } from '@models/investigation';
 import { Offender } from '@models/offender';
+import { Penalty } from '@models/penalty';
+import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
+import { OffenderViolationService } from '@services/offender-violation.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyService } from '@services/penalty.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
-import { DialogService } from '@services/dialog.service';
-import { UserClick } from '@enums/user-click';
-import { OffenderViolationService } from '@services/offender-violation.service';
-import { PenaltyService } from '@services/penalty.service';
 
 @Component({
   selector: 'app-decision-maker',
@@ -59,6 +59,7 @@ export class DecisionMakerComponent
       Record<number, { first: number | null; second: Penalty[] }>
     >();
   penalties = input.required<Record<number, PenaltyDecisionContract>>();
+  isOffenderViolationsProofed = input.required<boolean>();
 
   systemAction$: Subject<SystemPenalties> = new Subject<SystemPenalties>();
 

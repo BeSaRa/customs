@@ -131,6 +131,7 @@ export class OffendersViolationsPreviewComponent
   proofStatus = this.lookupService.lookups.proofStatus
     .slice()
     .sort((a, b) => a.lookupKey - b.lookupKey);
+
   model = input.required<Investigation>();
   isClaimed = input(false, { transform: booleanAttribute });
   selection = new SelectionModel<Offender>(true);
@@ -326,6 +327,10 @@ export class OffendersViolationsPreviewComponent
     [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]:
       this.penaltyDecisionService.openRequestReferralDialog,
   };
+
+  isOffenderViolationsProofed(offenderId: number) {
+    return this.violationProofStatus()[offenderId].every(c => c.value === 2);
+  }
 
   canMakeSystemDecision(offenderId: number): boolean {
     return !!(
