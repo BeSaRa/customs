@@ -1,7 +1,9 @@
 <div class="flex justify-center gap-2">
   <div>
     <app-icon-button
-      [disabled]="!canMakeNormalDecision(offender().id)"
+      [disabled]="
+        !canMakeNormalDecision(offender().id) || !isOffenderViolationsProofed()
+      "
       [matTooltip]="lang.map.make_penalty_decision"
       (click)="openDecisionDialog(offender())"
       icon="GAVEL" />
