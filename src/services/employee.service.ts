@@ -41,11 +41,13 @@ export class EmployeeService
   getLoginData() {
     return this.loginData;
   }
+
   setLoginData(data: LoginDataContract): LoginDataContract {
     this.loginData = this.intercept(data);
 
     return this.loginData;
   }
+
   get loggedInUserId(): number | undefined {
     return this.getLoginData()?.type === UserTypes.EXTERNAL_CLEARING_AGENCY
       ? this.getExternalClearingAgency()?.id
@@ -53,6 +55,7 @@ export class EmployeeService
         ? this.getEmployee()?.id
         : this.getExternalPerson()?.id;
   }
+
   private intercept(data: LoginDataContract): LoginDataContract {
     data.internalUser &&
       (data.internalUser = internalUserInterceptor.receive(
@@ -172,6 +175,15 @@ export class EmployeeService
       (t: Team) => t.authName === TeamNames.Human_Resources_Manager,
     );
   }
+
+  isHumanResourceTeam() {
+    return (this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.authName === TeamNames.Human_Resources_Manager ||
+        t.authName === TeamNames.Human_Resources,
+    );
+  }
+
   isLegalAffairsManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.authName === TeamNames.Legal_Affairs_Manager,
