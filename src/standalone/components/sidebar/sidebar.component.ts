@@ -19,6 +19,7 @@ import { SearchAnimation } from '@animations/search-animation';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { LangService } from '@services/lang.service';
 import { RouterLink } from '@angular/router';
+import { SidebarService } from '@services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -47,6 +48,7 @@ export class SidebarComponent {
     nonNullable: true,
   });
 
+  sidebarService = inject(SidebarService);
   lang = inject(LangService);
 
   @HostBinding('class')
@@ -83,6 +85,7 @@ export class SidebarComponent {
 
   toggle(): void {
     this.status = this.status === 'opened' ? 'closed' : 'opened';
+    this.sidebarService.isOpened.set(this.status === 'opened');
   }
 
   isClosingOrClosed(): boolean {
