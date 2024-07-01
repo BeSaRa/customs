@@ -40,6 +40,9 @@ export class Investigation extends BaseCase<
   isDrafted!: boolean;
   subject!: string;
 
+  // extra for search results
+  caseId!: string;
+
   buildForm(controls = false, disabled = false): object {
     const {
       description,
