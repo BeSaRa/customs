@@ -4,12 +4,12 @@
     [hideSingleSelectionIndicator]="true"
     #matButtonToggleGroup="matButtonToggleGroup"
     [value]="1">
-    <mat-button-toggle [value]="1">{{
-      lang.map.lbl_decisions
-    }}</mat-button-toggle>
-    <mat-button-toggle [value]="2">{{
-      lang.map.lbl_applied_grievances
-    }}</mat-button-toggle>
+    <mat-button-toggle [value]="1"
+      >{{ lang.map.lbl_decisions }}
+    </mat-button-toggle>
+    <mat-button-toggle [value]="2"
+      >{{ lang.map.lbl_applied_grievances }}
+    </mat-button-toggle>
   </mat-button-toggle-group>
   <div class="flex items-center justify-between">
     <div class="flex items-center ms-auto">
@@ -19,9 +19,9 @@
         (click)="reload$.next(null)"
         icon="RELOAD"></app-icon-button>
       @if (hidePagination) {
-        <app-button (click)="showAll()" [buttonType]="'primary-outline'">{{
-          lang.map.show_all
-        }}</app-button>
+        <app-button (click)="showAll()" [buttonType]="'primary-outline'"
+          >{{ lang.map.show_all }}
+        </app-button>
       }
     </div>
   </div>
@@ -40,7 +40,7 @@
   </mat-tab>
 </mat-tab-group>
 <ng-template #decisions_tab_template>
-  <div class="shadow relative overflow-auto">
+  <div class="shadow relative overflow-auto hidden sm:block">
     <table mat-table matSort class="table-style" [dataSource]="dataSource">
       <!-- decisionSerial -->
       <ng-container matColumnDef="decisionSerial">
@@ -149,6 +149,89 @@
         showFirstLastButtons="true"
         [length]="dataSource.data.length || 0"></mat-paginator>
     }
+  </div>
+  <div class="block sm:hidden">
+    <ul class="font-medium text-gray-900">
+      @for (element of dataSource.data; track $index) {
+        <li
+          class="shadow w-full px-4 py-3 border border-gray-200 rounded-lg mb-3">
+          <div class="flex items-center justify-between">
+            <span>
+              <strong class="text-primary">
+                {{ lang.map.decision_serial }}:
+              </strong>
+              {{ element.decisionSerial }}
+            </span>
+            <div class="flex gap-2">
+              @if (
+                (user?.type === UserTypes.EXTERNAL_CLEARING_AGENT ||
+                  user?.type === UserTypes.EXTERNAL_CLEARING_AGENCY) &&
+                element.isCash
+              ) {
+                <app-button
+                  [buttonType]="'secondary'"
+                  (click)="pay$.next(element)"
+                  [matTooltip]="lang.map.pay">
+                  <mat-icon [svgIcon]="AppIcons.HAND_COIN"></mat-icon>
+                </app-button>
+              }
+              @if (!element.hasRunningGrievance && !createdOver30Day(element)) {
+                <app-button
+                  [buttonType]="'primary'"
+                  (click)="grievance$.next(element)"
+                  [matTooltip]="lang.map.grievance">
+                  <mat-icon [svgIcon]="AppIcons.HAND_BACK_RIGHT"></mat-icon>
+                </app-button>
+              }
+              <app-button
+                [buttonType]="'primary-outline'"
+                (click)="viewDecisionFile$.next(element.vsid)"
+                [matTooltip]="lang.map.view_decision_file">
+                <mat-icon [svgIcon]="AppIcons.FILE_EYE"></mat-icon>
+              </app-button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between mb-3">
+            <span>
+              <strong class="text-primary">
+                {{ lang.map.decision_date }}:
+              </strong>
+              <span class="text-gray-400">
+                {{ element.penaltyAppliedDate | date: Config.DATE_FORMAT }}
+              </span>
+            </span>
+          </div>
+          <div class="flex items-center justify-between mb-3">
+            <span>
+              <strong class="text-primary"> {{ lang.map.issued_by }}: </strong>
+              {{
+                element.penaltySignerInfo &&
+                  element.penaltySignerInfo.getNames()
+              }}
+            </span>
+            <span>
+              <strong class="text-primary">
+                {{ lang.map.directed_to }}:
+              </strong>
+              {{ element.directedToInfo && element.directedToInfo.getNames() }}
+            </span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>
+              <strong class="text-primary"> {{ lang.map.decision }}: </strong>
+              {{ element.penaltyInfo && element.penaltyInfo.getNames() }}
+            </span>
+            <span>
+              <strong class="text-primary"> {{ lang.map.status }}: </strong>
+              {{
+                element.penaltyStatusInfo &&
+                  element.penaltyStatusInfo.getNames()
+              }}
+            </span>
+          </div>
+        </li>
+      }
+    </ul>
   </div>
 </ng-template>
 <ng-template #grievances_tab_template>

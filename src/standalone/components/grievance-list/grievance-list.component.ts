@@ -30,6 +30,9 @@ import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-com
 import { GrievanceAttachmentsPopupComponent } from '@standalone/popups/grievance-attachments-popup/grievance-attachments-popup.component';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-grievance-list',
@@ -51,6 +54,8 @@ import { Router } from '@angular/router';
     IconButtonComponent,
     MatTooltip,
     ButtonComponent,
+    DatePipe,
+    MatIcon,
   ],
   templateUrl: './grievance-list.component.html',
   styleUrl: './grievance-list.component.scss',
@@ -157,4 +162,6 @@ export class GrievanceListComponent
   showAll() {
     this.router.navigate(['/external/grievances']);
   }
+
+  protected readonly AppIcons = AppIcons;
 }
