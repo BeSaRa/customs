@@ -6,7 +6,6 @@ const { send, receive } = new PenaltyDecisionInterceptor();
 
 @InterceptModel({ send, receive })
 export class PenaltyDecisionCriteria extends Offender {
-  decisionSerial!: string;
   offenderType!: number;
   decisionDate!: string;
   buildForm(controls = false): object {

@@ -51,6 +51,8 @@ import { OffenderService } from '@services/offender.service';
 import { Offender } from '@models/offender';
 import { Config } from '@constants/config';
 import { Pagination } from '@models/pagination';
+import { MatIcon } from '@angular/material/icon';
+import { AppIcons } from '@constants/app-icons';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -79,6 +81,7 @@ import { Pagination } from '@models/pagination';
     MatButtonToggle,
     MatButtonToggleGroup,
     GrievanceListComponent,
+    MatIcon,
   ],
   templateUrl: './penalty-decision-for-external-users.component.html',
   styleUrl: './penalty-decision-for-external-users.component.scss',
@@ -246,4 +249,5 @@ export class PenaltyDecisionForExternalUsersComponent
   }
   protected readonly UserTypes = UserTypes;
   protected readonly Config = Config;
+  protected readonly AppIcons = AppIcons;
 }

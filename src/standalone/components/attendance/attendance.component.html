@@ -16,7 +16,7 @@
     }
   </div>
 </div>
-<div class="shadow relative overflow-auto">
+<div class="shadow relative overflow-auto hidden sm:block">
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
     <!-- fileNumber -->
     <ng-container matColumnDef="fileNumber">
@@ -56,7 +56,7 @@
         ><span>{{ element.summonTime | date: 'hh:mm' }} </span>
       </td>
     </ng-container>
-    <!-- summonDate -->
+    <!-- status -->
     <ng-container matColumnDef="status">
       <th mat-header-cell mat-sort-header="status" *matHeaderCellDef>
         {{ lang.map.status }}
@@ -92,4 +92,48 @@
       showFirstLastButtons="true"
       [length]="dataSource.data.length || 0"></mat-paginator>
   }
+</div>
+<div class="block sm:hidden">
+  <ul class="font-medium text-gray-900">
+    @for (element of dataSource.data; track $index) {
+      <li
+        class="shadow w-full px-4 py-2 border-b border-gray-200 rounded-lg mb-3">
+        <div class="flex items-center justify-between mb-3">
+          <span>
+            <strong class="text-primary"> {{ lang.map.file_number }}: </strong>
+            {{ element.investigationFullSerial }}
+          </span>
+          <div (click)="apology$.next(element)" [matTooltip]="lang.map.apology">
+            <app-icon-button class="text-primary" icon="CLIPBOARD_EDIT" />
+          </div>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <span>
+            <strong class="text-primary"> {{ lang.map.lbl_summons }}: </strong>
+            {{ element.createdByInfo.getNames() }}
+          </span>
+          <span>
+            <strong class="text-primary"> {{ lang.map.status }}: </strong>
+            {{ element.statusInfo.getNames() }}
+          </span>
+        </div>
+        <div class="mb-3">
+          <strong class="text-primary">
+            {{ lang.map.lbl_summon_date_time }}:
+          </strong>
+          <span class="inline-block"
+            >{{ element.summonDate | date: 'YYYY/MMM/dd' }} - </span
+          ><span>{{ element.summonTime | date: 'hh:mm' }} </span>
+        </div>
+        <div>
+          <span>
+            <strong class="text-primary">
+              {{ lang.map.lbl_summons_place }}:
+            </strong>
+            {{ element.summonsPlace }}
+          </span>
+        </div>
+      </li>
+    }
+  </ul>
 </div>

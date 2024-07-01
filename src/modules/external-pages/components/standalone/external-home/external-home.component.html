@@ -2,41 +2,64 @@
   <div
     [ngStyle]="getCountingBg()"
     class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
-    <app-icon-button
-      (click)="showAll('/external/investigations')"
-      [icon]="'ARROW_TOP_LEFT'"
-      [color]="'gray'"></app-icon-button>
-    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
-      <strong class="[font-size:42px] text-primary"> {{ casesLength }} </strong>
-      <h6>{{ lang.map.lbl_investigation_files }}</h6>
+    <div
+      class="flex flex-row-reverse items-center justify-between sm:flex-col sm:justify-center p-0.5">
+      <app-icon-button
+        class="ms-auto"
+        (click)="showAll('/external/investigations')"
+        [icon]="'ARROW_TOP_LEFT'"
+        [color]="'gray'"></app-icon-button>
+      <div
+        class="flex sm:flex-col items-center justify-around px-4 sm:pb-8 text-center">
+        <strong class="[font-size:42px] text-primary me-3 sm:me-0">
+          {{ casesLength }}
+        </strong>
+        <h6 class="font-medium [font-size: 18px] text-[#676767]">
+          {{ lang.map.lbl_investigation_files }}
+        </h6>
+      </div>
     </div>
   </div>
   <div
     [ngStyle]="getCountingBg()"
     class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
-    <app-icon-button
-      [icon]="'ARROW_TOP_LEFT'"
-      (click)="showAll('/external/decisions')"
-      [color]="'gray'"></app-icon-button>
-    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
-      <strong class="[font-size:42px] text-primary">
-        {{ penaltyDecisionLength }}
-      </strong>
-      <h6>{{ lang.map.lbl_decisions }}</h6>
+    <div
+      class="flex flex-row-reverse items-center justify-between sm:flex-col sm:justify-center p-0.5">
+      <app-icon-button
+        class="ms-auto"
+        (click)="showAll('/external/decisions')"
+        [icon]="'ARROW_TOP_LEFT'"
+        [color]="'gray'"></app-icon-button>
+      <div
+        class="flex sm:flex-col items-center justify-around px-4 sm:pb-8 text-center">
+        <strong class="[font-size:42px] text-primary me-3 sm:me-0">
+          {{ penaltyDecisionLength }}
+        </strong>
+        <h6 class="font-medium [font-size: 18px] text-[#676767]">
+          {{ lang.map.lbl_decisions }}
+        </h6>
+      </div>
     </div>
   </div>
   <div
     [ngStyle]="getCountingBg()"
     class="order-2 lg:order-1 col-span-12 sm:col-span-4 lg:col-span-2 border text-end rounded-xl">
-    <app-icon-button
-      [icon]="'ARROW_TOP_LEFT'"
-      (click)="showAll('/external/summons-to-attend')"
-      [color]="'gray'"></app-icon-button>
-    <div class="d-flex flex-col justify-around px-4 pb-8 text-center">
-      <strong class="[font-size:42px] text-primary">
-        {{ attendancesLength }}
-      </strong>
-      <h6>{{ lang.map.summons_to_attend }}</h6>
+    <div
+      class="flex flex-row-reverse items-center justify-between sm:flex-col sm:justify-center p-0.5">
+      <app-icon-button
+        class="ms-auto"
+        (click)="showAll('/external/summons-to-attend')"
+        [icon]="'ARROW_TOP_LEFT'"
+        [color]="'gray'"></app-icon-button>
+      <div
+        class="flex sm:flex-col items-center justify-around px-4 sm:pb-8 text-center">
+        <strong class="[font-size:42px] text-primary me-3 sm:me-0">
+          {{ attendancesLength }}
+        </strong>
+        <h6 class="font-medium [font-size: 18px] text-[#676767]">
+          {{ lang.map.summons_to_attend }}
+        </h6>
+      </div>
     </div>
   </div>
   <div

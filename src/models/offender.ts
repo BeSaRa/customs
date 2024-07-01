@@ -22,6 +22,8 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   clearingAgencyId!: number;
   customsViolationEffect!: number;
   penaltyId!: number;
+  decisionSerial!: string;
+  isCash!: boolean;
   linkedPid!: number;
   statusDateModified?: Date | string;
   ouId!: number;
