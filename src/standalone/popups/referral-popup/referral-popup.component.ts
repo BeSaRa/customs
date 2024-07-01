@@ -520,18 +520,19 @@ export class ReferralPopupComponent
                 Number(this.organizationControl.value),
               ])
             : service.completeTask(this.model().getTaskId()!, {
-                comment: this.isAssistantRequest()
-                  ? JSON.stringify([
-                      {
-                        type: OffenderTypes.EMPLOYEE,
-                        comment: this.employeesComment.value,
-                      },
-                      {
-                        type: OffenderTypes.BROKER,
-                        comment: this.brokersComment.value,
-                      },
-                    ])
-                  : this.commentControl.value,
+                comment:
+                  this.isAssistantRequest() && this.hasMixedOffenders()
+                    ? JSON.stringify([
+                        {
+                          type: OffenderTypes.EMPLOYEE,
+                          comment: this.employeesComment.value,
+                        },
+                        {
+                          type: OffenderTypes.BROKER,
+                          comment: this.brokersComment.value,
+                        },
+                      ])
+                    : this.commentControl.value,
                 selectedResponse: this.response!,
               });
         }),
