@@ -55,13 +55,16 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
           );
           const filteredTeams = teams.filter(
             team =>
+              team.parentDeptId === -1 ||
               !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
                 team.id,
               ),
           );
           return filteredTeams.filter(
             team =>
-              organizationUnitIds.includes(team.ouId) || team.ouId === null,
+              team.parentDeptId === -1 ||
+              organizationUnitIds.includes(team.ouId) ||
+              team.ouId === null,
           );
         }),
       )
