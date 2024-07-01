@@ -581,7 +581,8 @@
   </mat-menu>
 
   <!-- send to manager -->
-  @if (canLaunch() && !isApplicantManager()) {
+  <!--  && !isApplicantManager()-->
+  @if (canLaunch()) {
     <app-button
       (click)="
         launch.emit(
@@ -594,12 +595,8 @@
     </app-button>
   }
   <!-- send to chief -->
-  @if (
-    canLaunch() &&
-    !isApplicantManager() &&
-    model().sectionId &&
-    model().sectionId !== -1
-  ) {
+  // !isApplicantManager() &&
+  @if (canLaunch() && model().sectionId && model().sectionId !== -1) {
     <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
       >{{ lang.map.send_to_chief }}
     </app-button>
