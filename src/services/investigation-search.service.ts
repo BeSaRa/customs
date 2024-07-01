@@ -24,7 +24,7 @@ export class InvestigationSearchService extends InvestigationService {
   override serviceName: string = 'InvestigationSearchService';
 
   override getUrlSegment(): string {
-    return this.urlService.URLS.INVESTIGATION_SEARCH;
+    return this.urlService.URLS.CASE_ENTITY_VIEW;
   }
 
   @CastResponse(undefined, {

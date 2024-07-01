@@ -213,8 +213,8 @@ export class InvestigationSearchComponent implements OnInit {
   view(item: Investigation) {
     const itemDetails = this.encrypt.encrypt<INavigatedItem>({
       openFrom: OpenFrom.SEARCH,
-      taskId: item.id,
-      caseId: item.id,
+      taskId: item.caseId,
+      caseId: item.caseId,
       caseType: item.caseType,
       searchCriteria: this.form.value,
     });
