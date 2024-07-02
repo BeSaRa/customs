@@ -595,7 +595,7 @@
     </app-button>
   }
   <!-- send to chief -->
-  // !isApplicantManager() &&
+  <!--  // !isApplicantManager() &&-->
   @if (canLaunch() && model().sectionId && model().sectionId !== -1) {
     <app-button (click)="launch.emit(sendTypes.DIRECT_DEPARTMENT)"
       >{{ lang.map.send_to_chief }}
