@@ -227,7 +227,7 @@ export class InvestigationSearchComponent implements OnInit {
 
   showActionsOnCase(item: Investigation) {
     this.dialog.open(ActionsOnCaseComponent, {
-      data: { caseId: item.id },
+      data: { caseId: item.caseId },
     });
   }
 
