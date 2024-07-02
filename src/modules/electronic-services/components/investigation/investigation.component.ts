@@ -179,6 +179,10 @@ export class InvestigationComponent
     return this.employeeService.isHrManager();
   }
 
+  isInvestigator() {
+    return this.employeeService.isInvestigator();
+  }
+
   showSummaryElements() {
     return !!this.model.id;
   }
@@ -268,12 +272,14 @@ export class InvestigationComponent
     this.form = this.fb.group(model.buildForm(model.canSave(), this.readonly));
     this._afterBuildForm();
   }
+
   get canManageOffendersAttachments() {
     return (
       this.employeeService.hasPermissionTo('EDIT_ATTACHMENTS') &&
       (this.model.inMyInbox() || this.model.inDisciplinaryCommitteeReview())
     );
   }
+
   _handleReadOnly(model: Investigation) {
     // reset readonly and canTakeAction
     this.readonly = false;
@@ -284,7 +290,10 @@ export class InvestigationComponent
       // this.openFrom === OpenFrom.ADD_SCREEN
       return;
     }
-    if ((!model.inMyInbox() || !model.canSave()) && !model.isDrafted) {
+    if (
+      (!model.inMyInbox() || (!model.canSave() && !this.isInvestigator())) &&
+      !model.isDrafted
+    ) {
       this.readonly = true;
       this.canManageInvestigationElements = false; // specified for violations, offenders, external persons and attachments
     }

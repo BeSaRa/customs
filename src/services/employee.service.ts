@@ -176,6 +176,12 @@ export class EmployeeService
     );
   }
 
+  isInvestigator() {
+    return !!(this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.Investigator,
+    );
+  }
+
   isHumanResourceTeam() {
     return (this.loginData?.teams || []).find(
       (t: Team) =>
