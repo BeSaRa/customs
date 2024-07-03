@@ -35,6 +35,21 @@
             formControlName="description"
             [placeholder]="lang.map.add_grievance_description_placeholder"
             [label]="lang.map.description"></app-textarea>
+          <app-textarea
+            formControlName="commentList"
+            [label]="lang.map.comment"></app-textarea>
+          @if (grievanceModel && grievanceModel.id) {
+            <h3
+              class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
+              {{ lang.map.attachments }}
+            </h3>
+            <app-case-attachments
+              [folderType]="FolderType.GENERAL"
+              [caseId]="grievanceModel.id"
+              [type]="'folder'"
+              [service]="grievanceService"
+              [readonly]="false"></app-case-attachments>
+          }
         </form>
       </div>
     </div>

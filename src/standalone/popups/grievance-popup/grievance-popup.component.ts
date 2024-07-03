@@ -15,9 +15,10 @@ import { GrievanceService } from '@services/grievance.service';
 import { ActivatedRoute } from '@angular/router';
 import { EmployeeService } from '@services/employee.service';
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
-import { UserClick } from '@enums/user-click';
 import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 import { Config } from '@constants/config';
+import { GrievanceComment } from '@models/grievance-comment';
+import { FolderType } from '@enums/folder-type.enum';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -48,7 +49,7 @@ export class GrievancePopupComponent implements OnInit {
   form!: FormGroup;
   save$: Subject<void> = new Subject();
   model: PenaltyDecisionCriteria = this.data.model;
-
+  grievanceModel!: Grievance;
   ngOnInit(): void {
     this._listenToSave();
     this.buildForm();
@@ -65,13 +66,19 @@ export class GrievancePopupComponent implements OnInit {
         switchMap(() => {
           return this.grievanceService.create({
             ...this.form.value,
+            commentList: [
+              new GrievanceComment().clone<GrievanceComment>({
+                comment: this.form.value.commentList,
+                commentDate: new Date(),
+              }),
+            ],
             offenderId: this.model.id,
             applicantType: this.employeeService.getLoginData()?.type,
           });
         }),
       )
-      .subscribe(() => {
-        this.dialogRef.close(UserClick.YES);
+      .subscribe(model => {
+        this.grievanceModel = model;
       });
   }
 
@@ -87,4 +94,5 @@ export class GrievancePopupComponent implements OnInit {
   }
 
   protected readonly config = Config;
+  protected readonly FolderType = FolderType;
 }
