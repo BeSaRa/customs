@@ -205,6 +205,7 @@ export class DecisionMinutesComponent
             )
             .afterClosed()
             .pipe(
+              filter(click => !!click),
               map(penaltyDecision => {
                 return { penaltyDecision, decisionMinutes: model };
               }),
