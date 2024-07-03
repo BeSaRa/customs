@@ -178,7 +178,9 @@ export class EmployeeService
 
   isInvestigator() {
     return !!(this.loginData?.teams || []).find(
-      (t: Team) => t.authName === TeamNames.Investigator,
+      (t: Team) =>
+        t.authName === TeamNames.Investigator ||
+        t.authName === TeamNames.Investigation_Chief,
     );
   }
 

@@ -291,7 +291,7 @@ export class InvestigationComponent
       return;
     }
     if (
-      (!model.inMyInbox() || (!model.canSave() && !this.isInvestigator())) &&
+      ((!model.inMyInbox() && !this.isInvestigator()) || !model.canSave()) &&
       !model.isDrafted
     ) {
       this.readonly = true;
