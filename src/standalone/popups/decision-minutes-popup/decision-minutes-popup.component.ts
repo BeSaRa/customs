@@ -76,8 +76,10 @@ export class DecisionMinutesPopupComponent
     CustomValidators.required,
   );
   get filteredOffenders() {
-    return this.model().offenderInfo.filter(offender =>
-      this.model().getConcernedOffendersIds().includes(offender.id),
+    return this.model().offenderInfo.filter(
+      offender =>
+        this.model().getConcernedOffendersIds().includes(offender.id) &&
+        !this.hasDecisionMinutes(offender.id),
     );
   }
   ngOnInit(): void {
