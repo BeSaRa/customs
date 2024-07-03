@@ -14,7 +14,6 @@ import { Offender } from '@models/offender';
 import { Penalty } from '@models/penalty';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
-import { OffenderViolationService } from '@services/offender-violation.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyService } from '@services/penalty.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -45,7 +44,6 @@ export class DecisionMakerComponent
 
   private penaltyDecisionService = inject(PenaltyDecisionService);
   // don't remove it will break the code because we use it inside the model
-  private offenderViolationService = inject(OffenderViolationService);
   private penaltyService = inject(PenaltyService);
 
   lang = inject(LangService);

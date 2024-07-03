@@ -16,7 +16,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppIcons } from '@constants/app-icons';
 import { OrganizationUnitType } from '@enums/organization-unit-type';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { DialogService } from '@services/dialog.service';
 import { MawaredDepartment } from '@models/mawared-department';
 
 @Component({
@@ -40,7 +39,6 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   internalUserService = inject(InternalUserService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly mawaredDepartmentService = inject(MawaredDepartmentService);
-  private readonly dialog = inject(DialogService);
   internalUsers!: InternalUser[];
   organizationUnitService = inject(OrganizationUnitService);
   organizationUnits!: OrganizationUnit[];
