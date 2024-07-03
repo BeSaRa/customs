@@ -49,6 +49,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   override buildForm() {
     return {
       description: ['', [CustomValidators.maxLength(3000)]],
+      commentList: [''],
     };
   }
   buildCompleteForm() {
