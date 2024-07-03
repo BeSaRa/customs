@@ -332,7 +332,7 @@ export class OffendersViolationsPreviewComponent
   };
 
   isOffenderViolationsProofed(offenderId: number) {
-    return this.violationProofStatus()[offenderId].every(c => c.value === 2);
+    return this.violationProofStatus()[offenderId].some(c => c.value === 2);
   }
 
   canMakeSystemDecision(offenderId: number): boolean {

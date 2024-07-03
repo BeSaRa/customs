@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -7,17 +8,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Offender } from '@models/offender';
-import { Investigation } from '@models/investigation';
-import { LangService } from '@services/lang.service';
-import { MatTooltip } from '@angular/material/tooltip';
-import { CallRequest } from '@models/call-request';
-import { Subject } from 'rxjs';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { SummonType } from '@enums/summon-type';
-import { ignoreErrors } from '@utils/utils';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { CallRequestService } from '@services/call-request.service';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import {
   MatCell,
   MatCellDef,
@@ -31,17 +22,25 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { DatePipe } from '@angular/common';
-import { ConfigService } from '@services/config.service';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { LookupService } from '@services/lookup.service';
-import { CallRequestStatus } from '@enums/call-request-status';
-import { Lookup } from '@models/lookup';
+import { MatTooltip } from '@angular/material/tooltip';
+import { SummonType } from '@enums/summon-type';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { AdminResult } from '@models/admin-result';
-import { ToastService } from '@services/toast.service';
+import { CallRequest } from '@models/call-request';
+import { Investigation } from '@models/investigation';
+import { Lookup } from '@models/lookup';
+import { Offender } from '@models/offender';
 import { Witness } from '@models/witness';
+import { CallRequestService } from '@services/call-request.service';
+import { ConfigService } from '@services/config.service';
 import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { ToastService } from '@services/toast.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { ignoreErrors } from '@utils/utils';
+import { Subject } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-call-request-records-table',
@@ -101,15 +100,7 @@ export class CallRequestRecordsTableComponent
   ];
   lookupService = inject(LookupService);
   toast = inject(ToastService);
-  statuses = signal(
-    this.lookupService.lookups.obligationToAttendStatus.filter(
-      item =>
-        ![
-          CallRequestStatus.APOLOGY,
-          // CallRequestStatus.UNDER_PROCEDURE,
-        ].includes(item.lookupKey),
-    ),
-  );
+  statuses = signal(this.lookupService.lookups.obligationToAttendStatus);
 
   reloadInput = input.required<
     Subject<{
