@@ -228,6 +228,13 @@ export class Investigation extends BaseCase<
     });
   }
 
+  hasUnlinkedOffenders(): boolean {
+    const relatedOffenderIds = this.offenderViolationInfo.map(
+      i => i.offenderId,
+    );
+    return this.offenderInfo.some(o => !relatedOffenderIds.includes(o.id));
+  }
+
   hasUnlinkedViolations(): boolean {
     const relatedViolationsIds = this.offenderViolationInfo.map(
       i => i.violationId,

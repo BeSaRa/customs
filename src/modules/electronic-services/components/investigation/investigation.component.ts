@@ -515,10 +515,10 @@ export class InvestigationComponent
   }
 
   private _checkIfHasUnlinkedOffeneders() {
-    if ((this.model as unknown as Investigation).hasUnlinkedViolations()) {
+    if ((this.model as unknown as Investigation).hasUnlinkedOffenders()) {
       this.dialog.error(
         this.lang.map
-          .there_is_no_offenders_or_unlinked_violations_to_take_this_action,
+          .there_is_offenders_unlinked_to_violations_to_take_this_action,
       );
       return true;
     }
