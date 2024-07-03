@@ -87,7 +87,11 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getCaseStatus() === CommonCaseStatus.SENT_TO_CHIEF ||
       this.getCaseStatus() === CommonCaseStatus.RETURNED_TO_SAME_OFFICER ||
       this.getCaseStatus() === CommonCaseStatus.RETURNED_TO_DEPARTMENT ||
-      this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED
+      this.getCaseStatus() === CommonCaseStatus.CHIEF_COMPLETED ||
+      this.getCaseStatus() ===
+        CommonCaseStatus.REFERRALED_TO_PRESIDENT_ASSISTANT ||
+      this.getCaseStatus() ===
+        CommonCaseStatus.DISCIPLINARY_COUNCIL_MEMBER_APPROVED
     );
   }
 
