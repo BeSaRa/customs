@@ -61,7 +61,7 @@ import { AppIcons } from '@constants/app-icons';
 import { DecisionMakerComponent } from '@standalone/components/decision-maker/decision-maker.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { map, take } from 'rxjs/operators';
+import { catchError, map, take } from 'rxjs/operators';
 import { ToastService } from '@services/toast.service';
 import { UserClick } from '@enums/user-click';
 import { MatCheckbox } from '@angular/material/checkbox';
@@ -555,6 +555,16 @@ export class OffendersViolationsPreviewComponent
           .getCasePenalty(
             this.model().id as string,
             this.model().getActivityName()!,
+          )
+          .pipe(
+            catchError(() => {
+              return of(
+                {} as Record<
+                  string,
+                  { first: ManagerDecisions; second: Penalty[] }
+                >,
+              );
+            }),
           )
       : of(
           {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
