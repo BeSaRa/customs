@@ -134,6 +134,11 @@ export class ButtonsCaseWrapperComponent
     this.responseAction$
       .pipe(takeUntil(this.destroy$))
       .pipe(
+        filter(() => {
+          return !this._checkIfHasUnlinkedOffeneders();
+        }),
+      )
+      .pipe(
         switchMap((response: TaskResponses) => {
           return this.dialog
             .open(CommentPopupComponent, {
@@ -188,6 +193,7 @@ export class ButtonsCaseWrapperComponent
   }
 
   releaseItem() {
+    if (this._checkIfHasUnlinkedOffeneders()) return;
     this.model()
       .release()
       .pipe(take(1))
@@ -271,6 +277,11 @@ export class ButtonsCaseWrapperComponent
     this.referralRequest$
       .pipe(takeUntil(this.destroy$))
       .pipe(
+        filter(() => {
+          return !this._checkIfHasUnlinkedOffeneders();
+        }),
+      )
+      .pipe(
         map(({ penaltyKey, response }) => {
           return {
             selectedPenalty: this.systemPenaltiesMap()[penaltyKey],
@@ -334,6 +345,11 @@ export class ButtonsCaseWrapperComponent
     this.returnActions$
       .pipe(takeUntil(this.destroy$))
       .pipe(
+        filter(() => {
+          return !this._checkIfHasUnlinkedOffeneders();
+        }),
+      )
+      .pipe(
         switchMap(response => {
           if (this.model().getCaseType() === CaseTypes.GRIEVANCE) {
             this.referralGrievanceRequest$.next(response);
@@ -361,6 +377,11 @@ export class ButtonsCaseWrapperComponent
 
   private listenToApproveAction() {
     this.approve$
+      .pipe(
+        filter(() => {
+          return !this._checkIfHasUnlinkedOffeneders();
+        }),
+      )
       .pipe(
         exhaustMap(response => {
           return this.dialog
@@ -495,6 +516,11 @@ export class ButtonsCaseWrapperComponent
   private listenToLegalAffairsFinalApprove() {
     this.legalAffairsFinalApprove$
       .pipe(
+        filter(() => {
+          return !this._checkIfHasUnlinkedOffeneders();
+        }),
+      )
+      .pipe(
         switchMap(response => {
           return this.legalAffairsProceduresComponent()!
             .memorandumMasterComponent()!
@@ -540,6 +566,17 @@ export class ButtonsCaseWrapperComponent
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });
+  }
+
+  private _checkIfHasUnlinkedOffeneders() {
+    if ((this.model() as unknown as Investigation).hasUnlinkedViolations()) {
+      this.dialog.error(
+        this.lang.map
+          .there_is_no_offenders_or_unlinked_violations_to_take_this_action,
+      );
+      return true;
+    }
+    return false;
   }
 
   protected readonly TaskNames = TaskNames;

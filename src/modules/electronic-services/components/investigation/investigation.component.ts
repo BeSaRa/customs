@@ -401,7 +401,7 @@ export class InvestigationComponent
   }
 
   launchCase(type: SendTypes) {
-    if (!this.model) return;
+    if (!this.model || this._checkIfHasUnlinkedOffeneders()) return;
 
     this.model.applicantDecision = type;
     this.model
@@ -512,6 +512,17 @@ export class InvestigationComponent
             .dataset['name'];
         this.tabChange(tabName);
       });
+  }
+
+  private _checkIfHasUnlinkedOffeneders() {
+    if ((this.model as unknown as Investigation).hasUnlinkedViolations()) {
+      this.dialog.error(
+        this.lang.map
+          .there_is_no_offenders_or_unlinked_violations_to_take_this_action,
+      );
+      return true;
+    }
+    return false;
   }
 
   protected readonly AppPermissions = AppPermissions;
