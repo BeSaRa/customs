@@ -710,4 +710,5 @@ export interface LangKeysContract {
   return_to_president_assistant_office: string;
   final_decision: string;
   lbl_justification: string;
+  there_is_offenders_unlinked_to_violations_to_take_this_action: string;
 }
