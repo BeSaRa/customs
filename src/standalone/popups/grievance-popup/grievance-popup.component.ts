@@ -19,6 +19,7 @@ import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 import { Config } from '@constants/config';
 import { GrievanceComment } from '@models/grievance-comment';
 import { FolderType } from '@enums/folder-type.enum';
+import { PenaltySignerTypes } from '@enums/penalty-signer-types';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -83,14 +84,13 @@ export class GrievancePopupComponent implements OnInit {
   }
 
   get sendToTitle() {
-    // if (true) { // if penalty signer is assistant or DC committee
-    //   return 'الرئيس';
-    // } else if (
-    //   false  // if penalty signer is the manager
-    // ) {
-    //   return 'مساعد الرئيس';
-    // }
-    return '';
+    if (
+      this.model.penaltySignerRoleInfo.lookupKey ===
+      PenaltySignerTypes.MANAGER_DIRECTOR
+    ) {
+      return 'مساعد الرئيس';
+    }
+    return 'الرئيس';
   }
 
   protected readonly config = Config;
