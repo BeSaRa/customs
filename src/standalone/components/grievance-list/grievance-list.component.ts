@@ -79,6 +79,7 @@ export class GrievanceListComponent
 
   dataSource: MatTableDataSource<Grievance> = new MatTableDataSource();
   grievanceDisplayedColumns = [
+    'grievanceFullSerial',
     'caseIdentifier',
     'investigationFullSerial',
     'caseStatus',
