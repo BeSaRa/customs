@@ -58,8 +58,9 @@ export class DecisionMakerComponent
     input.required<
       Record<number, { first: number | null; second: Penalty[] }>
     >();
+
+  isSomeOffenderViolationsProofed = input.required<boolean>();
   penalties = input.required<Record<number, PenaltyDecisionContract>>();
-  isOffenderViolationsProofed = input.required<boolean>();
 
   systemAction$: Subject<SystemPenalties> = new Subject<SystemPenalties>();
 
@@ -89,6 +90,8 @@ export class DecisionMakerComponent
   }
 
   canMakeNormalDecision(offenderId: number): boolean {
+    console.log(this.penalties());
+    console.log(this.penalties()[offenderId]);
     return !!(
       (
         this.penalties() &&

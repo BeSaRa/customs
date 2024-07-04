@@ -70,6 +70,7 @@ import { intersection } from '@utils/utils';
 import { PenaltyIcons } from '@constants/penalty-icons';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
+import { ProofTypes } from '@enums/proof-types';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -331,8 +332,10 @@ export class OffendersViolationsPreviewComponent
       this.penaltyDecisionService.openRequestReferralDialog,
   };
 
-  isOffenderViolationsProofed(offenderId: number) {
-    return this.violationProofStatus()[offenderId].some(c => c.value === 2);
+  isSomeOffenderViolationsProofed(offenderId: number) {
+    return this.violationProofStatus()[offenderId].some(
+      c => c.value === ProofTypes.PROVED,
+    );
   }
 
   canMakeSystemDecision(offenderId: number): boolean {
