@@ -711,4 +711,5 @@ export interface LangKeysContract {
   final_decision: string;
   lbl_justification: string;
   there_is_offenders_unlinked_to_violations_to_take_this_action: string;
+  witness_name: string;
 }
