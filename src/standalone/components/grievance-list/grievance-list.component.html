@@ -1,5 +1,14 @@
 <div class="shadow relative overflow-auto hidden sm:block">
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
+    <!-- grievanceFullSerial -->
+    <ng-container matColumnDef="grievanceFullSerial">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ lang.map.grievance_number }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.grievanceFullSerial }}
+      </td>
+    </ng-container>
     <!-- caseIdentifier -->
     <ng-container matColumnDef="caseIdentifier">
       <th mat-header-cell *matHeaderCellDef>
