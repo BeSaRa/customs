@@ -2,7 +2,8 @@
   <div>
     <app-icon-button
       [disabled]="
-        !canMakeNormalDecision(offender().id) || !isOffenderViolationsProofed()
+        !canMakeNormalDecision(offender().id) ||
+        !isSomeOffenderViolationsProofed()
       "
       [matTooltip]="lang.map.make_penalty_decision"
       (click)="openDecisionDialog(offender())"
