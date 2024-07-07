@@ -30,6 +30,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   employeeDepartmentId!: number;
   agentCustomCode!: string;
   attachmentCount: number = 0;
+  decisionType!: number;
   offenderInfo?: MawaredEmployee | ClearingAgent;
   violations: OffenderViolation[] = [];
   offenderOUInfo?: AdminResult;
@@ -42,6 +43,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   penaltySignerRoleInfo!: AdminResult;
   penaltyStatusInfo!: AdminResult;
   directedToInfo!: AdminResult;
+  decisionTypeInfo!: AdminResult;
   penaltySignerId!: number;
   penaltyAppliedDate!: string;
   hasRunningGrievance!: number;
