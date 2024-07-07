@@ -355,6 +355,7 @@ export class ButtonsCaseWrapperComponent
         filter(() => {
           return !this._checkIfHasUnlinkedOffeneders();
         }),
+        filter(this._checkAllOffendersAssignedPenaltiesForPresident),
       )
       .pipe(
         exhaustMap(response => {
@@ -551,6 +552,32 @@ export class ButtonsCaseWrapperComponent
       return true;
     }
     return false;
+  }
+
+  private _checkAllOffendersAssignedPenaltiesForPresident = () => {
+    if (this.employeeService.isPresident()) {
+      const _isAllAssignedPenalty = this._getOffendersIds().every(oId =>
+        (this.model() as Investigation).penaltyDecisions.find(
+          p =>
+            p.offenderId === oId &&
+            p.penaltyInfo.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT,
+        ),
+      );
+      if (!_isAllAssignedPenalty) {
+        this.dialog.error(
+          this.lang.map
+            .all_offenders_must_adopted_a_penalty_decision_before_approve,
+        );
+      }
+      return _isAllAssignedPenalty;
+    }
+    return true;
+  };
+
+  private _getOffendersIds() {
+    return (this.model() as Investigation).offenderViolationInfo.map(
+      i => i.offenderId,
+    );
   }
 
   protected readonly TaskNames = TaskNames;
