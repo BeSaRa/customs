@@ -140,6 +140,14 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
     );
   }
 
+  getTeamAuthName() {
+    return this.taskDetails?.assignedToDisplayName;
+  }
+
+  getTeamDisplayName(): string {
+    return this.taskDetails.teamDisplayName;
+  }
+
   $$getEmployeeService$$(): EmployeeService {
     return ServiceRegistry.get<EmployeeService>(this.$$__employeeService__$$);
   }

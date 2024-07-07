@@ -70,16 +70,6 @@
             {{ model.offenderInfo.getNames() }}
           </div>
         </div>
-        @if (model.officeRecommendation) {
-          <div class="mb-3">
-            <span class="font-medium">{{
-              lang.map.lbl_office_recommendation
-            }}</span>
-            <div class="input-form p-2 block">
-              {{ model.officeRecommendationInfo.getNames() }}
-            </div>
-          </div>
-        }
         <div class="mb-3">
           <span class="font-medium">{{ lang.map.penalty }}</span>
           <div class="input-form p-2 block">
@@ -98,34 +88,34 @@
             {{ model.penaltySignerInfo.getNames() }}
           </div>
         </div>
-        @if (model.finalDecision) {
-          <div class="mb-3">
-            <span class="font-medium">{{ lang.map.final_decision }}</span>
-            <div class="input-form p-2 block">
-              {{
-                model.finalDecisionInfo
-                  ? model.finalDecisionInfo.getNames()
-                  : ' --- '
-              }}
-            </div>
-          </div>
-          @if (
-            model.finalDecision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY
-          ) {
-            <div class="mb-3">
-              <span class="font-medium">{{ lang.map.penalty }}</span>
-              <div class="input-form p-2 block">
-                {{ model.penaltyInfo ? model.penaltyInfo.getNames() : ' --- ' }}
-              </div>
-            </div>
-          }
-          <div class="mb-3 col-span-1 md:col-span-3">
-            <span class="font-medium">{{ lang.map.lbl_justification }}</span>
-            <div class="input-form min-h-[60px] p-2 block">
-              {{ model.justification }}
-            </div>
-          </div>
-        }
+        <!--        @if (model.finalDecision) {-->
+        <!--          <div class="mb-3">-->
+        <!--            <span class="font-medium">{{ lang.map.final_decision }}</span>-->
+        <!--            <div class="input-form p-2 block">-->
+        <!--              {{-->
+        <!--                model.finalDecisionInfo-->
+        <!--                  ? model.finalDecisionInfo.getNames()-->
+        <!--                  : ' -&#45;&#45; '-->
+        <!--              }}-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--          @if (-->
+        <!--            model.finalDecision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY-->
+        <!--          ) {-->
+        <!--            <div class="mb-3">-->
+        <!--              <span class="font-medium">{{ lang.map.penalty }}</span>-->
+        <!--              <div class="input-form p-2 block">-->
+        <!--                {{ model.penaltyInfo ? model.penaltyInfo.getNames() : ' -&#45;&#45; ' }}-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          }-->
+        <!--          <div class="mb-3 col-span-1 md:col-span-3">-->
+        <!--            <span class="font-medium">{{ lang.map.lbl_justification }}</span>-->
+        <!--            <div class="input-form min-h-[60px] p-2 block">-->
+        <!--              {{ model.justification }}-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        }-->
         <div class="col-span-1 md:col-span-3">
           <div class="mb-3 col-span-1 md:col-span-3">
             <span class="font-medium">{{ lang.map.description }}</span>

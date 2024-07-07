@@ -461,12 +461,4 @@ export class Investigation extends BaseCase<
   inHumanResource(): boolean {
     return this.inActivity(ActivitiesName.REVIEW_HUMAN_RESOURCES);
   }
-
-  getTeamAuthName() {
-    return this.taskDetails?.assignedToDisplayName;
-  }
-
-  getTeamDisplayName(): string {
-    return this.taskDetails.teamDisplayName;
-  }
 }

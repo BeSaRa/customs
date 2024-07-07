@@ -16,7 +16,6 @@ export class GrievanceInterceptor
     delete model.applicantTypeInfo;
     delete model.offenderInfo;
     delete model.offenderTypeInfo;
-    delete model.officeRecommendationInfo;
     delete model.penaltyInfo;
     delete model.penaltySignerInfo;
     delete model.penaltySignerRoleInfo;
@@ -51,10 +50,6 @@ export class GrievanceInterceptor
     model.offenderTypeInfo &&
       (model.offenderTypeInfo = AdminResult.createInstance(
         model.offenderTypeInfo,
-      ));
-    model.officeRecommendationInfo &&
-      (model.officeRecommendationInfo = AdminResult.createInstance(
-        model.officeRecommendationInfo,
       ));
     model.penaltyInfo &&
       (model.penaltyInfo = AdminResult.createInstance(model.penaltyInfo));
