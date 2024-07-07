@@ -324,9 +324,9 @@ export class OffendersViolationsPreviewComponent
   systemPenaltiesMap = {
     [SystemPenalties.TERMINATE]:
       this.penaltyDecisionService.openTerminateDialog,
-    [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
+    [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]:
       this.penaltyDecisionService.openRequestReferralDialog,
-    [SystemPenalties.REFERRAL_TO_PRESIDENT]:
+    [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]:
       this.penaltyDecisionService.openRequestReferralDialog,
     [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]:
       this.penaltyDecisionService.openRequestReferralDialog,
