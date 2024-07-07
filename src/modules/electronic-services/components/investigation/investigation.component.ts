@@ -401,7 +401,7 @@ export class InvestigationComponent
   }
 
   launchCase(type: SendTypes) {
-    if (!this.model || this._checkIfHasUnlinkedOffeneders()) return;
+    if (!this.model || this._checkIfHasUnlinkedOffenders()) return;
 
     this.model.applicantDecision = type;
     this.model
@@ -514,7 +514,7 @@ export class InvestigationComponent
       });
   }
 
-  private _checkIfHasUnlinkedOffeneders() {
+  private _checkIfHasUnlinkedOffenders() {
     if ((this.model as unknown as Investigation).hasUnlinkedOffenders()) {
       this.dialog.error(
         this.lang.map
