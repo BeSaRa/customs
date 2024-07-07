@@ -202,11 +202,13 @@ export class MemorandumPopupComponent
         this.dialogRef.close(this.data.response);
       });
   }
+
   get hasUnDecidedProofStatusItem() {
     return !!Object.values(this.controls).filter(
       item => item.value === ProofTypes.UNDEFINED,
     ).length;
   }
+
   private completeTask(model: Memorandum) {
     return of(this.investigationModel().getService())
       .pipe(

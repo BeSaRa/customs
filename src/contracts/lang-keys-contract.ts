@@ -713,4 +713,5 @@ export interface LangKeysContract {
   there_is_offenders_unlinked_to_violations_to_take_this_action: string;
   witness_name: string;
   all_offenders_must_adopted_a_penalty_decision_before_approve: string;
+  you_have_to_approve_one_legal_opinion_at_least: string;
 }
