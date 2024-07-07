@@ -51,6 +51,7 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { TaskNames } from '@enums/task-names';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-complete-popup/grievance-complete-popup.component';
+import { Memorandum } from '@models/memorandum';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -525,7 +526,29 @@ export class ButtonsCaseWrapperComponent
       )
       .pipe(filter(({ model }) => !!model))
       .pipe(
-        switchMap(({ model, response }) => {
+        map(({ model, response }) => {
+          const memos =
+            this.legalAffairsProceduresComponent()?.memorandumMasterComponent()
+              ?.models as unknown as Memorandum[];
+
+          const { isAnyApproved, lastModifiedApprovedMemo } =
+            this.getLastModifiedApprovedMemo(memos);
+
+          if (!isAnyApproved) {
+            this.dialog.error(
+              this.lang.map.you_have_to_approve_one_legal_opinion_at_least,
+            );
+          }
+
+          return { model, response, lastModifiedApprovedMemo };
+        }),
+      )
+      .pipe(
+        filter(({ lastModifiedApprovedMemo }) => !!lastModifiedApprovedMemo),
+      )
+      .pipe(
+        switchMap(({ model, response, lastModifiedApprovedMemo }) => {
+          model!.note = lastModifiedApprovedMemo.note;
           return (this.model() as Investigation)
             .getService()
             .openEditMemorandumDialog(
@@ -578,6 +601,29 @@ export class ButtonsCaseWrapperComponent
     return (this.model() as Investigation).offenderViolationInfo.map(
       i => i.offenderId,
     );
+  }
+
+  getLastModifiedApprovedMemo(memos: Memorandum[]) {
+    let isAnyApproved = false;
+    let lastModifiedApprovedMemo: Memorandum = memos[0];
+
+    memos.forEach(memo => {
+      if (memo.isApproved) {
+        isAnyApproved = true;
+        if (
+          !lastModifiedApprovedMemo ||
+          new Date(memo.lastModified) >
+            new Date(lastModifiedApprovedMemo.lastModified)
+        ) {
+          lastModifiedApprovedMemo = memo;
+        }
+      }
+    });
+
+    return {
+      isAnyApproved: isAnyApproved,
+      lastModifiedApprovedMemo: lastModifiedApprovedMemo,
+    };
   }
 
   protected readonly TaskNames = TaskNames;
