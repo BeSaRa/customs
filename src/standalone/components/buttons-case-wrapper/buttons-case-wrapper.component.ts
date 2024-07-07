@@ -48,7 +48,6 @@ import { Grievance } from '@models/grievance';
 import { BaseCase } from '@models/base-case';
 import { CaseTypes } from '@enums/case-types';
 import { BaseCaseService } from '@abstracts/base-case.service';
-import { ReferralGrievancePopupComponent } from '@standalone/popups/referral-grievance-popup/referral-grievance-popup.component';
 import { TaskNames } from '@enums/task-names';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-complete-popup/grievance-complete-popup.component';
@@ -112,7 +111,6 @@ export class ButtonsCaseWrapperComponent
     response: TaskResponses;
     penaltyKey: SystemPenalties;
   }>();
-  referralGrievanceRequest$ = new Subject<TaskResponses>();
   returnActions$ = new Subject<TaskResponses>();
   ask$ = new Subject<TaskResponses>();
 
@@ -123,7 +121,6 @@ export class ButtonsCaseWrapperComponent
     this.listenToReferralActions();
     this.listenToReturnActions();
     this.listenToApproveAction();
-    this.listenToReferralGrievanceAction();
     this.listenToAskAction();
     this.listenToGrievanceCompleteAction();
 
@@ -212,7 +209,7 @@ export class ButtonsCaseWrapperComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT,
       );
     } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
-      this.referralGrievanceRequest$.next(
+      this.grievanceCompleteAction$.next(
         TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
       );
     }
@@ -225,7 +222,7 @@ export class ButtonsCaseWrapperComponent
         SystemPenalties.REFERRAL_TO_PRESIDENT,
       );
     } else if (this.model().caseType === CaseTypes.GRIEVANCE) {
-      this.referralGrievanceRequest$.next(TaskResponses.REFERRAL_TO_PRESIDENT);
+      this.grievanceCompleteAction$.next(TaskResponses.REFERRAL_TO_PRESIDENT);
     }
   }
 
@@ -248,29 +245,6 @@ export class ButtonsCaseWrapperComponent
       penaltyKey,
       response,
     });
-  }
-
-  private listenToReferralGrievanceAction() {
-    this.referralGrievanceRequest$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(
-        switchMap(response => {
-          return this.dialog
-            .open(ReferralGrievancePopupComponent, {
-              data: {
-                model: this.model,
-                extras: {
-                  response,
-                },
-              },
-            })
-            .afterClosed();
-        }),
-      )
-      .pipe(filter(click => click === UserClick.YES))
-      .subscribe(() => {
-        this.navigateToSamePageThatUserCameFrom.emit();
-      });
   }
 
   private listenToReferralActions() {
@@ -352,7 +326,7 @@ export class ButtonsCaseWrapperComponent
       .pipe(
         switchMap(response => {
           if (this.model().getCaseType() === CaseTypes.GRIEVANCE) {
-            this.referralGrievanceRequest$.next(response);
+            this.grievanceCompleteAction$.next(response);
             return of(UserClick.NO);
           } else {
             return this.penaltyDecisionService

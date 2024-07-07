@@ -8,37 +8,156 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content" [formGroup]="form">
-    <div class="mb-3">
-      <app-select-input
-        [label]="lang.map.final_decision"
-        [options]="grievanceFinalDecisions"
-        formControlName="finalDecision"
-        [bindLabel]="'getNames'"
-        [bindValue]="'lookupKey'"
-        (selectChange)="handleFinalDecisionChanged($event)"
-        [nullable]="false"
-        [isMultiple]="false">
-      </app-select-input>
-    </div>
-    @if (
-      finalDecisionsCtrl.value === GrievanceFinalDecisionsEnum.UPDATE_PENALTY
-    ) {
-      <div class="mb-3">
-        <app-select-input
-          [label]="lang.map.penalty"
-          [options]="penaltiesList"
-          formControlName="penaltyId"
-          [bindLabel]="'getNames'"
-          [bindValue]="'id'"
-          [nullable]="false"
-          [isMultiple]="false">
-        </app-select-input>
+    <div class="dialog-content max-w-[800px] space-y-4">
+      <div class="flex justify-between">
+        <p>
+          <span> {{ lang.map.mr }} : </span>
+          <span class="font-semibold">
+            {{ model.offenderInfo?.getNames() }}
+          </span>
+          <span>{{ lang.map.respected }}</span>
+        </p>
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.investigation_file_number }} : </span>
+            <span class="font-semibold">{{ model.draftFullSerial }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_number }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_number }}))</span
+            >
+          </span>
+          <span>
+            <span>{{ lang.map.decision_date }} : </span>
+            <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+          </span>
+        </p>
       </div>
-    }
-    <div class="mb-3">
-      <app-textarea
-        formControlName="justification"
-        [label]="lang.map.description"></app-textarea>
+      <div class="flex justify-center">
+        <span>{{ lang.map.after_greetings }}</span>
+      </div>
+      <div class="flex">
+        <span>{{ lang.map.based_on_your_violations }}</span>
+      </div>
+      <!--      <table-->
+      <!--        mat-table-->
+      <!--        class="table-style table-primary"-->
+      <!--        [dataSource]="offenderViolations()">-->
+      <!--        &lt;!&ndash; violation &ndash;&gt;-->
+      <!--        <ng-container matColumnDef="violation">-->
+      <!--          <th mat-header-cell *matHeaderCellDef>-->
+      <!--            {{ lang.map.violation }}-->
+      <!--          </th>-->
+      <!--          <td mat-cell *matCellDef="let element">-->
+      <!--            {{ assertType(element).violationInfo.violationTypeInfo.getNames() }}-->
+      <!--          </td>-->
+      <!--        </ng-container>-->
+      <!--        &lt;!&ndash; createdOn &ndash;&gt;-->
+      <!--        <ng-container matColumnDef="createdOn">-->
+      <!--          <th mat-header-cell *matHeaderCellDef>-->
+      <!--            {{ lang.map.violation_date }}-->
+      <!--          </th>-->
+      <!--          <td mat-cell *matCellDef="let element">-->
+      <!--            @if (assertType(element).isNormalDate()) {-->
+      <!--              {{ assertType(element).violationInfo.violationsDate | date }}-->
+      <!--            } @else {-->
+      <!--              <span class="flex flex-col">-->
+      <!--                <span-->
+      <!--                  >{{ lang.map.date_from }} :-->
+      <!--                  <span>{{-->
+      <!--                    assertType(element).violationInfo.violationsDateFrom | date-->
+      <!--                  }}</span>-->
+      <!--                </span>-->
+      <!--                <span-->
+      <!--                  >{{ lang.map.date_to }} :-->
+      <!--                  <span>{{-->
+      <!--                    assertType(element).violationInfo.violationsDateTo | date-->
+      <!--                  }}</span>-->
+      <!--                </span>-->
+      <!--              </span>-->
+      <!--            }-->
+      <!--          </td>-->
+      <!--        </ng-container>-->
+      <!--        &lt;!&ndash; classification &ndash;&gt;-->
+      <!--        <ng-container matColumnDef="proofStatus">-->
+      <!--          <th mat-header-cell *matHeaderCellDef>-->
+      <!--            {{ lang.map.is_proved }}-->
+      <!--          </th>-->
+      <!--          <td mat-cell class="w-40" *matCellDef="let element">-->
+      <!--            {{ assertType(element).proofStatusInfo.getNames() }}-->
+      <!--          </td>-->
+      <!--        </ng-container>-->
+      <!--        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+      <!--        <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>-->
+      <!--        &lt;!&ndash; Row shown when there is no matching data. &ndash;&gt;-->
+      <!--        <tr class="mat-row" *matNoDataRow>-->
+      <!--          <td class="p-4" colspan="100">-->
+      <!--            {{ lang.map.no_records_to_display }}-->
+      <!--          </td>-->
+      <!--        </tr>-->
+      <!--      </table>-->
+      <div class="flex gap-x-4">
+        <div class="flex flex-auto flex-col">
+          <app-select-input
+            [label]="lang.map.final_decision"
+            [options]="grievanceFinalDecisions"
+            formControlName="finalDecision"
+            [bindLabel]="'getNames'"
+            [bindValue]="'lookupKey'"
+            (selectChange)="handleFinalDecisionChanged($event)"
+            [nullable]="false"
+            [isMultiple]="false">
+          </app-select-input>
+        </div>
+        <div class="flex flex-auto flex-col">
+          <label (click)="focusOnSelect(select)">{{
+            lang.map.penalty_action
+          }}</label>
+          <div class="input-form" [formGroup]="form">
+            <mat-select
+              #select="matSelect"
+              id="penalty"
+              formControlName="penaltyId"
+              class="min-h-[42px] input-select">
+              <mat-select-trigger>
+                {{
+                  penaltyCtrl.value
+                    ? selectedPenaltyText(penaltyCtrl.value)
+                    : ''
+                }}
+              </mat-select-trigger>
+              @for (penalty of penaltiesList(); track penalty.id) {
+                <mat-option [value]="penalty.id">
+                  {{ penalty.getNames() }}
+                  @if (penalty.penaltyGuidance) {
+                    <span class="bg-emerald-400 rounded text-white px-2 mx-2">
+                      {{ penalty.penaltyGuidanceInfo.getNames() }}
+                    </span>
+                  }
+                </mat-option>
+              }
+            </mat-select>
+          </div>
+        </div>
+      </div>
+      <div [formGroup]="form">
+        <app-textarea formControlName="justification" [label]="lang.map.text" />
+      </div>
+      <div class="flex justify-end">
+        <p class="flex flex-col">
+          <span>
+            <span>{{ lang.map.lbl_department }} : </span>
+            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+          </span>
+          <span>
+            <span>{{ lang.map.decision_signer }} : </span>
+            <span class="font-semibold"
+              >(({{ lang.map.decision_signer }}))</span
+            >
+          </span>
+        </p>
+      </div>
     </div>
   </div>
   <div class="dialog-footer justify-end">

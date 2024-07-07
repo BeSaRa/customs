@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import {
@@ -25,6 +25,15 @@ import { Grievance } from '@models/grievance';
 import { filter, Subject, switchMap, tap } from 'rxjs';
 import { UserClick } from '@enums/user-click';
 import { DialogService } from '@services/dialog.service';
+import { DatePipe } from '@angular/common';
+import { MatCell } from '@angular/material/table';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatOption } from '@angular/material/autocomplete';
+import { MatSelect, MatSelectTrigger } from '@angular/material/select';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { ReportStatus } from '@enums/report-status';
+import { EmployeeService } from '@services/employee.service';
+import { TeamNames } from '@enums/team-names';
 
 @Component({
   selector: 'app-grievance-complete-popup',
@@ -37,6 +46,13 @@ import { DialogService } from '@services/dialog.service';
     TextareaComponent,
     SelectInputComponent,
     ReactiveFormsModule,
+    DatePipe,
+    MatCell,
+    MatRadioGroup,
+    MatRadioButton,
+    MatOption,
+    MatSelectTrigger,
+    MatSelect,
   ],
   templateUrl: './grievance-complete-popup.component.html',
   styleUrl: './grievance-complete-popup.component.scss',
@@ -51,25 +67,46 @@ export class GrievanceCompletePopupComponent
   fb = inject(FormBuilder);
   dialogRef = inject(MatDialogRef);
   dialog = inject(DialogService);
+  employeeService = inject(EmployeeService);
   model = this.data.model;
   response = this.data.response;
   grievanceFinalDecisions = this.lookupService.lookups.GrievanceFinalDecision;
-  penaltiesList: Penalty[] = [];
+  penaltiesList = signal<Penalty[]>([]);
   form!: UntypedFormGroup;
   save$: Subject<void> = new Subject<void>();
+
+  penaltiesMap = computed<Record<number, Penalty>>(() => {
+    return this.penaltiesList().reduce((acc, item) => {
+      return { ...acc, [item.id]: item };
+    }, {});
+  });
+
+  focusOnSelect(select: MatSelect) {
+    select.focus();
+    select.toggle();
+  }
+
   ngOnInit(): void {
     this.buildForm();
     this.listenToSave();
     this.loadPenalties();
     this.loadPenalties().subscribe((penalties: Penalty[]) => {
-      this.penaltiesList = penalties;
+      this.penaltiesList.set(penalties.filter(item => !item.isSystem));
     });
   }
+
   buildForm() {
     this.form = this.fb.group(
       new Grievance().clone<Grievance>({ ...this.model }).buildCompleteForm(),
     );
+    if (
+      this.finalDecisionsCtrl.value ===
+      GrievanceFinalDecisionsEnum.UPDATE_PENALTY
+    ) {
+      this.penaltyCtrl.enable();
+    }
   }
+
   listenToSave() {
     this.save$
       .pipe(
@@ -81,6 +118,31 @@ export class GrievanceCompletePopupComponent
             ),
         ),
         filter(() => this.form.valid),
+        switchMap(() => {
+          return new PenaltyDecision()
+            .clone<PenaltyDecision>({
+              caseId: this.model.id,
+              offenderId: this.model.offenderId,
+              signerId: this.employeeService.getEmployee()?.id,
+              penaltyId: this.penaltyCtrl.value!,
+              comment: this.form.getRawValue().justification,
+              status: 1,
+              // ...(this.isBroker()
+              //   ? { customsViolationEffect: this.oldDecisionCustomsViolationEffect.value }
+              //   : null),
+              penaltyInfo: this.penaltiesMap()[this.penaltyCtrl.value!],
+              tkiid: this.model.getTaskId(),
+              roleAuthName: this.model.getTeamDisplayName(),
+              decisionType:
+                this.model.getTeamDisplayName() ===
+                  TeamNames.President_Office ||
+                this.model.getTeamDisplayName() ===
+                  TeamNames.President_Assistant_Office
+                  ? ReportStatus.GRIEVANCE_DRAFT
+                  : ReportStatus.GRIEVANCE_APPROVED,
+            })
+            .save();
+        }),
         switchMap(() => {
           return new Grievance()
             .clone<Grievance>({
@@ -94,20 +156,32 @@ export class GrievanceCompletePopupComponent
         this.dialogRef.close(UserClick.YES);
       });
   }
+
   private loadPenalties() {
     return this.model.getService().grievancePenalty(this.model.offenderId);
   }
+
   handleFinalDecisionChanged(decision: unknown) {
     this.penaltyCtrl.setValidators([]);
+    this.penaltyCtrl.disable();
     if (decision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY) {
+      this.penaltyCtrl.enable();
       this.penaltyCtrl.setValidators([CustomValidators.required]);
     }
   }
+
   get penaltyCtrl(): FormControl {
     return this.form.get('penaltyId') as FormControl;
   }
+
   get finalDecisionsCtrl(): FormControl {
     return this.form.get('finalDecision') as FormControl;
+  }
+
+  selectedPenaltyText(value: number | null) {
+    return this.penaltiesMap()[value as unknown as number]
+      ? this.penaltiesMap()[value as unknown as number].getNames()
+      : '';
   }
 
   protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
