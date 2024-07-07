@@ -12,6 +12,7 @@ import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
 import { Observable } from 'rxjs';
 import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
+import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 
 @CastResponseContainer({
   $pagination: {
@@ -55,6 +56,7 @@ export class OffenderService extends BaseCrudService<Offender> {
   isAgent(model: MawaredEmployee | ClearingAgent): model is ClearingAgent {
     return model.type === OffenderTypes.BROKER;
   }
+
   @CastResponse()
   getAttachmentsCount(offenderIds: number[]) {
     return this.http.get<Offender[]>(
@@ -94,26 +96,30 @@ export class OffenderService extends BaseCrudService<Offender> {
     fallback: '$pagination',
   })
   loadByCriteria(
-    criteria: Partial<{
-      offenderType: number;
-      decisionSerial: string;
-      decisionDate: string;
-    }>,
+    criteria: Partial<PenaltyDecisionCriteria>,
   ): Observable<Pagination<Offender[]>> {
-    if (!criteria.offenderType) {
-      delete criteria.offenderType;
+    if (criteria) {
+      delete criteria.buildForm;
+      Object.keys(criteria as unknown as object).forEach(key => {
+        if (
+          criteria &&
+          (criteria[key as keyof PenaltyDecisionCriteria] === null ||
+            criteria[key as keyof PenaltyDecisionCriteria] === undefined)
+        ) {
+          delete criteria[key as keyof PenaltyDecisionCriteria];
+        }
+      });
     }
-    if (!criteria.decisionSerial) {
-      delete criteria.decisionSerial;
-    }
-    if (!criteria.decisionDate) {
-      delete criteria.decisionDate;
+    if (criteria.decisionDate) {
+      criteria.decisionDate = new Date(
+        criteria.decisionDate,
+      ).toLocaleDateString('en-CA');
     }
     return this.http.get<Pagination<Offender[]>>(
       this.getUrlSegment() + '/admin/criteria',
       {
         params: new HttpParams({
-          fromObject: criteria,
+          fromObject: { ...(criteria as object) },
         }),
       },
     );
