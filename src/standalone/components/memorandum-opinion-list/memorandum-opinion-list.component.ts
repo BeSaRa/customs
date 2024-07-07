@@ -77,7 +77,7 @@ export class MemorandumOpinionListComponent
       .map(i => i.id),
   );
   updateModel = input.required<EventEmitter<void>>();
-  models: unknown[] = [];
+  models: Memorandum[] = [];
   displayedColumns: string[] = [
     'investigator',
     'referralNumber',
@@ -245,9 +245,9 @@ export class MemorandumOpinionListComponent
   }
 
   isMemoForCurrentTask(memo: Memorandum) {
-    return this.models$.value
+    return this.models
       .filter(m => m.id === memo.id)[0]
-      .offenderIds.every(oId =>
+      ?.offenderIds?.every(oId =>
         this.model()
           .getConcernedOffendersIds()
           .find(_oId => _oId === oId),
