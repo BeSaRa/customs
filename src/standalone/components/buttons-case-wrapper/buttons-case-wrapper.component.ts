@@ -132,7 +132,7 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         filter(() => {
-          return !this._checkIfHasUnlinkedOffeneders();
+          return !this._checkIfHasUnlinkedOffenders();
         }),
       )
       .pipe(
@@ -190,7 +190,7 @@ export class ButtonsCaseWrapperComponent
   }
 
   releaseItem() {
-    if (this._checkIfHasUnlinkedOffeneders()) return;
+    if (this._checkIfHasUnlinkedOffenders()) return;
     this.model()
       .release()
       .pipe(take(1))
@@ -252,7 +252,7 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         filter(() => {
-          return !this._checkIfHasUnlinkedOffeneders();
+          return !this._checkIfHasUnlinkedOffenders();
         }),
       )
       .pipe(
@@ -320,7 +320,7 @@ export class ButtonsCaseWrapperComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         filter(() => {
-          return !this._checkIfHasUnlinkedOffeneders();
+          return !this._checkIfHasUnlinkedOffenders();
         }),
       )
       .pipe(
@@ -353,7 +353,7 @@ export class ButtonsCaseWrapperComponent
     this.approve$
       .pipe(
         filter(() => {
-          return !this._checkIfHasUnlinkedOffeneders();
+          return !this._checkIfHasUnlinkedOffenders();
         }),
         filter(this._checkAllOffendersAssignedPenaltiesForPresident),
       )
@@ -492,7 +492,7 @@ export class ButtonsCaseWrapperComponent
     this.legalAffairsFinalApprove$
       .pipe(
         filter(() => {
-          return !this._checkIfHasUnlinkedOffeneders();
+          return !this._checkIfHasUnlinkedOffenders();
         }),
       )
       .pipe(
@@ -543,7 +543,7 @@ export class ButtonsCaseWrapperComponent
       });
   }
 
-  private _checkIfHasUnlinkedOffeneders() {
+  private _checkIfHasUnlinkedOffenders() {
     if ((this.model() as unknown as Investigation).hasUnlinkedOffenders()) {
       this.dialog.error(
         this.lang.map
