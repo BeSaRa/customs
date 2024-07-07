@@ -285,7 +285,6 @@
       model().hasResponse(taskResponses.RETURN_TO_HR) ||
       model().hasResponse(taskResponses.RETURN_TO_SAME) ||
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
-      model().hasResponse(taskResponses.RETURN_APP_MANAGER) ||
       model().hasResponse(taskResponses.RETURN_TO_CA) ||
       model().hasResponse(taskResponses.RETURN_TO_PO) ||
       model().hasResponse(taskResponses.RETURN_TO_PAE))
@@ -312,16 +311,6 @@
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_PAE)">
           {{ lang.map.return_to_president_assistant_office }}
-        </button>
-      }
-      @if (
-        model().inMyInbox() &&
-        model().hasResponse(taskResponses.RETURN_APP_MANAGER)
-      ) {
-        <button
-          mat-menu-item
-          (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
-          {{ lang.map.return_to_manager }}
         </button>
       }
       @if (
@@ -508,11 +497,13 @@
   <!-- president assessment decision -->
   @if (
     model().inMyInbox() &&
+    employeeService.isPresidentAssisstant() &&
     (model().hasResponse(
       taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
     ) ||
       model().hasResponse(taskResponses.LAUNCH_LEGAL_AFFAIRS) ||
-      model().hasResponse(taskResponses.TO_PAE))
+      model().hasResponse(taskResponses.TO_PAE) ||
+      model().hasResponse(taskResponses.RETURN_APP_MANAGER))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
       {{ lang.map.president_assessment_decision }}
@@ -522,8 +513,10 @@
   <!-- president decision -->
   @if (
     model().inMyInbox() &&
+    employeeService.isPresident() &&
     (model().hasResponse(taskResponses.PR_LAUNCH_LEGAL_AFFAIRS) ||
-      model().hasResponse(taskResponses.TO_PO))
+      model().hasResponse(taskResponses.TO_PO) ||
+      model().hasResponse(taskResponses.RETURN_APP_MANAGER))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="issuingMenu">
       {{ lang.map.president_decision }}
@@ -576,6 +569,17 @@
     @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PO)) {
       <button mat-menu-item (click)="responseAction$.next(taskResponses.TO_PO)">
         {{ lang.map.transfer_report_to_staff_president_office }}
+      </button>
+    }
+
+    @if (
+      model().inMyInbox() &&
+      model().hasResponse(taskResponses.RETURN_APP_MANAGER)
+    ) {
+      <button
+        mat-menu-item
+        (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
+        {{ lang.map.return_to_manager }}
       </button>
     }
   </mat-menu>

@@ -243,6 +243,18 @@ export class EmployeeService
     );
   }
 
+  isPresidentAssisstant() {
+    return (this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.President_Assistant,
+    );
+  }
+
+  isPresident() {
+    return (this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.President,
+    );
+  }
+
   getEmployee(): InternalUser | undefined {
     return this.loginData?.internalUser;
   }
