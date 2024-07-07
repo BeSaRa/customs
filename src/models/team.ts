@@ -17,7 +17,14 @@ export class Team extends BaseModel<Team, TeamService> {
   authName!: string;
   parentDeptId!: number;
   buildForm(controls = false): object {
-    const { ldapGroupName, arName, enName, teamEmail, autoClaim, ouId } = this;
+    const {
+      ldapGroupName,
+      arName,
+      enName,
+      teamEmail,
+      autoClaim,
+      parentDeptId,
+    } = this;
     return {
       ldapGroupName: ldapGroupName,
       arName: controls
@@ -42,7 +49,7 @@ export class Team extends BaseModel<Team, TeamService> {
         : enName,
       teamEmail: [teamEmail, [CustomValidators.pattern('EMAIL')]],
       autoClaim: controls ? [autoClaim, CustomValidators.required] : autoClaim,
-      ouId: controls ? [ouId, CustomValidators.required] : ouId,
+      parentDeptId: parentDeptId,
     };
   }
 }
