@@ -59,37 +59,39 @@
         {{ lang.map.view_memo }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <div class="flex">
-          @if (assertType(element).isApproved) {
-            <app-icon-button
-              [matTooltip]="lang.map.view_memo"
-              (click)="view$.next(element)"
-              icon="VIEW" />
-          } @else if (model().inMyInbox()) {
-            @if (!isManager()) {
+        @if (isMemoForCurrentTask(element)) {
+          <div class="flex">
+            @if (assertType(element).isApproved) {
               <app-icon-button
-                [disabled]="hasUnDecidedProofStatusItem()"
-                [matTooltip]="lang.map.approve_memo"
-                (click)="approve$.next(element)"
-                icon="APPROVE" />
-              @if (
-                !!element.vsId &&
-                employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
-              ) {
-                <mat-checkbox
-                  class="mt-1"
-                  [matTooltip]="lang.map.is_exportable"
-                  [checked]="element.isExportable"
-                  (change)="changeIsExportableStatus$.next(element)">
-                </mat-checkbox>
+                [matTooltip]="lang.map.view_memo"
+                (click)="view$.next(element)"
+                icon="VIEW" />
+            } @else if (model().inMyInbox()) {
+              @if (!isManager()) {
+                <app-icon-button
+                  [disabled]="hasUnDecidedProofStatusItem()"
+                  [matTooltip]="lang.map.approve_memo"
+                  (click)="approve$.next(element)"
+                  icon="APPROVE" />
+                @if (
+                  !!element.vsId &&
+                  employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
+                ) {
+                  <mat-checkbox
+                    class="mt-1"
+                    [matTooltip]="lang.map.is_exportable"
+                    [checked]="element.isExportable"
+                    (change)="changeIsExportableStatus$.next(element)">
+                  </mat-checkbox>
+                }
               }
+              <app-icon-button
+                [matTooltip]="lang.map.edit_memo"
+                (click)="edit$.next(element)"
+                icon="EDIT" />
             }
-            <app-icon-button
-              [matTooltip]="lang.map.edit_memo"
-              (click)="edit$.next(element)"
-              icon="EDIT" />
-          }
-        </div>
+          </div>
+        }
       </td>
     </ng-container>
 

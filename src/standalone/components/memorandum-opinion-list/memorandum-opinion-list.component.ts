@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -7,7 +8,7 @@ import {
   input,
   OnInit,
 } from '@angular/core';
-import { Investigation } from '@models/investigation';
+import { MatCheckbox } from '@angular/material/checkbox';
 import {
   MatCell,
   MatCellDef,
@@ -21,22 +22,21 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { ReplaySubject, Subject, tap } from 'rxjs';
-import { LangService } from '@services/lang.service';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { InvestigationService } from '@services/investigation.service';
-import { Memorandum } from '@models/memorandum';
-import { DatePipe } from '@angular/common';
-import { ConfigService } from '@services/config.service';
-import { ignoreErrors } from '@utils/utils';
-import { ToastService } from '@services/toast.service';
-import { EmployeeService } from '@services/employee.service';
 import { MemorandumCategories } from '@enums/memorandum-categories';
 import { ProofTypes } from '@enums/proof-types';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Investigation } from '@models/investigation';
+import { Memorandum } from '@models/memorandum';
+import { ConfigService } from '@services/config.service';
+import { EmployeeService } from '@services/employee.service';
+import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { ToastService } from '@services/toast.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { ignoreErrors } from '@utils/utils';
+import { BehaviorSubject, Subject, tap } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -93,7 +93,7 @@ export class MemorandumOpinionListComponent
   changeIsExportableStatus$: Subject<Memorandum> = new Subject<Memorandum>();
   isManager = input.required<boolean>();
   masterComponent = input<MemorandumOpinionListComponent>();
-  models$ = new ReplaySubject<Memorandum[]>(1);
+  models$ = new BehaviorSubject<Memorandum[]>([]);
   masterComponentEffect = effect(() => {
     if (this.masterComponent()) {
       this.listenToModelsChangeFromMaster();
@@ -242,5 +242,15 @@ export class MemorandumOpinionListComponent
           item => item.category === MemorandumCategories.LEGAL_RESULT,
         );
       });
+  }
+
+  isMemoForCurrentTask(memo: Memorandum) {
+    return this.models$.value
+      .filter(m => m.id === memo.id)[0]
+      .offenderIds.every(oId =>
+        this.model()
+          .getConcernedOffendersIds()
+          .find(_oId => _oId === oId),
+      );
   }
 }
