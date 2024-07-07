@@ -40,6 +40,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUserOU } from '@models/internal-user-ou';
 import { MatRipple } from '@angular/material/core';
 import { OrganizationUnitService } from '@services/organization-unit.service';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 @Component({
   selector: 'app-internal-user-permissions-popup',
@@ -121,7 +122,7 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
     this.organizationUnitService
       .loadById(this.data.model.organizationUnitId)
       .subscribe(ou =>
-        ou.parent
+        ou.parent && ou.type === OrganizationUnitType.SECTION
           ? this.loadUserPermissions(ou.parent)
           : this.loadUserPermissions(ou.id),
       );
