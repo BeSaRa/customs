@@ -9,11 +9,12 @@ export class PenaltyDecisionCriteria extends Offender {
   offenderType!: number;
   decisionDate!: string;
   buildForm(controls = false): object {
-    const { offenderType, decisionSerial, decisionDate } = this;
+    const { offenderType, decisionType, decisionSerial, decisionDate } = this;
     return {
       offenderType: controls ? [offenderType] : offenderType,
       decisionSerial: controls ? [decisionSerial] : decisionSerial,
       decisionDate: controls ? [decisionDate] : decisionDate,
+      decisionType: controls ? [decisionType] : decisionType,
     };
   }
 }

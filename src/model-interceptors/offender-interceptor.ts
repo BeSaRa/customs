@@ -17,7 +17,7 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
     delete model.agencyInfo;
     delete model.penaltyInfo;
     delete model.statusInfo;
-    delete model.penaltySignerInfo;
+    delete model.decisionTypeInfo;
     delete model.penaltySignerInfo;
     delete model.penaltySignerRoleInfo;
     delete model.penaltyStatusInfo;
@@ -35,7 +35,10 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
       (model.offenderInfo.typeInfo = AdminResult.createInstance(
         model.offenderInfo.typeInfo,
       ));
-
+    model.decisionTypeInfo &&
+      (model.decisionTypeInfo = AdminResult.createInstance(
+        model.decisionTypeInfo,
+      ));
     model.penaltySignerInfo &&
       (model.penaltySignerInfo = AdminResult.createInstance(
         model.penaltySignerInfo,

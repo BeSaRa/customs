@@ -38,6 +38,12 @@
             bindValue="lookupKey"
             bindLabel="getNames"
             [options]="offenderType" />
+          <app-select-input
+            formControlName="decisionType"
+            [label]="lang.map.decision_type"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="decisionTypes" />
           <app-input
             formControlName="decisionSerial"
             [label]="lang.map.decision_number" />
@@ -82,7 +88,7 @@
             </td>
           </ng-container>
           <!-- decision Type Column -->
-          <ng-container matColumnDef="decisionType">
+          <ng-container matColumnDef="decisionTypeInfo">
             <th mat-header-cell *matHeaderCellDef>
               {{ lang.map.decision_type }}
             </th>

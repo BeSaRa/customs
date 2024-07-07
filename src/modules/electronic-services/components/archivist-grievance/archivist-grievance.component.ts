@@ -104,6 +104,7 @@ export class ArchivistGrievanceComponent implements OnInit {
   fb = inject(UntypedFormBuilder);
 
   offenderType = this.lookupService.lookups.offenderType;
+  decisionTypes = this.lookupService.lookups.decisionReportStatus;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Offender>();
@@ -119,6 +120,7 @@ export class ArchivistGrievanceComponent implements OnInit {
   columnsWrapper: ColumnsWrapper<PenaltyDecision> = new ColumnsWrapper(
     new TextFilterColumn('decisionSerial'),
     new NoneFilterColumn('offenderInfo'),
+    new NoneFilterColumn('decisionTypeInfo'),
     new NoneFilterColumn('penaltyInfo'),
     new NoneFilterColumn('signerInfo'),
     new NoneFilterColumn('statusInfo'),
