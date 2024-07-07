@@ -185,10 +185,16 @@ export class EmployeeService
   }
 
   isHumanResourceTeam() {
-    return (this.loginData?.teams || []).find(
+    return !!(this.loginData?.teams || []).find(
       (t: Team) =>
         t.authName === TeamNames.Human_Resources_Manager ||
         t.authName === TeamNames.Human_Resources,
+    );
+  }
+
+  isCustomsAffairsManager() {
+    return !!(this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.Customs_Affairs_Manager,
     );
   }
 
