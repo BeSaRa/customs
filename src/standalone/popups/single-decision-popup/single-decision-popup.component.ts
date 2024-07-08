@@ -57,6 +57,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
 import { OffenderTypes } from '@enums/offender-types';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-single-decision-popup',
@@ -113,6 +114,8 @@ export class SingleDecisionPopupComponent
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
   offender = signal(this.data.offender);
+
+  todayDate = new Date();
 
   isBroker = computed(() => {
     return this.offender().type === OffenderTypes.BROKER;
@@ -261,4 +264,6 @@ export class SingleDecisionPopupComponent
       ? this.penaltiesMap()[value as unknown as number].getNames()
       : '';
   }
+
+  protected readonly Config = Config;
 }

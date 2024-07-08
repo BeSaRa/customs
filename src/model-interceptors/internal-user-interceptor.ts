@@ -25,6 +25,7 @@ export class InternalUserInterceptor
         model.managerDelegation,
       ) as ManagerDelegation);
     delete model.defaultDepartmentInfo;
+    delete model.departmentInfo;
     delete model.jobTitleInfo;
     return model;
   }
@@ -33,6 +34,7 @@ export class InternalUserInterceptor
     model.defaultDepartmentInfo = AdminResult.createInstance(
       model.defaultDepartmentInfo,
     );
+    model.departmentInfo = AdminResult.createInstance(model.departmentInfo);
     model.jobTitleInfo = AdminResult.createInstance(model.jobTitleInfo);
     model.statusInfo = new AdminResult().clone(model.statusInfo);
     model.mawaredEmployeeInfo = mawaredEmployeeInterceptor.receive(

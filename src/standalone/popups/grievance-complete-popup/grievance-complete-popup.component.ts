@@ -34,6 +34,7 @@ import { PenaltyDecision } from '@models/penalty-decision';
 import { ReportStatus } from '@enums/report-status';
 import { EmployeeService } from '@services/employee.service';
 import { TeamNames } from '@enums/team-names';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-grievance-complete-popup',
@@ -74,6 +75,7 @@ export class GrievanceCompletePopupComponent
   penaltiesList = signal<Penalty[]>([]);
   form!: UntypedFormGroup;
   save$: Subject<void> = new Subject<void>();
+  todayDate = new Date();
 
   penaltiesMap = computed<Record<number, Penalty>>(() => {
     return this.penaltiesList().reduce((acc, item) => {
@@ -184,5 +186,5 @@ export class GrievanceCompletePopupComponent
       : '';
   }
 
-  protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
+  protected readonly Config = Config;
 }
