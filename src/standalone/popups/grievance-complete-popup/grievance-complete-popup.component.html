@@ -30,7 +30,9 @@
           </span>
           <span>
             <span>{{ lang.map.decision_date }} : </span>
-            <span class="font-semibold">(({{ lang.map.decision_date }}))</span>
+            <span class="font-semibold">{{
+              todayDate | date: Config.DATE_FORMAT
+            }}</span>
           </span>
         </p>
       </div>
@@ -148,13 +150,15 @@
         <p class="flex flex-col">
           <span>
             <span>{{ lang.map.lbl_department }} : </span>
-            <span class="font-semibold">{{ lang.map.lbl_department }}</span>
+            <span class="font-semibold">{{
+              employeeService.getEmployee()?.departmentInfo?.getNames()
+            }}</span>
           </span>
           <span>
             <span>{{ lang.map.decision_signer }} : </span>
-            <span class="font-semibold"
-              >(({{ lang.map.decision_signer }}))</span
-            >
+            <span class="font-semibold">{{
+              employeeService.getEmployee()?.getNames()
+            }}</span>
           </span>
         </p>
       </div>
