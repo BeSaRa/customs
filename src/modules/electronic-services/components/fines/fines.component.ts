@@ -26,6 +26,7 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { map } from 'rxjs/operators';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { AddPaymentPopupComponent } from '@standalone/popups/add-payment-popup/add-payment-popup.component';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-fines',
@@ -47,6 +48,7 @@ export class FinesComponent implements OnInit {
   selectedTab = 0;
   view$: Subject<Fine> = new Subject();
   pay$: Subject<Fine> = new Subject();
+  config = Config;
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
