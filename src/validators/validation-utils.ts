@@ -39,6 +39,7 @@ export const validationPatterns = {
   HAS_LETTERS: new RegExp(
     /^[\u0621-\u064A0-9\u0660-\u0669\u0621-\u064Aa-zA-Z0-9]*[\u0621-\u064Aa-zA-Z ]/,
   ),
+  TRANSACTION_NUMBER: /^[0-9]+\/[0-9]+$/,
 };
 
 export type ValidationPatternType = typeof validationPatterns;

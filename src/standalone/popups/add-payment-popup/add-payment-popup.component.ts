@@ -42,8 +42,7 @@ export class AddPaymentPopupComponent implements OnInit {
   save$: Subject<void> = new Subject<void>();
   control = new FormControl('', [
     CustomValidators.required,
-    CustomValidators.positiveNumber,
-    CustomValidators.number,
+    CustomValidators.pattern('TRANSACTION_NUMBER'),
   ]);
   ngOnInit(): void {
     this.listenToSave();
