@@ -439,6 +439,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         }),
       )
       .subscribe(() => {
+        this.operation = OperationType.VIEW;
         this.toast.success(this.lang.map.file_uploaded_successfully);
       });
   }

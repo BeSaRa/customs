@@ -90,8 +90,6 @@ export class DecisionMakerComponent
   }
 
   canMakeNormalDecision(offenderId: number): boolean {
-    console.log(this.penalties());
-    console.log(this.penalties()[offenderId]);
     return !!(
       (
         this.penalties() &&
