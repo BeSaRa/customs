@@ -20,8 +20,8 @@ export const AppPermissionsGroup = {
     AppPermissions.MANAGE_CLEARING_AGENCY,
     AppPermissions.MANAGEMNT_SYSTEM_PREFRENCES,
     AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
+    AppPermissions.MANAGE_MANAGER_DELEGATION,
   ],
-  // ELECTRONIC_SERVICES: [AppPermissions.GUIDE_PANEL],
 };
 
 export type AppPermissionsGroupType = typeof AppPermissionsGroup;
