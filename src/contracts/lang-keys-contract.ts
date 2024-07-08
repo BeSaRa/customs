@@ -685,7 +685,7 @@ export interface LangKeysContract {
   penalty_from: string;
   penalty_to: string;
   search_for_fines: string;
-  penalty_amount: string;
+  fine_amount: string;
   not_paid: string;
   paid: string;
   transaction_number: string;
