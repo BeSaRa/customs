@@ -49,7 +49,8 @@ export class FinesComponent implements OnInit {
   pay$: Subject<Fine> = new Subject();
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
+    if (event.key === 'Enter') {
+      event.preventDefault();
       this.search$.next();
     }
   }
