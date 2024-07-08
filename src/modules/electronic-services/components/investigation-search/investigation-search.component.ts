@@ -88,7 +88,8 @@ export class InvestigationSearchComponent implements OnInit {
 
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
+    if (event.key === 'Enter') {
+      event.preventDefault();
       this.search$.next();
     }
   }

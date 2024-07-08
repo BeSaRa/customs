@@ -64,6 +64,10 @@ export class LoginComponent implements OnInit {
       event.preventDefault();
       this.router.navigate(['/' + AppRoutes.EXTERNAL_LOGIN]).then();
     }
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.login$.next();
+    }
   }
 
   ngOnInit(): void {

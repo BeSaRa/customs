@@ -40,7 +40,8 @@ export class VerifyPopupComponent implements OnInit {
   inputMaskPatterns = inputMaskPatterns;
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.code === 'Enter') {
+    if (event.key === 'Enter') {
+      event.preventDefault();
       this.verify$.next();
     }
   }
