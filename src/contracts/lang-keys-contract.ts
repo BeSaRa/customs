@@ -714,4 +714,6 @@ export interface LangKeysContract {
   witness_name: string;
   all_offenders_must_adopted_a_penalty_decision_before_approve: string;
   you_have_to_approve_one_legal_opinion_at_least: string;
+  fine_from: string;
+  fine_to: string;
 }
