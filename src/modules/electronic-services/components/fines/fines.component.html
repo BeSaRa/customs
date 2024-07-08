@@ -28,9 +28,7 @@
           <app-input
             formControlName="investigationFileNumber"
             [label]="lang.map.investigation_file_number" />
-          <app-input
-            formControlName="penaltyFrom"
-            [label]="lang.map.penalty_from">
+          <app-input formControlName="penaltyFrom" [label]="lang.map.fine_from">
             <input
               appControl
               formControlName="penaltyFrom"
@@ -38,7 +36,7 @@
               [matDatepicker]="datepickerFrom" />
             <mat-datepicker [touchUi]="true" #datepickerFrom />
           </app-input>
-          <app-input formControlName="penaltyTo" [label]="lang.map.penalty_to">
+          <app-input formControlName="penaltyTo" [label]="lang.map.fine_to">
             <input
               appControl
               formControlName="penaltyTo"
