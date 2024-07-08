@@ -33,6 +33,7 @@
               appControl
               formControlName="penaltyFrom"
               (click)="datepickerFrom.open()"
+              [max]="form.get('penaltyTo')?.value"
               [matDatepicker]="datepickerFrom" />
             <mat-datepicker [touchUi]="true" #datepickerFrom />
           </app-input>
@@ -41,6 +42,7 @@
               appControl
               formControlName="penaltyTo"
               (click)="datepickerTo.open()"
+              [min]="form.get('penaltyFrom')?.value"
               [matDatepicker]="datepickerTo" />
             <mat-datepicker [touchUi]="true" #datepickerTo />
           </app-input>
