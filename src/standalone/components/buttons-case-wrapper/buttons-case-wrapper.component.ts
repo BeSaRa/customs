@@ -567,7 +567,10 @@ export class ButtonsCaseWrapperComponent
   }
 
   private _checkIfHasUnlinkedOffenders() {
-    if ((this.model() as unknown as Investigation).hasUnlinkedOffenders()) {
+    if (
+      this.model().getCaseType() === CaseTypes.INVESTIGATION &&
+      (this.model() as unknown as Investigation).hasUnlinkedOffenders()
+    ) {
       this.dialog.error(
         this.lang.map
           .there_is_offenders_unlinked_to_violations_to_take_this_action,

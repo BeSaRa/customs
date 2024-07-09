@@ -130,7 +130,13 @@
               <h3
                 class="text-xl text-primary min-h-[3rem] align-middle flex items-center">
                 {{ lang.map.lbl_comments }}
-                @if (model.inMyInbox()) {
+                @if (
+                  model.inMyInbox() &&
+                  (model.getActivityName() ===
+                    ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT ||
+                    model.getActivityName() ===
+                      ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT_ASSISTANT)
+                ) {
                   <app-icon-button
                     [icon]="'COMMENT'"
                     (click)="comment$.next(model)"
@@ -175,7 +181,13 @@
                 [caseId]="model.id"
                 [type]="'folder'"
                 [service]="service"
-                [readonly]="!model.inMyInbox()"></app-case-attachments>
+                [readonly]="
+                  !model.inMyInbox() ||
+                  (model.getActivityName() !==
+                    ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT &&
+                    model.getActivityName() !==
+                      ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT_ASSISTANT)
+                "></app-case-attachments>
             </div>
           </div>
         </div>

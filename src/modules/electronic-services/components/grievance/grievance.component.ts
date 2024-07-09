@@ -21,6 +21,7 @@ import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-com
 import { UntypedFormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-grievance',
@@ -111,4 +112,5 @@ export class GrievanceComponent extends BaseCaseComponent<
 
   protected readonly FolderType = FolderType;
   protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
+  protected readonly ActivitiesName = ActivitiesName;
 }
