@@ -22,9 +22,12 @@ import { Observable } from 'rxjs';
 export class InvestigationDraftsService extends InvestigationService {
   override serviceName: string = 'InvestigationDraftsService';
 
-  @CastResponse(() => Investigation, { unwrap: 'rs', fallback: '$default' })
-  search(criteria: Partial<Investigation> = {}): Observable<Investigation[]> {
-    return this.http.post<Investigation[]>(
+  @CastResponse(undefined, { unwrap: '', fallback: '$pagination' })
+  search(criteria: {
+    pageNumber: number;
+    pageSize: number;
+  }): Observable<Pagination<Investigation[]>> {
+    return this.http.post<Pagination<Investigation[]>>(
       this.getUrlSegment() + '/is-drafted/search',
       criteria,
     );

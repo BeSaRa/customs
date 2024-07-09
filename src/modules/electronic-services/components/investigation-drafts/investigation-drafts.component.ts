@@ -12,10 +12,11 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { EncryptionService } from '@services/encryption.service';
 import { InvestigationDraftsService } from '@services/investigation-drafts.service';
 import { LangService } from '@services/lang.service';
-import { ignoreErrors } from '@utils/utils';
-import { catchError, exhaustMap, of, throwError } from 'rxjs';
+import { BehaviorSubject, of, combineLatest } from 'rxjs';
+import { delay, map, switchMap, tap } from 'rxjs/operators';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
 import { DialogService } from '@services/dialog.service';
+import { PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-investigation-drafts',
@@ -30,6 +31,12 @@ export class InvestigationDraftsComponent implements OnInit {
   lang = inject(LangService);
   investigationDraftsService = inject(InvestigationDraftsService);
   displayedList = new MatTableDataSource<Investigation>();
+
+  public paginate$ = new BehaviorSubject({
+    pageNumber: 0,
+    pageSize: 50,
+  });
+  length = 50;
 
   ngOnInit(): void {
     this.load();
@@ -57,16 +64,24 @@ export class InvestigationDraftsComponent implements OnInit {
   private load() {
     of(null)
       .pipe(
-        exhaustMap(() => {
-          return this.investigationDraftsService.search().pipe(
-            catchError(error => {
-              return throwError(() => error);
+        delay(0),
+        switchMap(() => {
+          return combineLatest([this.paginate$]).pipe(
+            switchMap(() => {
+              return this.investigationDraftsService.search({
+                pageSize: this.pageSize,
+                pageNumber: this.pageNumber + 1,
+              });
             }),
-            ignoreErrors(),
+            tap(({ count }) => {
+              this.length = count;
+            }),
           );
         }),
       )
+      .pipe(map(response => response.rs))
       .subscribe((data: Investigation[]) => {
+        console.log(data);
         this.displayedList = new MatTableDataSource(data);
       });
   }
@@ -84,9 +99,25 @@ export class InvestigationDraftsComponent implements OnInit {
       })
       .then();
   }
+
   showActionsOnCase(item: Investigation) {
     this.dialog.open(ActionsOnCaseComponent, {
       data: { caseId: item.id },
     });
+  }
+
+  paginate($event: PageEvent) {
+    this.paginate$.next({
+      pageNumber: $event.pageSize * $event.pageIndex,
+      pageSize: $event.pageSize,
+    });
+  }
+
+  get pageSize(): number {
+    return this.paginate$.value.pageSize;
+  }
+
+  get pageNumber(): number {
+    return this.paginate$.value.pageNumber;
   }
 }
