@@ -356,7 +356,9 @@ export class ButtonsCaseWrapperComponent
         filter(() => {
           return !this._checkIfHasUnlinkedOffenders();
         }),
-        filter(this._checkAllOffendersAssignedPenaltiesForPresident),
+        filter(
+          this._checkAllOffendersAssignedPenaltiesForPresidentAndVPAndManager,
+        ),
       )
       .pipe(
         exhaustMap(response => {
@@ -580,25 +582,35 @@ export class ButtonsCaseWrapperComponent
     return false;
   }
 
-  private _checkAllOffendersAssignedPenaltiesForPresident = () => {
-    if (this.employeeService.isPresident()) {
-      const _isAllAssignedPenalty = this._getOffendersIds().every(oId =>
-        (this.model() as Investigation).penaltyDecisions.find(
-          p =>
-            p.offenderId === oId &&
-            p.penaltyInfo.penaltyKey !== SystemPenalties.REFERRAL_TO_PRESIDENT,
-        ),
-      );
-      if (!_isAllAssignedPenalty) {
-        this.dialog.error(
-          this.lang.map
-            .all_offenders_must_adopted_a_penalty_decision_before_approve,
+  private _checkAllOffendersAssignedPenaltiesForPresidentAndVPAndManager =
+    () => {
+      if (
+        this.employeeService.isApplicantManager() ||
+        this.employeeService.isPresidentAssisstant() ||
+        this.employeeService.isPresident()
+      ) {
+        const _isAllAssignedPenalty = this._getOffendersIds().every(oId =>
+          (this.model() as Investigation).penaltyDecisions.find(
+            p =>
+              p.offenderId === oId &&
+              ((this.employeeService.isPresidentAssisstant() &&
+                p.penaltyInfo.penaltyKey !==
+                  SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
+                (this.employeeService.isPresident() &&
+                  p.penaltyInfo.penaltyKey !==
+                    SystemPenalties.REFERRAL_TO_PRESIDENT)),
+          ),
         );
+        if (!_isAllAssignedPenalty) {
+          this.dialog.error(
+            this.lang.map
+              .all_offenders_must_adopted_a_penalty_decision_before_approve,
+          );
+        }
+        return _isAllAssignedPenalty;
       }
-      return _isAllAssignedPenalty;
-    }
-    return true;
-  };
+      return true;
+    };
 
   private _getOffendersIds() {
     return (this.model() as Investigation).offenderViolationInfo.map(
