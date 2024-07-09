@@ -74,14 +74,14 @@
         </td>
       </ng-container>
       <!-- directed to -->
-      <ng-container matColumnDef="directedTo">
-        <th mat-header-cell mat-sort-header="directedTo" *matHeaderCellDef>
-          {{ lang.map.directed_to }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.directedToInfo && element.directedToInfo.getNames() }}
-        </td>
-      </ng-container>
+      <!--      <ng-container matColumnDef="directedTo">-->
+      <!--        <th mat-header-cell mat-sort-header="directedTo" *matHeaderCellDef>-->
+      <!--          {{ lang.map.directed_to }}-->
+      <!--        </th>-->
+      <!--        <td mat-cell *matCellDef="let element">-->
+      <!--          {{ element.directedToInfo && element.directedToInfo.getNames() }}-->
+      <!--        </td>-->
+      <!--      </ng-container>-->
       <!-- penalty -->
       <ng-container matColumnDef="penalty">
         <th mat-header-cell mat-sort-header="penalty" *matHeaderCellDef>
@@ -209,12 +209,12 @@
                   element.penaltySignerInfo.getNames()
               }}
             </span>
-            <span>
-              <strong class="text-primary">
-                {{ lang.map.directed_to }}:
-              </strong>
-              {{ element.directedToInfo && element.directedToInfo.getNames() }}
-            </span>
+            <!--            <span>-->
+            <!--              <strong class="text-primary">-->
+            <!--                {{ lang.map.directed_to }}:-->
+            <!--              </strong>-->
+            <!--              {{ element.directedToInfo && element.directedToInfo.getNames() }}-->
+            <!--            </span>-->
           </div>
           <div class="flex items-center justify-between">
             <span>

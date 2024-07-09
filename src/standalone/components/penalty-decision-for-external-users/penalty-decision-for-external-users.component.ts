@@ -121,7 +121,7 @@ export class PenaltyDecisionForExternalUsersComponent
     'decisionSerial',
     'date',
     'signer',
-    'directedTo',
+    // 'directedTo',
     'penalty',
     'status',
     'actions',
