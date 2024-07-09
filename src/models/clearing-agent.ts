@@ -94,7 +94,7 @@ export class ClearingAgent extends BaseModel<
       enName: this.enName,
       arName: this.arName,
       witnessType: WitnessTypes.CLEARING_AGENT,
-      witnessRefId: this.agentId,
+      witnessRefId: this.id,
       status: 1,
     });
   }
