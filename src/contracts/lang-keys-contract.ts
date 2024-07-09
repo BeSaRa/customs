@@ -716,4 +716,5 @@ export interface LangKeysContract {
   you_have_to_approve_one_legal_opinion_at_least: string;
   fine_from: string;
   fine_to: string;
+  transaction_number_pattern_error_msg: string;
 }

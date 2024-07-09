@@ -25,6 +25,9 @@ export const ValidationMessages: Record<string, ValidationMessageContract> = {
     replace: (message: string, errorValue: { requiredLength: number }) =>
       message.change({ x: errorValue.requiredLength }),
   },
+  TRANSACTION_NUMBER: {
+    key: 'transaction_number_pattern_error_msg',
+  },
 };
 
 export type ValidationMessagesType = typeof ValidationMessages;
