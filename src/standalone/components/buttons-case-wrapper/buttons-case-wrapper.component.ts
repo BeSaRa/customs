@@ -593,9 +593,10 @@ export class ButtonsCaseWrapperComponent
           (this.model() as Investigation).penaltyDecisions.find(
             p =>
               p.offenderId === oId &&
-              ((this.employeeService.isPresidentAssisstant() &&
-                p.penaltyInfo.penaltyKey !==
-                  SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
+              (this.employeeService.isApplicantManager() ||
+                (this.employeeService.isPresidentAssisstant() &&
+                  p.penaltyInfo.penaltyKey !==
+                    SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
                 (this.employeeService.isPresident() &&
                   p.penaltyInfo.penaltyKey !==
                     SystemPenalties.REFERRAL_TO_PRESIDENT)),
