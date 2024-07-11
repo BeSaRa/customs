@@ -113,6 +113,7 @@ export class PersonsListComponent
   witnessService = inject(WitnessService);
   model = input.required<Investigation>();
   fromCallRequestTab = input<boolean>(false);
+  isOpenedFromSearch = input<boolean>(false);
   concernedOffenders = computed(() => {
     return (this.model() && this.model().getConcernedOffenders()) || [];
   });
@@ -123,8 +124,12 @@ export class PersonsListComponent
   witness = signal<Witness[]>([]);
 
   models = computed(() => {
+    console.log(this.isOpenedFromSearch());
     return this.isOffender()
-      ? this.fromCallRequestTab()
+      ? this.fromCallRequestTab() ||
+        ((this.employeeService.isDisciplinaryCommittee() ||
+          this.employeeService.isOneOfLegalAffairsTeams()) &&
+          this.isOpenedFromSearch())
         ? this.allOffenders()
         : this.concernedOffenders()
       : (this.witness() as unknown as Offender[]);

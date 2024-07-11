@@ -1,5 +1,8 @@
 <div class="p-4">
-  <app-persons-list type="offender" [model]="model()" />
+  <app-persons-list
+    type="offender"
+    [model]="model()"
+    [isOpenedFromSearch]="isOpenedFromSearch()" />
 </div>
 @if (canViewWitness()) {
   <div class="p-4">

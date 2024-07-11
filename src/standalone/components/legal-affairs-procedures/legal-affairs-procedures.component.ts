@@ -23,6 +23,7 @@ export class LegalAffairsProceduresComponent {
   employeeService = inject(EmployeeService);
   @Output()
   updateModel = new EventEmitter<void>();
+  isOpenedFromSearch = input.required<boolean>();
   memorandumMasterComponent =
     viewChild<MemorandumOpinionListComponent>('master');
 
