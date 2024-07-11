@@ -15,6 +15,7 @@ export class InvestigationSearchCriteria extends Investigation {
   penaltyId!: number;
   violationTypeId!: number;
   offenderType: number = OffenderTypeWithNone.ALL;
+  investigationFileNumber!: string;
 
   override buildForm(
     controls: boolean = false,
@@ -34,6 +35,7 @@ export class InvestigationSearchCriteria extends Investigation {
       createdTo,
       draftNumber,
       decisionNumber,
+      investigationFileNumber,
     } = this;
     return {
       description: controls
@@ -56,6 +58,9 @@ export class InvestigationSearchCriteria extends Investigation {
         : departmentId,
       penaltyId: controls ? [penaltyId] : penaltyId,
       violationTypeId: controls ? [violationTypeId] : violationTypeId,
+      investigationFileNumber: controls
+        ? [investigationFileNumber]
+        : investigationFileNumber,
       offenderType: controls
         ? [offenderType, CustomValidators.required]
         : offenderType,
