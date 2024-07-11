@@ -717,4 +717,5 @@ export interface LangKeysContract {
   fine_from: string;
   fine_to: string;
   transaction_number_pattern_error_msg: string;
+  creator_department: string;
 }
