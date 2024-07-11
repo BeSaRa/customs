@@ -69,6 +69,9 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
         }
       });
       this.listenToMawaredDepChanges();
+    } else {
+      this.form.get('code')?.disable();
+      // this.form.get('parent')?.disable();
     }
   }
 
@@ -80,7 +83,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   protected _prepareModel(): OrganizationUnit | Observable<OrganizationUnit> {
     return new OrganizationUnit().clone<OrganizationUnit>({
       ...this.model,
-      ...this.form.value,
+      ...this.form.getRawValue(),
     });
   }
 
@@ -177,7 +180,11 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   listenToMawaredDepChanges() {
     this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
       Object.keys(this.form.controls).forEach(control => {
-        if (control !== 'mawaredDepId') {
+        if (
+          control !== 'mawaredDepId' &&
+          control !== 'code'
+          // && control !== 'parent'
+        ) {
           this.form.get(control)?.enable();
         }
       });
@@ -195,10 +202,15 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   setDepartment(department: MawaredDepartment) {
     const { arName, enName, departmentId } = department;
+    // console.log(department.parentId);
+    // const t = this.organizationUnits.find(
+    //   ou => ou.mawaredDepId === department.parentId,
+    // );
+    // console.log(t);
     this.form.patchValue({
       arName,
       enName,
-      mawaredDepId: departmentId,
+      code: departmentId,
     });
   }
 }
