@@ -120,6 +120,11 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       ? this.lang.map.investigation_report
       : this.lang.map.hearing_minutes_subject;
   });
+  personName = computed(() => {
+    return this.isOffender()
+      ? this.lang.map.offender_name
+      : this.lang.map.witness_name;
+  });
   personControl = new FormControl({ disabled: true, value: '' });
   investigatorCtrl = new FormControl({ disabled: true, value: '' });
 

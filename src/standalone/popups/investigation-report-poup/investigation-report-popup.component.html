@@ -10,9 +10,7 @@
   <div class="dialog-content gap-4 w-[1000px]">
     <div class="flex gap-2">
       <div class="flex flex-auto flex-col">
-        <app-input
-          [formControl]="personControl"
-          [label]="lang.map.witness_name" />
+        <app-input [formControl]="personControl" [label]="personName()" />
         <app-input
           [formControl]="investigatorCtrl"
           [label]="lang.map.investigator_name" />
