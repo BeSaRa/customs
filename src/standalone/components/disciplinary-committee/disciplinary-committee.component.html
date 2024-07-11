@@ -20,7 +20,10 @@
     [model]="model()"></app-decision-minutes>
 </div>
 <div class="p-4">
-  <app-persons-list type="offender" [model]="model()" />
+  <app-persons-list
+    type="offender"
+    [model]="model()"
+    [isOpenedFromSearch]="isOpenedFromSearch()" />
 </div>
 <div class="p-4">
   <app-persons-list type="witness" [model]="model()" />

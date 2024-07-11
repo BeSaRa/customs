@@ -61,7 +61,10 @@
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" [mat-stretch-tabs]="false">
-      @if (model.inLegalAffairsActivity()) {
+      @if (
+        model.inLegalAffairsActivity() ||
+        (isOpenedFromSearch() && employeeService.isOneOfLegalAffairsTeams())
+      ) {
         <mat-tab
           data-name="legal_procedures"
           [label]="lang.map.legal_procedures">
@@ -99,7 +102,10 @@
             [ngTemplateOutlet]="external_persons_tab"></ng-container>
         </mat-tab>
       }
-      @if (model.inDisciplinaryCommitteeReview()) {
+      @if (
+        model.inDisciplinaryCommitteeReview() ||
+        (isOpenedFromSearch() && employeeService.isDisciplinaryCommittee())
+      ) {
         <mat-tab
           data-name="disciplinary_committee_meetings"
           [label]="lang.map.disciplinary_committee">
@@ -240,11 +246,14 @@
     <app-legal-affairs-procedures
       #legalAffairsProceduresComponent
       (updateModel)="updateModel$.next(null)"
-      [model]="model" />
+      [model]="model"
+      [isOpenedFromSearch]="isOpenedFromSearch()" />
   </ng-template>
   <ng-template #disciplinary_committee_meetings>
     <div class="p-4">
-      <app-disciplinary-committee [model]="model" />
+      <app-disciplinary-committee
+        [model]="model"
+        [isOpenedFromSearch]="isOpenedFromSearch()" />
     </div>
   </ng-template>
   <ng-template #review_minutes>

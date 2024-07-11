@@ -219,6 +219,16 @@ export class EmployeeService
     );
   }
 
+  isOneOfLegalAffairsTeams() {
+    return !!(this.loginData?.teams || []).find(
+      (t: Team) =>
+        t.authName === TeamNames.Legal_Affairs ||
+        t.authName === TeamNames.Legal_Affairs_Manager ||
+        t.authName === TeamNames.Investigator ||
+        t.authName === TeamNames.Investigation_Chief,
+    );
+  }
+
   // isTeamSecretary(ldapGroupName: LDAPGroupNames) {
   //   const customSettings: string | undefined = (
   //     this.loginData?.teams || []

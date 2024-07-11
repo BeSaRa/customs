@@ -525,5 +525,12 @@ export class InvestigationComponent
     return false;
   }
 
+  isOpenedFromSearch(): boolean {
+    if (this.info === null) {
+      return false;
+    }
+    return this.info()?.openFrom === OpenFrom.SEARCH;
+  }
+
   protected readonly AppPermissions = AppPermissions;
 }
