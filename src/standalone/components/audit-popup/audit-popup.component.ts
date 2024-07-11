@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { BaseModel } from '@abstracts/base-model';
 import { BaseCrudService } from '@abstracts/base-crud-service';
@@ -34,6 +34,7 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ignoreErrors } from '@utils/utils';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-audit-popup',
@@ -53,6 +54,7 @@ import { ignoreErrors } from '@utils/utils';
     MatDialogModule,
     ButtonComponent,
     AsyncPipe,
+    DatePipe,
   ],
   templateUrl: './audit-popup.component.html',
   styleUrls: ['./audit-popup.component.scss'],
@@ -85,6 +87,7 @@ export class AuditPopupComponent implements OnInit {
   columnsWrapper: ColumnsWrapper<Audit> = new ColumnsWrapper<Audit>(
     new NoneFilterColumn('ip'),
     new NoneFilterColumn('user'),
+    new NoneFilterColumn('date'),
     new NoneFilterColumn('operation'),
     new NoneFilterColumn('actions'),
   );
@@ -144,4 +147,6 @@ export class AuditPopupComponent implements OnInit {
       limit: $event.pageSize,
     });
   }
+
+  protected readonly config = Config;
 }
