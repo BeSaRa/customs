@@ -325,6 +325,10 @@ export class OffendersViolationsPreviewComponent
   selectedSystemAction$ = new Subject<SystemPenalties>();
 
   systemPenaltiesMap = {
+    [SystemPenalties.REFERRAL_TO_PRESIDENT]:
+      this.penaltyDecisionService.openRequestReferralDialog,
+    [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]:
+      this.penaltyDecisionService.openRequestReferralDialog,
     [SystemPenalties.TERMINATE]:
       this.penaltyDecisionService.openTerminateDialog,
     [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]:
