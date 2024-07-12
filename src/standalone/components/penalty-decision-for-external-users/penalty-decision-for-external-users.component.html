@@ -175,7 +175,11 @@
                   <mat-icon [svgIcon]="AppIcons.HAND_COIN"></mat-icon>
                 </app-button>
               }
-              @if (!element.hasRunningGrievance && !createdOver30Day(element)) {
+              @if (
+                !element.hasRunningGrievance &&
+                !createdOver30Day(element) &&
+                element.decisionType === ReportStatus.APPROVED
+              ) {
                 <app-button
                   [buttonType]="'primary'"
                   (click)="grievance$.next(element)"

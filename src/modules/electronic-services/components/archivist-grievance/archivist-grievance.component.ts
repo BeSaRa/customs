@@ -59,6 +59,9 @@ import { UserClick } from '@enums/user-click';
 import { GrievanceListComponent } from '@standalone/components/grievance-list/grievance-list.component';
 import { OffenderService } from '@services/offender.service';
 import { Offender } from '@models/offender';
+import { Penalty } from '@models/penalty';
+import { PenaltyService } from '@services/penalty.service';
+import { ReportStatus } from '@enums/report-status';
 
 @Component({
   selector: 'app-archivist-grievance',
@@ -102,9 +105,11 @@ export class ArchivistGrievanceComponent implements OnInit {
   dialog = inject(DialogService);
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
+  penaltyService = inject(PenaltyService);
 
+  _30Day = 30 * 24 * 60 * 60 * 1000;
+  penalties!: Penalty[];
   offenderType = this.lookupService.lookups.offenderType;
-  decisionTypes = this.lookupService.lookups.decisionReportStatus;
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Offender>();
@@ -114,13 +119,13 @@ export class ArchivistGrievanceComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group(new PenaltyDecisionCriteria().buildForm());
     this.listenToSearch();
+    this.loadPenalties();
     this.listenGrievance();
   }
 
   columnsWrapper: ColumnsWrapper<PenaltyDecision> = new ColumnsWrapper(
     new TextFilterColumn('decisionSerial'),
     new NoneFilterColumn('offenderInfo'),
-    new NoneFilterColumn('decisionTypeInfo'),
     new NoneFilterColumn('penaltyInfo'),
     new NoneFilterColumn('signerInfo'),
     new NoneFilterColumn('statusInfo'),
@@ -136,6 +141,17 @@ export class ArchivistGrievanceComponent implements OnInit {
     this.form.reset();
   }
 
+  loadPenalties() {
+    this.penaltyService
+      .loadAsLookups()
+      .subscribe(penalties => (this.penalties = penalties));
+  }
+  createdOver30Day(element: Offender) {
+    return (
+      new Date().getTime() - new Date(element.penaltyAppliedDate).getTime() >
+      this._30Day
+    );
+  }
   private listenToSearch() {
     this.search$
       .pipe(
@@ -183,4 +199,6 @@ export class ArchivistGrievanceComponent implements OnInit {
         this.selectedTabIndex = 0;
       });
   }
+
+  protected readonly ReportStatus = ReportStatus;
 }

@@ -20,6 +20,7 @@ import { Config } from '@constants/config';
 import { GrievanceComment } from '@models/grievance-comment';
 import { FolderType } from '@enums/folder-type.enum';
 import { PenaltySignerTypes } from '@enums/penalty-signer-types';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-grievance-popup',
@@ -79,6 +80,7 @@ export class GrievancePopupComponent implements OnInit {
         }),
       )
       .subscribe(model => {
+        this.form.disable();
         this.grievanceModel = model;
       });
   }
@@ -95,4 +97,5 @@ export class GrievancePopupComponent implements OnInit {
 
   protected readonly config = Config;
   protected readonly FolderType = FolderType;
+  protected readonly OperationType = OperationType;
 }

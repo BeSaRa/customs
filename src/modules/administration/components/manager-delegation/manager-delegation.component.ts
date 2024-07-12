@@ -11,7 +11,7 @@ import { ConfigService } from '@services/config.service';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { InternalUserService } from '@services/internal-user.service';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { Subject, switchMap } from 'rxjs';
+import { map, Subject, switchMap } from 'rxjs';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { BlobModel } from '@models/blob-model';
 import { InvestigationService } from '@services/investigation.service';
@@ -85,16 +85,13 @@ export class ManagerDelegationComponent
           );
         }),
       )
+      .pipe(map(blob => new BlobModel(blob, this.domSanitize)))
       .pipe(
         switchMap(model => {
           return this.dialog
             .open(ViewAttachmentPopupComponent, {
               data: {
-                model: new BlobModel(
-                  model.content as unknown as Blob,
-                  this.domSanitize,
-                ),
-                title: model.documentTitle,
+                model,
               },
             })
             .afterClosed();

@@ -282,10 +282,11 @@ export class InvestigationService
     );
   }
 
-  @CastResponse(() => CaseAttachment)
-  getDecisionFileAttachments(vsid: string): Observable<CaseAttachment> {
-    return this.http.get<CaseAttachment>(
+  @CastResponse(() => Blob)
+  getDecisionFileAttachments(vsid: string): Observable<Blob> {
+    return this.http.get(
       this.getUrlSegment() + `/document/latest/${vsid}/content`,
+      { responseType: 'blob' },
     );
   }
 

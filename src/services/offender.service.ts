@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Offender } from '@models/offender';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
@@ -10,9 +10,11 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { OffenderTypes } from '@enums/offender-types';
 import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { InvestigationForExternalUser } from '@models/investigation-for-external-user';
 import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
+import { BlobModel } from '@models/blob-model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @CastResponseContainer({
   $pagination: {
@@ -36,6 +38,7 @@ import { PenaltyDecisionCriteria } from '@models/penalty-decision-criteria';
 })
 export class OffenderService extends BaseCrudService<Offender> {
   serviceName = 'OffenderService';
+  domSanitizer = inject(DomSanitizer);
 
   protected getModelClass(): Constructor<Offender> {
     return Offender;
@@ -55,6 +58,15 @@ export class OffenderService extends BaseCrudService<Offender> {
 
   isAgent(model: MawaredEmployee | ClearingAgent): model is ClearingAgent {
     return model.type === OffenderTypes.BROKER;
+  }
+
+  @CastResponse(() => BlobModel)
+  getDecisionFileAttachments(vsid: string): Observable<BlobModel> {
+    return this.http
+      .get(this.getUrlSegment() + `/admin/document/latest/${vsid}/content`, {
+        responseType: 'blob',
+      })
+      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
   }
 
   @CastResponse()

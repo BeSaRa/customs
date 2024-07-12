@@ -7,14 +7,14 @@ const { send, receive } = new PenaltyDecisionInterceptor();
 @InterceptModel({ send, receive })
 export class PenaltyDecisionCriteria extends Offender {
   offenderType!: number;
-  decisionDate!: string;
+  decisionDate: string | Date = new Date();
   buildForm(controls = false): object {
-    const { offenderType, decisionType, decisionSerial, decisionDate } = this;
+    const { offenderType, penaltyId, decisionSerial, decisionDate } = this;
     return {
       offenderType: controls ? [offenderType] : offenderType,
       decisionSerial: controls ? [decisionSerial] : decisionSerial,
       decisionDate: controls ? [decisionDate] : decisionDate,
-      decisionType: controls ? [decisionType] : decisionType,
+      penaltyId: controls ? [penaltyId] : penaltyId,
     };
   }
 }

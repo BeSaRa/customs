@@ -35,8 +35,6 @@ import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { UserTypes } from '@enums/user-types';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { BlobModel } from '@models/blob-model';
-import { InvestigationService } from '@services/investigation.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonComponent } from '@standalone/components/button/button.component';
@@ -53,6 +51,7 @@ import { Config } from '@constants/config';
 import { Pagination } from '@models/pagination';
 import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
+import { ReportStatus } from '@enums/report-status';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -96,7 +95,6 @@ export class PenaltyDecisionForExternalUsersComponent
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
   offenderService = inject(OffenderService);
-  investigationService = inject(InvestigationService);
   domSanitize = inject(DomSanitizer);
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -218,7 +216,7 @@ export class PenaltyDecisionForExternalUsersComponent
     this.viewDecisionFile$
       .pipe(
         switchMap(vsId => {
-          return this.investigationService.getDecisionFileAttachments(vsId);
+          return this.offenderService.getDecisionFileAttachments(vsId);
         }),
       )
       .pipe(
@@ -226,11 +224,7 @@ export class PenaltyDecisionForExternalUsersComponent
           return this.dialog
             .open(ViewAttachmentPopupComponent, {
               data: {
-                model: new BlobModel(
-                  model.content as unknown as Blob,
-                  this.domSanitize,
-                ),
-                title: model.documentTitle,
+                model,
               },
             })
             .afterClosed();
@@ -250,4 +244,5 @@ export class PenaltyDecisionForExternalUsersComponent
   protected readonly UserTypes = UserTypes;
   protected readonly Config = Config;
   protected readonly AppIcons = AppIcons;
+  protected readonly ReportStatus = ReportStatus;
 }

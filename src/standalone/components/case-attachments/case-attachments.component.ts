@@ -36,6 +36,7 @@ import { ignoreErrors } from '@utils/utils';
 import { Config } from '@constants/config';
 import { FolderType } from '@enums/folder-type.enum';
 import { EmployeeService } from '@services/employee.service';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-case-attachments',
@@ -66,6 +67,9 @@ export class CaseAttachmentsComponent
   caseId: InputSignal<
     string | string[] | undefined | undefined[] | (string | undefined)[]
   > = input();
+
+  @Input()
+  operation!: OperationType;
   @Input()
   folderType!: FolderType;
   @Input()
@@ -96,7 +100,7 @@ export class CaseAttachmentsComponent
   constructor() {
     super();
     effect(() => {
-      if (this.caseId()) {
+      if (this.caseId() && this.operation !== OperationType.CREATE) {
         this.reload$.next();
       }
     });
@@ -106,7 +110,9 @@ export class CaseAttachmentsComponent
     this.listenToView();
     this.listenToDelete();
     this._load();
-    this.reload$.next();
+    if (this.caseId() && this.operation !== OperationType.CREATE) {
+      this.reload$.next();
+    }
     if (this.folderType === FolderType.OFFICIAL) {
       this.displayedColumns.shift();
     }

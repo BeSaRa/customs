@@ -47,6 +47,7 @@
               [folderType]="FolderType.GENERAL"
               [caseId]="grievanceModel.id"
               [type]="'folder'"
+              [operation]="OperationType.CREATE"
               [service]="grievanceService"
               [readonly]="false"></app-case-attachments>
           }
@@ -55,9 +56,11 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary"
-      >{{ lang.map.save }}
-    </app-button>
+    @if (!grievanceModel) {
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
+    }
     <app-button mat-dialog-close="" buttonType="primary-outline"
       >{{ lang.map.close }}
     </app-button>
