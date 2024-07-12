@@ -27,6 +27,10 @@ import { map } from 'rxjs/operators';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { AddPaymentPopupComponent } from '@standalone/popups/add-payment-popup/add-payment-popup.component';
 import { Config } from '@constants/config';
+import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgentService } from '@services/clearing-agent.service';
+import { ClearingAgency } from '@models/clearing-agency';
+import { ClearingAgencyService } from '@services/clearing-agency.service';
 
 @Component({
   selector: 'app-fines',
@@ -41,7 +45,8 @@ export class FinesComponent implements OnInit {
   dialog = inject(DialogService);
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
-
+  clearingAgentService = inject(ClearingAgentService);
+  clearingAgencyService = inject(ClearingAgencyService);
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Fine>();
@@ -49,6 +54,8 @@ export class FinesComponent implements OnInit {
   view$: Subject<Fine> = new Subject();
   pay$: Subject<Fine> = new Subject();
   config = Config;
+  clearingAgents!: ClearingAgent[];
+  clearingAgencies!: ClearingAgency[];
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -62,6 +69,22 @@ export class FinesComponent implements OnInit {
     this.listenToSearch();
     this.listenToViewDoc();
     this.listenToPay();
+    this.loadClearingAgents();
+    this.loadClearingAgencies();
+  }
+
+  loadClearingAgents() {
+    this.clearingAgentService
+      .loadAsLookups()
+      .subscribe(clearingAgents => (this.clearingAgents = clearingAgents));
+  }
+
+  loadClearingAgencies() {
+    this.clearingAgencyService
+      .loadAsLookups()
+      .subscribe(
+        clearingAgencies => (this.clearingAgencies = clearingAgencies),
+      );
   }
 
   columnsWrapper: ColumnsWrapper<Fine> = new ColumnsWrapper(

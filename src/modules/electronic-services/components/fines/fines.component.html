@@ -52,18 +52,29 @@
           <app-input
             formControlName="agencyNumber"
             [label]="lang.map.clearing_agency_number" />
-          <app-input
-            formControlName="agencyName"
-            [label]="lang.map.clearing_agency_name" />
+          <app-select-input
+            formControlName="agencyId"
+            [label]="lang.map.lbl_clearing_agency"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="clearingAgencies"
+            [enableFilter]="true"
+            bindFilter="getNames" />
           <app-input
             formControlName="commercialRegistryNumber"
             [label]="lang.map.commercial_registry_number" />
           <app-input
             formControlName="establishmentRegistry"
             [label]="lang.map.establishment_registry" />
-          <app-input
-            formControlName="agentName"
-            [label]="lang.map.clearing_agent_name" />
+          <app-select-input
+            formControlName="agentId"
+            [label]="lang.map.clearing_agent_id"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="clearingAgents"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+
           <app-input formControlName="getqId" [label]="lang.map.qid" />
         </div>
         <div

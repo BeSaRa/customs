@@ -6,14 +6,16 @@ export class FineSearchCriteria extends Fine {
   establishmentRegistry!: string;
   penaltyFrom!: string;
   penaltyTo!: string;
+  agencyId!: number;
+  agentId!: number;
 
   buildForm(controls = false): object {
     const {
       agencyNumber,
       investigationFileNumber,
       penaltyDecisionNumber,
-      agencyName,
-      agentName,
+      agencyId,
+      agentId,
       getqId,
       commercialRegistryNumber,
       establishmentRegistry,
@@ -28,8 +30,8 @@ export class FineSearchCriteria extends Fine {
       penaltyDecisionNumber: controls
         ? [penaltyDecisionNumber]
         : penaltyDecisionNumber,
-      agencyName: controls ? [agencyName] : agencyName,
-      agentName: controls ? [agentName] : agentName,
+      agencyId: controls ? [agencyId] : agencyId,
+      agentId: controls ? [agentId] : agentId,
       getqId: controls ? [getqId] : getqId,
       commercialRegistryNumber: controls
         ? [commercialRegistryNumber]
