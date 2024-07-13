@@ -223,6 +223,12 @@ export class PenaltyDecisionForExternalUsersComponent
         switchMap(model => {
           return this.dialog
             .open(ViewAttachmentPopupComponent, {
+              width: '100vw',
+              height: '100vh',
+              maxWidth: '100vw',
+              maxHeight: '100vh',
+              hasBackdrop: true,
+              disableClose: true,
               data: {
                 model,
               },

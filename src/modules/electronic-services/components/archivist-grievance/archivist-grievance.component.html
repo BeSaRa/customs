@@ -146,9 +146,7 @@
             <td mat-cell *matCellDef="let element">
               <div class="flex">
                 @if (
-                  !element.hasRunningGrievance &&
-                  !createdOver30Day(element) &&
-                  element.decisionType === ReportStatus.APPROVED
+                  !element.hasRunningGrievance && !createdOver30Day(element)
                 ) {
                   <div
                     (click)="grievance$.next(element)"

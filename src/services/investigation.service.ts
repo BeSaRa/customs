@@ -282,12 +282,12 @@ export class InvestigationService
     );
   }
 
-  @CastResponse(() => Blob)
-  getDecisionFileAttachments(vsid: string): Observable<Blob> {
-    return this.http.get(
-      this.getUrlSegment() + `/document/latest/${vsid}/content`,
-      { responseType: 'blob' },
-    );
+  getDecisionFileAttachments(vsid: string): Observable<BlobModel> {
+    return this.http
+      .get(this.getUrlSegment() + `/document/latest/${vsid}/content`, {
+        responseType: 'blob',
+      })
+      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
   }
 
   @CastResponse(() => Memorandum)

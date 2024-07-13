@@ -60,7 +60,6 @@ export class OffenderService extends BaseCrudService<Offender> {
     return model.type === OffenderTypes.BROKER;
   }
 
-  @CastResponse(() => BlobModel)
   getDecisionFileAttachments(vsid: string): Observable<BlobModel> {
     return this.http
       .get(this.getUrlSegment() + `/admin/document/latest/${vsid}/content`, {

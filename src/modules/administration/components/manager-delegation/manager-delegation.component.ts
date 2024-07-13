@@ -11,11 +11,9 @@ import { ConfigService } from '@services/config.service';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { InternalUserService } from '@services/internal-user.service';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { map, Subject, switchMap } from 'rxjs';
+import { Subject, switchMap } from 'rxjs';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { BlobModel } from '@models/blob-model';
 import { InvestigationService } from '@services/investigation.service';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-manager-delegation',
@@ -37,7 +35,6 @@ export class ManagerDelegationComponent
 
   investigationService = inject(InvestigationService);
   viewDecisionFile$ = new Subject<string>();
-  domSanitize = inject(DomSanitizer);
   config = inject(ConfigService);
   service = inject(ManagerDelegationService);
   internalUserService = inject(InternalUserService);
@@ -79,13 +76,10 @@ export class ManagerDelegationComponent
   private listenToViewDecisionFile() {
     this.viewDecisionFile$
       .pipe(
-        switchMap(delegationVsId => {
-          return this.investigationService.getDecisionFileAttachments(
-            delegationVsId,
-          );
+        switchMap(vsId => {
+          return this.investigationService.getDecisionFileAttachments(vsId);
         }),
       )
-      .pipe(map(blob => new BlobModel(blob, this.domSanitize)))
       .pipe(
         switchMap(model => {
           return this.dialog
