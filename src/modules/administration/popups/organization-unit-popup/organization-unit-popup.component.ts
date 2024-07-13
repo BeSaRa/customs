@@ -71,7 +71,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       this.listenToMawaredDepChanges();
     } else {
       this.form.get('code')?.disable();
-      // this.form.get('parent')?.disable();
+      this.form.get('parent')?.disable();
     }
   }
 
@@ -182,8 +182,8 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       Object.keys(this.form.controls).forEach(control => {
         if (
           control !== 'mawaredDepId' &&
-          control !== 'code'
-          // && control !== 'parent'
+          control !== 'code' &&
+          control !== 'parent'
         ) {
           this.form.get(control)?.enable();
         }
@@ -202,15 +202,14 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
 
   setDepartment(department: MawaredDepartment) {
     const { arName, enName, departmentId } = department;
-    // console.log(department.parentId);
-    // const t = this.organizationUnits.find(
-    //   ou => ou.mawaredDepId === department.parentId,
-    // );
-    // console.log(t);
+    const parentId = this.organizationUnits.find(
+      ou => ou.mawaredDepId === department.parentId,
+    )?.id;
     this.form.patchValue({
       arName,
       enName,
       code: departmentId,
+      parent: parentId,
     });
   }
 }
