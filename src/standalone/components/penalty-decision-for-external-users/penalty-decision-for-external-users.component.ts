@@ -52,6 +52,7 @@ import { Pagination } from '@models/pagination';
 import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
 import { ReportStatus } from '@enums/report-status';
+import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
   selector: 'app-penalty-decision-for-external-users',
@@ -125,6 +126,8 @@ export class PenaltyDecisionForExternalUsersComponent
     'actions',
   ];
   dataSource: MatTableDataSource<Offender> = new MatTableDataSource();
+
+  readonly OffenderStatusEnum = OffenderStatusEnum;
 
   ngOnInit(): void {
     this.listenToReload();
