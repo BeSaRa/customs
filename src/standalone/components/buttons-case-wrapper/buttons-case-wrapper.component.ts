@@ -1,3 +1,4 @@
+import { BaseCaseService } from '@abstracts/base-case.service';
 import {
   Component,
   computed,
@@ -10,9 +11,37 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { ButtonComponent } from '../button/button.component';
-import { LangService } from '@services/lang.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { Router } from '@angular/router';
+import { AppIcons } from '@constants/app-icons';
+import { ActivitiesName } from '@enums/activities-name';
+import { CaseTypes } from '@enums/case-types';
+import { MemorandumCategories } from '@enums/memorandum-categories';
+import { OpenFrom } from '@enums/open-from';
+import { SaveTypes } from '@enums/save-types';
 import { SendTypes } from '@enums/send-types';
+import { SystemPenalties } from '@enums/system-penalties';
+import { TaskNames } from '@enums/task-names';
+import { TaskResponses } from '@enums/task-responses';
+import { UserClick } from '@enums/user-click';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { BaseCase } from '@models/base-case';
+import { Grievance } from '@models/grievance';
+import { Investigation } from '@models/investigation';
+import { Memorandum } from '@models/memorandum';
+import { Penalty } from '@models/penalty';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyService } from '@services/penalty.service';
+import { ToastService } from '@services/toast.service';
+import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
+import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-complete-popup/grievance-complete-popup.component';
 import {
   exhaustMap,
   filter,
@@ -22,36 +51,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { Investigation } from '@models/investigation';
-import { TaskResponses } from '@enums/task-responses';
-import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
-import { UserClick } from '@enums/user-click';
-import { DialogService } from '@services/dialog.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { MatIconModule } from '@angular/material/icon';
-import { AppIcons } from '@constants/app-icons';
-import { MatMenuModule } from '@angular/material/menu';
-import { SaveTypes } from '@enums/save-types';
-import { EmployeeService } from '@services/employee.service';
-import { Router } from '@angular/router';
 import { catchError, map, take } from 'rxjs/operators';
-import { OpenFrom } from '@enums/open-from';
-import { SystemPenalties } from '@enums/system-penalties';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { Penalty } from '@models/penalty';
-import { PenaltyService } from '@services/penalty.service';
-import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
-import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
-import { MemorandumCategories } from '@enums/memorandum-categories';
-import { ToastService } from '@services/toast.service';
-import { Grievance } from '@models/grievance';
-import { BaseCase } from '@models/base-case';
-import { CaseTypes } from '@enums/case-types';
-import { BaseCaseService } from '@abstracts/base-case.service';
-import { TaskNames } from '@enums/task-names';
-import { PenaltyDecision } from '@models/penalty-decision';
-import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-complete-popup/grievance-complete-popup.component';
-import { Memorandum } from '@models/memorandum';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -585,23 +586,37 @@ export class ButtonsCaseWrapperComponent
   private _checkAllOffendersAssignedPenaltiesForPresidentAndVPAndManager =
     () => {
       if (
-        this.employeeService.isApplicantManager() ||
-        this.employeeService.isPresidentAssisstant() ||
-        this.employeeService.isPresident()
+        this.model().getActivityName() ===
+          ActivitiesName.SUBMIT_INVESTIGATION ||
+        this.model().getActivityName() ===
+          ActivitiesName.REVIEW_PRESIDENT_ASSISTANT ||
+        this.model().getActivityName() === ActivitiesName.REVIEW_PRESIDENT
       ) {
-        const _isAllAssignedPenalty = this._getOffendersIds().every(oId =>
-          (this.model() as Investigation).penaltyDecisions.find(
-            p =>
-              p.offenderId === oId &&
-              (this.employeeService.isApplicantManager() ||
-                (this.employeeService.isPresidentAssisstant() &&
-                  p.penaltyInfo.penaltyKey !==
-                    SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
-                (this.employeeService.isPresident() &&
-                  p.penaltyInfo.penaltyKey !==
-                    SystemPenalties.REFERRAL_TO_PRESIDENT)),
-          ),
-        );
+        const _isAllAssignedPenalty = this._getOffendersIds()
+          .filter(oId => {
+            return this.model().getActivityName() ===
+              ActivitiesName.REVIEW_PRESIDENT_ASSISTANT
+              ? (this.model() as Investigation)
+                  .getConcernedOffendersIds()
+                  .find(_oId => _oId === oId)
+              : true;
+          })
+          .every(oId =>
+            (this.model() as Investigation).penaltyDecisions.find(
+              p =>
+                p.offenderId === oId &&
+                (this.model().getActivityName() ===
+                  ActivitiesName.SUBMIT_INVESTIGATION ||
+                  (this.model().getActivityName() ===
+                    ActivitiesName.REVIEW_PRESIDENT_ASSISTANT &&
+                    p.penaltyInfo.penaltyKey !==
+                      SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT) ||
+                  (this.model().getActivityName() ===
+                    ActivitiesName.REVIEW_PRESIDENT &&
+                    p.penaltyInfo.penaltyKey !==
+                      SystemPenalties.REFERRAL_TO_PRESIDENT)),
+            ),
+          );
         if (!_isAllAssignedPenalty) {
           this.dialog.error(
             this.lang.map
