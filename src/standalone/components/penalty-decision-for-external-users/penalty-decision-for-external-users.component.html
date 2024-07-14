@@ -120,7 +120,11 @@
                 <app-icon-button icon="HAND_COIN" />
               </div>
             }
-            @if (!element.hasRunningGrievance && !createdOver30Day(element)) {
+            @if (
+              !element.hasRunningGrievance &&
+              !createdOver30Day(element) &&
+              element.status !== OffenderStatusEnum.SAVED
+            ) {
               <div
                 (click)="grievance$.next(element)"
                 [matTooltip]="lang.map.grievance">
