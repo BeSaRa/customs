@@ -12,6 +12,7 @@ import { InternalUser } from '@models/internal-user';
 import { InternalUserService } from '@services/internal-user.service';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { OrganizationUnit } from '@models/organization-unit';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-manager-delegation-popup',
@@ -87,7 +88,14 @@ export class ManagerDelegationPopupComponent
   loadPenalties() {
     this.penaltyService
       .loadAsLookups()
-      .subscribe(penalties => (this.penalties = penalties));
+      .subscribe(
+        penalties =>
+          (this.penalties = penalties
+            .filter(penalty => !penalty.isSystem)
+            .filter(
+              penalty => penalty.offenderType !== OffenderTypes.EMPLOYEE,
+            )),
+      );
   }
 
   loadInternalUsers() {
