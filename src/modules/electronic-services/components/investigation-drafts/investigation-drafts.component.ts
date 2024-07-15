@@ -108,7 +108,7 @@ export class InvestigationDraftsComponent implements OnInit {
 
   paginate($event: PageEvent) {
     this.paginate$.next({
-      pageNumber: $event.pageSize * $event.pageIndex,
+      pageNumber: $event.pageIndex,
       pageSize: $event.pageSize,
     });
   }
