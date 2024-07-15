@@ -1,15 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from '@angular/material/dialog';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { LangService } from '@services/lang.service';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
+import { BaseCaseService } from '@abstracts/base-case.service';
 import {
   AbstractControl,
   FormArray,
@@ -18,14 +9,34 @@ import {
   UntypedFormBuilder,
   UntypedFormGroup,
 } from '@angular/forms';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AppIcons } from '@constants/app-icons';
+import { UserClick } from '@enums/user-click';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { AttachmentType } from '@models/attachment-type';
+import { BlobModel } from '@models/blob-model';
+import { CaseAttachment } from '@models/case-attachment';
+import { AttachmentTypeService } from '@services/attachment-type.service';
+import { CallRequestService } from '@services/call-request.service';
+import { DialogService } from '@services/dialog.service';
+import { LangService } from '@services/lang.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
-import { MatIconModule } from '@angular/material/icon';
-import { AppIcons } from '@constants/app-icons';
-import { CaseAttachment } from '@models/case-attachment';
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { CustomValidators } from '@validators/custom-validators';
 import {
   combineLatest,
   exhaustMap,
@@ -36,17 +47,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { BaseCaseService } from '@abstracts/base-case.service';
-import { AttachmentTypeService } from '@services/attachment-type.service';
-import { AttachmentType } from '@models/attachment-type';
-import { DialogService } from '@services/dialog.service';
-import { UserClick } from '@enums/user-click';
-import { ToastService } from '@services/toast.service';
-import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { BlobModel } from '@models/blob-model';
-import { DomSanitizer } from '@angular/platform-browser';
-import { CustomValidators } from '@validators/custom-validators';
-import { CallRequestService } from '@services/call-request.service';
+import { ScanPopupComponent } from '../scan-popup/scan-popup.component';
 
 @Component({
   selector: 'app-case-attachment-popup',
@@ -296,6 +297,26 @@ export class CaseAttachmentPopupComponent
 
   get list(): AbstractControl {
     return this.form.get('list') as FormControl;
+  }
+
+  openScanPopup() {
+    this.dialog
+      .open<ScanPopupComponent, void, File[]>(ScanPopupComponent)
+      .afterClosed()
+      .pipe(filter(files => !!files))
+      .subscribe(files => {
+        files!.forEach(file => {
+          this.createControlsInProgress = true;
+          this.attachments = [
+            ...this.attachments,
+            new CaseAttachment().clone<CaseAttachment>({
+              content: file,
+              documentTitle: file.name,
+            }),
+          ];
+          this.createControls();
+        });
+      });
   }
 
   private createControls() {

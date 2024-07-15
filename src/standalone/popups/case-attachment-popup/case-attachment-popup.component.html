@@ -99,6 +99,10 @@
             [multiple]="true"
             hidden
             (input)="selectFiles($event)" />
+          <app-icon-button
+            icon="CAMERA"
+            (click)="openScanPopup()"
+            class="mt-2 text-primary"></app-icon-button>
         </div>
       </div>
     </div>
