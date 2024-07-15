@@ -718,4 +718,10 @@ export interface LangKeysContract {
   fine_to: string;
   transaction_number_pattern_error_msg: string;
   creator_department: string;
+  capture_files: string;
+  connecting_to_video_devices: string;
+  an_error_occurred_while_trying_to_connect_to_video_devices: string;
+  connection_to_video_devices_blocked_please_allow_access_to_video_devices: string;
+  there_are_no_video_devices_available_for_use_please_connect_video_devices_to_continue: string;
+  browser_does_not_support_the_use_of_video_devices: string;
 }

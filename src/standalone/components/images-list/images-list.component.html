@@ -1,0 +1,20 @@
+<div #list class="max-w-full overflow-y-visible overflow-x-auto no-scrollbar">
+  <div #list class="pt-4 px-2 pb-2 flex items-center justify-start gap-5">
+    @for (img of images(); track img.imageName) {
+      <div
+        @grow
+        (click)="viewImage(img)"
+        class="relative flex-1 !min-w-[100px] !max-w-[100px] h-[100px] flex flex-col justify-center items-center border rounded-md bg-black/90 transition-all hover:scale-110 cursor-pointer">
+        <img
+          class="w-full rounded-md"
+          [src]="img.imageAsDataUrl"
+          [alt]="img.imageName" />
+        <button
+          (click)="removeImage(img.imageName, $event)"
+          class="absolute -top-2 -end-2 w-6 h-6 flex items-center justify-center rounded-full border bg-white text-black font-bold transition-all hover:bg-white/70">
+          x
+        </button>
+      </div>
+    }
+  </div>
+</div>

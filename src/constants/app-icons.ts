@@ -106,6 +106,12 @@ export const AppIcons = {
   DASHBOARD: 'view-dashboard',
   REFERRAL_DISCIPLINARY_COMMITTEE: 'account-alert',
   REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL: 'account-cancel',
+  CAMERA: 'camera',
+  CAPTURE: 'camera-iris',
+  CAMERA_SWITCH: 'camera-switch',
+  BLOCK: 'block-helper',
+  ALERT: 'alert-outline',
+  ERROR: 'alert-circle-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
