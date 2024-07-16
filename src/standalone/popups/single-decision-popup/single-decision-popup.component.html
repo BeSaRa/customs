@@ -45,7 +45,7 @@
     <table
       mat-table
       class="table-style table-primary"
-      [dataSource]="offenderViolations()">
+      [dataSource]="offenderViolations">
       <!-- violation -->
       <ng-container matColumnDef="violation">
         <th mat-header-cell *matHeaderCellDef>
@@ -97,7 +97,44 @@
         <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
       </tr>
     </table>
-    <div class="flex gap-x-4">
+    <div class="flex flex-col gap-y-4">
+      @if (isBroker()) {
+        <div class="flex gap-x-4 items-center justify-between">
+          <div class="flex flex-col">
+            <label for="effect" class="ps-2">{{
+              lang.map.penalty_for_whom
+            }}</label>
+            <mat-radio-group
+              id="effect"
+              [formControl]="violationEffectControl"
+              class="flex flex-col">
+              @for (item of violationEffect; track item.id) {
+                <mat-radio-button [value]="item.lookupKey"
+                  >{{ item.getNames() }}
+                </mat-radio-button>
+              }
+            </mat-radio-group>
+          </div>
+          <div class="flex flex-col">
+            <label for="effect" class="ps-2">{{
+              lang.map.responsibility_of_repetition_for_whom
+            }}</label>
+            <mat-radio-group
+              id="effect"
+              [formControl]="responsibilityRepeatViolationsControl"
+              class="flex flex-col">
+              @for (
+                item of getFilteredResponsibilityRepeatViolations();
+                track item.id
+              ) {
+                <mat-radio-button [value]="item.lookupKey"
+                  >{{ item.getNames() }}
+                </mat-radio-button>
+              }
+            </mat-radio-group>
+          </div>
+        </div>
+      }
       <div class="flex flex-auto flex-col">
         <label (click)="focusOnSelect(select)">{{
           lang.map.penalty_action
@@ -128,23 +165,6 @@
           </mat-select>
         </div>
       </div>
-      @if (isBroker()) {
-        <div class="flex flex-col">
-          <label for="effect" class="ps-2">{{
-            lang.map.penalty_for_whom
-          }}</label>
-          <mat-radio-group
-            id="effect"
-            [formControl]="violationEffectControl"
-            class="flex flex-col">
-            @for (item of violationEffect; track item.id) {
-              <mat-radio-button [value]="item.lookupKey"
-                >{{ item.getNames() }}
-              </mat-radio-button>
-            }
-          </mat-radio-group>
-        </div>
-      }
     </div>
     <div>
       <app-textarea [formControl]="textControl" [label]="lang.map.text" />

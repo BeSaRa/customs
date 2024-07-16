@@ -16,10 +16,12 @@ export class OffenderViolation extends BaseModel<
 > {
   $$__service_name__$$ = 'OffenderViolationService';
   repeat: number = 0;
+  agencyRepeat: number = 0;
   caseId!: string;
   violationId!: number;
   offenderId!: number;
   offenderRefId!: number;
+  responsibilityRepeatViolations!: number;
   violationInfo!: Violation;
   offenderInfo!: Offender;
   proofStatus: ProofTypes = ProofTypes.UNDEFINED;

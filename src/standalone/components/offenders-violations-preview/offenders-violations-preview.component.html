@@ -79,11 +79,24 @@
           track violation
         ) {
           <div class="flex justify-start items-center pt-1">
-            <span
-              [matTooltip]="lang.map.repeat"
-              class="cursor-pointer flex me-3 p-2 justify-center align-center items-center w-5 h-5 bg-red-100 rounded-[12px] text-xs font-medium ring-1 ring-inset ring-red-700/10">
-              {{ violation.repeat }}
-            </span>
+            @if (element.type === offenderTypes.EMPLOYEE) {
+              <span
+                [matTooltip]="lang.map.repeat"
+                class="cursor-pointer flex me-3 p-2 justify-center align-center items-center w-5 h-5 bg-red-100 rounded-[12px] text-xs font-medium ring-1 ring-inset ring-red-700/10">
+                {{ violation.repeat }}
+              </span>
+            } @else {
+              <span
+                [matTooltip]="lang.map.repeat_on_agency"
+                class="cursor-pointer flex me-3 p-2 justify-center align-center items-center w-5 h-5 bg-red-100 rounded-[12px] text-xs font-medium ring-1 ring-inset ring-red-700/10">
+                {{ violation.agencyRepeat }}
+              </span>
+              <span
+                [matTooltip]="lang.map.repeat_on_broker"
+                class="cursor-pointer flex me-3 p-2 justify-center align-center items-center w-5 h-5 bg-red-100 rounded-[12px] text-xs font-medium ring-1 ring-inset ring-red-700/10">
+                {{ violation.repeat }}
+              </span>
+            }
             <span
               class="inline-flex me-2 mb-1 items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-inset ring-yellow-600/20">
               {{ violation.violationInfo.violationTypeInfo.getNames() }}
@@ -338,11 +351,28 @@
               </span>
             }
             <!-- repeat -->
-            <span
-              class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
-              <label class="font-medium">{{ lang.map.repeatation }} : </label>
-              <label>{{ violation.repeat }}</label>
-            </span>
+            @if (element.type === offenderTypes.EMPLOYEE) {
+              <span
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
+                <label class="font-medium">{{ lang.map.repeatation }} : </label>
+                <label>{{ violation.repeat }}</label>
+              </span>
+            } @else {
+              <span
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
+                <label class="font-medium"
+                  >{{ lang.map.repeat_on_agency }} :
+                </label>
+                <label>{{ violation.agencyRepeat }}</label>
+              </span>
+              <span
+                class="me-2 mb-2 inline-flex items-center rounded-[12px] bg-light-50 px-2 py-1 text-xs font-medium text-light-700 ring-1 ring-inset ring-light-700/10">
+                <label class="font-medium"
+                  >{{ lang.map.repeat_on_broker }} :
+                </label>
+                <label>{{ violation.repeat }}</label>
+              </span>
+            }
             <!-- date -->
             @if (violation.violationInfo.violationsDate) {
               <span

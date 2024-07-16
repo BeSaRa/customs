@@ -64,6 +64,7 @@ import { OffenderService } from '@services/offender.service';
 import { ProofTypes } from '@enums/proof-types';
 import { OffenderViolationService } from '@services/offender-violation.service';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
+import { ResponsibilityRepeatViolations } from '@enums/responsibility-repeat-violations';
 
 @Component({
   selector: 'app-offender-criteria-popup',
@@ -453,6 +454,10 @@ export class OffenderCriteriaPopupComponent
                       violationId: violationId,
                       status: 1,
                       proofStatus: ProofTypes.UNDEFINED,
+                      responsibilityRepeatViolations:
+                        model.type === OffenderTypes.BROKER
+                          ? ResponsibilityRepeatViolations.BROKER
+                          : undefined,
                     })
                     .save()
                     .pipe(
