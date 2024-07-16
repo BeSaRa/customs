@@ -724,4 +724,7 @@ export interface LangKeysContract {
   connection_to_video_devices_blocked_please_allow_access_to_video_devices: string;
   there_are_no_video_devices_available_for_use_please_connect_video_devices_to_continue: string;
   browser_does_not_support_the_use_of_video_devices: string;
+  repeat_on_broker: string;
+  repeat_on_agency: string;
+  responsibility_of_repetition_for_whom: string;
 }

@@ -1,3 +1,4 @@
+import { AsyncPipe, DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -7,19 +8,19 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogClose,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Offender } from '@models/offender';
-import { Investigation } from '@models/investigation';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { LangService } from '@services/lang.service';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import {
+  MatOption,
+  MatSelect,
+  MatSelectTrigger,
+} from '@angular/material/select';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 import {
   MatCell,
   MatCellDef,
@@ -33,31 +34,42 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { OffenderViolation } from '@models/offender-violation';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { ToastService } from '@services/toast.service';
-import { exhaustMap, filter, map, takeUntil, tap } from 'rxjs/operators';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { Subject } from 'rxjs';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatTooltip } from '@angular/material/tooltip';
-import {
-  MatOption,
-  MatSelect,
-  MatSelectTrigger,
-} from '@angular/material/select';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
-import { LookupService } from '@services/lookup.service';
+import { Config } from '@constants/config';
+import { CustomsViolationEffect } from '@enums/customs-violation-effect';
+import { ManagerDecisions } from '@enums/manager-decisions';
+import { OffenderTypes } from '@enums/offender-types';
+import { ResponsibilityRepeatViolations } from '@enums/responsibility-repeat-violations';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Investigation } from '@models/investigation';
 import { Lookup } from '@models/lookup';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { CustomValidators } from '@validators/custom-validators';
+import { Offender } from '@models/offender';
+import { OffenderViolation } from '@models/offender-violation';
 import { Penalty } from '@models/penalty';
 import { PenaltyDecision } from '@models/penalty-decision';
-import { EmployeeService } from '@services/employee.service';
 import { DialogService } from '@services/dialog.service';
-import { OffenderTypes } from '@enums/offender-types';
-import { Config } from '@constants/config';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { OffenderViolationService } from '@services/offender-violation.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
+import { CustomValidators } from '@validators/custom-validators';
+import { of, Subject } from 'rxjs';
+import {
+  catchError,
+  exhaustMap,
+  filter,
+  map,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-single-decision-popup',
@@ -113,6 +125,7 @@ export class SingleDecisionPopupComponent
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
+  offenderViolationService = inject(OffenderViolationService);
   offender = signal(this.data.offender);
 
   todayDate = new Date();
@@ -122,11 +135,10 @@ export class SingleDecisionPopupComponent
   });
 
   model = this.data.model;
-  offenderViolations = computed(() => {
-    return this.model().offenderViolationInfo.filter(item => {
-      return item.offenderId === this.offender().id;
-    });
+  offenderViolations = this.model().offenderViolationInfo.filter(item => {
+    return item.offenderId === this.offender().id;
   });
+
   proofStatus = signal(
     this.lookupService.lookups.proofStatus
       .slice()
@@ -138,7 +150,7 @@ export class SingleDecisionPopupComponent
     }, {});
   });
   controls = computed(() => {
-    return this.offenderViolations().map(item => {
+    return this.offenderViolations.map(item => {
       return new FormControl(item.proofStatus);
     });
   });
@@ -181,10 +193,51 @@ export class SingleDecisionPopupComponent
     .sort((a, b) => a.lookupKey - b.lookupKey);
 
   violationEffectControl: FormControl = new FormControl(
-    this.isBroker() && this.oldPenaltyDecision()
-      ? this.oldPenaltyDecision()?.customsViolationEffect
-      : 1,
+    this.offender().customsViolationEffect,
   );
+
+  ResponsibilityRepeatViolations =
+    this.lookupService.lookups.responsibilityRepeatViolations
+      .slice()
+      .sort((a, b) => a.lookupKey - b.lookupKey);
+
+  responsibilityRepeatViolationsControl: FormControl = new FormControl(
+    this.offenderViolations[0].responsibilityRepeatViolations ??
+      this.getFilteredResponsibilityRepeatViolations()[0].lookupKey,
+  );
+
+  getFilteredResponsibilityRepeatViolations() {
+    return this.ResponsibilityRepeatViolations.filter(r => {
+      if (this.violationEffectControl.value === CustomsViolationEffect.BROKER)
+        return r.lookupKey !== ResponsibilityRepeatViolations.AGENCY;
+      else return r.lookupKey !== ResponsibilityRepeatViolations.BROKER;
+    });
+  }
+
+  listenToViolationEffect() {
+    this.violationEffectControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.responsibilityRepeatViolationsControl.setValue(
+          this.getFilteredResponsibilityRepeatViolations()[0].lookupKey,
+        );
+        this.updateOffenderViolationEffect();
+        this.penaltyControl.setValue(null);
+      });
+  }
+
+  listenToResponsibilityRepeatViolations() {
+    this.responsibilityRepeatViolationsControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        this.offenderViolations.forEach(
+          ov => (ov.responsibilityRepeatViolations = value),
+        );
+        this.offenderViolationService
+          .updateBulk(this.offenderViolations)
+          .subscribe(_ => {});
+      });
+  }
 
   assertType(element: unknown): OffenderViolation {
     return element as OffenderViolation;
@@ -192,6 +245,40 @@ export class SingleDecisionPopupComponent
 
   ngOnInit(): void {
     this.listenToSave();
+    this.listenToResponsibilityRepeatViolations();
+    this.listenToViolationEffect();
+  }
+
+  updateOffenderViolationEffect() {
+    this.offender.update(o => {
+      o.customsViolationEffect = this.violationEffectControl.value;
+      return o;
+    });
+    this.offender()
+      .update()
+      .pipe(switchMap(() => this.loadPenalties()))
+      .subscribe(penalties => {
+        this.offenderPenalties.set(penalties[this.offender().id]);
+      });
+  }
+
+  private loadPenalties() {
+    return this.model()
+      .getService()
+      .getCasePenalty(
+        this.model().id as string,
+        this.model().getActivityName()!,
+      )
+      .pipe(
+        catchError(() => {
+          return of(
+            {} as Record<
+              string,
+              { first: ManagerDecisions; second: Penalty[] }
+            >,
+          );
+        }),
+      );
   }
 
   focusOnSelect(select: MatSelect) {
