@@ -92,6 +92,7 @@ export class MemorandumOpinionListComponent
   edit$: Subject<Memorandum> = new Subject();
   changeIsExportableStatus$: Subject<Memorandum> = new Subject<Memorandum>();
   isManager = input.required<boolean>();
+  lastApprovedLegalMemo = input<Memorandum>();
   masterComponent = input<MemorandumOpinionListComponent>();
   models$ = new BehaviorSubject<Memorandum[]>([]);
   masterComponentEffect = effect(() => {
@@ -130,6 +131,7 @@ export class MemorandumOpinionListComponent
       )
       .subscribe(() => this.reload$.next());
   }
+
   private listenToAdd() {
     this.add$
       .pipe(
@@ -201,6 +203,11 @@ export class MemorandumOpinionListComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(model => {
+          if (this.lastApprovedLegalMemo()) {
+            model.note = (
+              this.lastApprovedLegalMemo() as unknown as Memorandum
+            ).note;
+          }
           return this.investigationService
             .openEditMemorandumDialog(model, this.model(), this.updateModel)
             .afterClosed();
@@ -218,6 +225,7 @@ export class MemorandumOpinionListComponent
       )
       .filter(ov => ov.proofStatus === ProofTypes.UNDEFINED).length;
   }
+
   canManageMemoOpinion() {
     return (
       !this.isManager() &&
