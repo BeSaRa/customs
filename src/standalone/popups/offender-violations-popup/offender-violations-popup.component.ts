@@ -43,6 +43,7 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { Investigation } from '@models/investigation';
 import { ProofTypes } from '@enums/proof-types';
 import { MatSort } from '@angular/material/sort';
+import { ResponsibilityRepeatViolations } from '@enums/responsibility-repeat-violations';
 
 @Component({
   selector: 'app-offender-violations-popup',
@@ -185,6 +186,10 @@ export class OffenderViolationsPopupComponent
                         violationId: violationId,
                         status: 1,
                         proofStatus: ProofTypes.UNDEFINED,
+                        responsibilityRepeatViolations:
+                          this.offender.type === OffenderTypes.BROKER
+                            ? ResponsibilityRepeatViolations.BROKER
+                            : undefined,
                       })
                       .save();
                   }),

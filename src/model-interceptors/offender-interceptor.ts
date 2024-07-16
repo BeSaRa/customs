@@ -7,6 +7,7 @@ import { ClearingAgent } from '@models/clearing-agent';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
 import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
 import { PenaltySignerTypes } from '@enums/penalty-signer-types';
+import { CustomsViolationEffect } from '@enums/customs-violation-effect';
 
 export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
   send(model: Partial<Offender>): Partial<Offender> {
@@ -52,7 +53,7 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
         model.penaltyStatusInfo,
       ));
     model.directedToInfo =
-      model.penaltySignerRoleInfo.lookupKey ===
+      model.penaltySignerRoleInfo?.lookupKey ===
       PenaltySignerTypes.MANAGER_DIRECTOR
         ? AdminResult.createInstance({
             arName: 'مساعد الرئيس',
@@ -81,6 +82,11 @@ export class OffenderInterceptor implements ModelInterceptorContract<Offender> {
         : agentInterceptor.receive(
             new ClearingAgent().clone<ClearingAgent>({ ...model.offenderInfo }),
           );
+    model.customsViolationEffect =
+      model.customsViolationEffect ?? CustomsViolationEffect.BROKER;
+    model.customsViolationEffectInfo = new AdminResult().clone(
+      model.customsViolationEffectInfo,
+    );
     return model;
   }
 }

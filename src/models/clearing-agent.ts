@@ -8,6 +8,7 @@ import { OffenderTypes } from '@enums/offender-types';
 import { Witness } from './witness';
 import { WitnessTypes } from '@enums/witness-types';
 import { NamesContract } from '@contracts/names-contract';
+import { CustomsViolationEffect } from '@enums/customs-violation-effect';
 
 const { send, receive } = new ClearingAgentInterceptor();
 
@@ -84,6 +85,7 @@ export class ClearingAgent extends BaseModel<
       status: 1,
       offenderRefId: this.id,
       ouId: this.agencyId,
+      customsViolationEffect: CustomsViolationEffect.BROKER,
     });
   }
 

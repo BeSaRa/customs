@@ -16,7 +16,7 @@
     [matTooltip]="lang.map.take_action">
   </app-icon-button>
   <mat-menu class="!max-w-[unset]" #menu="matMenu">
-    @for (penalty of getSystemPenalties(offender().id); track penalty.id) {
+    @for (penalty of getSystemPenalties(offender().id); track penalty) {
       <button (click)="systemAction$.next(penalty.penaltyKey)" mat-menu-item>
         <div class="flex gap-2">
           <mat-icon
