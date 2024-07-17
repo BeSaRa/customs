@@ -8,125 +8,153 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
-    <div class="p-4 overflow-auto" style="height: 100%">
-      <div class="shadow relative" style="max-height: 62vh">
-        <table
-          mat-table
-          matSort
-          class="table-style table-primary"
-          [dataSource]="displayedList">
-          <!-- violationType -->
-          <ng-container matColumnDef="violationType">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.violation_type }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <span>{{
-                element.violationInfo.violationTypeInfo?.getNames() || ''
-              }}</span>
-            </td>
-          </ng-container>
-
-          <!-- repeat -->
-          <ng-container matColumnDef="repeat">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.repeat }}</th>
-            <td mat-cell *matCellDef="let element">
-              <span>{{ element.repeat }}</span>
-            </td>
-          </ng-container>
-
-          <!-- violationDate -->
-          <ng-container matColumnDef="violationDate">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.violation_date }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              @if (element.violationInfo.violationsDate) {
-                <span>{{
-                  element.violationInfo.violationsDate
-                    | date: config.DATE_FORMAT
-                }}</span>
-              } @else {
-                <div class="flex flex-col">
-                  <span
-                    >{{ lang.map.date_from }}:
-                    {{
-                      element.violationInfo.violationsDateFrom
-                        | date: config.DATE_FORMAT
-                    }}</span
-                  >
-                  <span
-                    >{{ lang.map.date_to }}:
-                    {{
-                      element.violationInfo.violationsDateTo
-                        | date: config.DATE_FORMAT
-                    }}</span
-                  >
-                </div>
-              }
-            </td>
-          </ng-container>
-
-          <!-- offender -->
-          <ng-container matColumnDef="offender">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.offender_type }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <span> {{ element.offenderInfo?.getNames() || '' }}</span>
-            </td>
-          </ng-container>
-
-          <!-- isProved -->
-          <ng-container matColumnDef="isProved">
-            <th class="status-min-width" mat-header-cell *matHeaderCellDef>
-              {{ lang.map.is_proved }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <span>{{ getBooleanString(element.isProved) }}</span>
-            </td>
-          </ng-container>
-
-          <!-- status -->
-          <ng-container matColumnDef="status">
-            <th class="status-min-width" mat-header-cell *matHeaderCellDef>
-              {{ lang.map.status }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <span>{{ element.statusInfo?.getNames() }}</span>
-            </td>
-          </ng-container>
-
-          <!-- actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
-            <td mat-cell *matCellDef="let element">
-              <div class="flex">
-                <app-icon-button
-                  [matTooltip]="lang.map.more_details"
-                  icon="MORE_DETAILS"></app-icon-button>
-              </div>
-            </td>
-          </ng-container>
-          <tr
-            mat-header-row
-            *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
-          <tr
-            mat-row
-            (contextmenu)="contextMenu.open($event, element)"
-            *matRowDef="
-              let element;
-              columns: columnsWrapper.displayedColumns
-            "></tr>
-          <!-- Row shown when there is no matching data. -->
-          <tr class="mat-row" *matNoDataRow>
-            <td class="p-4" colspan="100">
-              {{ lang.map.no_records_to_display }}
-            </td>
-          </tr>
-        </table>
-        <app-context-menu #contextMenu [actions]="actions"></app-context-menu>
+    <div class="container mx-auto flex justify-between items-center">
+      <!-- First Column: Today's Date -->
+      <div class="text-start w-1/3">
+        <p class="text-gray-700 text-xs">
+          تاريخ الاستخراج :
+          {{ today | date: config.DATE_FORMAT }}
+        </p>
+      </div>
+      <!-- Second Column: Title -->
+      <div class="text-center w-1/3">
+        <h1 class="text-xl font-semibold text-gray-900">بحث حالة</h1>
+      </div>
+      <!-- Third Column: Empty -->
+      <div class="w-1/3">
+        <!-- Empty Column -->
       </div>
     </div>
+    <!-- Divider under the header -->
+    <div class="border-t border-black mt-4"></div>
+
+    <!-- Unordered List with 12 texts -->
+    <div class="container mx-auto mt-4">
+      <ul class="pl-6">
+        @if (employee) {
+          <li>
+            {{ 'الاسم: ' + employee.arName }}/
+            @if (employee.qid) {
+              {{ 'الرقم الشخصي: ' + employee.qid + '/' }}
+            }
+            @if (employee.employeeNo) {
+              {{ 'الرقم الوظيفي: ' + employee.employeeNo }}
+            }
+          </li>
+          @if (employee.phoneNumber) {
+            <li>{{ 'هاتف: ' + employee.phoneNumber }}</li>
+          }
+          @if (employee.email) {
+            <li>{{ 'البريد الالكتروني: ' + employee.email }}</li>
+          }
+          @if (employee.address) {
+            <li>{{ 'العنوان الوطني: ' + employee.address }}</li>
+          }
+          @if (employee.employeeCareerLevelInfo) {
+            <li>
+              {{
+                'الدرجة الوظيفية: ' +
+                  employee.employeeCareerLevelInfo.getNames()
+              }}
+            </li>
+          }
+          <li>
+            {{ 'تاريخ التعيين: ' + offender.getNames() }}
+          </li>
+          <li>
+            {{ 'تاريخ انتهاء الخدمة: ' + offender.getNames() }}/
+            {{ 'سبب انتهاء الخدمة: ' + offender.getNames() }}
+          </li>
+          <li>{{ 'تقييم اخر ثلاث سنوات: ' + offender.getNames() }}</li>
+          <li>{{ 'السنة: ' + offender.getNames() }}</li>
+          <li>{{ 'السنة: ' + offender.getNames() }}</li>
+          <li>{{ 'السنة: ' + offender.getNames() }}</li>
+          <li>
+            {{
+              'الادارة/القسم التي تعمل بها اخر ثلاث سنوات: ' +
+                offender.getNames()
+            }}
+          </li>
+        }
+      </ul>
+    </div>
+    <!-- Divider under the list -->
+    <div class="border-t border-black my-4 w-full"></div>
+
+    @if (situations && situations.length) {
+      <div class="container mx-auto flex justify-between items-center">
+        <!-- Title -->
+        <div class="text-center w-full">
+          <h1 class="text-xl font-semibold text-gray-900">
+            المخالفات الإدارية
+          </h1>
+        </div>
+      </div>
+      <!-- Divider under the header -->
+      <div class="border-t mt-4"></div>
+
+      @for (situation of situations; track situation) {
+        @if (situation.proofStatus === proofTypes.PROVED) {
+          <div>
+            <!-- Section with complex layout -->
+            <section class="container mx-auto mt-4 space-y-4">
+              <!-- First Row: Four columns with centered text -->
+              <div class="flex justify-between">
+                <div class="w-1/4 text-center bg-white p-4">
+                  {{ 'رقم الملف: ' + offender.getNames() }}
+                </div>
+                <div class="w-1/4 text-center bg-white p-4">
+                  {{ 'رقم القرار: ' + offender.getNames() }}
+                </div>
+                <div class="w-1/4 text-center bg-white p-4">
+                  {{ 'تاريخ المخالفة: ' + getDateString(situation) }}
+                </div>
+                <div class="w-1/4 text-center bg-white p-4">
+                  {{ 'مدير الادارة: ' + situation.offenderInfo?.getNames() }}
+                </div>
+              </div>
+
+              <!-- Second Row: Two columns, one with title and one with list -->
+              <div class="flex justify-between">
+                <div class="w-1/3 bg-white p-4">
+                  <h2 class="text-lg font-semibold">
+                    {{
+                      situation.violationInfo.classificationInfo.getNames() +
+                        ':'
+                    }}
+                  </h2>
+                </div>
+                <div class="w-2/3 bg-white p-4">
+                  <ul class="list-disc pl-6">
+                    <li>
+                      {{
+                        situation.violationInfo.violationTypeInfo?.getNames()
+                      }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Third Row: One column with centered text -->
+              <div class="bg-white p-4">
+                <p>القرار:.......</p>
+              </div>
+            </section>
+
+            <!-- Divider under the header -->
+            <div class="border-t border-black mt-4"></div>
+          </div>
+        }
+      }
+    } @else {
+      <div class="container mx-auto flex justify-between items-center">
+        <!-- No records to display -->
+        <div class="text-center w-full">
+          <h1 class="text-xl font-semibold text-gray-900">
+            {{ lang.map.no_records_to_display }}
+          </h1>
+        </div>
+      </div>
+    }
   </div>
 </div>

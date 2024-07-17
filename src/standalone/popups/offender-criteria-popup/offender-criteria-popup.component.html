@@ -166,6 +166,7 @@
                 @if (assertType(element).hasStatusSearch()) {
                   <div [matTooltip]="lang.map.situation_search">
                     <app-situation-search-btn
+                      [offender]="element"
                       [id]="
                         element.type === offenderTypesEnum.EMPLOYEE
                           ? element.id
