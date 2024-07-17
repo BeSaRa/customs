@@ -14,12 +14,12 @@ export class SituationSearch extends BaseModel<
 > {
   $$__service_name__$$ = 'SituationSearchService';
   caseId!: string;
-  isProved!: boolean;
   offenderId!: number;
   violationId!: number;
   repeat!: number;
-
+  proofStatus!: number;
   offenderInfo!: Offender;
   violationInfo!: Violation;
+
   buildForm() {}
 }

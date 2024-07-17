@@ -125,6 +125,7 @@
       <div class="flex justify-start gap-2">
         @if (assertType(element).hasStatusSearch()) {
           <app-situation-search-btn
+            [offender]="element"
             [id]="
               element.type === offenderTypes.EMPLOYEE
                 ? element.offenderInfo?.id

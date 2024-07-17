@@ -9,6 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Offender } from '@models/offender';
 
 @Component({
   selector: 'app-situation-search-btn',
@@ -29,6 +30,8 @@ export class SituationSearchBtnComponent {
 
   @Input({ required: true })
   isCompany!: boolean;
+  @Input()
+  offender!: Offender;
   @Input({ required: true })
   id!: number;
   @Input({ required: true })
@@ -42,10 +45,19 @@ export class SituationSearchBtnComponent {
         switchMap(() => {
           return this.dialog
             .open(SituationSearchComponent, {
+              width: '100vw',
+              height: '100vh',
+              maxWidth: '100vw',
+              maxHeight: '100vh',
+              panelClass: 'full-screen-dialog',
+
               data: {
                 id: this.id,
                 type: this.type,
                 isCompany: this.isCompany,
+                offender: this.offender.offenderInfo
+                  ? this.offender.offenderInfo
+                  : this.offender,
               },
             })
             .afterClosed();
