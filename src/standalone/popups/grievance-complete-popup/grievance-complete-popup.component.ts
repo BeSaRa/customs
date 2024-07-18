@@ -105,7 +105,7 @@ export class GrievanceCompletePopupComponent
       this.finalDecisionsCtrl.value ===
       GrievanceFinalDecisionsEnum.UPDATE_PENALTY
     ) {
-      this.penaltyCtrl.enable();
+      this.recommendedPenaltyCtrl.enable();
     }
   }
 
@@ -127,6 +127,7 @@ export class GrievanceCompletePopupComponent
               offenderId: this.model.offenderId,
               signerId: this.employeeService.getEmployee()?.id,
               penaltyId: this.penaltyCtrl.value!,
+              recommendedPenaltyId: this.recommendedPenaltyCtrl.value!,
               comment: this.form.getRawValue().justification,
               status: 1,
               // ...(this.isBroker()
@@ -164,16 +165,20 @@ export class GrievanceCompletePopupComponent
   }
 
   handleFinalDecisionChanged(decision: unknown) {
-    this.penaltyCtrl.setValidators([]);
-    this.penaltyCtrl.disable();
+    this.recommendedPenaltyCtrl.setValidators([]);
+    this.recommendedPenaltyCtrl.disable();
     if (decision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY) {
-      this.penaltyCtrl.enable();
-      this.penaltyCtrl.setValidators([CustomValidators.required]);
+      this.recommendedPenaltyCtrl.enable();
+      this.recommendedPenaltyCtrl.setValidators([CustomValidators.required]);
     }
   }
 
   get penaltyCtrl(): FormControl {
     return this.form.get('penaltyId') as FormControl;
+  }
+
+  get recommendedPenaltyCtrl(): FormControl {
+    return this.form.get('recommendedPenaltyId') as FormControl;
   }
 
   get finalDecisionsCtrl(): FormControl {

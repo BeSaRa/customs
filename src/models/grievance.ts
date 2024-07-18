@@ -32,6 +32,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   offenderId!: number;
   offenderType!: number;
   penaltyId!: number;
+  recommendedPenaltyId!: number;
   penaltySigner!: number;
   penaltySignerId!: number;
   justification!: string;
@@ -44,14 +45,17 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
   penaltySignerRoleInfo!: AdminResult;
   penaltySignerInfo!: AdminResult;
   finalDecisionInfo!: AdminResult;
+
   override buildForm() {
     return {
       description: ['', [CustomValidators.maxLength(3000)]],
       commentList: [''],
     };
   }
+
   buildCompleteForm() {
-    const { penaltyId, finalDecision, justification } = this;
+    const { penaltyId, finalDecision, justification, recommendedPenaltyId } =
+      this;
     return {
       justification: [
         justification,
@@ -59,6 +63,12 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
       ],
       finalDecision: [finalDecision, [CustomValidators.required]],
       penaltyId: [{ value: penaltyId, disabled: true }],
+      recommendedPenaltyId: [
+        {
+          value: recommendedPenaltyId ? recommendedPenaltyId : penaltyId,
+          disabled: true,
+        },
+      ],
     };
   }
 }

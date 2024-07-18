@@ -112,20 +112,51 @@
             [isMultiple]="false">
           </app-select-input>
         </div>
+        <!--        <div class="flex flex-auto flex-col">-->
+        <!--          <label (click)="focusOnSelect(select)">{{-->
+        <!--            lang.map.penalty_action-->
+        <!--          }}</label>-->
+        <!--          <div class="input-form" [formGroup]="form">-->
+        <!--            <mat-select-->
+        <!--              #select="matSelect"-->
+        <!--              id="penalty"-->
+        <!--              formControlName="penaltyId"-->
+        <!--              class="min-h-[42px] input-select">-->
+        <!--              <mat-select-trigger>-->
+        <!--                {{-->
+        <!--                  penaltyCtrl.value-->
+        <!--                    ? selectedPenaltyText(penaltyCtrl.value)-->
+        <!--                    : ''-->
+        <!--                }}-->
+        <!--              </mat-select-trigger>-->
+        <!--              @for (penalty of penaltiesList(); track penalty.id) {-->
+        <!--                <mat-option [value]="penalty.id">-->
+        <!--                  {{ penalty.getNames() }}-->
+        <!--                  @if (penalty.penaltyGuidance) {-->
+        <!--                    <span class="bg-emerald-400 rounded text-white px-2 mx-2">-->
+        <!--                      {{ penalty.penaltyGuidanceInfo.getNames() }}-->
+        <!--                    </span>-->
+        <!--                  }-->
+        <!--                </mat-option>-->
+        <!--              }-->
+        <!--            </mat-select>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
         <div class="flex flex-auto flex-col">
-          <label (click)="focusOnSelect(select)">{{
+          <label (click)="focusOnSelect(recommendedSelect)">{{
             lang.map.penalty_action
           }}</label>
           <div class="input-form" [formGroup]="form">
             <mat-select
-              #select="matSelect"
-              id="penalty"
-              formControlName="penaltyId"
+              #recommendedSelect="matSelect"
+              id="recommendedPenalty"
+              formControlName="recommendedPenaltyId"
               class="min-h-[42px] input-select">
               <mat-select-trigger>
                 {{
-                  penaltyCtrl.value
-                    ? selectedPenaltyText(penaltyCtrl.value)
+                  recommendedPenaltyCtrl?.value
+                    ? selectedPenaltyText(recommendedPenaltyCtrl?.value)
                     : ''
                 }}
               </mat-select-trigger>
