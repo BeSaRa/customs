@@ -265,6 +265,12 @@ export class EmployeeService
     );
   }
 
+  isPresidentAssistantOffice() {
+    return !!(this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.President_Assistant_Office,
+    );
+  }
+
   isPresident() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.authName === TeamNames.President,
