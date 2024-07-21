@@ -6,7 +6,10 @@
 </div>
 @if (canViewWitness()) {
   <div class="p-4">
-    <app-persons-list type="witness" [model]="model()" />
+    <app-persons-list
+      type="witness"
+      [model]="model()"
+      [isOpenedFromSearch]="isOpenedFromSearch()" />
   </div>
 }
 <div class="p-4">
