@@ -14,13 +14,16 @@ export class ScanImageService {
   }
 
   private _listenToMediaDevicesChange() {
-    navigator.mediaDevices.addEventListener('devicechange', () => {
+    navigator.mediaDevices?.addEventListener('devicechange', () => {
       this._setAvailableVideoInputs();
     });
   }
 
   private _setAvailableVideoInputs = () => {
-    from(navigator.mediaDevices.enumerateDevices())
+    from(
+      navigator.mediaDevices?.enumerateDevices() ??
+        Promise.resolve<MediaDeviceInfo[]>([]),
+    )
       .pipe(take(1))
       .pipe(
         map(devices => devices.filter(d => d.kind === 'videoinput')),
