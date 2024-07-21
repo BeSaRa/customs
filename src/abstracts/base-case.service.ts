@@ -337,6 +337,23 @@ export abstract class BaseCaseService<M>
     );
   }
 
+  addExternalCaseAttachment(
+    caseId: string,
+    attachment: CaseAttachment,
+  ): Observable<unknown> {
+    const formData = new FormData();
+    attachment.content ? formData.append('content', attachment.content) : null;
+    delete attachment.content;
+    formData.append(
+      'attachmentDTO',
+      new Blob([JSON.stringify(attachment)], { type: 'application/json' }),
+    );
+    return this.http.post(
+      this.getUrlSegment() + `/external/${caseId}/attachment`,
+      formData,
+    );
+  }
+
   @CastResponse(() => CaseAttachment)
   addBulkCaseAttachments(
     caseId: string,
@@ -376,7 +393,7 @@ export abstract class BaseCaseService<M>
   openAddAttachmentDialog(
     caseId: string,
     service: BaseCaseService<unknown> | unknown,
-    type: 'folder' | 'offender' | 'apology',
+    type: 'folder' | 'offender' | 'apology' | 'external_grievance',
     entityId: number,
   ): MatDialogRef<CaseAttachmentPopupComponent> {
     return this.dialog.open(CaseAttachmentPopupComponent, {

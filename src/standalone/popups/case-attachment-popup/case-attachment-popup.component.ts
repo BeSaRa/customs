@@ -79,7 +79,7 @@ export class CaseAttachmentPopupComponent
   data: {
     caseId: string;
     service: BaseCaseService<unknown> | unknown;
-    type: 'folder' | 'offender' | 'apology';
+    type: 'folder' | 'offender' | 'apology' | 'external_grievance';
     entityId: number;
   } = inject(MAT_DIALOG_DATA);
   lang = inject(LangService);
@@ -185,6 +185,14 @@ export class CaseAttachmentPopupComponent
             return (
               this.data.service as BaseCaseService<unknown>
             ).addBulkCaseAttachments(this.data.caseId, this.attachments);
+          } else if (this.data.type === 'external_grievance') {
+            return combineLatest(
+              this.attachments.map(attachment => {
+                return (
+                  this.data.service as BaseCaseService<unknown>
+                ).addExternalCaseAttachment(this.data.caseId, attachment);
+              }),
+            );
           } else if (this.data.type === 'offender') {
             return combineLatest(
               this.attachments.map(attachment => {
