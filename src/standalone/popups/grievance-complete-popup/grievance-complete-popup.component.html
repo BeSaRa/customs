@@ -153,8 +153,8 @@
               class="min-h-[42px] input-select">
               <mat-select-trigger>
                 {{
-                  recommendedPenaltyCtrl?.value
-                    ? selectedPenaltyText(recommendedPenaltyCtrl?.value)
+                  recommendedPenaltyCtrl && recommendedPenaltyCtrl.value
+                    ? selectedPenaltyText(recommendedPenaltyCtrl.value)
                     : ''
                 }}
               </mat-select-trigger>

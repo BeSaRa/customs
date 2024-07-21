@@ -18,7 +18,6 @@ import { ScanImageService } from '@services/scan-image.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ImagesListComponent } from '@standalone/components/images-list/images-list.component';
-import { WebcamModule } from 'ngx-webcam';
 
 @Component({
   selector: 'app-scan-popup',
@@ -28,7 +27,6 @@ import { WebcamModule } from 'ngx-webcam';
     IconButtonComponent,
     ButtonComponent,
     MatDialogModule,
-    WebcamModule,
     ImagesListComponent,
     MatIconModule,
   ],
