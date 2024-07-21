@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   computed,
@@ -7,28 +8,15 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/autocomplete';
 import {
   MAT_DIALOG_DATA,
   MatDialogClose,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Investigation } from '@models/investigation';
-import { Memorandum } from '@models/memorandum';
-import { OperationType } from '@enums/operation-type';
-import { OffenderService } from '@services/offender.service';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { InvestigationService } from '@services/investigation.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { LangService } from '@services/lang.service';
-import { filter, of, Subject, tap } from 'rxjs';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { OffenderViolation } from '@models/offender-violation';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
-import { ignoreErrors } from '@utils/utils';
-import { Offender } from '@models/offender';
-import { Penalty } from '@models/penalty';
-import { LookupService } from '@services/lookup.service';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatSelect } from '@angular/material/select';
 import {
   MatCell,
   MatCellDef,
@@ -42,19 +30,33 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { PenaltyDecision } from '@models/penalty-decision';
-import { EmployeeService } from '@services/employee.service';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatSelect } from '@angular/material/select';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { TaskResponses } from '@enums/task-responses';
-import { ToastService } from '@services/toast.service';
-import { CustomValidators } from '@validators/custom-validators';
+import { OffenderTypes } from '@enums/offender-types';
+import { OperationType } from '@enums/operation-type';
 import { ProofTypes } from '@enums/proof-types';
+import { TaskResponses } from '@enums/task-responses';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Investigation } from '@models/investigation';
+import { Memorandum } from '@models/memorandum';
+import { Offender } from '@models/offender';
+import { OffenderViolation } from '@models/offender-violation';
+import { Penalty } from '@models/penalty';
+import { PenaltyDecision } from '@models/penalty-decision';
 import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { OffenderService } from '@services/offender.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { ignoreErrors } from '@utils/utils';
+import { CustomValidators } from '@validators/custom-validators';
+import { filter, of, Subject, tap } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-memorandum-popup',
@@ -82,6 +84,7 @@ import { DialogService } from '@services/dialog.service';
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    CommonModule,
   ],
   templateUrl: './memorandum-popup.component.html',
   styleUrl: './memorandum-popup.component.scss',
@@ -108,11 +111,25 @@ export class MemorandumPopupComponent
   //TODO: only display attended or not attended
   offenderStatus = this.lookupService.lookups.offenderStatus;
   proofStatus = this.lookupService.lookups.proofStatus;
+  violationEffect = this.lookupService.lookups.customsViolationEffect
+    .slice()
+    .sort((a, b) => a.lookupKey - b.lookupKey);
+  violationEffectControls: Record<number, FormControl> = {};
   controls: Record<number, FormControl> = {};
   investigationModel = signal(this.data.investigationModel);
   operation = signal(this.data.operation);
   model = signal(this.data.model);
-  offenders = computed(() => this.investigationModel().getConcernedOffenders());
+  offenders = computed(() => {
+    const _offenders = this.investigationModel().getConcernedOffenders();
+    this.violationEffectControls = _offenders.reduce(
+      (acc, cur) => {
+        acc[cur.id] = new FormControl(cur.customsViolationEffect);
+        return acc;
+      },
+      {} as Record<number, FormControl>,
+    );
+    return _offenders;
+  });
   offendersIds = computed(() => this.offenders().map(i => i.id));
   updateModel = this.data.updateModel;
   offenderViolationsMap = computed<Record<number, OffenderViolation[]>>(() => {
@@ -151,10 +168,13 @@ export class MemorandumPopupComponent
 
   employee = inject(EmployeeService).getEmployee();
 
+  readonly offenderTypes = OffenderTypes;
+
   displayedColumns: string[] = [
     'offenderName',
     'violations',
     'investigationResult',
+    'violationEffect',
     'recommendation',
   ];
   private employeeService = inject(EmployeeService);
@@ -354,6 +374,13 @@ export class MemorandumPopupComponent
     });
   }
 
+  updateOffenderViolationEffect(offender: Offender, violationEffect: unknown) {
+    offender.customsViolationEffect = violationEffect as number;
+    offender.update().subscribe(() => {
+      this.loadPenalties$.next();
+    });
+  }
+
   private listenToLoadPenalties() {
     this.loadPenalties$
       .pipe(
@@ -379,5 +406,9 @@ export class MemorandumPopupComponent
       this.penaltiesDecisionsMap[element.id] &&
       this.penaltiesDecisionsMap[element.id].penaltyId === penalty.id
     );
+  }
+
+  hasBrokers() {
+    return this.offenders().some(o => o.type === OffenderTypes.BROKER);
   }
 }

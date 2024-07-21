@@ -124,7 +124,6 @@ export class PersonsListComponent
   witness = signal<Witness[]>([]);
 
   models = computed(() => {
-    console.log(this.isOpenedFromSearch());
     return this.isOffender()
       ? this.fromCallRequestTab() ||
         ((this.employeeService.isDisciplinaryCommittee() ||
