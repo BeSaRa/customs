@@ -73,7 +73,7 @@ export class CaseAttachmentsComponent
   @Input()
   folderType!: FolderType;
   @Input()
-  type: 'folder' | 'offender' = 'folder';
+  type: 'folder' | 'offender' | 'external_grievance' = 'folder';
   @Input()
   entityId!: number;
   @Input()
@@ -121,10 +121,12 @@ export class CaseAttachmentsComponent
   private _load() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
+      .pipe(tap(() => console.log(this.type)))
       .pipe(
         switchMap(() => {
           switch (this.type) {
-            case 'folder': {
+            case 'folder':
+            case 'external_grievance': {
               if (this.folderType === FolderType.OFFICIAL) {
                 return combineLatest([
                   this.caseId() && (this.caseId() as unknown[])[0]
