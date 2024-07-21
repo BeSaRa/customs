@@ -94,6 +94,7 @@ export class InvestigationRecordsTableComponent
   view$ = new Subject<InvestigationReport>();
   edit$ = new Subject<InvestigationReport>();
   download$ = new Subject<InvestigationReport>();
+  isOpenedFromSearch = input<boolean>(false);
   upload$ = new Subject<File>();
   config = inject(ConfigService);
   toast = inject(ToastService);
@@ -108,7 +109,9 @@ export class InvestigationRecordsTableComponent
   >();
 
   category = computed(() => {
-    return this.model().inLegalAffairsActivity()
+    return this.model().inLegalAffairsActivity() ||
+      (this.isOpenedFromSearch() &&
+        this.employeeService.isOneOfLegalAffairsTeams())
       ? this.isOffender()
         ? InvestigationCategory.LEGAL_AFFAIRS_INVESTIGATION_RECORD
         : InvestigationCategory.LEGAL_AFFAIRS_HEARING_TRANSCRIPT
@@ -133,6 +136,7 @@ export class InvestigationRecordsTableComponent
     this.listenToChangeIsExportableStatus();
     this.listenToReloadInput();
   }
+
   listenToChangeIsExportableStatus() {
     this.changeIsExportableStatus$
       .pipe(filter(element => !!element.documentVsId))
@@ -146,6 +150,7 @@ export class InvestigationRecordsTableComponent
       )
       .subscribe(() => this.reload$.next());
   }
+
   private listenToReload() {
     this.reload$
       .pipe(takeUntil(this.destroy$))

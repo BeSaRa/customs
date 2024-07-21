@@ -196,6 +196,7 @@
               @if (!fromCallRequestTab()) {
                 <div>
                   <app-investigation-records-table
+                    [isOpenedFromSearch]="isOpenedFromSearch()"
                     [reloadInput]="reload$"
                     [model]="model()"
                     [selected]="selectedOffender"
