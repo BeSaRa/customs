@@ -72,6 +72,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     isUpdate: boolean,
     model: Signal<Investigation>,
     offenderPenalties: { first: number | null; second: Penalty[] },
+    isView?: boolean,
   ) {
     return this.dialog.open(DcDecisionPopupComponent, {
       data: {
@@ -79,6 +80,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         model,
         isUpdate,
         offenderPenalties,
+        isView,
       },
     });
   }
