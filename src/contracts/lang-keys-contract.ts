@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_custom_menu: string;
   menu_manager_delegation: string;
   static_header_text_for_disciplinary_committee: string;
   static_footer_text_for_disciplinary_committee: string;
@@ -8,7 +9,7 @@ export interface LangKeysContract {
   referral_to_legal_affairs: string;
   there_is_no_investigation_result_to_perform_this_action: string;
   request_department_statement_footer: string;
-  request_department_statement_header: string;
+  request_departmwent_statement_header: string;
   request_for_department_statement: string;
   approve_msg_confirmation: string;
   something_wrong_happened: string;

@@ -264,4 +264,11 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ELECTRONIC_SERVICES,
     permission: 'COURT_DECISIONS',
   },
+  {
+    id: MenuIdes.CUSTOM_MENU,
+    langKey: 'menu_custom_menu',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.CUSTOM_MENU,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];
