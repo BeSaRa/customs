@@ -103,6 +103,7 @@ export class DcDecisionPopupComponent
     isUpdate: boolean;
     model: Signal<Investigation>;
     offenderPenalties: { first: number; second: Penalty[] };
+    isView?: boolean;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   lang = inject(LangService);
@@ -209,6 +210,13 @@ export class DcDecisionPopupComponent
 
   ngOnInit(): void {
     this.listenToSave();
+    if (this.isView()) {
+      Object.keys(this.controls()).forEach(key =>
+        this.controls()[key as unknown as number].disable(),
+      );
+      this.penaltyControl.disable();
+      this.textControl.disable();
+    }
   }
 
   focusOnSelect(select: MatSelect) {
@@ -351,5 +359,9 @@ export class DcDecisionPopupComponent
     return this.penaltiesMap()[value as unknown as number]
       ? this.penaltiesMap()[value as unknown as number].getNames()
       : '';
+  }
+
+  isView() {
+    return this.data.isView ?? false;
   }
 }
