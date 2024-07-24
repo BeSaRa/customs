@@ -26,6 +26,7 @@ import { SuspendedEmployeeComponent } from '@modules/administration/components/s
 import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
 import { ManagerDelegationComponent } from '@modules/administration/components/manager-delegation/manager-delegation.component';
+import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -236,6 +237,10 @@ const routes: Routes = [
       }),
     ],
   },
+  {
+    path: AppRoutes.CUSTOM_MENU,
+    component: CustomMenuComponent,
+  }
 ];
 
 @NgModule({

@@ -91,6 +91,8 @@ import {
   MatDatepickerInput,
 } from '@angular/material/datepicker';
 import { ManagerDelegationManagementComponent } from '@standalone/components/manager-delegation-management/manager-delegation-management.component';
+import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
+import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 
 @NgModule({
   declarations: [
@@ -144,6 +146,8 @@ import { ManagerDelegationManagementComponent } from '@standalone/components/man
     SuspendedEmployeePopupComponent,
     ManagerDelegationComponent,
     ManagerDelegationPopupComponent,
+    CustomMenuComponent,
+    CustomMenuPopupComponent,
   ],
   imports: [
     CommonModule,
