@@ -36,9 +36,8 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    // you can close the dialog after save here 
-    // this.dialogRef.close(this.model);
+    this.dialogRef.close(this.model);
   }
 }

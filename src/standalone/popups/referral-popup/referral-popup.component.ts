@@ -298,7 +298,7 @@ export class ReferralPopupComponent
       },
     },
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: {
-      header: this.lang.map.request_department_statement_header,
+      header: this.lang.map.request_department_statement_footer,
       footer: this.lang.map.request_department_statement_footer,
       whom: '',
     },
