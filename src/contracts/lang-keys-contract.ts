@@ -736,4 +736,6 @@ export interface LangKeysContract {
   employees_inbox_managment: string;
   please_review_the_legal_books_that_are_permitted_to_be_viewed_by_other_departments: string;
   disclaimer: string;
+  menu_type: string;
+  system_parent: string;
 }
