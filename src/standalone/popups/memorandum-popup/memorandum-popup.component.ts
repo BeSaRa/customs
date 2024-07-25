@@ -189,6 +189,7 @@ export class MemorandumPopupComponent
   }
 
   ngOnInit(): void {
+    console.log(this.investigationModel().penaltyDecisions);
     this.listenToSave();
     this.listenToSaveAndCreate();
     this.listenToOffenderStatus();
