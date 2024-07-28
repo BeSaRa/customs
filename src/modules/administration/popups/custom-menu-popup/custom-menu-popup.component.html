@@ -1,16 +1,81 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_custom_menu }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
-    <div class="grid grid-cols-2 gap-4">
-        your dialog content here 
-    </div>
-  </div>
+  <mat-tab-group
+    [mat-stretch-tabs]="false"
+    mat-align-tabs="start"
+    dynamicHeight="true">
+    <mat-tab [label]="lang.map.lbl_basic_info">
+      <ng-container [formGroup]="form">
+        <div class="grid grid-cols-1 gap-4 items-center p-4 pb-0">
+          @if (isDefaultParent()) {
+            <app-select-input
+              [label]="lang.map.system_parent"
+              bindLabel="getNames"
+              formControlName="systemMenuKey"
+              bindValue="id"
+              [options]="defaultParents" />
+          }
+        </div>
+        <div class="grid grid-cols-2 gap-4 items-center p-4 pb-0">
+          <app-input
+            formControlName="arName"
+            [label]="lang.map.ar_name"></app-input>
+          <app-input
+            formControlName="enName"
+            [label]="lang.map.en_name"></app-input>
+          <app-input
+            formControlName="menuOrder"
+            type="number"
+            [label]="lang.map.menu_order"></app-input>
+          <app-select-input
+            [label]="lang.map.menu_type"
+            bindLabel="getNames"
+            formControlName="menuType"
+            bindValue="lookupKey"
+            [options]="menuTypes" />
+          <app-select-input
+            [label]="lang.map.user_type"
+            bindLabel="getNames"
+            formControlName="userType"
+            bindValue="lookupKey"
+            [options]="userTypes" />
+          <app-input
+            formControlName="menuView"
+            [label]="lang.map.menu_view"></app-input>
+        </div>
+      </ng-container>
+    </mat-tab>
+    <mat-tab [label]="lang.map.link_settings"> link settings</mat-tab>
+    <mat-tab [label]="lang.map.children">
+      <app-custom-menu
+        #customMenuChildren
+        (listUpdated)="handleDisableFields()"
+        [parent]="model"
+        [readonly]="readonly"></app-custom-menu>
+    </mat-tab>
+  </mat-tab-group>
   <div class="dialog-footer justify-end">
-    <app-button *ngIf="!inViewMode()" (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-    <app-button *ngIf="!inViewMode()" mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
-    <app-button *ngIf="inViewMode()" mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
+    }
+    @if (!inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
+    }
+    @if (inViewMode()) {
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
+    }
   </div>
 </div>

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { CustomMenu } from '@models/custom-menu';
 import { CustomMenuService } from '@services/custom-menu.service';
@@ -13,6 +20,7 @@ import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { StatusTypes } from '@enums/status-types';
+import { exhaustMap, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-custom-menu',
@@ -58,7 +66,7 @@ export class CustomMenuComponent extends AdminComponent<
       label: 'view',
       icon: AppIcons.VIEW,
       callback: item => {
-        this.view$.next(item);
+        this.view(item);
       },
     },
     {
@@ -67,8 +75,16 @@ export class CustomMenuComponent extends AdminComponent<
       label: 'edit',
       icon: AppIcons.EDIT,
       callback: item => {
-        this.edit$.next(item);
+        this.edit(item);
       },
+    },
+    {
+      name: 'sub_list',
+      type: 'action',
+      label: 'sub_lists',
+      icon: AppIcons.CHILD_ITEMS,
+      callback: item => this.showChildren(item),
+      // show: () => !this.parent,
     },
     {
       name: 'delete',
@@ -80,36 +96,76 @@ export class CustomMenuComponent extends AdminComponent<
       },
     },
   ];
-  // here we have a new implementation for displayed/filter Columns for the table
-
-  // displayedColumns = [
-  //   'select',
-  //   'arName',
-  //   'enName',
-  //   'menuType',
-  //   'systemParent',
-  //   'status',
-  //   'actions',
-  // ];
-  // isClaimedEffect = effect(() => {
-  //   if (!this.isParentDefaultItem()) {
-  //     this.displayedColumns = [
-  //       ...this.displayedColumns.filter(column => column !== 'systemParent'),
-  //     ];
-  //   } else {
-  //     this.displayedColumns = [
-  //       'rowSelection',
-  //       'arName',
-  //       'enName',
-  //       'menuType',
-  //       'systemParent',
-  //       'status',
-  //       'actions',
-  //     ];
-  //   }
-  // });
 
   isParentDefaultItem(): boolean {
     return !!this.parent && this.parent.isDefaultItem();
+  }
+
+  view(model: CustomMenu): void {
+    this.selectedPopupTabName = 'basic';
+    this.view$.next(model);
+  }
+
+  edit(model: CustomMenu): void {
+    this.selectedPopupTabName = 'basic';
+    this.edit$.next(model);
+  }
+
+  showChildren(item: CustomMenu): void {
+    this.selectedPopupTabName = 'sub';
+    if (this.readonly) {
+      this.view$.next(item);
+    } else {
+      this.edit$.next(item);
+    }
+  }
+
+  override view$: Subject<CustomMenu> = new Subject<CustomMenu>();
+
+  override _listenToView(): void {
+    this.view$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        exhaustMap(model => {
+          return this.service
+            .openViewDialog(model, {
+              modelId: model.id,
+              parentMenu: this.parent,
+              selectedPopupTab: this.selectedPopupTabName,
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => this.reload$.next());
+  }
+
+  override _listenToCreate(): void {
+    this.create$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        exhaustMap(() =>
+          this.service
+            .openCreateDialog(new CustomMenu(), { parentMenu: this.parent })
+            .afterClosed(),
+        ),
+      )
+      .subscribe(() => this.reload$.next());
+  }
+
+  override _listenToEdit(): void {
+    this.edit$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        exhaustMap(model => {
+          return this.service
+            .openEditDialog(model, {
+              modelId: model.id,
+              parentMenu: this.parent,
+              selectedPopupTab: this.selectedPopupTabName,
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe(() => this.reload$.next());
   }
 }

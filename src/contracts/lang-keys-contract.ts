@@ -738,4 +738,11 @@ export interface LangKeysContract {
   disclaimer: string;
   menu_type: string;
   system_parent: string;
+  sub_lists: string;
+  private_menu: string;
+  public_menu: string;
+  menu_order: string;
+  menu_view: string;
+  link_settings: string;
+  children: string;
 }
