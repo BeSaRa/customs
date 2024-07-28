@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -59,26 +59,83 @@ export class CustomMenuService extends BaseCrudWithDialogService<
       parentMenu?: CustomMenu;
       selectedPopupTab: string;
     },
-    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
+    config?: Omit<MatDialogConfig<unknown>, 'data'>,
   ): MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE> {
-    const dialogComponent = this.getDialogComponent();
-
-    let dialogRef:
-      | MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE>
-      | undefined;
+    let dialogRef: MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE>;
 
     this.getById(extras.modelId).subscribe((item: CustomMenu) => {
       dialogRef = this.dialog.open<
         CustomMenuPopupComponent,
         CrudDialogDataContract<CustomMenu>,
         UserClick.CLOSE
-      >(dialogComponent, {
+      >(this.getDialogComponent(), {
         ...config,
         disableClose: true,
         data: {
           model: item,
           extras: { ...extras },
           operation: OperationType.VIEW,
+        },
+      });
+    });
+
+    return dialogRef!;
+  }
+
+  override openCreateDialog(
+    model: CustomMenu,
+    extras: { parentMenu?: CustomMenu },
+    config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
+  ): MatDialogRef<CustomMenuPopupComponent, CustomMenu | UserClick.CLOSE> {
+    const data = new CustomMenu();
+    const parentMenu = extras?.parentMenu;
+    if (parentMenu) {
+      data.parentMenuItemId = parentMenu.id;
+      data.menuView = parentMenu.menuView;
+      data.menuType = parentMenu.menuType;
+      data.userType = parentMenu.userType;
+      data.status = parentMenu.status;
+      data.hasSystemParent = parentMenu.isSystem;
+    }
+
+    return this.dialog.open<
+      CustomMenuPopupComponent,
+      CrudDialogDataContract<CustomMenu>,
+      CustomMenu | UserClick.CLOSE
+    >(this.getDialogComponent(), {
+      ...config,
+      disableClose: true,
+      data: {
+        model: data || this.getModelInstance(),
+        extras: { parent: parent },
+        operation: OperationType.CREATE,
+      },
+    });
+  }
+
+  override openEditDialog(
+    model: CustomMenu,
+    extras: {
+      modelId: number;
+      parentMenu?: CustomMenu;
+      selectedPopupTab: string;
+    },
+    config?: Omit<MatDialogConfig<unknown>, 'data'>,
+  ): MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE> {
+    let dialogRef: MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE>;
+
+    this.getById(extras.modelId).subscribe((item: CustomMenu) => {
+      dialogRef = this.dialog.open<
+        CustomMenuPopupComponent,
+        CrudDialogDataContract<CustomMenu>,
+        UserClick.CLOSE
+      >(this.getDialogComponent(), {
+        ...config,
+        disableClose: true,
+        data: {
+          model: item,
+          extras: { ...extras },
+          operation: OperationType.UPDATE,
         },
       });
     });
