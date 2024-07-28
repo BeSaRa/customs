@@ -15,7 +15,7 @@ import { TeamNames } from '@enums/team-names';
 export class MenuItemService {
   private readonly staticMenus = Menus;
   private filteredStaticMenu: MenuItemContract[] = [];
-  private parents: MenuItemContract[] = [];
+  parents: MenuItemContract[] = [];
   private children: Record<number, MenuItemContract[]> = {};
   private readonly employeeService = inject(EmployeeService);
   private readonly lang = inject(LangService);
