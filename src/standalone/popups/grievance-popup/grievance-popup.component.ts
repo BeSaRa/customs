@@ -48,17 +48,22 @@ export class GrievancePopupComponent implements OnInit {
   grievanceService = inject(GrievanceService);
   route = inject(ActivatedRoute);
   employeeService = inject(EmployeeService);
-  form: FormGroup = this.fb.group(new Grievance().buildForm());
+  form!: FormGroup;
   save$: Subject<void> = new Subject();
   model: PenaltyDecisionCriteria = this.data.model;
   grievanceModel!: Grievance;
   ngOnInit(): void {
     this._listenToSave();
+    this.buildForm();
+  }
+
+  buildForm() {
+    this.form = this.fb.group(new Grievance().buildForm());
   }
 
   private _listenToSave() {
     this.save$
-      .pipe(filter(() => this.form.valid))
+      .pipe(filter(() => !!this.form.value))
       .pipe(
         switchMap(() => {
           return this.grievanceService.create({

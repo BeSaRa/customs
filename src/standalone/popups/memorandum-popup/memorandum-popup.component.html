@@ -19,31 +19,9 @@
           {{ assertType(element).getNames() }}
         </td>
       </ng-container>
-      <!-- offenderStatus -->
-      <ng-container matColumnDef="offenderInvStatus">
-        <th class="w-40" mat-header-cell *matHeaderCellDef>
-          {{ lang.map.investigation_status }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="w-40 px-2 flex-shrink-0">
-            <app-select-input
-              label=""
-              size="sm"
-              [formControl]="offenderInvStatusControls[assertType(element).id]"
-              (selectChange)="updateOffenderInvStatus(element, $event)"
-              nullable="false"
-              bindValue="lookupKey"
-              bindLabel="getNames"
-              noMargin="true"
-              [options]="offenderInvStatus" />
-          </div>
-        </td>
-      </ng-container>
       <!-- violations -->
       <ng-container matColumnDef="violations">
-        <th mat-header-cell *matHeaderCellDef class="min-w-[200px]">
-          {{ lang.map.violations }}
-        </th>
+        <th mat-header-cell *matHeaderCellDef>{{ lang.map.violations }}</th>
         <td mat-cell colSpan="2" *matCellDef="let element">
           <div class="grid grid-cols-1 divide-y">
             @for (
@@ -52,7 +30,7 @@
             ) {
               <div class="flex items-center py-2">
                 <div
-                  class="flex-auto min-w-[160px] max-w-[350px] border bg-yellow-50 rounded text-sm p-2">
+                  class="flex-auto max-w-[350px] border bg-yellow-50 rounded text-sm p-2">
                   {{ item.violationInfo.violationTypeInfo.getNames() }}
                 </div>
                 <div class="w-40 px-2 flex-shrink-0">
@@ -79,37 +57,6 @@
         </th>
         <td mat-cell *matCellDef="let element" [style.display]="'none'"></td>
       </ng-container>
-      <!-- violationEffect -->
-      <ng-container matColumnDef="violationEffect">
-        <th
-          class="w-40"
-          mat-header-cell
-          *matHeaderCellDef
-          [ngClass]="{
-            hidden: !hasBrokers()
-          }">
-          {{ lang.map.penalty_for_whom }}
-        </th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          [ngClass]="{
-            hidden: assertType(element).type !== offenderTypes.BROKER
-          }">
-          <div class="w-40 px-2 flex-shrink-0">
-            <app-select-input
-              label=""
-              size="sm"
-              [formControl]="violationEffectControls[assertType(element).id]"
-              (selectChange)="updateOffenderViolationEffect(element, $event)"
-              nullable="false"
-              bindValue="lookupKey"
-              bindLabel="getNames"
-              noMargin="true"
-              [options]="violationEffect" />
-          </div>
-        </td>
-      </ng-container>
       <!-- recommendation -->
       <ng-container matColumnDef="recommendation">
         <th mat-header-cell class="w-[300px]" *matHeaderCellDef>
@@ -117,12 +64,7 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <div class="flex items-center">
-            <app-icon-button
-              [disabled]="
-                element.status !== OffenderInvStatus.INVESTIGATION_DONE
-              "
-              [matMenuTriggerFor]="menu"
-              icon="DOTS_VERTICAL" />
+            <app-icon-button [matMenuTriggerFor]="menu" icon="DOTS_VERTICAL" />
             <div>
               {{
                 penaltiesDecisionsMap[assertType(element).id] &&

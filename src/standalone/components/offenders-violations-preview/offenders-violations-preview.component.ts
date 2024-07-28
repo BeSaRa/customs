@@ -233,24 +233,12 @@ export class OffendersViolationsPreviewComponent
               this.model().inHumanResource() ||
               this.model().inLegalAffairsActivity() ||
               !this.model().hasTask() ||
-              !this.model().inMyInbox() ||
-              (this.isMandatoryToRequestReferral(key as unknown as number) &&
-                !(
-                  this.employeeService.isPresident() ||
-                  this.employeeService.isPresidentAssisstant()
-                )),
+              !this.model().inMyInbox(),
           }),
       );
       return acc;
     }, {});
   });
-
-  isMandatoryToRequestReferral(offenderId: number) {
-    return (
-      this.penaltyMap()[offenderId]?.first ===
-      ManagerDecisions.IT_IS_MANDATORY_TO_REQUEST_A_REFERRAL
-    );
-  }
 
   offenderViolationsSlices = computed(() => {
     const keys = Object.keys(this.offenderViolationsMap());

@@ -1,35 +1,13 @@
-import { DatePipe } from '@angular/common';
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
-import { INavigatedItem } from '@contracts/inavigated-item';
-import { OpenFrom } from '@enums/open-from';
-import { ClearingAgent } from '@models/clearing-agent';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';
-import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
-import { MawaredEmployee } from '@models/mawared-employee';
 import { NoneFilterColumn } from '@models/none-filter-column';
-import { OrganizationUnit } from '@models/organization-unit';
-import { Penalty } from '@models/penalty';
-import { ViolationType } from '@models/violation-type';
-import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
-import { ClearingAgentService } from '@services/clearing-agent.service';
-import { DialogService } from '@services/dialog.service';
-import { EmployeeService } from '@services/employee.service';
-import { EncryptionService } from '@services/encryption.service';
 import { InvestigationSearchService } from '@services/investigation-search.service';
 import { LangService } from '@services/lang.service';
-import { LookupService } from '@services/lookup.service';
-import { MawaredEmployeeService } from '@services/mawared-employee.service';
-import { OrganizationUnitService } from '@services/organization-unit.service';
-import { PenaltyService } from '@services/penalty.service';
-import { ViolationTypeService } from '@services/violation-type.service';
 import {
   BehaviorSubject,
   combineLatest,
@@ -43,6 +21,28 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
+import { EncryptionService } from '@services/encryption.service';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OpenFrom } from '@enums/open-from';
+import { LookupService } from '@services/lookup.service';
+import { DialogService } from '@services/dialog.service';
+import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
+import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { Penalty } from '@models/penalty';
+import { PenaltyService } from '@services/penalty.service';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { MawaredEmployeeService } from '@services/mawared-employee.service';
+import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgentService } from '@services/clearing-agent.service';
+import { PageEvent } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
+import { ViolationType } from '@models/violation-type';
+import { ViolationTypeService } from '@services/violation-type.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -277,19 +277,5 @@ export class InvestigationSearchComponent implements OnInit {
 
   get limit(): number {
     return this.paginate$.value.limit;
-  }
-
-  getDepartments() {
-    if (this.employeeService.hasPermissionTo('SEARCH_IN_ALL_DEPARTMENT')) {
-      return this.departments;
-    } else if (this.employeeService.hasPermissionTo('SEARCH_IN_DEPARTMENT')) {
-      return this.departments.filter(
-        d =>
-          this.employeeService.getOrganizationUnit()?.id === d.id ||
-          this.employeeService.getOrganizationUnit()?.id === d.parent,
-      );
-    } else {
-      return this.employeeService.getOrganizationUnits();
-    }
   }
 }
