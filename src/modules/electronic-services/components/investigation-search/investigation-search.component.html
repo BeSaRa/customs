@@ -67,7 +67,7 @@
             [label]="lang.map.creator_department"
             bindValue="id"
             bindLabel="getNames"
-            [options]="departments" />
+            [options]="getDepartments()" />
 
           <app-select-input
             formControlName="offenderType"

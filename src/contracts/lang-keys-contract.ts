@@ -727,4 +727,5 @@ export interface LangKeysContract {
   repeat_on_broker: string;
   repeat_on_agency: string;
   responsibility_of_repetition_for_whom: string;
+  investigation_status: string;
 }

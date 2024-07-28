@@ -152,9 +152,11 @@
     </div>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary"
-      >{{ lang.map.save }}
-    </app-button>
+    @if (!isView()) {
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
+    }
     <app-button mat-dialog-close="" buttonType="primary-outline">
       {{ lang.map.close }}
     </app-button>

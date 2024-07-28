@@ -55,6 +55,7 @@ import { Penalty } from '@models/penalty';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { PenaltyDecision } from '@models/penalty-decision';
+import { ActivitiesName } from '@enums/activities-name';
 @Component({
   selector: 'app-decision-minutes',
   standalone: true,
@@ -97,7 +98,7 @@ export class DecisionMinutesComponent
     new Subject<DecisionMinutes>();
   loadPenalties$ = new Subject<void>();
   penaltiesLoaded$ = this.loadPenalties$
-    .pipe(filter(() => this.canLoadPenalties()))
+    // .pipe(filter(() => this.canLoadPenalties()))
     .pipe(switchMap(() => this.loadPenalties()))
     .pipe(takeUntil(this.destroy$))
     .pipe(tap(data => this.penaltyMap.set(data)))
@@ -148,20 +149,21 @@ export class DecisionMinutesComponent
     this._listenToAddDecision();
     this.listenToLoadPenalties();
     this.listenToEditDecisionDialog();
+    this.listenToView();
     this.loadPenalties$.next();
   }
 
   private listenToLoadPenalties() {
     this.penaltiesLoaded$.subscribe();
   }
-  private canLoadPenalties(): boolean {
-    return !!(
-      this.model() &&
-      this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
-      this.model().getActivityName() &&
-      this.model().getTaskName()
-    );
-  }
+  // private canLoadPenalties(): boolean {
+  //   return !!(
+  //     this.model() &&
+  //     this.model().hasTask() && // next 2 conditions to make sure to not run this code for case without task and activityName
+  //     this.model().getActivityName() &&
+  //     this.model().getTaskName()
+  //   );
+  // }
 
   private loadPenalties() {
     return this.model()
@@ -169,7 +171,7 @@ export class DecisionMinutesComponent
           .getService()
           .getCasePenalty(
             this.model().id as string,
-            this.model().getActivityName()!,
+            ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL,
           )
       : of(
           {} as Record<string, { first: ManagerDecisions; second: Penalty[] }>,
@@ -307,5 +309,26 @@ export class DecisionMinutesComponent
       .subscribe(() => {
         this.reload$.next(null);
       });
+  }
+
+  listenToView() {
+    this.view$
+      .pipe(
+        switchMap(model => {
+          return this.penaltyDecisionService
+            .openDCDecisionDialog(
+              new Offender().clone<Offender>({
+                ...model.penaltyDecisionInfo.offenderInfo,
+                id: model.penaltyDecisionInfo.offenderId,
+              }),
+              true,
+              this.model,
+              this.penaltyMap()[model.penaltyDecisionInfo.offenderId],
+              true,
+            )
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }
