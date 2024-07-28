@@ -30,9 +30,11 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { OffenderInvStatus } from '@enums/offender-inv-status';
 import { OffenderTypes } from '@enums/offender-types';
 import { OperationType } from '@enums/operation-type';
 import { ProofTypes } from '@enums/proof-types';
+import { SystemPenalties } from '@enums/system-penalties';
 import { TaskResponses } from '@enums/task-responses';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { Investigation } from '@models/investigation';
@@ -46,8 +48,10 @@ import { EmployeeService } from '@services/employee.service';
 import { InvestigationService } from '@services/investigation.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
+import { OffenderViolationService } from '@services/offender-violation.service';
 import { OffenderService } from '@services/offender.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { PenaltyService } from '@services/penalty.service';
 import { ToastService } from '@services/toast.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
@@ -103,24 +107,39 @@ export class MemorandumPopupComponent
   lang = inject(LangService);
   dialogRef = inject(MatDialogRef);
   offenderService = inject(OffenderService);
+  offenderViolationService = inject(OffenderViolationService);
+  penaltyService = inject(PenaltyService);
   penaltyDecisionService = inject(PenaltyDecisionService);
   investigationService = inject(InvestigationService);
   lookupService = inject(LookupService);
   dialog = inject(DialogService);
 
   //TODO: only display attended or not attended
-  offenderStatus = this.lookupService.lookups.offenderStatus;
+  offenderInvStatus = this.lookupService.lookups.offenderStatus.filter(
+    o =>
+      o.lookupKey === OffenderInvStatus.INVESTIGATION_DONE ||
+      o.lookupKey === OffenderInvStatus.INVESTIGATION_POSTPONED,
+  );
   proofStatus = this.lookupService.lookups.proofStatus;
   violationEffect = this.lookupService.lookups.customsViolationEffect
     .slice()
     .sort((a, b) => a.lookupKey - b.lookupKey);
+  offenderInvStatusControls: Record<number, FormControl> = {};
   violationEffectControls: Record<number, FormControl> = {};
   controls: Record<number, FormControl> = {};
   investigationModel = signal(this.data.investigationModel);
   operation = signal(this.data.operation);
   model = signal(this.data.model);
+
   offenders = computed(() => {
     const _offenders = this.investigationModel().getConcernedOffenders();
+    this.offenderInvStatusControls = _offenders.reduce(
+      (acc, cur) => {
+        acc[cur.id] = new FormControl(cur.status);
+        return acc;
+      },
+      {} as Record<number, FormControl>,
+    );
     this.violationEffectControls = _offenders.reduce(
       (acc, cur) => {
         acc[cur.id] = new FormControl(cur.customsViolationEffect);
@@ -159,7 +178,7 @@ export class MemorandumPopupComponent
   save$: Subject<void> = new Subject();
   // create and approve
   saveAndCreate$: Subject<void> = new Subject();
-  offenderStatus$ = new Subject<Offender>();
+  offenderInvStatus$ = new Subject<Offender>();
   takeDecision$ = new Subject<{ offender: Offender; decision: Penalty }>();
 
   loadPenalties$ = new Subject<void>();
@@ -169,9 +188,11 @@ export class MemorandumPopupComponent
   employee = inject(EmployeeService).getEmployee();
 
   readonly offenderTypes = OffenderTypes;
+  readonly OffenderInvStatus = OffenderInvStatus;
 
   displayedColumns: string[] = [
     'offenderName',
+    'offenderInvStatus',
     'violations',
     'investigationResult',
     'violationEffect',
@@ -189,13 +210,15 @@ export class MemorandumPopupComponent
   }
 
   ngOnInit(): void {
-    console.log(this.investigationModel().penaltyDecisions);
     this.listenToSave();
     this.listenToSaveAndCreate();
-    this.listenToOffenderStatus();
+    this.listenToOffenderInvStatus();
     this.listenToTakeDecision();
     this.listenToLoadPenalties();
     this.loadPenalties$.next();
+    setTimeout(() => {
+      this.offenders().forEach(o => this.checkInvStatus(o));
+    }, 0);
   }
 
   private listenToSave() {
@@ -318,8 +341,8 @@ export class MemorandumPopupComponent
       });
   }
 
-  private listenToOffenderStatus() {
-    this.offenderStatus$
+  private listenToOffenderInvStatus() {
+    this.offenderInvStatus$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(offender => {
@@ -375,11 +398,83 @@ export class MemorandumPopupComponent
     });
   }
 
+  updateOffenderInvStatus(offender: Offender, status: unknown) {
+    offender.status = status as number;
+    offender.update().subscribe(() => {
+      this.checkInvStatus(offender);
+      if (status === OffenderInvStatus.INVESTIGATION_POSTPONED) {
+        this.revertPenaltyAndProofStatus(offender);
+      }
+    });
+  }
+
   updateOffenderViolationEffect(offender: Offender, violationEffect: unknown) {
     offender.customsViolationEffect = violationEffect as number;
     offender.update().subscribe(() => {
       this.loadPenalties$.next();
     });
+  }
+
+  checkInvStatus = (offender: Offender) => {
+    this.investigationModel()
+      .offenderViolationInfo.filter(
+        offenderViolation => offenderViolation.offenderId === offender.id,
+      )
+      .forEach(ov => {
+        offender.status === OffenderInvStatus.INVESTIGATION_DONE
+          ? this.controls[ov.id]?.enable()
+          : this.controls[ov.id]?.disable();
+      });
+
+    offender.status === OffenderInvStatus.INVESTIGATION_DONE
+      ? this.violationEffectControls[offender.id]?.enable()
+      : this.violationEffectControls[offender.id]?.disable();
+  };
+
+  revertPenaltyAndProofStatus(offender: Offender) {
+    let _penalty: Penalty | undefined;
+    this.penaltyService
+      .loadAsLookups()
+      .pipe(
+        switchMap(penalties => {
+          _penalty = penalties.find(
+            p => p.penaltyKey === SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
+          );
+          if (
+            this.penaltiesDecisionsMap[offender.id].penaltyId === _penalty?.id
+          ) {
+            return of(this.penaltiesDecisionsMap[offender.id]);
+          } else {
+            return this.penaltyDecisionService.updateFull({
+              ...this.penaltiesDecisionsMap[offender.id],
+              penaltyId:
+                _penalty?.id ??
+                this.penaltiesDecisionsMap[offender.id].penaltyId,
+            } as PenaltyDecision);
+          }
+        }),
+      )
+      .subscribe(d => {
+        this.penaltiesDecisionsMap[offender.id] = d;
+        this.penaltiesDecisionsMap[offender.id].penaltyInfo =
+          _penalty ?? this.penaltiesDecisionsMap[offender.id].penaltyInfo;
+      });
+
+    const _revertedOffenderViolationsProof: OffenderViolation[] = [];
+    this.offenderViolationsMap()[offender.id].forEach(ov => {
+      if (this.controls[ov.id].value !== ProofTypes.UNDEFINED) {
+        ov.proofStatus = ProofTypes.UNDEFINED;
+        _revertedOffenderViolationsProof.push(ov);
+        this.controls[ov.id].setValue(ProofTypes.UNDEFINED, {
+          emitEvent: false,
+        });
+      }
+    });
+    if (_revertedOffenderViolationsProof.length) {
+      this.offenderViolationService
+        .updateBulk(_revertedOffenderViolationsProof)
+        .subscribe(() => {});
+    }
   }
 
   private listenToLoadPenalties() {
