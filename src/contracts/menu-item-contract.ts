@@ -3,6 +3,7 @@ import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroupType } from '@constants/app-permissions-group';
 import { TeamNames } from '@enums/team-names';
 import { Common } from '@models/common';
+import { CustomMenu } from '@models/custom-menu';
 
 export interface MenuItemContract {
   id: number;
@@ -22,4 +23,10 @@ export interface MenuItemContract {
   englishSearchText?: string;
   searchText?: string;
   permissionFromTeam?: TeamNames;
+
+  // extra properties
+  customMenu?: CustomMenu;
+  data?: unknown;
+  defaultId?: number;
+  excludeFromDefaultParents?: boolean;
 }

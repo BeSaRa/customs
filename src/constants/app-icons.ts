@@ -112,6 +112,7 @@ export const AppIcons = {
   BLOCK: 'block-helper',
   ALERT: 'alert-outline',
   ERROR: 'alert-circle-outline',
+  CHILD_ITEMS: 'circle-multiple',
 };
 
 export type AppIconsType = typeof AppIcons;
