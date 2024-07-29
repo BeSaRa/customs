@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -52,7 +52,7 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     return this.urlService.URLS.CUSTOM_MENU;
   }
 
-  override openViewDialog(
+  openViewPopup(
     model: CustomMenu,
     extras: {
       modelId: number;
@@ -60,26 +60,26 @@ export class CustomMenuService extends BaseCrudWithDialogService<
       selectedPopupTab: string;
     },
     config?: Omit<MatDialogConfig<unknown>, 'data'>,
-  ): MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE> {
-    let dialogRef: MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE>;
-
-    this.getById(extras.modelId).subscribe((item: CustomMenu) => {
-      dialogRef = this.dialog.open<
-        CustomMenuPopupComponent,
-        CrudDialogDataContract<CustomMenu>,
-        UserClick.CLOSE
-      >(this.getDialogComponent(), {
-        ...config,
-        disableClose: true,
-        data: {
-          model: item,
-          extras: { ...extras },
-          operation: OperationType.VIEW,
-        },
-      });
-    });
-
-    return dialogRef!;
+  ) {
+    return this.getById(extras.modelId).pipe(
+      switchMap((item: CustomMenu) => {
+        return this.dialog
+          .open<
+            CustomMenuPopupComponent,
+            CrudDialogDataContract<CustomMenu>,
+            UserClick.CLOSE
+          >(this.getDialogComponent(), {
+            ...config,
+            disableClose: true,
+            data: {
+              model: item,
+              extras: { ...extras },
+              operation: OperationType.VIEW,
+            },
+          })
+          .afterClosed();
+      }),
+    );
   }
 
   override openCreateDialog(
@@ -113,7 +113,7 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     });
   }
 
-  override openEditDialog(
+  override openEditPopup(
     model: CustomMenu,
     extras: {
       modelId: number;

@@ -21,6 +21,7 @@ import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { StatusTypes } from '@enums/status-types';
 import { exhaustMap, Subject, takeUntil } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-custom-menu',
@@ -126,14 +127,12 @@ export class CustomMenuComponent extends AdminComponent<
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap(model => {
-          return this.service
-            .openViewDialog(model, {
-              modelId: model.id,
-              parentMenu: this.parent,
-              selectedPopupTab: this.selectedPopupTabName,
-            })
-            .afterClosed();
+        map((model, index) => {
+          return this.service.openViewPopup(model, {
+            modelId: model.id,
+            parentMenu: this.parent,
+            selectedPopupTab: this.selectedPopupTabName,
+          });
         }),
       )
       .subscribe(() => this.reload$.next());
