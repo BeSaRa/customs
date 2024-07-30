@@ -1,4 +1,3 @@
-import '@utils/prototypes/custom-prototypes';
 import { NgOptimizedImage } from '@angular/common';
 import {
   provideHttpClient,
@@ -6,62 +5,65 @@ import {
 } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
-import {
-  MAT_SNACK_BAR_DEFAULT_OPTIONS,
-  MatSnackBarModule,
-} from '@angular/material/snack-bar';
-import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { httpInterceptors } from '@http-interceptors/index';
-import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
-import { AuthService } from '@services/auth.service';
-import { ConfigService } from '@services/config.service';
-import { InfoService } from '@services/info.service';
-import { LookupService } from '@services/lookup.service';
-import { UrlService } from '@services/url.service';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
-import { ControlDirective } from '@standalone/directives/control.directive';
-import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
-import { MenuItemService } from '@services/menu-item.service';
-import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
-import { MatPaginatorIntl } from '@angular/material/paginator';
-import { PaginatorLocal } from '@constants/paginator-local';
-import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
-import { AppRoutingModule } from './app-routing.module';
-import { CookieModule } from 'ngx-cookie';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { CastResponseModule } from 'cast-response';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { AppComponent } from './app.component';
-import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './components/home/home.component';
-import { forkJoin, Observable, switchMap, tap } from 'rxjs';
-import {
-  MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
-  MatSelectModule,
-} from '@angular/material/select';
+import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
 import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   MatOptionModule,
 } from '@angular/material/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { LangService } from '@services/lang.service';
-import { NgProgressModule } from 'ngx-progressbar';
-import { MatDateFnsModule } from '@angular/material-date-fns-adapter';
-import { enUS } from 'date-fns/locale';
-import { Config } from '@constants/config';
-import { LoadingComponent } from '@standalone/components/loading/loading.component';
-import { VersionComponent } from '@standalone/components/version/version.component';
-import { PenaltyDecisionService } from '@services/penalty-decision.service';
-import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
-import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import {
+  MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
+  MatSelectModule,
+} from '@angular/material/select';
+import {
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+  MatSnackBarModule,
+} from '@angular/material/snack-bar';
+import { MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouteReuseStrategy } from '@angular/router';
+import { Config } from '@constants/config';
+import { PaginatorLocal } from '@constants/paginator-local';
+import { httpInterceptors } from '@http-interceptors/index';
+import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
+import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
+import { AuthService } from '@services/auth.service';
+import { ConfigService } from '@services/config.service';
+import { InfoService } from '@services/info.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { MenuItemService } from '@services/menu-item.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { UrlService } from '@services/url.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { LoadingComponent } from '@standalone/components/loading/loading.component';
+import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
+import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
+import { VersionComponent } from '@standalone/components/version/version.component';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import '@utils/prototypes/custom-prototypes';
+import { CastResponseModule } from 'cast-response';
+import { enUS } from 'date-fns/locale';
+import { CookieModule } from 'ngx-cookie';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { NgProgressModule } from 'ngx-progressbar';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { forkJoin, Observable, switchMap, tap } from 'rxjs';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ExternalLoginComponent } from './components/external-login/external-login.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -143,6 +145,10 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
     { provide: MAT_DATE_LOCALE, useValue: enUS },
     { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
     provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomInvestigationRouteReuseStrategy,
+    },
   ],
 })
 export class AppModule {

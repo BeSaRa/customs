@@ -1,5 +1,4 @@
-import { DialogService } from '@services/dialog.service';
-import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
+import { BaseCaseComponent } from '@abstracts/base-case-component';
 import {
   AfterViewInit,
   Component,
@@ -10,44 +9,55 @@ import {
   viewChild,
   ViewChild,
 } from '@angular/core';
-import { LangService } from '@services/lang.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { InvestigationService } from '@services/investigation.service';
-import { Investigation } from '@models/investigation';
-import { BaseCaseComponent } from '@abstracts/base-case-component';
-import { SaveTypes } from '@enums/save-types';
-import { OperationType } from '@enums/operation-type';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { CaseFolder } from '@models/case-folder';
 import { DateAdapter } from '@angular/material/core';
+import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Violation } from '@models/violation';
-import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
-import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
-import { ToastService } from '@services/toast.service';
-import { OpenFrom } from '@enums/open-from';
-import { INavigatedItem } from '@contracts/inavigated-item';
-import { EncryptionService } from '@services/encryption.service';
-import { EmployeeService } from '@services/employee.service';
-import { LookupService } from '@services/lookup.service';
-import { SendTypes } from '@enums/send-types';
-import { Offender } from '@models/offender';
-import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { ReportType } from '@app-types/validation-return-type';
+import { AppPermissions } from '@constants/app-permissions';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OpenedInfoContract } from '@contracts/opened-info-contract';
+import { OpenFrom } from '@enums/open-from';
+import { OperationType } from '@enums/operation-type';
+import { SaveTypes } from '@enums/save-types';
+import { SendTypes } from '@enums/send-types';
 import { ClassificationTypes } from '@enums/violation-classification';
 import { ViolationDegreeConfidentiality } from '@enums/violation-degree-confidentiality.enum';
-import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
-import { Penalty } from '@models/penalty';
-import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
-import { ViolationClassificationService } from '@services/violation-classification.service';
-import { ViolationClassification } from '@models/violation-classification';
-import { MatTabGroup } from '@angular/material/tabs';
-import { TeamService } from '@services/team.service';
-import { Team } from '@models/team';
-import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { CaseFolder } from '@models/case-folder';
 import { Grievance } from '@models/grievance';
-import { AppPermissions } from '@constants/app-permissions';
+import { Investigation } from '@models/investigation';
+import { Offender } from '@models/offender';
+import { Penalty } from '@models/penalty';
+import { Team } from '@models/team';
+import { Violation } from '@models/violation';
+import { ViolationClassification } from '@models/violation-classification';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { EncryptionService } from '@services/encryption.service';
+import { InboxService } from '@services/inbox.services';
+import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { TeamService } from '@services/team.service';
+import { ToastService } from '@services/toast.service';
+import { ViolationClassificationService } from '@services/violation-classification.service';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
+import { OffenderListComponent } from '@standalone/components/offender-list/offender-list.component';
+import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
+import { ViolationListComponent } from '@standalone/components/violation-list/violation-list.component';
+import { WitnessesListComponent } from '@standalone/components/witnesses-list/witnesses-list.component';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  retry,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs/operators';
 
 @Component({
   selector: 'app-investigation',
@@ -78,6 +88,7 @@ export class InvestigationComponent
   service = inject(InvestigationService);
   employeeService = inject(EmployeeService);
   teamService = inject(TeamService);
+  inboxService = inject(InboxService);
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   toast = inject(ToastService);
@@ -256,9 +267,42 @@ export class InvestigationComponent
   }
 
   _afterLaunch(): void {
-    this._updateForm(new Investigation());
-    this.toast.success(this.lang.map.request_has_been_sent_successfully);
-    this.navigateToSamePageThatUserCameFrom();
+    if (this.model.applicantDecision === SendTypes.SAVE_AND_PREPARE) {
+      this._updateForm(this.model);
+      this.inboxService
+        .loadTeamInbox(-1)
+        .pipe(
+          switchMap(inbox => {
+            const _case = inbox.items.find(
+              item => item.PI_PARENT_CASE_ID === this.model.id,
+            );
+            if (!_case) {
+              return throwError(() => 'Case not launched yet!');
+            }
+            return of(_case);
+          }),
+          retry(5),
+        )
+        .pipe(
+          catchError(err => {
+            this.navigateToSamePageThatUserCameFrom();
+            this.toast.error(
+              this.lang.map.an_error_occured_while_preparing_for_approve,
+            );
+            return throwError(() => err);
+          }),
+        )
+        .subscribe(_case => {
+          this.router.navigate([_case!.itemRoute], {
+            queryParams: { item: _case!.itemDetails, reload: true },
+            onSameUrlNavigation: 'reload',
+          });
+        });
+    } else {
+      this._updateForm(new Investigation());
+      this.toast.success(this.lang.map.request_has_been_sent_successfully);
+      this.navigateToSamePageThatUserCameFrom();
+    }
   }
 
   managerLaunch() {
@@ -402,9 +446,16 @@ export class InvestigationComponent
 
   launchCase(type: SendTypes) {
     if (!this.model || this._checkIfHasUnlinkedOffenders()) return;
-
+    const _model = new Investigation().clone<Investigation>(this.model);
     this.model.applicantDecision = type;
-    this.model
+    if (type === SendTypes.SAVE_AND_PREPARE) {
+      _model.applicantDecision = this.employeeService.isApplicantChief()
+        ? SendTypes.DIRECT_DEPARTMENT
+        : SendTypes.DIRECTOR_ADMIN;
+    } else {
+      _model.applicantDecision = type;
+    }
+    _model
       .save()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.launch$.next(null));
