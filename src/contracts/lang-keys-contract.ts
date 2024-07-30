@@ -728,4 +728,6 @@ export interface LangKeysContract {
   repeat_on_agency: string;
   responsibility_of_repetition_for_whom: string;
   investigation_status: string;
+  save_and_prepare_for_approve: string;
+  an_error_occured_while_preparing_for_approve: string;
 }

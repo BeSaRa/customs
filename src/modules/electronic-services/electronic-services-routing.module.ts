@@ -18,6 +18,7 @@ import { GrievanceComponent } from '@modules/electronic-services/components/grie
 import { ArchivistGrievanceComponent } from '@modules/electronic-services/components/archivist-grievance/archivist-grievance.component';
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
+import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -26,6 +27,7 @@ const routes: Routes = [
     component: InvestigationComponent,
     resolve: { info: itemResolver },
     canDeactivate: [investigationCanDeactivateGuard],
+    runGuardsAndResolvers: CustomInvestigationRouteReuseStrategy.shouldReload,
   },
   {
     path: 'grievance',

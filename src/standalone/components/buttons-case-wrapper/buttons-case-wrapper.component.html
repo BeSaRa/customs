@@ -584,6 +584,13 @@
     }
   </mat-menu>
 
+  <!-- save and prepare for approve -->
+  @if (canLaunch() && (isApplicantManager() || isApplicantChief())) {
+    <app-button (click)="launch.emit(sendTypes.SAVE_AND_PREPARE)"
+      >{{ lang.map.save_and_prepare_for_approve }}
+    </app-button>
+  }
+
   <!-- send to manager -->
   <!--  && !isApplicantManager()-->
   @if (canLaunch()) {
