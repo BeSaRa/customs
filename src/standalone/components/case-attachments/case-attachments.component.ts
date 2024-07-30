@@ -121,7 +121,6 @@ export class CaseAttachmentsComponent
   private _load() {
     this.reload$
       .pipe(takeUntil(this.destroy$))
-      .pipe(tap(() => console.log(this.type)))
       .pipe(
         switchMap(() => {
           switch (this.type) {
