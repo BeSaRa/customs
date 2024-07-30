@@ -247,10 +247,39 @@ export class MemorandumPopupComponent
       });
   }
 
-  get hasUnDecidedProofStatusItem() {
-    return !!Object.values(this.controls).filter(
-      item => item.value === ProofTypes.UNDEFINED,
-    ).length;
+  get saveDisabled() {
+    if (
+      Object.values(this.offenderInvStatusControls).filter(
+        c =>
+          c.value !== OffenderInvStatus.INVESTIGATION_DONE &&
+          c.value !== OffenderInvStatus.INVESTIGATION_POSTPONED,
+      ).length
+    ) {
+      return true;
+    } else {
+      const _offendersIDs = Object.keys(this.offenderInvStatusControls).filter(
+        o =>
+          this.offenderInvStatusControls[o as unknown as number].value !==
+          OffenderInvStatus.INVESTIGATION_POSTPONED,
+      );
+      const _offendersViolationsIds = Object.keys(this.offenderViolationsMap())
+        .filter(key => _offendersIDs.find(o => o === key))
+        .reduce((acc, cur) => {
+          acc = [
+            ...acc,
+            ...this.offenderViolationsMap()[cur as unknown as number].map(
+              ov => ov.id,
+            ),
+          ];
+          return acc;
+        }, [] as number[]);
+      return !!Object.keys(this.controls).filter(
+        key =>
+          _offendersViolationsIds.find(ov => ov === parseInt(key)) &&
+          this.controls[key as unknown as number].value ===
+            ProofTypes.UNDEFINED,
+      ).length;
+    }
   }
 
   private completeTask(model: Memorandum) {

@@ -174,7 +174,7 @@
   <div class="dialog-footer justify-end">
     <app-button
       (click)="save$.next()"
-      [disabled]="hasUnDecidedProofStatusItem"
+      [disabled]="saveDisabled"
       buttonType="primary">
       @if (data.response) {
         {{ lang.map.final_complete }}
