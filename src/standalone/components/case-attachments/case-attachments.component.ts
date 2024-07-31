@@ -73,7 +73,8 @@ export class CaseAttachmentsComponent
   @Input()
   folderType!: FolderType;
   @Input()
-  type: 'folder' | 'offender' | 'external_grievance' = 'folder';
+  type: 'folder' | 'offender' | 'external_grievance' | 'internal_grievance' =
+    'folder';
   @Input()
   entityId!: number;
   @Input()
@@ -125,6 +126,7 @@ export class CaseAttachmentsComponent
         switchMap(() => {
           switch (this.type) {
             case 'folder':
+            case 'internal_grievance':
             case 'external_grievance': {
               if (this.folderType === FolderType.OFFICIAL) {
                 return combineLatest([

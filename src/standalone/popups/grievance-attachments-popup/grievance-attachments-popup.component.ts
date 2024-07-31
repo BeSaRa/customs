@@ -6,6 +6,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
 import { FolderType } from '@enums/folder-type.enum';
 import { GrievanceService } from '@services/grievance.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-grievance-attachments-popup',
@@ -21,8 +22,15 @@ import { GrievanceService } from '@services/grievance.service';
 })
 export class GrievanceAttachmentsPopupComponent {
   lang = inject(LangService);
+  employeeService = inject(EmployeeService);
   service = inject(GrievanceService);
   data = inject(MAT_DIALOG_DATA);
   model = this.data.model;
   protected readonly FolderType = FolderType;
+
+  getType() {
+    return this.employeeService.isExternal()
+      ? 'external_grievance'
+      : 'internal_grievance';
+  }
 }

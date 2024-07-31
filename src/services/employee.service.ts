@@ -152,6 +152,15 @@ export class EmployeeService
     });
   }
 
+  isExternal() {
+    const _type = this.getLoginData()?.type;
+    return (
+      _type === UserTypes.EXTERNAL_CLEARING_AGENCY ||
+      _type === UserTypes.EXTERNAL_CLEARING_AGENT ||
+      _type === UserTypes.EXTERNAL_EMPLOYEE
+    );
+  }
+
   isApplicantUser() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.authName === TeamNames.Applicant_Department,
