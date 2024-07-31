@@ -86,7 +86,7 @@
           ) {
             <mat-checkbox
               [matTooltip]="lang.map.is_exportable"
-              [checked]="false"
+              [checked]="element.isExportable"
               class="mt-1"
               (change)="changeIsExportableStatus$.next(element)">
             </mat-checkbox>

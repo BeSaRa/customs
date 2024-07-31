@@ -147,11 +147,17 @@ export class InvestigationService
     isExportable: boolean,
     isAdminReport: boolean = false,
   ) {
-    return this.http.put(this.getUrlSegment() + '/document/isExportable', {
-      vsId,
-      isExportable,
-      isAdminReport,
-    });
+    return this.http.put(
+      this.getUrlSegment() + '/document/isExportable',
+      null,
+      {
+        params: {
+          vsId,
+          isExportable,
+          isAdminReport,
+        },
+      },
+    );
   }
 
   getOffenceDetails(
