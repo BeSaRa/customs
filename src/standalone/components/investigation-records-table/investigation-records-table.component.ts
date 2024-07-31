@@ -145,6 +145,7 @@ export class InvestigationRecordsTableComponent
           return this.investigationService.updateIsExportable(
             element.documentVsId as string,
             !element.isExportable,
+            true,
           );
         }),
       )

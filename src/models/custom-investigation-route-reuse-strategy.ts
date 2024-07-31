@@ -10,7 +10,8 @@ export class CustomInvestigationRouteReuseStrategy extends BaseRouteReuseStrateg
   ): boolean {
     return (
       (to.queryParamMap.get('reload') && !from.queryParamMap.get('reload')) ||
-      to.queryParamMap.get('item') !== from.queryParamMap.get('item')
+      (!!from.queryParamMap.get('item') &&
+        to.queryParamMap.get('item') !== from.queryParamMap.get('item'))
     );
   }
 
