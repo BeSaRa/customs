@@ -56,14 +56,11 @@
               {{ lang.map.menu_type }}
             </span>
             <mat-slide-toggle
+              [disabled]="inViewMode()"
               class="cursor-not-allowed"
               [matTooltip]="getTranslatedMenuView()"
               color="primary"
-              (click)="
-                menuViewControl.value === 1
-                  ? menuViewControl.setValue(null)
-                  : menuViewControl.setValue(1)
-              "
+              (click)="changeMenuView()"
               [checked]="menuViewControl.value === 1">
             </mat-slide-toggle>
           </div>

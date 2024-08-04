@@ -192,4 +192,11 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
       !this.inCreateMode() && this.model.id && !this.model.parentMenuItemId
     );
   }
+
+  changeMenuView() {
+    if (this.inViewMode()) return;
+    this.menuViewControl.value === 1
+      ? this.menuViewControl.setValue(null)
+      : this.menuViewControl.setValue(1);
+  }
 }
