@@ -270,7 +270,9 @@ export class EmployeeService
 
   isPresidentAssisstant() {
     return (this.loginData?.teams || []).find(
-      (t: Team) => t.authName === TeamNames.President_Assistant,
+      (t: Team) =>
+        t.authName === TeamNames.President_Assistant ||
+        t.authName === TeamNames.CA_President_Assistant,
     );
   }
 
