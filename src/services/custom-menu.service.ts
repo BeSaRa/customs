@@ -11,6 +11,10 @@ import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
+import { map } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
+import { CustomMenuSearchCriteria } from '@contracts/custom-menu-search-criteria';
 
 @CastResponseContainer({
   $pagination: {
@@ -57,27 +61,25 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     extras: {
       modelId: number;
       parentMenu?: CustomMenu;
-      selectedPopupTab: string;
+      selectedPopupTab: number;
     },
     config?: Omit<MatDialogConfig<unknown>, 'data'>,
   ) {
     return this.getById(extras.modelId).pipe(
-      switchMap((item: CustomMenu) => {
-        return this.dialog
-          .open<
-            CustomMenuPopupComponent,
-            CrudDialogDataContract<CustomMenu>,
-            UserClick.CLOSE
-          >(this.getDialogComponent(), {
-            ...config,
-            disableClose: true,
-            data: {
-              model: item,
-              extras: { ...extras },
-              operation: OperationType.VIEW,
-            },
-          })
-          .afterClosed();
+      map((item: CustomMenu) => {
+        return this.dialog.open<
+          CustomMenuPopupComponent,
+          CrudDialogDataContract<CustomMenu>,
+          UserClick.CLOSE
+        >(this.getDialogComponent(), {
+          ...config,
+          disableClose: true,
+          data: {
+            model: item,
+            extras: { ...extras },
+            operation: OperationType.VIEW,
+          },
+        });
       }),
     );
   }
@@ -113,34 +115,32 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     });
   }
 
-  override openEditPopup(
+  openEditPopup(
     model: CustomMenu,
     extras: {
       modelId: number;
       parentMenu?: CustomMenu;
-      selectedPopupTab: string;
+      selectedPopupTab: number;
     },
     config?: Omit<MatDialogConfig<unknown>, 'data'>,
-  ): MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE> {
-    let dialogRef: MatDialogRef<CustomMenuPopupComponent, UserClick.CLOSE>;
-
-    this.getById(extras.modelId).subscribe((item: CustomMenu) => {
-      dialogRef = this.dialog.open<
-        CustomMenuPopupComponent,
-        CrudDialogDataContract<CustomMenu>,
-        UserClick.CLOSE
-      >(this.getDialogComponent(), {
-        ...config,
-        disableClose: true,
-        data: {
-          model: item,
-          extras: { ...extras },
-          operation: OperationType.UPDATE,
-        },
-      });
-    });
-
-    return dialogRef!;
+  ) {
+    return this.getById(extras.modelId).pipe(
+      map((item: CustomMenu) => {
+        return this.dialog.open<
+          CustomMenuPopupComponent,
+          CrudDialogDataContract<CustomMenu>,
+          UserClick.CLOSE
+        >(this.getDialogComponent(), {
+          ...config,
+          disableClose: true,
+          data: {
+            model: item,
+            extras: { ...extras },
+            operation: OperationType.UPDATE,
+          },
+        });
+      }),
+    );
   }
 
   @CastResponse(() => CustomMenu, {
@@ -161,5 +161,48 @@ export class CustomMenuService extends BaseCrudWithDialogService<
   })
   private _getById(modelId: number): Observable<CustomMenu> {
     return this.http.get<CustomMenu>(this.getUrlSegment() + '/' + modelId);
+  }
+
+  @CastResponse(undefined, {
+    fallback: '$pagination',
+  })
+  loadByCriteriaPaging(
+    criteria: Partial<CustomMenuSearchCriteria>,
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+  ): Observable<Pagination<CustomMenu[]>> {
+    criteria.offset = options.offset;
+    criteria.limit = options.limit;
+
+    return this.http.get<Pagination<CustomMenu[]>>(
+      this.getUrlSegment() + '/criteria',
+      {
+        params: new HttpParams({ fromObject: criteria }),
+      },
+    );
+  }
+
+  loadMain(options: {
+    offset: number;
+    limit: number;
+  }): Observable<Pagination<CustomMenu[]>> {
+    return this._loadMain(options);
+  }
+
+  @CastResponse(undefined, {
+    fallback: '$pagination',
+  })
+  private _loadMain(options: {
+    offset: number;
+    limit: number;
+  }): Observable<Pagination<CustomMenu[]>> {
+    return this.http.get<Pagination<CustomMenu[]>>(
+      this.getUrlSegment() + '/main',
+      {
+        params: { ...options },
+      },
+    );
   }
 }

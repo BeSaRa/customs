@@ -744,5 +744,8 @@ export interface LangKeysContract {
   menu_order: string;
   menu_view: string;
   link_settings: string;
-  children: string;
+  sub_custom_menus: string;
+  menu_url: string;
+  variable_name: string;
+  variable_value: string;
 }

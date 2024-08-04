@@ -93,6 +93,7 @@ import {
 import { ManagerDelegationManagementComponent } from '@standalone/components/manager-delegation-management/manager-delegation-management.component';
 import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
+import { CustomMenuUrlHandlerComponent } from '@modules/administration/components/custom-menu-url-handler/custom-menu-url-handler.component';
 
 @NgModule({
   declarations: [
@@ -201,6 +202,7 @@ import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-
     MatDatepicker,
     MatDatepickerInput,
     ManagerDelegationManagementComponent,
+    CustomMenuUrlHandlerComponent,
   ],
 })
 export class AdministrationModule {}

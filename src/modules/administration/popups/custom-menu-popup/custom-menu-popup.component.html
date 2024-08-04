@@ -10,7 +10,8 @@
   <mat-tab-group
     [mat-stretch-tabs]="false"
     mat-align-tabs="start"
-    dynamicHeight="true">
+    dynamicHeight="true"
+    [(selectedIndex)]="selectedPopupTab">
     <mat-tab [label]="lang.map.lbl_basic_info">
       <ng-container [formGroup]="form">
         <div class="grid grid-cols-1 gap-4 items-center p-4 pb-0">
@@ -52,13 +53,22 @@
         </div>
       </ng-container>
     </mat-tab>
-    <mat-tab [label]="lang.map.link_settings"> link settings</mat-tab>
-    <mat-tab [label]="lang.map.children">
-      <app-custom-menu
-        #customMenuChildren
-        (listUpdated)="handleDisableFields()"
-        [parent]="model"
-        [readonly]="readonly"></app-custom-menu>
+    <mat-tab [label]="lang.map.link_settings">
+      <app-custom-menu-url-handler
+        #urlHandlerComponent
+        [readonly]="readonly"
+        [record]="model"></app-custom-menu-url-handler>
+    </mat-tab>
+    <mat-tab [label]="lang.map.sub_custom_menus">
+      <div class="p-4">
+        <div class="p-4 h-96 overflow-y-auto">
+          <app-custom-menu
+            #customMenuChildren
+            (listUpdated)="handleDisableFields()"
+            [parent]="model"
+            [readonly]="readonly"></app-custom-menu>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
   <div class="dialog-footer justify-end">
