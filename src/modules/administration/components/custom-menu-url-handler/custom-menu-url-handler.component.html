@@ -40,13 +40,15 @@
               (cdkDropListDropped)="drop($event, row)">
               @for (itemValue of row.valueLookups; track itemValue) {
                 <div
-                  class="flex items-center justify-center transition-transform duration-300 ease-in-out animate-fade-in-slide-up">
-                  <span>{{ itemValue.getNames() }}</span>
-                  <app-icon-button
-                    [matTooltip]="lang.map.delete"
-                    (click)="removeVariableValue(row)"
-                    icon="DELETE">
-                  </app-icon-button>
+                  class="flex align-middle items-center justify-center transition-transform duration-300 ease-in-out animate-fade-in-slide-up">
+                  <span class="p-4">{{ itemValue.getNames() }}</span>
+                  @if (!readonly) {
+                    <app-icon-button
+                      [matTooltip]="lang.map.delete"
+                      (click)="removeVariableValue(row)"
+                      icon="DELETE">
+                    </app-icon-button>
+                  }
                 </div>
               }
             </div>
