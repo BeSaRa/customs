@@ -4,6 +4,7 @@ import { Lookup } from '@models/lookup';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
 import { AdminResult } from '@models/admin-result';
 import { ServiceContract } from '@contracts/service-contract';
+import { isValidValue } from '@utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,15 @@ export class LookupService
       });
     });
     return this.lookups;
+  }
+
+  findLookupByLookupKey(
+    lookupList: Lookup[] = [],
+    lookupKey?: number,
+  ): Lookup | null {
+    if (!isValidValue(lookupKey) || !lookupList || lookupList.length === 0) {
+      return null;
+    }
+    return lookupList.find(x => x.lookupKey === lookupKey) || null;
   }
 }

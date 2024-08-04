@@ -157,10 +157,6 @@ export abstract class AdminComponent<
     );
   }
 
-  /**
-   * listen to create event
-   * @protected
-   */
   protected _listenToCreate() {
     this.create$
       .pipe(takeUntil(this.destroy$))
