@@ -23,4 +23,5 @@ export abstract class AppDocument {
   declare arName: string;
   declare enName: string;
   declare isExportable: boolean;
+  declare isLegal: boolean;
 }

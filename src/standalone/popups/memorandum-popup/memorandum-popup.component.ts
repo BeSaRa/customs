@@ -334,6 +334,7 @@ export class MemorandumPopupComponent
             .createMemorandum(
               this.model().clone<Memorandum>({
                 note: this.textControl.value!,
+                isLegal: true,
                 offenderIds: this.offendersIds(),
                 decisionFullSerial:
                   this.investigationModel().getReferralNumber(),
