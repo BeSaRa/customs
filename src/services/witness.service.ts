@@ -8,6 +8,7 @@ import { Observable, Subject, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
 import { DialogService } from '@services/dialog.service';
+import { Offender } from '@models/offender';
 
 @CastResponseContainer({
   $pagination: {
@@ -41,10 +42,11 @@ export class WitnessService extends BaseCrudService<Witness> {
     return this.urlService.URLS.WITNESS;
   }
 
-  openCreateDialog(caseId: string) {
+  openCreateDialog(caseId: string, models: Offender[]) {
     return this.dialog.open(WitnessCriteriaPopupComponent, {
       data: {
         caseId,
+        models,
       },
     });
   }

@@ -321,7 +321,9 @@ export class PersonsListComponent
       )
       .pipe(
         exhaustMap(() =>
-          this.witnessService.openCreateDialog(this.model().id).afterClosed(),
+          this.witnessService
+            .openCreateDialog(this.model().id, this.models())
+            .afterClosed(),
         ),
       )
       .subscribe(() => {

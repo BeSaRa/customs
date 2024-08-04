@@ -185,7 +185,16 @@ export class WitnessCriteriaPopupComponent
         map(() => this.employeeFormGroup.getRawValue()),
         switchMap(value => this.mawaredEmployeeService.load(undefined, value)),
       )
-      .pipe(map(pagination => pagination.rs))
+      .pipe(
+        map(pagination => {
+          return pagination.rs.filter(
+            emp =>
+              !this.data.models.find(
+                (offender: Witness) => offender.witnessInfo.id === emp.id,
+              ),
+          );
+        }),
+      )
       .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
@@ -198,7 +207,16 @@ export class WitnessCriteriaPopupComponent
         map(() => this.clearingAgentFormGroup.getRawValue()),
         switchMap(value => this.clearingAgentService.load(undefined, value)),
       )
-      .pipe(map(pagination => pagination.rs))
+      .pipe(
+        map(pagination => {
+          return pagination.rs.filter(
+            emp =>
+              !this.data.models.find(
+                (offender: Witness) => offender.witnessInfo.id === emp.id,
+              ),
+          );
+        }),
+      )
       .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
