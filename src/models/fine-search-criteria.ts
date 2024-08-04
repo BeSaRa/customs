@@ -1,7 +1,6 @@
 import { Fine } from '@models/Fine';
 
 export class FineSearchCriteria extends Fine {
-  getqId!: string;
   commercialRegistryNumber!: string;
   establishmentRegistry!: string;
   penaltyFrom!: string;
@@ -16,7 +15,7 @@ export class FineSearchCriteria extends Fine {
       penaltyDecisionNumber,
       agencyId,
       agentId,
-      getqId,
+      qId,
       commercialRegistryNumber,
       establishmentRegistry,
       penaltyFrom,
@@ -32,7 +31,7 @@ export class FineSearchCriteria extends Fine {
         : penaltyDecisionNumber,
       agencyId: controls ? [agencyId] : agencyId,
       agentId: controls ? [agentId] : agentId,
-      getqId: controls ? [getqId] : getqId,
+      qId: controls ? [qId] : qId,
       commercialRegistryNumber: controls
         ? [commercialRegistryNumber]
         : commercialRegistryNumber,
