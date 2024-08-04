@@ -110,4 +110,10 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
   getChildrenIds(): number[] {
     return this.subMenuItems.map(x => x.id);
   }
+
+  static clone(data: Partial<CustomMenu>): CustomMenu {
+    const instance = new CustomMenu();
+    Object.assign(instance, data);
+    return instance;
+  }
 }

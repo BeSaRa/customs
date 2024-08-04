@@ -240,7 +240,7 @@ const routes: Routes = [
   {
     path: AppRoutes.CUSTOM_MENU,
     component: CustomMenuComponent,
-  }
+  },
 ];
 
 @NgModule({

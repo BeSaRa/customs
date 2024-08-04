@@ -1,18 +1,10 @@
-import {
-  Component,
-  EventEmitter,
-  inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { CustomMenu } from '@models/custom-menu';
 import { CustomMenuService } from '@services/custom-menu.service';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { AppIcons } from '@constants/app-icons';
-import { MenuItemService } from '@services/menu-item.service';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { TextFilterColumn } from '@models/text-filter-column';
@@ -20,8 +12,22 @@ import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
 import { StatusTypes } from '@enums/status-types';
-import { exhaustMap, Subject, takeUntil } from 'rxjs';
+import {
+  combineLatest,
+  delay,
+  exhaustMap,
+  finalize,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ignoreErrors } from '@utils/utils';
+import { Pagination } from '@models/pagination';
+import { CustomMenuSearchCriteria } from '@contracts/custom-menu-search-criteria';
 
 @Component({
   selector: 'app-custom-menu',
@@ -34,9 +40,6 @@ export class CustomMenuComponent extends AdminComponent<
   CustomMenuService
 > {
   service = inject(CustomMenuService);
-  usePagination = true;
-  useCompositeToLoad = false;
-  menuItemService = inject(MenuItemService);
   commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED,
   );
@@ -58,7 +61,7 @@ export class CustomMenuComponent extends AdminComponent<
   @Input() parent?: CustomMenu;
   @Input() readonly: boolean = false;
   @Output() listUpdated: EventEmitter<unknown> = new EventEmitter<unknown>();
-  selectedPopupTabName: string = 'basic';
+  selectedPopupTab: number = 0;
 
   actions: ContextMenuActionContract<CustomMenu>[] = [
     {
@@ -98,22 +101,22 @@ export class CustomMenuComponent extends AdminComponent<
     },
   ];
 
-  isParentDefaultItem(): boolean {
-    return !!this.parent && this.parent.isDefaultItem();
-  }
+  // isParentDefaultItem(): boolean {
+  //   return !!this.parent && this.parent.isDefaultItem();
+  // }
 
   view(model: CustomMenu): void {
-    this.selectedPopupTabName = 'basic';
+    this.selectedPopupTab = 0;
     this.view$.next(model);
   }
 
   edit(model: CustomMenu): void {
-    this.selectedPopupTabName = 'basic';
+    this.selectedPopupTab = 0;
     this.edit$.next(model);
   }
 
   showChildren(item: CustomMenu): void {
-    this.selectedPopupTabName = 'sub';
+    this.selectedPopupTab = 2;
     if (this.readonly) {
       this.view$.next(item);
     } else {
@@ -127,11 +130,11 @@ export class CustomMenuComponent extends AdminComponent<
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        map((model, index) => {
+        exhaustMap(model => {
           return this.service.openViewPopup(model, {
             modelId: model.id,
             parentMenu: this.parent,
-            selectedPopupTab: this.selectedPopupTabName,
+            selectedPopupTab: this.selectedPopupTab,
           });
         }),
       )
@@ -142,11 +145,11 @@ export class CustomMenuComponent extends AdminComponent<
     this.create$
       .pipe(takeUntil(this.destroy$))
       .pipe(
-        exhaustMap(() =>
-          this.service
+        exhaustMap(() => {
+          return this.service
             .openCreateDialog(new CustomMenu(), { parentMenu: this.parent })
-            .afterClosed(),
-        ),
+            .afterClosed();
+        }),
       )
       .subscribe(() => this.reload$.next());
   }
@@ -156,15 +159,56 @@ export class CustomMenuComponent extends AdminComponent<
       .pipe(takeUntil(this.destroy$))
       .pipe(
         exhaustMap(model => {
-          return this.service
-            .openEditDialog(model, {
-              modelId: model.id,
-              parentMenu: this.parent,
-              selectedPopupTab: this.selectedPopupTabName,
-            })
-            .afterClosed();
+          return this.service.openEditPopup(model, {
+            modelId: model.id,
+            parentMenu: this.parent,
+            selectedPopupTab: this.selectedPopupTab,
+          });
         }),
       )
       .subscribe(() => this.reload$.next());
+  }
+
+  override _load(): Observable<CustomMenu[]> {
+    return of(undefined)
+      .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
+      .pipe(
+        switchMap(() => {
+          return combineLatest([
+            this.reload$,
+            this.paginate$,
+            this.filter$,
+            this.sort$,
+          ])
+            .pipe(
+              switchMap(([, paginationOptions]) => {
+                this.selection.clear();
+                this.loadingSubject.next(true);
+                let loading: Observable<Pagination<CustomMenu[]>>;
+                if (this.parent && this.parent.id) {
+                  const criteria: Partial<CustomMenuSearchCriteria> = {
+                    'parent-menu-item-id': this.parent.id,
+                  };
+                  loading = this.service.loadByCriteriaPaging(
+                    criteria,
+                    paginationOptions,
+                  );
+                } else {
+                  loading = this.service.loadMain(paginationOptions);
+                }
+                return loading.pipe(
+                  finalize(() => this.loadingSubject.next(false)),
+                  ignoreErrors(),
+                );
+              }),
+              tap(() => {
+                // console.log(count);
+                // this.length = count;
+                // this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
+              }),
+            )
+            .pipe(map(res => res.rs));
+        }),
+      );
   }
 }

@@ -36,6 +36,7 @@ export class CustomMenuPopupComponent
   selectedTabIndex$: Subject<number> = new Subject<number>();
   defaultSelectedTab: string = 'basic';
   validateFieldsVisible: boolean = true;
+  selectedPopupTab = this.data.extras?.selectedPopupTab;
   @ViewChild('customMenuChildren') customMenuChildrenRef!: CustomMenuComponent;
 
   _buildForm(): void {
