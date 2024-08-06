@@ -8,6 +8,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import {
   MatCell,
@@ -34,6 +35,7 @@ import { Witness } from '@models/witness';
 import { CallRequestService } from '@services/call-request.service';
 import { ConfigService } from '@services/config.service';
 import { EmployeeService } from '@services/employee.service';
+import { InvestigationService } from '@services/investigation.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { ToastService } from '@services/toast.service';
@@ -63,6 +65,7 @@ import { filter, switchMap, takeUntil } from 'rxjs/operators';
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
+    MatCheckboxModule,
   ],
   templateUrl: './call-request-records-table.component.html',
   styleUrl: './call-request-records-table.component.scss',
@@ -85,6 +88,7 @@ export class CallRequestRecordsTableComponent
   reload$ = new Subject<void>();
   view$ = new Subject<CallRequest>();
   service = inject(CallRequestService);
+  investigationService = inject(InvestigationService);
   selectedChange = effect(() => {
     if (this.selected() === this.person()) {
       this.reload$.next();
@@ -173,6 +177,12 @@ export class CallRequestRecordsTableComponent
         callRequest.status = status.lookupKey;
         callRequest.statusInfo = AdminResult.createInstance(status);
       });
+  }
+
+  changeIsExportableStatus(item: CallRequest) {
+    this.investigationService
+      .updateIsExportable(item.documentVsId, !item.isExportable, false, true)
+      .subscribe(() => this.reload$.next());
   }
 
   private listenToReloadInput() {

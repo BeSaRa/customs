@@ -146,6 +146,7 @@ export class InvestigationService
     vsId: string,
     isExportable: boolean,
     isAdminReport: boolean = false,
+    isObligationToAttend: boolean = false,
   ) {
     return this.http.put(
       this.getUrlSegment() + '/document/isExportable',
@@ -155,6 +156,7 @@ export class InvestigationService
           vsId,
           isExportable,
           isAdminReport,
+          isObligationToAttend,
         },
       },
     );
