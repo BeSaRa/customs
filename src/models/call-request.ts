@@ -15,6 +15,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   $$__service_name__$$ = 'CallRequestService';
   caseId!: string;
   investigationFullSerial!: string;
+  documentVsId!: string;
   summonedId!: number;
   summonedType!: number;
   summonDate!: string | Date;
@@ -24,6 +25,7 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   note!: string;
   createdBy!: number;
   isApologize!: boolean;
+  isExportable!: boolean;
   apologyReason!: string;
   apologyReasonId!: number;
   apologyReasonDate!: string;

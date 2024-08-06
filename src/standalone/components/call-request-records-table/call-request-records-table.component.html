@@ -79,6 +79,17 @@
           <app-icon-button
             icon="VIEW"
             (click)="view$.next(assertType(element))" />
+          @if (
+            !!element.documentVsId &&
+            employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
+          ) {
+            <mat-checkbox
+              class="mt-1"
+              [matTooltip]="lang.map.is_exportable"
+              [checked]="element.isExportable"
+              (change)="changeIsExportableStatus(element)">
+            </mat-checkbox>
+          }
         </div>
       </td>
     </ng-container>
