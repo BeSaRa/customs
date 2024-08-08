@@ -125,7 +125,6 @@ export class MemorandumOpinionListComponent
           return this.investigationService.updateIsExportable(
             element.vsId,
             !element.isExportable,
-            false,
           );
         }),
       )
@@ -156,12 +155,7 @@ export class MemorandumOpinionListComponent
       .pipe(filter(() => !this.isManager()))
       .pipe(
         switchMap(() =>
-          this.investigationService.loadMemorandums(
-            this.model().id,
-            this.isManager()
-              ? MemorandumCategories.LEGAL_RESULT
-              : MemorandumCategories.LEGAL_MEMORANDUM,
-          ),
+          this.investigationService.loadMemorandums(this.model().id),
         ),
       )
       .subscribe(models => {
@@ -253,12 +247,9 @@ export class MemorandumOpinionListComponent
   }
 
   isMemoForCurrentTask(memo: Memorandum) {
-    return this.models
-      .filter(m => m.id === memo.id)[0]
-      ?.offenderIds?.every(oId =>
-        this.model()
-          .getConcernedOffendersIds()
-          .find(_oId => _oId === oId),
-      );
+    return (
+      memo.decisionFullSerial ===
+      this.model().taskDetails.activityProperties?.DecisionFullSerial.value
+    );
   }
 }

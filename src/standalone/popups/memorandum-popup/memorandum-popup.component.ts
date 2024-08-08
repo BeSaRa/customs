@@ -31,7 +31,6 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { OffenderInvStatus } from '@enums/offender-inv-status';
-import { OffenderTypes } from '@enums/offender-types';
 import { OperationType } from '@enums/operation-type';
 import { ProofTypes } from '@enums/proof-types';
 import { SystemPenalties } from '@enums/system-penalties';
@@ -187,7 +186,6 @@ export class MemorandumPopupComponent
 
   employee = inject(EmployeeService).getEmployee();
 
-  readonly offenderTypes = OffenderTypes;
   readonly OffenderInvStatus = OffenderInvStatus;
 
   displayedColumns: string[] = [
@@ -336,6 +334,8 @@ export class MemorandumPopupComponent
                 note: this.textControl.value!,
                 isLegal: true,
                 offenderIds: this.offendersIds(),
+                offenderType:
+                  this.investigationModel().getConcernedOffendersType(),
                 decisionFullSerial:
                   this.investigationModel().getReferralNumber(),
               }),
@@ -534,7 +534,7 @@ export class MemorandumPopupComponent
     );
   }
 
-  hasBrokers() {
-    return this.offenders().some(o => o.type === OffenderTypes.BROKER);
+  isBrokersTask() {
+    return this.investigationModel().isBrokerTask();
   }
 }
