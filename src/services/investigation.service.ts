@@ -1,3 +1,4 @@
+import { BaseCaseService } from '@abstracts/base-case.service';
 import {
   EventEmitter,
   inject,
@@ -5,7 +6,6 @@ import {
   InputSignal,
   WritableSignal,
 } from '@angular/core';
-import { BaseCaseService } from '@abstracts/base-case.service';
 import { Constructor } from '@app-types/constructors';
 import { ServiceContract } from '@contracts/service-contract';
 import { Investigation } from '@models/investigation';
@@ -16,29 +16,28 @@ import {
   InterceptParam,
 } from 'cast-response';
 
-import { MatDialogRef } from '@angular/material/dialog';
-import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
-import { ViolationService } from '@services/violation.service';
-import { LangKeysContract } from '@contracts/lang-keys-contract';
-import { SuspendEmployee } from '@models/suspend-employee';
-import { ReportType } from '@app-types/validation-return-type';
-import { map, Observable } from 'rxjs';
-import { BlobModel } from '@models/blob-model';
-import { DeclarationNumberDetailsResult } from '@models/declaration-number-details-result';
-import { b64toBlob } from '@utils/utils';
-import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
-import { Violation } from '@models/violation';
-import { Meeting } from '@models/meeting';
 import { HttpParams } from '@angular/common/http';
-import { CaseAttachment } from '@models/case-attachment';
-import { MeetingInterceptor } from '@model-interceptors/meeting-interceptor';
-import { MeetingMinutes } from '@models/meeting-minutes';
-import { DecisionMinutes } from '@models/decision-minutes';
-import { Memorandum } from '@models/memorandum';
-import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ReportType } from '@app-types/validation-return-type';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { OperationType } from '@enums/operation-type';
-import { MemorandumCategories } from '@enums/memorandum-categories';
 import { TaskResponses } from '@enums/task-responses';
+import { MeetingInterceptor } from '@model-interceptors/meeting-interceptor';
+import { BlobModel } from '@models/blob-model';
+import { CaseAttachment } from '@models/case-attachment';
+import { DecisionMinutes } from '@models/decision-minutes';
+import { DeclarationNumberDetailsResult } from '@models/declaration-number-details-result';
+import { Meeting } from '@models/meeting';
+import { MeetingMinutes } from '@models/meeting-minutes';
+import { Memorandum } from '@models/memorandum';
+import { OffenceNumberDetailsResult } from '@models/offence-number-details-result';
+import { SuspendEmployee } from '@models/suspend-employee';
+import { Violation } from '@models/violation';
+import { ViolationService } from '@services/violation.service';
+import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/memorandum-popup.component';
+import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
+import { b64toBlob } from '@utils/utils';
+import { map, Observable } from 'rxjs';
 
 @CastResponseContainer({
   $default: {
@@ -327,15 +326,12 @@ export class InvestigationService
   }
 
   @CastResponse(() => Memorandum)
-  loadMemorandums(
-    caseId: string,
-    category: MemorandumCategories = MemorandumCategories.LEGAL_MEMORANDUM,
-  ): Observable<Memorandum[]> {
+  loadMemorandums(caseId: string): Observable<Memorandum[]> {
     return this.http.get<Memorandum[]>(
       this.getUrlSegment() + '/document/inv-result',
       {
         params: new HttpParams({
-          fromObject: { caseId, category },
+          fromObject: { caseId },
         }),
       },
     );

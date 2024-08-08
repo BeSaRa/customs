@@ -313,6 +313,10 @@ export class Investigation extends BaseCase<
     return this.taskDetails?.activityProperties?.OffenderType?.value;
   }
 
+  isBrokerTask() {
+    return this.getConcernedOffendersType() === OffenderTypes.BROKER;
+  }
+
   getConcernedOffenders(): Offender[] {
     const offendersIds = this.getConcernedOffendersIds();
     return this.offenderInfo.filter(offender =>

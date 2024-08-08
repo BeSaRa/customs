@@ -14,4 +14,5 @@ export class Memorandum extends ClonerMixin(AppDocument) {
   declare note: string;
   declare isApproved: boolean;
   declare offenderIds: number[];
+  declare offenderType: number;
 }
