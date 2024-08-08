@@ -85,13 +85,13 @@
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>
     </tr>
   </table>
-  @if (!hidePagination) {
-    <mat-paginator
-      #paginator
-      [pageSizeOptions]="[10, 25, 50, 100, 150, 200]"
-      showFirstLastButtons="true"
-      [length]="dataSource.data.length || 0"></mat-paginator>
-  }
+  <!--  @if (!hidePagination) {-->
+  <!--    <mat-paginator-->
+  <!--      #paginator-->
+  <!--      [pageSizeOptions]="[10, 25, 50, 100, 150, 200]"-->
+  <!--      showFirstLastButtons="true"-->
+  <!--      [length]="dataSource.data.length || 0"></mat-paginator>-->
+  <!--  }-->
 </div>
 <div class="block sm:hidden">
   <ul class="font-medium text-gray-900">

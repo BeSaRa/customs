@@ -113,23 +113,25 @@ export class GrievanceListComponent
         }),
       )
       .subscribe((list: Pagination<Grievance[]>) => {
-        this.dataSource.data = !this.hidePagination
-          ? (list.rs as Grievance[])
-          : (list.rs.splice(0, 5) as Grievance[]);
+        this.dataSource.data = list.rs;
+        // = !this.hidePagination
+        // ? (list.rs as Grievance[])
+        // : (list.rs.splice(0, 5) as Grievance[]);
       });
-    if (!this.hidePagination) {
-      this.dataSource.paginator = this.paginator;
-      this.paginator._intl.getRangeLabel = (
-        page: number,
-        pageSize: number,
-        length: number,
-      ) => {
-        const start = page * pageSize + 1;
-        const end = Math.min((page + 1) * pageSize, length);
-        return `${start} - ${end} ${this.lang.map.of} ${length}`;
-      };
-    }
+    // if (!this.hidePagination) {
+    // this.dataSource.paginator = this.paginator;
+    //   this.paginator._intl.getRangeLabel = (
+    //     page: number,
+    //     pageSize: number,
+    //     length: number,
+    //   ) => {
+    //     const start = page * pageSize + 1;
+    //     const end = Math.min((page + 1) * pageSize, length);
+    //     return `${start} - ${end} ${this.lang.map.of} ${length}`;
+    //   };
+    // }
   }
+
   listenToComment() {
     this.comment$
       .pipe(
@@ -145,6 +147,7 @@ export class GrievanceListComponent
       )
       .subscribe();
   }
+
   listenToAttachment() {
     this.attachment$
       .pipe(
@@ -160,6 +163,7 @@ export class GrievanceListComponent
       )
       .subscribe();
   }
+
   showAll() {
     this.router.navigate(['/external/grievances']);
   }

@@ -52,6 +52,7 @@ export class GrievancePopupComponent implements OnInit {
   save$: Subject<void> = new Subject();
   model: PenaltyDecisionCriteria = this.data.model;
   grievanceModel!: Grievance;
+
   ngOnInit(): void {
     this._listenToSave();
   }
@@ -93,4 +94,10 @@ export class GrievancePopupComponent implements OnInit {
   protected readonly config = Config;
   protected readonly FolderType = FolderType;
   protected readonly OperationType = OperationType;
+
+  getAttachmentType() {
+    return this.employeeService.isExternal()
+      ? 'external_grievance'
+      : 'internal_grievance';
+  }
 }
