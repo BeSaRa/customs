@@ -1,14 +1,13 @@
+import { BaseCrudService } from '@abstracts/base-crud-service';
 import { inject, Injectable } from '@angular/core';
-import { CastResponseContainer } from 'cast-response';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { BaseCrudService } from '@abstracts/base-crud-service';
 import { Witness } from '@models/witness';
+import { DialogService } from '@services/dialog.service';
+import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
+import { CastResponseContainer } from 'cast-response';
 import { Observable, Subject, tap } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { WitnessCriteriaPopupComponent } from '@standalone/popups/witness-criteria-popup/witness-criteria-popup.component';
-import { DialogService } from '@services/dialog.service';
-import { Offender } from '@models/offender';
 
 @CastResponseContainer({
   $pagination: {
@@ -42,11 +41,11 @@ export class WitnessService extends BaseCrudService<Witness> {
     return this.urlService.URLS.WITNESS;
   }
 
-  openCreateDialog(caseId: string, models: Offender[]) {
+  openCreateDialog(caseId: string, witnessList: Witness[]) {
     return this.dialog.open(WitnessCriteriaPopupComponent, {
       data: {
         caseId,
-        models,
+        witnessList,
       },
     });
   }
