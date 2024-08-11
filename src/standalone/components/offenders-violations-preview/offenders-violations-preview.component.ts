@@ -226,6 +226,7 @@ export class OffendersViolationsPreviewComponent
           new FormControl<number>({
             value: i.proofStatus,
             disabled:
+              !this.penaltyMap()[i.offenderId] ||
               (decision &&
                 decision.penaltyInfo &&
                 decision.penaltyInfo.penaltyKey === SystemPenalties.TERMINATE &&
