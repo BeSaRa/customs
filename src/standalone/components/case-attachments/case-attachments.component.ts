@@ -154,8 +154,8 @@ export class CaseAttachmentsComponent
                           (doc.isLegal &&
                             (doc.isExportable ||
                               this.employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief())) ||
-                          (!doc.isLegal && doc.isApproved === null) ||
-                          doc.isApproved,
+                          (!doc.isLegal &&
+                            (doc.isApproved === null || doc.isApproved)),
                       );
                   }),
                 );
