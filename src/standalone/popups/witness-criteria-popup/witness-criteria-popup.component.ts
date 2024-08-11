@@ -1,7 +1,5 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { ControlDirective } from '@standalone/directives/control.directive';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import {
   FormControl,
   FormsModule,
@@ -9,17 +7,40 @@ import {
   UntypedFormBuilder,
   UntypedFormGroup,
 } from '@angular/forms';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { OffenderTypes } from '@enums/offender-types';
+import { PersonTypes } from '@enums/person-types';
+import { WitnessTypes } from '@enums/witness-types';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { AppTableDataSource } from '@models/app-table-data-source';
+import { ClearingAgent } from '@models/clearing-agent';
+import { ClearingAgentCriteria } from '@models/clearing-agent-criteria';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { MawaredEmployeeCriteria } from '@models/mawared-employee-criteria';
+import { Witness } from '@models/witness';
+import { ClearingAgentService } from '@services/clearing-agent.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { MawaredDepartmentService } from '@services/mawared-department.service';
+import { MawaredEmployeeService } from '@services/mawared-employee.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { LangService } from '@services/lang.service';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import { ignoreErrors } from '@utils/utils';
+import { CustomValidators } from '@validators/custom-validators';
 import {
   BehaviorSubject,
   filter,
@@ -29,26 +50,6 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { LookupService } from '@services/lookup.service';
-import { MawaredEmployeeCriteria } from '@models/mawared-employee-criteria';
-import { ClearingAgentCriteria } from '@models/clearing-agent-criteria';
-import { EmployeeService } from '@services/employee.service';
-import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { MawaredEmployeeService } from '@services/mawared-employee.service';
-import { ClearingAgentService } from '@services/clearing-agent.service';
-import { AppTableDataSource } from '@models/app-table-data-source';
-import { MawaredEmployee } from '@models/mawared-employee';
-import { ClearingAgent } from '@models/clearing-agent';
-import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
-import { MatTableModule } from '@angular/material/table';
-import { ToastService } from '@services/toast.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { ignoreErrors } from '@utils/utils';
-import { WitnessTypes } from '@enums/witness-types';
-import { Witness } from '@models/witness';
-import { PersonTypes } from '@enums/person-types';
-import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-witness-criteria-popup',
@@ -185,13 +186,14 @@ export class WitnessCriteriaPopupComponent
         map(() => this.employeeFormGroup.getRawValue()),
         switchMap(value => this.mawaredEmployeeService.load(undefined, value)),
       )
+      .pipe(map(pagination => pagination.rs))
       .pipe(
-        map(pagination => {
-          return pagination.rs.filter(
-            emp =>
-              !this.data.models.find(
-                (offender: Witness) => offender.witnessInfo.id === emp.id,
-              ),
+        map(employees => {
+          const _witness = (this.data.witnessList as Witness[]).filter(
+            w => w.witnessType === OffenderTypes.EMPLOYEE,
+          );
+          return employees.filter(
+            e => !_witness.find(w => w.witnessRefId === e.id),
           );
         }),
       )
@@ -207,13 +209,14 @@ export class WitnessCriteriaPopupComponent
         map(() => this.clearingAgentFormGroup.getRawValue()),
         switchMap(value => this.clearingAgentService.load(undefined, value)),
       )
+      .pipe(map(pagination => pagination.rs))
       .pipe(
-        map(pagination => {
-          return pagination.rs.filter(
-            emp =>
-              !this.data.models.find(
-                (offender: Witness) => offender.witnessInfo.id === emp.id,
-              ),
+        map(brokers => {
+          const _witness = (this.data.witnessList as Witness[]).filter(
+            w => w.witnessType === OffenderTypes.BROKER,
+          );
+          return brokers.filter(
+            e => !_witness.find(w => w.witnessRefId === e.id),
           );
         }),
       )
@@ -301,6 +304,9 @@ export class WitnessCriteriaPopupComponent
         }),
       )
       .subscribe(model => {
+        this.employees$.next(
+          this.employees$.value.filter(e => model.witnessRefId !== e.id),
+        );
         this.toast.success(
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );
@@ -335,6 +341,9 @@ export class WitnessCriteriaPopupComponent
         }),
       )
       .subscribe(model => {
+        this.clearingAgents$.next(
+          this.clearingAgents$.value.filter(c => model.witnessRefId !== c.id),
+        );
         this.toast.success(
           this.lang.map.msg_add_x_success.change({ x: model.getNames() }),
         );

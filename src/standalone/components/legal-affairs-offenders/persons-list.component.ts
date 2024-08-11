@@ -1,4 +1,12 @@
 import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { NgClass } from '@angular/common';
+import {
   Component,
   computed,
   inject,
@@ -6,7 +14,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Investigation } from '@models/investigation';
+import { MatIcon } from '@angular/material/icon';
 import {
   MatCell,
   MatCellDef,
@@ -20,40 +28,32 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { LangService } from '@services/lang.service';
-import { Offender } from '@models/offender';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { exhaustMap, Subject } from 'rxjs';
-import { OffenderTypes } from '@enums/offender-types';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltip } from '@angular/material/tooltip';
-import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
-import { MatIcon } from '@angular/material/icon';
 import { AppIcons } from '@constants/app-icons';
-import { OffenderViolation } from '@models/offender-violation';
-import { OffenderViolationsComponent } from '@standalone/components/offender-violations/offender-violations.component';
-import { InvestigationRecordsTableComponent } from '@standalone/components/investigation-records-table/investigation-records-table.component';
-import { NgClass } from '@angular/common';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { OffenderTypes } from '@enums/offender-types';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
-import { InvestigationReportService } from '@services/investigation-report.service';
-import { InvestigationReport } from '@models/investigation-report';
-import { EmployeeService } from '@services/employee.service';
 import { AdminResult } from '@models/admin-result';
-import { DialogService } from '@services/dialog.service';
-import { CallRequestService } from '@services/call-request.service';
 import { CallRequest } from '@models/call-request';
-import { CallRequestRecordsTableComponent } from '@standalone/components/call-request-records-table/call-request-records-table.component';
+import { Investigation } from '@models/investigation';
+import { InvestigationReport } from '@models/investigation-report';
+import { Lookup } from '@models/lookup';
+import { Offender } from '@models/offender';
+import { OffenderViolation } from '@models/offender-violation';
 import { Witness } from '@models/witness';
+import { CallRequestService } from '@services/call-request.service';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { InvestigationReportService } from '@services/investigation-report.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
 import { WitnessService } from '@services/witness.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { CallRequestRecordsTableComponent } from '@standalone/components/call-request-records-table/call-request-records-table.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InvestigationRecordsTableComponent } from '@standalone/components/investigation-records-table/investigation-records-table.component';
+import { OffenderViolationsComponent } from '@standalone/components/offender-violations/offender-violations.component';
+import { exhaustMap, Subject } from 'rxjs';
+import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-persons-list',
@@ -322,7 +322,7 @@ export class PersonsListComponent
       .pipe(
         exhaustMap(() =>
           this.witnessService
-            .openCreateDialog(this.model().id, this.models())
+            .openCreateDialog(this.model().id, this.witness())
             .afterClosed(),
         ),
       )
