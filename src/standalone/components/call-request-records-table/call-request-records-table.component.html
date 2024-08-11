@@ -81,6 +81,7 @@
             (click)="view$.next(assertType(element))" />
           @if (
             !!element.documentVsId &&
+            model().inMyInbox() &&
             employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief()
           ) {
             <mat-checkbox
