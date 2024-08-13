@@ -14,4 +14,7 @@ export class Lookup
   lookupStrKey?: string;
   parent?: number;
   status!: boolean;
+
+  // extra properties
+  temp: boolean = false; // used in menu item (drag/drop) to mark the temporary item
 }
