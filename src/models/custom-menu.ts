@@ -13,13 +13,14 @@ const { send, receive } = new CustomMenuInterceptor();
 @InterceptModel({ send, receive })
 export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
   $$__service_name__$$ = 'CustomMenuService';
+
   override status: number = StatusTypes.ACTIVE;
   menuOrder!: number;
   menuType!: number;
   menuView!: number;
   userType!: number;
   menuURL!: string;
-  urlParams: string = '';
+  urlParams!: string;
   parentMenuItemId?: number;
   statusDateModified!: string;
   menuTypeInfo!: AdminResult;
@@ -54,19 +55,13 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
       arName: controls
         ? [
             arName,
-            [
-              CustomValidators.required,
-              CustomValidators.pattern('AR_NUM_ONE_AR'),
-            ],
+            [CustomValidators.required, CustomValidators.pattern('AR_ONLY')],
           ]
         : arName,
       enName: controls
         ? [
             enName,
-            [
-              CustomValidators.required,
-              CustomValidators.pattern('ENG_NUM_ONE_ENG'),
-            ],
+            [CustomValidators.required, CustomValidators.pattern('ENG_ONLY')],
           ]
         : enName,
       menuOrder: controls
@@ -75,7 +70,7 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
       menuType: controls ? [menuType, [CustomValidators.required]] : menuType,
       menuView: controls ? [menuView, []] : menuView,
       userType: controls ? [userType, [CustomValidators.required]] : userType,
-      icon: controls ? [icon, [CustomValidators.required]] : icon,
+      // icon: controls ? [icon, []] : icon,
       parentMenuItemId: controls ? [parentMenuItemId, []] : parentMenuItemId,
       systemMenuKey: controls ? [systemMenuKey, []] : systemMenuKey,
     };

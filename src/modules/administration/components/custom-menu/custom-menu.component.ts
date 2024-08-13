@@ -15,6 +15,7 @@ import { StatusTypes } from '@enums/status-types';
 import {
   combineLatest,
   delay,
+  EMPTY,
   exhaustMap,
   finalize,
   Observable,
@@ -28,6 +29,7 @@ import { map } from 'rxjs/operators';
 import { ignoreErrors } from '@utils/utils';
 import { Pagination } from '@models/pagination';
 import { CustomMenuSearchCriteria } from '@contracts/custom-menu-search-criteria';
+import { OperationType } from '@enums/operation-type';
 
 @Component({
   selector: 'app-custom-menu',
@@ -43,6 +45,7 @@ export class CustomMenuComponent extends AdminComponent<
   commonStatus: Lookup[] = inject(LookupService).lookups.commonStatus.filter(
     lookupItem => lookupItem.lookupKey !== StatusTypes.DELETED,
   );
+  StatusTypes = StatusTypes;
 
   columnsWrapper: ColumnsWrapper<CustomMenu> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
@@ -59,9 +62,18 @@ export class CustomMenuComponent extends AdminComponent<
   ).attacheFilter(this.filter$);
 
   @Input() parent?: CustomMenu;
-  @Input() readonly: boolean = false;
+  @Input() operation!: OperationType;
+
   @Output() listUpdated: EventEmitter<unknown> = new EventEmitter<unknown>();
   selectedPopupTab: number = 0;
+
+  get readOnly() {
+    return this.operation === OperationType.VIEW;
+  }
+
+  get inCreateMode() {
+    return this.operation === OperationType.CREATE;
+  }
 
   actions: ContextMenuActionContract<CustomMenu>[] = [
     {
@@ -85,10 +97,10 @@ export class CustomMenuComponent extends AdminComponent<
     {
       name: 'sub_list',
       type: 'action',
-      label: 'sub_lists',
+      label: 'sub_custom_menus',
       icon: AppIcons.CHILD_ITEMS,
       callback: item => this.showChildren(item),
-      // show: () => !this.parent,
+      hide: () => !!this.parent,
     },
     {
       name: 'delete',
@@ -117,7 +129,7 @@ export class CustomMenuComponent extends AdminComponent<
 
   showChildren(item: CustomMenu): void {
     this.selectedPopupTab = 2;
-    if (this.readonly) {
+    if (this.readOnly) {
       this.view$.next(item);
     } else {
       this.edit$.next(item);
@@ -147,7 +159,7 @@ export class CustomMenuComponent extends AdminComponent<
       .pipe(
         exhaustMap(() => {
           return this.service
-            .openCreateDialog(new CustomMenu(), { parentMenu: this.parent })
+            .openCreatePopup(new CustomMenu(), { parentMenu: this.parent })
             .afterClosed();
         }),
       )
@@ -174,6 +186,9 @@ export class CustomMenuComponent extends AdminComponent<
       .pipe(delay(0)) // need it to make little delay till the userFilter input get bind.
       .pipe(
         switchMap(() => {
+          if (this.inCreateMode) {
+            return EMPTY;
+          }
           return combineLatest([
             this.reload$,
             this.paginate$,
@@ -200,11 +215,6 @@ export class CustomMenuComponent extends AdminComponent<
                   finalize(() => this.loadingSubject.next(false)),
                   ignoreErrors(),
                 );
-              }),
-              tap(() => {
-                // console.log(count);
-                // this.length = count;
-                // this.loadingSubject.next(false); //TODO move to finalize in loadComposite and load
               }),
             )
             .pipe(map(res => res.rs));

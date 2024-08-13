@@ -35,6 +35,10 @@
             formControlName="menuOrder"
             type="number"
             [label]="lang.map.menu_order"></app-input>
+          <app-input
+            formControlName="parentMenuItemId"
+            type="number"
+            [label]="lang.map.parent_menu_item"></app-input>
           <app-select-input
             [label]="lang.map.menu_type"
             bindLabel="getNames"
@@ -47,9 +51,22 @@
             formControlName="userType"
             bindValue="lookupKey"
             [options]="userTypes" />
-          <app-input
-            formControlName="menuView"
-            [label]="lang.map.menu_view"></app-input>
+          <div class="flex content-start">
+            <span class="px-2">
+              {{ lang.map.menu_type }}
+            </span>
+            <mat-slide-toggle
+              class="cursor-not-allowed"
+              [matTooltip]="getTranslatedMenuView()"
+              color="primary"
+              (click)="
+                menuViewControl.value === 1
+                  ? menuViewControl.setValue(null)
+                  : menuViewControl.setValue(1)
+              "
+              [checked]="menuViewControl.value === 1">
+            </mat-slide-toggle>
+          </div>
         </div>
       </ng-container>
     </mat-tab>
@@ -59,17 +76,19 @@
         [readonly]="readonly"
         [record]="model"></app-custom-menu-url-handler>
     </mat-tab>
-    <mat-tab [label]="lang.map.sub_custom_menus">
-      <div class="p-4">
-        <div class="p-4 h-96 overflow-y-auto">
-          <app-custom-menu
-            #customMenuChildren
-            (listUpdated)="handleDisableFields()"
-            [parent]="model"
-            [readonly]="readonly"></app-custom-menu>
+    @if (showCustomMenu()) {
+      <mat-tab [label]="lang.map.sub_custom_menus">
+        <div class="p-4">
+          <div class="p-4 h-96 overflow-y-auto">
+            <app-custom-menu
+              #customMenuChildren
+              (listUpdated)="handleDisableFields()"
+              [parent]="model"
+              [operation]="operation"></app-custom-menu>
+          </div>
         </div>
-      </div>
-    </mat-tab>
+      </mat-tab>
+    }
   </mat-tab-group>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {

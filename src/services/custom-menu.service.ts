@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -15,6 +15,7 @@ import { map } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { CustomMenuSearchCriteria } from '@contracts/custom-menu-search-criteria';
+import { isValidValue } from '@utils/utils';
 
 @CastResponseContainer({
   $pagination: {
@@ -84,7 +85,7 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     );
   }
 
-  override openCreateDialog(
+  openCreatePopup(
     model: CustomMenu,
     extras: { parentMenu?: CustomMenu },
     config?: Omit<MatDialogConfig<unknown>, 'data'> | undefined,
@@ -163,10 +164,21 @@ export class CustomMenuService extends BaseCrudWithDialogService<
     return this.http.get<CustomMenu>(this.getUrlSegment() + '/' + modelId);
   }
 
+  loadByCriteriaPaging(
+    criteria: Partial<CustomMenuSearchCriteria>,
+    options: FetchOptionsContract = {
+      offset: 0,
+      limit: 50,
+    },
+  ): Observable<Pagination<CustomMenu[]>> {
+    return this._loadByCriteriaPaging(criteria, options);
+  }
+
   @CastResponse(undefined, {
     fallback: '$pagination',
+    unwrap: '',
   })
-  loadByCriteriaPaging(
+  private _loadByCriteriaPaging(
     criteria: Partial<CustomMenuSearchCriteria>,
     options: FetchOptionsContract = {
       offset: 0,
@@ -193,6 +205,7 @@ export class CustomMenuService extends BaseCrudWithDialogService<
 
   @CastResponse(undefined, {
     fallback: '$pagination',
+    unwrap: '',
   })
   private _loadMain(options: {
     offset: number;
@@ -204,5 +217,12 @@ export class CustomMenuService extends BaseCrudWithDialogService<
         params: { ...options },
       },
     );
+  }
+
+  findVariablesInUrl(url: string): string[] {
+    if (!isValidValue(url)) {
+      return [];
+    }
+    return url.match(/{(\w+)}/g) ?? [];
   }
 }
