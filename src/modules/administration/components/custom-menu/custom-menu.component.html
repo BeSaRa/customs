@@ -7,10 +7,12 @@
     [matTooltip]="lang.map.reload"
     (click)="reload$.next()"
     icon="RELOAD"></app-icon-button>
-  <app-icon-button
-    [matTooltip]="lang.map.add"
-    (click)="create$.next()"
-    icon="PLUS"></app-icon-button>
+  @if (!readOnly) {
+    <app-icon-button
+      [matTooltip]="lang.map.add"
+      (click)="create$.next()"
+      icon="PLUS"></app-icon-button>
+  }
 </div>
 <div class="shadow relative">
   <table
@@ -81,11 +83,17 @@
       </th>
       <td mat-cell *matCellDef="let element">
         <mat-slide-toggle
+          [disabled]="(loading$ | async)!"
           class="cursor-not-allowed"
-          [matTooltip]="lang.map.change_status"
+          [matTooltip]="
+            element.status === StatusTypes.ACTIVE
+              ? lang.map.deactivate
+              : lang.map.activate
+          "
           color="primary"
-          [checked]="element.isActive()"
-          disabled="true"></mat-slide-toggle>
+          (click)="status$.next(element)"
+          [checked]="element.isActive()">
+        </mat-slide-toggle>
       </td>
     </ng-container>
 
@@ -99,21 +107,25 @@
             [matTooltip]="lang.map.view"
             (click)="view(element)"
             icon="VIEW"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.edit"
-            (click)="edit(element)"
-            icon="EDIT"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.delete"
-            (click)="delete$.next(element)"
-            icon="DELETE"></app-icon-button>
-          <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.sub_custom_menus"
-            (click)="showChildren(element)"
-            icon="CHILD_ITEMS"></app-icon-button>
+          @if (!readOnly) {
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.edit"
+              (click)="edit(element)"
+              icon="EDIT"></app-icon-button>
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.delete"
+              (click)="delete$.next(element)"
+              icon="DELETE"></app-icon-button>
+          }
+          @if (!this.parent) {
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.sub_custom_menus"
+              (click)="showChildren(element)"
+              icon="CHILD_ITEMS"></app-icon-button>
+          }
         </div>
       </td>
     </ng-container>

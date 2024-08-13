@@ -748,4 +748,11 @@ export interface LangKeysContract {
   menu_url: string;
   variable_name: string;
   variable_value: string;
+  available_values: string;
+  parent_menu_item: string;
+  deactivate: string;
+  activate: string;
+  check_url_variables: string;
+  no_variable_found: string;
+  duplicate_url_variables: string;
 }

@@ -12,16 +12,15 @@ import { MenuItemContract } from '@contracts/menu-item-contract';
 import { CustomValidators } from '@validators/custom-validators';
 import { MenuItemService } from '@services/menu-item.service';
 import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
+import { CustomMenuUrlHandlerComponent } from '@modules/administration/components/custom-menu-url-handler/custom-menu-url-handler.component';
+import { StatusTypes } from '@enums/status-types';
 
 @Component({
   selector: 'app-custom-menu-popup',
   templateUrl: './custom-menu-popup.component.html',
   styleUrls: ['./custom-menu-popup.component.scss'],
 })
-export class CustomMenuPopupComponent
-  extends AdminDialogComponent<CustomMenu>
-  implements AfterViewInit
-{
+export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<CustomMenu> = inject(MAT_DIALOG_DATA);
   saveVisible = true;
@@ -29,7 +28,7 @@ export class CustomMenuPopupComponent
   menuItemService = inject(MenuItemService);
   menuTypes: Lookup[] = this.lookupService.lookups.menuType;
   userTypes: Lookup[] = this.lookupService.lookups.userType;
-  menuView: Lookup[] = this.lookupService.lookups.menuView;
+  menuViews: Lookup[] = this.lookupService.lookups.menuView;
   parentMenu?: CustomMenu;
   defaultParent?: MenuItemContract;
   defaultParents: MenuItemContract[] = [];
@@ -38,21 +37,46 @@ export class CustomMenuPopupComponent
   validateFieldsVisible: boolean = true;
   selectedPopupTab = this.data.extras?.selectedPopupTab;
   @ViewChild('customMenuChildren') customMenuChildrenRef!: CustomMenuComponent;
+  @ViewChild('urlHandlerComponent')
+  urlHandlerComponentRef!: CustomMenuUrlHandlerComponent;
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    if (this.isDefaultParent()) {
+      this._addDefaultParents();
+      this._updateDefaultParentValidity();
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
-    return this.form.valid;
+    this.urlHandlerComponentRef.form.markAllAsTouched();
+    if (!this.form.valid) {
+      this.selectedPopupTab = 0;
+    } else if (
+      !this.urlHandlerComponentRef.isValidUrl() ||
+      !this.urlHandlerComponentRef.form.valid
+    ) {
+      this.selectedPopupTab = 1;
+    }
+    return this.form.valid && this.urlHandlerComponentRef.isValidUrl();
   }
 
   protected _prepareModel(): CustomMenu | Observable<CustomMenu> {
-    return new CustomMenu().clone<CustomMenu>({
+    const value = new CustomMenu().clone({
       ...this.model,
-      ...this.form.value,
-    });
+      ...this.form.getRawValue(),
+    }) as CustomMenu;
+    value.menuURL = this.urlHandlerComponentRef
+      ? this.urlHandlerComponentRef.menuUrlControl.value
+      : '';
+    value.urlParamsParsed = this.urlHandlerComponentRef
+      ? this.urlHandlerComponentRef.variableList
+      : [];
+    // if (this.defaultParent) {
+    //   value.parentMenuItemId = -1;
+    // }
+    return value;
   }
 
   protected _afterSave(model: CustomMenu): void {
@@ -61,6 +85,7 @@ export class CustomMenuPopupComponent
     this.toast.success(
       this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
+    this.customMenuChildrenRef && this.customMenuChildrenRef.reload$.next();
     this.dialogRef.close(this.model);
   }
 
@@ -69,21 +94,8 @@ export class CustomMenuPopupComponent
     this.systemMenuKeyControl.updateValueAndValidity();
   }
 
-  ngAfterViewInit(): void {
-    this._setDefaultSelectedTab();
-    this._afterViewInit();
-  }
-
-  private _setDefaultSelectedTab(): void {
-    // setTimeout(() => {
-    //   if (this.tabsData.hasOwnProperty(this.defaultSelectedTab) && this.tabsData[this.defaultSelectedTab]) {
-    //     const index = this.defaultSelectedTab === 'basic' ? 0 : 2;
-    //     this.selectedTabIndex$.next(index);
-    //   }
-    // });
-  }
-
-  private _afterViewInit(): void {
+  protected override _afterBuildForm() {
+    super._afterBuildForm();
     this.handleDisableFields();
 
     if (this.readonly || this.isMainMenu()) {
@@ -117,8 +129,7 @@ export class CustomMenuPopupComponent
     if (!this.customMenuChildrenRef) {
       return false;
     }
-    return true;
-    // return this.customMenuChildrenRef.models.length > 0;
+    return this.customMenuChildrenRef.dataSource.data.length > 0;
   }
 
   get readonly(): boolean {
@@ -172,5 +183,13 @@ export class CustomMenuPopupComponent
 
   isDefaultParent() {
     return this.parentMenu && this.parentMenu.isDefaultItem();
+  }
+
+  protected readonly StatusTypes = StatusTypes;
+
+  showCustomMenu() {
+    return (
+      !this.inCreateMode() && this.model.id && !this.model.parentMenuItemId
+    );
   }
 }
