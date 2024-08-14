@@ -68,11 +68,12 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
         }
       });
       this.listenToMawaredDepChanges();
-      this.listenToOrganizationUnitTypeChanges();
     } else {
       this.form.get('code')?.disable();
       this.form.get('parent')?.disable();
     }
+    this.setOrganizationUnitTypeValidator();
+    this.listenToOrganizationUnitTypeChanges();
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -201,22 +202,28 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   }
 
   listenToOrganizationUnitTypeChanges() {
-    this.organizationUnitTypeCtrl?.valueChanges.subscribe(val => {
-      if (val === OrganizationUnitType.ASSISTANT_DEPARTMENT) {
-        this.assistantOuIdCtrl?.setValue(null);
-        this.assistantOuIdCtrl?.clearValidators();
-      } else {
-        this.assistantOuIdCtrl?.setValidators(CustomValidators.required);
-      }
-      this.assistantOuIdCtrl?.updateValueAndValidity();
+    this.organizationUnitTypeCtrl?.valueChanges.subscribe(() => {
+      this.setOrganizationUnitTypeValidator();
     });
+  }
+
+  setOrganizationUnitTypeValidator() {
+    if (
+      this.organizationUnitTypeCtrl?.value ===
+      OrganizationUnitType.ASSISTANT_DEPARTMENT
+    ) {
+      this.assistantOuIdCtrl?.setValue(null);
+      this.assistantOuIdCtrl?.clearValidators();
+    } else {
+      this.assistantOuIdCtrl?.setValidators(CustomValidators.required);
+    }
+    this.assistantOuIdCtrl?.updateValueAndValidity();
   }
 
   autoFillFields() {
     const department = this.mawaredDepartments.find(
       department => department.departmentId === this.mawaredDepIdCtrl?.value,
     );
-
     if (department) this.setDepartment(department);
   }
 
