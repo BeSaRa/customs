@@ -25,13 +25,16 @@ if (!vType) {
 
 const configPath = "src/constants/config.ts";
 const pkgPath = "package.json";
+const pkgLockPath = "package.json";
 const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+const pkgLock = JSON.parse(readFileSync(pkgLockPath, "utf8"));
 let configContent = readFileSync(configPath, "utf-8");
 const [major, minor, patch] = pkg.version.split(".");
 const newVersion = correctVersion(major, minor, patch, vType);
 const appVersion = "v" + newVersion;
 
 pkg.version = newVersion;
+pkgLock.version = newVersion;
 
 configContent = configContent.replace(
   /[^_]VERSION:.*,$/gm,
@@ -39,6 +42,7 @@ configContent = configContent.replace(
 );
 
 writeFileSync(pkgPath, JSON.stringify(pkg, null, "  "), "utf-8");
+writeFileSync(pkgLock, JSON.stringify(pkgLock, null, "  "), "utf-8");
 writeFileSync(configPath, configContent, "utf-8");
 
 exec("git add .", function (error) {
