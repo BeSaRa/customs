@@ -16,8 +16,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AppIcons } from '@constants/app-icons';
 import { OrganizationUnitType } from '@enums/organization-unit-type';
 import { MawaredDepartmentService } from '@services/mawared-department.service';
-import { DialogService } from '@services/dialog.service';
 import { MawaredDepartment } from '@models/mawared-department';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-organization-unit-popup',
@@ -40,7 +40,6 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   internalUserService = inject(InternalUserService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly mawaredDepartmentService = inject(MawaredDepartmentService);
-  private readonly dialog = inject(DialogService);
   internalUsers!: InternalUser[];
   organizationUnitService = inject(OrganizationUnitService);
   organizationUnits!: OrganizationUnit[];
@@ -69,6 +68,7 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
         }
       });
       this.listenToMawaredDepChanges();
+      this.listenToOrganizationUnitTypeChanges();
     } else {
       this.form.get('code')?.disable();
       this.form.get('parent')?.disable();
@@ -177,6 +177,14 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     return this.form.get('mawaredDepId');
   }
 
+  get assistantOuIdCtrl() {
+    return this.form.get('assistantOuId');
+  }
+
+  get organizationUnitTypeCtrl() {
+    return this.form.get('type');
+  }
+
   listenToMawaredDepChanges() {
     this.mawaredDepIdCtrl?.valueChanges.subscribe(() => {
       Object.keys(this.form.controls).forEach(control => {
@@ -189,6 +197,18 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
         }
       });
       this.autoFillFields();
+    });
+  }
+
+  listenToOrganizationUnitTypeChanges() {
+    this.organizationUnitTypeCtrl?.valueChanges.subscribe(val => {
+      if (val === OrganizationUnitType.ASSISTANT_DEPARTMENT) {
+        this.assistantOuIdCtrl?.setValue(null);
+        this.assistantOuIdCtrl?.clearValidators();
+      } else {
+        this.assistantOuIdCtrl?.setValidators(CustomValidators.required);
+      }
+      this.assistantOuIdCtrl?.updateValueAndValidity();
     });
   }
 
