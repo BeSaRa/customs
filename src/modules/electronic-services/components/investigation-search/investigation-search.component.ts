@@ -8,28 +8,24 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { INavigatedItem } from '@contracts/inavigated-item';
+import { LangKeysContract } from '@contracts/lang-keys-contract';
+import { OffenderTypeWithNone } from '@enums/offender-type-with-none';
 import { OpenFrom } from '@enums/open-from';
-import { ClearingAgent } from '@models/clearing-agent';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';
 import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
-import { MawaredEmployee } from '@models/mawared-employee';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { OrganizationUnit } from '@models/organization-unit';
-import { Penalty } from '@models/penalty';
-import { ViolationType } from '@models/violation-type';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
-import { ClearingAgentService } from '@services/clearing-agent.service';
+import { ConfigService } from '@services/config.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
 import { EncryptionService } from '@services/encryption.service';
 import { InvestigationSearchService } from '@services/investigation-search.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
-import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { OrganizationUnitService } from '@services/organization-unit.service';
-import { PenaltyService } from '@services/penalty.service';
-import { ViolationTypeService } from '@services/violation-type.service';
+import { range } from '@utils/utils';
 import {
   BehaviorSubject,
   combineLatest,
@@ -43,12 +39,34 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { Config } from '@constants/config';
+import { OffenderViolation } from '@models/offender-violation';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
+import { ClassificationTypes } from '@enums/violation-classification';
+import { AdminResult } from '@models/admin-result';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-investigation-search',
   templateUrl: './investigation-search.component.html',
   styleUrls: ['./investigation-search.component.scss'],
   providers: [DatePipe],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+      ),
+    ]),
+  ],
 })
 export class InvestigationSearchComponent implements OnInit {
   investigationSearchService = inject(InvestigationSearchService);
@@ -60,21 +78,21 @@ export class InvestigationSearchComponent implements OnInit {
   lang = inject(LangService);
   fb = inject(UntypedFormBuilder);
   datePipe = inject(DatePipe);
-
-  securityLevels = this.lookupService.lookups.securityLevelsWithAll;
-  departments!: OrganizationUnit[];
-  offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
-  caseStatus = this.lookupService.lookups.commonCaseStatus;
-  violations!: ViolationType[];
-  penalties!: Penalty[];
-  mawaredEmployees!: MawaredEmployee[];
-  clearingAgents!: ClearingAgent[];
-  penaltyService = inject(PenaltyService);
-  violationTypeService = inject(ViolationTypeService);
-  mawaredEmployeeService = inject(MawaredEmployeeService);
-  clearingAgentService = inject(ClearingAgentService);
   departmentService = inject(OrganizationUnitService);
   employeeService = inject(EmployeeService);
+  config = inject(ConfigService);
+
+  selectedOffender!: OffenderViolation | null;
+  Config = Config;
+  departments!: OrganizationUnit[];
+  violationClassifications = this.lookupService.lookups.violationClassification;
+  offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
+  statusList = this.lookupService.lookups.caseGeneralStatus;
+  OffenderTypesEnum = OffenderTypes;
+  years: string[] = range(
+    new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
+    new Date().getFullYear(),
+  ).map(i => i.toString());
   form!: UntypedFormGroup;
   search$: Subject<void> = new Subject();
   displayedList = new MatTableDataSource<Investigation>();
@@ -85,7 +103,7 @@ export class InvestigationSearchComponent implements OnInit {
     limit: 50,
   });
   length = 50;
-
+  offenderViolationInfo: Map<string, OffenderViolation[]> = new Map();
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -96,10 +114,6 @@ export class InvestigationSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDepartments();
-    this.loadPenalties();
-    this.loadViolationTypes();
-    this.loadMawaredEmployees();
-    this.loadClearingAgents();
     this.form = this.fb.group(
       new InvestigationSearchCriteria().buildForm(true),
     );
@@ -126,19 +140,76 @@ export class InvestigationSearchComponent implements OnInit {
     },
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
-    new NoneFilterColumn('draftFullSerial'),
-    new NoneFilterColumn('investigationFullSerial'),
+    new NoneFilterColumn('fullSerial'),
     new NoneFilterColumn('caseStatus'),
-    new NoneFilterColumn('securityLevel'),
-    new NoneFilterColumn('department'),
+    new NoneFilterColumn('dateCreated'),
+    new NoneFilterColumn('violationClassifications'),
     new NoneFilterColumn('actions'),
   );
-
+  offenderDetailsDisplayedColumns = [
+    'offenderType',
+    'offenderName',
+    'offenderNumber',
+    'department/agency',
+  ];
+  showInvestigationViolationClassification(
+    OffendersViolations: OffenderViolation[],
+  ) {
+    const map = new Map();
+    OffendersViolations.forEach(offenderViolation => {
+      if (!map.has(offenderViolation.violationInfo.classificationInfo.id)) {
+        map.set(
+          offenderViolation.violationInfo.classificationInfo.id,
+          AdminResult.createInstance({
+            ...offenderViolation.violationInfo.classificationInfo,
+          }),
+        );
+      }
+    });
+    return map.values();
+  }
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
-
+  getOffenderNumberLabel(): keyof LangKeysContract {
+    if (this.isEmployee) {
+      return 'employee_number' as keyof LangKeysContract;
+    } else if (this.isClearingAgent) {
+      return 'clearing_agent_code' as keyof LangKeysContract;
+    }
+    return 'employee_clearing_agent_number' as keyof LangKeysContract;
+  }
+  get isEmployee() {
+    return (
+      this.form.getRawValue().offenderType === OffenderTypeWithNone.EMPLOYEE
+    );
+  }
+  get isClearingAgent() {
+    return this.form.getRawValue().offenderType === OffenderTypeWithNone.BROKER;
+  }
+  get isCustomsViolationClassification() {
+    return (
+      this.form.getRawValue().violationClassificationId ===
+      ClassificationTypes.custom
+    );
+  }
+  get isCriminalViolationClassification() {
+    return (
+      this.form.getRawValue().violationClassificationId ===
+      ClassificationTypes.criminal
+    );
+  }
+  filteredElements(Elements: OffenderViolation[]) {
+    const map = new Map();
+    return Elements.filter(elem => {
+      if (map.has(elem.offenderId)) {
+        return false;
+      }
+      map.set(elem.offenderId, true);
+      return true;
+    });
+  }
   private _prepareModel() {
     if (
       this.form.get('createdFrom')?.value &&
@@ -168,6 +239,17 @@ export class InvestigationSearchComponent implements OnInit {
     this.form.reset();
   }
 
+  rowClicked($event: MouseEvent, element: OffenderViolation) {
+    const requiredClassToPreventExpended = 'mat-mdc-button-touch-target';
+    if (
+      !($event.target as unknown as HTMLElement).classList.contains(
+        requiredClassToPreventExpended,
+      )
+    ) {
+      this.selectedOffender =
+        this.selectedOffender === element ? null : element;
+    }
+  }
   private listenToSearch() {
     this.search$
       .pipe(delay(0))
@@ -199,6 +281,17 @@ export class InvestigationSearchComponent implements OnInit {
             }),
             map(response => response.rs),
           );
+        }),
+      )
+      .pipe(
+        tap(data => {
+          data.forEach(element => {
+            this.offenderViolationInfo.set(element.caseId, [
+              ...this.showInvestigationViolationClassification(
+                element.offenderViolationInfo,
+              ),
+            ]);
+          });
         }),
       )
       .subscribe((data: Investigation[]) => {
@@ -240,32 +333,6 @@ export class InvestigationSearchComponent implements OnInit {
         this.form.get('departmentId')?.setValue(userOU.id);
       }
     });
-  }
-
-  loadPenalties() {
-    this.penaltyService
-      .loadAsLookups()
-      .subscribe(penalties => (this.penalties = penalties));
-  }
-
-  loadViolationTypes() {
-    this.violationTypeService
-      .loadAsLookups()
-      .subscribe(violations => (this.violations = violations));
-  }
-
-  loadMawaredEmployees() {
-    this.mawaredEmployeeService
-      .loadAsLookups()
-      .subscribe(
-        mawaredEmployees => (this.mawaredEmployees = mawaredEmployees),
-      );
-  }
-
-  loadClearingAgents() {
-    this.clearingAgentService
-      .loadAsLookups()
-      .subscribe(clearingAgents => (this.clearingAgents = clearingAgents));
   }
 
   paginate($event: PageEvent) {

@@ -23,9 +23,17 @@
     </mat-tab-group>
   </mat-card>
   <ng-template #search_for_investigation>
-    <div class="p-4 overflow-auto" style="height: 100%">
+    <div class="p-4 overflow-auto" style="max-height: calc(100% - 60px)">
       <form [formGroup]="form">
         <div class="p-4 grid gap-4 grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+          <h4
+            class="text-primary font-semibold col-span-1 md:col-span-2 lg:col-span-4">
+            {{ lang.map.basic_info_selectors }}
+          </h4>
+          <app-input
+            formControlName="investigationFileNumber"
+            [label]="lang.map.investigation_file_number" />
+
           <div class="mb-3">
             <label class="font-medium">{{ lang.map.created_date }} </label>
             <div
@@ -44,23 +52,11 @@
             </div>
             <mat-date-range-picker hidden #rangePicker></mat-date-range-picker>
           </div>
-          <app-input
-            formControlName="draftNumber"
-            [label]="lang.map.report_draft_number" />
-          <app-input
-            formControlName="investigationFileNumber"
-            [label]="lang.map.investigation_file_number" />
 
           <app-select-input
-            formControlName="securityLevel"
-            [label]="lang.map.level_of_secrecy"
-            bindValue="lookupKey"
-            bindLabel="getNames"
-            [options]="securityLevels" />
-
-          <app-input
-            formControlName="decisionNumber"
-            [label]="lang.map.decision_number" />
+            formControlName="year"
+            [label]="lang.map.report_year"
+            [options]="years" />
 
           <app-select-input
             formControlName="departmentId"
@@ -70,70 +66,69 @@
             [options]="getDepartments()" />
 
           <app-select-input
+            formControlName="generalStatus"
+            [label]="lang.map.general_status"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="statusList" />
+          <app-select-input
+            formControlName="executionStatus"
+            [label]="lang.map.execution_status"
+            bindValue="id"
+            bindLabel="getNames"
+            [options]="statusList" />
+          <app-select-input
+            formControlName="violationClassificationId"
+            [label]="lang.map.violation_classification"
+            bindValue="lookupKey"
+            bindLabel="getNames"
+            [options]="violationClassifications" />
+          @if (isCustomsViolationClassification) {
+            <app-input
+              formControlName="customsDeclarationNumber"
+              [label]="lang.map.customs_declaration_number" />
+            <app-input
+              formControlName="controlReportNumber"
+              [label]="lang.map.control_report_number" />
+          }
+          @if (isCriminalViolationClassification) {
+            <app-input
+              formControlName="reportNumber"
+              [label]="lang.map.criminal_report_number" />
+          }
+          <h4
+            class="text-primary font-semibold col-span-1 md:col-span-2 lg:col-span-4">
+            {{ lang.map.offender_selectors }}
+          </h4>
+          <app-select-input
             formControlName="offenderType"
             [label]="lang.map.offender_type"
             bindValue="lookupKey"
             bindLabel="getNames"
             [options]="offenderTypes" />
+          <app-input formControlName="name" [label]="lang.map.offender_name" />
+          <app-input
+            formControlName="employeeNo"
+            [label]="lang.map[getOffenderNumberLabel()]" />
 
-          <app-select-input
-            formControlName="caseStatus"
-            [label]="lang.map.status"
-            bindValue="lookupKey"
-            bindLabel="getNames"
-            [options]="caseStatus" />
+          <app-input formControlName="qId" [label]="lang.map.qid" />
 
-          <app-select-input
-            formControlName="violationTypeId"
-            [label]="lang.map.violation_type"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="violations"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-
-          <app-select-input
-            formControlName="penaltyId"
-            [label]="lang.map.penalty"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="penalties"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-
-          <app-select-input
-            formControlName="mawaredEmployeeId"
-            [label]="lang.map.mawared_empl_id"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="mawaredEmployees"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-
-          <app-select-input
-            formControlName="clearingAgentId"
-            [label]="lang.map.clearing_agent_id"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="clearingAgents"
-            [enableFilter]="true"
-            bindFilter="getNames" />
-
-          <app-textarea
-            formControlName="description"
-            class="col-span-1 md:col-span-2 lg:col-span-4"
-            [label]="lang.map.general_explanation_of_violations" />
-        </div>
-        <div
-          class="border-t pt-4 space-x-4 rtl:space-x-reverse flex justify-end">
-          <app-button (click)="search$.next()" buttonType="primary">
-            {{ lang.map.search }}
-          </app-button>
-          <app-button (click)="resetForm()" buttonType="primary"
-            >{{ lang.map.reset }}
-          </app-button>
+          @if (!isEmployee) {
+            <app-input
+              formControlName="eId"
+              [label]="lang.map.establishment_id" />
+          }
         </div>
       </form>
+    </div>
+    <div
+      class="border-t pt-4 px-4 space-x-4 rtl:space-x-reverse flex justify-end">
+      <app-button (click)="search$.next()" buttonType="primary">
+        {{ lang.map.search }}
+      </app-button>
+      <app-button (click)="resetForm()" buttonType="primary"
+        >{{ lang.map.reset }}
+      </app-button>
     </div>
   </ng-template>
   <ng-template #search_result>
@@ -143,30 +138,22 @@
           mat-table
           matSort
           class="table-style"
+          multiTemplateDataRows=""
           [dataSource]="displayedList">
-          <!-- draft full serial -->
-          <ng-container matColumnDef="draftFullSerial">
+          <!-- full serial -->
+          <ng-container matColumnDef="fullSerial">
             <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.report_draft_number }}
+              {{ lang.map.report_number }}
             </th>
             <td mat-cell *matCellDef="let element">
               <button
                 class="text-blue-700 hover:underline focus:outline-none"
                 (click)="view(element)">
-                {{ element.draftFullSerial }}
-              </button>
-            </td>
-          </ng-container>
-          <!-- investigation full serial -->
-          <ng-container matColumnDef="investigationFullSerial">
-            <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.investigation_file_number }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <button
-                class="text-blue-700 hover:underline focus:outline-none"
-                (click)="view(element)">
-                {{ element.investigationFullSerial }}
+                {{
+                  element.investigationFullSerial
+                    ? element.investigationFullSerial
+                    : element.draftFullSerial
+                }}
               </button>
             </td>
           </ng-container>
@@ -177,26 +164,33 @@
               <span>{{ element.caseStatusInfo?.getNames() || '' }}</span>
             </td>
           </ng-container>
-          <!-- security Level -->
-          <ng-container matColumnDef="securityLevel">
+          <!-- dateCreated -->
+          <ng-container matColumnDef="dateCreated">
             <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.level_of_secrecy }}
+              {{ lang.map.created_date }}
             </th>
             <td mat-cell *matCellDef="let element">
-              <span>{{ element.securityLevelInfo?.getNames() }}</span>
+              <span>{{ element.dateCreated | date: Config.DATE_FORMAT }}</span>
             </td>
           </ng-container>
 
-          <!-- department -->
-          <ng-container matColumnDef="department">
+          <!-- violationClassifications -->
+          <ng-container matColumnDef="violationClassifications">
             <th mat-header-cell *matHeaderCellDef>
-              {{ lang.map.lbl_department }}
+              {{ lang.map.violation_classification }}
             </th>
             <td mat-cell *matCellDef="let element">
-              <span>{{ element.departmentInfo?.getNames() || '' }}</span>
+              @for (
+                classification of offenderViolationInfo.get(element.caseId);
+                track classification
+              ) {
+                <span
+                  class="bg-gray-100 text-gray-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                  {{ classification.getNames() }}
+                </span>
+              }
             </td>
           </ng-container>
-
           <!-- actions Column -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>{{ lang.map.actions }}</th>
@@ -213,16 +207,113 @@
               </div>
             </td>
           </ng-container>
+
+          <ng-container matColumnDef="expandedDetail">
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="p-0"
+              [attr.colspan]="columnsWrapper.displayedColumns.length">
+              <div
+                [@detailExpand]="
+                  selectedOffender === element ? 'expanded' : 'collapsed'
+                "
+                class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100">
+                <table
+                  mat-table
+                  matSort
+                  class="table-style"
+                  [dataSource]="
+                    filteredElements(element.offenderViolationInfo)
+                  ">
+                  <!-- offender Type -->
+                  <ng-container matColumnDef="offenderType">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ lang.map.offender_type }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{
+                        element.offenderInfo.typeInfo.getNames()
+                      }}</span>
+                    </td>
+                  </ng-container>
+                  <!-- offender Name -->
+                  <ng-container matColumnDef="offenderName">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ lang.map.offender_name }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{
+                        element.offenderInfo?.offenderInfo?.getNames()
+                      }}</span>
+                    </td>
+                  </ng-container>
+
+                  <!-- offender Number -->
+                  <ng-container matColumnDef="offenderNumber">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ lang.map.employee_clearing_agent_number }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{
+                        element.offenderInfo?.offenderInfo.type ===
+                        OffenderTypesEnum.EMPLOYEE
+                          ? element.offenderInfo?.offenderInfo.employeeNo
+                          : element.offenderInfo?.offenderInfo.agentCustomCode
+                      }}</span>
+                    </td>
+                  </ng-container>
+
+                  <!-- department/agency -->
+                  <ng-container matColumnDef="department/agency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ lang.map.department_company }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span>{{
+                        element.offenderInfo?.offenderInfo.type ===
+                        OffenderTypesEnum.EMPLOYEE
+                          ? element.offenderInfo?.offenderInfo?.getEmployeeDepartmentInfoName()
+                          : element.offenderInfo?.offenderInfo?.getCompanyName()
+                      }}</span>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="offenderDetailsDisplayedColumns"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let element;
+                      columns: offenderDetailsDisplayedColumns
+                    "
+                    class="element-row"></tr>
+                  <!-- Row shown when there is no matching data. -->
+                  <tr class="mat-row" *matNoDataRow>
+                    <td class="p-4" colspan="100">
+                      {{ lang.map.no_records_to_display }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </ng-container>
           <tr
             mat-header-row
             *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
           <tr
             mat-row
+            *matRowDef="let element; columns: columnsWrapper.displayedColumns"
             (contextmenu)="contextMenu.open($event, element)"
-            *matRowDef="
-              let element;
-              columns: columnsWrapper.displayedColumns
-            "></tr>
+            class="element-row"
+            [class.example-expanded-row]="selectedOffender === element"
+            (click)="rowClicked($event, element)"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: ['expandedDetail']"
+            class="detail-row"></tr>
+
           <!-- Row shown when there is no matching data. -->
           <tr class="mat-row" *matNoDataRow>
             <td class="p-4" colspan="100">

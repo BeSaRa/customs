@@ -60,4 +60,5 @@ export interface LookupMapContract {
   attendeeType: Lookup[];
   GrievanceFinalDecision: Lookup[];
   responsibilityRepeatViolations: Lookup[];
+  caseGeneralStatus: Lookup[];
 }

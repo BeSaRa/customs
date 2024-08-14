@@ -753,4 +753,10 @@ export interface LangKeysContract {
   check_url_variables: string;
   no_variable_found: string;
   duplicate_url_variables: string;
+  basic_info_selectors: string;
+  offender_selectors: string;
+  execution_status: string;
+  general_status: string;
+  employee_clearing_agent_number: string;
+  criminal_report_number: string;
 }
