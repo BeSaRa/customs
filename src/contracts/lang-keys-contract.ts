@@ -733,4 +733,10 @@ export interface LangKeysContract {
   employees_inbox_managment: string;
   please_review_the_legal_books_that_are_permitted_to_be_viewed_by_other_departments: string;
   disclaimer: string;
+  basic_info_selectors: string;
+  offender_selectors: string;
+  execution_status: string;
+  general_status: string;
+  employee_clearing_agent_number: string;
+  criminal_report_number: string;
 }

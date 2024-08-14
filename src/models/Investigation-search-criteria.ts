@@ -1,70 +1,70 @@
 import { Investigation } from './investigation';
-import { CustomValidators } from '@validators/custom-validators';
 import { OffenderTypeWithNone } from '@enums/offender-type-with-none';
 
 export class InvestigationSearchCriteria extends Investigation {
   override $$__service_name__$$: string = 'InvestigationSearchCriteria';
 
-  mawaredEmployeeId!: number;
-  clearingAgentId!: number;
+  offenderType: number = OffenderTypeWithNone.ALL;
+  name!: string;
+  qId!: string;
+  eId!: string;
+  employeeNo!: string;
+  investigationFileNumber!: string;
   createdFrom!: string;
   createdTo!: string;
-  draftNumber!: string;
-  decisionNumber!: string;
+  year!: number;
+  generalStatus!: number;
+  executionStatus!: number;
+  violationClassificationId!: number;
+  reportNumber!: string;
+  customsDeclarationNumber!: string;
+  controlReportNumber!: string;
   departmentId!: number;
-  penaltyId!: number;
-  violationTypeId!: number;
-  offenderType: number = OffenderTypeWithNone.ALL;
-  investigationFileNumber!: string;
 
-  override buildForm(
-    controls: boolean = false,
-    disabled: boolean = false,
-  ): object {
+  override buildForm(controls: boolean = false): object {
     const {
+      name,
+      qId,
+      eId,
+      employeeNo,
       departmentId,
-      penaltyId,
-      description,
-      violationTypeId,
       offenderType,
-      caseStatus,
-      mawaredEmployeeId,
-      clearingAgentId,
-      securityLevel,
+      year,
+      generalStatus,
+      executionStatus,
+      violationClassificationId,
+      reportNumber,
+      customsDeclarationNumber,
+      controlReportNumber,
       createdFrom,
       createdTo,
-      draftNumber,
-      decisionNumber,
       investigationFileNumber,
     } = this;
     return {
-      description: controls
-        ? [
-            { value: description, disabled: disabled },
-            [CustomValidators.maxLength(100000)],
-          ]
-        : description,
-      mawaredEmployeeId: controls ? [mawaredEmployeeId] : mawaredEmployeeId,
-      clearingAgentId: controls ? [clearingAgentId] : clearingAgentId,
-      securityLevel: controls
-        ? [securityLevel, CustomValidators.required]
-        : securityLevel,
+      name: controls ? [name] : name,
+      qId: controls ? [qId] : qId,
+      eId: controls ? [eId] : eId,
+      employeeNo: controls ? [employeeNo] : employeeNo,
+      year: controls ? [year] : year,
+      generalStatus: controls ? [generalStatus] : generalStatus,
+      executionStatus: controls ? [executionStatus] : executionStatus,
+      violationClassificationId: controls
+        ? [violationClassificationId]
+        : violationClassificationId,
+      reportNumber: controls ? [reportNumber] : reportNumber,
+      customsDeclarationNumber: controls
+        ? [customsDeclarationNumber]
+        : customsDeclarationNumber,
+      controlReportNumber: controls
+        ? [controlReportNumber]
+        : controlReportNumber,
       createdFrom: controls ? [createdFrom] : createdFrom,
       createdTo: controls ? [createdTo] : createdTo,
-      draftNumber: controls ? [draftNumber] : draftNumber,
-      decisionNumber: controls ? [decisionNumber] : decisionNumber,
-      departmentId: controls
-        ? [departmentId, CustomValidators.required]
-        : departmentId,
-      penaltyId: controls ? [penaltyId] : penaltyId,
-      violationTypeId: controls ? [violationTypeId] : violationTypeId,
+      departmentId: controls ? [departmentId] : departmentId,
       investigationFileNumber: controls
         ? [investigationFileNumber]
         : investigationFileNumber,
-      offenderType: controls
-        ? [offenderType, CustomValidators.required]
-        : offenderType,
-      caseStatus: controls ? [caseStatus] : caseStatus,
+      offenderType: controls ? [offenderType] : offenderType,
     };
   }
 }
