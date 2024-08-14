@@ -379,7 +379,10 @@ export class ButtonsCaseWrapperComponent
           return click === UserClick.YES;
         }),
         switchMap(response => {
-          if ((this.model() as Investigation).inSubmitInvestigationActivity()) {
+          if (
+            (this.model() as Investigation).inSubmitInvestigationActivity() ||
+            response.response === TaskResponses.PR_FRST_APPROVE
+          ) {
             return (this.model() as Investigation).penaltyDecisions.length
               ? this.penaltyDecisionService
                   .createBulkFull(
