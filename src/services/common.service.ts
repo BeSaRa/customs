@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Common } from '@models/common';
+import { InboxResult } from '@models/inbox-result';
+import { InternalUser } from '@models/internal-user';
 import { UrlService } from '@services/url.service';
+import { CastResponse } from 'cast-response';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Common } from '@models/common';
-import { CastResponse } from 'cast-response';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +45,27 @@ export class CommonService {
 
   getCounter(key: keyof Common['counters']): string {
     return (this.counters && this.counters[key]) || '';
+  }
+
+  @CastResponse(() => InternalUser, {
+    fallback: '$default',
+    unwrap: 'rs',
+  })
+  loadAvailableEmployeesToAssign(
+    departmentId: number,
+    inboxResults: InboxResult[],
+  ) {
+    const _tasks = inboxResults.map(t => ({
+      BD_CASE_TYPE: t.BD_CASE_TYPE,
+      ONWER: t.OWNER,
+      TKIID: t.TKIID,
+    }));
+    return this.http.post<InternalUser[]>(
+      this._getURLSegment() + '/internal/assign-user',
+      _tasks,
+      {
+        params: { departmentId },
+      },
+    );
   }
 }

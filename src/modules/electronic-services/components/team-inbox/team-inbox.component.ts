@@ -1,29 +1,29 @@
 import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { InboxResult } from '@models/inbox-result';
-import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
-import { LangService } from '@services/lang.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { InboxService } from '@services/inbox.services';
-import { ColumnsWrapper } from '@models/columns-wrapper';
-import { NoneFilterColumn } from '@models/none-filter-column';
-import { SelectFilterColumn } from '@models/select-filter-column';
-import { Lookup } from '@models/lookup';
-import { LookupService } from '@services/lookup.service';
-import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
-import { AppIcons } from '@constants/app-icons';
-import { Router } from '@angular/router';
-import { QueryResultSet } from '@models/query-result-set';
-import { EmployeeService } from '@services/employee.service';
-import { Team } from '@models/team';
 import { FormControl } from '@angular/forms';
-import { InboxRiskStatus } from '@enums/inbox-risk-status';
-import { CaseTypes } from '@enums/case-types';
-import { DialogService } from '@services/dialog.service';
-import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
+import { AppIcons } from '@constants/app-icons';
+import { Config } from '@constants/config';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { CaseTypes } from '@enums/case-types';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ColumnsWrapper } from '@models/columns-wrapper';
+import { InboxResult } from '@models/inbox-result';
+import { Lookup } from '@models/lookup';
+import { NoneFilterColumn } from '@models/none-filter-column';
+import { QueryResultSet } from '@models/query-result-set';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { Team } from '@models/team';
 import { CommonService } from '@services/common.service';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { InboxService } from '@services/inbox.services';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
 import { NavbarService } from '@services/navbar.service';
+import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
+import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
 
 @Component({
   selector: 'app-team-inbox',
@@ -82,6 +82,8 @@ export class TeamInboxComponent
       },
     },
   ];
+
+  readonly Config = Config;
 
   ngOnInit(): void {
     this.listenToReload(this.employeeService.getEmployeeTeams()[0].id);
@@ -149,18 +151,6 @@ export class TeamInboxComponent
     this.selectedTeamId.valueChanges.subscribe(value => {
       this.listenToReload(value!);
     });
-  }
-
-  statusStyle(element: InboxResult) {
-    let classes = 'custom-status ';
-    if (element.RISK_STATUS === InboxRiskStatus.NORMAL) {
-      classes += 'custom-status-normal';
-    } else if (element.RISK_STATUS === InboxRiskStatus.AT_RISK) {
-      classes += 'custom-status-risk';
-    } else if (element.RISK_STATUS === InboxRiskStatus.OVERDUE) {
-      classes += 'custom-status-overdue';
-    }
-    return classes;
   }
 
   showActionsOnCase(item: InboxResult) {

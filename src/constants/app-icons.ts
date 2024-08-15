@@ -113,6 +113,8 @@ export const AppIcons = {
   ALERT: 'alert-outline',
   ERROR: 'alert-circle-outline',
   CHILD_ITEMS: 'circle-multiple',
+  MANAGE_INBOX: 'email-multiple',
+  ACCOUNT_CONVERT: 'account-convert',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -19,6 +19,7 @@ import { ArchivistGrievanceComponent } from '@modules/electronic-services/compon
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
+import { EmployeesInboxManagmentComponent } from './components/employees-inbox-managment/employees-inbox-managment.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -41,6 +42,15 @@ const routes: Routes = [
   {
     path: AppRoutes.TEAM_INBOX,
     component: TeamInboxComponent,
+  },
+  {
+    path: AppRoutes.EMPLOYEES_INBOX_MANAGMENT,
+    component: EmployeesInboxManagmentComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.INBOX_FOLLOW_UP,
+      }),
+    ],
   },
   {
     path: AppRoutes.GUIDE_PANEL,

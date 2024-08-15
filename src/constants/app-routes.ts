@@ -40,5 +40,6 @@ export const AppRoutes = {
   GRIEVANCE: 'archivist-grievance',
   FINES: 'fines',
   COURT_DECISIONS: 'court-decisions',
-  CUSTOM_MENU: 'custom-menu'
+  CUSTOM_MENU: 'custom-menu',
+  EMPLOYEES_INBOX_MANAGMENT: 'employees-inbox-managment',
 };

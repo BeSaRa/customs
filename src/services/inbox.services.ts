@@ -1,17 +1,17 @@
-import { InvestigationService } from '@services/investigation.service';
-import { Injectable, inject } from '@angular/core';
-import { InboxResult } from '@models/inbox-result';
-import { CastResponse, CastResponseContainer } from 'cast-response';
-import { Constructor } from '@app-types/constructors';
-import { Pagination } from '@models/pagination';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseCaseService } from '@abstracts/base-case.service';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Constructor } from '@app-types/constructors';
 import { CaseTypes } from '@enums/case-types';
-import { UrlService } from './url.service';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { InboxResult } from '@models/inbox-result';
+import { Pagination } from '@models/pagination';
 import { QueryResultSet } from '@models/query-result-set';
 import { GrievanceService } from '@services/grievance.service';
+import { InvestigationService } from '@services/investigation.service';
+import { CastResponse, CastResponseContainer } from 'cast-response';
+import { Observable } from 'rxjs';
+import { UrlService } from './url.service';
 
 @CastResponseContainer({
   $pagination: {
@@ -61,6 +61,13 @@ export class InboxService extends RegisterServiceMixin(class {}) {
   }
 
   @CastResponse(() => QueryResultSet)
+  loadUserInboxByDomain(domainName: string): Observable<QueryResultSet> {
+    return this.http.get<QueryResultSet>(
+      this.urlService.URLS.USER_INBOX + `/${domainName}`,
+    );
+  }
+
+  @CastResponse(() => QueryResultSet)
   private _loadTeamInbox(
     teamId: number,
     options?: unknown,
@@ -77,6 +84,21 @@ export class InboxService extends RegisterServiceMixin(class {}) {
 
   loadTeamInbox(teamId: number, options?: unknown): Observable<QueryResultSet> {
     return this._loadTeamInbox(teamId, options);
+  }
+
+  reassignTasks(toUser: string, inboxResults: InboxResult[]) {
+    const _tasks = inboxResults.map(t => ({
+      BD_CASE_TYPE: t.BD_CASE_TYPE,
+      PI_PARENT_CASE_ID: t.PI_PARENT_CASE_ID,
+      TKIID: t.TKIID,
+    }));
+    return this.http.post(
+      this.urlService.URLS.TASK_INBOX + '/reassign/bulk/',
+      _tasks,
+      {
+        params: { toUser },
+      },
+    );
   }
 
   getService(serviceNumber: number): BaseCaseService<unknown> {
