@@ -1,0 +1,30 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.assign_to_employee }}</h1>
+
+    <app-icon-button
+      [matTooltip]="lang.map.close"
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content">
+    <app-select-input
+      [formControl]="employeesControl"
+      [label]="lang.map.lbl_employee"
+      bindLabel="getNames"
+      [options]="employees"></app-select-input>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button
+      buttonType="primary"
+      (click)="save()"
+      [disabled]="employeesControl.invalid"
+      >{{ lang.map.save }}</app-button
+    >
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+      lang.map.close
+    }}</app-button>
+  </div>
+</div>

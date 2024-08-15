@@ -9,6 +9,7 @@ import { ServiceRegistry } from '@services/service-registry';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { CaseTypes } from '@enums/case-types';
+import { InboxRiskStatus } from '@enums/inbox-risk-status';
 
 const { send, receive } = new InboxInterceptor();
 
@@ -55,5 +56,17 @@ export class InboxResult extends ClonerMixin(class {}) {
       caseId: this.PI_PARENT_CASE_ID,
       caseType: this.BD_CASE_TYPE,
     });
+  }
+
+  getStatusStyle() {
+    let classes = 'custom-status ';
+    if (this.RISK_STATUS === InboxRiskStatus.NORMAL) {
+      classes += 'custom-status-normal';
+    } else if (this.RISK_STATUS === InboxRiskStatus.AT_RISK) {
+      classes += 'custom-status-risk';
+    } else if (this.RISK_STATUS === InboxRiskStatus.OVERDUE) {
+      classes += 'custom-status-overdue';
+    }
+    return classes;
   }
 }

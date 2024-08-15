@@ -155,6 +155,14 @@ export const Menus: MenuItemContract[] = [
     counter: 'personalInbox',
   },
   {
+    id: MenuIdes.EMPLOYEES_INBOX_MANAGMENT,
+    langKey: 'employees_inbox_managment',
+    icon: AppIcons.MANAGE_INBOX,
+    path: AppFullRoutes.EMPLOYEES_INBOX_MANAGMENT,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'INBOX_FOLLOW_UP',
+  },
+  {
     id: MenuIdes.INVESTIGATION,
     langKey: 'menu_investigation',
     icon: AppIcons.INVESTIGATION,

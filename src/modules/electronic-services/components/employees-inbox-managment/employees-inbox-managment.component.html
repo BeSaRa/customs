@@ -1,16 +1,47 @@
 <div
-  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-between py-2">
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
-    {{ lang.map.menu_user_inbox }}
+    {{ lang.map.employees_inbox_managment }}
   </h1>
-  <app-icon-button
-    [matTooltip]="lang.map.reload"
-    (click)="listenToReload()"
-    icon="RELOAD"></app-icon-button>
-  <div class="flex-auto"></div>
+  @if (selection.hasValue()) {
+    <app-icon-button
+      [matTooltip]="lang.map.assign_selected_tasks_to_an_employee"
+      (click)="openReassignPopup(selection.selected)"
+      icon="ACCOUNT_CONVERT"></app-icon-button>
+  }
 </div>
 <div class="shadow relative overflow-auto">
+  <div class="px-4 pt-4 grid grid-cols-2 gap-4 justify-center items-center">
+    <app-select-input
+      [formControl]="teamsControl"
+      [label]="lang.map.main_team"
+      bindLabel="getNames"
+      bindValue="id"
+      [options]="teams"></app-select-input>
+    <app-select-input
+      [formControl]="employeesControl"
+      [label]="lang.map.lbl_employee"
+      bindLabel="getNames"
+      [options]="employees"></app-select-input>
+  </div>
   <table mat-table matSort class="table-style" [dataSource]="dataSource">
+    <!-- Select -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          (change)="$event ? toggleAllRows() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(element) : null"
+          [checked]="selection.isSelected(element)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
     <!-- BD_FULL_SERIAL -->
     <ng-container matColumnDef="SERIAL">
       <th
@@ -20,17 +51,15 @@
         {{ lang.map.serial_number }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <button
-          class="text-blue-700 hover:underline focus:outline-none"
-          (click)="view(element)">
+        <span>
           {{
-            element.BD_CASE_TYPE === CaseTypes.GRIEVANCE
+            element.BD_CASE_TYPE === caseTypes.GRIEVANCE
               ? element.BD_GRIEVANCE_FULL_SERIAL
               : element.BD_IS_DRAFTED
                 ? element.BD_DRAFT_FULL_SERIAL
                 : element.BD_INVESTIGATION_FULL_SERIAL
           }}
-        </button>
+        </span>
       </td>
     </ng-container>
 
@@ -127,36 +156,21 @@
       <td mat-cell *matCellDef="let element">
         <div class="flex">
           <app-icon-button
-            [matTooltip]="lang.map.view"
-            (click)="view(element)"
-            icon="VIEW"></app-icon-button>
-          <app-icon-button
-            [matTooltip]="lang.map.actions"
-            (click)="showActionsOnCase(element)"
-            icon="VIEW_LIST_OUTLINE"></app-icon-button>
+            [matTooltip]="lang.map.assign_to_employee"
+            (click)="openReassignPopup([assertType(element)])"
+            icon="ACCOUNT_CONVERT"></app-icon-button>
         </div>
       </td>
     </ng-container>
 
-    @for (filter of columnsWrapper.filteredColumns; track filter) {
-      <!-- localizationKey Column -->
-      <ng-container [matColumnDef]="filter">
-        <th mat-header-cell *matHeaderCellDef>
-          <app-filter-column
-            (filterChange)="filterChange($event)"
-            [column]="columnsWrapper.columnsMap[filter]"></app-filter-column>
-        </th>
-      </ng-container>
-    }
-    <tr mat-header-row *matHeaderRowDef="columnsWrapper.displayedColumns"></tr>
     <tr
       mat-header-row
       class="!bg-primary/5 row-filter"
-      *matHeaderRowDef="columnsWrapper.filteredColumns"></tr>
+      *matHeaderRowDef="columns"></tr>
     <tr
       mat-row
       (contextmenu)="contextMenu.open($event, element)"
-      *matRowDef="let element; columns: columnsWrapper.displayedColumns"></tr>
+      *matRowDef="let element; columns: columns"></tr>
     <!-- Row shown when there is no matching data. -->
     <tr class="mat-row" *matNoDataRow>
       <td class="p-4" colspan="100">{{ lang.map.no_records_to_display }}</td>

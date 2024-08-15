@@ -49,6 +49,9 @@ import { CallRequestsComponent } from '@standalone/components/call-requests/call
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 import { CourtDecisionListComponent } from '@standalone/components/court-decision-list/court-decision-list.component';
+import { EmployeesInboxManagmentComponent } from './components/employees-inbox-managment/employees-inbox-managment.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,7 @@ import { CourtDecisionListComponent } from '@standalone/components/court-decisio
     InvestigationDraftsComponent,
     FinesComponent,
     CourtDecisionsComponent,
+    EmployeesInboxManagmentComponent,
   ],
   imports: [
     CommonModule,
@@ -105,6 +109,8 @@ import { CourtDecisionListComponent } from '@standalone/components/court-decisio
     CallRequestsComponent,
     CourtDecisionListComponent,
     DatePipe,
+    MatCheckboxModule,
+    HighlightPipe,
   ],
 })
 export class ElectronicServicesModule {}

@@ -31,6 +31,7 @@ export const EndPoints = {
   INVESTIGATION: '/investigation-case',
   USER_INBOX: '/inbox/user',
   TEAM_INBOX: '/inbox/team',
+  TASK_INBOX: '/inbox/task',
   VIOLATION_PENALTY: '/entity/violation-penalty',
   LEGAL_RULE: '/entity/legal-rule',
   ATTACHMENT_TYPE: '/entity/attachment-type',

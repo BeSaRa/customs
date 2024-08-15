@@ -759,4 +759,6 @@ export interface LangKeysContract {
   general_status: string;
   employee_clearing_agent_number: string;
   criminal_report_number: string;
+  assign_to_employee: string;
+  assign_selected_tasks_to_an_employee: string;
 }

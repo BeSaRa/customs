@@ -36,5 +36,7 @@ export const AppFullRoutes = {
   LANDING_PAGE: '/home/landing-page',
   FINES: '/home/electronic-services/fines',
   COURT_DECISIONS: '/home/electronic-services/court-decisions',
-  CUSTOM_MENU: '/home/administration/custom-menu'
+  CUSTOM_MENU: '/home/administration/custom-menu',
+  EMPLOYEES_INBOX_MANAGMENT:
+    '/home/electronic-services/employees-inbox-managment',
 };
