@@ -36,6 +36,7 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
   // extra
   mawaredEmployeeId!: number;
   userType = 1;
+
   buildForm(controls = false): object {
     const {
       domainName,
@@ -93,7 +94,10 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
       email: controls
         ? [
             email,
-            [CustomValidators.required, CustomValidators.pattern('EMAIL')],
+            [
+              CustomValidators.required,
+              CustomValidators.pattern('EMAIL_WITH_CAPITAL_LETTERS'),
+            ],
           ]
         : email,
       phoneNumber: controls
