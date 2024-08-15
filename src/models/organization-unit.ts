@@ -60,14 +60,7 @@ export class OrganizationUnit extends BaseModel<
           ]
         : arName,
       enName: controls
-        ? [
-            enName,
-            [
-              CustomValidators.required,
-              CustomValidators.maxLength(50),
-              CustomValidators.pattern('ENG_NUM'),
-            ],
-          ]
+        ? [enName, [CustomValidators.required, CustomValidators.maxLength(50)]]
         : enName,
       type: controls ? [type, CustomValidators.required] : type,
       managerId: controls ? [managerId] : managerId,
