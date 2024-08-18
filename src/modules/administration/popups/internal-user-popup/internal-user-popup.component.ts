@@ -75,8 +75,6 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         filter(response => response !== null),
       )
       .subscribe();
-    // you can close the dialog after save here
-    this.dialogRef.close(this.model);
   }
 
   protected override _init(): void {
