@@ -39,7 +39,8 @@
             label=""
             [displayErrors]="false"
             [noMargin]="true"
-            [placeholder]="lang.map.filter">
+            [placeholder]="lang.map.filter"
+            (keydown.space)="$event.stopPropagation()">
             <mat-icon
               appInputSuffix
               class="mx-1 !h-10"
