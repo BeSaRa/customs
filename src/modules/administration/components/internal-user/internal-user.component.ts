@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
 import { InternalUser } from '@models/internal-user';
 import { InternalUserService } from '@services/internal-user.service';
@@ -11,18 +11,24 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { StatusTypes } from '@enums/status-types';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Lookup } from '@models/lookup';
+import { BehaviorSubject } from 'rxjs';
+import { LangCodes } from '@enums/lang-codes';
 
 @Component({
   selector: 'app-internal-user',
   templateUrl: './internal-user.component.html',
   styleUrls: ['./internal-user.component.scss'],
 })
-export class InternalUserComponent extends AdminComponent<
-  InternalUserPopupComponent,
-  InternalUser,
-  InternalUserService
-> {
+export class InternalUserComponent
+  extends AdminComponent<
+    InternalUserPopupComponent,
+    InternalUser,
+    InternalUserService
+  >
+  implements OnInit
+{
   service = inject(InternalUserService);
+  currentLangCode$ = new BehaviorSubject<LangCodes>(LangCodes.AR);
   commonStatus: Lookup[] = this.lookupService.lookups.commonStatus.filter(
     s => s.lookupKey !== StatusTypes.DELETED,
   );
@@ -96,9 +102,14 @@ export class InternalUserComponent extends AdminComponent<
       'getNames',
     ),
     new NoneFilterColumn('actions'),
-  ).attacheFilter(this.filter$);
+  )
+    .attacheFilter(this.filter$)
+    .setLangCode(this.currentLangCode$);
 
-  getStatusString(status: number) {
-    return status === StatusTypes.ACTIVE ? 'Active' : 'Disable';
+  override ngOnInit() {
+    super.ngOnInit();
+    this.lang.change$.subscribe(lang => {
+      this.currentLangCode$.next(lang.code);
+    });
   }
 }
