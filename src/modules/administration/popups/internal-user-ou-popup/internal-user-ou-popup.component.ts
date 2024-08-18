@@ -156,9 +156,9 @@ export class InternalUserOUPopupComponent extends AdminDialogComponent<InternalU
     this.form
       .get('administrationAndSectionUnit')
       ?.valueChanges.subscribe(value => {
-        this.departmentUnits = this.organizationUnits.filter(
-          o => o.parent === value && o.status === StatusTypes.ACTIVE,
-        );
+        this.departmentUnits = this.organizationUnits
+          .filter(o => o.parent === value && o.status === StatusTypes.ACTIVE)
+          .filter(o => o.type === OrganizationUnitType.SECTION);
       });
   }
 }
