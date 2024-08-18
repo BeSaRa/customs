@@ -64,6 +64,20 @@
       </td>
     </ng-container>
 
+    <!-- employeeDepartment Column -->
+    <ng-container matColumnDef="employeeDepartment">
+      <th
+        mat-header-cell
+        mat-sort-header="employeeDepartment"
+        *matHeaderCellDef
+        class="min-w-48">
+        {{ lang.map.department }}
+      </th>
+      <td mat-cell *matCellDef="let element" class="min-w-48">
+        {{ element.employeeDepartmentInfo.getNames() }}
+      </td>
+    </ng-container>
+
     <!-- jobTitleCode Column -->
     <ng-container matColumnDef="qid">
       <th mat-header-cell mat-sort-header="qid" *matHeaderCellDef>
