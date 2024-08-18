@@ -28,7 +28,7 @@
         </div>
       </mat-tab>
       <mat-tab [label]="lang.map.lbl_permissions">
-        <div class="grid grid-cols-1 gap-4 dialog-content" style="height: 60vh">
+        <div class="grid grid-cols-1 gap-4 p-4 overflow-auto h-96">
           @for (group of groups; track group) {
             <div
               class="border-b flex items-center justify-between bg-slate-300">
@@ -75,7 +75,7 @@
                   "></mat-icon>
               </app-input>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               @for (
                 permission of group.list
                   | FilterArray: 'getNames' : filter.control.value;
