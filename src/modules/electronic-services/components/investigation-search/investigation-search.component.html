@@ -57,13 +57,14 @@
             formControlName="year"
             [label]="lang.map.report_year"
             [options]="years" />
-
-          <app-select-input
-            formControlName="departmentId"
-            [label]="lang.map.creator_department"
-            bindValue="id"
-            bindLabel="getNames"
-            [options]="getDepartments()" />
+          @if (form.getRawValue().offenderType !== OffenderTypeWithNone.ALL) {
+            <app-select-input
+              formControlName="departmentId"
+              [label]="lang.map.creator_department"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="getDepartments()" />
+          }
 
           <app-select-input
             formControlName="generalStatus"
@@ -105,6 +106,7 @@
             [label]="lang.map.offender_type"
             bindValue="lookupKey"
             bindLabel="getNames"
+            (selectChange)="handleOffenderTypeChange()"
             [options]="offenderTypes" />
           <app-input formControlName="name" [label]="lang.map.offender_name" />
           <app-input

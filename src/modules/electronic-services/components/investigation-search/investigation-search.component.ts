@@ -104,6 +104,7 @@ export class InvestigationSearchComponent implements OnInit {
   });
   length = 50;
   offenderViolationInfo: Map<string, OffenderViolation[]> = new Map();
+  readonly OffenderTypeWithNone = OffenderTypeWithNone;
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -199,6 +200,11 @@ export class InvestigationSearchComponent implements OnInit {
       this.form.getRawValue().violationClassificationId ===
       ClassificationTypes.criminal
     );
+  }
+  handleOffenderTypeChange() {
+    if (this.form.getRawValue().offenderType === OffenderTypeWithNone.ALL) {
+      this.form.get('departmentId')?.reset();
+    }
   }
   filteredElements(Elements: OffenderViolation[]) {
     const map = new Map();
@@ -328,10 +334,6 @@ export class InvestigationSearchComponent implements OnInit {
   loadDepartments() {
     this.departmentService.loadAsLookups().subscribe(departments => {
       this.departments = departments;
-      const userOU = this.employeeService.getOrganizationUnit();
-      if (userOU) {
-        this.form.get('departmentId')?.setValue(userOU.id);
-      }
     });
   }
 
