@@ -38,14 +38,16 @@
                 [label]="lang.map.unit_type"
                 bindValue="lookupKey"
                 bindLabel="getNames" />
-              <app-select-input
-                formControlName="managerId"
-                [options]="internalUsers"
-                [label]="lang.map.manager"
-                bindValue="id"
-                bindLabel="getNames"
-                [enableFilter]="true"
-                bindFilter="getNames" />
+              @if (!inCreateMode()) {
+                <app-select-input
+                  formControlName="managerId"
+                  [options]="internalUsersInOu"
+                  [label]="lang.map.manager"
+                  bindValue="id"
+                  bindLabel="getNames"
+                  [enableFilter]="true"
+                  bindFilter="getNames" />
+              }
               <app-select-input
                 formControlName="parent"
                 [options]="organizationUnits"
@@ -62,14 +64,16 @@
                 bindLabel="getNames"
                 [enableFilter]="true"
                 bindFilter="getNames" />
-              <app-select-input
-                formControlName="managerAssistant"
-                [options]="managerAssistants"
-                [label]="lang.map.ou_manager_assistant"
-                bindValue="id"
-                bindLabel="getNames"
-                [enableFilter]="true"
-                bindFilter="getNames" />
+              @if (!inCreateMode()) {
+                <app-select-input
+                  formControlName="managerAssistant"
+                  [options]="internalUsersInOu"
+                  [label]="lang.map.ou_manager_assistant"
+                  bindValue="id"
+                  bindLabel="getNames"
+                  [enableFilter]="true"
+                  bindFilter="getNames" />
+              }
               <app-switch
                 formControlName="status"
                 [trueValue]="1"
