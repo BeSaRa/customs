@@ -75,6 +75,7 @@ export class MawaredEmployeeComponent
     new NoneFilterColumn('select'),
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
+    new NoneFilterColumn('employeeDepartment'),
     new TextFilterColumn('qid'),
     new TextFilterColumn('employeeNo'),
     new SelectFilterColumn(
