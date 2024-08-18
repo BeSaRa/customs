@@ -40,22 +40,20 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   internalUserService = inject(InternalUserService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly mawaredDepartmentService = inject(MawaredDepartmentService);
-  internalUsers!: InternalUser[];
   organizationUnitService = inject(OrganizationUnitService);
   organizationUnits!: OrganizationUnit[];
   assistantOus!: OrganizationUnit[];
-  managerAssistants!: InternalUser[];
+  internalUsersInOu!: InternalUser[];
 
   protected readonly AppIcons = AppIcons;
   mawaredDepartments!: MawaredDepartment[];
 
   protected override _initPopup(): void {
     super._initPopup();
-    this.getInternalUsers();
     this.getOrganizationUnits();
     this.getMawaredDepartments();
     this.loadAssistantOus();
-    this.loadManagerAssistants(this.model.id);
+    this.loadInternalUsersInOu(this.model.id);
     this.getouLogoSafeURL();
   }
 
@@ -107,12 +105,6 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
     this.dialogRef.close(this.model);
   }
 
-  protected getInternalUsers() {
-    this.internalUserService.loadAsLookups().subscribe(data => {
-      this.internalUsers = data;
-    });
-  }
-
   protected getOrganizationUnits() {
     this.organizationUnitService.loadAsLookups().subscribe(data => {
       this.organizationUnits = data;
@@ -131,12 +123,12 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       .subscribe(ous => (this.assistantOus = ous));
   }
 
-  protected loadManagerAssistants(ouId: number) {
+  protected loadInternalUsersInOu(ouId: number) {
     if (ouId)
       this.internalUserService
         .getInternalUsersByOuId(ouId)
         .subscribe(internalUsers => {
-          this.managerAssistants = internalUsers;
+          this.internalUsersInOu = internalUsers;
         });
   }
 
