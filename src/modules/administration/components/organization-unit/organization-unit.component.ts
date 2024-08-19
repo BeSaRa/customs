@@ -86,10 +86,8 @@ export class OrganizationUnitComponent extends AdminComponent<
     new TextFilterColumn('arName'),
     new TextFilterColumn('enName'),
     new SelectFilterColumn(
-      'status',
-      this.lookupService.lookups.commonStatus.filter(
-        item => item.lookupKey !== StatusTypes.DELETED,
-      ),
+      'type',
+      this.lookupService.lookups.organizationUnitType,
       'lookupKey',
       'getNames',
     ),
@@ -98,6 +96,14 @@ export class OrganizationUnitComponent extends AdminComponent<
       'assistantOuId',
       this.service.loadOUsByType(OrganizationUnitType.ASSISTANT_DEPARTMENT),
       'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'status',
+      this.lookupService.lookups.commonStatus.filter(
+        item => item.lookupKey !== StatusTypes.DELETED,
+      ),
+      'lookupKey',
       'getNames',
     ),
     new NoneFilterColumn('actions'),
