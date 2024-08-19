@@ -97,6 +97,20 @@
     </ng-container>
 
     <!-- assistantOuId -->
+    <ng-container matColumnDef="type">
+      <th
+        class="min-w-48"
+        mat-header-cell
+        mat-sort-header="type"
+        *matHeaderCellDef>
+        {{ lang.map.type }}
+      </th>
+      <td class="min-w-48" mat-cell *matCellDef="let element">
+        {{ element.typeInfo?.getNames() || '' }}
+      </td>
+    </ng-container>
+
+    <!-- assistantOuId -->
     <ng-container matColumnDef="assistantOuId">
       <th mat-header-cell mat-sort-header="assistantOuId" *matHeaderCellDef>
         {{ lang.map.assistant_ou }}
