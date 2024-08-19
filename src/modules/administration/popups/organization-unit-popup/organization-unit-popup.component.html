@@ -15,18 +15,21 @@
       <mat-tab [label]="lang.map.lbl_basic_info">
         <ng-container [formGroup]="form">
           <div class="h-full overflow-y-scroll">
-            <div
-              class="grid grid-cols-1 gap-4 mt-auto mb-0 items-center p-4 pb-0">
-              <app-select-input
-                formControlName="mawaredDepId"
-                [options]="mawaredDepartments"
-                [label]="lang.map.mawared_dep_id"
-                bindValue="departmentId"
-                bindLabel="getNames"
-                [enableFilter]="true"
-                bindFilter="getNames"
-                nullable="false"></app-select-input>
-            </div>
+            @if (organizationUnits) {
+              <div
+                class="grid grid-cols-1 gap-4 mt-auto mb-0 items-center p-4 pb-0">
+                <app-select-input
+                  formControlName="mawaredDepId"
+                  [options]="mawaredDepartments"
+                  [label]="lang.map.mawared_dep_id"
+                  bindValue="departmentId"
+                  bindLabel="getNames"
+                  [enableFilter]="true"
+                  bindFilter="getNames"
+                  [highlightCondition]="highlightCondition"
+                  nullable="false"></app-select-input>
+              </div>
+            }
             <div class="grid grid-cols-2 gap-4 my-auto items-center p-4">
               <app-input formControlName="arName" [label]="lang.map.ar_name" />
               <app-input formControlName="enName" [label]="lang.map.en_name" />
