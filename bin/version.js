@@ -44,11 +44,12 @@ configContent = configContent.replace(
 writeFileSync(pkgPath, JSON.stringify(pkg, null, "  "), "utf-8");
 writeFileSync(pkgLockPath, JSON.stringify(pkgLock, null, "  "), "utf-8");
 writeFileSync(configPath, configContent, "utf-8");
-
-exec("git add .", function (error) {
-  if (error) console.log(error);
-  exec(`git commit -m ${newVersion}`, function () {
-    exec(`git tag -a ${appVersion} -m ${newVersion}`);
-    console.log(`Version Created: ${appVersion}`);
+setTimeout(() => {
+  exec("git add .", function (error) {
+    if (error) console.log(error);
+    exec(`git commit -m ${newVersion}`, function () {
+      exec(`git tag -a ${appVersion} -m ${newVersion}`);
+      console.log(`Version Created: ${appVersion}`);
+    });
   });
-});
+}, 2000);
