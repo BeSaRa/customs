@@ -116,6 +116,8 @@ export class SelectInputComponent
   divider = false;
   @Input()
   showDeleteSelected = true;
+  @Input()
+  highlightCondition!: (option: unknown) => boolean;
 
   nullable = input(true, { transform: booleanAttribute });
 
@@ -246,5 +248,9 @@ export class SelectInputComponent
     event.preventDefault();
     event.stopPropagation();
     if (this.control.value === option) this.control.setValue(null);
+  }
+
+  shouldHighlight(option: unknown): boolean {
+    return this.highlightCondition ? this.highlightCondition(option) : false;
   }
 }

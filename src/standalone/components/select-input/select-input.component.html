@@ -58,7 +58,10 @@
       }
       <ng-template #defaultTemplate let-option>
         <mat-option
-          [ngClass]="{ 'custom-divider': divider }"
+          [ngClass]="{
+            'custom-divider': divider,
+            'highlighted-option': shouldHighlight(option)
+          }"
           [value]="getBindValue(option)"
           >{{ getBindLabel(option) }}
         </mat-option>

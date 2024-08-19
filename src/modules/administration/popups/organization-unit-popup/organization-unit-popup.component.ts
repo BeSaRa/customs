@@ -41,10 +41,10 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   private readonly sanitizer = inject(DomSanitizer);
   private readonly mawaredDepartmentService = inject(MawaredDepartmentService);
   organizationUnitService = inject(OrganizationUnitService);
-  organizationUnits!: OrganizationUnit[];
+  organizationUnits: OrganizationUnit[] = [];
   assistantOus!: OrganizationUnit[];
   internalUsersInOu!: InternalUser[];
-
+  highlightCondition: (option: unknown) => boolean = () => false;
   protected readonly AppIcons = AppIcons;
   mawaredDepartments!: MawaredDepartment[];
 
@@ -108,6 +108,10 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
   protected getOrganizationUnits() {
     this.organizationUnitService.loadAsLookups().subscribe(data => {
       this.organizationUnits = data;
+      setTimeout(() => {
+        this.highlightCondition = (option: unknown) =>
+          this.isHighlightCondition(option);
+      }, 0);
     });
   }
 
@@ -230,5 +234,11 @@ export class OrganizationUnitPopupComponent extends AdminDialogComponent<Organiz
       code: departmentId,
       parent: parentId,
     });
+  }
+
+  private isHighlightCondition(option: unknown): boolean {
+    if (!this.organizationUnits) return false;
+    const ids = this.organizationUnits.map(ou => ou.mawaredDepId);
+    return ids.includes((option as MawaredDepartment).id);
   }
 }
