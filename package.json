@@ -36,7 +36,7 @@
     "@kolkov/angular-editor": "^3.0.0-beta.0",
     "@mdi/angular-material": "^7.1.96",
     "@tailwindcss/typography": "^0.5.9",
-    "cast-response": "^1.1.1",
+    "cast-response": "^2.0.0",
     "chart.js": "^4.4.3",
     "crypto-js": "^4.1.1",
     "customs-schematics": "^0.0.14",
