@@ -54,7 +54,7 @@ export class OrganizationUnit extends BaseModel<
             arName,
             [
               CustomValidators.required,
-              CustomValidators.maxLength(50),
+              CustomValidators.maxLength(150),
               CustomValidators.pattern('AR_NUM'),
             ],
           ]
@@ -64,7 +64,7 @@ export class OrganizationUnit extends BaseModel<
             enName,
             [
               CustomValidators.required,
-              CustomValidators.maxLength(100),
+              CustomValidators.maxLength(150),
               CustomValidators.pattern('ENG_NUM'),
             ],
           ]
