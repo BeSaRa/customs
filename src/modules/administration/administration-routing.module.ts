@@ -13,10 +13,13 @@ import { PermissionRoleComponent } from '@modules/administration/components/perm
 import { MawaredEmployeeComponent } from '@modules/administration/components/mawared-employee/mawared-employee.component';
 import { OrganizationUnitComponent } from '@modules/administration/components/organization-unit/organization-unit.component';
 import { MawaredDepartmentComponent } from '@modules/administration/components/mawared-department/mawared-department.component';
+import { ServicesComponent } from '@modules/administration/components/services/services.component';
+import { ServiceStepsComponent } from '@modules/administration/components/service-steps/service-steps.component';
 import { EmailTemplateComponent } from '@modules/administration/components/email-template/email-template.component';
 import { GlobalSettingComponent } from '@modules/administration/components/global-setting/global-setting.component';
 import { ViolationPenaltyComponent } from '@modules/administration/components/violation-penalty/violation-penalty.component';
 import { LegalRuleComponent } from '@modules/administration/components/legal-rule/legal-rule.component';
+import { AttachmentTypeComponent } from '@modules/administration/components/attachment-type/attachment-type.component';
 import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
 import { ClearingAgencyComponent } from '@modules/administration/components/clearing-agency/clearing-agency.component';
 import { SuspendedEmployeeComponent } from '@modules/administration/components/suspended-employee/suspended-employee.component';
@@ -135,7 +138,24 @@ const routes: Routes = [
       }),
     ],
   },
-
+  {
+    path: AppRoutes.SERVICES,
+    component: ServicesComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_SERVICES_DATA,
+      }),
+    ],
+  },
+  {
+    path: AppRoutes.SERVICE_STEPS,
+    component: ServiceStepsComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_SERVICES_DATA,
+      }),
+    ],
+  },
   {
     path: AppRoutes.EMAIL_TEMPLATE,
     component: EmailTemplateComponent,
@@ -172,7 +192,15 @@ const routes: Routes = [
       }),
     ],
   },
-
+  {
+    path: AppRoutes.ATTACHMENT_TYPE,
+    component: AttachmentTypeComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_ATTACHMENT_TYPE,
+      }),
+    ],
+  },
   {
     path: AppRoutes.CLEARING_AGENT,
     component: ClearingAgentComponent,
