@@ -108,6 +108,14 @@ export const Menus: MenuItemContract[] = [
     permission: 'MANAGE_MAWARED_DEPARTMENT',
   },
   {
+    id: MenuIdes.SERVICES,
+    langKey: 'menu_services',
+    icon: AppIcons.SERVICES,
+    parent: MenuIdes.ADMINISTRATION,
+    path: AppFullRoutes.SERVICES,
+    permission: 'MANAGE_SERVICES_DATA',
+  },
+  {
     id: MenuIdes.EMAIL_TEMPLATE,
     langKey: 'menu_email_template',
     icon: AppIcons.EMAIL_TEMPLATE,
@@ -167,6 +175,14 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.LEGAL_RULE,
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGE_LEGAL_RULE',
+  },
+  {
+    id: MenuIdes.ATTACHMENT_TYPE,
+    langKey: 'menu_attachment_type',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.ATTACHMENT_TYPE,
+    parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_ATTACHMENT_TYPE',
   },
   {
     id: MenuIdes.GUIDE_PANEL,
