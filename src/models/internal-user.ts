@@ -128,6 +128,9 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
                 CustomValidators.required,
               ]
             : userPreferences.isSMSNotificationEnabled,
+          simpleSearch: controls
+            ? [userPreferences.simpleSearch, CustomValidators.required]
+            : userPreferences.simpleSearch,
           defaultLang: controls
             ? [userPreferences.defaultLang]
             : userPreferences.defaultLang,

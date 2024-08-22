@@ -761,4 +761,5 @@ export interface LangKeysContract {
   criminal_report_number: string;
   assign_to_employee: string;
   assign_selected_tasks_to_an_employee: string;
+  simple_search: string;
 }
