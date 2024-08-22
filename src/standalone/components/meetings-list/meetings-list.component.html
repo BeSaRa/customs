@@ -95,9 +95,9 @@
               hasNotHaveMeetingMinutes(element.id) &&
               !itWasHeld(element)
             ) {
+              <!-- [disabled]="meetingDateIsNotToday(element)" -->
               <app-icon-button
                 (click)="addMeetingMinutes$.next(element)"
-                [disabled]="meetingDateIsNotToday(element)"
                 class="text-primary"
                 [matTooltip]="lang.map.add_meeting_minutes"
                 icon="BOOK_CLOCK"></app-icon-button>
