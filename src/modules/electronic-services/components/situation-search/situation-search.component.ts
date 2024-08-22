@@ -1,11 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { Config } from '@constants/config';
-import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { ColumnsWrapper } from '@models/columns-wrapper';
-import { NoneFilterColumn } from '@models/none-filter-column';
 import { SituationSearch } from '@models/situation-search';
 import { LangService } from '@services/lang.service';
 import { SituationSearchService } from '@services/situation-search.service';

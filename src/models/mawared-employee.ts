@@ -44,7 +44,9 @@ export class MawaredEmployee extends BaseModel<
   arJobDescription!: string;
   enJobDescription!: string;
   isSuspended!: boolean;
-
+  appointmentStartDate!: string;
+  appointmentEndDate!: string;
+  terminationServiceReason!: string;
   // not related to the model
   code?: string;
   jobTitleCode?: string;

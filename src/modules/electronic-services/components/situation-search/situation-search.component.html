@@ -33,12 +33,12 @@
       <ul class="pl-6">
         @if (employee) {
           <li>
-            {{ 'الاسم: ' + employee.arName }}/
+            {{ 'الاسم: ' + employee.arName }}
             @if (employee.qid) {
-              {{ 'الرقم الشخصي: ' + employee.qid + '/' }}
+              {{ '/' + 'الرقم الشخصي: ' + employee.qid }}
             }
             @if (employee.employeeNo) {
-              {{ 'الرقم الوظيفي: ' + employee.employeeNo }}
+              {{ '/' + 'الرقم الوظيفي: ' + employee.employeeNo }}
             }
           </li>
           @if (employee.phoneNumber) {
@@ -58,23 +58,99 @@
               }}
             </li>
           }
+          @if (employee.appointmentStartDate) {
+            <li>
+              {{ 'تاريخ التعيين: ' + offender.getNames() }}
+            </li>
+          }
           <li>
-            {{ 'تاريخ التعيين: ' + offender.getNames() }}
+            @if (employee.appointmentEndDate) {
+              {{ 'تاريخ انتهاء الخدمة: ' + offender.getNames() }}
+            }
+            @if (employee.terminationServiceReason) {
+              {{ '/' + 'سبب انتهاء الخدمة: ' + offender.getNames() }}
+            }
           </li>
+          <!--          <li>{{ 'تقييم اخر ثلاث سنوات: ' + offender.getNames() }}</li>-->
+          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
+          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
+          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
+          @if (employee.employeeDepartmentInfo) {
+            <li>
+              {{
+                'الادارة/القسم التي تعمل بها اخر ثلاث سنوات: ' +
+                  employee.employeeDepartmentInfo.getNames()
+              }}
+            </li>
+          }
+        }
+        @if (clearingAgent) {
           <li>
-            {{ 'تاريخ انتهاء الخدمة: ' + offender.getNames() }}/
-            {{ 'سبب انتهاء الخدمة: ' + offender.getNames() }}
+            {{ 'الاسم: ' + clearingAgent.arName }}
+            @if (clearingAgent.qid) {
+              {{ '/' + 'الرقم الشخصي: ' + clearingAgent.qid }}
+            }
           </li>
-          <li>{{ 'تقييم اخر ثلاث سنوات: ' + offender.getNames() }}</li>
-          <li>{{ 'السنة: ' + offender.getNames() }}</li>
-          <li>{{ 'السنة: ' + offender.getNames() }}</li>
-          <li>{{ 'السنة: ' + offender.getNames() }}</li>
+          @if (clearingAgent.address) {
+            <li>
+              {{ 'العنوان: ' + clearingAgent.address }}
+            </li>
+          }
+          @if (clearingAgent.typeInfo) {
+            <li>
+              {{ 'النوع: ' + clearingAgent.typeInfo.getNames() }}
+            </li>
+          }
+          @if (clearingAgent.agencyArabicCompanyName) {
+            <li>
+              {{ 'اسم الشركة: ' + clearingAgent.agencyArabicCompanyName }}
+            </li>
+          }
+          @if (clearingAgent.agentCustomCode) {
+            <li>
+              {{ 'الرمز: ' + clearingAgent.agentCustomCode }}
+            </li>
+          }
+          @if (clearingAgent.phoneNumber) {
+            <li>
+              {{ 'رقم الهاتف: ' + clearingAgent.phoneNumber }}
+            </li>
+          }
+          @if (clearingAgent.email) {
+            <li>
+              {{ 'البريد الإلكتروني: ' + clearingAgent.email }}
+            </li>
+          }
+        }
+        @if (clearingAgency) {
           <li>
-            {{
-              'الادارة/القسم التي تعمل بها اخر ثلاث سنوات: ' +
-                offender.getNames()
-            }}
+            {{ 'الاسم: ' + clearingAgency.arName }}
           </li>
+          @if (clearingAgency.address) {
+            <li>
+              {{ 'العنوان: ' + clearingAgency.address }}
+            </li>
+          }
+          @if (clearingAgency.accountAdminFullName) {
+            <li>
+              {{ 'حساب المدير: ' + clearingAgency.accountAdminFullName }}
+            </li>
+          }
+          @if (clearingAgency.customCode) {
+            <li>
+              {{ 'الرمز: ' + clearingAgency.customCode }}
+            </li>
+          }
+          @if (clearingAgency.telNo) {
+            <li>
+              {{ 'رقم الهاتف: ' + clearingAgency.telNo }}
+            </li>
+          }
+          @if (clearingAgency.email) {
+            <li>
+              {{ 'البريد الإلكتروني: ' + clearingAgency.email }}
+            </li>
+          }
         }
       </ul>
     </div>
@@ -94,57 +170,57 @@
       <div class="border-t mt-4"></div>
 
       @for (situation of situations; track situation) {
-        @if (situation.proofStatus === proofTypes.PROVED) {
-          <div>
-            <!-- Section with complex layout -->
-            <section class="container mx-auto mt-4 space-y-4">
-              <!-- First Row: Four columns with centered text -->
-              <div class="flex justify-between">
+        <!--        @if (situation.proofStatus === proofTypes.PROVED) {-->
+        <div>
+          <!-- Section with complex layout -->
+          <section class="container mx-auto mt-4 space-y-4">
+            <!-- First Row: Four columns with centered text -->
+            <div class="flex justify-between">
+              @if (situation.offenderInfo.decisionSerial) {
                 <div class="w-1/4 text-center bg-white p-4">
-                  {{ 'رقم الملف: ' + offender.getNames() }}
+                  {{ 'رقم القرار: ' + situation.offenderInfo.decisionSerial }}
                 </div>
+              }
+              @if (situation.offenderInfo.penaltyAppliedDate) {
                 <div class="w-1/4 text-center bg-white p-4">
-                  {{ 'رقم القرار: ' + offender.getNames() }}
+                  {{
+                    'تاريخ القرار: ' + situation.offenderInfo.penaltyAppliedDate
+                  }}
                 </div>
-                <div class="w-1/4 text-center bg-white p-4">
-                  {{ 'تاريخ المخالفة: ' + getDateString(situation) }}
-                </div>
-                <div class="w-1/4 text-center bg-white p-4">
-                  {{ 'مدير الادارة: ' + situation.offenderInfo?.getNames() }}
-                </div>
+              }
+              <div class="w-1/4 text-center bg-white p-4">
+                {{ 'تاريخ المخالفة: ' + getDateString(situation) }}
               </div>
+            </div>
 
-              <!-- Second Row: Two columns, one with title and one with list -->
-              <div class="flex justify-between">
-                <div class="w-1/3 bg-white p-4">
-                  <h2 class="text-lg font-semibold">
-                    {{
-                      situation.violationInfo.classificationInfo.getNames() +
-                        ':'
-                    }}
-                  </h2>
-                </div>
-                <div class="w-2/3 bg-white p-4">
-                  <ul class="list-disc pl-6">
-                    <li>
-                      {{
-                        situation.violationInfo.violationTypeInfo?.getNames()
-                      }}
-                    </li>
-                  </ul>
-                </div>
+            <!-- Second Row: Two columns, one with title and one with list -->
+            <div class="flex justify-between">
+              <div class="w-1/3 bg-white p-4">
+                <h2 class="text-lg font-semibold">
+                  {{
+                    situation.violationInfo.classificationInfo.getNames() + ':'
+                  }}
+                </h2>
               </div>
-
-              <!-- Third Row: One column with centered text -->
-              <div class="bg-white p-4">
-                <p>القرار:.......</p>
+              <div class="w-2/3 bg-white p-4">
+                <ul class="list-disc pl-6">
+                  <li>
+                    {{ situation.violationInfo.violationTypeInfo.getNames() }}
+                  </li>
+                </ul>
               </div>
-            </section>
+            </div>
 
-            <!-- Divider under the header -->
-            <div class="border-t border-black mt-4"></div>
-          </div>
-        }
+            <!-- Third Row: One column with centered text -->
+            <div class="bg-white p-4">
+              <p>القرار:.......</p>
+            </div>
+          </section>
+
+          <!-- Divider under the header -->
+          <div class="border-t border-black mt-4"></div>
+        </div>
+        <!--        }-->
       }
     } @else {
       <div class="container mx-auto flex justify-between items-center">
