@@ -259,11 +259,13 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.lang.map.need_questions_and_answers_to_take_this_action,
       );
     }
+    this.attendeeCategoryCtrl.markAsTouched();
     return (
       !!this.model.detailsList.length &&
       this.attendeeCtrl.valid &&
       this.qidCtrl.valid &&
-      this.attendeeNameCtrl.valid
+      this.attendeeNameCtrl.valid &&
+      this.attendeeCategoryCtrl.valid
     );
   }
 
