@@ -189,7 +189,7 @@ export class WitnessCriteriaPopupComponent
       .pipe(map(pagination => pagination.rs))
       .pipe(
         map(employees => {
-          const _witness = (this.data.witnessList as Witness[]).filter(
+          const _witness = ((this.data.witnessList as Witness[]) || []).filter(
             w => w.witnessType === OffenderTypes.EMPLOYEE,
           );
           return employees.filter(
@@ -212,7 +212,7 @@ export class WitnessCriteriaPopupComponent
       .pipe(map(pagination => pagination.rs))
       .pipe(
         map(brokers => {
-          const _witness = (this.data.witnessList as Witness[]).filter(
+          const _witness = ((this.data.witnessList as Witness[]) || []).filter(
             w => w.witnessType === OffenderTypes.BROKER,
           );
           return brokers.filter(
