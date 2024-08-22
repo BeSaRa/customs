@@ -51,6 +51,8 @@ import {
 import { ClassificationTypes } from '@enums/violation-classification';
 import { AdminResult } from '@models/admin-result';
 import { OffenderTypes } from '@enums/offender-types';
+import { ViolationClassification } from '@models/violation-classification';
+import { ViolationClassificationService } from '@services/violation-classification.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -81,6 +83,7 @@ export class InvestigationSearchComponent implements OnInit {
   departmentService = inject(OrganizationUnitService);
   employeeService = inject(EmployeeService);
   config = inject(ConfigService);
+  violationClassificationService = inject(ViolationClassificationService);
 
   selectedOffender!: OffenderViolation | null;
   Config = Config;
@@ -88,6 +91,7 @@ export class InvestigationSearchComponent implements OnInit {
   violationClassifications = this.lookupService.lookups.violationClassification;
   offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
   statusList = this.lookupService.lookups.caseGeneralStatus;
+  violationClassifications: ViolationClassification[] = [];
   OffenderTypesEnum = OffenderTypes;
   years: string[] = range(
     new Date().getFullYear() - this.config.CONFIG.YEAR_RANGE_FROM_CURRENT_YEAR,
@@ -118,6 +122,7 @@ export class InvestigationSearchComponent implements OnInit {
     this.form = this.fb.group(
       new InvestigationSearchCriteria().buildForm(true),
     );
+    this.loadViolationClassifications();
     this.form
       .get('createdFrom')
       ?.setValue(new Date(new Date().getFullYear(), 0, 1));
@@ -154,6 +159,13 @@ export class InvestigationSearchComponent implements OnInit {
     'offenderNumber',
     'department/agency',
   ];
+
+  protected loadViolationClassifications() {
+    this.violationClassificationService.loadAsLookups().subscribe(data => {
+      this.violationClassifications = data;
+    });
+  }
+
   showInvestigationViolationClassification(
     OffendersViolations: OffenderViolation[],
   ) {
@@ -196,11 +208,17 @@ export class InvestigationSearchComponent implements OnInit {
       ClassificationTypes.custom
     );
   }
-  get isCriminalViolationClassification() {
-    return (
-      this.form.getRawValue().violationClassificationId ===
-      ClassificationTypes.criminal
-    );
+  get isCriminalViolationClassification(): boolean {
+    let isCriminal = false;
+    this.violationClassifications.forEach(classification => {
+      if (
+        classification.id ===
+          this.form?.getRawValue().violationClassificationId &&
+        classification.key === 'criminal'
+      )
+        isCriminal = true;
+    });
+    return isCriminal;
   }
   handleOffenderTypeChange() {
     if (this.form.getRawValue().offenderType === OffenderTypeWithNone.ALL) {
