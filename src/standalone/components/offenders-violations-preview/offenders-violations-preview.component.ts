@@ -184,7 +184,8 @@ export class OffendersViolationsPreviewComponent
   offenders = computed(() => {
     if (
       this.employeeService.isHumanResourceTeam() ||
-      this.employeeService.isCustomsAffairsManager()
+      this.employeeService.isCustomsAffairsManager() ||
+      this.employeeService.isCustomsAffairs()
     )
       return this.model().getConcernedOffenders();
 

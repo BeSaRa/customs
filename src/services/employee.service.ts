@@ -207,6 +207,12 @@ export class EmployeeService
     );
   }
 
+  isCustomsAffairs() {
+    return !!(this.loginData?.teams || []).find(
+      (t: Team) => t.authName === TeamNames.Customs_Affairs,
+    );
+  }
+
   isLegalAffairsManager() {
     return (this.loginData?.teams || []).find(
       (t: Team) => t.authName === TeamNames.Legal_Affairs_Manager,
