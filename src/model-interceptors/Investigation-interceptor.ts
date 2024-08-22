@@ -46,6 +46,14 @@ export class InvestigationInterceptor
       (model.securityLevelInfo = AdminResult.createInstance(
         model.securityLevelInfo,
       ));
+    model.generalStatusInfo &&
+      (model.generalStatusInfo = AdminResult.createInstance(
+        model.generalStatusInfo,
+      ));
+    model.executionStatusInfo &&
+      (model.executionStatusInfo = AdminResult.createInstance(
+        model.executionStatusInfo,
+      ));
 
     model.offenderInfo =
       model.offenderInfo &&

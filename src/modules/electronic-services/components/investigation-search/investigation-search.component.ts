@@ -142,7 +142,8 @@ export class InvestigationSearchComponent implements OnInit {
   ];
   columnsWrapper: ColumnsWrapper<Investigation> = new ColumnsWrapper(
     new NoneFilterColumn('fullSerial'),
-    new NoneFilterColumn('caseStatus'),
+    new NoneFilterColumn('executionStatus'),
+    new NoneFilterColumn('generalStatus'),
     new NoneFilterColumn('dateCreated'),
     new NoneFilterColumn('violationClassifications'),
     new NoneFilterColumn('actions'),
