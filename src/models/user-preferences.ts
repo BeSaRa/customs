@@ -22,6 +22,7 @@ export class UserPreferences extends BaseModel<
   isMailNotificationEnabled!: boolean;
   isSMSNotificationEnabled!: boolean;
   defaultLang = 1;
+  simpleSearch!: boolean;
 
   private _alternateEmailList!: string;
   public get alternateEmailList(): string {
