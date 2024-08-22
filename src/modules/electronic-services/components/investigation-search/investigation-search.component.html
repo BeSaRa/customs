@@ -109,9 +109,16 @@
             (selectChange)="handleOffenderTypeChange()"
             [options]="offenderTypes" />
           <app-input formControlName="name" [label]="lang.map.offender_name" />
-          <app-input
-            formControlName="employeeNo"
-            [label]="lang.map[getOffenderNumberLabel()]" />
+          @if (isEmployee || isAll) {
+            <app-input
+              formControlName="employeeNo"
+              [label]="lang.map.employee_number" />
+          }
+          @if (isClearingAgent || isAll) {
+            <app-input
+              formControlName="customCode"
+              [label]="lang.map.clearing_agent_code" />
+          }
 
           <app-input formControlName="qId" [label]="lang.map.qid" />
 
@@ -194,7 +201,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               @for (
-                classification of offenderViolationInfo.get(element.caseId);
+                classification of offenderViolationInfo.get(element.id);
                 track classification
               ) {
                 <span
@@ -229,7 +236,7 @@
               [attr.colspan]="columnsWrapper.displayedColumns.length">
               <div
                 [@detailExpand]="
-                  selectedOffender === element ? 'expanded' : 'collapsed'
+                  selectedOffenderMap.get(element.id) ? 'expanded' : 'collapsed'
                 "
                 class="px-1 divide-y-2 divide-primary divide-dashed bg-gray-100">
                 <table
@@ -320,7 +327,7 @@
             *matRowDef="let element; columns: columnsWrapper.displayedColumns"
             (contextmenu)="contextMenu.open($event, element)"
             class="element-row"
-            [class.example-expanded-row]="selectedOffender === element"
+            [class.example-expanded-row]="selectedOffenderMap.get(element.id)"
             (click)="rowClicked($event, element)"></tr>
           <tr
             mat-row

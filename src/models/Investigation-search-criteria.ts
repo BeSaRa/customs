@@ -9,6 +9,7 @@ export class InvestigationSearchCriteria extends Investigation {
   qId!: string;
   eId!: string;
   employeeNo!: string;
+  customCode!: string;
   investigationFileNumber!: string;
   createdFrom!: string;
   createdTo!: string;
@@ -27,6 +28,7 @@ export class InvestigationSearchCriteria extends Investigation {
       qId,
       eId,
       employeeNo,
+      customCode,
       departmentId,
       offenderType,
       year,
@@ -45,6 +47,7 @@ export class InvestigationSearchCriteria extends Investigation {
       qId: controls ? [qId] : qId,
       eId: controls ? [eId] : eId,
       employeeNo: controls ? [employeeNo] : employeeNo,
+      customCode: controls ? [customCode] : customCode,
       year: controls ? [year] : year,
       generalStatus: controls ? [generalStatus] : generalStatus,
       executionStatus: controls ? [executionStatus] : executionStatus,
