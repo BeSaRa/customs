@@ -8,7 +8,6 @@ import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { INavigatedItem } from '@contracts/inavigated-item';
-import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { OffenderTypeWithNone } from '@enums/offender-type-with-none';
 import { OpenFrom } from '@enums/open-from';
 import { ColumnsWrapper } from '@models/columns-wrapper';
@@ -85,10 +84,9 @@ export class InvestigationSearchComponent implements OnInit {
   config = inject(ConfigService);
   violationClassificationService = inject(ViolationClassificationService);
 
-  selectedOffender!: OffenderViolation | null;
+  selectedOffenderMap: Map<string, boolean> = new Map();
   Config = Config;
   departments!: OrganizationUnit[];
-  violationClassifications = this.lookupService.lookups.violationClassification;
   offenderTypes = this.lookupService.lookups.offenderTypeWithNone;
   statusList = this.lookupService.lookups.caseGeneralStatus;
   violationClassifications: ViolationClassification[] = [];
@@ -186,13 +184,9 @@ export class InvestigationSearchComponent implements OnInit {
     this.form.markAllAsTouched();
     return this.form.valid;
   }
-  getOffenderNumberLabel(): keyof LangKeysContract {
-    if (this.isEmployee) {
-      return 'employee_number' as keyof LangKeysContract;
-    } else if (this.isClearingAgent) {
-      return 'clearing_agent_code' as keyof LangKeysContract;
-    }
-    return 'employee_clearing_agent_number' as keyof LangKeysContract;
+
+  get isAll() {
+    return this.form.getRawValue().offenderType === OffenderTypeWithNone.ALL;
   }
   get isEmployee() {
     return (
@@ -264,15 +258,17 @@ export class InvestigationSearchComponent implements OnInit {
     this.form.reset();
   }
 
-  rowClicked($event: MouseEvent, element: OffenderViolation) {
+  rowClicked($event: MouseEvent, element: Investigation) {
     const requiredClassToPreventExpended = 'mat-mdc-button-touch-target';
     if (
       !($event.target as unknown as HTMLElement).classList.contains(
         requiredClassToPreventExpended,
       )
     ) {
-      this.selectedOffender =
-        this.selectedOffender === element ? null : element;
+      this.selectedOffenderMap.set(
+        element.id,
+        !this.selectedOffenderMap.get(element.id),
+      );
     }
   }
   private listenToSearch() {
@@ -311,7 +307,7 @@ export class InvestigationSearchComponent implements OnInit {
       .pipe(
         tap(data => {
           data.forEach(element => {
-            this.offenderViolationInfo.set(element.caseId, [
+            this.offenderViolationInfo.set(element.id, [
               ...this.showInvestigationViolationClassification(
                 element.offenderViolationInfo,
               ),
@@ -322,6 +318,9 @@ export class InvestigationSearchComponent implements OnInit {
       .subscribe((data: Investigation[]) => {
         if (data.length) {
           this.selectedTab = 1;
+          data.forEach(element => {
+            this.selectedOffenderMap.set(element.id, true);
+          });
           this.displayedList = new MatTableDataSource(data);
         } else {
           this.dialog.info(this.lang.map.no_records_to_display);
@@ -332,8 +331,8 @@ export class InvestigationSearchComponent implements OnInit {
   view(item: Investigation) {
     const itemDetails = this.encrypt.encrypt<INavigatedItem>({
       openFrom: OpenFrom.SEARCH,
-      taskId: item.caseId,
-      caseId: item.caseId,
+      taskId: item.id,
+      caseId: item.id,
       caseType: item.caseType,
       searchCriteria: this.form.value,
     });
@@ -346,7 +345,7 @@ export class InvestigationSearchComponent implements OnInit {
 
   showActionsOnCase(item: Investigation) {
     this.dialog.open(ActionsOnCaseComponent, {
-      data: { caseId: item.caseId },
+      data: { caseId: item.id },
     });
   }
 
