@@ -37,6 +37,8 @@ export class Investigation extends BaseCase<
   violationInfo: Violation[] = [];
   penaltyDecisions: PenaltyDecision[] = [];
   securityLevelInfo?: AdminResult;
+  generalStatusInfo?: AdminResult;
+  executionStatusInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
 
