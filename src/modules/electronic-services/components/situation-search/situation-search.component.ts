@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Config } from '@constants/config';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { SituationSearch } from '@models/situation-search';
@@ -14,6 +14,12 @@ import { ProofTypes } from '@enums/proof-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { ClearingAgent } from '@models/clearing-agent';
 import { ClearingAgency } from '@models/clearing-agency';
+import { CaseTypes } from '@enums/case-types';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { OpenFrom } from '@enums/open-from';
+import { AppFullRoutes } from '@constants/app-full-routes';
+import { EncryptionService } from '@services/encryption.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-situation-search',
@@ -33,6 +39,9 @@ export class SituationSearchComponent
   today = new Date();
   offender: Offender = this.data && (this.data.offender as Offender);
   datePipe = inject(DatePipe);
+  encrypt = inject(EncryptionService);
+  router = inject(Router);
+  dialog = inject(MatDialog);
   employee!: MawaredEmployee;
   clearingAgent!: ClearingAgent;
   clearingAgency!: ClearingAgency;
@@ -98,4 +107,20 @@ export class SituationSearchComponent
   }
 
   protected readonly proofTypes = ProofTypes;
+  protected readonly CaseTypes = CaseTypes;
+
+  view(caseId: string) {
+    this.dialog.closeAll();
+    const itemDetails = this.encrypt.encrypt<INavigatedItem>({
+      openFrom: OpenFrom.DRAFT_SCREEN,
+      taskId: caseId,
+      caseId: caseId,
+      caseType: CaseTypes.INVESTIGATION,
+    });
+    this.router
+      .navigate([AppFullRoutes.INVESTIGATION], {
+        queryParams: { item: itemDetails },
+      })
+      .then();
+  }
 }

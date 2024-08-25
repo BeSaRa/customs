@@ -212,8 +212,18 @@
             </div>
 
             <!-- Third Row: One column with centered text -->
+            @if (situation.offenderInfo.penaltyInfo.arName) {
+              <div class="bg-white p-4">
+                <p>القرار:{{ situation.offenderInfo.penaltyInfo.arName }}</p>
+              </div>
+            }
+            <!-- Third Row: One column with centered text -->
             <div class="bg-white p-4">
-              <p>القرار:.......</p>
+              <button
+                class="text-blue-700 hover:underline focus:outline-none"
+                (click)="view(situation.caseId)">
+                {{ situation.caseId }}
+              </button>
             </div>
           </section>
 
