@@ -43,6 +43,7 @@ export class UserPreferences extends BaseModel<
       defaultLang,
       isMailNotificationEnabled,
       isSMSNotificationEnabled,
+      simpleSearch,
     } = this;
 
     return {
@@ -56,6 +57,9 @@ export class UserPreferences extends BaseModel<
         ? [isSMSNotificationEnabled, CustomValidators.required]
         : isSMSNotificationEnabled,
       alternateEmailListParsed: alternateEmailListParsed,
+      simpleSearch: controls
+        ? [simpleSearch, CustomValidators.required]
+        : simpleSearch,
     };
   }
 
