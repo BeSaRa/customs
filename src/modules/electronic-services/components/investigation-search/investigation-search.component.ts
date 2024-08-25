@@ -197,22 +197,24 @@ export class InvestigationSearchComponent implements OnInit {
     return this.form.getRawValue().offenderType === OffenderTypeWithNone.BROKER;
   }
   get isCustomsViolationClassification() {
-    return (
-      this.form.getRawValue().violationClassificationId ===
-      ClassificationTypes.custom
+    return !!this.violationClassifications.find(
+      classification =>
+        this.form
+          ?.getRawValue()
+          .violationClassificationId.find(
+            (vcId: number) => vcId === classification.id,
+          ) && classification.key === ClassificationTypes.custom,
     );
   }
   get isCriminalViolationClassification(): boolean {
-    let isCriminal = false;
-    this.violationClassifications.forEach(classification => {
-      if (
-        classification.id ===
-          this.form?.getRawValue().violationClassificationId &&
-        classification.key === 'criminal'
-      )
-        isCriminal = true;
-    });
-    return isCriminal;
+    return !!this.violationClassifications.find(
+      classification =>
+        this.form
+          ?.getRawValue()
+          .violationClassificationId.find(
+            (vcId: number) => vcId === classification.id,
+          ) && classification.key === ClassificationTypes.criminal,
+    );
   }
   filteredElements(Elements: OffenderViolation[]) {
     const map = new Map();

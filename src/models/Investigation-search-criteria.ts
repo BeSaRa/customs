@@ -16,7 +16,7 @@ export class InvestigationSearchCriteria extends Investigation {
   year: string = new Date().getFullYear().toString();
   generalStatus!: number;
   executionStatus!: number;
-  violationClassificationId!: number[];
+  violationClassificationId: number[] = [];
   reportNumber!: string;
   customsDeclarationNumber!: string;
   controlReportNumber!: string;
