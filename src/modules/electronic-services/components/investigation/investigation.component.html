@@ -57,7 +57,7 @@
   class="relative"
   [ngClass]="{
     'investigation-tab-group': !showSummaryElements(),
-    'investigation-tab-group-preview': showSummaryElements()
+    'investigation-tab-group-preview': showSummaryElements(),
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" [mat-stretch-tabs]="false">
@@ -135,7 +135,10 @@
     (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
   </app-buttons-case-wrapper>
   <ng-template #summary_tab>
-    <app-summary-tab (updateModel)="updateModel$.next(null)" [model]="model" />
+    <app-summary-tab
+      (updateModel)="updateModel$.next(null)"
+      [openFrom]="openFrom"
+      [model]="model" />
   </ng-template>
 
   <ng-template #basic_info_tab>
@@ -229,7 +232,7 @@
         #officialAttachments
         [caseId]="[
           getCaseFolderIdByName(folderType.OFFICIAL),
-          getCaseFolderIdByName(folderType.LEGAL)
+          getCaseFolderIdByName(folderType.LEGAL),
         ]"
         [service]="service"
         [readonly]="true"

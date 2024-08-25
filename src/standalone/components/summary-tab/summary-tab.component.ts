@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
+  Input,
   input,
   Output,
   ViewChild,
@@ -11,6 +12,7 @@ import { OffendersViolationsPreviewComponent } from '../offenders-violations-pre
 import { LangService } from '@services/lang.service';
 import { UnlinkedViolationsComponent } from '@standalone/components/unlinked-violations/unlinked-violations.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-summary-tab',
@@ -26,6 +28,7 @@ import { TextareaComponent } from '@standalone/components/textarea/textarea.comp
 export class SummaryTabComponent {
   lang = inject(LangService);
   model = input.required<Investigation>();
+  @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   @Output() updateModel: EventEmitter<void> = new EventEmitter<void>();
   @ViewChild(OffendersViolationsPreviewComponent)
   offendersViolationsPreview!: OffendersViolationsPreviewComponent;
