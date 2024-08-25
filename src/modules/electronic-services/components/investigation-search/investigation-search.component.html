@@ -83,6 +83,7 @@
             [label]="lang.map.violation_classification"
             bindValue="id"
             bindLabel="getNames"
+            [isMultiple]="true"
             [options]="violationClassifications" />
           @if (isCustomsViolationClassification) {
             <app-input
@@ -106,7 +107,6 @@
             [label]="lang.map.offender_type"
             bindValue="lookupKey"
             bindLabel="getNames"
-            (selectChange)="handleOffenderTypeChange()"
             [options]="offenderTypes" />
           <app-input formControlName="name" [label]="lang.map.offender_name" />
           @if (isEmployee || isAll) {
