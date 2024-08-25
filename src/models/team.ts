@@ -16,6 +16,11 @@ export class Team extends BaseModel<Team, TeamService> {
   ouId!: number;
   authName!: string;
   parentDeptId!: number;
+
+  // for disciplinary committee only
+  secretary!: number;
+  president!: number;
+
   buildForm(controls = false): object {
     const {
       ldapGroupName,
@@ -24,6 +29,9 @@ export class Team extends BaseModel<Team, TeamService> {
       teamEmail,
       autoClaim,
       parentDeptId,
+      authName,
+      secretary,
+      president,
     } = this;
     return {
       ldapGroupName: ldapGroupName,
@@ -50,6 +58,9 @@ export class Team extends BaseModel<Team, TeamService> {
       teamEmail: [teamEmail, [CustomValidators.pattern('EMAIL')]],
       autoClaim: controls ? [autoClaim, CustomValidators.required] : autoClaim,
       parentDeptId: parentDeptId,
+      authName: authName,
+      secretary: controls ? [secretary] : secretary,
+      president: controls ? [president] : president,
     };
   }
 }
