@@ -214,11 +214,6 @@ export class InvestigationSearchComponent implements OnInit {
     });
     return isCriminal;
   }
-  handleOffenderTypeChange() {
-    if (this.form.getRawValue().offenderType === OffenderTypeWithNone.ALL) {
-      this.form.get('departmentId')?.reset();
-    }
-  }
   filteredElements(Elements: OffenderViolation[]) {
     const map = new Map();
     return Elements.filter(elem => {
@@ -352,6 +347,10 @@ export class InvestigationSearchComponent implements OnInit {
   loadDepartments() {
     this.departmentService.loadAsLookups().subscribe(departments => {
       this.departments = departments;
+      const userOU = this.employeeService.getOrganizationUnit();
+      if (userOU) {
+        this.form.get('departmentId')?.setValue(userOU.id);
+      }
     });
   }
 
