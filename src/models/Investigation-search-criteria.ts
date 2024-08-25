@@ -13,7 +13,7 @@ export class InvestigationSearchCriteria extends Investigation {
   investigationFileNumber!: string;
   createdFrom!: string;
   createdTo!: string;
-  year!: number;
+  year: string = new Date().getFullYear().toString();
   generalStatus!: number;
   executionStatus!: number;
   violationClassificationId!: number;
