@@ -13,6 +13,7 @@ import {
   effect,
   EventEmitter,
   inject,
+  Input,
   input,
   OnInit,
   signal,
@@ -71,6 +72,7 @@ import { PenaltyIcons } from '@constants/penalty-icons';
 import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 import { ProofTypes } from '@enums/proof-types';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -107,6 +109,7 @@ export class OffendersViolationsPreviewComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
+  @Input() openFrom: OpenFrom = OpenFrom.ADD_SCREEN;
   protected readonly AppIcons = AppIcons;
   updateModel = input.required<EventEmitter<void>>();
   penaltyDecisionService = inject(PenaltyDecisionService);
@@ -183,9 +186,11 @@ export class OffendersViolationsPreviewComponent
 
   offenders = computed(() => {
     if (
-      this.employeeService.isHumanResourceTeam() ||
-      this.employeeService.isCustomsAffairsManager() ||
-      this.employeeService.isCustomsAffairs()
+      (this.employeeService.isHumanResourceTeam() ||
+        this.employeeService.isCustomsAffairsManager() ||
+        this.employeeService.isCustomsAffairs()) &&
+      !this.model().isDrafted &&
+      this.openFrom !== OpenFrom.SEARCH
     )
       return this.model().getConcernedOffenders();
 
