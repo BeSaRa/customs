@@ -762,4 +762,6 @@ export interface LangKeysContract {
   assign_to_employee: string;
   assign_selected_tasks_to_an_employee: string;
   simple_search: string;
+  secretary: string;
+  for_disciplinary_committee_only: string;
 }

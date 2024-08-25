@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { OrganizationUnit } from '@models/organization-unit';
+import { TeamNames } from '@enums/team-names';
+import { InternalUser } from '@models/internal-user';
+import { InternalUserService } from '@services/internal-user.service';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-team-popup',
@@ -19,6 +23,9 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
   data: CrudDialogDataContract<Team> = inject(MAT_DIALOG_DATA);
   organizationUnitService = inject(OrganizationUnitService);
   organizationUnits!: OrganizationUnit[];
+  employeesOnDisciplinary!: InternalUser[];
+  internalUserService = inject(InternalUserService);
+  teamNames = TeamNames;
 
   protected override _init(): void {
     this.organizationUnitService
@@ -31,6 +38,19 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
     this.form.controls['ldapGroupName'].disable();
+  }
+
+  protected override _afterBuildForm() {
+    super._afterBuildForm();
+    if (this.isDisciplinary()) {
+      this.internalUserService
+        .loadAsLookups()
+        .subscribe(
+          internalUsers => (this.employeesOnDisciplinary = internalUsers),
+        );
+      this.form.get('secretary')?.setValidators(CustomValidators.required);
+      this.form.get('president')?.setValidators(CustomValidators.required);
+    }
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -54,5 +74,12 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
     this.dialogRef.close(this.model);
     // you can close the dialog after save here
     // this.dialogRef.close(this.model);
+  }
+
+  isDisciplinary() {
+    return (
+      this.form &&
+      this.form.get('authName')?.value === this.teamNames.Disciplinary_Committee
+    );
   }
 }

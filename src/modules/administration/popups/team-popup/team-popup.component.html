@@ -15,8 +15,8 @@
           [label]="lang.map.ar_name"></app-input>
         <app-input
           formControlName="enName"
-          [label]="lang.map.en_name"></app-input
-        ><app-input
+          [label]="lang.map.en_name"></app-input>
+        <app-input
           formControlName="ldapGroupName"
           [label]="lang.map.ldap_group_name"></app-input>
         <app-input
@@ -32,23 +32,45 @@
           formControlName="autoClaim"
           [label]="lang.map.auto_claim"></app-switch>
       </div>
+      @if (isDisciplinary()) {
+        <div class="grid grid-cols-1 gap-4 items-center">
+          <hr />
+          <p class="mb-2">{{ lang.map.for_disciplinary_committee_only }} :</p>
+        </div>
+        <div class="grid grid-cols-2 gap-4 items-center">
+          <app-select-input
+            formControlName="secretary"
+            [options]="employeesOnDisciplinary"
+            [label]="lang.map.secretary"
+            bindValue="id"
+            bindLabel="getNames"
+            [enableFilter]="true"
+            bindFilter="getNames" />
+          <app-select-input
+            formControlName="president"
+            [options]="employeesOnDisciplinary"
+            [label]="lang.map.president"
+            bindValue="id"
+            bindLabel="getNames" />
+        </div>
+      }
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      <app-button (click)="save$.next()" buttonType="primary">{{
-        lang.map.save
-      }}</app-button>
+      <app-button (click)="save$.next()" buttonType="primary"
+        >{{ lang.map.save }}
+      </app-button>
     }
     @if (!inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline"
+        >{{ lang.map.close }}
+      </app-button>
     }
     @if (inViewMode()) {
-      <app-button mat-dialog-close="" buttonType="primary">{{
-        lang.map.close
-      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary"
+        >{{ lang.map.close }}
+      </app-button>
     }
   </div>
 </div>
