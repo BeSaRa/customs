@@ -4,6 +4,7 @@ import { BaseModel } from '@abstracts/base-model';
 import { SituationSearchService } from '@services/situation-search.service';
 import { Violation } from './violation';
 import { Offender } from './offender';
+import { AdminResult } from '@models/admin-result';
 
 const { send, receive } = new SituationSearchInterceptor();
 
@@ -16,8 +17,9 @@ export class SituationSearch extends BaseModel<
   caseId!: string;
   offenderId!: number;
   violationId!: number;
-  repeat!: number;
+  violationTypeId!: number;
   proofStatus!: number;
+  proofStatusInfo!: AdminResult;
   offenderInfo!: Offender;
   violationInfo!: Violation;
 

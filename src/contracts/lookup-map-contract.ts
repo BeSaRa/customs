@@ -61,4 +61,5 @@ export interface LookupMapContract {
   GrievanceFinalDecision: Lookup[];
   responsibilityRepeatViolations: Lookup[];
   caseGeneralStatus: Lookup[];
+  penaltyStatus: Lookup[];
 }
