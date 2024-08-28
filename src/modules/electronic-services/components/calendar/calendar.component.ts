@@ -70,7 +70,7 @@ export class CalendarComponent implements OnInit {
     this.reload$
       .pipe(
         switchMap(() => {
-          return this.meetingService.load();
+          return this.meetingService.load({});
         }),
       )
       .subscribe(list => {
