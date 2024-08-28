@@ -107,6 +107,7 @@ export class InvestigationSearchComponent implements OnInit {
   length = 50;
   offenderViolationInfo: Map<string, OffenderViolation[]> = new Map();
   readonly OffenderTypeWithNone = OffenderTypeWithNone;
+
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
@@ -180,6 +181,7 @@ export class InvestigationSearchComponent implements OnInit {
     });
     return map.values();
   }
+
   protected _beforeSearch(): boolean | Observable<boolean> {
     this.form.markAllAsTouched();
     return this.form.valid;
@@ -188,14 +190,17 @@ export class InvestigationSearchComponent implements OnInit {
   get isAll() {
     return this.form.getRawValue().offenderType === OffenderTypeWithNone.ALL;
   }
+
   get isEmployee() {
     return (
       this.form.getRawValue().offenderType === OffenderTypeWithNone.EMPLOYEE
     );
   }
+
   get isClearingAgent() {
     return this.form.getRawValue().offenderType === OffenderTypeWithNone.BROKER;
   }
+
   get isCustomsViolationClassification() {
     return !!this.violationClassifications.find(
       classification =>
@@ -206,6 +211,7 @@ export class InvestigationSearchComponent implements OnInit {
           ) && classification.key === ClassificationTypes.custom,
     );
   }
+
   get isCriminalViolationClassification(): boolean {
     return !!this.violationClassifications.find(
       classification =>
@@ -216,6 +222,7 @@ export class InvestigationSearchComponent implements OnInit {
           ) && classification.key === ClassificationTypes.criminal,
     );
   }
+
   filteredElements(Elements: OffenderViolation[]) {
     const map = new Map();
     return Elements.filter(elem => {
@@ -226,6 +233,7 @@ export class InvestigationSearchComponent implements OnInit {
       return true;
     });
   }
+
   private _prepareModel() {
     if (
       this.form.get('createdFrom')?.value &&
@@ -268,6 +276,7 @@ export class InvestigationSearchComponent implements OnInit {
       );
     }
   }
+
   private listenToSearch() {
     this.search$
       .pipe(delay(0))
@@ -379,5 +388,9 @@ export class InvestigationSearchComponent implements OnInit {
     } else {
       return this.employeeService.getOrganizationUnits();
     }
+  }
+
+  isSimpleSearch() {
+    return !!this.employeeService.getEmployee()?.userPreferences.simpleSearch;
   }
 }

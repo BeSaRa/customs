@@ -19,5 +19,6 @@ export interface LoginDataContract {
   teams: Team[];
   token: string;
   type: number;
+  simpleSearch: boolean;
   userSecConfig: object;
 }
