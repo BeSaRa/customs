@@ -19,6 +19,10 @@ export class SituationSearchInterceptor
   receive(model: SituationSearch): SituationSearch {
     model.statusInfo &&
       (model.statusInfo = AdminResult.createInstance(model.statusInfo));
+    model.proofStatusInfo &&
+      (model.proofStatusInfo = AdminResult.createInstance(
+        model.proofStatusInfo,
+      ));
     model.offenderInfo = new Offender().clone<Offender>(
       new OffenderInterceptor().receive(model.offenderInfo),
     );

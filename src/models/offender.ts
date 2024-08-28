@@ -42,6 +42,7 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   penaltySignerInfo!: AdminResult;
   penaltySignerRoleInfo!: AdminResult;
   penaltyStatusInfo!: AdminResult;
+  penaltyStatus!: number;
   directedToInfo!: AdminResult;
   decisionTypeInfo!: AdminResult;
   penaltySignerId!: number;

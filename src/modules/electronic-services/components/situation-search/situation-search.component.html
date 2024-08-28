@@ -9,31 +9,26 @@
   </div>
   <div class="dialog-content">
     <div class="container mx-auto flex justify-between items-center">
-      <!-- First Column: Today's Date -->
       <div class="text-start w-1/3">
         <p class="text-gray-700 text-xs">
           تاريخ الاستخراج :
           {{ today | date: config.DATE_FORMAT }}
         </p>
       </div>
-      <!-- Second Column: Title -->
       <div class="text-center w-1/3">
         <h1 class="text-xl font-semibold text-gray-900">بحث حالة</h1>
       </div>
-      <!-- Third Column: Empty -->
-      <div class="w-1/3">
-        <!-- Empty Column -->
-      </div>
+      <div class="w-1/3"></div>
     </div>
-    <!-- Divider under the header -->
     <div class="border-t border-black mt-4"></div>
 
-    <!-- Unordered List with 12 texts -->
     <div class="container mx-auto mt-4">
       <ul class="pl-6">
         @if (employee) {
           <li>
-            {{ 'الاسم: ' + employee.arName }}
+            @if (employee.arName) {
+              {{ 'الاسم: ' + employee.arName }}
+            }
             @if (employee.qid) {
               {{ '/' + 'الرقم الشخصي: ' + employee.qid }}
             }
@@ -71,10 +66,6 @@
               {{ '/' + 'سبب انتهاء الخدمة: ' + offender.getNames() }}
             }
           </li>
-          <!--          <li>{{ 'تقييم اخر ثلاث سنوات: ' + offender.getNames() }}</li>-->
-          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
-          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
-          <!--          <li>{{ 'السنة: ' + offender.getNames() }}</li>-->
           @if (employee.employeeDepartmentInfo) {
             <li>
               {{
@@ -154,87 +145,165 @@
         }
       </ul>
     </div>
-    <!-- Divider under the list -->
     <div class="border-t border-black my-4 w-full"></div>
 
     @if (situations && situations.length) {
       <div class="container mx-auto flex justify-between items-center">
-        <!-- Title -->
         <div class="text-center w-full">
           <h1 class="text-xl font-semibold text-gray-900">
             المخالفات الإدارية
           </h1>
         </div>
-      </div>
-      <!-- Divider under the header -->
-      <div class="border-t mt-4"></div>
+        <div class="text-center">
+          <div>
+            <app-select-input
+              class="min-w-42"
+              [label]="lang.map.status"
+              bindLabel="getNames"
+              [formControl]="statusFilter"
+              bindValue="lookupKey"
+              [options]="penaltyStatus" />
+          </div>
 
-      @for (situation of situations; track situation) {
-        <!--        @if (situation.proofStatus === proofTypes.PROVED) {-->
-        <div>
-          <!-- Section with complex layout -->
-          <section class="container mx-auto mt-4 space-y-4">
-            <!-- First Row: Four columns with centered text -->
-            <div class="flex justify-between">
-              @if (situation.offenderInfo.decisionSerial) {
-                <div class="w-1/4 text-center bg-white p-4">
-                  {{ 'رقم القرار: ' + situation.offenderInfo.decisionSerial }}
-                </div>
-              }
-              @if (situation.offenderInfo.penaltyAppliedDate) {
-                <div class="w-1/4 text-center bg-white p-4">
-                  {{
-                    'تاريخ القرار: ' + situation.offenderInfo.penaltyAppliedDate
-                  }}
-                </div>
-              }
-              <div class="w-1/4 text-center bg-white p-4">
-                {{ 'تاريخ المخالفة: ' + getDateString(situation) }}
+          <div [formGroup]="dateRangeFormGroup">
+            <div class="mb-3">
+              <label class="font-medium">{{ lang.map.violation_date }} </label>
+              <div
+                (click)="rangePicker.open()"
+                class="flex read-only input-form p-2">
+                <mat-date-range-input [rangePicker]="rangePicker">
+                  <input
+                    [placeholder]="lang.map.date_from"
+                    matStartDate
+                    formControlName="start" />
+                  <input
+                    [placeholder]="lang.map.date_to"
+                    matEndDate
+                    formControlName="end" />
+                </mat-date-range-input>
               </div>
+              <mat-date-range-picker
+                hidden
+                #rangePicker></mat-date-range-picker>
             </div>
-
-            <!-- Second Row: Two columns, one with title and one with list -->
-            <div class="flex justify-between">
-              <div class="w-1/3 bg-white p-4">
-                <h2 class="text-lg font-semibold">
-                  {{
-                    situation.violationInfo.classificationInfo.getNames() + ':'
-                  }}
-                </h2>
-              </div>
-              <div class="w-2/3 bg-white p-4">
-                <ul class="list-disc pl-6">
-                  <li>
-                    {{ situation.violationInfo.violationTypeInfo.getNames() }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- Third Row: One column with centered text -->
-            @if (situation.offenderInfo.penaltyInfo.arName) {
-              <div class="bg-white p-4">
-                <p>القرار:{{ situation.offenderInfo.penaltyInfo.arName }}</p>
-              </div>
-            }
-            <!-- Third Row: One column with centered text -->
-            <div class="bg-white p-4">
-              <button
-                class="text-blue-700 hover:underline focus:outline-none"
-                (click)="view(situation.caseId)">
-                {{ situation.caseId }}
-              </button>
-            </div>
-          </section>
-
-          <!-- Divider under the header -->
-          <div class="border-t border-black mt-4"></div>
+          </div>
         </div>
-        <!--        }-->
+      </div>
+      <div class="border-t mt-4"></div>
+      @if (mapSituations.size > 0) {
+        @for (caseEntry of mapSituations | keyvalue; track caseEntry) {
+          <div>
+            <section class="container mx-auto mt-4 space-y-4">
+              <div class="flex justify-between">
+                <div class="w-1/4 text-center bg-white p-4">
+                  {{
+                    'الحالة : ' +
+                      getFirstSituation(
+                        caseEntry.value
+                      ).offenderInfo.penaltyStatusInfo.getNames() || ' '
+                  }}
+                </div>
+                @if (
+                  getFirstSituation(caseEntry.value).offenderInfo.decisionSerial
+                ) {
+                  <div class="w-1/4 text-center bg-white p-4">
+                    {{
+                      'رقم القرار: ' +
+                        getFirstSituation(caseEntry.value).offenderInfo
+                          .decisionSerial || ' '
+                    }}
+                  </div>
+                }
+                @if (
+                  getFirstSituation(caseEntry.value).offenderInfo
+                    .penaltyAppliedDate
+                ) {
+                  <div class="w-1/4 text-center bg-white p-4">
+                    {{
+                      'تاريخ القرار: ' +
+                        getDecisionDateString(
+                          getFirstSituation(caseEntry.value)
+                        ) || ' '
+                    }}
+                  </div>
+                }
+              </div>
+              @for (
+                violationEntry of caseEntry.value | keyvalue;
+                track violationEntry
+              ) {
+                <div class="flex justify-between">
+                  <div class="w-1/3 bg-white p-4">
+                    <h2 class="text-lg font-semibold">
+                      {{
+                        violationEntry.value[0].violationInfo.classificationInfo.getNames() +
+                          ':'
+                      }}
+                    </h2>
+                  </div>
+                  <div class="w-2/3 bg-white p-4">
+                    <ul class="list-disc pl-6">
+                      @for (
+                        situationEntry of violationEntry.value;
+                        track situationEntry
+                      ) {
+                        <li>
+                          {{
+                            situationEntry.violationInfo.violationTypeInfo.getNames()
+                          }}
+                          //
+                          {{
+                            'تاريخ المخالفة: ' +
+                              getViolationDateString(situationEntry)
+                          }}
+                          //
+                          {{ situationEntry.proofStatusInfo.getNames() }}
+                          //
+                        </li>
+                      }
+                    </ul>
+                  </div>
+                </div>
+              }
+
+              @if (
+                getFirstSituation(caseEntry.value).offenderInfo.penaltyInfo
+                  .arName
+              ) {
+                <div class="bg-white p-4">
+                  <p>
+                    القرار:{{
+                      getFirstSituation(caseEntry.value).offenderInfo
+                        .penaltyInfo.arName || ' '
+                    }}
+                  </p>
+                </div>
+              }
+              <div class="bg-white flex justify-between">
+                <button
+                  class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
+                  (click)="view(caseEntry.key)">
+                  {{ 'عرض ملف التحقيق' }}
+                </button>
+
+                <button
+                  class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
+                  (click)="
+                    viewDecisionFile$.next(
+                      getFirstSituation(caseEntry.value)!.offenderInfo.vsid
+                    )
+                  ">
+                  {{ 'عرض القرار' }}
+                </button>
+              </div>
+            </section>
+
+            <div class="border-t border-black mt-4"></div>
+          </div>
+        }
       }
     } @else {
       <div class="container mx-auto flex justify-between items-center">
-        <!-- No records to display -->
         <div class="text-center w-full">
           <h1 class="text-xl font-semibold text-gray-900">
             {{ lang.map.no_records_to_display }}
