@@ -246,7 +246,8 @@ export class OffendersViolationsPreviewComponent
                   this.employeeService.isPresident() ||
                   this.employeeService.isPresidentAssisstant()
                 )) ||
-              !this.model().isOffenderConcerned(i.offenderId),
+              (this.model().hasConcernedOffenders() &&
+                !this.model().isOffenderConcerned(i.offenderId)),
           }),
       );
       return acc;
