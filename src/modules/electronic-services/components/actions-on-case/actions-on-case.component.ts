@@ -14,6 +14,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { ignoreErrors } from '@utils/utils';
 import { catchError, exhaustMap, of, throwError } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-actions-on-case',
@@ -24,6 +25,8 @@ import { MatSort } from '@angular/material/sort';
     MatDialogModule,
     MatTableModule,
     MatSort,
+    MatTabGroup,
+    MatTab,
   ],
   templateUrl: './actions-on-case.component.html',
   styleUrl: './actions-on-case.component.scss',

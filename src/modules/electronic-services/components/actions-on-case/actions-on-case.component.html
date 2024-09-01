@@ -7,9 +7,12 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content">
-    <div class="p-4" style="max-height: 62vh">
-      <div class="shadow relative mb-4" style="max-height: 30vh">
+  <mat-tab-group
+    [mat-stretch-tabs]="false"
+    mat-align-tabs="start"
+    dynamicHeight="true">
+    <mat-tab [label]="lang.map.item_place">
+      <div class="shadow relative m-3">
         <div
           class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
           <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
@@ -17,7 +20,7 @@
           </h1>
         </div>
 
-        <div class="max-h-[26vh] overflow-y-auto">
+        <div class="max-h-[48vh] overflow-y-auto">
           <table
             mat-table
             matSort
@@ -86,7 +89,9 @@
           </table>
         </div>
       </div>
-      <div class="shadow relative" style="max-height: 30vh">
+    </mat-tab>
+    <mat-tab [label]="lang.map.actions">
+      <div class="shadow relative m-3">
         <div
           class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
           <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
@@ -94,7 +99,7 @@
           </h1>
         </div>
 
-        <div class="max-h-[26vh] overflow-y-auto">
+        <div class="max-h-[48vh] overflow-y-auto m-3">
           <table
             mat-table
             matSort
@@ -193,8 +198,8 @@
           </table>
         </div>
       </div>
-    </div>
-  </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 <div class="dialog-footer justify-end">
   <app-button mat-dialog-close="" buttonType="primary"
