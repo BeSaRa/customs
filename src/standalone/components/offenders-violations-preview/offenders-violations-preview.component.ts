@@ -73,6 +73,7 @@ import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 import { ProofTypes } from '@enums/proof-types';
 import { OpenFrom } from '@enums/open-from';
+import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -125,6 +126,7 @@ export class OffendersViolationsPreviewComponent
   attachments$: Subject<Offender> = new Subject<Offender>();
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
+  offenderStatus = OffenderStatusEnum;
   // referralOrTerminateDecision$ = new Subject<{
   //   offender: Offender;
   //   penaltyId: number | undefined;
@@ -185,21 +187,26 @@ export class OffendersViolationsPreviewComponent
     .pipe(shareReplay(1));
 
   offenders = computed(() => {
+    let offenderList: Offender[] = [];
     if (
       (this.employeeService.isHumanResourceTeam() ||
         this.employeeService.isCustomsAffairsManager() ||
         this.employeeService.isCustomsAffairs()) &&
       !this.model().isDrafted &&
       this.openFrom !== OpenFrom.SEARCH
-    )
-      return this.model().getConcernedOffenders();
-
-    const offendersIds = this.model().offenderViolationInfo.map(
-      i => i.offenderId,
+    ) {
+      offenderList = this.model().getConcernedOffenders();
+    } else {
+      const offendersIds = this.model().offenderViolationInfo.map(
+        i => i.offenderId,
+      );
+      offenderList = this.model().offenderInfo.filter(offender => {
+        return offendersIds.includes(offender.id);
+      });
+    }
+    return offenderList.sort(offender =>
+      offender.status === this.offenderStatus.TERMINATE ? -1 : 1,
     );
-    return this.model().offenderInfo.filter(offender => {
-      return offendersIds.includes(offender.id);
-    });
   });
 
   offenderViolationsMap = computed(() => {
