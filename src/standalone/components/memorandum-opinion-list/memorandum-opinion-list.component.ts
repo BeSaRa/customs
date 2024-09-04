@@ -37,6 +37,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { ignoreErrors } from '@utils/utils';
 import { BehaviorSubject, Subject, tap } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
+import { OffenderInvStatus } from '@enums/offender-inv-status';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -217,7 +218,11 @@ export class MemorandumOpinionListComponent
       .offenderViolationInfo.filter(offenderViolation =>
         this.offendersIds().includes(offenderViolation.offenderId),
       )
-      .filter(ov => ov.proofStatus === ProofTypes.UNDEFINED).length;
+      .filter(
+        ov =>
+          ov.proofStatus === ProofTypes.UNDEFINED &&
+          ov.offenderInfo.status === OffenderInvStatus.INVESTIGATION_DONE,
+      ).length;
   }
 
   canManageMemoOpinion() {
