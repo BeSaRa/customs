@@ -17,7 +17,7 @@ import {
 } from 'rxjs';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { Offender } from '@models/offender';
-import { DatePipe } from '@angular/common';
+import { DatePipe, LocationStrategy } from '@angular/common';
 import { ProofTypes } from '@enums/proof-types';
 import { OffenderTypes } from '@enums/offender-types';
 import { ClearingAgent } from '@models/clearing-agent';
@@ -53,6 +53,7 @@ export class SituationSearchComponent
   lang = inject(LangService);
   situationSearchService = inject(SituationSearchService);
   fb = inject(FormBuilder);
+  locationStrategy = inject(LocationStrategy);
 
   id: number = this.data && (this.data.id as number);
   type: number = this.data && (this.data.type as number);
@@ -166,18 +167,22 @@ export class SituationSearchComponent
   }
 
   view(caseId: string) {
-    this.dialog.closeAll();
     const itemDetails = this.encrypt.encrypt<INavigatedItem>({
       openFrom: OpenFrom.DRAFT_SCREEN,
       taskId: caseId,
       caseId: caseId,
       caseType: CaseTypes.INVESTIGATION,
     });
-    this.router
-      .navigate([AppFullRoutes.INVESTIGATION], {
-        queryParams: { item: itemDetails },
-      })
-      .then();
+
+    const urlTree = this.router.createUrlTree([AppFullRoutes.INVESTIGATION], {
+      queryParams: { item: itemDetails },
+    });
+
+    const fullUrl = this.locationStrategy.prepareExternalUrl(
+      this.router.serializeUrl(urlTree),
+    );
+
+    window.open(fullUrl, '_blank');
   }
 
   getDecisionDateString(situation: SituationSearch) {
