@@ -206,7 +206,7 @@ export class InvestigationSearchComponent implements OnInit {
       classification =>
         this.form
           ?.getRawValue()
-          .violationClassificationId.find(
+          .violationClassificationId?.find(
             (vcId: number) => vcId === classification.id,
           ) && classification.key === ClassificationTypes.custom,
     );
@@ -217,7 +217,7 @@ export class InvestigationSearchComponent implements OnInit {
       classification =>
         this.form
           ?.getRawValue()
-          .violationClassificationId.find(
+          .violationClassificationId?.find(
             (vcId: number) => vcId === classification.id,
           ) && classification.key === ClassificationTypes.criminal,
     );
