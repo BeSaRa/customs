@@ -444,8 +444,8 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (isCase()) {
-      <app-button (click)="complete$.next()" buttonType="primary"
-        >{{ lang.map.send }}
+      <app-button (click)="complete$.next()" buttonType="primary">
+        {{ complete }}
       </app-button>
     } @else {
       <app-button (click)="save$.next()" buttonType="primary"
