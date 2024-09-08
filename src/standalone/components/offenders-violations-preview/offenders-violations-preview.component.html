@@ -458,6 +458,9 @@
     *matRowDef="let element; columns: offenderDisplayedColumns"
     class="element-row"
     [class.example-expanded-row]="selectedOffender === element"
+    [ngClass]="{
+      'highlighted-row': isHighlighted(element)
+    }"
     (click)="rowClicked($event, element)"></tr>
   <tr
     mat-row
