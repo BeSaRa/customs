@@ -13,12 +13,18 @@ tr.element-row:not(.expanded-row):active {
 .example-element-row td {
   border-bottom-width: 0;
 }
+
 .example-element-detail {
   overflow: hidden;
   display: flex;
 }
+ 
 .p-0 {
   padding: 0 !important;
+}
+
+.highlighted-row {
+  background-color: #efefef !important;
 }
 
 // .element-row:nth-child(even){
