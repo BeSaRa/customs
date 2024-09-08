@@ -73,6 +73,7 @@ import { PenaltyDecisionContract } from '@contracts/penalty-decision-contract';
 import { SituationSearchBtnComponent } from '@modules/electronic-services/components/situation-search-btn/situation-search-btn.component';
 import { ProofTypes } from '@enums/proof-types';
 import { OpenFrom } from '@enums/open-from';
+import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -185,20 +186,32 @@ export class OffendersViolationsPreviewComponent
     .pipe(shareReplay(1));
 
   offenders = computed(() => {
+    let offendersList = [];
+
     if (
       (this.employeeService.isHumanResourceTeam() ||
         this.employeeService.isCustomsAffairsManager() ||
         this.employeeService.isCustomsAffairs()) &&
       !this.model().isDrafted &&
       this.openFrom !== OpenFrom.SEARCH
-    )
-      return this.model().getConcernedOffenders();
+    ) {
+      offendersList = this.model().getConcernedOffenders();
+    } else {
+      const offendersIds = this.model().offenderViolationInfo.map(
+        i => i.offenderId,
+      );
+      offendersList = this.model().offenderInfo.filter(offender => {
+        return offendersIds.includes(offender.id);
+      });
+    }
 
-    const offendersIds = this.model().offenderViolationInfo.map(
-      i => i.offenderId,
-    );
-    return this.model().offenderInfo.filter(offender => {
-      return offendersIds.includes(offender.id);
+    return offendersList.sort((a, b) => {
+      const isAHighlighted = this.isHighlighted(a);
+      const isBHighlighted = this.isHighlighted(b);
+
+      if (isAHighlighted && !isBHighlighted) return -1;
+      if (!isAHighlighted && isBHighlighted) return 1;
+      return 0;
     });
   });
 
@@ -720,5 +733,13 @@ export class OffendersViolationsPreviewComponent
             this.selection.clear();
           });
       });
+  }
+
+  isHighlighted(offender: Offender): boolean {
+    return [
+      OffenderStatusEnum.THE_PENALTY_WAS_IMPOSED,
+      OffenderStatusEnum.TERMINATE,
+      OffenderStatusEnum.SAVED,
+    ].includes(offender.status);
   }
 }
