@@ -363,6 +363,7 @@ export class InvestigationSearchComponent implements OnInit {
         this.form.get('departmentId')?.setValue(userOU.id);
       }
     });
+    // this.setUserDepartment();
   }
 
   paginate($event: PageEvent) {
@@ -386,7 +387,16 @@ export class InvestigationSearchComponent implements OnInit {
           this.employeeService.getOrganizationUnit()?.id === d.parent,
       );
     } else {
-      return this.employeeService.getOrganizationUnits();
+      const units = this.employeeService.getOrganizationUnits();
+      const unit = this.employeeService.getOrganizationUnit();
+      if (!unit) return units;
+
+      const unitExists = units.some(u => u.id === unit.id);
+      if (unitExists) {
+        return units;
+      } else {
+        return [...units, unit];
+      }
     }
   }
 
