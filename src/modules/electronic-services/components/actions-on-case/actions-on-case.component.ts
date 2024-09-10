@@ -79,7 +79,12 @@ export class ActionsOnCaseComponent implements OnInit {
         }),
       )
       .subscribe(data => {
-        this.ActionsOnCaseDisplayedList = new MatTableDataSource(data);
+        const sortedData = data.sort((a, b) => {
+          return (
+            new Date(b.updatedOn).getTime() - new Date(a.updatedOn).getTime()
+          );
+        });
+        this.ActionsOnCaseDisplayedList = new MatTableDataSource(sortedData);
       });
   }
 
