@@ -8,6 +8,7 @@ import { LangService } from '@services/lang.service';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { TeamNames } from '@enums/team-names';
+import { CustomMenu } from '@models/custom-menu';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class MenuItemService {
   private readonly staticMenus = Menus;
   private filteredStaticMenu: MenuItemContract[] = [];
   parents: MenuItemContract[] = [];
-  private children: Record<number, MenuItemContract[]> = {};
+  private children: Record<number | string, MenuItemContract[]> = {};
   private readonly employeeService = inject(EmployeeService);
   private readonly lang = inject(LangService);
 
@@ -33,30 +34,32 @@ export class MenuItemService {
     return this.parents;
   }
 
-  getChildren(parentId: number): MenuItemContract[] {
+  getChildren(parentId: number | string): MenuItemContract[] {
     return this.children[parentId] || [];
   }
 
-  filterStaticMenu(): void {
-    this.filteredStaticMenu = this.staticMenus.filter(item => {
-      return (
-        (!item.permission &&
-          !item.permissionGroup &&
-          !item.permissionFromTeam) ||
-        (item.permission &&
-          this.employeeService.hasPermissionTo(item.permission)) ||
-        (item.permissionFromTeam &&
-          this.employeeService.hasPermissionFromTeam(
-            <TeamNames>item.permissionFromTeam,
-          )) ||
-        (item.permissionGroup &&
-          this.employeeService.hasAnyPermissions(
-            AppPermissionsGroup[
-              item.permissionGroup
-            ] as unknown as (keyof AppPermissionsType)[],
-          ))
-      );
-    });
+  filterStaticMenu(dynamicMenus: CustomMenu[]): void {
+    this.filteredStaticMenu = this.staticMenus
+      .concat(dynamicMenus.map(item => item.convertToMenuItem()))
+      .filter(item => {
+        return (
+          (!item.permission &&
+            !item.permissionGroup &&
+            !item.permissionFromTeam) ||
+          (item.permission &&
+            this.employeeService.hasPermissionTo(item.permission)) ||
+          (item.permissionFromTeam &&
+            this.employeeService.hasPermissionFromTeam(
+              <TeamNames>item.permissionFromTeam,
+            )) ||
+          (item.permissionGroup &&
+            this.employeeService.hasAnyPermissions(
+              AppPermissionsGroup[
+                item.permissionGroup
+              ] as unknown as (keyof AppPermissionsType)[],
+            ))
+        );
+      });
   }
 
   buildHierarchy() {
@@ -104,7 +107,10 @@ export class MenuItemService {
     arabicChildren: string[],
     englishChildren: string[],
   ) {
-    const { arName, enName } = this.lang.getLocalizationByKey(item.langKey);
+    const { arName, enName } =
+      typeof item.id === 'number'
+        ? this.lang.getLocalizationByKey(item.langKey)
+        : { arName: item.arName!, enName: item.enName! };
     item.arName = arName;
     item.enName = enName;
     arabicChildren.push(arName);

@@ -6,11 +6,12 @@ import { Team } from '@models/team';
 import { MawaredEmployee } from '@models/mawared-employee';
 import { ClearingAgent } from '@models/clearing-agent';
 import { ClearingAgency } from '@models/clearing-agency';
+import { CustomMenu } from '@models/custom-menu';
 
 export interface LoginDataContract {
   internalUser: InternalUser;
   lookupMap: LookupMapContract;
-  menuItems: unknown[];
+  menuItems: CustomMenu[];
   organizationUnit: OrganizationUnit;
   organizationUnits: OrganizationUnit[];
   permissionSet: Permission[];

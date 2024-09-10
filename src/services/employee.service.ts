@@ -17,11 +17,14 @@ import { TeamNames } from '@enums/team-names';
 import { MawaredEmployeeInterceptor } from '@model-interceptors/mawared-employee-interceptor';
 import { ClearingAgentInterceptor } from '@model-interceptors/clearing-agent-interceptor';
 import { ClearingAgencyInterceptor } from '@model-interceptors/clearing-agency-interceptor';
+import { CustomMenu } from '@models/custom-menu';
+import { CustomMenuInterceptor } from '@model-interceptors/custom-menu-interceptor';
 
 const internalUserInterceptor = new InternalUserInterceptor();
 const mawaredEmployeeInterceptor = new MawaredEmployeeInterceptor();
 const clearingAgentInterceptor = new ClearingAgentInterceptor();
 const clearingAgencyInterceptor = new ClearingAgencyInterceptor();
+const customMenuInterceptor = new CustomMenuInterceptor();
 
 @Injectable({
   providedIn: 'root',
@@ -69,6 +72,9 @@ export class EmployeeService
     });
     data.organizationUnit = new OrganizationUnit().clone<OrganizationUnit>(
       data.organizationUnit,
+    );
+    data.menuItems = (data.menuItems || []).map(item =>
+      customMenuInterceptor.receive(new CustomMenu().clone<CustomMenu>(item)),
     );
     // set the lookup after login
     data.lookupMap = this.lookupService.setLookups(data.lookupMap);

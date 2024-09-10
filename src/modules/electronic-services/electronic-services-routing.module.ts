@@ -44,7 +44,7 @@ const routes: Routes = [
     component: TeamInboxComponent,
   },
   {
-    path: AppRoutes.EMPLOYEES_INBOX_MANAGMENT,
+    path: AppRoutes.EMPLOYEES_INBOX_MANAGEMENT,
     component: EmployeesInboxManagmentComponent,
     canActivate: [
       accessPageGuard({

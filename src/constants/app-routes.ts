@@ -41,5 +41,6 @@ export const AppRoutes = {
   FINES: 'fines',
   COURT_DECISIONS: 'court-decisions',
   CUSTOM_MENU: 'custom-menu',
-  EMPLOYEES_INBOX_MANAGMENT: 'employees-inbox-managment',
+  EMPLOYEES_INBOX_MANAGEMENT: 'employees-inbox-managment',
+  DYNAMIC_MENU: 'dynamic-menu',
 };

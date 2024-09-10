@@ -38,7 +38,7 @@
               class="value-dropzone min-h-[50px]"
               [cdkDropListConnectedTo]="['menuList']"
               (cdkDropListDropped)="drop($event, row)">
-              @for (itemValue of row.valueLookups; track itemValue) {
+              @for (itemValue of row.valueLookups; track $index) {
                 <div
                   class="flex align-middle items-center justify-center transition-transform duration-300 ease-in-out animate-fade-in-slide-up">
                   <span class="p-4">{{ itemValue.getNames() }}</span>

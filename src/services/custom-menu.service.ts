@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { CustomMenu } from '@models/custom-menu';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -16,6 +16,10 @@ import { HttpParams } from '@angular/common/http';
 import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { CustomMenuSearchCriteria } from '@contracts/custom-menu-search-criteria';
 import { isValidValue } from '@utils/utils';
+import { MenuItemParametersEnum } from '@enums/menu-item-parameters.enum';
+import { EmployeeService } from '@services/employee.service';
+import { TokenService } from '@services/token.service';
+import { LangService } from '@services/lang.service';
 
 @CastResponseContainer({
   $pagination: {
@@ -40,6 +44,9 @@ export class CustomMenuService extends BaseCrudWithDialogService<
   dynamicMainMenuUrl: string = 'home/dynamic-menus/:parentId';
   dynamicMainMenuDetailsUrl: string = 'home/dynamic-menus/:parentId/details';
   dynamicChildMenuUrl: string = 'home/dynamic-menus/:parentId/details/:id';
+  private employeeService = inject(EmployeeService);
+  private tokenService = inject(TokenService);
+  private lang = inject(LangService);
 
   protected getModelClass(): Constructor<CustomMenu> {
     return CustomMenu;
@@ -224,5 +231,24 @@ export class CustomMenuService extends BaseCrudWithDialogService<
       return [];
     }
     return url.match(/{(\w+)}/g) ?? [];
+  }
+
+  getUrlReplacementValue(variableValue: MenuItemParametersEnum): string {
+    let value: string | number | undefined = '';
+    switch (variableValue) {
+      case MenuItemParametersEnum.USER_ID:
+        value = this.employeeService.getEmployee()?.id;
+        break;
+      case MenuItemParametersEnum.LANG_CODE:
+        value = this.lang.getCurrent().code;
+        break;
+      case MenuItemParametersEnum.USER_TOKEN:
+        value = this.tokenService.getToken()?.replace('Bearer ', '');
+        break;
+      case MenuItemParametersEnum.DOMAIN_NAME:
+        value = this.employeeService.getEmployee()?.domainName;
+        break;
+    }
+    return (value ?? '') + '';
   }
 }

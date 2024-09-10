@@ -37,6 +37,7 @@ export const AppFullRoutes = {
   FINES: '/home/electronic-services/fines',
   COURT_DECISIONS: '/home/electronic-services/court-decisions',
   CUSTOM_MENU: '/home/administration/custom-menu',
-  EMPLOYEES_INBOX_MANAGMENT:
+  EMPLOYEES_INBOX_MANAGEMENT:
     '/home/electronic-services/employees-inbox-managment',
+  DYNAMIC_MENU: '/home/dynamic-menu',
 };

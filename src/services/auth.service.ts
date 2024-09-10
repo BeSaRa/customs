@@ -191,8 +191,13 @@ export class AuthService
               data.internalUser.userPreferences.defaultLang.toString(),
             ),
         ),
-        tap(() => (this.authenticated = true)),
-        tap(() => this.menuItemService.filterStaticMenu()),
+        tap(() => {
+          this.authenticated = true;
+        }),
+        tap(data => {
+          console.log(data.menuItems);
+          this.menuItemService.filterStaticMenu(data.menuItems || []);
+        }),
         tap(() => this.menuItemService.buildHierarchy()),
       );
     };

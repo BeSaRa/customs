@@ -56,6 +56,13 @@ const routes: Routes = [
           // }),
         ],
       },
+      {
+        path: AppRoutes.DYNAMIC_MENU,
+        loadChildren: () =>
+          import('../modules/dynamic-menu/dynamic-menu.module').then(
+            m => m.DynamicMenuModule,
+          ),
+      },
     ],
   },
   {
@@ -79,6 +86,7 @@ const routes: Routes = [
     component: ExternalLoginComponent,
     canMatch: [authGuard('GUEST', AppRoutes.EXTERNAL_PAGES)],
   },
+
   {
     path: '**',
     redirectTo: 'errors',

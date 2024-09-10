@@ -1,0 +1,26 @@
+<div
+  class="flex bg-gradient-to-br from-primary to-primary-light px-3 text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+  <h1 class="text-xl min-h-[3rem] align-middle flex items-center gap-x-2">
+    @for (item of breadcrumbs; track item.id) {
+      @if ($first) {
+        <mat-icon [svgIcon]="item.icon!" />
+      }
+      @if ($last) {
+        <span>{{ item.translate }}</span>
+      } @else {
+        <a [routerLink]="['/home/dynamic-menu/', item.id]">
+          {{ item.translate }}
+        </a>
+      }
+      @if (!$last) {
+        <mat-icon [svgIcon]="icon" />
+      }
+    }
+  </h1>
+  <div class="flex-auto"></div>
+</div>
+<div class="flex-auto flex">
+  @if (url) {
+    <iframe class="flex-auto border-none" [src]="url"></iframe>
+  }
+</div>

@@ -59,13 +59,15 @@ export class MenuItemListComponent implements OnInit {
   lang = inject(LangService);
   @Input()
   parent?: number;
-
+  @Input()
   items: MenuItemContract[] = [];
 
   control = new FormControl('', { nonNullable: true });
   value: Observable<string> = this.control.valueChanges.pipe(debounceTime(200));
 
   ngOnInit(): void {
+    if (this.items) return;
+
     this.items = this.parent
       ? this.menuItemService.getChildren(this.parent)
       : this.menuItemService.getMenu();

@@ -6,13 +6,13 @@ import { Common } from '@models/common';
 import { CustomMenu } from '@models/custom-menu';
 
 export interface MenuItemContract {
-  id: number;
+  id: number | string;
   langKey: keyof LangKeysContract;
   icon?: string;
   path?: string;
   permission?: keyof AppPermissionsType;
   permissionGroup?: keyof AppPermissionsGroupType;
-  parent?: number;
+  parent?: number | string;
   arName?: string;
   enName?: string;
   order?: number;
