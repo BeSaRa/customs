@@ -1,86 +1,93 @@
 <ng-container [formGroup]="form">
-  <div class="flex flex-col align-middle justify-center gap-1 p-4">
-    <app-textarea formControlName="menuURL" [label]="lang.map.menu_url">
+  <div class="flex flex-col items-center justify-center p-4">
+    <app-textarea
+      class="w-full"
+      formControlName="menuURL"
+      [label]="lang.map.menu_url">
     </app-textarea>
     @if (!readonly) {
-      <app-button
-        [disabled]="menuUrlControl.invalid"
-        (click)="checkUrlVariables(true)">
-        {{ lang.map.check_url_variables }}
-      </app-button>
+      <ng-container>
+        <app-button
+          [disabled]="menuUrlControl.invalid"
+          (click)="checkUrlVariables(true)">
+          {{ lang.map.check_url_variables }}
+        </app-button>
+      </ng-container>
     }
   </div>
 </ng-container>
 @if (variableList.length > 0) {
-  <div class="grid grid-cols-2 gap-4 items-start p-4">
-    <!-- Variables Table -->
-    <div class="shadow relative overflow-auto">
-      <table mat-table matSort class="table-style" [dataSource]="variableList">
-        <!-- Variable Name Column -->
-        <ng-container matColumnDef="variable">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ lang.map.variable_name }}
-          </th>
-          <td mat-cell *matCellDef="let element">
-            <span>{{ element.name }}</span>
-          </td>
-        </ng-container>
-
-        <!-- Variable Value Column -->
-        <ng-container matColumnDef="variableValue">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ lang.map.variable_value }}
-          </th>
-          <td mat-cell *matCellDef="let row; index as rowIndex">
-            <div
-              cdkDropList
-              id="dropList-{{ rowIndex }}"
-              class="value-dropzone min-h-[50px]"
-              [cdkDropListConnectedTo]="['menuList']"
-              (cdkDropListDropped)="drop($event, row)">
-              @for (itemValue of row.valueLookups; track $index) {
-                <div
-                  class="flex align-middle items-center justify-center transition-transform duration-300 ease-in-out animate-fade-in-slide-up">
-                  <span class="p-4">{{ itemValue.getNames() }}</span>
-                  @if (!readonly) {
-                    <app-icon-button
-                      [matTooltip]="lang.map.delete"
-                      (click)="removeVariableValue(row)"
-                      icon="DELETE">
-                    </app-icon-button>
-                  }
-                </div>
-              }
+  <ng-container>
+    <div class="grid grid-cols-2 gap-4 p-4">
+      <div class="shadow-md rounded-md overflow-auto h-fit mt-4">
+        <div class="grid grid-cols-2 bg-gray-200 p-2">
+          <div>{{ lang.map.variable_name }}</div>
+          <div>{{ lang.map.variable_value }}</div>
+        </div>
+        @for (element of variableList; track $index) {
+          <div class="grid grid-cols-2 border-b">
+            <div class="p-1 flex items-center justify-center text-center">
+              {{ element.name }}
             </div>
-          </td>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
-        <tr class="mat-row" *matNoDataRow>
-          <td class="p-4" colspan="100">
-            {{ lang.map.no_records_to_display }}
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Available Values List -->
-    <div class="container relative">
-      <h1 class="h6 text-primary">{{ lang.map.available_values }}</h1>
-      <div
-        class="list relative"
-        cdkDropList
-        id="menuList"
-        [cdkDropListData]="menuParamsList"
-        [cdkDropListSortingDisabled]="true"
-        [cdkDropListConnectedTo]="getConnectedListIds()">
-        @for (item of menuParamsList; track item) {
-          <div class="box" cdkDrag [cdkDragData]="item">
-            {{ item.getNames() }}
+            <div class="p-1">
+              <div
+                cdkDropList
+                id="dropList-{{ $index }}"
+                class="min-h-[50px] p-1 border rounded bg-gray-50"
+                [cdkDropListConnectedTo]="['menuList']"
+                (cdkDropListDropped)="drop($event, element)">
+                @for (itemValue of element.valueLookups; track $index) {
+                  <ng-container>
+                    <div class="flex items-center justify-between py-1">
+                      <span class="px-2">{{ itemValue.getNames() }}</span>
+                      @if (!readonly) {
+                        <ng-container>
+                          <app-icon-button
+                            [matTooltip]="lang.map.delete"
+                            (click)="removeVariableValue(element)"
+                            icon="DELETE">
+                          </app-icon-button>
+                        </ng-container>
+                      }
+                    </div>
+                  </ng-container>
+                }
+              </div>
+            </div>
           </div>
         }
+
+        @if (variableList.length === 0) {
+          <ng-container>
+            <div class="p-4 text-center">
+              {{ lang.map.no_records_to_display }}
+            </div>
+          </ng-container>
+        }
+      </div>
+
+      <div class="w-full max-w-md p-4">
+        <h1 class="text-lg text-primary">
+          {{ lang.map.available_values }}
+        </h1>
+        <div
+          class="border border-gray-300 rounded-md overflow-auto"
+          cdkDropList
+          id="menuList"
+          [cdkDropListData]="menuParamsList"
+          [cdkDropListSortingDisabled]="true"
+          [cdkDropListConnectedTo]="getConnectedListIds()">
+          @for (item of menuParamsList; track $index) {
+            <div
+              class="flex items-center justify-between p-2 border rounded bg-gray-50 m-2 cursor-move"
+              cdkDrag
+              [cdkDragData]="item">
+              <span class="px-2">{{ item.getNames() }}</span>
+            </div>
+          }
+        </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 }

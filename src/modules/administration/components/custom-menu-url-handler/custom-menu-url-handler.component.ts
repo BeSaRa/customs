@@ -113,6 +113,7 @@ export class CustomMenuUrlHandlerComponent implements OnInit, AfterViewInit {
     );
     if (userInteraction && !newVariableList.length) {
       this.dialog.warning(this.lang.map.no_variable_found);
+      this.variableList = [];
       return;
     }
     const duplicateVariablesList = this._getDuplicateVariables(newVariableList);
