@@ -286,15 +286,17 @@
                   {{ 'عرض ملف التحقيق' }}
                 </button>
 
-                <button
-                  class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
-                  (click)="
-                    viewDecisionFile$.next(
-                      getFirstSituation(caseEntry.value)!.offenderInfo.vsid
-                    )
-                  ">
-                  {{ 'عرض القرار' }}
-                </button>
+                @if (getFirstSituation(caseEntry.value)!.offenderInfo.vsid) {
+                  <button
+                    class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
+                    (click)="
+                      viewDecisionFile$.next(
+                        getFirstSituation(caseEntry.value)!.offenderInfo.vsid
+                      )
+                    ">
+                    {{ 'عرض القرار' }}
+                  </button>
+                }
               </div>
             </section>
 
