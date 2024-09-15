@@ -35,6 +35,10 @@ export class InvestigationInterceptor
   receive(model: Investigation): Investigation {
     model.caseStatusInfo &&
       (model.caseStatusInfo = AdminResult.createInstance(model.caseStatusInfo));
+    model.presidentAssistantOuInfo &&
+      (model.presidentAssistantOuInfo = AdminResult.createInstance(
+        model.presidentAssistantOuInfo,
+      ));
     model.sectionInfo &&
       (model.sectionInfo = AdminResult.createInstance(model.sectionInfo));
     model.departmentInfo &&
@@ -87,7 +91,6 @@ export class InvestigationInterceptor
           }),
         );
       }));
-
     return model;
   }
 }

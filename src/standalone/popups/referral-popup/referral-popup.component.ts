@@ -215,6 +215,7 @@ export class ReferralPopupComponent
   });
   // referral_to_the_permanent_disciplinary_council
   // referral_to_the_disciplinary_committee
+
   referralTextMap: Record<
     | SystemPenalties
     | TaskResponses.RETURN_TO_PR
@@ -228,17 +229,23 @@ export class ReferralPopupComponent
       header: string;
       footer: string;
       whom: string | ((tab?: 'employee' | 'broker') => string);
+      complete: string;
+      suffix: string;
     }
   > = {
     [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]: {
       header: this.lang.map.static_header_text_for_legal_affairs,
       footer: this.lang.map.static_footer_text_for_legal_affairs,
       whom: this.lang.map.director_of_legal_affairs_department,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [SystemPenalties.REFERRAL_TO_PRESIDENT]: {
       header: this.lang.map.request_static_header_for_president,
       footer: this.lang.map.request_static_footer_for_president,
-      whom: this.lang.map.president,
+      whom: this.lang.map.president_of_gac,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.venerable,
     },
     [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]: {
       header: this.lang.map.request_static_header_for_president_assistant,
@@ -246,39 +253,51 @@ export class ReferralPopupComponent
       whom: (tab?: 'employee' | 'broker') => {
         if (!tab) {
           return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
-            ? this.lang.map.vice_president
+            ? this.model().presidentAssistantOuInfo.getNames()
             : this.customsAffairsPAOUInfo.getNames();
         } else {
           return tab === 'broker'
             ? this.customsAffairsPAOUInfo.getNames()
-            : this.lang.map.vice_president;
+            : this.model().presidentAssistantOuInfo.getNames();
         }
       },
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [SystemPenalties.TERMINATE]: {
       header: '',
       footer: '',
       whom: '',
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]: {
       header: this.lang.map.static_header_text_for_disciplinary_committee,
       footer: this.lang.map.static_footer_text_for_disciplinary_committee,
       whom: this.lang.map.chairman_of_the_disciplinary_committee,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [SystemPenalties.REFERRAL_TO_PERMANENT_DISCIPLINARY_COUNCIL]: {
       header: this.lang.map.static_header_text_for_disciplinary_council,
       footer: this.lang.map.static_footer_text_for_disciplinary_council,
       whom: this.lang.map.disciplinary_council_director,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [SystemPenalties.SAVE]: {
       header: '',
       footer: '',
       whom: '',
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.RETURN_TO_PR]: {
       header: this.lang.map.static_header_text_for_return_to_president,
       footer: this.lang.map.static_footer_text_for_return_to_president,
       whom: this.lang.map.president,
+      complete: this.lang.map.approve,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.RETURN_TO_PA]: {
       header:
@@ -296,31 +315,43 @@ export class ReferralPopupComponent
             : this.lang.map.vice_president;
         }
       },
+      complete: this.lang.map.approve,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: {
       header: this.lang.map.request_department_statement_footer,
       footer: this.lang.map.request_department_statement_footer,
       whom: '',
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: {
       header: this.lang.map.static_header_text_for_legal_affairs,
       footer: this.lang.map.static_footer_text_for_legal_affairs,
       whom: this.lang.map.director_of_legal_affairs_department,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL]: {
       header: this.lang.map.static_header_text_for_disciplinary_council,
       footer: this.lang.map.static_footer_text_for_disciplinary_council,
       whom: this.lang.map.disciplinary_council_director,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.PA_FNL_LAUNCH_PERMANENT_DISCIPLINARY_COUNCIL]: {
       header: this.lang.map.static_header_text_for_disciplinary_council,
       footer: this.lang.map.static_footer_text_for_disciplinary_council,
       whom: this.lang.map.disciplinary_council_director,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
     [TaskResponses.PA_FNL_LAUNCH_DC]: {
       header: this.lang.map.static_header_text_for_disciplinary_committee,
       footer: this.lang.map.static_footer_text_for_disciplinary_committee,
       whom: this.lang.map.chairman_of_the_disciplinary_committee,
+      complete: this.lang.map.send,
+      suffix: this.lang.map.respected,
     },
   };
 
@@ -410,8 +441,16 @@ export class ReferralPopupComponent
     return this.referralTextMap[this.referralKey()].header;
   }
 
+  get formSuffix() {
+    return this.referralTextMap[this.referralKey()].suffix;
+  }
+
   get formFooter() {
     return this.referralTextMap[this.referralKey()].footer;
+  }
+
+  get complete() {
+    return this.referralTextMap[this.referralKey()].complete;
   }
 
   ngOnInit(): void {

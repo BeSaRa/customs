@@ -41,6 +41,8 @@ export class Investigation extends BaseCase<
   executionStatusInfo?: AdminResult;
   isDrafted!: boolean;
   subject!: string;
+  presidentAssistantOuId!: number;
+  presidentAssistantOuInfo!: AdminResult;
 
   // extra for search results
   caseId!: string;

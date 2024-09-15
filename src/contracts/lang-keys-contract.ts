@@ -764,4 +764,7 @@ export interface LangKeysContract {
   simple_search: string;
   secretary: string;
   for_disciplinary_committee_only: string;
+  is_private_menu: string;
+  president_of_gac: string;
+  venerable: string;
 }
