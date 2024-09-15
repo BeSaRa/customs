@@ -58,7 +58,7 @@
               [enableFilter]="true"
               bindFilter="getNames" />
             <app-input
-              formControlName="jobTitleCode"
+              formControlName="employeeNo"
               [label]="lang.map.employee_number" />
             <app-input formControlName="arName" [label]="lang.map.ar_name" />
             <app-input formControlName="enName" [label]="lang.map.en_name" />
@@ -112,7 +112,7 @@
               {{ lang.map.employee_number }}
             </th>
             <td mat-cell *matCellDef="let element">
-              {{ element.jobTitleCode }}
+              {{ element.employeeNo }}
             </td>
           </ng-container>
           <ng-container matColumnDef="offenderName">
