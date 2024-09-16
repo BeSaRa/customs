@@ -142,4 +142,8 @@ export class InternalUser extends BaseModel<InternalUser, InternalUserService> {
           defaultLang: [1, CustomValidators.required],
         };
   }
+
+  updateUserPreferences(model: UserPreferences) {
+    this.userPreferences = new UserPreferences().clone<UserPreferences>(model);
+  }
 }
