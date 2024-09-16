@@ -128,8 +128,8 @@ export class NavbarComponent
             );
         }),
       )
-      .subscribe(() => {
-        //this.reload$.next();
+      .subscribe(model => {
+        this.employee?.updateUserPreferences(model);
       });
   }
 

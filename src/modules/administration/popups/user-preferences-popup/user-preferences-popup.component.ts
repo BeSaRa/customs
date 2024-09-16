@@ -91,6 +91,7 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
 
   protected override _afterSave(model: UserPreferences): void {
     this.model = model;
+    this.dialogRef.close(model);
     //this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
   }
 }
