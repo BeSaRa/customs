@@ -767,4 +767,5 @@ export interface LangKeysContract {
   is_private_menu: string;
   president_of_gac: string;
   venerable: string;
+  acting: string;
 }

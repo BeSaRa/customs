@@ -252,13 +252,21 @@ export class ReferralPopupComponent
       footer: this.lang.map.request_static_footer_for_president_assistant,
       whom: (tab?: 'employee' | 'broker') => {
         if (!tab) {
-          return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
-            ? this.model().presidentAssistantOuInfo.getNames()
-            : this.customsAffairsPAOUInfo.getNames();
+          return (
+            this.lang.map.acting +
+            ' ' +
+            (this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
+              ? this.model().presidentAssistantOuInfo.getNames()
+              : this.customsAffairsPAOUInfo.getNames())
+          );
         } else {
-          return tab === 'broker'
-            ? this.customsAffairsPAOUInfo.getNames()
-            : this.model().presidentAssistantOuInfo.getNames();
+          return (
+            this.lang.map.acting +
+            ' ' +
+            (tab === 'broker'
+              ? this.customsAffairsPAOUInfo.getNames()
+              : this.model().presidentAssistantOuInfo.getNames())
+          );
         }
       },
       complete: this.lang.map.send,
