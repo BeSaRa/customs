@@ -545,17 +545,6 @@
   }
 
   <mat-menu #issuingMenu="matMenu">
-    <!-- issuing referral decision to legal affairs manager by President assistant -->
-    @if (
-      model().inMyInbox() &&
-      model().hasResponse(
-        taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
-      )
-    ) {
-      <button mat-menu-item (click)="referralToLegalAffairs()">
-        {{ lang.map.to_legal_affairs_manager }}
-      </button>
-    }
     <!-- issuing referral decision to legal affairs manager -->
     @if (
       model().inMyInbox() &&
@@ -592,6 +581,17 @@
       </button>
     }
 
+    <!-- issuing referral decision to legal affairs manager by President assistant -->
+    @if (
+      model().inMyInbox() &&
+      model().hasResponse(
+        taskResponses.PRESIDENT_ASSISTANT_LAUNCH_LEGAL_AFFAIRS
+      )
+    ) {
+      <button mat-menu-item (click)="referralToLegalAffairs()">
+        {{ lang.map.preparing_referral_decision_for_legal_affairs }}
+      </button>
+    }
     @if (
       model().inMyInbox() &&
       model().hasResponse(taskResponses.RETURN_APP_MANAGER)
@@ -599,7 +599,10 @@
       <button
         mat-menu-item
         (click)="responseAction$.next(taskResponses.RETURN_APP_MANAGER)">
-        {{ lang.map.send_to_manager }}
+        {{
+          lang.map
+            .preparing_return_letter_to_director_of_the_department_from_which_the_request_was_received
+        }}
       </button>
     }
   </mat-menu>
