@@ -127,6 +127,20 @@
               [options]="usersList" />
           </div>
         }
+        @if (isSendToPAOfficeUser || isSendToPOfficeUser) {
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="userId"
+              [label]="
+                isSendToPAOfficeUser
+                  ? lang.map.send_to_pao_user_x
+                  : lang.map.send_to_po_user_x
+              "
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="usersList" />
+          </div>
+        }
         @if (isSendToInvestigator) {
           <div class="col-12 mb-3">
             <app-select-input
