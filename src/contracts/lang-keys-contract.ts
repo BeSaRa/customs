@@ -768,4 +768,8 @@ export interface LangKeysContract {
   president_of_gac: string;
   venerable: string;
   acting: string;
+  return_to_president_office_user: string;
+  return_to_president_assistant_office_user: string;
+  send_to_po_user_x: string;
+  send_to_pao_user_x: string;
 }

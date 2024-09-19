@@ -49,4 +49,6 @@ export enum TaskResponses {
   RETURN_TO_PO = 'return_to_po',
   RETURN_TO_PAE = 'return_to_pae',
   GR_COMPLETE = 'gr_complete',
+  TO_PO_USER = 'to_po_user',
+  TO_PAO_USER = 'to_pao_user',
 }
