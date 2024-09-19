@@ -100,12 +100,21 @@ export class CommentPopupComponent
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
   }
+
   get isSendToHrUser() {
     return this.response === TaskResponses.TO_HR_USER;
   }
 
   get isSendToInvestigator() {
     return this.response === TaskResponses.TO_INV_USER;
+  }
+
+  get isSendToPAOfficeUser() {
+    return this.response === TaskResponses.TO_PAO_USER;
+  }
+
+  get isSendToPOfficeUser() {
+    return this.response === TaskResponses.TO_PO_USER;
   }
 
   private _loadUsersList() {
@@ -123,6 +132,23 @@ export class CommentPopupComponent
         .subscribe(data => {
           this.usersList = data;
         });
+    } else if (
+      this.isSendToPAOfficeUser &&
+      this.employeeService.getOrganizationUnit()?.id
+    ) {
+      const orgUnitId = this.employeeService.getOrganizationUnit()!.id;
+
+      this.teamService
+        .loadTeamMembersByDep(TeamNames.President_Assistant_Office, orgUnitId)
+        .subscribe(data => {
+          this.usersList = data;
+        });
+    } else if (this.isSendToPOfficeUser) {
+      this.teamService
+        .loadTeamMembers(TeamNames.President_Office)
+        .subscribe(data => {
+          this.usersList = data;
+        });
     }
   }
 
@@ -131,7 +157,13 @@ export class CommentPopupComponent
       comment: new UntypedFormControl('', [CustomValidators.maxLength(100000)]),
       userId: new UntypedFormControl(null, []),
     });
-    if (this.isSendToUser || this.isSendToInvestigator || this.isSendToHrUser) {
+    if (
+      this.isSendToUser ||
+      this.isSendToInvestigator ||
+      this.isSendToHrUser ||
+      this.isSendToPAOfficeUser ||
+      this.isSendToPOfficeUser
+    ) {
       this.form.get('userId')?.setValidators([CustomValidators.required]);
       this.form.get('userId')?.updateValueAndValidity();
     }
@@ -180,7 +212,9 @@ export class CommentPopupComponent
           if (
             !this.isSendToUser &&
             !this.isSendToInvestigator &&
-            !this.isSendToHrUser
+            !this.isSendToHrUser &&
+            !this.isSendToPAOfficeUser &&
+            !this.isSendToPOfficeUser
           ) {
             delete completeBody.userId;
           }

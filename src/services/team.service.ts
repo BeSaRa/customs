@@ -31,6 +31,7 @@ export class TeamService extends BaseCrudWithDialogService<
   Team
 > {
   serviceName = 'TeamService';
+
   protected getModelClass(): Constructor<Team> {
     return Team;
   }
@@ -54,6 +55,17 @@ export class TeamService extends BaseCrudWithDialogService<
   loadTeamMembers(authName: TeamNames) {
     return this.http.get<InternalUser[]>(
       this.getUrlSegment() + `/members/auth/${authName}`,
+    );
+  }
+
+  @CastResponse(() => InternalUser, {
+    unwrap: 'rs',
+    fallback: 'internalUser$',
+  })
+  loadTeamMembersByDep(authName: TeamNames, depId: number) {
+    console.log(depId);
+    return this.http.get<InternalUser[]>(
+      this.getUrlSegment() + `/members/auth/${authName}/depId/${depId}`,
     );
   }
 
