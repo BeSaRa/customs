@@ -37,6 +37,13 @@
               bindValue="lookupKey"
               bindLabel="getNames"
               [label]="lang.map.gender" />
+            <app-select-input
+              formControlName="employeeCareerLevelId"
+              [options]="careerLevels"
+              bindValue="lookupKey"
+              bindLabel="getNames"
+              [label]="lang.map.employee_career_level"
+              [nullable]="false" />
             <app-switch
               formControlName="isPrivateUser"
               [label]="lang.map.is_private_user"></app-switch>

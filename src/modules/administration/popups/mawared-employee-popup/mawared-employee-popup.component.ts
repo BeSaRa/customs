@@ -20,6 +20,7 @@ export class MawaredEmployeePopupComponent extends AdminDialogComponent<MawaredE
 
   private lookupService = inject(LookupService);
   genderTypes: Lookup[] = this.lookupService.lookups.gender;
+  careerLevels: Lookup[] = this.lookupService.lookups.careerLevel;
   protected readonly langCodes = LangCodes;
 
   _buildForm(): void {
