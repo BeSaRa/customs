@@ -75,6 +75,7 @@ export class MawaredEmployee extends BaseModel<
       isSuspended,
       phoneNumber,
       employeeNo,
+      employeeCareerLevelId,
     } = this;
     return {
       arName,
@@ -103,6 +104,7 @@ export class MawaredEmployee extends BaseModel<
       isSuspended,
       phoneNumber,
       employeeNo,
+      employeeCareerLevelId,
     };
   }
 
