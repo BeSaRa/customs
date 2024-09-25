@@ -288,4 +288,9 @@ export class SituationSearchComponent
     const situations = violationMap.get(firstKey)!;
     return situations[0];
   }
+
+  resetDateRange(event: MouseEvent) {
+    event.stopPropagation();
+    this.dateRangeFormGroup.reset();
+  }
 }
