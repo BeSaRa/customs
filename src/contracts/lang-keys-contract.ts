@@ -773,4 +773,12 @@ export interface LangKeysContract {
   send_to_pao_user_x: string;
   preparing_referral_decision_for_legal_affairs: string;
   preparing_return_letter_to_director_of_the_department_from_which_the_request_was_received: string;
+  appointment_start_date: string;
+  appointment_end_date: string;
+  terminate_reason: string;
+  department_last_three_years: string;
+  company_name: string;
+  admin_account: string;
+  administrative_violations: string;
+  extraction_date: string;
 }

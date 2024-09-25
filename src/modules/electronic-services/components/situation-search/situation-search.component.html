@@ -11,296 +11,458 @@
     <div class="container mx-auto flex justify-between items-center">
       <div class="text-start w-1/3">
         <p class="text-gray-700 text-xs">
-          تاريخ الاستخراج :
+          {{ lang.map.extraction_date }} :
           {{ today | date: config.DATE_FORMAT }}
         </p>
       </div>
       <div class="text-center w-1/3">
-        <h1 class="text-xl font-semibold text-gray-900">بحث حالة</h1>
+        <h1 class="text-xl font-semibold text-gray-900">
+          {{ lang.map.situation_search }}
+        </h1>
       </div>
       <div class="w-1/3"></div>
     </div>
-    <div class="border-t border-black mt-4"></div>
+    <div class="border-t border-black my-4"></div>
 
-    <div class="container mx-auto mt-4">
-      <ul class="pl-6">
+    <div class="container mx-auto px-4">
+      <div class="container mx-auto px-4">
         @if (employee) {
-          <li>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @if (employee.arName) {
-              {{ 'الاسم: ' + employee.arName }}
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.name }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.arName }}
+                </div>
+              </div>
             }
             @if (employee.qid) {
-              {{ '/' + 'الرقم الشخصي: ' + employee.qid }}
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.qid }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.qid }}
+                </div>
+              </div>
             }
             @if (employee.employeeNo) {
-              {{ '/' + 'الرقم الوظيفي: ' + employee.employeeNo }}
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.employee_number }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.employeeNo }}
+                </div>
+              </div>
             }
-          </li>
-          @if (employee.phoneNumber) {
-            <li>{{ 'هاتف: ' + employee.phoneNumber }}</li>
-          }
-          @if (employee.email) {
-            <li>{{ 'البريد الالكتروني: ' + employee.email }}</li>
-          }
-          @if (employee.address) {
-            <li>{{ 'العنوان الوطني: ' + employee.address }}</li>
-          }
-          @if (employee.employeeCareerLevelInfo) {
-            <li>
-              {{
-                'الدرجة الوظيفية: ' +
-                  employee.employeeCareerLevelInfo.getNames()
-              }}
-            </li>
-          }
-          @if (employee.appointmentStartDate) {
-            <li>
-              {{ 'تاريخ التعيين: ' + offender.getNames() }}
-            </li>
-          }
-          <li>
+            @if (employee.phoneNumber) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.phone_number }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.phoneNumber }}
+                </div>
+              </div>
+            }
+            @if (employee.email) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.email }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.email }}
+                </div>
+              </div>
+            }
+            @if (employee.address) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.lbl_address }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.address }}
+                </div>
+              </div>
+            }
+
+            @if (employee.employeeCareerLevelInfo) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.career_level }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.employeeCareerLevelInfo.getNames() }}
+                </div>
+              </div>
+            }
+            @if (employee.appointmentStartDate) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2"
+                  >{{ lang.map.appointment_start_date }}:</strong
+                >
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.appointmentStartDate }}
+                </div>
+              </div>
+            }
             @if (employee.appointmentEndDate) {
-              {{ 'تاريخ انتهاء الخدمة: ' + offender.getNames() }}
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2"
+                  >{{ lang.map.appointment_end_date }}:</strong
+                >
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.appointmentEndDate }}
+                </div>
+              </div>
             }
             @if (employee.terminationServiceReason) {
-              {{ '/' + 'سبب انتهاء الخدمة: ' + offender.getNames() }}
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.terminate_reason }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.terminationServiceReason }}
+                </div>
+              </div>
             }
-          </li>
-          @if (employee.employeeDepartmentInfo) {
-            <li>
-              {{
-                'الادارة/القسم التي تعمل بها اخر ثلاث سنوات: ' +
-                  employee.employeeDepartmentInfo.getNames()
-              }}
-            </li>
-          }
-        }
-        @if (clearingAgent) {
-          <li>
-            {{ 'الاسم: ' + clearingAgent.arName }}
-            @if (clearingAgent.qid) {
-              {{ '/' + 'الرقم الشخصي: ' + clearingAgent.qid }}
+            @if (employee.employeeDepartmentInfo) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2"
+                  >{{ lang.map.department_last_three_years }}:</strong
+                >
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ employee.employeeDepartmentInfo.getNames() }}
+                </div>
+              </div>
             }
-          </li>
-          @if (clearingAgent.address) {
-            <li>
-              {{ 'العنوان: ' + clearingAgent.address }}
-            </li>
-          }
-          @if (clearingAgent.typeInfo) {
-            <li>
-              {{ 'النوع: ' + clearingAgent.typeInfo.getNames() }}
-            </li>
-          }
-          @if (clearingAgent.agencyArabicCompanyName) {
-            <li>
-              {{ 'اسم الشركة: ' + clearingAgent.agencyArabicCompanyName }}
-            </li>
-          }
-          @if (clearingAgent.agentCustomCode) {
-            <li>
-              {{ 'الرمز: ' + clearingAgent.agentCustomCode }}
-            </li>
-          }
-          @if (clearingAgent.phoneNumber) {
-            <li>
-              {{ 'رقم الهاتف: ' + clearingAgent.phoneNumber }}
-            </li>
-          }
-          @if (clearingAgent.email) {
-            <li>
-              {{ 'البريد الإلكتروني: ' + clearingAgent.email }}
-            </li>
-          }
+          </div>
         }
         @if (clearingAgency) {
-          <li>
-            {{ 'الاسم: ' + clearingAgency.arName }}
-          </li>
-          @if (clearingAgency.address) {
-            <li>
-              {{ 'العنوان: ' + clearingAgency.address }}
-            </li>
-          }
-          @if (clearingAgency.accountAdminFullName) {
-            <li>
-              {{ 'حساب المدير: ' + clearingAgency.accountAdminFullName }}
-            </li>
-          }
-          @if (clearingAgency.customCode) {
-            <li>
-              {{ 'الرمز: ' + clearingAgency.customCode }}
-            </li>
-          }
-          @if (clearingAgency.telNo) {
-            <li>
-              {{ 'رقم الهاتف: ' + clearingAgency.telNo }}
-            </li>
-          }
-          @if (clearingAgency.email) {
-            <li>
-              {{ 'البريد الإلكتروني: ' + clearingAgency.email }}
-            </li>
-          }
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
+            <div class="flex items-center justify-between mb-2">
+              <strong class="mr-2">{{ lang.map.name }}:</strong>
+              <div
+                class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                {{ clearingAgency.arName }}
+              </div>
+            </div>
+
+            @if (clearingAgency.address) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.lbl_address }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgency.address }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgency.accountAdminFullName) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.admin_account }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgency.accountAdminFullName }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgency.customCode) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.code }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgency.customCode }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgency.telNo) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.phone_number }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgency.telNo }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgency.email) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.email }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgency.email }}
+                </div>
+              </div>
+            }
+          </div>
         }
-      </ul>
+        @if (clearingAgent) {
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-4">
+            <div class="flex items-center justify-between mb-2">
+              <strong class="mr-2">{{ lang.map.name }}:</strong>
+              <div
+                class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                {{ clearingAgent.arName }}
+              </div>
+            </div>
+            @if (clearingAgent.qid) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.qid }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.qid }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.address) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.lbl_address }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.address }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.typeInfo) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.type }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.typeInfo.getNames() }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.agencyArabicCompanyName) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.company_name }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.agencyArabicCompanyName }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.agentCustomCode) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.code }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.agentCustomCode }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.phoneNumber) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.phone_number }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.phoneNumber }}
+                </div>
+              </div>
+            }
+
+            @if (clearingAgent.email) {
+              <div class="flex items-center justify-between mb-2">
+                <strong class="mr-2">{{ lang.map.email }}:</strong>
+                <div
+                  class="w-[180px] p-2 bg-gray-100 rounded shadow-sm flex justify-center items-center text-center h-12">
+                  {{ clearingAgent.email }}
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
     </div>
     <div class="border-t border-black my-4 w-full"></div>
 
     @if (situations && situations.length) {
-      <div class="container mx-auto flex justify-between items-center">
-        <div class="text-center w-full">
-          <h1 class="text-xl font-semibold text-gray-900">
-            المخالفات الإدارية
-          </h1>
-        </div>
-        <div class="text-center">
-          <div>
+      <div class="container mx-auto">
+        <div class="grid grid-cols-2 gap-4 items-center">
+          <div class="text-start">
+            <h1 class="text-xl font-semibold text-gray-900">
+              {{ lang.map.administrative_violations }}
+            </h1>
+          </div>
+          <div class="grid grid-cols-2 gap-4 items-center">
             <app-select-input
-              class="min-w-42"
+              class="w-50"
               [label]="lang.map.status"
               bindLabel="getNames"
               [formControl]="statusFilter"
               bindValue="lookupKey"
               [options]="penaltyStatus" />
-          </div>
 
-          <div [formGroup]="dateRangeFormGroup">
-            <div class="mb-3">
-              <label class="font-medium">{{ lang.map.violation_date }} </label>
-              <div
-                (click)="rangePicker.open()"
-                class="flex read-only input-form p-2">
-                <mat-date-range-input [rangePicker]="rangePicker">
-                  <input
-                    [placeholder]="lang.map.date_from"
-                    matStartDate
-                    formControlName="start" />
-                  <input
-                    [placeholder]="lang.map.date_to"
-                    matEndDate
-                    formControlName="end" />
-                </mat-date-range-input>
+            <div [formGroup]="dateRangeFormGroup" class="w-50">
+              <div class="mb-5">
+                <label class="font-medium">{{ lang.map.violation_date }}</label>
+                <div
+                  (click)="rangePicker.open()"
+                  class="flex read-only input-form p-2 w-50 text-center align-middle">
+                  <mat-date-range-input [rangePicker]="rangePicker">
+                    <input
+                      [placeholder]="lang.map.date_from"
+                      matStartDate
+                      formControlName="start" />
+                    <input
+                      [placeholder]="lang.map.date_to"
+                      matEndDate
+                      formControlName="end" />
+                  </mat-date-range-input>
+
+                  @if (
+                    dateRangeFormGroup.get('start')?.value ||
+                    dateRangeFormGroup.get('end')?.value
+                  ) {
+                    <mat-icon
+                      class="me-1"
+                      (click)="resetDateRange($event)"
+                      svgIcon="close">
+                    </mat-icon>
+                  }
+                </div>
+
+                <mat-date-range-picker
+                  hidden
+                  #rangePicker></mat-date-range-picker>
               </div>
-              <mat-date-range-picker
-                hidden
-                #rangePicker></mat-date-range-picker>
             </div>
           </div>
         </div>
       </div>
-      <div class="border-t mt-4"></div>
+
+      <div class="mt-2"></div>
       @if (mapSituations.size > 0) {
         @for (caseEntry of mapSituations | keyvalue; track caseEntry) {
           <div>
             <section class="container mx-auto mt-4 space-y-4">
-              <div class="flex justify-between">
-                <div class="w-1/4 text-center bg-white p-4">
-                  {{
-                    'الحالة : ' +
-                      getFirstSituation(
-                        caseEntry.value
-                      ).offenderInfo.penaltyStatusInfo.getNames() || ' '
-                  }}
-                </div>
-                @if (
-                  getFirstSituation(caseEntry.value).offenderInfo.decisionSerial
-                ) {
-                  <div class="w-1/4 text-center bg-white p-4">
-                    {{
-                      'رقم القرار: ' +
-                        getFirstSituation(caseEntry.value).offenderInfo
-                          .decisionSerial || ' '
-                    }}
-                  </div>
-                }
-                @if (
-                  getFirstSituation(caseEntry.value).offenderInfo
-                    .penaltyAppliedDate
-                ) {
-                  <div class="w-1/4 text-center bg-white p-4">
-                    {{
-                      'تاريخ القرار: ' +
-                        getDecisionDateString(
-                          getFirstSituation(caseEntry.value)
-                        ) || ' '
-                    }}
-                  </div>
-                }
-              </div>
-              @for (
-                violationEntry of caseEntry.value | keyvalue;
-                track violationEntry
-              ) {
+              <div class="border rounded-2xl shadow-sm bg-gray-50 p-4">
                 <div class="flex justify-between">
-                  <div class="w-1/3 bg-white p-4">
-                    <h2 class="text-lg font-semibold">
+                  @if (
+                    getFirstSituation(caseEntry.value).offenderInfo
+                      .decisionSerial
+                  ) {
+                    <div class="text-center min-w-48 font-bold content-center">
+                      {{
+                        lang.map.decision_number +
+                          ': ' +
+                          getFirstSituation(caseEntry.value).offenderInfo
+                            .decisionSerial || ' '
+                      }}
+                    </div>
+                  }
+                  <div class="w-full"></div>
+                  @if (
+                    getFirstSituation(
+                      caseEntry.value
+                    ).offenderInfo.penaltyStatusInfo.getNames()
+                  ) {
+                    <div
+                      class="text-center min-w-48 content-center bg-gray-300 text-green-950 p-2 border border-gray-400 rounded-md">
+                      {{
+                        lang.map.status +
+                          ': ' +
+                          getFirstSituation(
+                            caseEntry.value
+                          ).offenderInfo.penaltyStatusInfo.getNames() || ' '
+                      }}
+                    </div>
+                  }
+
+                  @if (
+                    getFirstSituation(caseEntry.value).offenderInfo
+                      .penaltyAppliedDate
+                  ) {
+                    <div class="min-w-48 content-center text-center">
+                      {{
+                        lang.map.decision_date +
+                          ': ' +
+                          getDecisionDateString(
+                            getFirstSituation(caseEntry.value)
+                          ) || ' '
+                      }}
+                    </div>
+                  }
+                  @if (
+                    getFirstSituation(caseEntry.value).offenderInfo.penaltyInfo
+                      .arName
+                  ) {
+                    <div class="min-w-48 content-center text-primary">
+                      <p class="flex align-middle justify-center text-center">
+                        <mat-icon svgIcon="circle" class="m-2 mt-0"></mat-icon>
+                        {{ lang.map.decision }}:
+                        {{
+                          getFirstSituation(caseEntry.value).offenderInfo
+                            .penaltyInfo.arName || ' '
+                        }}
+                      </p>
+                    </div>
+                  }
+                </div>
+                @for (
+                  violationEntry of caseEntry.value | keyvalue;
+                  track violationEntry
+                ) {
+                  <div class="p-4">
+                    <h2 class="text-lg text-gray-700">
                       {{
                         violationEntry.value[0].violationInfo.classificationInfo.getNames() +
                           ':'
                       }}
                     </h2>
-                  </div>
-                  <div class="w-2/3 bg-white p-4">
-                    <ul class="list-disc pl-6">
-                      @for (
-                        situationEntry of violationEntry.value;
-                        track situationEntry
-                      ) {
-                        <li>
-                          {{
+
+                    @for (
+                      situationEntry of violationEntry.value;
+                      track situationEntry;
+                      let last = $last
+                    ) {
+                      <div class="mt-2">
+                        <p>
+                          <strong>{{
                             situationEntry.violationInfo.violationTypeInfo.getNames()
-                          }}
+                          }}</strong>
                           //
                           {{
-                            'تاريخ المخالفة: ' +
+                            lang.map.violation_date +
+                              ': ' +
                               getViolationDateString(situationEntry)
                           }}
                           //
                           {{ situationEntry.proofStatusInfo.getNames() }}
-                          //
-                        </li>
-                      }
-                    </ul>
+                        </p>
+                        @if (!last) {
+                          <hr class="my-2 border-gray-300" />
+                        }
+                      </div>
+                    }
                   </div>
-                </div>
-              }
-
-              @if (
-                getFirstSituation(caseEntry.value).offenderInfo.penaltyInfo
-                  .arName
-              ) {
-                <div class="bg-white p-4">
-                  <p>
-                    القرار:{{
-                      getFirstSituation(caseEntry.value).offenderInfo
-                        .penaltyInfo.arName || ' '
-                    }}
-                  </p>
-                </div>
-              }
-              <div class="bg-white flex justify-between">
-                <button
-                  class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
-                  (click)="view(caseEntry.key)">
-                  {{ 'عرض ملف التحقيق' }}
-                </button>
-
-                @if (getFirstSituation(caseEntry.value)!.offenderInfo.vsid) {
-                  <button
-                    class="text-blue-700 hover:underline focus:outline-none w-1/4 text-center bg-white p-4"
-                    (click)="
-                      viewDecisionFile$.next(
-                        getFirstSituation(caseEntry.value)!.offenderInfo.vsid
-                      )
-                    ">
-                    {{ 'عرض القرار' }}
-                  </button>
                 }
+                <div class="flex justify-end mt-4">
+                  <app-button
+                    class="mx-2"
+                    buttonType="primary"
+                    (click)="view(caseEntry.key)"
+                    >{{ lang.map.view }}
+                  </app-button>
+                  @if (getFirstSituation(caseEntry.value)!.offenderInfo.vsid) {
+                    <app-button
+                      buttonType="secondary"
+                      (click)="
+                        viewDecisionFile$.next(
+                          getFirstSituation(caseEntry.value)!.offenderInfo.vsid
+                        )
+                      ">
+                      {{ lang.map.view_decision_file }}
+                    </app-button>
+                  }
+                </div>
               </div>
             </section>
-
-            <div class="border-t border-black mt-4"></div>
           </div>
         }
       }
