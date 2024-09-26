@@ -781,4 +781,6 @@ export interface LangKeysContract {
   admin_account: string;
   administrative_violations: string;
   extraction_date: string;
+  send_to_president_office_inbox: string;
+  return_to_inbox: string;
 }

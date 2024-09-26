@@ -194,7 +194,11 @@
   <!-- complete action -->
   @if (model().inMyInbox() && model().hasComplete()) {
     <app-button (click)="responseAction$.next(taskResponses.COMPLETE)">
-      {{ lang.map.complete }}
+      {{
+        isVicePresidentOfficeOrVicePresident()
+          ? lang.map.send_to_president_office_inbox
+          : lang.map.complete
+      }}
     </app-button>
   }
   <!-- final complete action -->
@@ -642,7 +646,11 @@
   <!-- release -->
   @if (model().canRelease()) {
     <app-button (click)="releaseItem()">
-      {{ lang.map.release }}
+      {{
+        isVicePresidentOfficeOrVicePresident()
+          ? lang.map.return_to_inbox
+          : lang.map.release
+      }}
     </app-button>
   }
 

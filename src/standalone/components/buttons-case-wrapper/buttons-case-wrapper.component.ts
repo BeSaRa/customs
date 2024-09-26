@@ -662,4 +662,11 @@ export class ButtonsCaseWrapperComponent
   }
 
   protected readonly TaskNames = TaskNames;
+
+  isVicePresidentOfficeOrVicePresident() {
+    return (
+      this.employeeService.isPresidentAssistantOffice() ||
+      !!this.employeeService.isPresidentAssisstant()
+    );
+  }
 }
