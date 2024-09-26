@@ -277,6 +277,22 @@
       {{ lang.map.return_to_same_hr }}
     </app-button>
   }
+  <!-- to president office user -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PO_USER)) {
+    <app-button
+      buttonType="primary"
+      (click)="responseAction$.next(taskResponses.TO_PO_USER)">
+      {{ lang.map.return_to_president_office_user }}
+    </app-button>
+  }
+  <!-- to president assistant office user -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PAO_USER)) {
+    <app-button
+      buttonType="primary"
+      (click)="responseAction$.next(taskResponses.TO_PAO_USER)">
+      {{ lang.map.return_to_president_assistant_office }}
+    </app-button>
+  }
 
   <!-- return -->
   @if (
@@ -287,9 +303,7 @@
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
       model().hasResponse(taskResponses.RETURN_TO_CA) ||
       model().hasResponse(taskResponses.RETURN_TO_PO) ||
-      model().hasResponse(taskResponses.RETURN_TO_PAE) ||
-      model().hasResponse(taskResponses.TO_PO_USER) ||
-      model().hasResponse(taskResponses.TO_PAO_USER))
+      model().hasResponse(taskResponses.RETURN_TO_PAE))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -304,24 +318,6 @@
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_PO)">
           {{ lang.map.return_to_president_office }}
-        </button>
-      }
-      @if (
-        model().inMyInbox() && model().hasResponse(taskResponses.TO_PO_USER)
-      ) {
-        <button
-          mat-menu-item
-          (click)="responseAction$.next(taskResponses.TO_PO_USER)">
-          {{ lang.map.return_to_president_office_user }}
-        </button>
-      }
-      @if (
-        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PAE)
-      ) {
-        <button
-          mat-menu-item
-          (click)="responseAction$.next(taskResponses.RETURN_TO_PAE)">
-          {{ lang.map.return_to_president_assistant_office }}
         </button>
       }
       @if (
