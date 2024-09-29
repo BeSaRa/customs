@@ -294,7 +294,7 @@
     <app-button
       buttonType="primary"
       (click)="responseAction$.next(taskResponses.TO_PAO_USER)">
-      {{ lang.map.return_to_president_assistant_office }}
+      {{ lang.map.return_to_president_assistant_office_user }}
     </app-button>
   }
 
@@ -306,8 +306,7 @@
       model().hasResponse(taskResponses.RETURN_TO_SAME) ||
       model().hasResponse(taskResponses.RETURN_TO_APP) ||
       model().hasResponse(taskResponses.RETURN_TO_CA) ||
-      model().hasResponse(taskResponses.RETURN_TO_PO) ||
-      model().hasResponse(taskResponses.RETURN_TO_PAE))
+      model().hasResponse(taskResponses.RETURN_TO_PO))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -322,15 +321,6 @@
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_PO)">
           {{ lang.map.return_to_president_office }}
-        </button>
-      }
-      @if (
-        model().inMyInbox() && model().hasResponse(taskResponses.TO_PAO_USER)
-      ) {
-        <button
-          mat-menu-item
-          (click)="responseAction$.next(taskResponses.TO_PAO_USER)">
-          {{ lang.map.return_to_president_assistant_office_user }}
         </button>
       }
       @if (
