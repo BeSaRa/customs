@@ -382,7 +382,8 @@ export class ButtonsCaseWrapperComponent
           if (
             (this.model() as Investigation).inSubmitInvestigationActivity() ||
             response.response === TaskResponses.PR_FRST_APPROVE ||
-            response.response === TaskResponses.PA_FRST_APPROVE
+            response.response === TaskResponses.PA_FRST_APPROVE ||
+            response.response === TaskResponses.MANAGER_APPROVE
           ) {
             return (this.model() as Investigation).penaltyDecisions.length
               ? this.penaltyDecisionService

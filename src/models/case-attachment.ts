@@ -6,7 +6,9 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { CaseAttachmentInterceptor } from '@model-interceptors/case-attachment-interceptor';
 import { InterceptModel } from 'cast-response';
+
 const { send, receive } = new CaseAttachmentInterceptor();
+
 @InterceptModel({
   send,
   receive,
@@ -39,6 +41,7 @@ export class CaseAttachment extends ClonerMixin(class {}) {
   // not related to the model
 
   content?: File;
+
   setContent(file: File): void {
     this.content = file;
   }
