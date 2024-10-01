@@ -381,9 +381,9 @@ export class ButtonsCaseWrapperComponent
         switchMap(response => {
           if (
             (this.model() as Investigation).inSubmitInvestigationActivity() ||
+            (this.model() as Investigation).inReviewApplicantDepartment() ||
             response.response === TaskResponses.PR_FRST_APPROVE ||
-            response.response === TaskResponses.PA_FRST_APPROVE ||
-            response.response === TaskResponses.MANAGER_APPROVE
+            response.response === TaskResponses.PA_FRST_APPROVE
           ) {
             return (this.model() as Investigation).penaltyDecisions.length
               ? this.penaltyDecisionService

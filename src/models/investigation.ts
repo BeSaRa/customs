@@ -452,6 +452,10 @@ export class Investigation extends BaseCase<
     return this.inActivity(ActivitiesName.SUBMIT_INVESTIGATION);
   }
 
+  inReviewApplicantDepartment(): boolean {
+    return this.inActivity(ActivitiesName.REVIEW_APPLICANT_DEPARTMENT);
+  }
+
   inLegalAffairsActivity(): boolean {
     return this.inActivity(ActivitiesName.REVIEW_LEGAL_AFFAIRS);
   }
