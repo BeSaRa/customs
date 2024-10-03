@@ -20,12 +20,10 @@
     [updateModel]="updateModel"
     [model]="model()" />
   <!-- the new component goes here  -->
-  @if (getLastApprovedLegalMemo()) {
-    <app-memorandum-opinion-list
-      [masterComponent]="master"
-      [isManager]="true"
-      [updateModel]="updateModel"
-      [model]="model()"
-      [lastApprovedLegalMemo]="getLastApprovedLegalMemo()" />
-  }
+
+  <app-memorandum-opinion-list
+    [masterComponent]="master"
+    [isManager]="true"
+    [updateModel]="updateModel"
+    [model]="model()" />
 </div>
