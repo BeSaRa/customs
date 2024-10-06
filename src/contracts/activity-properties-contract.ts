@@ -19,4 +19,7 @@ export interface ActivityPropertiesContract {
   OffenderType: {
     value: number;
   };
+  CreatedByOUType: {
+    value: number;
+  };
 }

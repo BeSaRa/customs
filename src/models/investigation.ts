@@ -15,6 +15,7 @@ import { OffenderTypes } from '@enums/offender-types';
 import { ManagerDecisions } from '@enums/manager-decisions';
 import { ProofTypes } from '@enums/proof-types';
 import { ActivitiesName } from '@enums/activities-name';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
 
 const { send, receive } = new InvestigationInterceptor();
 
@@ -295,6 +296,16 @@ export class Investigation extends BaseCase<
       this.taskDetails.activityProperties.OffenderIds.value &&
       this.taskDetails.activityProperties.OffenderIds.value.items &&
       this.taskDetails.activityProperties.OffenderIds.value.items.length
+    );
+  }
+  isReturnedFromVPToManager() {
+    return !!(
+      this.hasTask() &&
+      this.taskDetails.activityProperties &&
+      this.taskDetails.activityProperties.CreatedByOUType &&
+      this.taskDetails.activityProperties.CreatedByOUType.value &&
+      this.taskDetails.activityProperties.CreatedByOUType.value ===
+        OrganizationUnitType.OFFICE
     );
   }
 

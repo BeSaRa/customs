@@ -402,7 +402,8 @@
   <mat-menu #referralMenu="matMenu">
     @if (
       model().inMyInbox() &&
-      model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT)
+      model().hasResponse(taskResponses.REFERRAL_TO_PRESIDENT) &&
+      !isReturnedFromVPToManager()
     ) {
       <button mat-menu-item (click)="requestReferralPresident()">
         {{ lang.map.referral_request_to_presodent }}
