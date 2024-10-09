@@ -9,7 +9,11 @@ import {
   viewChild,
   ViewChild,
 } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -58,6 +62,9 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
+import { StatementService } from '@services/statement.service';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
 
 @Component({
   selector: 'app-investigation',
@@ -89,6 +96,7 @@ export class InvestigationComponent
   employeeService = inject(EmployeeService);
   teamService = inject(TeamService);
   inboxService = inject(InboxService);
+  statementService = inject(StatementService);
   router = inject(Router);
   activeRoute = inject(ActivatedRoute);
   toast = inject(ToastService);
@@ -97,6 +105,8 @@ export class InvestigationComponent
   adapter = inject(DateAdapter);
   violationClassificationService = inject(ViolationClassificationService);
   canManageInvestigationElements = true;
+  organizationUnits!: OrganizationUnit[];
+  organizationUnitService = inject(OrganizationUnitService);
   info = input<OpenedInfoContract | null>(null);
   @ViewChild(SummaryTabComponent)
   summaryTabComponent?: SummaryTabComponent;
@@ -110,6 +120,12 @@ export class InvestigationComponent
   generalAttachments!: CaseAttachmentsComponent;
   @ViewChild('officialAttachments')
   officialAttachments!: CaseAttachmentsComponent;
+
+  reviewStatementForm = new UntypedFormGroup({
+    reviewerOuId: new UntypedFormControl(null, { nonNullable: true }),
+    description: new UntypedFormControl(null),
+    reply: new UntypedFormControl(undefined),
+  });
   legalAffairsProceduresComponent = viewChild<LegalAffairsProceduresComponent>(
     'legalAffairsProceduresComponent',
   );
@@ -163,6 +179,10 @@ export class InvestigationComponent
     this._listenToLoadOffendersViolations();
     this.listenToTabChange();
     this.claimIfAutoClaim();
+    this.loadOrganizationUnits();
+    if (this.model.isReviewStatement()) {
+      this.setReviewStatementFormValues();
+    }
   }
 
   claimIfAutoClaim() {
@@ -584,4 +604,31 @@ export class InvestigationComponent
   }
 
   protected readonly AppPermissions = AppPermissions;
+
+  openRequestStatementDialog() {
+    this.statementService.openRequestStatementDialog(this.model);
+  }
+
+  hasStatementCreatorPermission() {
+    return this.employeeService.hasPermissionTo('STATEMENT_CREATOR');
+  }
+
+  private loadOrganizationUnits() {
+    this.organizationUnitService
+      .loadAsLookups()
+      .subscribe(ous => (this.organizationUnits = ous));
+  }
+
+  private setReviewStatementFormValues() {
+    const { reviewerOuId, description, reply } =
+      this.model.getReviewStatementValues();
+    this.reviewStatementForm.patchValue({
+      reviewerOuId,
+      description,
+    });
+    if (reply) {
+      this.reviewStatementForm.get('reply')?.setValue(reply);
+    }
+    this.reviewStatementForm.disable();
+  }
 }

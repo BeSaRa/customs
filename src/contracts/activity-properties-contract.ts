@@ -19,4 +19,13 @@ export interface ActivityPropertiesContract {
   OffenderType: {
     value: number;
   };
+  Description: {
+    value: string;
+  };
+  ReviewerOuId: {
+    value: number;
+  };
+  Reply: {
+    value: string;
+  };
 }

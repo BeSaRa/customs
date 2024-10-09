@@ -115,6 +115,7 @@ export const AppIcons = {
   CHILD_ITEMS: 'circle-multiple',
   MANAGE_INBOX: 'email-multiple',
   ACCOUNT_CONVERT: 'account-convert',
+  REQUEST_STATEMENT: 'arrow-top-left-bold-box-outline',
 };
 
 export type AppIconsType = typeof AppIcons;

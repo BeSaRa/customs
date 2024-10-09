@@ -5,8 +5,10 @@
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
     </h1>
     <div class="flex-auto"></div>
-    <!--  <app-icon-button [matTooltip]="lang.map.collapse_all" icon="COLLAPSE_ALL" />-->
-    <!--  <app-icon-button [matTooltip]="lang.map.expand_all" icon="EXPAND_ALL" />-->
+    @if(model.id && hasStatementCreatorPermission()){
+      <app-icon-button (click)="openRequestStatementDialog()" [matTooltip]="lang.map.request_statement" icon="REQUEST_STATEMENT" />
+    }
+
   </div>
   @if (showSummaryElements()) {
     <div
@@ -61,6 +63,13 @@
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" [mat-stretch-tabs]="false">
+      @if(model.isReviewStatement()){
+        <mat-tab
+          data-name="review_statement"
+          [label]="lang.map.review_statement">
+          <ng-container [ngTemplateOutlet]="review_statement"></ng-container>
+        </mat-tab>
+      }
       @if (
         model.inLegalAffairsActivity() ||
         (isOpenedFromSearch() && employeeService.isOneOfLegalAffairsTeams())
@@ -251,6 +260,31 @@
       (updateModel)="updateModel$.next(null)"
       [model]="model"
       [isOpenedFromSearch]="isOpenedFromSearch()" />
+  </ng-template>
+  <ng-template #review_statement>
+    <div
+      [formGroup]="reviewStatementForm"
+      class="p-4 grid gap-4 grid-cols-1">
+      <app-select-input
+        [label]="lang.map.reviewer_organization_unit"
+        formControlName="reviewerOuId"
+        [options]="organizationUnits"
+        [bindValue]="'id'"
+        [bindLabel]="'getNames'"
+        [nullable]="false"
+      >
+      </app-select-input>
+      <app-textarea
+        formControlName="description"
+        [label]="lang.map.description " >
+      </app-textarea>
+      @if(reviewStatementForm.get('reply')?.value){
+        <app-textarea
+          formControlName="reply"
+          [label]="lang.map.reply_to_statement" >
+        </app-textarea>
+      }
+    </div>
   </ng-template>
   <ng-template #disciplinary_committee_meetings>
     <div class="p-4">

@@ -473,4 +473,13 @@ export class Investigation extends BaseCase<
   inHumanResource(): boolean {
     return this.inActivity(ActivitiesName.REVIEW_HUMAN_RESOURCES);
   }
+
+  getReviewStatementValues() {
+    const description = this.taskDetails.activityProperties!.Description!.value;
+    const reviewerOuId =
+      this.taskDetails.activityProperties!.ReviewerOuId!.value;
+    const reply = this.taskDetails.activityProperties?.Reply.value;
+
+    return { description, reviewerOuId, reply };
+  }
 }

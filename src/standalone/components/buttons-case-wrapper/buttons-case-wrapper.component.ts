@@ -171,6 +171,9 @@ export class ButtonsCaseWrapperComponent
     return this.model().canStart();
   }
 
+  reviewStatement() {
+    return this.model().isReviewStatement();
+  }
   claimItem() {
     this.model()
       .claim()
@@ -402,33 +405,34 @@ export class ButtonsCaseWrapperComponent
                   )
                   .pipe(map(() => response))
               : of(response);
-          }
-          else if(
+          } else if (
             (this.model() as Investigation).inReviewApplicantDepartment() &&
             (this.model() as Investigation).getConcernedOffendersIds()
           ) {
             return (this.model() as Investigation).getConcernedOffendersIds()
               ? this.penaltyDecisionService
-                .createBulkFull(
-                  (this.model() as Investigation).getConcernedOffendersIds().map(
-                    offenderId => {
-                      const item = (this.model() as Investigation).penaltyDecisions.find(item=>item.offenderId === offenderId)!
-                      return item.clone<PenaltyDecision>({
-                        ...item,
-                        signerId: this.employee!.id,
-                        tkiid: this.model().getTaskId(),
-                        roleAuthName: (
+                  .createBulkFull(
+                    (this.model() as Investigation)
+                      .getConcernedOffendersIds()
+                      .map(offenderId => {
+                        const item = (
                           this.model() as Investigation
-                        ).getTeamDisplayName(),
-                      })
-                    },
-                  ),
-                )
-                .pipe(map(() => response))
+                        ).penaltyDecisions.find(
+                          item => item.offenderId === offenderId,
+                        )!;
+                        return item.clone<PenaltyDecision>({
+                          ...item,
+                          signerId: this.employee!.id,
+                          tkiid: this.model().getTaskId(),
+                          roleAuthName: (
+                            this.model() as Investigation
+                          ).getTeamDisplayName(),
+                        });
+                      }),
+                  )
+                  .pipe(map(() => response))
               : of(response);
-          }
-
-          else return of(response);
+          } else return of(response);
         }),
         switchMap(({ response }) => {
           return (

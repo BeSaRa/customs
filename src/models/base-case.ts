@@ -217,4 +217,10 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
   start(): Observable<boolean> {
     return this.getService().start(this.id);
   }
+
+  isReviewStatement() {
+    return (
+      this.getActivityName() === ActivitiesName.REVIEW_DEPARTMENT_STATEMENT
+    );
+  }
 }
