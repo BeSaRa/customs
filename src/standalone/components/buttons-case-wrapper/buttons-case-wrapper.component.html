@@ -606,7 +606,7 @@
 
   <!-- send to manager -->
   <!--  && !isApplicantManager()-->
-  @if (canLaunch()) {
+  @if (canLaunch() && !reviewStatement()) {
     <app-button
       (click)="
         launch.emit(
@@ -650,6 +650,38 @@
       buttonType="error"
       (click)="responseAction$.next(taskResponses.TERMINATE)">
       {{ lang.map.terminate }}
+    </app-button>
+  }
+  <!-- statement return to creator -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_RETURN_CREATOR)) {
+    <app-button
+      buttonType="primary"
+      (click)="responseAction$.next(taskResponses.STM_RETURN_CREATOR)">
+      {{ lang.map.return_to_creator }}
+    </app-button>
+  }
+  <!-- statement approve -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_DEP_APPROVE)) {
+    <app-button
+      buttonType="primary-outline"
+      (click)="responseAction$.next(taskResponses.STM_DEP_APPROVE)">
+      {{ lang.map.approve_statement_request }}
+    </app-button>
+  }
+  <!-- statement close -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_CLOSE)) {
+    <app-button
+      buttonType="primary"
+      (click)="responseAction$.next(taskResponses.STM_CLOSE)">
+      {{ lang.map.close_statement_request }}
+    </app-button>
+  }
+  <!-- statement reply -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_REPLY)) {
+    <app-button
+      buttonType="primary"
+      (click)="responseAction$.next(taskResponses.STM_REPLY)">
+      {{ lang.map.reply_to_statement }}
     </app-button>
   }
 

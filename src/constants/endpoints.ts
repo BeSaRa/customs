@@ -63,6 +63,7 @@ export const EndPoints = {
   CASE_ENTITY_VIEW: '/investigation-case/search/criteria',
   COURT_DECISION: '/court-decision-case', // until implemented from BE side
   CUSTOM_MENU: '/entity/menu-item',
+  REQUEST_STATEMENT: '/investigation-case/statement-review',
 };
 
 export type EndpointsType = typeof EndPoints;

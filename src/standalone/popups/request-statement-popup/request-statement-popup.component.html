@@ -1,0 +1,35 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.request_statement }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div [formGroup]="form" class="dialog-content">
+    <div class="grid grid-cols-1 gap-2">
+      <app-select-input
+        [label]="lang.map.request_for_department_statement"
+        formControlName="departments"
+        [options]="organizationUnits"
+        bindValue="id"
+        bindLabel="getNames"
+        [isMultiple]="true"
+      >
+      </app-select-input>
+      <app-textarea
+        [label]="lang.map.description"
+        formControlName="description">
+      </app-textarea>
+    </div>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button (click)="requestStatement()" buttonType="primary">{{
+        hasStatementApprovePermission()? lang.map.approve : lang.map.request_statement
+      }}</app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
+  </div>
+</div>

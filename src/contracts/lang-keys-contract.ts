@@ -9,7 +9,7 @@ export interface LangKeysContract {
   referral_to_legal_affairs: string;
   there_is_no_investigation_result_to_perform_this_action: string;
   request_department_statement_footer: string;
-  request_departmwent_statement_header: string;
+  request_department_statement_header: string;
   request_for_department_statement: string;
   approve_msg_confirmation: string;
   something_wrong_happened: string;
@@ -783,4 +783,11 @@ export interface LangKeysContract {
   extraction_date: string;
   send_to_president_office_inbox: string;
   return_to_inbox: string;
+  request_statement: string;
+  review_statement: string;
+  reviewer_organization_unit: string;
+  return_to_creator: string;
+  approve_statement_request: string;
+  close_statement_request: string;
+  reply_to_statement: string;
 }

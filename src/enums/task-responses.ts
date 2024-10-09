@@ -51,4 +51,8 @@ export enum TaskResponses {
   GR_COMPLETE = 'gr_complete',
   TO_PO_USER = 'to_po_user',
   TO_PAO_USER = 'to_pao_user',
+  STM_RETURN_CREATOR = 'stm_return_creator',
+  STM_DEP_APPROVE = 'stm_dep_approve',
+  STM_CLOSE = 'stm_close',
+  STM_REPLY = 'stm_reply',
 }
