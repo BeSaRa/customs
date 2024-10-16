@@ -28,4 +28,7 @@ export interface ActivityPropertiesContract {
   Reply: {
     value: string;
   };
+  Serial: {
+    value: string;
+  };
 }
