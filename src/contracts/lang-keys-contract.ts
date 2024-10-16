@@ -789,5 +789,6 @@ export interface LangKeysContract {
   return_to_creator: string;
   approve_statement_request: string;
   close_statement_request: string;
+  reply: string;
   reply_to_statement: string;
 }

@@ -56,20 +56,6 @@
               }
             </div>
           }
-          <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM2">
-          <h5 *ngFor="let violation of violations">
-            <strong>
-              {{violation.name}}
-            </strong>
-          </h5>
-        </div> -->
-          <!-- <div class="mb-4" *ngIf="response===taskResponses.FORM7">
-        <h5>
-          <strong>
-            {{violation.name + ' ' + violation.date}}
-          </strong>
-        </h5>
-      </div> -->
           <form [formGroup]="form" class="mb-3">
             <app-textarea
               formControlName="comment"
@@ -155,14 +141,14 @@
         <div class="col-12 mb-3">
           <app-textarea
             formControlName="comment"
-            label="comment"></app-textarea>
+            [label]="isStatementReply? lang.map.reply : lang.map.comment"></app-textarea>
         </div>
       </form>
     }
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary"
-      >{{ lang.map.save }}
+      >{{ isStatementReply? lang.map.reply_to_statement : lang.map.save }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline"
       >{{ lang.map.close }}
