@@ -479,7 +479,7 @@ export class Investigation extends BaseCase<
     const reviewerOuId =
       this.taskDetails.activityProperties!.ReviewerOuId!.value;
     const reply = this.taskDetails.activityProperties?.Reply.value;
-
-    return { description, reviewerOuId, reply };
+    const statementSerial = this.taskDetails.activityProperties?.Serial.value;
+    return { description, reviewerOuId, reply, statementSerial };
   }
 }

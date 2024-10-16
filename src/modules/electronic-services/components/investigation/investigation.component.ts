@@ -66,6 +66,7 @@ import { StatementService } from '@services/statement.service';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { CommonCaseStatus } from '@enums/common-case-status';
+import { TaskResponses } from '@enums/task-responses';
 
 @Component({
   selector: 'app-investigation',
@@ -127,6 +128,7 @@ export class InvestigationComponent
     reviewerOuId: new UntypedFormControl(null, { nonNullable: true }),
     description: new UntypedFormControl(null),
     reply: new UntypedFormControl(undefined),
+    statementSerial: new UntypedFormControl(undefined),
   });
   legalAffairsProceduresComponent = viewChild<LegalAffairsProceduresComponent>(
     'legalAffairsProceduresComponent',
@@ -631,7 +633,7 @@ export class InvestigationComponent
   }
 
   private setReviewStatementFormValues() {
-    const { reviewerOuId, description, reply } =
+    const { reviewerOuId, description, reply, statementSerial } =
       this.model.getReviewStatementValues();
     this.reviewStatementForm.patchValue({
       reviewerOuId,
@@ -640,6 +642,15 @@ export class InvestigationComponent
     if (reply) {
       this.reviewStatementForm.get('reply')?.setValue(reply);
     }
+    if (statementSerial) {
+      this.reviewStatementForm
+        .get('statementSerial')
+        ?.setValue(statementSerial);
+    }
     this.reviewStatementForm.disable();
+  }
+
+  get isStatementReply() {
+    return this.model.getResponses()?.includes(TaskResponses.STM_REPLY);
   }
 }

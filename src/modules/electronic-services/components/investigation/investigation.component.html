@@ -265,6 +265,13 @@
     <div
       [formGroup]="reviewStatementForm"
       class="p-4 grid gap-4 grid-cols-1">
+      @if (isStatementReply) {
+        <app-input
+          formControlName="statementSerial"
+          [label]="lang.map.serial_number"
+          >
+        </app-input>
+      }
       <app-select-input
         [label]="lang.map.reviewer_organization_unit"
         formControlName="reviewerOuId"
