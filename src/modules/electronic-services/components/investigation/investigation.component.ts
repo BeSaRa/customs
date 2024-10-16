@@ -355,8 +355,9 @@ export class InvestigationComponent
       return;
     }
     if (
-      ((!model.inMyInbox() && !this.isInvestigator()) || !model.canSave()) &&
-      !model.isDrafted
+      (((!model.inMyInbox() && !this.isInvestigator()) || !model.canSave()) &&
+        !model.isDrafted) ||
+      model.isReviewStatement()
     ) {
       this.readonly = true;
       this.canManageInvestigationElements = false; // specified for violations, offenders, external persons and attachments
