@@ -97,6 +97,10 @@ export class CommentPopupComponent
     this.isPreviewForm = this.previewFormList.includes(this.response);
   }
 
+  get isStatementReply() {
+    return this.response === TaskResponses.STM_REPLY;
+  }
+
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
   }
@@ -166,6 +170,9 @@ export class CommentPopupComponent
     ) {
       this.form.get('userId')?.setValidators([CustomValidators.required]);
       this.form.get('userId')?.updateValueAndValidity();
+    }
+    if (this.isStatementReply) {
+      this.form.get('comment')?.setValidators([CustomValidators.required]);
     }
   }
 
