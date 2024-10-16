@@ -53,6 +53,7 @@ import {
 } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { ButtonComponent } from '../button/button.component';
+import { StatementService } from '@services/statement.service';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -73,6 +74,7 @@ export class ButtonsCaseWrapperComponent
   router = inject(Router);
   protected readonly OpenFromEnum = OpenFrom;
   toast = inject(ToastService);
+  statementService = inject(StatementService);
   employee = this.employeeService.getEmployee();
   taskResponses = TaskResponses;
   AppIcons = AppIcons;
@@ -82,7 +84,7 @@ export class ButtonsCaseWrapperComponent
   grievanceCompleteAction$: Subject<TaskResponses> =
     new Subject<TaskResponses>();
   approve$: Subject<TaskResponses> = new Subject<TaskResponses>();
-
+  readonly caseTypes = CaseTypes;
   legalAffairsProceduresComponent = input<LegalAffairsProceduresComponent>();
 
   model: InputSignal<
@@ -698,5 +700,15 @@ export class ButtonsCaseWrapperComponent
       this.employeeService.isPresidentAssistantOffice() ||
       !!this.employeeService.isPresidentAssisstant()
     );
+  }
+
+  openRequestStatementDialog() {
+    this.statementService.openRequestStatementDialog(
+      this.model() as Investigation,
+    );
+  }
+
+  hasStatementCreatorPermission() {
+    return this.employeeService.hasPermissionTo('STATEMENT_CREATOR');
   }
 }

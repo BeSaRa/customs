@@ -697,4 +697,12 @@
       >{{ lang.map.view + ' ' + lang.map.actions }}
     </app-button>
   }
+
+  <!-- request statement -->
+  @if(model().id && hasStatementCreatorPermission() && this.model().caseType === caseTypes.INVESTIGATION ){
+    <app-button (click)="openRequestStatementDialog()" buttonType="primary"
+      >{{ lang.map.request_statement }}
+    </app-button>
+  }
+
 </div>
