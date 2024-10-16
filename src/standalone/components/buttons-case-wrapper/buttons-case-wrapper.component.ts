@@ -54,6 +54,7 @@ import {
 import { catchError, map, take } from 'rxjs/operators';
 import { ButtonComponent } from '../button/button.component';
 import { StatementService } from '@services/statement.service';
+import { CommonCaseStatus } from '@enums/common-case-status';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -86,6 +87,7 @@ export class ButtonsCaseWrapperComponent
   approve$: Subject<TaskResponses> = new Subject<TaskResponses>();
   readonly caseTypes = CaseTypes;
   legalAffairsProceduresComponent = input<LegalAffairsProceduresComponent>();
+  protected readonly commonCaseStatus = CommonCaseStatus;
 
   model: InputSignal<
     BaseCase<
@@ -710,5 +712,14 @@ export class ButtonsCaseWrapperComponent
 
   hasStatementCreatorPermission() {
     return this.employeeService.hasPermissionTo('STATEMENT_CREATOR');
+  }
+
+  hasRequestStatement() {
+    return (
+      this.model().caseType === this.caseTypes.INVESTIGATION &&
+      this.model().caseState !== this.commonCaseStatus.DRAFT &&
+      this.hasStatementCreatorPermission() &&
+      !!this.model().id
+    );
   }
 }

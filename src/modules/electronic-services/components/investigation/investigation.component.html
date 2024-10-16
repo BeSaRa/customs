@@ -5,7 +5,7 @@
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
     </h1>
     <div class="flex-auto"></div>
-    @if(model.id && hasStatementCreatorPermission()){
+    @if(hasRequestStatement()){
       <app-icon-button (click)="openRequestStatementDialog()" [matTooltip]="lang.map.request_statement" icon="REQUEST_STATEMENT" />
     }
 

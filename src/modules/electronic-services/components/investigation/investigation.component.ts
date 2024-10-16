@@ -65,6 +65,7 @@ import {
 import { StatementService } from '@services/statement.service';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
+import { CommonCaseStatus } from '@enums/common-case-status';
 
 @Component({
   selector: 'app-investigation',
@@ -105,6 +106,7 @@ export class InvestigationComponent
   adapter = inject(DateAdapter);
   violationClassificationService = inject(ViolationClassificationService);
   canManageInvestigationElements = true;
+  protected readonly commonCaseStatus = CommonCaseStatus;
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
   info = input<OpenedInfoContract | null>(null);
@@ -612,6 +614,14 @@ export class InvestigationComponent
 
   hasStatementCreatorPermission() {
     return this.employeeService.hasPermissionTo('STATEMENT_CREATOR');
+  }
+
+  hasRequestStatement() {
+    return (
+      this.model.caseState !== this.commonCaseStatus.DRAFT &&
+      this.hasStatementCreatorPermission() &&
+      !!this.model.id
+    );
   }
 
   private loadOrganizationUnits() {
