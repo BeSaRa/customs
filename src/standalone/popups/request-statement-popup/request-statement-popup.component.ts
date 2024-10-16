@@ -82,9 +82,10 @@ export class RequestStatementPopupComponent implements OnInit {
   }
 
   protected _afterSave(): void {
-    this.toast.success(this.lang.map.msg_save_x_success);
+    this.toast.success(this.lang.map.msg_statement_sent_successfully);
     this.dialogRef.close();
   }
+
   requestStatement() {
     of(null)
       .pipe(
