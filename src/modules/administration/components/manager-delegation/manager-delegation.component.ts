@@ -54,7 +54,7 @@ export class ManagerDelegationComponent
     new NoneFilterColumn('select'),
     new SelectFilterColumn(
       'delegatedId',
-      this.internalUserService.loadAsLookups(),
+      this.internalUserService.getManagerUsers(),
       'id',
       'getNames',
     ),
