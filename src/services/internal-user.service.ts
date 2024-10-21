@@ -92,4 +92,10 @@ export class InternalUserService extends BaseCrudWithDialogService<
       { id, defaultOUId },
     );
   }
+
+  @CastResponse()
+  getManagerUsers(): Observable<InternalUser[]> {
+    const url = `${this.getUrlSegment()}/manager/lookup`;
+    return this.http.get<InternalUser[]>(url);
+  }
 }
