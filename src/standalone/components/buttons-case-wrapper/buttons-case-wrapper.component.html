@@ -653,7 +653,9 @@
     </app-button>
   }
   <!-- statement return to creator -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_RETURN_CREATOR)) {
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.STM_RETURN_CREATOR)
+  ) {
     <app-button
       buttonType="primary"
       (click)="responseAction$.next(taskResponses.STM_RETURN_CREATOR)">
@@ -661,7 +663,9 @@
     </app-button>
   }
   <!-- statement approve -->
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_DEP_APPROVE)) {
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.STM_DEP_APPROVE)
+  ) {
     <app-button
       buttonType="primary-outline"
       (click)="responseAction$.next(taskResponses.STM_DEP_APPROVE)">
@@ -673,7 +677,7 @@
     <app-button
       buttonType="primary"
       (click)="responseAction$.next(taskResponses.STM_CLOSE)">
-      {{ lang.map.close_statement_request }}
+      {{ lang.map.terminate_statement }}
     </app-button>
   }
   <!-- statement reply -->
@@ -699,10 +703,9 @@
   }
 
   <!-- request statement -->
-  @if(hasRequestStatement() ){
+  @if (hasRequestStatement()) {
     <app-button (click)="openRequestStatementDialog()" buttonType="primary"
       >{{ lang.map.request_statement }}
     </app-button>
   }
-
 </div>
