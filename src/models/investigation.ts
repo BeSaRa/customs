@@ -475,7 +475,7 @@ export class Investigation extends BaseCase<
   }
 
   getReviewStatementValues() {
-    const description = this.taskDetails.activityProperties!.Description!.value;
+    const description = this.taskDetails.fullDescription;
     const reviewerOuId =
       this.taskDetails.activityProperties!.ReviewerOuId!.value;
     const reply = this.taskDetails.activityProperties?.Reply.value;

@@ -45,5 +45,6 @@ export class TaskDetails {
   actions!: ActionNames[];
   isRead!: boolean;
   isMain!: boolean;
+  fullDescription?: string;
   activityProperties?: ActivityPropertiesContract;
 }
