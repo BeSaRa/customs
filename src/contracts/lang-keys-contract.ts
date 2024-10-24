@@ -788,7 +788,7 @@ export interface LangKeysContract {
   reviewer_organization_unit: string;
   return_to_creator: string;
   approve_statement_request: string;
-  close_statement_request: string;
+  terminate_statement: string;
   reply: string;
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
