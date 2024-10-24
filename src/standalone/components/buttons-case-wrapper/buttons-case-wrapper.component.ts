@@ -716,6 +716,7 @@ export class ButtonsCaseWrapperComponent
 
   hasRequestStatement() {
     return (
+      !this.reviewStatement() &&
       this.model().caseType === this.caseTypes.INVESTIGATION &&
       this.model().caseState !== this.commonCaseStatus.DRAFT &&
       this.hasStatementCreatorPermission() &&

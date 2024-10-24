@@ -620,6 +620,7 @@ export class InvestigationComponent
 
   hasRequestStatement() {
     return (
+      !this.model.isReviewStatement() &&
       this.model.caseState !== this.commonCaseStatus.DRAFT &&
       this.hasStatementCreatorPermission() &&
       !!this.model.id
