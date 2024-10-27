@@ -75,7 +75,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
       },
       {} as Record<string | number, GridStackPosition>,
     );
-    this.gridService.updateWidgets(_updates);
+    this.gridService.updateWidgetsPosition(_updates);
   }
 
   drop(event: droppedCB) {

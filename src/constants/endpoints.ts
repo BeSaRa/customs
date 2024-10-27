@@ -65,6 +65,7 @@ export const EndPoints = {
   CUSTOM_MENU: '/entity/menu-item',
   REQUEST_STATEMENT: '/investigation-case/statement-review',
   GRIEVANCE_REQUEST_STATEMENT: '/grievance-case/statement-review',
+  INBOX_COUNTER: 'entity/counter-team',
 };
 
 export type EndpointsType = typeof EndPoints;

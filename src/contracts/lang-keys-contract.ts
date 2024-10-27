@@ -799,4 +799,6 @@ export interface LangKeysContract {
   accreditation_date: string;
   edit_statement_request: string;
   login_successfully: string;
+  data_source: string;
+  there_is_no_data_sources: string;
 }

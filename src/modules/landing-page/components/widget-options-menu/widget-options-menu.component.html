@@ -1,0 +1,31 @@
+<button class="pointer-events-none" [matMenuTriggerFor]="menu"></button>
+<ng-container [formGroup]="optionsForm">
+  <mat-menu #menu="matMenu" class="px-2">
+    <button mat-menu-item [matMenuTriggerFor]="dataMenu">
+      {{ lang.map.data_source }}
+    </button>
+    <mat-menu #dataMenu="matMenu">
+      <mat-selection-list
+        formControlName="countersIds"
+        (click)="$event.stopPropagation()"
+        [multiple]="optionsService.isMulti">
+        @if (inboxCountersService.userCounters().length) {
+          @for (team of inboxCountersService.userTeamsCounters(); track team) {
+            <p class="text-center font-bold text-lg text-primary">
+              {{ team.team.getNames() }}
+            </p>
+            @for (counter of team.counters; track counter) {
+              <mat-list-option [value]="counter.counterId">{{
+                counter.counterInfo.getNames()
+              }}</mat-list-option>
+            }
+          }
+        } @else {
+          <span class="inline-block px-2 text-gray-500">{{
+            lang.map.there_is_no_data_sources
+          }}</span>
+        }
+      </mat-selection-list>
+    </mat-menu>
+  </mat-menu>
+</ng-container>

@@ -1,4 +1,5 @@
 import { WidgetState } from '@abstracts/widget-state';
+import { Type } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { WidgetTypes } from '@enums/widget-types';
 import {
@@ -19,7 +20,7 @@ import { GridStackWidget } from 'gridstack';
 export const WidgetTypeToComponentMap: Record<
   WidgetTypes,
   {
-    component: typeof BaseWidgetDirective;
+    component: Type<BaseWidgetDirective>;
     stateOptions: Constructor<WidgetState>;
     initialSize: GridStackWidget;
     iconUrl: string;

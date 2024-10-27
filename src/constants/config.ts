@@ -23,6 +23,7 @@ export const Config = {
   },
   E_SERVICE_ITEM_KEY: 'item',
   YEAR_RANGE_FROM_CURRENT_YEAR: 10,
+  TIME_TO_RELOAD_USER_INBOX_COUNTERS: 120,
 };
 
 export type ConfigType = typeof Config;

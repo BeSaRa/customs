@@ -1,5 +1,4 @@
 import { WidgetState } from '@abstracts/widget-state';
-import { WidgetTypeToComponentMap } from '@contracts/widgets-map';
 import { LayoutWidgetModel } from '@models/layout-widget-model';
 import { ServiceRegistry } from '@services/service-registry';
 import { WidgetService } from '@services/widget.service';
@@ -29,9 +28,8 @@ export class LayoutWidgetInterceptor
     model.widgetDetails = _widgetService.getWidgetById(model.widgetId);
     model.position = JSON.parse((model.position as unknown as string) ?? '{}');
 
-    const StateType =
-      WidgetTypeToComponentMap[model.widgetDetails.type].stateOptions;
-    model.stateOptions = new StateType().clone(
+    model.stateOptions = LayoutWidgetModel.getStateInstance(
+      model.widgetDetails.type,
       JSON.parse((model.stateOptions as unknown as string) ?? '{}'),
     );
 
