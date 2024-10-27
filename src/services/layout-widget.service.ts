@@ -87,6 +87,11 @@ export class LayoutWidgetService extends BaseCrudService<LayoutWidgetModel> {
         new LayoutWidgetModel().clone<LayoutWidgetModel>(structuredClone(lw));
       this._layoutWidgetsMap[lw.id].widgetDetails =
         new WidgetModel().clone<WidgetModel>(structuredClone(lw.widgetDetails));
+      this._layoutWidgetsMap[lw.id].stateOptions =
+        LayoutWidgetModel.getStateInstance(
+          lw.widgetDetails.type,
+          structuredClone(lw.stateOptions),
+        );
     });
     this._layoutWidgetsMapSignal.set(this._layoutWidgetsMap);
   }

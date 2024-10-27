@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   effect,
   ElementRef,
@@ -7,6 +6,7 @@ import {
   inject,
   Injector,
   input,
+  OnInit,
   runInInjectionContext,
 } from '@angular/core';
 import { FadeAnimation } from '@animations/fade-animation';
@@ -16,6 +16,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { LayoutWidgetModel } from '@models/layout-widget-model';
 import { GridService } from '@services/grid.service';
 import { LangService } from '@services/lang.service';
+import { WidgetOptionsService } from '@services/widget-options.service';
 import { GridStackNode } from 'gridstack';
 import { takeUntil } from 'rxjs';
 
@@ -24,10 +25,11 @@ import { takeUntil } from 'rxjs';
   templateUrl: './widget-container.component.html',
   styleUrl: './widget-container.component.scss',
   animations: [GrowAnimation, FadeAnimation],
+  providers: [WidgetOptionsService],
 })
 export class WidgetContainerComponent
   extends OnDestroyMixin(class {})
-  implements AfterViewInit
+  implements OnInit
 {
   widgetData = input.required<LayoutWidgetModel>();
 
@@ -35,6 +37,7 @@ export class WidgetContainerComponent
   gridService = inject(GridService);
   injector = inject(Injector);
   lang = inject(LangService);
+  optionsService = inject(WidgetOptionsService);
 
   widgetGridStackNode?: GridStackNode;
 
@@ -50,10 +53,11 @@ export class WidgetContainerComponent
   @HostBinding('style.animation-delay') private _delay =
     (Math.random() / 2).toFixed(1) + 's';
 
-  ngAfterViewInit(): void {
-    this._makeCurrentComponentAsGridWidget();
+  ngOnInit(): void {
     this._listenToActiveGridChange();
     this._listenToLangChange();
+    this._makeCurrentComponentAsGridWidget();
+    this.optionsService.setWidgetData(this.widgetData());
   }
 
   removeSelf() {

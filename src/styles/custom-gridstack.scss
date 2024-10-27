@@ -3,6 +3,10 @@ $columns: 96;
   @return calc(round($float * 1000) / 1000);
 }
 
+gridstack.grid-stack > .grid-stack-item {
+  height: auto;
+}
+
 .gs-#{$columns} > .grid-stack-item {
   width: calc((100% / $columns));
 

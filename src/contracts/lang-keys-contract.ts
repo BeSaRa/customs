@@ -807,4 +807,6 @@ export interface LangKeysContract {
   agency_status: string;
   msg_delete_success: string;
   msg_delete_confirm: string;
+  data_source: string;
+  there_is_no_data_sources: string;
 }

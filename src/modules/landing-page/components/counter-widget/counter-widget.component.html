@@ -1,4 +1,19 @@
-<div
-  [countUp]="100"
-  [options]="{ scrollSpyOnce: true }"
-  class="w-full h-full flex items-center justify-center text-5xl font-bold"></div>
+@if (widgetCounters().length) {
+  <div class="w-full h-full flex flex-col justify-center items-center">
+    <span class="font-bold text-center text-2xl">
+      {{ widgetCounters()[0].counterInfo.getNames() }}</span
+    >
+    <span
+      [countUp]="widgetCounters()[0].inboxCount"
+      [options]="{ scrollSpyOnce: true }"
+      class="text-5xl font-bold"></span>
+    <span class="font-bold text-center text-sm">{{
+      widgetCounters()[0].teamInfo.getNames()
+    }}</span>
+  </div>
+} @else {
+  <div
+    [countUp]="100"
+    [options]="{ scrollSpyOnce: true }"
+    class="w-full h-full flex items-center justify-center text-5xl font-bold"></div>
+}

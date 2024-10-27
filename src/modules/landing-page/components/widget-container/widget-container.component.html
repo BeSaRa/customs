@@ -1,15 +1,25 @@
 <div
   [ngClass]="{
-    'bg-gray-100 border-gray-400/15': gridService.isStatic,
-    'bg-gray-200 border-gray-400/50 cursor-move': !gridService.isStatic
+    'bg-gray-100 border-gray-400/15 pt-2': gridService.isStatic,
+    'bg-gray-200 border-gray-400/50 pt-6 cursor-move': !gridService.isStatic
   }"
-  class="relative w-full h-full pt-6 pb-2 px-2 border rounded-md overflow-hidden flex items-center justify-center">
+  class="relative w-full h-full pb-2 px-2 border rounded-md overflow-hidden flex items-center justify-center transition-all">
   @if (!gridService.isStatic) {
-    <button
-      (click)="removeSelf()"
-      class="absolute rtl:left-1 ltr:right-1 top-1 w-4 h-4 border border-gray-700/50 text-gray-700/50 rounded-full flex items-center justify-center text-xs">
-      x
-    </button>
+    <div
+      class="absolute rtl:left-1 ltr:right-1 top-1 flex justify-center items-center">
+      <button (click)="optionsMenu.open($event)" class="h-6">
+        <img
+          src="assets/images/widgets-icons/options.png"
+          class="w-full h-full"
+          alt="" />
+      </button>
+      <app-widget-options-menu #optionsMenu></app-widget-options-menu>
+      <button
+        (click)="removeSelf()"
+        class="w-4 h-4 border border-gray-700/50 text-gray-700/50 rounded-full flex items-center justify-center text-xs">
+        x
+      </button>
+    </div>
   }
   @if (getWidgetComponentType()) {
     <div
