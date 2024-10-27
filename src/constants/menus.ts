@@ -10,7 +10,7 @@ export const Menus: MenuItemContract[] = [
     langKey: 'landing_page',
     icon: AppIcons.DASHBOARD,
     path: AppFullRoutes.LANDING_PAGE,
-    permission: 'MANAGE_LAYOUT_WIDGET',
+    permissionGroup: 'DASHBOARD',
   },
   {
     id: MenuIdes.ADMINISTRATION,

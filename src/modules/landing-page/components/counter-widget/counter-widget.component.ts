@@ -9,4 +9,8 @@ export class CounterWidgetState extends WidgetState {}
   templateUrl: './counter-widget.component.html',
   styleUrl: './counter-widget.component.scss',
 })
-export class CounterWidgetComponent extends BaseWidgetDirective {}
+export class CounterWidgetComponent extends BaseWidgetDirective {
+  override isMulti() {
+    return false;
+  }
+}

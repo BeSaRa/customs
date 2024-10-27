@@ -1,10 +1,12 @@
 import { BaseModel } from '@abstracts/base-model';
 import { WidgetState } from '@abstracts/widget-state';
+import { WidgetTypeToComponentMap } from '@contracts/widgets-map';
+import { WidgetTypes } from '@enums/widget-types';
+import { LayoutWidgetInterceptor } from '@model-interceptors/layout-widget-interceptor';
 import { LayoutWidgetService } from '@services/layout-widget.service';
+import { InterceptModel } from 'cast-response';
 import { GridStackPosition } from 'gridstack';
 import { WidgetModel } from './widget-model';
-import { LayoutWidgetInterceptor } from '@model-interceptors/layout-widget-interceptor';
-import { InterceptModel } from 'cast-response';
 
 const { send, receive } = new LayoutWidgetInterceptor();
 
@@ -36,5 +38,10 @@ export class LayoutWidgetModel extends BaseModel<
       w: this.position.w ?? this.widgetDetails?.getDefaultSize()?.w ?? 0,
       h: this.position.h ?? this.widgetDetails?.getDefaultSize()?.h ?? 0,
     };
+  }
+
+  static getStateInstance(type: WidgetTypes, state: Partial<WidgetState>) {
+    const _StateType = WidgetTypeToComponentMap[type].stateOptions;
+    return new _StateType().clone(state);
   }
 }
