@@ -792,4 +792,6 @@ export interface LangKeysContract {
   reply: string;
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
+  data_source: string;
+  there_is_no_data_sources: string;
 }

@@ -1,3 +1,4 @@
+import { WidgetState } from '@abstracts/widget-state';
 import {
   computed,
   effect,
@@ -18,11 +19,11 @@ import { LayoutWidgetService } from './layout-widget.service';
 export class GridService {
   static readonly COLUMNS_COUNT = 96;
 
-  private _activeGrid = signal<GridStack | undefined>(undefined);
-  activeGrid = computed(() => this._activeGrid());
-
   private layoutWidgetService = inject(LayoutWidgetService);
   private _injector = inject(Injector);
+
+  private _activeGrid = signal<GridStack | undefined>(undefined);
+  activeGrid = computed(() => this._activeGrid());
 
   private _widgetsMap: Record<string | number, LayoutWidgetModel> =
     this.layoutWidgetService.layoutWidgetsMap();
@@ -55,14 +56,25 @@ export class GridService {
     this._widgetsMap[_uuid] = new LayoutWidgetModel().clone<LayoutWidgetModel>({
       widgetDomId: _uuid,
       ...widget,
+      stateOptions: LayoutWidgetModel.getStateInstance(
+        widget.widgetDetails!.type,
+        {} as WidgetState,
+      ),
     });
     this._setWidgetsSignal();
   }
 
-  updateWidgets(updatedWidgets: Record<string | number, GridStackPosition>) {
+  updateWidgetsPosition(
+    updatedWidgets: Record<string | number, GridStackPosition>,
+  ) {
     Object.keys(updatedWidgets).forEach(k => {
       this._widgetsMap[k].position = updatedWidgets[k];
     });
+    this._setWidgetsSignal();
+  }
+
+  updateWidgetState(id: number | string, newState: WidgetState) {
+    this._widgetsMap[id].stateOptions = newState;
     this._setWidgetsSignal();
   }
 

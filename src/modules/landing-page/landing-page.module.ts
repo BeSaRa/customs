@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule, Routes } from '@angular/router';
-import { AppPermissions } from '@constants/app-permissions';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { LandingPageComponent } from '@modules/landing-page/components/landing-page/landing-page.component';
 import { layoutWidgetResolver } from '@resolvers/layout-widget.resolver';
@@ -25,6 +27,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { NewWidgetComponent } from './components/new-widget/new-widget.component';
 import { PieChartWidgetComponent } from './components/pie-chart-widget/pie-chart-widget.component';
 import { WidgetContainerComponent } from './components/widget-container/widget-container.component';
+import { WidgetOptionsMenuComponent } from './components/widget-options-menu/widget-options-menu.component';
 import { WidgetsSidebarComponent } from './components/widgets-sidebar/widgets-sidebar.component';
 import { LayoutPopupComponent } from './popupss/layout-popup/layout-popup.component';
 
@@ -36,7 +39,7 @@ const routes: Routes = [
     canActivate: [
       accessPageGuard(
         {
-          permission: AppPermissions.MANAGE_LAYOUT_WIDGET,
+          permissionGroup: AppPermissionsGroup.DASHBOARD,
         },
         true,
       ),
@@ -55,6 +58,7 @@ const routes: Routes = [
     LayoutComponent,
     WidgetsSidebarComponent,
     LayoutPopupComponent,
+    WidgetOptionsMenuComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +73,8 @@ const routes: Routes = [
     MatTooltipModule,
     CountUpModule,
     MatDialogModule,
+    MatMenuModule,
+    MatListModule,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
 })

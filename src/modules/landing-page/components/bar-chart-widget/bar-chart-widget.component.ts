@@ -67,4 +67,8 @@ export class BarChartWidgetComponent extends BaseWidgetDirective {
   ];
 
   public ChartType = 'bar' as keyof ChartTypeRegistry;
+
+  override isMulti() {
+    return true;
+  }
 }

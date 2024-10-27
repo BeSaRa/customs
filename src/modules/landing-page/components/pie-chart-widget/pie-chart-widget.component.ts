@@ -28,4 +28,8 @@ export class PieChartWidgetComponent extends BaseWidgetDirective {
     ],
   };
   public pieChartType: ChartType = 'pie';
+
+  override isMulti() {
+    return true;
+  }
 }
