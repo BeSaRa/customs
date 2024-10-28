@@ -653,6 +653,16 @@
       {{ lang.map.terminate }}
     </app-button>
   }
+  <!-- terminate -->
+  @if (
+    model().inMyInbox() && model().hasResponse(taskResponses.STM_DEST_CLOSE)
+  ) {
+    <app-button
+      buttonType="error"
+      (click)="responseAction$.next(taskResponses.STM_DEST_CLOSE)">
+      {{ lang.map.terminate }}
+    </app-button>
+  }
   <!-- statement return to creator -->
   @if (
     model().inMyInbox() && model().hasResponse(taskResponses.STM_RETURN_CREATOR)
