@@ -792,4 +792,5 @@ export interface LangKeysContract {
   reply: string;
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
+  statment_actions: string;
 }

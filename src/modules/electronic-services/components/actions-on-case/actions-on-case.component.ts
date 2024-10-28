@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { LangKeysContract } from '@contracts/lang-keys-contract';
@@ -15,6 +15,7 @@ import { ignoreErrors } from '@utils/utils';
 import { catchError, exhaustMap, of, throwError } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-actions-on-case',
@@ -27,6 +28,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
     MatSort,
     MatTabGroup,
     MatTab,
+    NgTemplateOutlet,
   ],
   templateUrl: './actions-on-case.component.html',
   styleUrl: './actions-on-case.component.scss',
@@ -55,7 +57,10 @@ export class ActionsOnCaseComponent implements OnInit {
   );
 
   ActionsOnCaseDisplayedList = new MatTableDataSource<ActionsOnCase>();
+  ActionsOnCaseDisplayedListForStatementRequest =
+    new MatTableDataSource<ActionsOnCase>();
   assignedToDisplayedList = new MatTableDataSource<AssignedTo>();
+  isStatemetRequestActionEmpty = signal(true);
 
   ngOnInit(): void {
     this.loadActionsOnCase();
@@ -84,7 +89,16 @@ export class ActionsOnCaseComponent implements OnInit {
             new Date(b.updatedOn).getTime() - new Date(a.updatedOn).getTime()
           );
         });
-        this.ActionsOnCaseDisplayedList = new MatTableDataSource(sortedData);
+        const [nonStatmentRequestRecords, statmentRequestRecords] = [
+          sortedData.filter(el => !el.guid),
+          sortedData.filter(el => el.guid),
+        ];
+        this.ActionsOnCaseDisplayedList = new MatTableDataSource(
+          nonStatmentRequestRecords,
+        );
+        this.ActionsOnCaseDisplayedListForStatementRequest =
+          new MatTableDataSource(statmentRequestRecords);
+        this.isStatemetRequestActionEmpty.set(!statmentRequestRecords.length);
       });
   }
 
