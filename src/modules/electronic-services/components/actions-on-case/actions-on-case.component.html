@@ -90,115 +90,132 @@
         </div>
       </div>
     </mat-tab>
-    <mat-tab [label]="lang.map.actions">
-      <div class="shadow relative m-3">
-        <div
-          class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
-          <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
-            {{ lang.map.actions }}
-          </h1>
+    <ng-container
+      *ngTemplateOutlet="
+        actionsTab;
+        context: {
+          $implicit: ActionsOnCaseDisplayedList,
+          header: lang.map.actions
+        }
+      "></ng-container>
+    @if (!isStatemetRequestActionEmpty()) {
+      <ng-container
+        *ngTemplateOutlet="
+          actionsTab;
+          context: {
+            $implicit: ActionsOnCaseDisplayedListForStatementRequest,
+            header: lang.map.statment_actions
+          }
+        "></ng-container>
+    }
+    <ng-template #actionsTab let-data let-header="header">
+      <mat-tab [label]="header">
+        <div class="shadow relative m-3">
+          <div
+            class="flex bg-gradient-to-br from-primary to-primary-light text-white rounded-tr-lg rounded-tl-lg items-center justify-start py-2">
+            <h1
+              class="text-xl min-h-[3rem] align-middle flex items-center px-3">
+              {{ header }}
+            </h1>
+          </div>
+
+          <div class="max-h-[48vh] overflow-y-auto m-3">
+            <table mat-table matSort class="table-style" [dataSource]="data">
+              <!-- action -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.action }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.actionInfo?.getNames() || '' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- userFromInfo -->
+              <ng-container matColumnDef="userFrom">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.user }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.userFromInfo?.getNames() || '' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- userToInfo -->
+              <ng-container matColumnDef="userTo">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.user_to }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.userToInfo?.getNames() || '' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- addedOn -->
+              <ng-container matColumnDef="addedOn">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.creation_date }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.addedOn }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- time -->
+              <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.time }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.time }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- comment -->
+              <ng-container matColumnDef="comment">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ lang.map.comment }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="flex justify-start items-center">
+                    {{ element.comment }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="
+                  ActionsOnCaseColumnsWrapper.displayedColumns;
+                  sticky: true
+                "></tr>
+              <tr
+                mat-row
+                *matRowDef="
+                  let element;
+                  columns: ActionsOnCaseColumnsWrapper.displayedColumns
+                "></tr>
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="p-4" colspan="100">
+                  {{ lang.map.no_records_to_display }}
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-
-        <div class="max-h-[48vh] overflow-y-auto m-3">
-          <table
-            mat-table
-            matSort
-            class="table-style"
-            [dataSource]="ActionsOnCaseDisplayedList">
-            <!-- action -->
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.action }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.actionInfo?.getNames() || '' }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- userFromInfo -->
-            <ng-container matColumnDef="userFrom">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.user }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.userFromInfo?.getNames() || '' }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- userToInfo -->
-            <ng-container matColumnDef="userTo">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.user_to }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.userToInfo?.getNames() || '' }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- addedOn -->
-            <ng-container matColumnDef="addedOn">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.creation_date }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.addedOn }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- time -->
-            <ng-container matColumnDef="time">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.time }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.time }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- comment -->
-            <ng-container matColumnDef="comment">
-              <th mat-header-cell *matHeaderCellDef>
-                {{ lang.map.comment }}
-              </th>
-              <td mat-cell *matCellDef="let element">
-                <span class="flex justify-start items-center">
-                  {{ element.comment }}
-                </span>
-              </td>
-            </ng-container>
-
-            <tr
-              mat-header-row
-              *matHeaderRowDef="
-                ActionsOnCaseColumnsWrapper.displayedColumns;
-                sticky: true
-              "></tr>
-            <tr
-              mat-row
-              *matRowDef="
-                let element;
-                columns: ActionsOnCaseColumnsWrapper.displayedColumns
-              "></tr>
-            <!-- Row shown when there is no matching data. -->
-            <tr class="mat-row" *matNoDataRow>
-              <td class="p-4" colspan="100">
-                {{ lang.map.no_records_to_display }}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </mat-tab>
+      </mat-tab>
+    </ng-template>
   </mat-tab-group>
 </div>
 <div class="dialog-footer justify-end">

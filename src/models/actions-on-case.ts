@@ -23,6 +23,7 @@ export class ActionsOnCase {
   enName!: string;
   addedOn!: string;
   time!: string;
+  guid?: string;
   userInfo!: AdminResult;
   offendersInfo!: AdminResult;
   actionInfo!: AdminResult;
