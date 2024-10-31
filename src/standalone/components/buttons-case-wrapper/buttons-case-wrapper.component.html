@@ -719,4 +719,9 @@
       >{{ lang.map.request_statement }}
     </app-button>
   }
+  @if (isStatementRework()) {
+    <app-button (click)="openRequestStatementDialogForRework()">
+      {{ lang.map.edit_statement_request }}
+    </app-button>
+  }
 </div>

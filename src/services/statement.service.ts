@@ -4,7 +4,7 @@ import { RequestStatementPopupComponent } from '@standalone/popups/request-state
 import { Investigation } from '@models/investigation';
 import { RequestStatement } from '@models/request-statement';
 import { CastResponse } from 'cast-response';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
 import { Grievance } from '@models/grievance';
 
@@ -24,12 +24,14 @@ export class StatementService {
   openRequestStatementDialog(
     model: Investigation | Grievance,
     grievanceStatementRequest = false,
+    forRework = false,
   ) {
     return this.dialog.open(RequestStatementPopupComponent, {
       data: {
         model,
         extras: {
           grievanceStatementRequest: grievanceStatementRequest,
+          forRework: forRework,
         },
       },
     });
@@ -45,5 +47,13 @@ export class StatementService {
         `/${requestStatement.caseId}/start`,
       requestStatement,
     );
+  }
+
+  updateDescription(requestStatement: RequestStatement, descriptionId: number) {
+    const url = `${this.getUrlSegment(false)}/${descriptionId}`;
+    const params = new HttpParams().set('descId', descriptionId);
+    return this.http.put<RequestStatement>(url, requestStatement, {
+      params: params,
+    });
   }
 }

@@ -91,7 +91,7 @@ export class LoginComponent implements OnInit {
         }),
       )
       .subscribe(() => {
-        this.toast.success('logged in successfully!');
+        this.toast.success(this.lang.map.login_successfully);
         this.router.navigate([AppFullRoutes.LANDING_PAGE]).then();
       });
   }
