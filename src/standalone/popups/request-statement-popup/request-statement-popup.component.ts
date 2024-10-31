@@ -43,11 +43,15 @@ export class RequestStatementPopupComponent implements OnInit {
   lang = inject(LangService);
   employeeService = inject(EmployeeService);
   form!: UntypedFormGroup;
-  data: CrudDialogDataContract<Investigation> = inject(MAT_DIALOG_DATA);
+  data: CrudDialogDataContract<
+    Investigation,
+    { forRework: boolean; grievanceStatementRequest: boolean }
+  > = inject(MAT_DIALOG_DATA);
   grievanceStatementRequest = !!this.data?.extras?.grievanceStatementRequest;
   model!: RequestStatement;
   fb = inject(UntypedFormBuilder);
   caseModel: Investigation = this.data && (this.data.model as Investigation);
+  isForRework = !!this.data.extras?.forRework;
   organizationUnits!: OrganizationUnit[];
   organizationUnitService = inject(OrganizationUnitService);
   statementService = inject(StatementService);
@@ -67,14 +71,20 @@ export class RequestStatementPopupComponent implements OnInit {
   get approveCtrl() {
     return this.form.get('approve');
   }
-
+  get departmentsCtrl() {
+    return this.form.get('departments');
+  }
+  get descriptionCtrl() {
+    return this.form.get('description');
+  }
   hasStatementApprovePermission() {
     return this.employeeService.hasPermissionTo('STATEMENT_APPROVAL');
   }
   loadOrganizationUnits() {
-    this.organizationUnitService
-      .loadAsLookups()
-      .subscribe(ous => (this.organizationUnits = ous));
+    this.organizationUnitService.loadAsLookups().subscribe(ous => {
+      this.organizationUnits = ous;
+      this.fillDataForRework();
+    });
   }
 
   protected _beforeSave(): boolean {
@@ -97,6 +107,13 @@ export class RequestStatementPopupComponent implements OnInit {
       .pipe(filter(value => value))
       .pipe(
         exhaustMap(() => {
+          if (this.isForRework) {
+            return this.statementService.updateDescription(
+              this.form.value,
+              this.caseModel.taskDetails.activityProperties!.DescriptionId
+                .value,
+            );
+          }
           return this.statementService.requestStatement(
             this.form.value,
             this.grievanceStatementRequest,
@@ -106,5 +123,15 @@ export class RequestStatementPopupComponent implements OnInit {
       .subscribe(() => {
         this._afterSave();
       });
+  }
+
+  fillDataForRework() {
+    if (this.isForRework) {
+      this.departmentsCtrl?.setValue([this.caseModel.departmentInfo.id]);
+      this.descriptionCtrl?.setValue(
+        this.caseModel.taskDetails.fullDescription,
+      );
+      this.departmentsCtrl?.disable();
+    }
   }
 }

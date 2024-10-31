@@ -644,6 +644,11 @@
       }}
     </app-button>
   }
+  @if (isStatmentRework()) {
+    <app-button (click)="openRequestStatementDialogForRework()">
+      {{ lang.map.edit_statement_request }}
+    </app-button>
+  }
 
   <!-- terminate -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.TERMINATE)) {
