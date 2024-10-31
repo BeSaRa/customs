@@ -8,6 +8,16 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div [formGroup]="form" class="dialog-content">
+    <div class="flex justify-end">
+      <span>{{ lang.map.statement_serial_number }} : </span>
+      <span class="font-semibold"
+      >(({{ lang.map.statement_serial_number }}))</span
+      >
+    </div>
+    <div class="flex justify-end">
+      <span>{{ lang.map.accreditation_date }} : </span>
+      <span class="font-semibold">(({{ lang.map.accreditation_date }}))</span>
+    </div>
     <div class="grid grid-cols-1 gap-2">
       <app-select-input
         [label]="lang.map.request_for_department_statement"

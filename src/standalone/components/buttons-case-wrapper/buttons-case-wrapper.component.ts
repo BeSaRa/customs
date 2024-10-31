@@ -730,4 +730,23 @@ export class ButtonsCaseWrapperComponent
       !!this.model().id
     );
   }
+
+  isStatementRework() {
+    return this.model().taskDetails?.displayName === 'stm_rework';
+  }
+  openRequestStatementDialogForRework() {
+    if (this.model().caseType === this.caseTypes.INVESTIGATION) {
+      this.statementService.openRequestStatementDialog(
+        this.model() as Investigation,
+        false,
+        true,
+      );
+    } else if (this.model().caseType === this.caseTypes.GRIEVANCE) {
+      this.statementService.openRequestStatementDialog(
+        this.model() as Grievance,
+        true,
+        true,
+      );
+    }
+  }
 }

@@ -31,4 +31,7 @@ export interface ActivityPropertiesContract {
   Serial: {
     value: string;
   };
+  DescriptionId: {
+    value: number;
+  };
 }

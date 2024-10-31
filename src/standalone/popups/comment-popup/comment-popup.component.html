@@ -137,7 +137,18 @@
               [options]="usersList" />
           </div>
         }
-
+        @if (isStatementReply){
+          <div class="flex justify-end">
+            <span>{{ lang.map.statement_serial_number }} : </span>
+            <span class="font-semibold"
+            >(({{ lang.map.statement_serial_number }}))</span
+            >
+          </div>
+          <div class="flex justify-end">
+            <span>{{ lang.map.accreditation_date }} : </span>
+            <span class="font-semibold">(({{ lang.map.accreditation_date }}))</span>
+          </div>
+        }
         <div class="col-12 mb-3">
           <app-textarea
             formControlName="comment"
