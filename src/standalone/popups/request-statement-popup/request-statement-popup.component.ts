@@ -115,7 +115,6 @@ export class RequestStatementPopupComponent implements OnInit {
           return this.statementService.requestStatement(
             this.form.value,
             this.grievanceStatementRequest,
-            this.forRework,
           );
         }),
       )
