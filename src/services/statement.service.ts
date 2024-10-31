@@ -45,6 +45,16 @@ export class StatementService {
       },
     });
   }
+  openRequestStatementDialogForRework(model: Investigation) {
+    return this.dialog.open(RequestStatementPopupComponent, {
+      data: {
+        model,
+        extras: {
+          forRework: true,
+        },
+      },
+    });
+  }
   @CastResponse()
   requestStatement(
     requestStatement: RequestStatement,
