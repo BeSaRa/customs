@@ -22,6 +22,8 @@ import { UntypedFormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
 import { ActivitiesName } from '@enums/activities-name';
+import { EmployeeService } from '@services/employee.service';
+import { StatementService } from '@services/statement.service';
 
 @Component({
   selector: 'app-grievance',
@@ -49,6 +51,9 @@ export class GrievanceComponent extends BaseCaseComponent<
   service = inject(GrievanceService);
   lookupService = inject(LookupService);
   dialog = inject(DialogService);
+  employeeService = inject(EmployeeService);
+  statementService = inject(StatementService);
+
   info = input<OpenedInfoContract | null>(null);
   form!: UntypedFormGroup;
   comment$: Subject<Grievance> = new Subject<Grievance>();
@@ -113,4 +118,18 @@ export class GrievanceComponent extends BaseCaseComponent<
   protected readonly FolderType = FolderType;
   protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
   protected readonly ActivitiesName = ActivitiesName;
+
+  hasRequestStatement() {
+    return (
+      !this.model.isReviewStatement() &&
+      this.hasStatementCreatorPermission() &&
+      !!this.model.id
+    );
+  }
+  openRequestStatementDialog() {
+    this.statementService.openRequestStatementDialog(this.model, true);
+  }
+  hasStatementCreatorPermission() {
+    return this.employeeService.hasPermissionTo('STATEMENT_CREATOR');
+  }
 }
