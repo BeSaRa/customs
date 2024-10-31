@@ -8,6 +8,16 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div [formGroup]="form" class="dialog-content">
+    <div class="flex justify-end">
+      <span>{{ lang.map.statement_serial_number }} : </span>
+      <span class="font-semibold"
+        >(({{ lang.map.statement_serial_number }}))</span
+      >
+    </div>
+    <div class="flex justify-end">
+      <span>{{ lang.map.accreditation_date }} : </span>
+      <span class="font-semibold">(({{ lang.map.accreditation_date }}))</span>
+    </div>
     <div class="grid grid-cols-1 gap-2">
       <app-select-input
         [label]="lang.map.request_for_department_statement"
@@ -15,8 +25,7 @@
         [options]="organizationUnits"
         bindValue="id"
         bindLabel="getNames"
-        [isMultiple]="true"
-      >
+        [isMultiple]="true">
       </app-select-input>
       <app-textarea
         [label]="lang.map.description"
@@ -26,10 +35,12 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="requestStatement()" buttonType="primary">{{
-        hasStatementApprovePermission()? lang.map.approve : lang.map.request_statement
-      }}</app-button>
+      hasStatementApprovePermission()
+        ? lang.map.approve
+        : lang.map.request_statement
+    }}</app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">{{
-        lang.map.close
-      }}</app-button>
+      lang.map.close
+    }}</app-button>
   </div>
 </div>

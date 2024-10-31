@@ -5,10 +5,12 @@
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
     </h1>
     <div class="flex-auto"></div>
-    @if(hasRequestStatement()){
-      <app-icon-button (click)="openRequestStatementDialog()" [matTooltip]="lang.map.request_statement" icon="REQUEST_STATEMENT" />
+    @if (hasRequestStatement()) {
+      <app-icon-button
+        (click)="openRequestStatementDialog()"
+        [matTooltip]="lang.map.request_statement"
+        icon="REQUEST_STATEMENT" />
     }
-
   </div>
   @if (showSummaryElements()) {
     <div
@@ -59,11 +61,11 @@
   class="relative"
   [ngClass]="{
     'investigation-tab-group': !showSummaryElements(),
-    'investigation-tab-group-preview': showSummaryElements(),
+    'investigation-tab-group-preview': showSummaryElements()
   }">
   <mat-card>
     <mat-tab-group [(selectedIndex)]="selectedTab" [mat-stretch-tabs]="false">
-      @if(model.isReviewStatement()){
+      @if (model.isReviewStatement()) {
         <mat-tab
           data-name="review_statement"
           [label]="lang.map.review_statement">
@@ -241,7 +243,7 @@
         #officialAttachments
         [caseId]="[
           getCaseFolderIdByName(folderType.OFFICIAL),
-          getCaseFolderIdByName(folderType.LEGAL),
+          getCaseFolderIdByName(folderType.LEGAL)
         ]"
         [service]="service"
         [readonly]="true"
@@ -262,14 +264,11 @@
       [isOpenedFromSearch]="isOpenedFromSearch()" />
   </ng-template>
   <ng-template #review_statement>
-    <div
-      [formGroup]="reviewStatementForm"
-      class="p-4 grid gap-4 grid-cols-1">
+    <div [formGroup]="reviewStatementForm" class="p-4 grid gap-4 grid-cols-1">
       @if (isStatementReply) {
         <app-input
           formControlName="statementSerial"
-          [label]="lang.map.serial_number"
-          >
+          [label]="lang.map.statement_serial_number">
         </app-input>
       }
       <app-select-input
@@ -278,17 +277,16 @@
         [options]="organizationUnits"
         [bindValue]="'id'"
         [bindLabel]="'getNames'"
-        [nullable]="false"
-      >
+        [nullable]="false">
       </app-select-input>
       <app-textarea
         formControlName="description"
-        [label]="lang.map.description " >
+        [label]="lang.map.description">
       </app-textarea>
-      @if(reviewStatementForm.get('reply')?.value){
+      @if (reviewStatementForm.get('reply')?.value) {
         <app-textarea
           formControlName="reply"
-          [label]="lang.map.reply_to_statement" >
+          [label]="lang.map.reply_to_statement">
         </app-textarea>
       }
     </div>

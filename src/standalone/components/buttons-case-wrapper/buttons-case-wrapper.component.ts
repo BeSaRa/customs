@@ -178,6 +178,7 @@ export class ButtonsCaseWrapperComponent
   reviewStatement() {
     return this.model().isReviewStatement();
   }
+
   claimItem() {
     this.model()
       .claim()
@@ -721,6 +722,14 @@ export class ButtonsCaseWrapperComponent
       this.model().caseState !== this.commonCaseStatus.DRAFT &&
       this.hasStatementCreatorPermission() &&
       !!this.model().id
+    );
+  }
+  isStatmentRework() {
+    return !!(this.model().taskDetails?.displayName === 'stm_rework');
+  }
+  openRequestStatementDialogForRework() {
+    this.statementService.openRequestStatementDialogForRework(
+      this.model() as Investigation,
     );
   }
 }

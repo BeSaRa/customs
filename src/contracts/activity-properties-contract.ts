@@ -22,6 +22,9 @@ export interface ActivityPropertiesContract {
   Description: {
     value: string;
   };
+  DescriptionId: {
+    value: number;
+  };
   ReviewerOuId: {
     value: number;
   };

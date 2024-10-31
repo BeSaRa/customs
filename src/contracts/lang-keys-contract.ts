@@ -793,4 +793,8 @@ export interface LangKeysContract {
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
   statment_actions: string;
+  statement_serial_number: string;
+  accreditation_date: string;
+  edit_statement_request: string;
+  login_successfully: string;
 }
