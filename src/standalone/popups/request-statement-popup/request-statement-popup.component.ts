@@ -44,6 +44,7 @@ export class RequestStatementPopupComponent implements OnInit {
   employeeService = inject(EmployeeService);
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<Investigation> = inject(MAT_DIALOG_DATA);
+  grievanceStatementRequest = !!this.data?.extras?.grievanceStatementRequest;
   model!: RequestStatement;
   fb = inject(UntypedFormBuilder);
   caseModel: Investigation = this.data && (this.data.model as Investigation);
@@ -96,7 +97,10 @@ export class RequestStatementPopupComponent implements OnInit {
       .pipe(filter(value => value))
       .pipe(
         exhaustMap(() => {
-          return this.statementService.requestStatement(this.form.value);
+          return this.statementService.requestStatement(
+            this.form.value,
+            this.grievanceStatementRequest,
+          );
         }),
       )
       .subscribe(() => {

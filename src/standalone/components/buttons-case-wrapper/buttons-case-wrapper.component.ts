@@ -705,9 +705,17 @@ export class ButtonsCaseWrapperComponent
   }
 
   openRequestStatementDialog() {
-    this.statementService.openRequestStatementDialog(
-      this.model() as Investigation,
-    );
+    if (this.model().caseType === this.caseTypes.INVESTIGATION) {
+      this.statementService.openRequestStatementDialog(
+        this.model() as Investigation,
+        false,
+      );
+    } else if (this.model().caseType === this.caseTypes.GRIEVANCE) {
+      this.statementService.openRequestStatementDialog(
+        this.model() as Grievance,
+        true,
+      );
+    }
   }
 
   hasStatementCreatorPermission() {
@@ -717,7 +725,6 @@ export class ButtonsCaseWrapperComponent
   hasRequestStatement() {
     return (
       !this.reviewStatement() &&
-      this.model().caseType === this.caseTypes.INVESTIGATION &&
       this.model().caseState !== this.commonCaseStatus.DRAFT &&
       this.hasStatementCreatorPermission() &&
       !!this.model().id

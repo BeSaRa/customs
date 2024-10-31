@@ -6,6 +6,7 @@ import { RequestStatement } from '@models/request-statement';
 import { CastResponse } from 'cast-response';
 import { HttpClient } from '@angular/common/http';
 import { UrlService } from '@services/url.service';
+import { Grievance } from '@models/grievance';
 
 @Injectable({
   providedIn: 'root',
@@ -15,20 +16,33 @@ export class StatementService {
   protected dialog = inject(DialogService);
   protected urlService = inject(UrlService);
 
-  getUrlSegment(): string {
-    return this.urlService.URLS.REQUEST_STATEMENT;
+  getUrlSegment(grievanceStatementRequest: boolean): string {
+    return grievanceStatementRequest
+      ? this.urlService.URLS.GRIEVANCE_REQUEST_STATEMENT
+      : this.urlService.URLS.REQUEST_STATEMENT;
   }
-  openRequestStatementDialog(model: Investigation) {
+  openRequestStatementDialog(
+    model: Investigation | Grievance,
+    grievanceStatementRequest = false,
+  ) {
     return this.dialog.open(RequestStatementPopupComponent, {
       data: {
         model,
+        extras: {
+          grievanceStatementRequest: grievanceStatementRequest,
+        },
       },
     });
   }
+
   @CastResponse()
-  requestStatement(requestStatement: RequestStatement) {
+  requestStatement(
+    requestStatement: RequestStatement,
+    grievanceStatementRequest: boolean,
+  ) {
     return this.http.post<RequestStatement>(
-      this.getUrlSegment() + `/${requestStatement.caseId}/start`,
+      this.getUrlSegment(grievanceStatementRequest) +
+        `/${requestStatement.caseId}/start`,
       requestStatement,
     );
   }
