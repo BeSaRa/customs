@@ -97,7 +97,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     if (!$event.dataTransfer.files) return;
     if (!$event.dataTransfer.files[0]) return;
     this.userSignature = new UserSignature(
-      this.data.model.id,
+      this.model.id,
       $event.dataTransfer.files[0],
     );
     const reader = new FileReader();
