@@ -13,6 +13,7 @@ import { map, Subject } from 'rxjs';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { InternalUserService } from '@services/internal-user.service';
 import { InternalUserPermissionsPopupComponent } from '@modules/administration/popups/internal-user-permissions-popup/internal-user-permissions-popup.component';
+import { InternalUserTeamsPopupComponent } from '@modules/administration/popups/internal-user-teams-popup/internal-user-teams-popup.component';
 
 @Component({
   selector: 'app-internal-user-ou',
@@ -32,6 +33,7 @@ export class InternalUserOUComponent
   organizationUnits: number[] = [];
   defaultOUId!: number;
   editUserPermissions$: Subject<InternalUserOU> = new Subject<InternalUserOU>();
+  editUserTeams$: Subject<InternalUserOU> = new Subject<InternalUserOU>();
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -49,6 +51,7 @@ export class InternalUserOUComponent
     this.filter$.next({ internalUserId: this.internalUser.id });
     this.defaultOUId = this.internalUser.defaultOUId;
     this.listenToEditUserPermissions();
+    this.listenToEditUserTeams();
   }
 
   service = inject(InternalUserOUService);
@@ -71,6 +74,15 @@ export class InternalUserOUComponent
       icon: AppIcons.PERMISSIONS_LIST,
       callback: item => {
         this.editUserPermissions$.next(item);
+      },
+    },
+    {
+      name: 'teams',
+      type: 'action',
+      label: 'menu_user_team',
+      icon: AppIcons.TEAM_INBOX,
+      callback: item => {
+        this.editUserTeams$.next(item);
       },
     },
   ];
@@ -112,6 +124,18 @@ export class InternalUserOUComponent
   listenToEditUserPermissions() {
     this.editUserPermissions$.subscribe(item => {
       this.dialog.open(InternalUserPermissionsPopupComponent, {
+        data: {
+          model: item,
+          extras: {
+            inViewMode: this.inViewMode,
+          },
+        },
+      });
+    });
+  }
+  listenToEditUserTeams() {
+    this.editUserTeams$.subscribe(item => {
+      this.dialog.open(InternalUserTeamsPopupComponent, {
         data: {
           model: item,
           extras: {

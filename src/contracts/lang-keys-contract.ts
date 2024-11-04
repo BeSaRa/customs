@@ -236,6 +236,7 @@ export interface LangKeysContract {
   msg_delete_x_confirm: string;
   msg_delete_link_with_x_confirm: string;
   msg_delete_x_success: string;
+  msg_delete_success: string;
   msg_status_x_changed_success: string;
   actions: string;
   view: string;
@@ -520,6 +521,7 @@ export interface LangKeysContract {
   select_employee: string;
   is_penalty: string;
   msg_delete_selected_confirm: string;
+  msg_delete_confirm: string;
   msg_delete_selected_success: string;
   decision_type: string;
   save_and_continue: string;

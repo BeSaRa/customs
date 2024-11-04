@@ -60,6 +60,12 @@
             (click)="editUserPermissions$.next(element)"
             icon="PERMISSIONS_LIST">
           </app-icon-button>
+          <app-icon-button
+            [disabled]="(loading$ | async)!"
+            [matTooltip]="lang.map.menu_user_team"
+            (click)="editUserTeams$.next(element)"
+            icon="TEAM_INBOX">
+          </app-icon-button>
         </div>
       </td>
     </ng-container>

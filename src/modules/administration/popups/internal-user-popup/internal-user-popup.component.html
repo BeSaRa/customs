@@ -85,15 +85,15 @@
           </div>
         </mat-tab>
       }
-      @if (!inCreateMode()) {
-        <mat-tab [label]="lang.map.menu_user_team">
-          <div class="p-4">
-            <app-user-team
-              [internalUser]="data.model"
-              [inViewMode]="inViewMode()"></app-user-team>
-          </div>
-        </mat-tab>
-      }
+      <!--      @if (!inCreateMode()) {-->
+      <!--        <mat-tab [label]="lang.map.menu_user_team">-->
+      <!--          <div class="p-4">-->
+      <!--            <app-user-team-->
+      <!--              [internalUser]="data.model"-->
+      <!--              [inViewMode]="inViewMode()"></app-user-team>-->
+      <!--          </div>-->
+      <!--        </mat-tab>-->
+      <!--      }-->
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.lbl_user_signature">
           <div class="p-4">
