@@ -16,6 +16,7 @@ export class UserTeam extends BaseModel<UserTeam, UserTeamService> {
   internalUserInfo!: AdminResult;
   teamInfo!: AdminResult;
   selectedTeams!: number[];
+  ouId!: number;
   override status = 1;
 
   buildForm(controls = false): object {

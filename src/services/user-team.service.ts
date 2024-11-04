@@ -54,13 +54,14 @@ export class UserTeamService extends BaseCrudWithDialogService<
   })
   loadUserTeams(
     userId: number,
+    ouId: number,
     options: FetchOptionsContract = {
       offset: 0,
       limit: 50,
     },
   ): Observable<Pagination<UserTeam[]>> {
     return this.http.get<Pagination<UserTeam[]>>(
-      this.getUrlSegment() + `/${userId}`,
+      this.getUrlSegment() + `/${userId}/${ouId}`,
       {
         params: new HttpParams({
           fromObject: { ...options } as never,
@@ -72,6 +73,7 @@ export class UserTeamService extends BaseCrudWithDialogService<
   saveUserTeam(userTeam: {
     internalUserId: number;
     teamId: number;
+    ouId: number;
     status: number;
   }): Observable<unknown> {
     return this.http.post(
@@ -80,10 +82,12 @@ export class UserTeamService extends BaseCrudWithDialogService<
     );
   }
 
-  override delete(id: number): Observable<UserTeam> {
+  deleteWithOuId(id: number, ouId: number): Observable<UserTeam> {
+    const params = new HttpParams().set('ouId', ouId.toString());
+
     return this.http.delete<UserTeam>(
-      this.teamService.getUrlSegment() + '/admin/remove-users/bulk',
-      { body: [id] },
+      `${this.teamService.getUrlSegment()}/admin/remove-users/bulk`,
+      { params, body: [id] },
     );
   }
 }

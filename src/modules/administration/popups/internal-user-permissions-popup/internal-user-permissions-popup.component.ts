@@ -77,9 +77,9 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
   permissionService = inject(PermissionService);
   organizationUnitService = inject(OrganizationUnitService);
   lookupService = inject(LookupService);
-  data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   permissionsRoles!: PermissionRole[];
+  data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
   ouId = this.data.model.organizationUnitId;
   internalUserId = this.data.model.internalUserId;
   inViewMode = !!this.data.extras?.inViewMode;

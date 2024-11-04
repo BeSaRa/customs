@@ -86,6 +86,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
     return new UserTeam().clone<UserTeam>({
       ...this.model,
       internalUserId: this.data.extras?.internalUserId,
+      ouId: this.data.extras?.ouId,
       ...this.form.value,
     });
   }
@@ -102,6 +103,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
   private saveUserTeam(userTeam: {
     internalUserId: number;
     teamId: number;
+    ouId: number;
     status: number;
   }): Observable<unknown> {
     return this.userTeamService.saveUserTeam(userTeam);
@@ -113,6 +115,7 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
         internalUserId: userTeam.internalUserId,
         teamId: teamId,
         status: userTeam.status,
+        ouId: userTeam.ouId,
       }),
     );
     return forkJoin(requests$);

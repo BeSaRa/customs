@@ -75,7 +75,6 @@ import { AttachmentTypeComponent } from '@modules/administration/components/atta
 import { AttachmentTypePopupComponent } from '@modules/administration/popups/attachment-type-popup/attachment-type-popup.component';
 import { InternalUserOUComponent } from '@modules/administration/components/internal-user-ou/internal-user-ou.component';
 import { InternalUserOUPopupComponent } from '@modules/administration/popups/internal-user-ou-popup/internal-user-ou-popup.component';
-import { UserTeamComponent } from '@modules/administration/components/user-team/user-team.component';
 import { UserTeamPopupComponent } from '@modules/administration/popups/user-team-popup/user-team-popup.component';
 import { ClearingAgentComponent } from '@modules/administration/components/clearing-agent/clearing-agent.component';
 import { ClearingAgentPopupComponent } from '@modules/administration/popups/clearing-agent-popup/clearing-agent-popup.component';
@@ -137,7 +136,6 @@ import { CustomMenuUrlHandlerComponent } from '@modules/administration/component
     AttachmentTypePopupComponent,
     InternalUserOUComponent,
     InternalUserOUPopupComponent,
-    UserTeamComponent,
     UserTeamPopupComponent,
     ClearingAgentComponent,
     ClearingAgentPopupComponent,
