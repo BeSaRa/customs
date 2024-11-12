@@ -7,15 +7,30 @@
     [matTooltip]="lang.map.reload"
     (click)="listenToReload(selectedTeamId.value ?? -1)"
     icon="RELOAD"></app-icon-button>
-  <app-select-input
-    label=""
-    [formControl]="selectedTeamId"
-    [options]="teams"
-    bindLabel="arName"
-    bindValue="id"
-    marginBottom="0"
-    size="sm"
-    [nullable]="false" />
+  <div class="flex justify-start items-center gap-2">
+    <app-select-input
+      class="min-w-[200px]"
+      label=""
+      [formControl]="selectedTeamId"
+      [options]="teams"
+      bindLabel="getNames"
+      bindValue="id"
+      marginBottom="0"
+      size="sm"
+      [nullable]="false" />
+    @if (getCurrentTeamCounters().length) {
+      <app-select-input
+        class="min-w-[200px]"
+        label=""
+        [formControl]="selectedCounterId"
+        [options]="getCurrentTeamCounters()"
+        bindLabel="getNames"
+        bindValue="id"
+        marginBottom="0"
+        size="sm"
+        [nullable]="false" />
+    }
+  </div>
   <div class="flex-auto"></div>
 </div>
 <div class="shadow relative overflow-auto">

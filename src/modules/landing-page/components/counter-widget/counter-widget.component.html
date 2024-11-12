@@ -1,5 +1,11 @@
 @if (widgetCounters().length) {
-  <div class="w-full h-full flex flex-col justify-center items-center">
+  <div class="relative w-full h-full flex flex-col justify-center items-center">
+    @if (!isEditMode) {
+      <app-icon-button
+        (click)="navigate()"
+        class="absolute -end-2 -top-2"
+        icon="OPEN"></app-icon-button>
+    }
     <span class="font-bold text-center text-2xl">
       {{ widgetCounters()[0].counterInfo.getNames() }}</span
     >

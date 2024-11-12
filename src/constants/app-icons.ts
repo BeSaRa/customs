@@ -116,6 +116,7 @@ export const AppIcons = {
   MANAGE_INBOX: 'email-multiple',
   ACCOUNT_CONVERT: 'account-convert',
   REQUEST_STATEMENT: 'arrow-top-left-bold-box-outline',
+  OPEN: 'open-in-new',
 };
 
 export type AppIconsType = typeof AppIcons;
