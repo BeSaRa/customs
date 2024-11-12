@@ -118,6 +118,7 @@ export const AppIcons = {
   REQUEST_STATEMENT: 'arrow-top-left-bold-box-outline',
   USER_GUIDE: 'book',
   OPEN_IN_NEW: 'open-in-new',
+  OPEN: 'open-in-new',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -299,3 +299,7 @@ export function downloadLink(value: string, fileName = 'download.pdf') {
   link.target = '_blank';
   link.click();
 }
+
+export function getHexColorWithOpacity(hexColor: string, opacity: number) {
+  return hexColor + Math.ceil(opacity * 100);
+}
