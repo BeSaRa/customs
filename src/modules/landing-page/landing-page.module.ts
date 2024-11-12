@@ -75,6 +75,7 @@ const routes: Routes = [
     MatDialogModule,
     MatMenuModule,
     MatListModule,
+    IconButtonComponent,
   ],
   providers: [provideCharts(withDefaultRegisterables())],
 })

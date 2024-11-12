@@ -1,7 +1,17 @@
 import { WidgetState } from '@abstracts/widget-state';
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
+import { Colors } from '@enums/colors';
+import { InboxCounter } from '@models/inbox-counter';
 import { BaseWidgetDirective } from '@modules/landing-page/directives/base-widget.directive';
-import { ChartDataset, ChartTypeRegistry, CoreChartOptions } from 'chart.js';
+import { getHexColorWithOpacity } from '@utils/utils';
+import { Chart, ChartTypeRegistry, CoreChartOptions } from 'chart.js/auto';
+import { takeUntil } from 'rxjs';
 
 export class BarChartWidgetState extends WidgetState {}
 
@@ -10,65 +20,89 @@ export class BarChartWidgetState extends WidgetState {}
   templateUrl: './bar-chart-widget.component.html',
   styleUrl: './bar-chart-widget.component.scss',
 })
-export class BarChartWidgetComponent extends BaseWidgetDirective {
-  public SystemName: string = 'MF1';
+export class BarChartWidgetComponent
+  extends BaseWidgetDirective
+  implements AfterViewInit
+{
+  @ViewChild('canvas') private _canvas!: ElementRef<HTMLCanvasElement>;
 
-  public lineChartData: Array<number> = [1, 8, 49];
+  chart?: Chart;
 
-  public labelMFL: ChartDataset[] = [
-    { data: this.lineChartData, label: this.SystemName },
-  ];
-  // labels
-  public lineChartLabels: Array<unknown> = [
-    '2018-01-29 10:00:00',
-    '2018-01-29 10:27:00',
-    '2018-01-29 10:28:00',
-  ];
+  private _updateEffect = effect(() => {
+    this._updateChartData();
+  });
 
-  public lineChartOptions = {
-    responsive: true,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            max: 60,
-            min: 0,
-          },
-        },
-      ],
-      xAxes: [{}],
-    },
-    plugins: {
-      datalabels: {
-        display: true,
-        align: 'top',
-        anchor: 'end',
-        //color: "#2756B3",
-        color: '#222',
-
-        font: {
-          family: 'FontAwesome',
-          size: 14,
-        },
-      },
-      deferred: false,
-    },
-  } as unknown as CoreChartOptions<keyof ChartTypeRegistry>;
-
-  _lineChartColors: Array<unknown> = [
-    {
-      backgroundColor: 'red',
-      borderColor: 'red',
-      pointBackgroundColor: 'red',
-      pointBorderColor: 'red',
-      pointHoverBackgroundColor: 'red',
-      pointHoverBorderColor: 'red',
-    },
-  ];
-
-  public ChartType = 'bar' as keyof ChartTypeRegistry;
-
-  override isMulti() {
+  override _isMulti() {
     return true;
+  }
+
+  ngAfterViewInit(): void {
+    this._initializeChart();
+    this._listToLangChange();
+  }
+
+  _listToLangChange() {
+    this.lang.change$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this._updateChartData();
+    });
+  }
+
+  private _updateChartData() {
+    const _counters = this.widgetCounters();
+    if (this.chart) {
+      this.chart.data.labels = this._getLabels(_counters);
+      this.chart.data.datasets[0].data = this._getValues(_counters);
+      this.chart.update();
+    }
+  }
+
+  private _getLabels(counters: InboxCounter[]) {
+    return counters.map(counter => counter.counterInfo.getNames());
+  }
+
+  private _getValues(counters: InboxCounter[]) {
+    return counters.map(counter => counter.inboxCount);
+  }
+
+  private _initializeChart() {
+    this.chart = new Chart(this._canvas.nativeElement, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            data: [],
+            label: '',
+            backgroundColor: getHexColorWithOpacity(Colors.PRIMARY, 0.99),
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                max: 60,
+                min: 0,
+              },
+            },
+          ],
+          xAxes: [{}],
+        },
+        plugins: {
+          datalabels: {
+            display: true,
+            align: 'top',
+            anchor: 'end',
+            font: {
+              family: 'FontAwesome',
+              size: 14,
+            },
+          },
+          deferred: false,
+        },
+      } as unknown as CoreChartOptions<keyof ChartTypeRegistry>,
+    });
   }
 }

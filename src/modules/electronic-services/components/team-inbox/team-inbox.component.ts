@@ -2,11 +2,12 @@ import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppIcons } from '@constants/app-icons';
 import { Config } from '@constants/config';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { CaseTypes } from '@enums/case-types';
+import { InobxCounterTypes } from '@enums/inbox-counter-types';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { InboxResult } from '@models/inbox-result';
@@ -18,6 +19,7 @@ import { Team } from '@models/team';
 import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
+import { InboxCounterService } from '@services/inbox-counter.service';
 import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
@@ -37,11 +39,13 @@ export class TeamInboxComponent
   inboxService = inject(InboxService);
   lookupService = inject(LookupService);
   lang = inject(LangService);
+  route = inject(ActivatedRoute);
   router = inject(Router);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
   commonService = inject(CommonService);
   navbarService = inject(NavbarService);
+  inboxCounterService = inject(InboxCounterService);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
@@ -52,6 +56,7 @@ export class TeamInboxComponent
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
   teams: Team[] = this.employeeService.getEmployeeTeams();
   selectedTeamId = new FormControl(-1);
+  selectedCounterId = new FormControl(InobxCounterTypes.TOTAL_INBOX);
   length = 50;
   caseTypes = CaseTypes;
   columnsWrapper: ColumnsWrapper<InboxResult> = new ColumnsWrapper(
@@ -86,8 +91,10 @@ export class TeamInboxComponent
   readonly Config = Config;
 
   ngOnInit(): void {
-    this.listenToReload(this.employeeService.getEmployeeTeams()[0].id);
+    this.initControlsValues();
+    this.listenToReload(this.selectedTeamId.value!);
     this.listenToSelectedTeamIdChange();
+    this.listenToSelectedCounterIdChange();
     this.listenToDepartmentChange();
   }
 
@@ -95,11 +102,34 @@ export class TeamInboxComponent
     this.navbarService.departmentChange$.unsubscribe();
   }
 
+  initControlsValues() {
+    const _teamId = parseInt(
+      this.route.snapshot.queryParamMap.get('teamId') ?? '',
+    );
+    const _counterId = parseInt(
+      this.route.snapshot.queryParamMap.get('counterId') ?? '',
+    );
+
+    _teamId && this.selectedTeamId.setValue(_teamId!, { emitEvent: false });
+    _counterId &&
+      this.selectedCounterId.setValue(_counterId!, { emitEvent: false });
+  }
+
+  getCurrentTeamCounters() {
+    return this.inboxCounterService
+      .userCounters()
+      .filter(c => c.counterId !== InobxCounterTypes.PERSONAL_INBOX)
+      .filter(c => c.teamId === this.selectedTeamId.value)
+      .map(c => c.counterInfo);
+  }
+
   listenToReload(teamId: number = -1) {
     this.reloadInbox$
       .pipe(
         switchMap(() => {
-          return this.inboxService.loadTeamInbox(teamId);
+          return this.inboxService.loadTeamInbox(teamId, {
+            counterId: this.selectedCounterId.value,
+          });
         }),
         takeUntil(this.destroy$),
       )
@@ -149,7 +179,16 @@ export class TeamInboxComponent
 
   listenToSelectedTeamIdChange() {
     this.selectedTeamId.valueChanges.subscribe(value => {
+      this.selectedCounterId.setValue(InobxCounterTypes.TOTAL_INBOX, {
+        emitEvent: false,
+      });
       this.listenToReload(value!);
+    });
+  }
+
+  listenToSelectedCounterIdChange() {
+    this.selectedCounterId.valueChanges.subscribe(_ => {
+      this.listenToReload(this.selectedTeamId.value!);
     });
   }
 
