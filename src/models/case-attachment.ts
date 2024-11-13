@@ -52,6 +52,14 @@ export class CaseAttachment extends ClonerMixin(class {}) {
     return service.viewAttachment(this.id);
   }
 
+  updateAttachmentTitle(
+    service: BaseCaseService<unknown>,
+    newTitle: string,
+    isExternal: boolean,
+  ) {
+    return service.updateAttachmentTitle(this, newTitle, isExternal);
+  }
+
   delete(service: BaseCaseService<unknown>): Observable<unknown> {
     return service.deleteAttachment(this.id);
   }

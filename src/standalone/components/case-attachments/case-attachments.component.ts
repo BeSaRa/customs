@@ -24,6 +24,7 @@ import {
   takeUntil,
   tap,
   combineLatest,
+  take,
 } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -37,6 +38,7 @@ import { Config } from '@constants/config';
 import { FolderType } from '@enums/folder-type.enum';
 import { EmployeeService } from '@services/employee.service';
 import { OperationType } from '@enums/operation-type';
+import { EditAttachmentNameComponent } from '@standalone/popups/edit-attachment-name/edit-attachment-name.component';
 
 @Component({
   selector: 'app-case-attachments',
@@ -259,6 +261,20 @@ export class CaseAttachmentsComponent
           ),
         ),
       )
+      .subscribe(() => this.reload$.next());
+  }
+
+  openUpdateAttachmentTitleDialog(attachment: CaseAttachment) {
+    this.dialog
+      .open(EditAttachmentNameComponent, {
+        data: {
+          attachment,
+          service: this.service,
+          isExternal: this.type === 'external_grievance',
+        },
+      })
+      .afterClosed()
+      .pipe(take(1))
       .subscribe(() => this.reload$.next());
   }
 
