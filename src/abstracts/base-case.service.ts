@@ -442,6 +442,19 @@ export abstract class BaseCaseService<M>
     );
   }
 
+  updateAttachmentTitle(
+    attachment: CaseAttachment,
+    newTitle: string,
+    isExternal: boolean,
+  ) {
+    const _url =
+      this.getUrlSegment() + (isExternal ? '/external' : '') + '/attachment';
+    return this.http.put(_url, {
+      id: attachment.id,
+      documentTitle: newTitle,
+    } as Partial<CaseAttachment>);
+  }
+
   deleteAttachment(attachmentId: string): Observable<unknown> {
     return this.http.delete(this.getUrlSegment() + `/document/${attachmentId}`);
   }

@@ -1,0 +1,21 @@
+<div class="dialog-container">
+  <div class="dialog-header bg-primary">
+    <h1>{{ lang.map.edit_attachment_title }}</h1>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
+  </div>
+  <div class="dialog-content max-w-[900px]">
+    <app-input [formControl]="title"></app-input>
+  </div>
+  <div class="dialog-footer justify-end">
+    <app-button [disabled]="title.invalid" (click)="save()" buttonType="primary"
+      >{{ lang.map.save }}
+    </app-button>
+    <app-button mat-dialog-close="" buttonType="primary-outline"
+      >{{ lang.map.close }}
+    </app-button>
+  </div>
+</div>
