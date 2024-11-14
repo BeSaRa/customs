@@ -40,4 +40,5 @@ export const AppFullRoutes = {
   EMPLOYEES_INBOX_MANAGEMENT:
     '/home/electronic-services/employees-inbox-managment',
   DYNAMIC_MENU: '/home/dynamic-menu',
+  USER_GUIDE: '/home/user-guide',
 };
