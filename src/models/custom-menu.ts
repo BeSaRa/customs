@@ -81,9 +81,7 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
   buildMenuUrlForm(controls?: boolean) {
     const { menuURL } = this;
     return {
-      menuURL: controls
-        ? [menuURL, [CustomValidators.maxLength(350)]]
-        : menuURL,
+      menuURL: controls ? [menuURL] : menuURL,
     };
   }
 

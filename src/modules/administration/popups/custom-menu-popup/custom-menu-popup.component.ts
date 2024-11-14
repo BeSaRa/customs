@@ -14,6 +14,7 @@ import { MenuItemService } from '@services/menu-item.service';
 import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
 import { CustomMenuUrlHandlerComponent } from '@modules/administration/components/custom-menu-url-handler/custom-menu-url-handler.component';
 import { StatusTypes } from '@enums/status-types';
+import { CustomMenuService } from '@services/custom-menu.service';
 
 @Component({
   selector: 'app-custom-menu-popup',
@@ -26,10 +27,12 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
   saveVisible = true;
   lookupService = inject(LookupService);
   menuItemService = inject(MenuItemService);
+  customMenuService = inject(CustomMenuService);
   menuTypes: Lookup[] = this.lookupService.lookups.menuType;
   userTypes: Lookup[] = this.lookupService.lookups.userType;
   menuViews: Lookup[] = this.lookupService.lookups.menuView;
   parentMenu?: CustomMenu;
+  customMenus!: CustomMenu[];
   defaultParent?: MenuItemContract;
   defaultParents: MenuItemContract[] = [];
   selectedTabIndex$: Subject<number> = new Subject<number>();
@@ -40,6 +43,16 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
   @ViewChild('urlHandlerComponent')
   urlHandlerComponentRef!: CustomMenuUrlHandlerComponent;
 
+  override ngOnInit() {
+    super.ngOnInit();
+    this.loadCustomMenus();
+  }
+
+  loadCustomMenus() {
+    this.customMenuService.loadAsLookups().subscribe(data => {
+      this.customMenus = data.filter(data => data.isParentMenu());
+    });
+  }
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
     if (this.isDefaultParent()) {
