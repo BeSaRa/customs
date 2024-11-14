@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_user_guide: string;
   menu_custom_menu: string;
   menu_manager_delegation: string;
   static_header_text_for_disciplinary_committee: string;
@@ -236,7 +237,6 @@ export interface LangKeysContract {
   msg_delete_x_confirm: string;
   msg_delete_link_with_x_confirm: string;
   msg_delete_x_success: string;
-  msg_delete_success: string;
   msg_status_x_changed_success: string;
   actions: string;
   view: string;
@@ -521,7 +521,6 @@ export interface LangKeysContract {
   select_employee: string;
   is_penalty: string;
   msg_delete_selected_confirm: string;
-  msg_delete_confirm: string;
   msg_delete_selected_success: string;
   decision_type: string;
   save_and_continue: string;
@@ -794,6 +793,9 @@ export interface LangKeysContract {
   reply: string;
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
+  statment_actions: string;
+  url: string;
+  open: string;
   statement_actions: string;
   statement_serial_number: string;
   accreditation_date: string;

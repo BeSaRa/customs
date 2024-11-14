@@ -24,6 +24,7 @@ import { accessPageGuard } from '@guards/access-page-guard';
 import { AppPermissions } from '@constants/app-permissions';
 import { ManagerDelegationComponent } from '@modules/administration/components/manager-delegation/manager-delegation.component';
 import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
+import { UserGuideComponent } from '@modules/administration/components/user-guide/user-guide.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -241,6 +242,10 @@ const routes: Routes = [
     path: AppRoutes.CUSTOM_MENU,
     component: CustomMenuComponent,
   },
+  {
+    path: AppRoutes.USER_GUIDE,
+    component: UserGuideComponent,
+  }
 ];
 
 @NgModule({

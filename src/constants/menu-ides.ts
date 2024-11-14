@@ -36,4 +36,5 @@ export const MenuIdes = {
   CUSTOM_MENU: 33,
   EMPLOYEES_INBOX_MANAGEMENT: 34,
   DYNAMIC_MENU: 35,
+  USER_GUIDE: 36
 };
