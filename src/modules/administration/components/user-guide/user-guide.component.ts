@@ -8,11 +8,48 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { Subject } from 'rxjs';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatTooltip } from '@angular/material/tooltip';
+import { AsyncPipe } from '@angular/common';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import { ContextMenuComponent } from '@standalone/components/context-menu/context-menu.component';
 
 @Component({
   selector: 'app-user-guide',
   templateUrl: './user-guide.component.html',
   styleUrls: ['./user-guide.component.scss'],
+  standalone: true,
+  imports: [
+    IconButtonComponent,
+    MatTooltip,
+    AsyncPipe,
+    MatProgressSpinner,
+    MatTable,
+    MatRow,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRowDef,
+    MatNoDataRow,
+    ContextMenuComponent,
+    MatCell,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatHeaderCell,
+    MatColumnDef,
+  ],
 })
 export class UserGuideComponent
   extends AdminComponent<UserGuidePopupComponent, UserGuide, UserGuideService>
