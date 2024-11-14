@@ -64,6 +64,7 @@ export const EndPoints = {
   COURT_DECISION: '/court-decision-case', // until implemented from BE side
   CUSTOM_MENU: '/entity/menu-item',
   REQUEST_STATEMENT: '/investigation-case/statement-review',
+  USER_GUIDE: '/entity/user-guide'
 };
 
 export type EndpointsType = typeof EndPoints;

@@ -281,4 +281,10 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.CUSTOM_MENU,
     parent: MenuIdes.ADMINISTRATION,
   },
+  {
+    id: MenuIdes.USER_GUIDE,
+    langKey: 'menu_user_guide',
+    icon: AppIcons.USER_GUIDE,
+    path: AppFullRoutes.USER_GUIDE,
+  },
 ];

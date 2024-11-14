@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_user_guide: string;
   menu_custom_menu: string;
   menu_manager_delegation: string;
   static_header_text_for_disciplinary_committee: string;
@@ -793,4 +794,6 @@ export interface LangKeysContract {
   reply_to_statement: string;
   msg_statement_sent_successfully: string;
   statment_actions: string;
+  url: string;
+  open: string;
 }
