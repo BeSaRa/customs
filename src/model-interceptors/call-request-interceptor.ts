@@ -1,7 +1,7 @@
-import { ModelInterceptorContract } from 'cast-response';
-import { CallRequest } from '@models/call-request';
-import { format, getTime, parseISO, set } from 'date-fns';
 import { AdminResult } from '@models/admin-result';
+import { CallRequest } from '@models/call-request';
+import { ModelInterceptorContract } from 'cast-response';
+import { format, getTime, parseISO } from 'date-fns';
 
 export class CallRequestInterceptor
   implements ModelInterceptorContract<CallRequest>
@@ -18,9 +18,15 @@ export class CallRequestInterceptor
             ? Number(myHours) - 12
             : Number(myHours);
 
-      model.summonTime = getTime(
-        set(model.summonDate! as Date, { hours, minutes: Number(minutes) }),
+      const _date = new Date(
+        format(new Date(model.summonDate!), 'yyyy-MM-dd', {
+          locale: undefined,
+        }),
       );
+      model.summonDate = new Date(_date);
+      _date.setUTCHours(hours);
+      _date.setUTCMinutes(Number(minutes));
+      model.summonTime = _date;
     }
     return model;
   }
