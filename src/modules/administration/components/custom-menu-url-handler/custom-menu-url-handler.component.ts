@@ -45,6 +45,7 @@ import { CustomMenuService } from '@services/custom-menu.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { generateHtmlList, isValidValue } from '@utils/utils';
 import { DialogService } from '@services/dialog.service';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-custom-menu-url-handler',
@@ -162,6 +163,17 @@ export class CustomMenuUrlHandlerComponent implements OnInit, AfterViewInit {
 
   isValidUrl(): boolean {
     const url = this.menuUrlControl.value;
+    if (this.record.isParentMenu()) {
+      this.menuUrlControl.setValidators([CustomValidators.maxLength(350)]);
+    } else {
+      this.menuUrlControl.setValidators([
+        CustomValidators.maxLength(350),
+        CustomValidators.required,
+      ]);
+    }
+    this.menuUrlControl.updateValueAndValidity();
+    this.form.markAllAsTouched();
+    // console.log(this.form.valid);
     if (this.record.isParentMenu()) {
       // if no url, its valid
       if (!isValidValue(url)) {
