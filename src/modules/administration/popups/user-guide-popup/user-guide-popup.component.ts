@@ -11,6 +11,7 @@ import { OperationType } from '@enums/operation-type';
   selector: 'app-user-guide-popup',
   templateUrl: './user-guide-popup.component.html',
   styleUrls: ['./user-guide-popup.component.scss'],
+  standalone: true,
 })
 export class UserGuidePopupComponent extends AdminDialogComponent<UserGuide> {
   form!: UntypedFormGroup;
