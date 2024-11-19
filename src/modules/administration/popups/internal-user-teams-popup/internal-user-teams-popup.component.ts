@@ -45,9 +45,13 @@ import {
   exhaustMap,
   filter,
   Subject,
+  catchError,
 } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 import { UserClick } from '@enums/user-click';
+import { OrganizationUnitType } from '@enums/organization-unit-type';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { AppTableDataSource } from '@models/app-table-data-source';
 
 @Component({
   selector: 'app-internal-user-teams-popup',
@@ -83,13 +87,24 @@ export class InternalUserTeamsPopupComponent extends AdminComponent<
   UserTeamService
 > {
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
-  ouId = this.data.model.organizationUnitId;
+  ouId!: number;
   internalUserId = this.data.model.internalUserId;
   inViewMode: boolean = !!this.data.extras?.inViewMode;
   deleteWithOuId$: Subject<UserTeam> = new Subject<UserTeam>();
+  organizationUnitService = inject(OrganizationUnitService);
   override ngOnInit() {
+    this.loadOrganizationUnit();
     super.ngOnInit();
     this.listenToDelete();
+  }
+  loadOrganizationUnit() {
+    this.organizationUnitService
+      .loadById(this.data.model.organizationUnitId)
+      .subscribe(ou =>
+        ou.parent && ou.type === OrganizationUnitType.SECTION
+          ? (this.ouId = ou.parent)
+          : (this.ouId = ou.id),
+      );
   }
 
   service = inject(UserTeamService);
@@ -110,30 +125,37 @@ export class InternalUserTeamsPopupComponent extends AdminComponent<
     },
   ];
   override data$: Observable<UserTeam[]> = this._load();
-
+  override dataSource: AppTableDataSource<UserTeam> =
+    new AppTableDataSource<UserTeam>(this.data$);
   protected override _load(): Observable<UserTeam[]> {
-    return of(undefined)
-      .pipe(delay(0))
-      .pipe(
-        switchMap(() => {
-          return combineLatest([this.reload$]).pipe(
-            switchMap(() => {
-              this.loadingSubject.next(true);
-              return this.service
-                .loadUserTeams(this.internalUserId, this.ouId, {})
+    return this.reload$.pipe(
+      switchMap(() => {
+        this.loadingSubject.next(true);
+        return this.organizationUnitService
+          .loadById(this.data.model.organizationUnitId)
+          .pipe(
+            map(ou =>
+              ou.parent && ou.type === OrganizationUnitType.SECTION
+                ? ou.parent
+                : ou.id,
+            ),
+            switchMap(resolvedOuId =>
+              this.service
+                .loadUserTeams(this.internalUserId, resolvedOuId, {})
                 .pipe(
-                  finalize(() => this.loadingSubject.next(false)),
-                  ignoreErrors(),
-                );
-            }),
-            tap(({ count }) => {
-              this.length = count;
-              this.loadingSubject.next(false);
-            }),
-            map(response => response.rs),
+                  tap(({ count }) => {
+                    this.length = count;
+                  }),
+                  map(response => response.rs),
+                  catchError(() => {
+                    return of([]);
+                  }),
+                ),
+            ),
           );
-        }),
-      );
+      }),
+      finalize(() => this.loadingSubject.next(false)),
+    );
   }
 
   override _getCreateExtras(): {
