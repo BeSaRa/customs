@@ -1,7 +1,7 @@
 {
   "ENVIRONMENTS_URLS": {
     "DEV_IP": "https://192.168.51.5:9445/cdi/api/",
-    "QA_IP": "http://192.168.53.15/cdi/api/"
+    "QA_IP": "https://192.168.53.15:9445/cdi/api/"
   },
   "BASE_ENVIRONMENT": "DEV_IP"
 }
