@@ -50,22 +50,23 @@ export class UserTeamPopupComponent extends AdminDialogComponent<UserTeam> {
     ])
       .pipe(
         map(([teams, internalUserOUs]) => {
-          const organizationUnitIds = internalUserOUs.map(
-            internalUserOu => internalUserOu.organizationUnitId,
-          );
-          const filteredTeams = teams.filter(
-            team =>
-              team.parentDeptId === -1 ||
-              !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
-                team.id,
-              ),
-          );
-          return filteredTeams.filter(
-            team =>
-              team.parentDeptId === -1 ||
-              organizationUnitIds.includes(team.ouId) ||
-              team.ouId === null,
-          );
+          // const organizationUnitIds = internalUserOUs.map(
+          //   internalUserOu => internalUserOu.organizationUnitId,
+          // );
+          return teams;
+          // const filteredTeams = teams.filter(
+          //   team =>
+          //     team.parentDeptId === -1 ||
+          //     !(this.data.extras?.mappedUserTeamsIds as number[]).includes(
+          //       team.id,
+          //     ),
+          // );
+          // return filteredTeams.filter(
+          //   team =>
+          //     team.parentDeptId === -1 ||
+          //     organizationUnitIds.includes(team.ouId) ||
+          //     team.ouId === null,
+          // );
         }),
       )
       .subscribe(filteredTeams => {
