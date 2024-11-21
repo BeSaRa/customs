@@ -51,23 +51,37 @@
             formControlName="status"
             [label]="lang.map.status"></app-switch>
         </div>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch
+            [trueValue]="1"
+            [falseValue]="0"
+            formControlName="agencyApprovalStatus"
+            [label]="lang.map.agency_approval_status"></app-switch>
+        </div>
+        <div class="flex flex-row pl-1 items-center justify-start">
+          <app-switch
+            [trueValue]="1"
+            [falseValue]="0"
+            formControlName="agencyStatus"
+            [label]="lang.map.agency_status"></app-switch>
+        </div>
       </ng-container>
     </div>
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
       <app-button (click)="save$.next()" buttonType="primary"
-        >{{ lang.map.save }}
+      >{{ lang.map.save }}
       </app-button>
     }
     @if (!inViewMode()) {
       <app-button mat-dialog-close="" buttonType="primary-outline"
-        >{{ lang.map.close }}
+      >{{ lang.map.close }}
       </app-button>
     }
     @if (inViewMode()) {
       <app-button mat-dialog-close="" buttonType="primary"
-        >{{ lang.map.close }}
+      >{{ lang.map.close }}
       </app-button>
     }
   </div>

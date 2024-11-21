@@ -801,4 +801,6 @@ export interface LangKeysContract {
   login_successfully: string;
   edit_attachment_title: string;
   attachment_title_updated_successfully: string;
+  agency_approval_status: string;
+  agency_status: string;
 }

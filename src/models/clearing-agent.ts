@@ -37,6 +37,8 @@ export class ClearingAgent extends BaseModel<
   phoneNumber!: string;
   email!: string;
   code?: string;
+  agencyStatus!: number;
+  agencyApprovalStatus!: number;
 
   // not related to the model
   jobTitleCode!: string;
@@ -55,6 +57,8 @@ export class ClearingAgent extends BaseModel<
       email,
       qid,
       agentPreviousLicenseFeePenalty,
+      agencyApprovalStatus,
+      agencyStatus,
     } = this;
     return {
       enName,
@@ -69,6 +73,8 @@ export class ClearingAgent extends BaseModel<
       agencyId,
       agentPreviousLicenseFeePenalty,
       status,
+      agencyStatus,
+      agencyApprovalStatus,
     };
   }
 
