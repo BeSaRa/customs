@@ -26,7 +26,7 @@ export class ClearingAgency extends BaseModel<
   licenseIssueDate!: string;
   licenseExpiryDate!: string;
   previousLicenseFeePenalty!: number;
-
+  approvalStatus!: number;
   buildForm(): object {
     const {
       enName,
@@ -42,6 +42,7 @@ export class ClearingAgency extends BaseModel<
       licenseIssueDate,
       licenseExpiryDate,
       establishmentId,
+      approvalStatus,
     } = this;
     return {
       enName,
@@ -57,6 +58,7 @@ export class ClearingAgency extends BaseModel<
       licenseIssueDate,
       licenseExpiryDate,
       establishmentId,
+      approvalStatus,
     };
   }
 
