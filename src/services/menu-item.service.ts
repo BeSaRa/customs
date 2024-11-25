@@ -39,6 +39,10 @@ export class MenuItemService {
   }
 
   filterStaticMenu(dynamicMenus: CustomMenu[]): void {
+    dynamicMenus.sort((a, b) => a.menuOrder - b.menuOrder);
+    dynamicMenus.forEach(menu => {
+      menu.subMenuItems.sort((a, b) => a.menuOrder - b.menuOrder);
+    });
     this.filteredStaticMenu = this.staticMenus
       .concat(dynamicMenus.map(item => item.convertToMenuItem()))
       .filter(item => {
