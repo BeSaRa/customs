@@ -195,7 +195,6 @@ export class AuthService
           this.authenticated = true;
         }),
         tap(data => {
-          console.log(data.menuItems);
           this.menuItemService.filterStaticMenu(data.menuItems || []);
         }),
         tap(() => this.menuItemService.buildHierarchy()),
