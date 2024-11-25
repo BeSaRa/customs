@@ -805,4 +805,6 @@ export interface LangKeysContract {
   attachment_title_updated_successfully: string;
   agency_approval_status: string;
   agency_status: string;
+  msg_delete_success: string;
+  msg_delete_confirm: string;
 }
