@@ -56,4 +56,5 @@ export enum TaskResponses {
   STM_CLOSE = 'stm_close',
   STM_REPLY = 'stm_reply',
   STM_DEST_CLOSE = 'stm_dest_close',
+  STM_COMPLETE = 'stm_complete',
 }
