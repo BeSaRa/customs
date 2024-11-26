@@ -22,6 +22,7 @@ import { StatementService } from '@services/statement.service';
 import { exhaustMap, filter, of, switchMap } from 'rxjs';
 import { ToastService } from '@services/toast.service';
 import { DialogRef } from '@angular/cdk/dialog';
+import { TaskResponses } from '@enums/task-responses';
 
 @Component({
   selector: 'app-request-statement-popup',
@@ -101,9 +102,7 @@ export class RequestStatementPopupComponent implements OnInit {
         switchMap(() => {
           return of(this._beforeSave());
         }),
-      )
-      .pipe(filter(value => value))
-      .pipe(
+        filter(value => value),
         exhaustMap(() => {
           if (this.forRework) {
             return this.statementService.updateDescription(
@@ -116,6 +115,18 @@ export class RequestStatementPopupComponent implements OnInit {
             this.form.value,
             this.grievanceStatementRequest,
           );
+        }),
+        switchMap(() => {
+          if (this.forRework) {
+            const completeBody = {
+              selectedResponse: TaskResponses.STM_COMPLETE,
+              comment: '',
+            };
+            return this.caseModel
+              .getService()
+              .completeTask(this.caseModel.taskDetails.tkiid, completeBody);
+          }
+          return of(null);
         }),
       )
       .subscribe(() => {

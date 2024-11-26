@@ -731,9 +731,6 @@ export class ButtonsCaseWrapperComponent
     );
   }
 
-  isStatementRework() {
-    return this.model().taskDetails?.displayName === 'stm_rework';
-  }
   openRequestStatementDialogForRework() {
     if (this.model().caseType === this.caseTypes.INVESTIGATION) {
       this.statementService.openRequestStatementDialog(
