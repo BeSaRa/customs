@@ -199,7 +199,10 @@ export class TeamInboxComponent
   }
 
   listenToDepartmentChange() {
-    this.navbarService.departmentChange$.subscribe(() => this.listenToReload());
+    this.navbarService.departmentChange$.subscribe(() => {
+      this.selectedTeamId.setValue(-1);
+      this.teams = this.employeeService.getEmployeeTeams();
+    });
   }
 
   protected readonly CaseTypes = CaseTypes;
