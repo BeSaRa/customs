@@ -74,6 +74,7 @@ import { SituationSearchBtnComponent } from '@modules/electronic-services/compon
 import { ProofTypes } from '@enums/proof-types';
 import { OpenFrom } from '@enums/open-from';
 import { OffenderStatusEnum } from '@enums/offender-status.enum';
+import { OffenderInvStatus } from '@enums/offender-inv-status';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -259,6 +260,10 @@ export class OffendersViolationsPreviewComponent
                   this.employeeService.isPresident() ||
                   this.employeeService.isPresidentAssisstant()
                 )) ||
+              ((this.employeeService.isPresident() ||
+                this.employeeService.isPresidentAssisstant()) &&
+                i.offenderInfo.status ===
+                  OffenderInvStatus.INVESTIGATION_POSTPONED) ||
               (this.model().hasConcernedOffenders() &&
                 !this.model().isOffenderConcerned(i.offenderId)),
           }),
