@@ -3,7 +3,7 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { Subject, takeUntil, filter, switchMap, of } from 'rxjs';
+import { filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -75,6 +75,11 @@ export class CommentPopupComponent
     TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL,
     TaskResponses.RETURN_APP_MANAGER,
   ];
+  statementResponses: TaskResponses[] = [
+    TaskResponses.STM_DEP_APPROVE,
+    TaskResponses.STM_RETURN_CREATOR,
+    TaskResponses.STM_REPLY,
+  ];
   isPreviewForm = false;
 
   concernedOffenders = computed(() => this.model.getConcernedOffenders());
@@ -119,6 +124,10 @@ export class CommentPopupComponent
 
   get isSendToPOfficeUser() {
     return this.response === TaskResponses.TO_PO_USER;
+  }
+
+  get isStatementResponse() {
+    return this.statementResponses.includes(this.response);
   }
 
   private _loadUsersList() {
