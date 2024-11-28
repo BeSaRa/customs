@@ -94,6 +94,17 @@
       <!--          </div>-->
       <!--        </mat-tab>-->
       <!--      }-->
+      @if(!inCreateMode()){
+        <mat-tab [label]="lang.map.menu_custom_menu">
+          <div class="p-4">
+            <app-user-custom-menus
+              (selectedMenuIds)="onCustomMenusSelected($event)"
+              [internalUserId]="model.id"
+              [inViewMode]="inViewMode()"
+            ></app-user-custom-menus>
+          </div>
+        </mat-tab>
+      }
       @if (!inCreateMode()) {
         <mat-tab [label]="lang.map.lbl_user_signature">
           <div class="p-4">

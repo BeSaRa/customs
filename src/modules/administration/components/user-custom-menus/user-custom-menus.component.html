@@ -1,0 +1,45 @@
+<div class="grid gap-4 p-2 overflow-auto">
+  @for (group of groups; track group) {
+    @if (hasParents(group)) {
+      <div class="p-2 bg-slate-300">
+        <mat-checkbox
+          [disabled]="!group.list.length || inViewMode"
+          (change)="onTypeChange(group)"
+          [checked]="group.isFull()"
+          [indeterminate]="group.isIndeterminate()"
+        >
+          {{ group.getNames() }}
+        </mat-checkbox>
+      </div>
+
+      <div style="padding-inline-start: 1rem; margin-top: 0.5rem;">
+        @for (parentMenu of parents(group); track parentMenu) {
+          <div class="bg-slate-200">
+            <mat-checkbox
+              [disabled]="inViewMode"
+              (change)="onParentChange(group, parentMenu)"
+              [checked]="isParentSelected(group, parentMenu)"
+              [indeterminate]="isParentIndeterminate(group, parentMenu)"
+            >
+              {{ parentMenu.getNames() }}
+            </mat-checkbox>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2" style="padding-inline-start: 2rem; margin-top: 0.5rem;">
+            @for (childMenu of children(group, parentMenu); track childMenu) {
+              <div>
+                <mat-checkbox
+                  [disabled]="inViewMode"
+                  (change)="onChildChange(group, parentMenu, childMenu)"
+                  [checked]="group.isSelected(childMenu.id)"
+                >
+                  {{ childMenu.getNames() }}
+                </mat-checkbox>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>
