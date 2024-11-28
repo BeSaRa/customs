@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { InternalUser } from '@models/internal-user';
@@ -15,6 +15,8 @@ import { UserSignature } from '@models/user-signature';
 import { MawaredEmployeeService } from '@services/mawared-employee.service';
 import { DialogService } from '@services/dialog.service';
 import { MawaredEmployee } from '@models/mawared-employee';
+import { UserCustomMenusComponent } from '@modules/administration/components/user-custom-menus/user-custom-menus.component';
+import { UserCustomMenuService } from '@services/user-custom-menu-service';
 
 @Component({
   selector: 'app-internal-user-popup',
@@ -26,6 +28,7 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   data: CrudDialogDataContract<InternalUser> = inject(MAT_DIALOG_DATA);
   private readonly lookupService = inject(LookupService);
   private readonly internalUserService = inject(InternalUserService);
+  private readonly userCustomMenuService = inject(UserCustomMenuService);
   private readonly mawaredEmployeeService = inject(MawaredEmployeeService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly dialog = inject(DialogService);
@@ -34,6 +37,10 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
   userSignature!: UserSignature;
   statusList!: Lookup[];
   protected readonly AppIcons = AppIcons;
+
+  @ViewChild(UserCustomMenusComponent)
+  customMenusComponent!: UserCustomMenusComponent;
+  customMenuIds: number[] = [];
 
   _buildForm(): void {
     this.form = this.fb.group({
@@ -70,6 +77,13 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
     );
     this.internalUserService
       .uploadSignature(this.userSignature)
+      .pipe(
+        catchError(() => of(null)),
+        filter(response => response !== null),
+      )
+      .subscribe();
+    this.userCustomMenuService
+      .saveUserCustomMenu(model.id, this.customMenuIds)
       .pipe(
         catchError(() => of(null)),
         filter(response => response !== null),
@@ -164,5 +178,9 @@ export class InternalUserPopupComponent extends AdminDialogComponent<InternalUse
         }
       });
     });
+  }
+
+  onCustomMenusSelected(ids: number[]): void {
+    this.customMenuIds = ids;
   }
 }

@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { UserClick } from '@enums/user-click';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
@@ -20,6 +20,7 @@ import { MenuItemParametersEnum } from '@enums/menu-item-parameters.enum';
 import { EmployeeService } from '@services/employee.service';
 import { TokenService } from '@services/token.service';
 import { LangService } from '@services/lang.service';
+import { MenuView } from '@enums/menu-view';
 
 @CastResponseContainer({
   $pagination: {
@@ -250,5 +251,26 @@ export class CustomMenuService extends BaseCrudWithDialogService<
         break;
     }
     return (value ?? '') + '';
+  }
+
+  loadPrivateMenus(): Observable<CustomMenu[]> {
+    return this.loadByCriteria({ 'menu-view': MenuView.PRIVATE });
+  }
+
+  @CastResponse(undefined, {
+    fallback: '$default',
+    unwrap: 'rs',
+  })
+  loadByCriteria(
+    criteria: Partial<CustomMenuSearchCriteria>,
+  ): Observable<CustomMenu[]> {
+    delete criteria.offset;
+    delete criteria.limit;
+
+    return this.http
+      .get<CustomMenu[]>(this.getUrlSegment() + '/criteria', {
+        params: new HttpParams({ fromObject: criteria }),
+      })
+      .pipe(catchError(() => of([])));
   }
 }
