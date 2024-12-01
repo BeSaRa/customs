@@ -27,7 +27,7 @@ export class CounterWidgetComponent extends BaseWidgetDirective {
       this.router.navigate([AppFullRoutes.TEAM_INBOX], {
         queryParams: {
           teamId: this.widgetCounters()[0].teamId,
-          counterId: this.widgetCounters()[0].counterId,
+          // counterId: this.widgetCounters()[0].counterId,
         },
       });
     }

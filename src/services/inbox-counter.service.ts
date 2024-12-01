@@ -7,8 +7,12 @@ import { AdminResult } from '@models/admin-result';
 import { InboxCounter } from '@models/inbox-counter';
 import { Pagination } from '@models/pagination';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { take, timer } from 'rxjs';
+import { filter, take, timer } from 'rxjs';
 import { ConfigService } from './config.service';
+import { AuthService } from './auth.service';
+import { EmployeeService } from './employee.service';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
+import { AppPermissionsType } from '@constants/app-permissions';
 
 @CastResponseContainer({
   $pagination: {
@@ -27,10 +31,23 @@ import { ConfigService } from './config.service';
 export class InboxCounterService extends BaseCrudService<InboxCounter> {
   serviceName = 'InboxCounterService';
   configService = inject(ConfigService);
+  authService = inject(AuthService);
+  employeeService = inject(EmployeeService);
 
   constructor() {
     super();
-    this._startPolling().subscribe(() => this._loadAndSetUserCounters());
+    this._startPolling()
+      .pipe(
+        filter(() => {
+          return (
+            this.authService.isAuthenticated() &&
+            this.employeeService.hasAllPermissions(
+              AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
+            )
+          );
+        }),
+      )
+      .subscribe(() => this._loadAndSetUserCounters());
   }
 
   private _userCounters = signal<InboxCounter[]>([]);
