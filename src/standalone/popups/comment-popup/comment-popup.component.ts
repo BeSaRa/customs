@@ -131,6 +131,10 @@ export class CommentPopupComponent
     return this.statementResponses.includes(this.response);
   }
 
+  get isReviewCustomsAffairsActivity() {
+    return this.model.inActivity(ActivitiesName.REVIEW_CUSTOMS_AFFAIRS);
+  }
+
   private _loadUsersList() {
     if (this.isSendToHrUser) {
       this.teamService
@@ -139,7 +143,7 @@ export class CommentPopupComponent
           this.usersList = data;
         });
     } else if (this.isSendToUser) {
-      this.model.inActivity(ActivitiesName.REVIEW_CUSTOMS_AFFAIRS)
+      this.isReviewCustomsAffairsActivity
         ? this.teamService
             .loadTeamMembers(TeamNames.Customs_Affairs)
             .subscribe(data => {

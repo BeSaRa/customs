@@ -99,17 +99,28 @@
     }
     @if (!isPreviewForm) {
       <form [formGroup]="form">
-        @if (isSendToUser || isSendToHrUser) {
+        @if (isSendToHrUser) {
           <div class="col-12 mb-3">
             <app-select-input
               formControlName="userId"
-              [label]="
-                isSendToHrUser
-                  ? lang.map.send_to_hr_user
-                  : lang.map.send_to_user_x
+              [label]="lang.map.send_to_hr_user"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="usersList" />
+          </div>
+        }
+
+        @if (isSendToUser) {
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="userId"
+              [label]="lang.map.send_to_user_x"
+              [bindValue]="
+                isReviewCustomsAffairsActivity ? 'id' : 'internalUserId'
               "
-              bindValue="internalUserId"
-              bindLabel="getOUUserNames"
+              [bindLabel]="
+                isReviewCustomsAffairsActivity ? 'getNames' : 'getOUUserNames'
+              "
               [options]="usersList" />
           </div>
         }
@@ -137,29 +148,33 @@
               [options]="usersList" />
           </div>
         }
-        @if (isStatementResponse){
+        @if (isStatementResponse) {
           <div class="flex justify-end">
             <span>{{ lang.map.statement_serial_number }} : </span>
             <span class="font-semibold"
-            >(({{ lang.map.statement_serial_number }}))</span
+              >(({{ lang.map.statement_serial_number }}))</span
             >
           </div>
           <div class="flex justify-end">
             <span>{{ lang.map.accreditation_date }} : </span>
-            <span class="font-semibold">(({{ lang.map.accreditation_date }}))</span>
+            <span class="font-semibold"
+              >(({{ lang.map.accreditation_date }}))</span
+            >
           </div>
         }
         <div class="col-12 mb-3">
           <app-textarea
             formControlName="comment"
-            [label]="isStatementReply? lang.map.reply : lang.map.comment"></app-textarea>
+            [label]="
+              isStatementReply ? lang.map.reply : lang.map.comment
+            "></app-textarea>
         </div>
       </form>
     }
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary"
-      >{{ isStatementReply? lang.map.reply_to_statement : lang.map.save }}
+      >{{ isStatementReply ? lang.map.reply_to_statement : lang.map.save }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline"
       >{{ lang.map.close }}
