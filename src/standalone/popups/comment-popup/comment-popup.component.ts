@@ -30,6 +30,7 @@ import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-comment-popup',
@@ -131,14 +132,27 @@ export class CommentPopupComponent
   }
 
   private _loadUsersList() {
-    if (this.isSendToUser || this.isSendToHrUser) {
-      this.internalUserOUService
-        .internalUserOUCriteria({
-          organizationUnitId: this.employeeService.getOrganizationUnit()?.id,
-        })
+    if (this.isSendToHrUser) {
+      this.teamService
+        .loadTeamMembers(TeamNames.Human_Resources)
         .subscribe(data => {
           this.usersList = data;
         });
+    } else if (this.isSendToUser) {
+      this.model.inActivity(ActivitiesName.REVIEW_CUSTOMS_AFFAIRS)
+        ? this.teamService
+            .loadTeamMembers(TeamNames.Customs_Affairs)
+            .subscribe(data => {
+              this.usersList = data;
+            })
+        : this.internalUserOUService
+            .internalUserOUCriteria({
+              organizationUnitId:
+                this.employeeService.getOrganizationUnit()?.id,
+            })
+            .subscribe(data => {
+              this.usersList = data;
+            });
     } else if (this.isSendToInvestigator) {
       this.teamService
         .loadTeamMembers(TeamNames.Investigator)
