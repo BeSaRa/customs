@@ -1,5 +1,6 @@
 import { AdminResult } from '@models/admin-result';
 import { CallRequest } from '@models/call-request';
+import { getDateString } from '@utils/utils';
 import { ModelInterceptorContract } from 'cast-response';
 import { format, getTime, parseISO } from 'date-fns';
 
@@ -23,10 +24,13 @@ export class CallRequestInterceptor
           locale: undefined,
         }),
       );
-      model.summonDate = new Date(_date);
-      _date.setUTCHours(hours);
-      _date.setUTCMinutes(Number(minutes));
-      model.summonTime = _date;
+
+      _date.setHours(0);
+      _date.setMinutes(0);
+      model.summonDate = getDateString(new Date(_date));
+      _date.setHours(hours);
+      _date.setMinutes(Number(minutes));
+      model.summonTime = getDateString(_date);
     }
     return model;
   }

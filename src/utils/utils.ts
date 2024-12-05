@@ -299,3 +299,13 @@ export function downloadLink(value: string, fileName = 'download.pdf') {
   link.target = '_blank';
   link.click();
 }
+
+export function getDateString(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, '0');
+  const hrs = String(date.getHours()).padStart(2, '0');
+  const mins = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hrs}:${mins}:${seconds}`;
+}
