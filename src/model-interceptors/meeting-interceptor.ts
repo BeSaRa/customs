@@ -3,14 +3,25 @@ import { Meeting } from '@models/meeting';
 import { AdminResult } from '@models/admin-result';
 import { MeetingAttendanceInterceptor } from '@model-interceptors/meeting-attendance-interceptor';
 import { MeetingAttendance } from '@models/meeting-attendance';
+import { getDateString } from '@utils/utils';
+import { format } from 'date-fns';
 
 const meetingAttendanceInterceptor = new MeetingAttendanceInterceptor();
 export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
   send(model: Partial<Meeting>): Partial<Meeting> {
     delete model.statusInfo;
     delete model.createdByInfo;
+    const date = new Date(
+      new Date(
+        format(new Date(model.meetingDate!), 'yyyy-MM-dd', {
+          locale: undefined,
+        }),
+      ),
+    );
+    date.setHours(0);
+    date.setMinutes(0);
+    model.meetingDate = getDateString(date);
     if (model.meetingTimeFrom) {
-      const date = new Date();
       if (
         (model.meetingTimeFrom as string).split(' ')[1].toLowerCase() === 'pm'
       ) {
@@ -21,10 +32,9 @@ export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
       date.setMinutes(
         +(model.meetingTimeFrom as string).split(':')[1].split(' ')[0],
       );
-      model.meetingTimeFrom = date.getTime();
+      model.meetingTimeFrom = getDateString(date);
     }
     if (model.meetingTimeTo) {
-      const date = new Date();
       if (
         (model.meetingTimeTo as string).split(' ')[1].toLowerCase() === 'pm'
       ) {
@@ -35,7 +45,7 @@ export class MeetingInterceptor implements ModelInterceptorContract<Meeting> {
       date.setMinutes(
         +(model.meetingTimeTo as string).split(':')[1].split(' ')[0],
       );
-      model.meetingTimeTo = date.getTime();
+      model.meetingTimeTo = getDateString(date);
     }
     model.attendanceList = model.attendanceList?.map(attendance => {
       return new MeetingAttendance().clone(
