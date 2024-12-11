@@ -85,7 +85,11 @@
                 (click)="view$.next(element)"
                 icon="VIEW"></app-icon-button>
             </div>
-            @if (!readonly && element.status === MeetingStatusEnum.pending) {
+            @if (
+              !readonly &&
+              hasNotHaveMeetingMinutes(element.id) &&
+              element.status === MeetingStatusEnum.pending
+            ) {
               <div [matTooltip]="lang.map.edit">
                 <app-icon-button (click)="update$.next(element)" icon="EDIT" />
               </div>
