@@ -1,5 +1,5 @@
 export const Config = {
-  VERSION: 'v1.2.6',
+  VERSION: 'v1.3.0',
   PRIVATE_VERSION: '',
   BASE_ENVIRONMENT: '',
   ENVIRONMENTS_URLS: {},
