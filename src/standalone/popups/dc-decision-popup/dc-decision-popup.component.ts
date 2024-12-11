@@ -1,3 +1,4 @@
+import { AsyncPipe, DatePipe } from '@angular/common';
 import {
   Component,
   computed,
@@ -6,19 +7,19 @@ import {
   Signal,
   signal,
 } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
   MatDialogClose,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { Offender } from '@models/offender';
-import { Investigation } from '@models/investigation';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { LangService } from '@services/lang.service';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { MatRadioButton } from '@angular/material/radio';
+import {
+  MatOption,
+  MatSelect,
+  MatSelectTrigger,
+} from '@angular/material/select';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 import {
   MatCell,
   MatCellDef,
@@ -32,31 +33,30 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { OffenderViolation } from '@models/offender-violation';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { ToastService } from '@services/toast.service';
-import { exhaustMap, filter, map, take, takeUntil, tap } from 'rxjs/operators';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { of, Subject, switchMap } from 'rxjs';
-import { MatRadioButton } from '@angular/material/radio';
 import { MatTooltip } from '@angular/material/tooltip';
-import {
-  MatOption,
-  MatSelect,
-  MatSelectTrigger,
-} from '@angular/material/select';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
-import { LookupService } from '@services/lookup.service';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { CustomValidators } from '@validators/custom-validators';
-import { Penalty } from '@models/penalty';
-import { PenaltyDecision } from '@models/penalty-decision';
-import { EmployeeService } from '@services/employee.service';
-import { DialogService } from '@services/dialog.service';
 import { ProofTypes } from '@enums/proof-types';
 import { UserClick } from '@enums/user-click';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { Investigation } from '@models/investigation';
+import { Offender } from '@models/offender';
+import { OffenderViolation } from '@models/offender-violation';
+import { Penalty } from '@models/penalty';
+import { PenaltyDecision } from '@models/penalty-decision';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
 import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { ToastService } from '@services/toast.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
+import { CustomValidators } from '@validators/custom-validators';
+import { of, Subject, switchMap } from 'rxjs';
+import { exhaustMap, filter, map, take, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dc-decision-popup',
@@ -175,7 +175,10 @@ export class DcDecisionPopupComponent
     return this.model().getPenaltyDecisionByOffenderId(this.offender().id);
   });
   oldPenaltyId = computed(() => {
-    return this.oldPenaltyDecision()?.penaltyId;
+    return (
+      this.penalties().find(p => p.id === this.oldPenaltyDecision()?.penaltyId)
+        ?.id ?? null
+    );
   });
   oldPenaltyComment = computed(() => {
     return this.oldPenaltyDecision()?.comment;
