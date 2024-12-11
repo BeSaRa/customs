@@ -106,34 +106,19 @@
       </tr>
     </table>
     <div class="flex flex-col">
-      <label (click)="focusOnSelect(select)">{{
-        lang.map.penalty_action
-      }}</label>
-      <div class="input-form">
-        <mat-select
-          #select="matSelect"
-          id="penalty"
-          [formControl]="penaltyControl"
-          class="min-h-[42px] input-select">
-          <mat-select-trigger>
-            {{
-              penaltyControl.value
-                ? selectedPenaltyText(penaltyControl.value)
-                : ''
-            }}
-          </mat-select-trigger>
-          @for (penalty of penalties(); track penalty.id) {
-            <mat-option [value]="penalty.id">
-              {{ penalty.getNames() }}
-              @if (penalty.penaltyGuidance) {
-                <span class="bg-emerald-400 rounded text-white px-2 mx-2">
-                  {{ penalty.penaltyGuidanceInfo.getNames() }}
-                </span>
-              }
-            </mat-option>
+      <app-select-input
+        [formControl]="penaltyControl"
+        [label]="lang.map.penalty_action"
+        [options]="penalties()">
+        <mat-option *appOptionTemplate="let penalty" [value]="penalty.id">
+          {{ penalty.getNames() }}
+          @if (penalty.penaltyGuidance) {
+            <span class="bg-emerald-400 rounded text-white px-2 mx-2">
+              {{ penalty.penaltyGuidanceInfo.getNames() }}
+            </span>
           }
-        </mat-select>
-      </div>
+        </mat-option>
+      </app-select-input>
     </div>
     <div>
       <app-textarea [formControl]="textControl" [label]="lang.map.text" />
