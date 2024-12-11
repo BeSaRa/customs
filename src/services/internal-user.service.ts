@@ -98,4 +98,9 @@ export class InternalUserService extends BaseCrudWithDialogService<
     const url = `${this.getUrlSegment()}/manager/lookup`;
     return this.http.get<InternalUser[]>(url);
   }
+  @CastResponse()
+  getInternalUsersInSameDepartment(): Observable<InternalUser[]> {
+    const url = `${this.getUrlSegment()}/delegation/users`;
+    return this.http.get<InternalUser[]>(url);
+  }
 }

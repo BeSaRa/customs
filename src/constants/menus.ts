@@ -229,7 +229,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.SUSPENDED_EMPLOYEE,
     langKey: 'menu_suspended_employee',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.SUSPEND_EMPLOYEE,
     path: AppFullRoutes.SUSPENDED_EMPLOYEE,
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGE_SUSPENDED_EMPLOYEE',
@@ -245,7 +245,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.MANAGER_DELEGATION,
     langKey: 'menu_manager_delegation',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.DELEGATE_MANAGER,
     path: AppFullRoutes.MANAGER_DELEGATION,
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGE_MANAGER_DELEGATION',
@@ -277,7 +277,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.CUSTOM_MENU,
     langKey: 'menu_custom_menu',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.CUSTOM_MENU,
     path: AppFullRoutes.CUSTOM_MENU,
     parent: MenuIdes.ADMINISTRATION,
   },
@@ -290,7 +290,7 @@ export const Menus: MenuItemContract[] = [
   {
     id: MenuIdes.USER_DELEGATION,
     langKey: 'menu_user_delegation',
-    icon: AppIcons.SETTINGS,
+    icon: AppIcons.DELEGATE_USER,
     path: AppFullRoutes.USER_DELEGATION,
     parent: MenuIdes.ADMINISTRATION,
   },

@@ -95,6 +95,7 @@ export const AppIcons = {
   ARROW_TOP_LEFT: 'arrow-top-left',
   SUSPEND_EMPLOYEE: 'pause-octagon',
   DELEGATE_MANAGER: 'account-arrow-up-outline',
+  DELEGATE_USER: 'account-arrow-up',
   CANCEL_DELEGATE: 'pen-remove',
   COMMENT: 'comment-text-multiple-outline',
   EXPAND: 'arrow-expand-all',
@@ -119,6 +120,7 @@ export const AppIcons = {
   USER_GUIDE: 'book',
   OPEN_IN_NEW: 'open-in-new',
   OPEN: 'open-in-new',
+  CUSTOM_MENU: 'microsoft-xbox-controller-menu',
 };
 
 export type AppIconsType = typeof AppIcons;

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { UserDelegation } from '@models/user-delegation';
@@ -6,18 +6,56 @@ import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { InternalUser } from '@models/internal-user';
+import { InternalUserService } from '@services/internal-user.service';
+import { OrganizationUnit } from '@models/organization-unit';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-user-delegation-popup',
   templateUrl: './user-delegation-popup.component.html',
   styleUrls: ['./user-delegation-popup.component.scss'],
 })
-export class UserDelegationPopupComponent extends AdminDialogComponent<UserDelegation> {
+export class UserDelegationPopupComponent
+  extends AdminDialogComponent<UserDelegation>
+  implements OnInit
+{
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<UserDelegation> = inject(MAT_DIALOG_DATA);
 
+  internalUsersInSameDepartment!: InternalUser[];
+  internalUserService = inject(InternalUserService);
+  employeeService = inject(EmployeeService);
+  departments!: OrganizationUnit[];
+  departmentService = inject(OrganizationUnitService);
+  today = new Date();
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.loadInternalUsersInSameDepartment();
+    this.setUserDepartments();
+  }
+
+  loadInternalUsersInSameDepartment() {
+    this.internalUserService
+      .getInternalUsersInSameDepartment()
+      .subscribe(users => (this.internalUsersInSameDepartment = users));
+  }
+
+  setUserDepartments() {
+    this.departments = this.employeeService.getOrganizationUnits();
+  }
+
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+  }
+
+  protected override _afterBuildForm() {
+    super._afterBuildForm();
+    this.form
+      .get('delegatorId')
+      ?.setValue(this.employeeService.getEmployee()!.id);
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -28,7 +66,7 @@ export class UserDelegationPopupComponent extends AdminDialogComponent<UserDeleg
   protected _prepareModel(): UserDelegation | Observable<UserDelegation> {
     return new UserDelegation().clone<UserDelegation>({
       ...this.model,
-      ...this.form.value,
+      ...this.form.getRawValue(),
     });
   }
 
@@ -36,9 +74,12 @@ export class UserDelegationPopupComponent extends AdminDialogComponent<UserDeleg
     this.model = model;
     this.operation = OperationType.UPDATE;
     this.toast.success(
-      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() })
+      this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }),
     );
-    // you can close the dialog after save here 
-    // this.dialogRef.close(this.model);
+    // you can close the dialog after save here
+    this.dialogRef.close(this.model);
+  }
+  endDateMinDate() {
+    return this.form.get('startDate')?.value || this.today;
   }
 }
