@@ -6,7 +6,7 @@ import { ComponentType } from '@angular/cdk/portal';
 import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
 import { Constructor } from '@app-types/constructors';
 import { Pagination } from '@models/pagination';
-    
+
 @CastResponseContainer({
   $pagination: {
     model: () => Pagination,
@@ -22,8 +22,9 @@ import { Pagination } from '@models/pagination';
   providedIn: 'root',
 })
 export class UserDelegationService extends BaseCrudWithDialogService<
-UserDelegationPopupComponent,
-UserDelegation> {
+  UserDelegationPopupComponent,
+  UserDelegation
+> {
   serviceName = 'UserDelegationService';
   protected getModelClass(): Constructor<UserDelegation> {
     return UserDelegation;

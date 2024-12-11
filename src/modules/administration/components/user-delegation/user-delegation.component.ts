@@ -8,6 +8,7 @@ import { AppIcons } from '@constants/app-icons';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { ConfigService } from '@services/config.service';
 
 @Component({
   selector: 'app-user-delegation',
@@ -19,40 +20,44 @@ export class UserDelegationComponent extends AdminComponent<
   UserDelegation,
   UserDelegationService
 > {
+  config = inject(ConfigService);
   service = inject(UserDelegationService);
   actions: ContextMenuActionContract<UserDelegation>[] = [
-      {
-        name: 'view',
-        type: 'action',
-        label: 'view',
-        icon: AppIcons.VIEW,
-        callback: (item) => {
-          this.view$.next(item);
-        },
+    {
+      name: 'view',
+      type: 'action',
+      label: 'view',
+      icon: AppIcons.VIEW,
+      callback: item => {
+        this.view$.next(item);
       },
-      {
-        name: 'edit',
-        type: 'action',
-        label: 'edit',
-        icon: AppIcons.EDIT,
-        callback: (item) => {
-          this.edit$.next(item);
-        },
+    },
+    {
+      name: 'edit',
+      type: 'action',
+      label: 'edit',
+      icon: AppIcons.EDIT,
+      callback: item => {
+        this.edit$.next(item);
       },
-      {
-        name: 'delete',
-        type: 'action',
-        label: 'delete',
-        icon: AppIcons.DELETE,
-        callback: (item) => {
-          this.delete$.next(item);
-        },
+    },
+    {
+      name: 'delete',
+      type: 'action',
+      label: 'delete',
+      icon: AppIcons.DELETE,
+      callback: item => {
+        this.delete$.next(item);
       },
-    ];
-    // here we have a new implementation for displayed/filter Columns for the table
-    columnsWrapper: ColumnsWrapper<UserDelegation> = new ColumnsWrapper(
-      new NoneFilterColumn('select'),
-      new TextFilterColumn('arName'),
-      new NoneFilterColumn('actions')
-    ).attacheFilter(this.filter$);
+    },
+  ];
+  // here we have a new implementation for displayed/filter Columns for the table
+  columnsWrapper: ColumnsWrapper<UserDelegation> = new ColumnsWrapper(
+    new NoneFilterColumn('select'),
+    new TextFilterColumn('delegatee'),
+    new TextFilterColumn('department'),
+    new TextFilterColumn('startDate'),
+    new TextFilterColumn('endDate'),
+    new NoneFilterColumn('actions'),
+  ).attacheFilter(this.filter$);
 }
