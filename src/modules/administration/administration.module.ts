@@ -94,6 +94,8 @@ import { CustomMenuComponent } from '@modules/administration/components/custom-m
 import { CustomMenuPopupComponent } from '@modules/administration/popups/custom-menu-popup/custom-menu-popup.component';
 import { CustomMenuUrlHandlerComponent } from '@modules/administration/components/custom-menu-url-handler/custom-menu-url-handler.component';
 import { UserCustomMenusComponent } from '@modules/administration/components/user-custom-menus/user-custom-menus.component';
+import { UserDelegationComponent } from '@modules/administration/components/user-delegation/user-delegation.component';
+import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
 
 @NgModule({
   declarations: [
@@ -148,6 +150,8 @@ import { UserCustomMenusComponent } from '@modules/administration/components/use
     ManagerDelegationPopupComponent,
     CustomMenuComponent,
     CustomMenuPopupComponent,
+    UserDelegationComponent,
+    UserDelegationPopupComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,5 @@
 export interface LangKeysContract {
+  menu_user_delegation : string;
   menu_user_guide: string;
   menu_custom_menu: string;
   menu_manager_delegation: string;

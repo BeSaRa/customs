@@ -287,4 +287,11 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.USER_GUIDE,
     path: AppFullRoutes.USER_GUIDE,
   },
+  {
+    id: MenuIdes.USER_DELEGATION,
+    langKey: 'menu_user_delegation',
+    icon: AppIcons.SETTINGS,
+    path: AppFullRoutes.USER_DELEGATION,
+    parent: MenuIdes.ADMINISTRATION,
+  },
 ];
