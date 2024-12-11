@@ -25,6 +25,7 @@ import { AppPermissions } from '@constants/app-permissions';
 import { ManagerDelegationComponent } from '@modules/administration/components/manager-delegation/manager-delegation.component';
 import { CustomMenuComponent } from '@modules/administration/components/custom-menu/custom-menu.component';
 import { UserGuideComponent } from '@modules/administration/components/user-guide/user-guide.component';
+import { UserDelegationComponent } from '@modules/administration/components/user-delegation/user-delegation.component';
 
 const routes: Routes = [
   { path: '', component: AdministrationComponent },
@@ -245,6 +246,10 @@ const routes: Routes = [
   {
     path: AppRoutes.USER_GUIDE,
     component: UserGuideComponent,
+  },
+  {
+    path: AppRoutes.USER_DELEGATION,
+    component: UserDelegationComponent,
   }
 ];
 
