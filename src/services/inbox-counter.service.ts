@@ -2,6 +2,8 @@ import { BaseCrudService } from '@abstracts/base-crud-service';
 import { HttpContext } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
+import { AppPermissionsType } from '@constants/app-permissions';
+import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { NO_LOADER_TOKEN } from '@http-contexts/tokens';
 import { AdminResult } from '@models/admin-result';
 import { InboxCounter } from '@models/inbox-counter';
@@ -9,10 +11,7 @@ import { Pagination } from '@models/pagination';
 import { CastResponse, CastResponseContainer } from 'cast-response';
 import { filter, take, timer } from 'rxjs';
 import { ConfigService } from './config.service';
-import { AuthService } from './auth.service';
 import { EmployeeService } from './employee.service';
-import { AppPermissionsGroup } from '@constants/app-permissions-group';
-import { AppPermissionsType } from '@constants/app-permissions';
 
 @CastResponseContainer({
   $pagination: {
@@ -31,7 +30,6 @@ import { AppPermissionsType } from '@constants/app-permissions';
 export class InboxCounterService extends BaseCrudService<InboxCounter> {
   serviceName = 'InboxCounterService';
   configService = inject(ConfigService);
-  authService = inject(AuthService);
   employeeService = inject(EmployeeService);
 
   constructor() {
@@ -39,11 +37,8 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
     this._startPolling()
       .pipe(
         filter(() => {
-          return (
-            this.authService.isAuthenticated() &&
-            this.employeeService.hasAllPermissions(
-              AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
-            )
+          return this.employeeService.hasAllPermissions(
+            AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
           );
         }),
       )
