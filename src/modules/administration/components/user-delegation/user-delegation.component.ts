@@ -32,32 +32,19 @@ export class UserDelegationComponent extends AdminComponent<
         this.view$.next(item);
       },
     },
-    {
-      name: 'edit',
-      type: 'action',
-      label: 'edit',
-      icon: AppIcons.EDIT,
-      callback: item => {
-        this.edit$.next(item);
-      },
-    },
-    {
-      name: 'delete',
-      type: 'action',
-      label: 'delete',
-      icon: AppIcons.DELETE,
-      callback: item => {
-        this.delete$.next(item);
-      },
-    },
   ];
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<UserDelegation> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
+    new TextFilterColumn('delegator'),
     new TextFilterColumn('delegatee'),
     new TextFilterColumn('department'),
     new TextFilterColumn('startDate'),
     new TextFilterColumn('endDate'),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+
+  isDelegator(element: UserDelegation) {
+    return this.employeeService.getEmployee()?.id === element.delegatorId;
+  }
 }
