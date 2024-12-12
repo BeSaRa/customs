@@ -90,15 +90,27 @@
         </div>
       </div>
     </mat-tab>
-    <ng-container
-      *ngTemplateOutlet="
-        actionsTab;
-        context: {
-          $implicit: ActionsOnCaseDisplayedList,
-          header: lang.map.actions
-        }
+    @if (!isActionsEmpty()){
+      <ng-container
+        *ngTemplateOutlet="
+          actionsTab;
+          context: {
+            $implicit: ActionsOnCaseDisplayedList,
+            header: lang.map.actions
+          }
       "></ng-container>
-    @if (!isStatemetRequestActionEmpty()) {
+    }
+    @if (!isSeenEmpty()){
+      <ng-container
+        *ngTemplateOutlet="
+          actionsTab;
+          context: {
+            $implicit: ActionsOnCaseDisplayedListForSeen,
+            header: lang.map.seen
+          }
+        "></ng-container>
+    }
+    @if (!isStatementRequestActionEmpty()) {
       <ng-container
         *ngTemplateOutlet="
           actionsTab;

@@ -16,6 +16,7 @@ import { catchError, exhaustMap, of, throwError } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { NgTemplateOutlet } from '@angular/common';
+import { ActionOnCaseIds } from '@enums/action-on-case-ids';
 
 @Component({
   selector: 'app-actions-on-case',
@@ -57,10 +58,13 @@ export class ActionsOnCaseComponent implements OnInit {
   );
 
   ActionsOnCaseDisplayedList = new MatTableDataSource<ActionsOnCase>();
+  ActionsOnCaseDisplayedListForSeen = new MatTableDataSource<ActionsOnCase>();
   ActionsOnCaseDisplayedListForStatementRequest =
     new MatTableDataSource<ActionsOnCase>();
   assignedToDisplayedList = new MatTableDataSource<AssignedTo>();
-  isStatemetRequestActionEmpty = signal(true);
+  isStatementRequestActionEmpty = signal(true);
+  isSeenEmpty = signal(true);
+  isActionsEmpty = signal(true);
 
   ngOnInit(): void {
     this.loadActionsOnCase();
@@ -89,16 +93,24 @@ export class ActionsOnCaseComponent implements OnInit {
             new Date(b.updatedOn).getTime() - new Date(a.updatedOn).getTime()
           );
         });
-        const [nonStatmentRequestRecords, statmentRequestRecords] = [
-          sortedData.filter(el => !el.guid),
+        const [others, seenRecords, statmentRequestRecords] = [
+          sortedData.filter(
+            el => !el.guid && el.actionId !== ActionOnCaseIds.SEEN,
+          ),
+          sortedData.filter(
+            el => !el.guid && el.actionId === ActionOnCaseIds.SEEN,
+          ),
           sortedData.filter(el => el.guid),
         ];
-        this.ActionsOnCaseDisplayedList = new MatTableDataSource(
-          nonStatmentRequestRecords,
+        this.ActionsOnCaseDisplayedList = new MatTableDataSource(others);
+        this.ActionsOnCaseDisplayedListForSeen = new MatTableDataSource(
+          seenRecords,
         );
         this.ActionsOnCaseDisplayedListForStatementRequest =
           new MatTableDataSource(statmentRequestRecords);
-        this.isStatemetRequestActionEmpty.set(!statmentRequestRecords.length);
+        this.isStatementRequestActionEmpty.set(!statmentRequestRecords.length);
+        this.isSeenEmpty.set(!seenRecords.length);
+        this.isActionsEmpty.set(!others.length);
       });
   }
 
