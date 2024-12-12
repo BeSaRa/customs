@@ -1,5 +1,5 @@
 export interface LangKeysContract {
-  menu_user_delegation : string;
+  menu_user_delegation: string;
   menu_user_guide: string;
   menu_custom_menu: string;
   menu_manager_delegation: string;
@@ -810,4 +810,5 @@ export interface LangKeysContract {
   msg_delete_confirm: string;
   data_source: string;
   there_is_no_data_sources: string;
+  seen: string;
 }
