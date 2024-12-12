@@ -714,7 +714,7 @@
   }
 
   <!-- request statement -->
-  @if (hasRequestStatement()) {
+  @if (model().isClaimed() && hasRequestStatement()) {
     <app-button (click)="openRequestStatementDialog()" buttonType="primary"
       >{{ lang.map.request_statement }}
     </app-button>
