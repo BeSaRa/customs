@@ -340,4 +340,10 @@ export class PersonsListComponent
 
     return hasPermission && (isDisciplinaryCommittee || isInMyInbox);
   }
+
+  isMe(person: Witness | Offender) {
+    return person instanceof Witness
+      ? this.employeeService.getEmployee()?.id === person?.witnessInfo?.id
+      : this.employeeService.getEmployee()?.id === person?.offenderInfo?.id;
+  }
 }
