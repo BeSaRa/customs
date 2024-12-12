@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { UserDelegation } from '@models/user-delegation';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { InternalUser } from '@models/internal-user';
@@ -11,11 +11,29 @@ import { InternalUserService } from '@services/internal-user.service';
 import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { EmployeeService } from '@services/employee.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+} from '@angular/material/datepicker';
+import { ButtonComponent } from '@standalone/components/button/button.component';
 
 @Component({
   selector: 'app-user-delegation-popup',
   templateUrl: './user-delegation-popup.component.html',
   styleUrls: ['./user-delegation-popup.component.scss'],
+  standalone: true,
+  imports: [
+    IconButtonComponent,
+    ReactiveFormsModule,
+    SelectInputComponent,
+    InputComponent,
+    MatDatepicker,
+    MatDatepickerInput,
+    ButtonComponent,
+  ],
 })
 export class UserDelegationPopupComponent
   extends AdminDialogComponent<UserDelegation>

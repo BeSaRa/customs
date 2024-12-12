@@ -22,7 +22,6 @@ export const AppPermissionsGroup = {
     AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
     AppPermissions.MANAGE_MANAGER_DELEGATION,
   ],
-
   DASHBOARD: [
     AppPermissions.MANAGE_LAYOUT,
     AppPermissions.MANAGE_WIDGET,

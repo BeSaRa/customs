@@ -250,7 +250,7 @@ const routes: Routes = [
   {
     path: AppRoutes.USER_DELEGATION,
     component: UserDelegationComponent,
-  }
+  },
 ];
 
 @NgModule({
