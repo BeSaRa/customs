@@ -17,7 +17,7 @@ import { take } from 'rxjs';
 import { ToastService } from '@services/toast.service';
 
 @Component({
-  selector: 'app-edit-attachment-name',
+  selector: 'app-edit-attachment-name-popup',
   standalone: true,
   imports: [
     CommonModule,
@@ -27,10 +27,10 @@ import { ToastService } from '@services/toast.service';
     InputComponent,
     IconButtonComponent,
   ],
-  templateUrl: './edit-attachment-name.component.html',
-  styleUrl: './edit-attachment-name.component.scss',
+  templateUrl: './edit-attachment-name-popup.component.html',
+  styleUrl: './edit-attachment-name-popup.component.scss',
 })
-export class EditAttachmentNameComponent {
+export class EditAttachmentNamePopupComponent {
   lang = inject(LangService);
   data = inject<{
     attachment: CaseAttachment;

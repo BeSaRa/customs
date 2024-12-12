@@ -1,3 +1,5 @@
+import { BaseCaseService } from '@abstracts/base-case.service';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   effect,
@@ -7,13 +9,25 @@ import {
   InputSignal,
   OnInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { Config } from '@constants/config';
+import { FolderType } from '@enums/folder-type.enum';
+import { OperationType } from '@enums/operation-type';
+import { UserClick } from '@enums/user-click';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { AppTableDataSource } from '@models/app-table-data-source';
 import { CaseAttachment } from '@models/case-attachment';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { ToastService } from '@services/toast.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { EditAttachmentNamePopupComponent } from '@standalone/popups/edit-attachment-name-popup/edit-attachment-name-popup.component';
+import { ignoreErrors } from '@utils/utils';
 import {
+  combineLatest,
   exhaustMap,
   filter,
   map,
@@ -21,24 +35,10 @@ import {
   ReplaySubject,
   Subject,
   switchMap,
+  take,
   takeUntil,
   tap,
-  combineLatest,
-  take,
 } from 'rxjs';
-import { BaseCaseService } from '@abstracts/base-case.service';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { LangService } from '@services/lang.service';
-import { MatCardModule } from '@angular/material/card';
-import { DialogService } from '@services/dialog.service';
-import { UserClick } from '@enums/user-click';
-import { ToastService } from '@services/toast.service';
-import { ignoreErrors } from '@utils/utils';
-import { Config } from '@constants/config';
-import { FolderType } from '@enums/folder-type.enum';
-import { EmployeeService } from '@services/employee.service';
-import { OperationType } from '@enums/operation-type';
-import { EditAttachmentNameComponent } from '@standalone/popups/edit-attachment-name/edit-attachment-name.component';
 
 @Component({
   selector: 'app-case-attachments',
@@ -266,7 +266,7 @@ export class CaseAttachmentsComponent
 
   openUpdateAttachmentTitleDialog(attachment: CaseAttachment) {
     this.dialog
-      .open(EditAttachmentNameComponent, {
+      .open(EditAttachmentNamePopupComponent, {
         data: {
           attachment,
           service: this.service,

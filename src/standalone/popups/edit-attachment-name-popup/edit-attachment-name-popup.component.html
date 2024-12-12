@@ -8,7 +8,9 @@
       icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content max-w-[900px]">
-    <app-input [formControl]="title"></app-input>
+    <app-input
+      [label]="lang.map.document_name"
+      [formControl]="title"></app-input>
   </div>
   <div class="dialog-footer justify-end">
     <app-button [disabled]="title.invalid" (click)="save()" buttonType="primary"
