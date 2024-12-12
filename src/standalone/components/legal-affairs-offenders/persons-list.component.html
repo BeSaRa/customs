@@ -154,7 +154,9 @@
           buttonType="secondary"
           (click)="requestCall$.next(element)"
           [disabled]="
-            !model().inMyInbox() && !model().inDisciplinaryCommitteeReview()
+            (!model().inMyInbox() &&
+              !model().inDisciplinaryCommitteeReview()) ||
+            isMe(element)
           ">
           {{ lang.map.call_request }}
         </app-button>
