@@ -26,6 +26,13 @@
         </mat-checkbox>
       </td>
     </ng-container>
+
+    <!-- delegator -->
+    <ng-container matColumnDef="delegator">
+      <th mat-header-cell mat-sort-header="delegatorId" *matHeaderCellDef>{{ lang.map.delegator }}</th>
+      <td mat-cell *matCellDef="let element">{{ element.delegatorInfo.getNames()  }}</td>
+    </ng-container>
+
     <!-- delegatee -->
     <ng-container matColumnDef="delegatee">
       <th mat-header-cell mat-sort-header="delegateeId" *matHeaderCellDef>{{ lang.map.delegated }}</th>
@@ -58,14 +65,16 @@
           <app-icon-button
           [disabled]="(loading$ | async)!"
           [matTooltip]="lang.map.view" (click)="view$.next(element)" icon="VIEW"></app-icon-button>
-          <app-icon-button
-          [disabled]="(loading$ | async)!"
-          [matTooltip]="lang.map.edit" (click)="edit$.next(element)" icon="EDIT"></app-icon-button>
-          <app-icon-button
+          @if (isDelegator(element)){
+            <app-icon-button
             [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.delete"
-            (click)="delete$.next(element)"
-            icon="DELETE"></app-icon-button>
+            [matTooltip]="lang.map.edit" (click)="edit$.next(element)" icon="EDIT"></app-icon-button>
+            <app-icon-button
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.delete"
+              (click)="delete$.next(element)"
+              icon="DELETE"></app-icon-button>
+          }
         </div>
       </td>
     </ng-container>
