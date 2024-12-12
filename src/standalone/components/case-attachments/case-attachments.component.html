@@ -24,20 +24,12 @@
       <th mat-header-cell *matHeaderCellDef>
         {{ lang.map.document_name }}
       </th>
-      <td
-        mat-cell
-        *matCellDef="let element"
-        class="flex justify-start items-center gap-1">
+      <td mat-cell *matCellDef="let element">
         <button
           class="text-blue-700 hover:underline focus:outline-none"
           (click)="view$.next(element)">
           {{ element.documentTitle }}
         </button>
-        @if (!readonly) {
-          <app-icon-button
-            (click)="openUpdateAttachmentTitleDialog(element)"
-            icon="EDIT"></app-icon-button>
-        }
       </td>
     </ng-container>
     <!-- attachmentType -->
@@ -84,6 +76,9 @@
             (click)="view$.next(element)"
             icon="VIEW"></app-icon-button>
           @if (!readonly) {
+            <app-icon-button
+              (click)="openUpdateAttachmentTitleDialog(element)"
+              icon="EDIT"></app-icon-button>
             <app-icon-button
               (click)="delete$.next(element)"
               icon="DELETE"></app-icon-button>
