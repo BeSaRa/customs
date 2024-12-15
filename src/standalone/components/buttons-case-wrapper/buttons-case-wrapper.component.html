@@ -198,7 +198,7 @@
       {{
         isVicePresidentOfficeOrVicePresident()
           ? lang.map.send_to_president_office_inbox
-          : lang.map.complete
+          : lang.map.launch
       }}
     </app-button>
   }
@@ -214,7 +214,7 @@
   @if (model().inMyInbox() && model().hasResponse(taskResponses.GR_COMPLETE)) {
     <app-button
       (click)="grievanceCompleteAction$.next(taskResponses.GR_COMPLETE)">
-      {{ lang.map.complete }}
+      {{ lang.map.launch }}
     </app-button>
   }
 
