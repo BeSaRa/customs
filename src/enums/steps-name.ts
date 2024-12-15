@@ -16,7 +16,15 @@ export enum StepsName {
   CUSTOMS_AFFAIRS_REWORK = 'CA_REW',
   CUSTOMS_AFFAIRS_DEPARTMENT_REWORK = 'CA_DEP_REW',
   /* ActivityName: Review Department Statement */
-  DEPARTMENT_STATEMENT_REVIEW = 'DEP_STM_REV',
+  DEPARTMENT_STATEMENT_REVIEW = 'DEP_STM_REV', // (صادر)
+  STATEMENT_OWNER_REVIEW = 'STM_OWNER_REW', // (صادر)
+  STATEMENT_DEST_DEPARTMENT = 'STM_DEST_DEP', // (وارد)
+  DEPARTMENT_REPLY = 'DEP_REPLY', // (رد)
+  /* ActivityName: Review Grievance Statement */
+  GRIEVANCE_OWNER_REVIEW = 'GRV_OWN_REV', // (صادر)
+  GRIEVANCE_DEPARTMENT_REVIEW = 'GRV_DEP_REV', // (صادر)
+  GRIEVANCE_STATEMENT_REVIEW = 'GRV_STM_REV', // (وارد)
+  GRIEVANCE_REPLY = 'GRV_REPLY', // (رد)
   /* ActivityName: Review Disciplinary Council */
   REVIEW_DISCIPLINARY_COUNCIL = 'DC_REV',
   /* ActivityName: Review Disciplinary Council Signature */

@@ -811,4 +811,7 @@ export interface LangKeysContract {
   data_source: string;
   there_is_no_data_sources: string;
   seen: string;
+  outgoing: string;
+  incoming: string;
+  unknown: string;
 }

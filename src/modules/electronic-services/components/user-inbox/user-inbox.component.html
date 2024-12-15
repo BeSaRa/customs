@@ -81,8 +81,15 @@
         {{ lang.map.step_name }}
       </th>
       <td mat-cell *matCellDef="let element">
-        <span
-          [innerHTML]="lang.map[assertType(element).TAD_DISPLAY_NAME]"></span>
+        <div class="flex align-middle">
+          <span
+            [innerHTML]="lang.map[assertType(element).TAD_DISPLAY_NAME]"></span>
+          @if (isStatement(element)){
+            <span class="mx-1">
+            ({{ getStepName(element) }})
+            </span>
+          }
+        </div>
       </td>
     </ng-container>
 
