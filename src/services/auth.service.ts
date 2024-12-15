@@ -183,7 +183,11 @@ export class AuthService
     return source => {
       return source.pipe(
         map(data => this.employeeService.setLoginData(data)),
-        tap(data => this.tokenService.setToken(data.token)),
+        tap(data => {
+          return data.token
+            ? this.tokenService.setToken(data.token)
+            : this.tokenService.setToken(data.accessToken);
+        }),
         tap(
           data =>
             data.internalUser &&
