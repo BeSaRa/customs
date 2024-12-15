@@ -19,6 +19,7 @@ export class InboxResult extends ClonerMixin(class {}) {
   DB_GRIEVANCE_FULL_SERIAL!: string;
   BD_IS_DRAFTED!: string;
   BD_SUBJECT!: string;
+  PT_NAME!: string;
   BD_CASE_TYPE!: number;
   PI_CREATE!: string;
   ACTIVATED!: string;
@@ -27,6 +28,7 @@ export class InboxResult extends ClonerMixin(class {}) {
   RISK_STATUS!: number;
   OWNER!: string;
   TKIID!: string;
+  NAME!: string;
   PI_PARENT_CASE_ID!: string;
   TAD_DISPLAY_NAME!: keyof LangKeysContract;
   fromUserInfo!: AdminResult;

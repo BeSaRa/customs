@@ -20,6 +20,9 @@ import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
+import { EmployeeService } from '@services/employee.service';
+import { ActivitiesName } from '@enums/activities-name';
+import { StepsName } from '@enums/steps-name';
 
 @Component({
   selector: 'app-user-inbox',
@@ -40,6 +43,7 @@ export class UserInboxComponent
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
   oldQueryResultSet?: QueryResultSet;
+  employeeService = inject(EmployeeService);
 
   reloadInbox$: BehaviorSubject<unknown> = new BehaviorSubject<unknown>(null);
   filter$ = new BehaviorSubject<Partial<InboxResult>>({});
@@ -140,4 +144,26 @@ export class UserInboxComponent
 
   protected readonly CaseTypes = CaseTypes;
   readonly Config = Config;
+
+  getStepName(element: InboxResult): string {
+    const stepMappings: Record<string, string> = {
+      [StepsName.DEPARTMENT_STATEMENT_REVIEW]: this.lang.map.outgoing,
+      [StepsName.STATEMENT_DEST_DEPARTMENT]: this.lang.map.incoming,
+      [StepsName.STATEMENT_OWNER_REVIEW]: this.lang.map.outgoing,
+      [StepsName.DEPARTMENT_REPLY]: this.lang.map.reply,
+      [StepsName.GRIEVANCE_OWNER_REVIEW]: this.lang.map.outgoing,
+      [StepsName.GRIEVANCE_DEPARTMENT_REVIEW]: this.lang.map.outgoing,
+      [StepsName.GRIEVANCE_STATEMENT_REVIEW]: this.lang.map.incoming,
+      [StepsName.GRIEVANCE_REPLY]: this.lang.map.reply,
+    };
+
+    return stepMappings[element.NAME] || this.lang.map.unknown;
+  }
+
+  isStatement(element: InboxResult) {
+    return (
+      element.PT_NAME === ActivitiesName.REVIEW_DEPARTMENT_STATEMENT ||
+      element.PT_NAME === ActivitiesName.REVIEW_GRIEVANCE_STATEMENT
+    );
+  }
 }

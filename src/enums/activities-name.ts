@@ -3,6 +3,7 @@ export enum ActivitiesName {
   REVIEW_APPLICANT_DEPARTMENT = 'Review Applicant Department',
   REVIEW_CUSTOMS_AFFAIRS = 'Review Customs Affairs',
   REVIEW_DEPARTMENT_STATEMENT = 'Review Department Statement',
+  REVIEW_GRIEVANCE_STATEMENT = 'Review Grievance Statement',
   REVIEW_DISCIPLINARY_COUNCIL = 'Review Disciplinary Council',
   REVIEW_DISCIPLINARY_COUNCIL_SIGNATURE = 'Review Disciplinary Council Signature',
   REVIEW_FINAL_PRESIDENT_ASSISTANT = 'Review Final President Assistant',
