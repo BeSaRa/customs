@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { AppIcons } from '@constants/app-icons';
 import { ActivitiesName } from '@enums/activities-name';
 import { CaseTypes } from '@enums/case-types';
+import { CommonCaseStatus } from '@enums/common-case-status';
 import { MemorandumCategories } from '@enums/memorandum-categories';
 import { OpenFrom } from '@enums/open-from';
 import { SaveTypes } from '@enums/save-types';
@@ -38,6 +39,7 @@ import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { PenaltyService } from '@services/penalty.service';
+import { StatementService } from '@services/statement.service';
 import { ToastService } from '@services/toast.service';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 import { CommentPopupComponent } from '@standalone/popups/comment-popup/comment-popup.component';
@@ -53,8 +55,6 @@ import {
 } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 import { ButtonComponent } from '../button/button.component';
-import { StatementService } from '@services/statement.service';
-import { CommonCaseStatus } from '@enums/common-case-status';
 
 @Component({
   selector: 'app-buttons-case-wrapper',
@@ -394,8 +394,8 @@ export class ButtonsCaseWrapperComponent
             return (this.model() as Investigation).penaltyDecisions.length
               ? this.penaltyDecisionService
                   .createBulkFull(
-                    (this.model() as Investigation).penaltyDecisions.map(
-                      item => {
+                    (this.model() as Investigation).penaltyDecisions
+                      .map(item => {
                         return item.clone<PenaltyDecision>({
                           ...item,
                           signerId: this.employee!.id,
@@ -404,8 +404,12 @@ export class ButtonsCaseWrapperComponent
                             this.model() as Investigation
                           ).getTeamDisplayName(),
                         });
-                      },
-                    ),
+                      })
+                      .filter(pd =>
+                        (this.model() as Investigation)
+                          .getConcernedOffendersIds()
+                          .find(oId => oId === pd.offenderId),
+                      ),
                   )
                   .pipe(map(() => response))
               : of(response);
