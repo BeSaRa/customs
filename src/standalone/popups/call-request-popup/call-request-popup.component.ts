@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { Observable } from 'rxjs';
+import { Observable, takeUntil } from 'rxjs';
 import { CallRequestService } from '@services/call-request.service';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { Offender } from '@models/offender';
@@ -17,7 +17,11 @@ import { SummonType } from '@enums/summon-type';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { generateTimeList } from '@utils/utils';
+import {
+  compareTwoDates,
+  generateTimeList,
+  getTimeAsNumberFromGeneratedTime,
+} from '@utils/utils';
 import {
   MatDatepicker,
   MatDatepickerInput,
@@ -48,6 +52,13 @@ import { Investigation } from '@models/investigation';
 })
 export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest> {
   override form!: UntypedFormGroup;
+  get summonTimeControl() {
+    return this.form.get('summonTime')!;
+  }
+  get summonDateControl() {
+    return this.form.get('summonDate')!;
+  }
+
   callRequestService = inject(CallRequestService);
   data = inject<
     CrudDialogDataContract<
@@ -88,9 +99,48 @@ export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest>
     return this.isOffender() ? this.offender() : this.witness();
   });
 
-  times = generateTimeList();
+  private _times = generateTimeList();
+  times = this._times;
 
   today: Date = new Date();
+
+  override ngOnInit(): void {
+    super.ngOnInit();
+    if (!this.inViewMode()) {
+      this._refreshSummonTime(false);
+      this.summonDateControl.valueChanges
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(d => {
+          this._refreshSummonTime();
+          this._updateTimes();
+        });
+    }
+  }
+
+  private _refreshSummonTime(reset = true) {
+    if (
+      reset &&
+      compareTwoDates(
+        new Date(Date.now()),
+        new Date(this.summonDateControl.value),
+      )
+    ) {
+      this.summonTimeControl.reset();
+    }
+    this.summonDateControl.value
+      ? this.summonTimeControl.enable()
+      : this.summonTimeControl.disable();
+  }
+
+  private _updateTimes() {
+    const _now = new Date(Date.now());
+    this.times = this._times.filter(
+      t =>
+        !compareTwoDates(_now, new Date(this.summonDateControl.value)) ||
+        (getTimeAsNumberFromGeneratedTime(t).hours > _now.getHours() &&
+          getTimeAsNumberFromGeneratedTime(t).minutes >= _now.getMinutes()),
+    );
+  }
 
   override _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));

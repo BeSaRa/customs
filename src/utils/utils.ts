@@ -7,6 +7,7 @@ import {
   of,
 } from 'rxjs';
 import { AdminResult } from '@models/admin-result';
+import { format } from 'date-fns';
 
 /**
  * to check if the NgControl is NgModel
@@ -281,15 +282,32 @@ export function generateTimeList(steps = ['00', '30']): string[] {
   const times: string[] = [];
   for (let i = 0; i < 24; i++) {
     const AMPM = i >= 12 ? 'PM' : 'AM';
-    const time = (i === 0 ? 12 : i > 12 ? i - 12 : i)
-      .toString()
-      .padStart(2, '0');
+    const time = (i > 12 ? i - 12 : i).toString().padStart(2, '0');
 
     steps.forEach(item => {
       times.push(time + ':' + item + ' ' + AMPM);
     });
   }
   return times;
+}
+
+export function getTimeAsNumberFromGeneratedTime(time: string) {
+  let hours = parseInt(time.slice(0, 2));
+  if (time.slice(6, 8).toLowerCase() === 'pm' && hours !== 12) hours += 12;
+  const minutes = parseInt(time.slice(3, 5));
+
+  return { hours, minutes };
+}
+
+export function compareTwoDates(date1: Date, date2: Date) {
+  return (
+    format(date1, 'yyyy-MM-dd', {
+      locale: undefined,
+    }) ===
+    format(date2, 'yyyy-MM-dd', {
+      locale: undefined,
+    })
+  );
 }
 
 export function downloadLink(value: string, fileName = 'download.pdf') {
