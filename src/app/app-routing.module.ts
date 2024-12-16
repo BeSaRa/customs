@@ -5,8 +5,6 @@ import { authGuard } from '@guards/auth.guard';
 import { HomeComponent } from './components/home/home.component';
 import { AppRoutes } from '@constants/app-routes';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
-import { AppPermissionsGroup } from '@constants/app-permissions-group';
-import { accessPageGuard } from '@guards/access-page-guard';
 import { UserGuideComponent } from '@modules/administration/components/user-guide/user-guide.component';
 
 const routes: Routes = [
@@ -39,11 +37,6 @@ const routes: Routes = [
           import('@modules/administration/administration.module').then(
             m => m.AdministrationModule,
           ),
-        canActivate: [
-          accessPageGuard({
-            permissionGroup: AppPermissionsGroup.ADMINISTRATION,
-          }),
-        ],
       },
       {
         path: AppRoutes.USER_GUIDE,
