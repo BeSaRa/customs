@@ -292,5 +292,6 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_user_delegation',
     icon: AppIcons.DELEGATE_USER,
     path: AppFullRoutes.USER_DELEGATION,
+    parent: MenuIdes.ADMINISTRATION,
   },
 ];

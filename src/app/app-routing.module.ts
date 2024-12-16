@@ -8,7 +8,6 @@ import { ExternalLoginComponent } from './components/external-login/external-log
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { accessPageGuard } from '@guards/access-page-guard';
 import { UserGuideComponent } from '@modules/administration/components/user-guide/user-guide.component';
-import { UserDelegationComponent } from '@modules/administration/components/user-delegation/user-delegation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: AppRoutes.LOGIN, pathMatch: 'full' },
@@ -49,10 +48,6 @@ const routes: Routes = [
       {
         path: AppRoutes.USER_GUIDE,
         component: UserGuideComponent,
-      },
-      {
-        path: AppRoutes.USER_DELEGATION,
-        component: UserDelegationComponent,
       },
       {
         path: AppRoutes.ELECTRONIC_SERVICES,
