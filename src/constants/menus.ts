@@ -125,14 +125,6 @@ export const Menus: MenuItemContract[] = [
     permission: 'MANAGE_EMAIL_TEMPLATE',
   },
   {
-    id: MenuIdes.GLOBAL_SETTING,
-    langKey: 'menu_global_setting',
-    icon: AppIcons.GLOBAL_SETTING,
-    path: AppFullRoutes.GLOBAL_SETTING,
-    parent: MenuIdes.ADMINISTRATION,
-    permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
-  },
-  {
     id: MenuIdes.ELECTRONIC_SERVICES,
     langKey: 'menu_electronic_services',
     icon: AppIcons.ELECTRONIC_SERVICES,
@@ -251,6 +243,13 @@ export const Menus: MenuItemContract[] = [
     permission: 'MANAGE_MANAGER_DELEGATION',
   },
   {
+    id: MenuIdes.USER_DELEGATION,
+    langKey: 'menu_user_delegation',
+    icon: AppIcons.DELEGATE_USER,
+    path: AppFullRoutes.USER_DELEGATION,
+    parent: MenuIdes.ADMINISTRATION,
+  },
+  {
     id: MenuIdes.GRIEVANCE,
     langKey: 'menu_grievances',
     icon: AppIcons.HAND_BACK_RIGHT,
@@ -288,10 +287,11 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.USER_GUIDE,
   },
   {
-    id: MenuIdes.USER_DELEGATION,
-    langKey: 'menu_user_delegation',
-    icon: AppIcons.DELEGATE_USER,
-    path: AppFullRoutes.USER_DELEGATION,
+    id: MenuIdes.GLOBAL_SETTING,
+    langKey: 'menu_global_setting',
+    icon: AppIcons.GLOBAL_SETTING,
+    path: AppFullRoutes.GLOBAL_SETTING,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
   },
 ];
