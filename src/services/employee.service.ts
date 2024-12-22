@@ -318,6 +318,7 @@ export class EmployeeService
 
   clearEmployee() {
     this.loginData = undefined;
+    this.permissionMap.clear();
   }
 
   getOrganizationUnit(): OrganizationUnit | undefined {
