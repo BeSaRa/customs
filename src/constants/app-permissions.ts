@@ -67,6 +67,9 @@ export const AppPermissions = {
   COURT_DECISIONS: 'COURT_DECISIONS',
 
   SEARCH_IN_DEPARTMENT: 'SEARCH_IN_DEPARTMENT',
+
+  // penalty modification permissions
   SEARCH_IN_ALL_DEPARTMENT: 'SEARCH_IN_ALL_DEPARTMENT',
+  CREATE_PENALTY_MODIFICATION_REQUEST: 'CREATE_PENALTY_MODIFICATION_REQUEST',
 };
 export type AppPermissionsType = typeof AppPermissions;

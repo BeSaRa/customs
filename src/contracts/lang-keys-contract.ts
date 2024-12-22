@@ -814,5 +814,6 @@ export interface LangKeysContract {
   outgoing: string;
   incoming: string;
   unknown: string;
+  menu_penalty_modification: string;
   go_to_page: string;
 }

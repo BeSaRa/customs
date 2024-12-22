@@ -20,6 +20,7 @@ import { FinesComponent } from '@modules/electronic-services/components/fines/fi
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
 import { EmployeesInboxManagmentComponent } from './components/employees-inbox-managment/employees-inbox-managment.component';
+import { PenaltyModificationComponent } from '@modules/electronic-services/components/penalty-modification/penalty-modification.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -42,6 +43,15 @@ const routes: Routes = [
   {
     path: AppRoutes.TEAM_INBOX,
     component: TeamInboxComponent,
+  },
+  {
+    path: AppRoutes.PENALTY_MODIFICATION,
+    component: PenaltyModificationComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.CREATE_PENALTY_MODIFICATION_REQUEST,
+      }),
+    ],
   },
   {
     path: AppRoutes.EMPLOYEES_INBOX_MANAGEMENT,

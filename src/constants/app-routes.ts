@@ -44,5 +44,6 @@ export const AppRoutes = {
   EMPLOYEES_INBOX_MANAGEMENT: 'employees-inbox-managment',
   DYNAMIC_MENU: 'dynamic-menu',
   USER_GUIDE: 'user-guide',
-  USER_DELEGATION: 'user-delegation'
+  USER_DELEGATION: 'user-delegation',
+  PENALTY_MODIFICATION: 'penalty-modification',
 };

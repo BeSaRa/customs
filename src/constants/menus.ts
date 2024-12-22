@@ -295,4 +295,12 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
   },
+  {
+    id: MenuIdes.PENALTY_MODIFICATION,
+    langKey: 'menu_penalty_modification',
+    icon: AppIcons.EDIT,
+    path: AppFullRoutes.PENALTY_MODIFICATION,
+    parent: MenuIdes.ELECTRONIC_SERVICES,
+    permission: 'CREATE_PENALTY_MODIFICATION_REQUEST',
+  },
 ];

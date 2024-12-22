@@ -205,6 +205,15 @@ export class InvestigationService
       },
     );
   }
+  requestPenaltyModification(decisionSerial: string) {
+    const params = new HttpParams().set('decisionSerial', decisionSerial);
+
+    return this.http.post(
+      this.getUrlSegment() + '/penalty-modification/start',
+      {},
+      { params },
+    );
+  }
 
   @CastResponse(() => DecisionMinutes, {
     unwrap: 'rs',

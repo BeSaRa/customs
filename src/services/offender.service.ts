@@ -81,6 +81,19 @@ export class OffenderService extends BaseCrudService<Offender> {
       },
     );
   }
+  @CastResponse(() => Offender, { unwrap: 'rs' })
+  loadDecisionSerial(decisionSerial: number) {
+    return this.http.get<Offender>(
+      this.getUrlSegment() + '/admin/decision-serial',
+      {
+        params: new HttpParams({
+          fromObject: {
+            decisionSerial,
+          },
+        }),
+      },
+    );
+  }
 
   @CastResponse(undefined, {
     fallback: '$paginationForCases',
