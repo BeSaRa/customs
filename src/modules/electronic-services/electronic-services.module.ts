@@ -40,7 +40,7 @@ import { MenuItemListComponent } from '@standalone/components/menu-item-list/men
 import { SummaryTabComponent } from '@standalone/components/summary-tab/summary-tab.component';
 import { OffenderAttachmentsComponent } from '@standalone/components/offender-attachments/offender-attachments.component';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { PersonsListComponent } from '@standalone/components/legal-affairs-offenders/persons-list.component';
 import { LegalAffairsProceduresComponent } from '@standalone/components/legal-affairs-procedures/legal-affairs-procedures.component';
 import { DisciplinaryCommitteeComponent } from '@standalone/components/disciplinary-committee/disciplinary-committee.component';
@@ -52,6 +52,7 @@ import { CourtDecisionListComponent } from '@standalone/components/court-decisio
 import { EmployeesInboxManagementComponent } from '@modules/electronic-services/components/employees-inbox-managament/employees-inbox-management.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
+import { PenaltyModificationComponent } from '@modules/electronic-services/components/penalty-modification/penalty-modification.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     InvestigationDraftsComponent,
     FinesComponent,
     CourtDecisionsComponent,
+    PenaltyModificationComponent,
     EmployeesInboxManagementComponent,
   ],
   imports: [
@@ -111,6 +113,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     DatePipe,
     MatCheckboxModule,
     HighlightPipe,
+    MatSortHeader,
   ],
 })
 export class ElectronicServicesModule {}

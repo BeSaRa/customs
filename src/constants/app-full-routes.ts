@@ -42,5 +42,6 @@ export const AppFullRoutes = {
   DYNAMIC_MENU: '/home/dynamic-menu',
   USER_GUIDE: '/home/user-guide',
   USER_DELEGATION: '/home/administration/user-delegation',
+  PENALTY_MODIFICATION: '/home/electronic-services/penalty-modification',
   AI_SEARCH: '/home/administration/ai-search',
 };
