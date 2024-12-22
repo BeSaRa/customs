@@ -70,6 +70,7 @@ export const EndPoints = {
   INBOX_COUNTER: 'entity/counter-team',
   USER_MENU_ITEM: 'entity/user-menu-item',
   USER_DELEGATION: '/entity/user-delegation',
+  PENALTY_MODIFICATION: '/admin/penalty-modification',
 };
 export const AzureEndPoints = {
   BASE_URL: '',
