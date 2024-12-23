@@ -12,6 +12,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
 import { QueryResultSet } from '@models/query-result-set';
+import { Team } from '@models/team';
 import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
@@ -42,13 +43,19 @@ export class EmployeesInboxManagmentComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
 
-  teams =
-    this.employeeService.getLoginData()?.teams.filter(t => t.id !== -1) ?? [];
+  departments =
+    this.employeeService
+      .getLoginData()
+      ?.organizationUnits.filter(ou => ou.id !== -1) ?? [];
+  teams: Team[] = [];
   employees: InternalUser[] = [];
   availableEmployeesToAssign: InternalUser[] = [];
 
-  teamsControl = new FormControl<number | null>(null);
-  employeesControl = new FormControl<InternalUser | null>(null);
+  ouControl = new FormControl<number | null>(
+    this.employeeService.getLoginData()?.organizationUnit.id!,
+  );
+  teamControl = new FormControl<number | null>(null);
+  employeeControl = new FormControl<InternalUser | null>(null);
 
   queryResultSet?: QueryResultSet;
   dataSource: MatTableDataSource<InboxResult> =
@@ -86,36 +93,55 @@ export class EmployeesInboxManagmentComponent
   selection = new SelectionModel<InboxResult>(true, []);
 
   ngOnInit(): void {
+    this.listenToOuChange();
     this.listenToTeamChange();
     this.listenToEmployeeChange();
+    this.ouControl.disable(); // until implementing super admin from BE side
   }
 
   assertType(item: InboxResult): InboxResult {
     return item;
   }
 
+  listenToOuChange() {
+    this.ouControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(ouId => {
+        this.teamControl.setValue(null);
+        this.loadTeams();
+      });
+  }
+
   listenToTeamChange() {
-    this.teamsControl.valueChanges
+    this.teamControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(tId => {
-        this.employeesControl.setValue(null);
-        this.loadEmployees(tId!);
+        this.employeeControl.setValue(null);
+        this.loadEmployees();
       });
   }
 
   listenToEmployeeChange() {
-    this.employeesControl.valueChanges
+    this.employeeControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.loadEmployeeInbox();
       });
   }
 
-  loadEmployees(teamId: number | null) {
+  loadTeams() {
     this.selection.clear();
-    if (!teamId) return;
     this.teamService
-      .loadTeamMembersById(teamId)
+      .loadDepartmentTeams(this.ouControl.value!)
+      .pipe(ignoreErrors())
+      .subscribe(teams => (this.teams = teams));
+  }
+
+  loadEmployees() {
+    if (!this.teamControl.value) return;
+    this.selection.clear();
+    this.teamService
+      .loadTeamMembersById(this.teamControl.value!, this.ouControl.value!)
       .pipe(ignoreErrors())
       .subscribe(emps => {
         this.employees = emps;
@@ -124,7 +150,7 @@ export class EmployeesInboxManagmentComponent
 
   loadEmployeeInbox() {
     this.selection.clear();
-    const employeeDomainName = this.employeesControl.value?.domainName;
+    const employeeDomainName = this.employeeControl.value?.domainName;
     if (!employeeDomainName) {
       this.dataSource.data = [];
       return;
@@ -162,8 +188,9 @@ export class EmployeesInboxManagmentComponent
       .open(ReassignTaskPopupComponent, {
         data: {
           tasks,
-          departmentId: this.employeesControl.value!.defaultOUId,
-          employeeId: this.employeesControl.value!.id,
+          employees: this.employees.filter(
+            e => e.id !== this.employeeControl.value?.id,
+          ),
         },
       })
       .afterClosed()
