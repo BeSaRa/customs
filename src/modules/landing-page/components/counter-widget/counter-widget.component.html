@@ -3,6 +3,7 @@
     @if (!isEditMode) {
       <app-icon-button
         (click)="navigate()"
+        [matTooltip]="lang.map.go_to_page"
         class="absolute -end-2 -top-2"
         icon="OPEN"></app-icon-button>
     }
