@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Team } from '@models/team';
-import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
-import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
+import { HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
-import { Pagination } from '@models/pagination';
 import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
+import { Pagination } from '@models/pagination';
+import { Team } from '@models/team';
+import { TeamPopupComponent } from '@modules/administration/popups/team-popup/team-popup.component';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 
 @CastResponseContainer({
   $pagination: {
@@ -48,6 +49,16 @@ export class TeamService extends BaseCrudWithDialogService<
     return this.urlService.URLS.TEAM;
   }
 
+  @CastResponse(() => Team, {
+    unwrap: 'rs',
+  })
+  loadDepartmentTeams(ouId: number) {
+    return this.http.get<Team[]>(
+      this.getUrlSegment() + `/department-teams/lookup`,
+      { params: new HttpParams({ fromObject: { ouId } }) },
+    );
+  }
+
   @CastResponse(() => InternalUser, {
     unwrap: 'rs',
     fallback: 'internalUser$',
@@ -73,9 +84,10 @@ export class TeamService extends BaseCrudWithDialogService<
     unwrap: 'rs',
     fallback: 'internalUser$',
   })
-  loadTeamMembersById(teamId: number) {
+  loadTeamMembersById(teamId: number, ouId?: number) {
     return this.http.get<InternalUser[]>(
       this.getUrlSegment() + `/members/${teamId}`,
+      { params: new HttpParams({ fromObject: ouId ? { ouId } : {} }) },
     );
   }
 }
