@@ -654,4 +654,8 @@ export class InvestigationComponent
   get isStatementReply() {
     return this.model.getResponses()?.includes(TaskResponses.STM_REPLY);
   }
+
+  get hasStatementReply(): boolean {
+    return !!this.reviewStatementForm.get('reply')?.value;
+  }
 }

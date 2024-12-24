@@ -141,7 +141,9 @@
     (release)="_updateForm($event)"
     [legalAffairsProceduresComponent]="legalAffairsProceduresComponent()"
     [isMandatoryToImposePenalty]="isMandatoryToImposePenalty()"
-    (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()">
+    (navigateToSamePageThatUserCameFrom)="navigateToSamePageThatUserCameFrom()"
+    [hasStatementReply]="hasStatementReply"
+  >
   </app-buttons-case-wrapper>
   <ng-template #summary_tab>
     <app-summary-tab
@@ -285,7 +287,7 @@
         formControlName="description"
         [label]="lang.map.description " >
       </app-textarea>
-      @if(reviewStatementForm.get('reply')?.value){
+      @if(hasStatementReply){
         <app-textarea
           formControlName="reply"
           [label]="lang.map.reply_to_statement" >

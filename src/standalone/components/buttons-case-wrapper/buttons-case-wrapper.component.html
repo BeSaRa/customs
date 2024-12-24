@@ -719,7 +719,7 @@
       >{{ lang.map.request_statement }}
     </app-button>
   }
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_COMPLETE)) {
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.STM_COMPLETE) && !hasStatementReply) {
     <app-button (click)="openRequestStatementDialogForRework()">
       {{ lang.map.edit_statement_request }}
     </app-button>
