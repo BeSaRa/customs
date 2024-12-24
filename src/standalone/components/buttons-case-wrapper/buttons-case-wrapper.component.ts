@@ -109,7 +109,7 @@ export class ButtonsCaseWrapperComponent
   @Output() claim = new EventEmitter<Investigation | Grievance>();
   @Output() release = new EventEmitter<Investigation | Grievance>();
   @Output() navigateToSamePageThatUserCameFrom = new EventEmitter<void>();
-
+  hasStatementReply = input<boolean>();
   penaltyMap = input<Record<number, { first: number; second: Penalty[] }>>();
 
   systemPenaltiesMap = computed(() => this.penaltyService.systemPenaltiesMap());
