@@ -135,6 +135,12 @@
           </ng-container>
         </div>
       </mat-tab>
+      <mat-tab [label]="lang.map.delegate">
+        <div class="p-2 overflow-y-auto max-h-full">
+          <app-user-delegation
+            [type]="UserDelegationType.PREFERENCES"></app-user-delegation>
+        </div>
+      </mat-tab>
     </mat-tab-group>
   </div>
   <div class="dialog-footer justify-end">

@@ -4,11 +4,12 @@ import { FormArray, FormControl, UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { LangContract } from '@contracts/lang-contract';
+import { UserDelegationType } from '@enums/user-delegation-type';
 import { UserPreferences } from '@models/user-preferences';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
-import { Observable } from 'rxjs';
 import { CustomValidators } from '@validators/custom-validators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-preferences-popup',
@@ -28,6 +29,8 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
   phoneNumber!: string;
   email!: string;
   languages: LangContract[] = this.langService.languages;
+
+  readonly UserDelegationType = UserDelegationType;
 
   override _buildForm(): void {
     const formObj = this.model.buildForm(true);

@@ -1,14 +1,16 @@
-import { Component, inject } from '@angular/core';
 import { AdminComponent } from '@abstracts/admin-component';
-import { UserDelegation } from '@models/user-delegation';
-import { UserDelegationService } from '@services/user-delegation.service';
-import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
-import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { Component, inject, input } from '@angular/core';
 import { AppIcons } from '@constants/app-icons';
+import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { UserDelegationType } from '@enums/user-delegation-type';
 import { ColumnsWrapper } from '@models/columns-wrapper';
-import { TextFilterColumn } from '@models/text-filter-column';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { TextFilterColumn } from '@models/text-filter-column';
+import { UserDelegation } from '@models/user-delegation';
+import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
 import { ConfigService } from '@services/config.service';
+import { UserDelegationService } from '@services/user-delegation.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-user-delegation',
@@ -20,6 +22,7 @@ export class UserDelegationComponent extends AdminComponent<
   UserDelegation,
   UserDelegationService
 > {
+  type = input<UserDelegationType>();
   config = inject(ConfigService);
   service = inject(UserDelegationService);
   actions: ContextMenuActionContract<UserDelegation>[] = [
@@ -44,7 +47,22 @@ export class UserDelegationComponent extends AdminComponent<
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.filter$ = new BehaviorSubject<Partial<UserDelegation>>({
+      delegationType: this.type() ?? UserDelegationType.ADMIN,
+    });
+  }
+
   isDelegator(element: UserDelegation) {
     return this.employeeService.getEmployee()?.id === element.delegatorId;
+  }
+
+  override _getCreateExtras() {
+    return { type: this.type() ?? UserDelegationType.ADMIN };
+  }
+
+  isFromUserPreferences() {
+    return this.type() === UserDelegationType.PREFERENCES;
   }
 }

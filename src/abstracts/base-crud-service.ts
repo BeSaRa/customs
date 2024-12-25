@@ -50,17 +50,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     criteria?: Partial<M>,
     sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
-    if (criteria) {
-      Object.keys(criteria as unknown as object).forEach(key => {
-        if (
-          criteria &&
-          (criteria[key as keyof Partial<M>] === null ||
-            criteria[key as keyof Partial<M>] === undefined)
-        ) {
-          delete criteria[key as keyof Partial<M>];
-        }
-      });
-    }
+    this._cleanCriteria(criteria);
     return this.http.get<Pagination<M[]>>(this.getUrlSegment(), {
       params: new HttpParams({
         fromObject: { ...options, ...criteria, ...sortOptions },
@@ -129,17 +119,7 @@ export abstract class BaseCrudService<M, PrimaryType = number>
     criteria?: Partial<M>,
     sortOptions?: SortOptionsContract,
   ): Observable<Pagination<M[]>> {
-    if (criteria) {
-      Object.keys(criteria as unknown as object).forEach(key => {
-        if (
-          criteria &&
-          (criteria[key as keyof Partial<M>] === null ||
-            criteria[key as keyof Partial<M>] === undefined)
-        ) {
-          delete criteria[key as keyof Partial<M>];
-        }
-      });
-    }
+    this._cleanCriteria(criteria);
     return this.http.get<Pagination<M[]>>(this.getUrlSegment() + '/composite', {
       params: new HttpParams({
         fromObject: { ...options, ...criteria, ...sortOptions },
@@ -245,5 +225,19 @@ export abstract class BaseCrudService<M, PrimaryType = number>
 
   isInstanceOf(model: unknown): model is M {
     return model instanceof this.getModelClass();
+  }
+
+  _cleanCriteria(criteria?: Partial<M>) {
+    if (criteria) {
+      Object.keys(criteria as unknown as object).forEach(key => {
+        if (
+          criteria &&
+          (criteria[key as keyof Partial<M>] === null ||
+            criteria[key as keyof Partial<M>] === undefined)
+        ) {
+          delete criteria[key as keyof Partial<M>];
+        }
+      });
+    }
   }
 }

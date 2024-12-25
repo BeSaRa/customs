@@ -248,6 +248,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.DELEGATE_USER,
     path: AppFullRoutes.USER_DELEGATION,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_USER_DELEGATION',
   },
   {
     id: MenuIdes.GRIEVANCE,

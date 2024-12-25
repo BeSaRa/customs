@@ -1,16 +1,17 @@
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { Component, inject, OnInit } from '@angular/core';
+import { UntypedFormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { UserDelegation } from '@models/user-delegation';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { UntypedFormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
+import { UserDelegationType } from '@enums/user-delegation-type';
 import { InternalUser } from '@models/internal-user';
-import { InternalUserService } from '@services/internal-user.service';
 import { OrganizationUnit } from '@models/organization-unit';
-import { OrganizationUnitService } from '@services/organization-unit.service';
+import { UserDelegation } from '@models/user-delegation';
 import { EmployeeService } from '@services/employee.service';
+import { InternalUserService } from '@services/internal-user.service';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { Observable, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-delegation-popup',
@@ -23,39 +24,89 @@ export class UserDelegationPopupComponent
 {
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<UserDelegation> = inject(MAT_DIALOG_DATA);
+  type: UserDelegationType = this.data.extras!.type as UserDelegationType;
 
-  internalUsersInSameDepartment!: InternalUser[];
+  employees: InternalUser[] = [];
   internalUserService = inject(InternalUserService);
   employeeService = inject(EmployeeService);
   departments!: OrganizationUnit[];
   departmentService = inject(OrganizationUnitService);
   today = new Date();
 
-  override ngOnInit() {
-    super.ngOnInit();
-    this.loadInternalUsersInSameDepartment();
-    this.setUserDepartments();
+  get departmentId() {
+    return this.form.controls['departmentId'];
   }
 
-  loadInternalUsersInSameDepartment() {
-    this.internalUserService
-      .getInternalUsersInSameDepartment()
-      .subscribe(users => (this.internalUsersInSameDepartment = users));
+  get delegatorId() {
+    return this.form.controls['delegatorId'];
+  }
+
+  get delegateeId() {
+    return this.form.controls['delegateeId'];
+  }
+
+  override ngOnInit() {
+    super.ngOnInit();
+    this.listenToDepartmentIdChange();
+    this.setUserDepartments();
+    this.initDelegator();
+    this.loademployees();
+  }
+
+  listenToDepartmentIdChange() {
+    this.delegateeId.disable();
+    this.delegatorId.disable();
+    this.departmentId.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(dId => {
+        this.delegateeId.reset();
+        if (!this.isFromUserPreferences()) this.delegatorId.reset();
+        if (dId) {
+          this.delegateeId.enable();
+          if (!this.isFromUserPreferences()) this.delegatorId.enable();
+        } else {
+          this.delegateeId.disable();
+          this.delegatorId.disable();
+        }
+
+        this.loademployees();
+      });
+  }
+
+  initDelegator() {
+    if (this.isFromUserPreferences()) {
+      this.delegatorId.setValue(
+        this.employeeService.getLoginData()?.internalUser.id,
+      );
+    }
   }
 
   setUserDepartments() {
-    this.departments = this.employeeService.getOrganizationUnits();
+    if (this.isFromUserPreferences()) {
+      this.departments = this.employeeService.getOrganizationUnits();
+    } else {
+      this.departmentService.loadAsLookups().subscribe(deps => {
+        this.departments = deps;
+      });
+    }
+  }
+
+  loademployees() {
+    if (this.isFromUserPreferences()) {
+      if (!this.employees.length)
+        this.internalUserService
+          .getPreferencesEmployees()
+          .subscribe(users => (this.employees = users));
+    } else {
+      this.departmentId.value &&
+        this.internalUserService
+          .getAdminEmployees(this.departmentId.value!)
+          .subscribe(users => (this.employees = users));
+    }
   }
 
   _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
-  }
-
-  protected override _afterBuildForm() {
-    super._afterBuildForm();
-    this.form
-      .get('delegatorId')
-      ?.setValue(this.employeeService.getEmployee()!.id);
   }
 
   protected _beforeSave(): boolean | Observable<boolean> {
@@ -67,6 +118,7 @@ export class UserDelegationPopupComponent
     return new UserDelegation().clone<UserDelegation>({
       ...this.model,
       ...this.form.getRawValue(),
+      delegationType: this.type,
     });
   }
 
@@ -81,5 +133,26 @@ export class UserDelegationPopupComponent
   }
   endDateMinDate() {
     return this.form.get('startDate')?.value || this.today;
+  }
+
+  getDelegatees() {
+    return this.getEmployees().filter(u => u.id !== this.delegatorId.value);
+  }
+
+  getDelegators() {
+    return this.getEmployees().filter(u => u.id !== this.delegateeId.value);
+  }
+
+  getEmployees() {
+    return this.employees.filter(
+      e =>
+        !this.isFromUserPreferences() ||
+        e.defaultOUId === this.departmentId.value ||
+        e.id === this.employeeService.getLoginData()?.internalUser.id,
+    );
+  }
+
+  isFromUserPreferences() {
+    return this.type === UserDelegationType.PREFERENCES;
   }
 }
