@@ -1,7 +1,9 @@
 import { BaseCrudService } from '@abstracts/base-crud-service';
 import { HttpContext } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { Constructor } from '@app-types/constructors';
+import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
 import { NO_LOADER_TOKEN } from '@http-contexts/tokens';
@@ -31,16 +33,18 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
   serviceName = 'InboxCounterService';
   configService = inject(ConfigService);
   employeeService = inject(EmployeeService);
+  router = inject(Router);
 
   constructor() {
     super();
     this._startPolling()
       .pipe(
-        filter(() => {
-          return this.employeeService.hasAllPermissions(
+        filter(() =>
+          this.employeeService.hasAllPermissions(
             AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
-          );
-        }),
+          ),
+        ),
+        filter(() => this.router.url === AppFullRoutes.LANDING_PAGE),
       )
       .subscribe(() => this._loadAndSetUserCounters());
   }
