@@ -19,6 +19,7 @@ import { EmployeeService } from '@services/employee.service';
 import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
+import { NavbarService } from '@services/navbar.service';
 import { TeamService } from '@services/team.service';
 import { ReassignTaskPopupComponent } from '@standalone/popups/reassign-task-popup/reassign-task-popup.component';
 import { ignoreErrors } from '@utils/utils';
@@ -42,6 +43,7 @@ export class EmployeesInboxManagmentComponent
   commonService = inject(CommonService);
   lang = inject(LangService);
   dialog = inject(DialogService);
+  navbarService = inject(NavbarService);
 
   departments =
     this.employeeService
@@ -93,6 +95,7 @@ export class EmployeesInboxManagmentComponent
   selection = new SelectionModel<InboxResult>(true, []);
 
   ngOnInit(): void {
+    this.listenToDepartmentChange();
     this.listenToOuChange();
     this.listenToTeamChange();
     this.listenToEmployeeChange();
@@ -101,6 +104,16 @@ export class EmployeesInboxManagmentComponent
 
   assertType(item: InboxResult): InboxResult {
     return item;
+  }
+
+  listenToDepartmentChange() {
+    this.navbarService.departmentChange$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.ouControl.setValue(
+          this.employeeService.getLoginData()?.organizationUnit.id!,
+        );
+      });
   }
 
   listenToOuChange() {
