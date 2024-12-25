@@ -250,7 +250,12 @@ const routes: Routes = [
   {
     path: AppRoutes.USER_DELEGATION,
     component: UserDelegationComponent,
-  }
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_USER_DELEGATION,
+      }),
+    ],
+  },
 ];
 
 @NgModule({

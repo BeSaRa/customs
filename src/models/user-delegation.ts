@@ -4,6 +4,8 @@ import { UserDelegationInterceptor } from '@model-interceptors/user-delegation-i
 import { InterceptModel } from 'cast-response';
 import { AdminResult } from '@models/admin-result';
 import { CustomValidators } from '@validators/custom-validators';
+import { Observable } from 'rxjs';
+import { UserDelegationType } from '@enums/user-delegation-type';
 
 const { send, receive } = new UserDelegationInterceptor();
 
@@ -24,6 +26,9 @@ export class UserDelegation extends BaseModel<
   departmentInfo!: AdminResult;
   isDelegated!: boolean;
 
+  // not related to model
+  delegationType!: UserDelegationType;
+
   buildForm(controls = false): object {
     const { startDate, endDate, delegateeId, departmentId, delegatorId } = this;
     return {
@@ -40,5 +45,19 @@ export class UserDelegation extends BaseModel<
         : departmentId,
       status: 1,
     };
+  }
+
+  override save(): Observable<UserDelegation> {
+    if (this.delegationType === UserDelegationType.PREFERENCES) {
+      return this.id
+        ? this.$$getService$$<UserDelegationService>().updatePreferencesFull(
+            this,
+          )
+        : this.$$getService$$<UserDelegationService>().createPreferencesFull(
+            this,
+          );
+    }
+
+    return super.save();
   }
 }

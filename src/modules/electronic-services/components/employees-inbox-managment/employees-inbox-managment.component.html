@@ -10,7 +10,7 @@
       icon="ACCOUNT_CONVERT"></app-icon-button>
   }
 </div>
-<div class="shadow relative overflow-auto">
+<div class="shadow relative">
   <div class="px-4 pt-4 grid grid-cols-3 gap-4 justify-center items-center">
     <app-select-input
       [formControl]="ouControl"
@@ -30,7 +30,11 @@
       bindLabel="getNames"
       [options]="employees"></app-select-input>
   </div>
-  <table mat-table matSort class="table-style" [dataSource]="dataSource">
+  <table
+    mat-table
+    matSort
+    class="table-style overflow-auto"
+    [dataSource]="dataSource">
     <!-- Select -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>

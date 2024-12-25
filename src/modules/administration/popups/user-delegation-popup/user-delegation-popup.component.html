@@ -1,24 +1,34 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
     <h1>{{ lang.map.menu_user_delegation }}</h1>
-    <app-icon-button tabindex="-1" mat-dialog-close="" class="close-btn" icon="CLOSE"></app-icon-button>
+    <app-icon-button
+      tabindex="-1"
+      mat-dialog-close=""
+      class="close-btn"
+      icon="CLOSE"></app-icon-button>
   </div>
   <div class="dialog-content">
     <ng-container [formGroup]="form">
       <div class="grid grid-cols-2 gap-4">
         <app-select-input
-          formControlName="delegateeId"
-          [options]="internalUsersInSameDepartment"
-          [label]="lang.map.delegated"
-          bindValue="id"
-          bindLabel="getNames" />
-        <app-select-input
+          class="col-span-2"
           formControlName="departmentId"
           [options]="departments"
           [label]="lang.map.department"
           bindValue="id"
           bindLabel="getNames" />
-
+        <app-select-input
+          formControlName="delegatorId"
+          [options]="getDelegators()"
+          [label]="lang.map.delegator"
+          bindValue="id"
+          bindLabel="getNames" />
+        <app-select-input
+          formControlName="delegateeId"
+          [options]="getDelegatees()"
+          [label]="lang.map.delegated"
+          bindValue="id"
+          bindLabel="getNames" />
         <app-input formControlName="startDate" [label]="lang.map.start_date">
           <input
             appControl
@@ -41,11 +51,17 @@
     </ng-container>
   </div>
   <div class="dialog-footer justify-end">
-    @if (!inViewMode()){
-      <app-button (click)="save$.next()" buttonType="primary">{{ lang.map.save }}</app-button>
-      <app-button mat-dialog-close="" buttonType="primary-outline">{{ lang.map.close }}</app-button>
+    @if (!inViewMode()) {
+      <app-button (click)="save$.next()" buttonType="primary">{{
+        lang.map.save
+      }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary-outline">{{
+        lang.map.close
+      }}</app-button>
     } @else {
-      <app-button mat-dialog-close="" buttonType="primary">{{ lang.map.close }}</app-button>
+      <app-button mat-dialog-close="" buttonType="primary">{{
+        lang.map.close
+      }}</app-button>
     }
   </div>
 </div>

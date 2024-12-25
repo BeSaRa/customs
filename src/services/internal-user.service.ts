@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { InternalUser } from '@models/internal-user';
-import { CastResponse, CastResponseContainer } from 'cast-response';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
-import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
-import { Constructor } from '@app-types/constructors';
-import { Pagination } from '@models/pagination';
 import { HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Constructor } from '@app-types/constructors';
 import { BlobModel } from '@models/blob-model';
-import { map, Observable, of } from 'rxjs';
+import { InternalUser } from '@models/internal-user';
+import { Pagination } from '@models/pagination';
 import { UserSignature } from '@models/user-signature';
+import { InternalUserPopupComponent } from '@modules/administration/popups/internal-user-popup/internal-user-popup.component';
+import { CastResponse, CastResponseContainer } from 'cast-response';
+import { map, Observable, of } from 'rxjs';
 
 @CastResponseContainer({
   $pagination: {
@@ -98,8 +98,17 @@ export class InternalUserService extends BaseCrudWithDialogService<
     const url = `${this.getUrlSegment()}/manager/lookup`;
     return this.http.get<InternalUser[]>(url);
   }
+
   @CastResponse()
-  getInternalUsersInSameDepartment(): Observable<InternalUser[]> {
+  getAdminEmployees(ouId: number): Observable<InternalUser[]> {
+    const url = `${this.getUrlSegment()}/admin/delegation/users`;
+    return this.http.get<InternalUser[]>(url, {
+      params: new HttpParams({ fromObject: { ouId } }),
+    });
+  }
+
+  @CastResponse()
+  getPreferencesEmployees(): Observable<InternalUser[]> {
     const url = `${this.getUrlSegment()}/delegation/users`;
     return this.http.get<InternalUser[]>(url);
   }

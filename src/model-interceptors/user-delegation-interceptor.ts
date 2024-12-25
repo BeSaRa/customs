@@ -10,6 +10,7 @@ export class UserDelegationInterceptor
     delete model.delegatorInfo;
     delete model.departmentInfo;
     delete model.statusInfo;
+    delete model.delegationType;
     return model;
   }
 
