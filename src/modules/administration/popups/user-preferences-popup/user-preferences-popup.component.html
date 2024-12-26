@@ -137,8 +137,11 @@
       </mat-tab>
       <mat-tab [label]="lang.map.delegate">
         <div class="p-2 overflow-y-auto max-h-full">
-          <app-user-delegation
-            [type]="UserDelegationType.PREFERENCES"></app-user-delegation>
+          <ng-container
+            *ngComponentOutlet="
+              getDelegationComponent();
+              inputs: { type: UserDelegationType.PREFERENCES }
+            "></ng-container>
         </div>
       </mat-tab>
     </mat-tab-group>

@@ -6,6 +6,7 @@ import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { LangContract } from '@contracts/lang-contract';
 import { UserDelegationType } from '@enums/user-delegation-type';
 import { UserPreferences } from '@models/user-preferences';
+import { UserDelegationComponent } from '@modules/administration/components/user-delegation/user-delegation.component';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { CustomValidators } from '@validators/custom-validators';
@@ -96,5 +97,9 @@ export class UserPreferencesPopupComponent extends AdminDialogComponent<UserPref
     this.model = model;
     this.dialogRef.close(model);
     //this.toast.success(this.lang.map.msg_save_x_success.change({ x: this.model.getNames() }));
+  }
+
+  getDelegationComponent() {
+    return UserDelegationComponent;
   }
 }
