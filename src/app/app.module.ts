@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgOptimizedImage } from '@angular/common';
 import {
   provideHttpClient,
@@ -16,6 +17,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import {
   MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
   MatSelectModule,
@@ -63,8 +65,6 @@ import { AppComponent } from './app.component';
 import { ExternalLoginComponent } from './components/external-login/external-login.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ChatComponent } from '@standalone/components/chat/chat.component';
 
 @NgModule({
@@ -177,6 +177,6 @@ export class AppModule {
         .pipe(tap(() => url.prepareAzureUrls()))
         .pipe(switchMap(() => info.load()))
         .pipe(tap(info => lookup.setLookups(info.lookupMap)))
-        .pipe(switchMap(() => auth.validateToken()));
+        .pipe(switchMap(() => auth.refreshToken()));
   }
 }

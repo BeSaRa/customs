@@ -9,6 +9,8 @@ export const Config = {
   BASE_URL: '',
   TOKEN_HEADER_KEY: 'Authorization',
   TOKEN_STORE_KEY: '$$_T_$$',
+  REFRESH_TOKEN_STORE_KEY: '$$_R_$$',
+  ACCESS_TOKEN_TIMEOUT_IN_MINUTES: 15,
   DATE_FORMAT: 'dd-MM-yyyy',
   DATE_FORMAT_OVERRIDE: {
     parse: {

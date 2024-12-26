@@ -18,7 +18,9 @@ export interface LoginDataContract {
   person: MawaredEmployee | ClearingAgent;
   clearingAgency: ClearingAgency;
   teams: Team[];
-  token: string;
+  accessToken: string;
+  refreshToken: string;
+  accessTimeOut: number;
   type: number;
   simpleSearch: boolean;
   userSecConfig: object;
