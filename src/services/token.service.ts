@@ -1,14 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { RegisterServiceMixin } from '@mixins/register-service-mixin';
-import { ECookieService } from '@services/e-cookie.service';
-import { ConfigService } from '@services/config.service';
-import { HttpClient, HttpContext } from '@angular/common/http';
-import { UrlService } from '@services/url.service';
-import { Observable } from 'rxjs';
-import { LoginDataContract } from '@contracts/login-data-contract';
-import { CastResponse } from 'cast-response';
 import { ServiceContract } from '@contracts/service-contract';
-import { NO_ERROR_HANDLE } from '@http-contexts/tokens';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { ConfigService } from '@services/config.service';
+import { ECookieService } from '@services/e-cookie.service';
+import { UrlService } from '@services/url.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,51 +15,58 @@ export class TokenService
 {
   serviceName = 'TokenService';
   private readonly eCookieService = inject(ECookieService);
-  private readonly tokenStoreKey = inject(ConfigService).CONFIG.TOKEN_STORE_KEY;
+  private readonly config = inject(ConfigService);
+  private readonly tokenStoreKey = this.config.CONFIG.TOKEN_STORE_KEY;
+  private readonly refreshTokenStoreKey =
+    this.config.CONFIG.REFRESH_TOKEN_STORE_KEY;
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private token?: string;
+  private refreshToken?: string;
 
   setToken(token: string | undefined): void {
     this.token = token;
     this.token && this.eCookieService.putE(this.tokenStoreKey, this.token);
   }
 
+  setRefreshToken(token: string | undefined): void {
+    this.refreshToken = token;
+    this.refreshToken &&
+      this.eCookieService.putE(this.refreshTokenStoreKey, this.refreshToken);
+  }
+
   getToken(): string | undefined {
     return this.token;
+  }
+
+  getRefreshToken(): string | undefined {
+    return this.refreshToken;
   }
 
   hasStoredToken(): boolean {
     return !!this.getTokenFromStore()?.length;
   }
 
-  getTokenFromStore(): string | undefined {
-    return this.eCookieService.getE(this.tokenStoreKey);
+  getTokenFromStore(isRefresh = false): string | undefined {
+    return this.eCookieService.getE(
+      isRefresh ? this.refreshTokenStoreKey : this.tokenStoreKey,
+    );
   }
 
-  hasToken(): boolean {
-    return !!this.getToken()?.length;
+  hasToken(isRefresh = false): boolean {
+    return isRefresh
+      ? !!this.getRefreshToken()?.length
+      : !!this.getToken()?.length;
   }
 
-  isSameToken(token: string | undefined): token is string {
-    return this.token === token;
+  isSameToken(token: string | undefined, isRefresh = false): token is string {
+    return isRefresh ? this.refreshToken === token : this.token === token;
   }
 
   clearToken(): void {
     this.token = undefined;
+    this.refreshToken = undefined;
     this.eCookieService.removeE(this.tokenStoreKey);
-  }
-
-  @CastResponse()
-  private _validateToken(): Observable<LoginDataContract> {
-    return this.http.post<LoginDataContract>(
-      this.urlService.URLS.VALIDATE_TOKEN,
-      {},
-      { context: new HttpContext().set(NO_ERROR_HANDLE, true) },
-    );
-  }
-
-  validateToken(): Observable<LoginDataContract> {
-    return this._validateToken();
+    this.eCookieService.removeE(this.refreshTokenStoreKey);
   }
 }
