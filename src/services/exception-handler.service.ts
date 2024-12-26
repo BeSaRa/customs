@@ -1,8 +1,10 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { DialogService } from '@services/dialog.service';
+import { inject, Injectable } from '@angular/core';
+import { ErrorCodes } from '@enums/error-codes';
 import { AdminResult } from '@models/admin-result';
+import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +12,8 @@ import { LangService } from '@services/lang.service';
 export class ExceptionHandlerService {
   private readonly dialog = inject(DialogService);
   private readonly lang = inject(LangService);
+  private readonly auth = inject(AuthService);
+
   httpExceptionHandle(error: HttpErrorResponse): void {
     // this.dialog.error();
     const hasErrorObject = Object.prototype.hasOwnProperty.call(
@@ -21,6 +25,13 @@ export class ExceptionHandlerService {
       error.error ?? {},
       'ms',
     );
+
+    if (
+      this.auth.isAuthenticated() &&
+      error.error.ec === ErrorCodes.ACCESS_TOKEN_TIMED_OUT
+    ) {
+      this.auth.refreshToken().subscribe();
+    }
 
     if (hasErrorObject) {
       // const content = ;

@@ -10,6 +10,7 @@ export const EndPoints = {
   AUTH_CLEARING_AGENCY_VERIFY: '/auth/external/clearing-agency/verify',
   SWITCH_ORGANIZATION: '/auth/internal/organization-unit',
   VALIDATE_TOKEN: '/auth/validate-token',
+  REFRESH_TOKEN: '/auth/refresh-token',
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
   USER_PREFERENCES: '/entity/user-preferences/internal-user-id',
@@ -68,7 +69,7 @@ export const EndPoints = {
   USER_GUIDE: '/entity/user-guide',
   INBOX_COUNTER: 'entity/counter-team',
   USER_MENU_ITEM: 'entity/user-menu-item',
-  USER_DELEGATION: '/entity/user-delegation'
+  USER_DELEGATION: '/entity/user-delegation',
 };
 
 export type EndpointsType = typeof EndPoints;
