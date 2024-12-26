@@ -49,12 +49,12 @@ export class UserDelegationPopupComponent
     super.ngOnInit();
     this.listenToDepartmentIdChange();
     this.setUserDepartments();
-    this.initDelegator();
-    this.loademployees();
+    this.initValues();
   }
 
   listenToDepartmentIdChange() {
-    this.delegateeId.disable();
+    if (!this.isFromUserPreferences()) this.delegateeId.disable();
+    else this.departmentId.disable();
     this.delegatorId.disable();
     this.departmentId.valueChanges
       .pipe(takeUntil(this.destroy$))
@@ -65,7 +65,7 @@ export class UserDelegationPopupComponent
           this.delegateeId.enable();
           if (!this.isFromUserPreferences()) this.delegatorId.enable();
         } else {
-          this.delegateeId.disable();
+          if (!this.isFromUserPreferences()) this.delegateeId.disable();
           this.delegatorId.disable();
         }
 
@@ -73,8 +73,11 @@ export class UserDelegationPopupComponent
       });
   }
 
-  initDelegator() {
+  initValues() {
     if (this.isFromUserPreferences()) {
+      this.departmentId.setValue(
+        this.employeeService.getLoginData()?.internalUser.defaultOUId,
+      );
       this.delegatorId.setValue(
         this.employeeService.getLoginData()?.internalUser.id,
       );
@@ -136,20 +139,11 @@ export class UserDelegationPopupComponent
   }
 
   getDelegatees() {
-    return this.getEmployees().filter(u => u.id !== this.delegatorId.value);
+    return this.employees.filter(u => u.id !== this.delegatorId.value);
   }
 
   getDelegators() {
-    return this.getEmployees().filter(u => u.id !== this.delegateeId.value);
-  }
-
-  getEmployees() {
-    return this.employees.filter(
-      e =>
-        !this.isFromUserPreferences() ||
-        e.defaultOUId === this.departmentId.value ||
-        e.id === this.employeeService.getLoginData()?.internalUser.id,
-    );
+    return this.employees.filter(u => u.id !== this.delegateeId.value);
   }
 
   isFromUserPreferences() {
