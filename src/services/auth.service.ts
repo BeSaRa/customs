@@ -1,33 +1,41 @@
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { UrlService } from '@services/url.service';
+import { Router } from '@angular/router';
+import { AppRoutes } from '@constants/app-routes';
 import { CredentialsContract } from '@contracts/credentials-contract';
+import { ExternalCredentialsContract } from '@contracts/external-credentials-contract';
+import { ExternalLoginDataContract } from '@contracts/external-login-data-contract';
+import { LoginDataContract } from '@contracts/login-data-contract';
+import { ServiceContract } from '@contracts/service-contract';
+import { VerifyExternalCredentialsContract } from '@contracts/verify-external-credentials-contract';
+import { UserTypes } from '@enums/user-types';
+import {
+  IS_REFRESH,
+  NO_ERROR_HANDLE,
+  NO_LOADER_TOKEN,
+} from '@http-contexts/tokens';
+import { RegisterServiceMixin } from '@mixins/register-service-mixin';
+import { CommonService } from '@services/common.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { MenuItemService } from '@services/menu-item.service';
+import { TokenService } from '@services/token.service';
+import { UrlService } from '@services/url.service';
+import { ignoreErrors } from '@utils/utils';
+import { CastResponse } from 'cast-response';
 import {
   catchError,
   iif,
+  interval,
   map,
   Observable,
   of,
   OperatorFunction,
+  Subscription,
   switchMap,
   tap,
 } from 'rxjs';
-import { EmployeeService } from '@services/employee.service';
-import { LoginDataContract } from '@contracts/login-data-contract';
-import { CastResponse } from 'cast-response';
-import { RegisterServiceMixin } from '@mixins/register-service-mixin';
-import { TokenService } from '@services/token.service';
-import { MenuItemService } from '@services/menu-item.service';
-import { ServiceContract } from '@contracts/service-contract';
-import { LangService } from '@services/lang.service';
-import { ExternalCredentialsContract } from '@contracts/external-credentials-contract';
-import { VerifyExternalCredentialsContract } from '@contracts/verify-external-credentials-contract';
-import { UserTypes } from '@enums/user-types';
-import { ignoreErrors } from '@utils/utils';
-import { ExternalLoginDataContract } from '@contracts/external-login-data-contract';
-import { CommonService } from '@services/common.service';
-import { ECookieService } from '@services/e-cookie.service';
-import { ConfigService } from '@services/config.service';
+import { ConfigService } from './config.service';
 import { SpeechService } from '@services/speech.service';
 
 @Injectable({
@@ -45,11 +53,13 @@ export class AuthService
   private readonly menuItemService = inject(MenuItemService);
   private readonly langService = inject(LangService);
   private readonly commonService = inject(CommonService);
-  private readonly eCookieService = inject(ECookieService);
-  private readonly configurationService = inject(ConfigService);
+  private readonly configService = inject(ConfigService);
   private readonly speechService = inject(SpeechService);
+  private readonly router = inject(Router);
 
   private authenticated = false;
+
+  private _refreshSubscription?: Subscription;
 
   @CastResponse()
   private _login(
@@ -106,7 +116,7 @@ export class AuthService
   login(
     credentials: Partial<CredentialsContract>,
   ): Observable<LoginDataContract> {
-    return this._login(credentials).pipe(this.setDateAfterAuthenticate());
+    return this._login(credentials).pipe(this.setDataAfterAuthenticate());
   }
 
   externalLogin(
@@ -120,46 +130,54 @@ export class AuthService
       delete credentials.userType;
       delete credentials.qid;
       return this._verifyExternalAgencyLogin(credentials).pipe(
-        this.setDateAfterAuthenticate(),
+        this.setDataAfterAuthenticate(),
       );
     } else {
       delete credentials.userType;
       delete credentials.eId;
       return this._verifyExternalLogin(credentials).pipe(
-        this.setDateAfterAuthenticate(),
+        this.setDataAfterAuthenticate(),
       );
     }
   }
 
-  getTokenFromStore(): string | undefined {
-    return this.eCookieService.getE(
-      this.configurationService.CONFIG.TOKEN_STORE_KEY,
-    );
+  private _listenToRefresh() {
+    if (this._refreshSubscription) this._refreshSubscription.unsubscribe();
+
+    this._refreshSubscription = interval(
+      Math.floor(
+        (this.employeeService.getLoginData()?.accessTimeOut ??
+          this.configService.CONFIG.ACCESS_TOKEN_TIMEOUT_IN_MINUTES) *
+          0.95 *
+          60 *
+          1000,
+      ),
+    )
+      .pipe(switchMap(() => this.refreshToken()))
+      .subscribe(() => {});
   }
 
-  validateToken(): Observable<boolean> {
+  refreshToken(): Observable<boolean> {
     return of(false)
       .pipe(
-        tap(
-          () =>
-            this.tokenService.getTokenFromStore() &&
-            this.tokenService.setToken(this.tokenService.getTokenFromStore()),
+        tap(() =>
+          this.tokenService.setRefreshToken(
+            this.tokenService.getTokenFromStore(true),
+          ),
         ),
       )
       .pipe(
         switchMap(() =>
           iif(
-            () => this.tokenService.hasToken(),
-            this.tokenService
-              .validateToken()
-              .pipe(this.setDateAfterAuthenticate()),
+            () => this.tokenService.hasToken(true),
+            this._refreshToken().pipe(this.setDataAfterAuthenticate()),
             of(false),
           ),
         ),
       )
       .pipe(
         switchMap(() =>
-          !this.getTokenFromStore()
+          !this.tokenService.getTokenFromStore()
             ? of(null)
             : this.commonService.loadCounters(),
         ),
@@ -167,25 +185,43 @@ export class AuthService
       .pipe(map(() => true))
       .pipe(
         catchError(() => {
+          this.logout();
+          this.router.navigate([AppRoutes.LOGIN]);
           return of(false);
         }),
       );
+  }
+
+  @CastResponse()
+  private _refreshToken(): Observable<LoginDataContract> {
+    return this.http.post<LoginDataContract>(
+      this.urlService.URLS.REFRESH_TOKEN,
+      {},
+      {
+        context: new HttpContext()
+          .set(NO_LOADER_TOKEN, true)
+          .set(NO_ERROR_HANDLE, true)
+          .set(IS_REFRESH, true),
+      },
+    );
   }
 
   logout(): void {
     this.authenticated = false;
     this.tokenService.clearToken();
     this.employeeService.clearEmployee();
+    this._refreshSubscription?.unsubscribe();
   }
 
-  private setDateAfterAuthenticate(): OperatorFunction<
-    LoginDataContract,
-    LoginDataContract
-  > {
+  private setDataAfterAuthenticate(
+    listenToRefresh = true,
+  ): OperatorFunction<LoginDataContract, LoginDataContract> {
     return source => {
       return source.pipe(
         map(data => this.employeeService.setLoginData(data)),
-        tap(data => this.tokenService.setToken(data.token)),
+        tap(data => this.tokenService.setToken(data.accessToken)),
+        tap(data => this.tokenService.setRefreshToken(data.refreshToken)),
+        tap(() => listenToRefresh && this._listenToRefresh()),
         tap(
           data =>
             data.internalUser &&
@@ -225,7 +261,7 @@ export class AuthService
 
   switchOrganization(organizationId: number): Observable<LoginDataContract> {
     return this._switchOrganization(organizationId).pipe(
-      this.setDateAfterAuthenticate(),
+      this.setDataAfterAuthenticate(false),
     );
   }
 }

@@ -10,6 +10,7 @@ export const EndPoints = {
   AUTH_CLEARING_AGENCY_VERIFY: '/auth/external/clearing-agency/verify',
   SWITCH_ORGANIZATION: '/auth/internal/organization-unit',
   VALIDATE_TOKEN: '/auth/validate-token',
+  REFRESH_TOKEN: '/auth/refresh-token',
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
   USER_PREFERENCES: '/entity/user-preferences/internal-user-id',
