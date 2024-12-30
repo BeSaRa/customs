@@ -62,6 +62,10 @@ export class UserDelegationComponent extends AdminComponent<
     return { type: this.type() ?? UserDelegationType.ADMIN };
   }
 
+  override _getEditExtras() {
+    return { type: this.type() ?? UserDelegationType.ADMIN };
+  }
+
   isFromUserPreferences() {
     return this.type() === UserDelegationType.PREFERENCES;
   }
