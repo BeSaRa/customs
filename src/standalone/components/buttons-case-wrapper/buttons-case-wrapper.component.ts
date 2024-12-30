@@ -18,7 +18,6 @@ import { AppIcons } from '@constants/app-icons';
 import { ActivitiesName } from '@enums/activities-name';
 import { CaseTypes } from '@enums/case-types';
 import { CommonCaseStatus } from '@enums/common-case-status';
-import { MemorandumCategories } from '@enums/memorandum-categories';
 import { OpenFrom } from '@enums/open-from';
 import { SaveTypes } from '@enums/save-types';
 import { SendTypes } from '@enums/send-types';
@@ -30,7 +29,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { BaseCase } from '@models/base-case';
 import { Grievance } from '@models/grievance';
 import { Investigation } from '@models/investigation';
-import { Memorandum } from '@models/memorandum';
 import { Penalty } from '@models/penalty';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
@@ -542,21 +540,17 @@ export class ButtonsCaseWrapperComponent
         }),
       )
       .pipe(
-        switchMap(response => {
-          return this.legalAffairsProceduresComponent()!
-            .memorandumMasterComponent()!
-            .models$.pipe(
-              map(models =>
-                models.find(
-                  item => item.category === MemorandumCategories.LEGAL_RESULT,
-                ),
+        map(response => {
+          return {
+            model: this.legalAffairsProceduresComponent()!
+              .memorandumMasterComponent()!
+              .models$.value.find(
+                item =>
+                  item.isLegalResult() &&
+                  item.isForCurrentTask(this.model() as Investigation),
               ),
-            )
-            .pipe(
-              map(model => {
-                return { model, response };
-              }),
-            );
+            response,
+          };
         }),
       )
       .pipe(
@@ -564,36 +558,13 @@ export class ButtonsCaseWrapperComponent
           ({ model }) =>
             !model &&
             this.dialog.error(
-              this.lang.map
-                .there_is_no_investigation_result_to_perform_this_action,
+              this.lang.map.you_have_to_approve_one_legal_opinion_at_least,
             ),
         ),
       )
       .pipe(filter(({ model }) => !!model))
       .pipe(
-        map(({ model, response }) => {
-          const memos =
-            this.legalAffairsProceduresComponent()?.memorandumMasterComponent()
-              ?.models as unknown as Memorandum[];
-
-          const { isAnyApproved, lastModifiedApprovedMemo } =
-            this.getLastModifiedApprovedMemo(memos);
-
-          if (!isAnyApproved) {
-            this.dialog.error(
-              this.lang.map.you_have_to_approve_one_legal_opinion_at_least,
-            );
-          }
-
-          return { model, response, lastModifiedApprovedMemo };
-        }),
-      )
-      .pipe(
-        filter(({ lastModifiedApprovedMemo }) => !!lastModifiedApprovedMemo),
-      )
-      .pipe(
-        switchMap(({ model, response, lastModifiedApprovedMemo }) => {
-          model!.note = lastModifiedApprovedMemo.note;
+        switchMap(({ model, response }) => {
           return (this.model() as Investigation)
             .getService()
             .openEditMemorandumDialog(
@@ -674,29 +645,6 @@ export class ButtonsCaseWrapperComponent
     return (this.model() as Investigation).offenderViolationInfo.map(
       i => i.offenderId,
     );
-  }
-
-  getLastModifiedApprovedMemo(memos: Memorandum[]) {
-    let isAnyApproved = false;
-    let lastModifiedApprovedMemo: Memorandum = memos[0];
-
-    memos.forEach(memo => {
-      if (memo.isApproved) {
-        isAnyApproved = true;
-        if (
-          !lastModifiedApprovedMemo ||
-          new Date(memo.lastModified) >
-            new Date(lastModifiedApprovedMemo.lastModified)
-        ) {
-          lastModifiedApprovedMemo = memo;
-        }
-      }
-    });
-
-    return {
-      isAnyApproved: isAnyApproved,
-      lastModifiedApprovedMemo: lastModifiedApprovedMemo,
-    };
   }
 
   protected readonly TaskNames = TaskNames;
