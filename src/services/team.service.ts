@@ -90,4 +90,12 @@ export class TeamService extends BaseCrudWithDialogService<
       { params: new HttpParams({ fromObject: ouId ? { ouId } : {} }) },
     );
   }
+
+  @CastResponse(() => InternalUser, {
+    unwrap: 'rs',
+    fallback: 'internalUser$',
+  })
+  loadDCTeamMembers() {
+    return this.http.get<InternalUser[]>(this.getUrlSegment() + `/dc-members`);
+  }
 }
