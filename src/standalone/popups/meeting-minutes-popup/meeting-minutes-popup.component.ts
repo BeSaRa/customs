@@ -1,43 +1,42 @@
 import { Component, inject, OnInit, Signal } from '@angular/core';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogClose,
-  MatDialogRef,
-} from '@angular/material/dialog';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { LangService } from '@services/lang.service';
-import { filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { Meeting } from '@models/meeting';
-import { ControlDirective } from '@standalone/directives/control.directive';
-import { InputComponent } from '@standalone/components/input/input.component';
 import {
   MatDatepicker,
   MatDatepickerInput,
 } from '@angular/material/datepicker';
 import {
+  MAT_DIALOG_DATA,
+  MatDialogClose,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { GeneralStatusEnum } from '@enums/general-status-enum';
+import { MeetingStatusEnum } from '@enums/meeting-status-enum';
+import { OperationType } from '@enums/operation-type';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { AdminResult } from '@models/admin-result';
+import { InternalUser } from '@models/internal-user';
+import { Investigation } from '@models/investigation';
+import { Meeting } from '@models/meeting';
+import { MeetingAttendance } from '@models/meeting-attendance';
+import { MeetingMinutes } from '@models/meeting-minutes';
+import { DialogService } from '@services/dialog.service';
+import { InvestigationService } from '@services/investigation.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
+import { TeamService } from '@services/team.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { MeetingAttendanceListComponent } from '@standalone/components/meeting-attendance-list/meeting-attendance-list.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import { CustomValidators } from '@validators/custom-validators';
+import {
   NgxMatTimepickerComponent,
   NgxMatTimepickerDirective,
 } from 'ngx-mat-timepicker';
-import { MeetingAttendanceListComponent } from '@standalone/components/meeting-attendance-list/meeting-attendance-list.component';
-import { InvestigationService } from '@services/investigation.service';
-import { CustomValidators } from '@validators/custom-validators';
-import { DialogService } from '@services/dialog.service';
-import { LookupService } from '@services/lookup.service';
-import { MeetingAttendance } from '@models/meeting-attendance';
-import { TeamService } from '@services/team.service';
-import { TeamNames } from '@enums/team-names';
-import { InternalUser } from '@models/internal-user';
-import { AdminResult } from '@models/admin-result';
-import { OperationType } from '@enums/operation-type';
-import { MeetingStatusEnum } from '@enums/meeting-status-enum';
-import { Investigation } from '@models/investigation';
-import { MeetingMinutes } from '@models/meeting-minutes';
-import { GeneralStatusEnum } from '@enums/general-status-enum';
+import { filter, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 @Component({
   selector: 'app-meeting-minutes-popup',
@@ -98,7 +97,7 @@ export class MeetingMinutesPopupComponent
 
   getAttendanceList() {
     this.teamService
-      .loadTeamMembers(TeamNames.Disciplinary_Committee)
+      .loadDCTeamMembers()
       .pipe(
         map((users: InternalUser[]) => {
           return users.map((user: InternalUser) => {
