@@ -22,7 +22,10 @@
     (matSortChange)="sort($event)"
     [dataSource]="dataSource">
     <ng-container matColumnDef="select">
-      <th mat-header-cell *matHeaderCellDef>
+      <th
+        [ngClass]="{ '!hidden': isFromUserPreferences() }"
+        mat-header-cell
+        *matHeaderCellDef>
         <mat-checkbox
           [disabled]="(loading$ | async)!"
           (change)="$event ? toggleAllRows() : null"
@@ -30,7 +33,10 @@
           [indeterminate]="selection.hasValue() && !isAllSelected()">
         </mat-checkbox>
       </th>
-      <td mat-cell *matCellDef="let element">
+      <td
+        [ngClass]="{ '!hidden': isFromUserPreferences() }"
+        mat-cell
+        *matCellDef="let element">
         <mat-checkbox
           [disabled]="(loading$ | async)!"
           (click)="$event.stopPropagation()"
