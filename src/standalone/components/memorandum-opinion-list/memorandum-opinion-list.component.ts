@@ -23,7 +23,7 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MemorandumCategories } from '@enums/memorandum-categories';
+import { OffenderInvStatus } from '@enums/offender-inv-status';
 import { ProofTypes } from '@enums/proof-types';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { Investigation } from '@models/investigation';
@@ -37,7 +37,6 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { ignoreErrors } from '@utils/utils';
 import { BehaviorSubject, Subject, tap } from 'rxjs';
 import { filter, switchMap, takeUntil } from 'rxjs/operators';
-import { OffenderInvStatus } from '@enums/offender-inv-status';
 
 @Component({
   selector: 'app-memorandum-opinion-list',
@@ -230,7 +229,7 @@ export class MemorandumOpinionListComponent
   private listenToModelsChange() {
     this.models$.pipe(takeUntil(this.destroy$)).subscribe(models => {
       this.models = models.filter(item => {
-        return item.category === MemorandumCategories.LEGAL_MEMORANDUM;
+        return item.isLegalMemorandum();
       });
     });
   }
@@ -239,16 +238,11 @@ export class MemorandumOpinionListComponent
     this.masterComponent()
       ?.models$.pipe(takeUntil(this.destroy$))
       .subscribe(models => {
-        this.models = models.filter(
-          item => item.category === MemorandumCategories.LEGAL_RESULT,
-        );
+        this.models = models.filter(item => item.isLegalResult());
       });
   }
 
   isMemoForCurrentTask(memo: Memorandum) {
-    return (
-      memo.decisionFullSerial ===
-      this.model().taskDetails.activityProperties?.DecisionFullSerial.value
-    );
+    return memo.isForCurrentTask(this.model());
   }
 }
