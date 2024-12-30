@@ -47,15 +47,13 @@ export class UserDelegationPopupComponent
 
   override ngOnInit() {
     super.ngOnInit();
-    this.listenToDepartmentIdChange();
     this.setUserDepartments();
-    this.initValues();
+    this.init();
+    this.loademployees();
+    this.listenToDepartmentIdChange();
   }
 
   listenToDepartmentIdChange() {
-    if (!this.isFromUserPreferences()) this.delegateeId.disable();
-    else this.departmentId.disable();
-    this.delegatorId.disable();
     this.departmentId.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(dId => {
@@ -73,7 +71,13 @@ export class UserDelegationPopupComponent
       });
   }
 
-  initValues() {
+  init() {
+    if (this.isFromUserPreferences()) this.departmentId.disable();
+    if (!this.isFromUserPreferences() && !this.inEditMode())
+      this.delegateeId.disable();
+    if (this.isFromUserPreferences() || !this.inEditMode())
+      this.delegatorId.disable();
+
     if (this.isFromUserPreferences()) {
       this.departmentId.setValue(
         this.employeeService.getLoginData()?.internalUser.defaultOUId,
