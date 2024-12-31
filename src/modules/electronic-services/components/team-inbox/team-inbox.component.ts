@@ -127,9 +127,12 @@ export class TeamInboxComponent
     this.reloadInbox$
       .pipe(
         switchMap(() => {
-          return this.inboxService.loadTeamInbox(teamId, {
-            counterId: this.selectedCounterId.value,
-          });
+          return this.inboxService.loadTeamInbox(
+            teamId,
+            //   {
+            //   counterId: this.selectedCounterId.value,
+            // }
+          );
         }),
         takeUntil(this.destroy$),
       )
