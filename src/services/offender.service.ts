@@ -94,6 +94,19 @@ export class OffenderService extends BaseCrudService<Offender> {
       },
     );
   }
+  @CastResponse(() => Offender, { unwrap: 'rs' })
+  loadPenaltyModification(offenderId: number) {
+    return this.http.get<Offender[]>(
+      this.getUrlSegment() + '/admin/penalty-modification',
+      {
+        params: new HttpParams({
+          fromObject: {
+            offenderId,
+          },
+        }),
+      },
+    );
+  }
 
   @CastResponse(undefined, {
     fallback: '$paginationForCases',

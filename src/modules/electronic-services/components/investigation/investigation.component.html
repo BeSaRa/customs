@@ -4,6 +4,11 @@
     <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
     </h1>
+    @if (isReviewPenaltyModification()){
+      <h1 class="text-xl min-h-[3rem] align-middle flex items-center mx-1">
+        ({{lang.map.menu_penalty_modification}})
+      </h1>
+    }
     <div class="flex-auto"></div>
     @if(hasRequestStatement()){
       <app-icon-button (click)="openRequestStatementDialog()" [matTooltip]="lang.map.request_statement" icon="REQUEST_STATEMENT" />
