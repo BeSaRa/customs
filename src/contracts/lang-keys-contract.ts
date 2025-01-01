@@ -815,6 +815,8 @@ export interface LangKeysContract {
   incoming: string;
   unknown: string;
   menu_penalty_modification: string;
+  approve_modification: string;
+  penalties: string;
   go_to_page: string;
   menu_ai_search: string;
   search_message: string;

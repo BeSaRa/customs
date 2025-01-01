@@ -67,6 +67,7 @@ import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-investigation',
@@ -653,6 +654,12 @@ export class InvestigationComponent
 
   get isStatementReply() {
     return this.model.getResponses()?.includes(TaskResponses.STM_REPLY);
+  }
+  isReviewPenaltyModification() {
+    return (
+      this.model.getActivityName() ===
+      ActivitiesName.REVIEW_PENALTY_MODIFICATION
+    );
   }
 
   get hasStatementReply(): boolean {

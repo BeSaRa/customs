@@ -75,6 +75,8 @@ import { ProofTypes } from '@enums/proof-types';
 import { OpenFrom } from '@enums/open-from';
 import { OffenderStatusEnum } from '@enums/offender-status.enum';
 import { OffenderInvStatus } from '@enums/offender-inv-status';
+import { MatDialogClose } from '@angular/material/dialog';
+import { ModifiedPenaltyComponent } from '@modules/electronic-services/components/modified-penalty/modified-penalty.component';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -95,6 +97,7 @@ import { OffenderInvStatus } from '@enums/offender-inv-status';
     ReactiveFormsModule,
     MatCheckbox,
     SituationSearchBtnComponent,
+    MatDialogClose,
   ],
   animations: [
     trigger('detailExpand', [
@@ -746,5 +749,17 @@ export class OffendersViolationsPreviewComponent
       OffenderStatusEnum.TERMINATE,
       OffenderStatusEnum.SAVED,
     ].includes(offender.status);
+  }
+
+  showModificationPenalties($event: MouseEvent, element: Offender) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.dialog.open(ModifiedPenaltyComponent, {
+      data: { offenderId: element.id },
+    });
+  }
+
+  isPenaltyModified(element: Offender) {
+    return element.status === OffenderStatusEnum.PENALTY_UPDATED;
   }
 }
