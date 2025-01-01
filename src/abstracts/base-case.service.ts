@@ -261,6 +261,7 @@ export abstract class BaseCaseService<M>
     const penaltyInterceptor = new PenaltyInterceptor();
     return this._getCasePenalty(caseId, activityName).pipe(
       map(rs => {
+        console.log('from getCasePenalty', rs);
         const obj: {
           [key: string]: { first: ManagerDecisions; second: Penalty[] };
         } = {};

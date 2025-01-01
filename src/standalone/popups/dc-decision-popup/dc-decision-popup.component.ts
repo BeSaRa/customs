@@ -185,6 +185,7 @@ export class DcDecisionPopupComponent
   });
   offenderPenalties = signal(this.data.offenderPenalties);
   penalties = computed(() => {
+    console.log('from penalty computed', this.offenderPenalties().second);
     return this.offenderPenalties().second;
   });
   penaltiesMap = computed<Record<number, Penalty>>(() => {
