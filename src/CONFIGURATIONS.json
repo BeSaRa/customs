@@ -3,5 +3,5 @@
     "DEV_IP": "https://192.168.51.5:9445/cdi/api/",
     "QA_IP": "https://192.168.53.15:9445/cdi/api/"
   },
-  "BASE_ENVIRONMENT": "DEV_IP"
+  "BASE_ENVIRONMENT": "QA_IP"
 }

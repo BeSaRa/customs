@@ -19,6 +19,7 @@ export interface LoginDataContract {
   clearingAgency: ClearingAgency;
   teams: Team[];
   token: string;
+  accessToken: string;
   type: number;
   simpleSearch: boolean;
   userSecConfig: object;
