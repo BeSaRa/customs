@@ -112,7 +112,16 @@
       {{ lang.map.status }}
     </th>
     <td mat-cell *matCellDef="let element">
-      {{ element.statusInfo && element.statusInfo?.getNames() }}
+      <div class="flex flex-row items-center ">
+        {{ element.statusInfo && element.statusInfo?.getNames() }}
+        @if(isPenaltyModified(element)){
+        <app-icon-button
+          icon="MODIFICATION_PENALTIES"
+          class="m-1 text-primary"
+          (click)="showModificationPenalties($event, element)"
+        ></app-icon-button>
+        }
+      </div>
     </td>
   </ng-container>
 

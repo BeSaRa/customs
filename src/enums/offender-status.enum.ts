@@ -4,4 +4,5 @@ export enum OffenderStatusEnum {
   THE_PENALTY_WAS_IMPOSED = 4,
   SAVED = 5,
   DELAYED = 11,
+  PENALTY_UPDATED = 14,
 }

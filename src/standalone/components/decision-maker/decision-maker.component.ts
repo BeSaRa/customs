@@ -20,7 +20,6 @@ import { PenaltyService } from '@services/penalty.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-decision-maker',
@@ -348,13 +347,6 @@ export class DecisionMakerComponent
       this.penaltyMap()[this.offender().id].second.find(
         item => item.penaltyKey === penaltyKey,
       )!,
-    );
-  }
-
-  isReviewPenaltyModification() {
-    return (
-      this.model().getActivityName() ===
-      ActivitiesName.REVIEW_PENALTY_MODIFICATION
     );
   }
 }
