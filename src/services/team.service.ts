@@ -63,20 +63,12 @@ export class TeamService extends BaseCrudWithDialogService<
     unwrap: 'rs',
     fallback: 'internalUser$',
   })
-  loadTeamMembers(authName: TeamNames) {
-    return this.http.get<InternalUser[]>(
-      this.getUrlSegment() + `/members/auth/${authName}`,
-    );
-  }
+  loadTeamMembers(authName: TeamNames, ouId: number) {
+    const params = new HttpParams().set('ouId', ouId);
 
-  @CastResponse(() => InternalUser, {
-    unwrap: 'rs',
-    fallback: 'internalUser$',
-  })
-  loadTeamMembersByDep(authName: TeamNames, depId: number) {
-    console.log(depId);
     return this.http.get<InternalUser[]>(
-      this.getUrlSegment() + `/members/auth/${authName}/depId/${depId}`,
+      `${this.getUrlSegment()}/members/auth/${authName}`,
+      { params },
     );
   }
 
