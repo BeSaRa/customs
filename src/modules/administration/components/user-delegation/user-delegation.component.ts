@@ -66,6 +66,12 @@ export class UserDelegationComponent extends AdminComponent<
     return { type: this.type() ?? UserDelegationType.ADMIN };
   }
 
+  isDelegateeOnPreferences(element: UserDelegation) {
+    return (
+      this.isFromUserPreferences() &&
+      element.delegateeId === this.employeeService.getEmployee()!.id
+    );
+  }
   isFromUserPreferences() {
     return this.type() === UserDelegationType.PREFERENCES;
   }

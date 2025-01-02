@@ -49,7 +49,7 @@ export class UserDelegationPopupComponent
     super.ngOnInit();
     this.setUserDepartments();
     this.init();
-    this.loademployees();
+    this.loadEmployees();
     this.listenToDepartmentIdChange();
   }
 
@@ -67,7 +67,7 @@ export class UserDelegationPopupComponent
           this.delegatorId.disable();
         }
 
-        this.loademployees();
+        this.loadEmployees();
       });
   }
 
@@ -98,7 +98,7 @@ export class UserDelegationPopupComponent
     }
   }
 
-  loademployees() {
+  loadEmployees() {
     if (this.isFromUserPreferences()) {
       if (!this.employees.length)
         this.internalUserService
