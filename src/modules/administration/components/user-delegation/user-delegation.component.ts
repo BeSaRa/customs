@@ -9,6 +9,7 @@ import { TextFilterColumn } from '@models/text-filter-column';
 import { UserDelegation } from '@models/user-delegation';
 import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
 import { ConfigService } from '@services/config.service';
+import { StatusTypes } from '@enums/status-types';
 import { UserDelegationService } from '@services/user-delegation.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -25,6 +26,7 @@ export class UserDelegationComponent extends AdminComponent<
   type = input<UserDelegationType>();
   config = inject(ConfigService);
   service = inject(UserDelegationService);
+  protected readonly StatusTypes = StatusTypes;
   actions: ContextMenuActionContract<UserDelegation>[] = [
     {
       name: 'view',
@@ -44,6 +46,7 @@ export class UserDelegationComponent extends AdminComponent<
     new TextFilterColumn('department'),
     new TextFilterColumn('startDate'),
     new TextFilterColumn('endDate'),
+    new TextFilterColumn('status'),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
 
