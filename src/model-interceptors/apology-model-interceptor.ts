@@ -5,7 +5,6 @@ export class ApologyModelInterceptor
   implements ModelInterceptorContract<ApologyModel>
 {
   send(model: Partial<ApologyModel>): Partial<ApologyModel> {
-    console.log(model);
     return model;
   }
 
