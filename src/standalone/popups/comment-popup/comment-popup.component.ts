@@ -68,7 +68,7 @@ export class CommentPopupComponent
   private teamService = inject(TeamService);
 
   private employeeService = inject(EmployeeService);
-
+  ouId = this.employeeService.getOrganizationUnit()!.id;
   previewFormList: TaskResponses[] = [
     TaskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT,
     TaskResponses.REFERRAL_TO_PRESIDENT,
@@ -138,14 +138,14 @@ export class CommentPopupComponent
   private _loadUsersList() {
     if (this.isSendToHrUser) {
       this.teamService
-        .loadTeamMembers(TeamNames.Human_Resources)
+        .loadTeamMembers(TeamNames.Human_Resources, this.ouId)
         .subscribe(data => {
           this.usersList = data;
         });
     } else if (this.isSendToUser) {
       this.isReviewCustomsAffairsActivity
         ? this.teamService
-            .loadTeamMembers(TeamNames.Customs_Affairs)
+            .loadTeamMembers(TeamNames.Customs_Affairs, this.ouId)
             .subscribe(data => {
               this.usersList = data;
             })
@@ -159,7 +159,7 @@ export class CommentPopupComponent
             });
     } else if (this.isSendToInvestigator) {
       this.teamService
-        .loadTeamMembers(TeamNames.Investigator)
+        .loadTeamMembers(TeamNames.Investigator, this.ouId)
         .subscribe(data => {
           this.usersList = data;
         });
@@ -167,16 +167,14 @@ export class CommentPopupComponent
       this.isSendToPAOfficeUser &&
       this.employeeService.getOrganizationUnit()?.id
     ) {
-      const orgUnitId = this.employeeService.getOrganizationUnit()!.id;
-
       this.teamService
-        .loadTeamMembersByDep(TeamNames.President_Assistant_Office, orgUnitId)
+        .loadTeamMembers(TeamNames.President_Assistant_Office, this.ouId)
         .subscribe(data => {
           this.usersList = data;
         });
     } else if (this.isSendToPOfficeUser) {
       this.teamService
-        .loadTeamMembers(TeamNames.President_Office)
+        .loadTeamMembers(TeamNames.President_Office, this.ouId)
         .subscribe(data => {
           this.usersList = data;
         });

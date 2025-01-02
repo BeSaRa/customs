@@ -47,6 +47,7 @@ import { TeamService } from '@services/team.service';
 import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
 import { InvestigationAttendance } from '@models/investigation-attendance';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -91,6 +92,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   investigationReportService = inject(InvestigationReportService);
   lookupService = inject(LookupService);
   teamService = inject(TeamService);
+  employeeService = inject(EmployeeService);
+  ouId = this.employeeService.getOrganizationUnit()!.id;
   override form!: UntypedFormGroup;
   attendeeTypes = this.lookupService.lookups.attendeeType;
   investigationModel = signal(this.data.extras!.model!);
@@ -195,7 +198,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
 
   loadInvestigatorsTeam() {
     this.teamService
-      .loadTeamMembers(TeamNames.Investigator)
+      .loadTeamMembers(TeamNames.Investigator, this.ouId)
       .subscribe((investigators: InternalUser[]) => {
         this.investigators = investigators;
       });
