@@ -27,7 +27,6 @@ export class UserDelegationComponent extends AdminComponent<
   type = input<UserDelegationType>();
   config = inject(ConfigService);
   service = inject(UserDelegationService);
-  protected readonly StatusTypes = StatusTypes;
   actions: ContextMenuActionContract<UserDelegation>[] = [
     {
       name: 'view',
@@ -90,7 +89,6 @@ export class UserDelegationComponent extends AdminComponent<
       )
       .pipe(
         switchMap(model => {
-          console.log(model);
           return this.dialog
             .open(ViewAttachmentPopupComponent, {
               data: {
@@ -102,4 +100,6 @@ export class UserDelegationComponent extends AdminComponent<
       )
       .subscribe();
   }
+
+  protected readonly StatusTypes = StatusTypes;
 }
