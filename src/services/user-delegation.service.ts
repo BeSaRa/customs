@@ -1,7 +1,7 @@
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { ComponentType } from '@angular/cdk/portal';
 import { HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 import { SortOptionsContract } from '@contracts/sort-options-contract';
@@ -15,6 +15,9 @@ import {
   HasInterception,
   InterceptParam,
 } from 'cast-response';
+import { map, Observable } from 'rxjs';
+import { BlobModel } from '@models/blob-model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @CastResponseContainer({
   $pagination: {
@@ -35,6 +38,8 @@ export class UserDelegationService extends BaseCrudWithDialogService<
   UserDelegation
 > {
   serviceName = 'UserDelegationService';
+  domSanitizer = inject(DomSanitizer);
+
   protected getModelClass(): Constructor<UserDelegation> {
     return UserDelegation;
   }
@@ -125,5 +130,13 @@ export class UserDelegationService extends BaseCrudWithDialogService<
       this.getUrlSegment() + '/preferences/full',
       model,
     );
+  }
+
+  getFileAttachments(delegationVsId: string): Observable<BlobModel> {
+    return this.http
+      .get(`/investigation-case/document/latest/${delegationVsId}/content`, {
+        responseType: 'blob',
+      })
+      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
   }
 }

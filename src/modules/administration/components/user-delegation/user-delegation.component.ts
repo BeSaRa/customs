@@ -11,7 +11,8 @@ import { UserDelegationPopupComponent } from '@modules/administration/popups/use
 import { ConfigService } from '@services/config.service';
 import { StatusTypes } from '@enums/status-types';
 import { UserDelegationService } from '@services/user-delegation.service';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap } from 'rxjs';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 
 @Component({
   selector: 'app-user-delegation',
@@ -49,12 +50,14 @@ export class UserDelegationComponent extends AdminComponent<
     new TextFilterColumn('status'),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
+  viewDecisionFile$ = new Subject<string>();
 
   override ngOnInit(): void {
     super.ngOnInit();
     this.filter$ = new BehaviorSubject<Partial<UserDelegation>>({
       delegationType: this.type() ?? UserDelegationType.ADMIN,
     });
+    this.listenToViewDecisionFile();
   }
 
   isDelegator(element: UserDelegation) {
@@ -77,5 +80,26 @@ export class UserDelegationComponent extends AdminComponent<
   }
   isFromUserPreferences() {
     return this.type() === UserDelegationType.PREFERENCES;
+  }
+  private listenToViewDecisionFile() {
+    this.viewDecisionFile$
+      .pipe(
+        switchMap(delegationVsId => {
+          return this.service.getFileAttachments(delegationVsId);
+        }),
+      )
+      .pipe(
+        switchMap(model => {
+          console.log(model);
+          return this.dialog
+            .open(ViewAttachmentPopupComponent, {
+              data: {
+                model,
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }
