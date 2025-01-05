@@ -11,19 +11,15 @@
   }
 </div>
 <div class="shadow relative">
-  <div class="px-4 pt-4 grid grid-cols-3 gap-4 justify-center items-center">
+  <div class="px-4 pt-4 grid grid-cols-2 gap-4 justify-center items-center">
     <app-select-input
       [formControl]="ouControl"
       [label]="lang.map.department"
       bindLabel="getNames"
       bindValue="id"
-      [options]="departments"></app-select-input>
-    <app-select-input
-      [formControl]="teamControl"
-      [label]="lang.map.main_team"
-      bindLabel="getNames"
-      bindValue="id"
-      [options]="teams"></app-select-input>
+      [options]="departments"
+      [nullable]="false"
+    ></app-select-input>
     <app-select-input
       [formControl]="employeeControl"
       [label]="lang.map.lbl_employee"

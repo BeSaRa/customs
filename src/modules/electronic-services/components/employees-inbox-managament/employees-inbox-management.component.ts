@@ -12,7 +12,6 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
 import { QueryResultSet } from '@models/query-result-set';
-import { Team } from '@models/team';
 import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
@@ -20,10 +19,10 @@ import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { NavbarService } from '@services/navbar.service';
-import { TeamService } from '@services/team.service';
 import { ReassignTaskPopupComponent } from '@standalone/popups/reassign-task-popup/reassign-task-popup.component';
 import { ignoreErrors } from '@utils/utils';
 import { filter, take, takeUntil } from 'rxjs';
+import { InternalUserService } from '@services/internal-user.service';
 
 @Component({
   selector: 'app-employees-inbox-management',
@@ -36,7 +35,7 @@ export class EmployeesInboxManagementComponent
 {
   @ViewChild('paginator') paginator!: MatPaginator;
 
-  teamService = inject(TeamService);
+  internalUserService = inject(InternalUserService);
   employeeService = inject(EmployeeService);
   lookupService = inject(LookupService);
   inboxService = inject(InboxService);
@@ -49,14 +48,11 @@ export class EmployeesInboxManagementComponent
     this.employeeService
       .getLoginData()
       ?.organizationUnits.filter(ou => ou.id !== -1) ?? [];
-  teams: Team[] = [];
   employees: InternalUser[] = [];
-  availableEmployeesToAssign: InternalUser[] = [];
 
   ouControl = new FormControl<number | null>(
     this.employeeService.getLoginData()?.organizationUnit.id!,
   );
-  teamControl = new FormControl<number | null>(null);
   employeeControl = new FormControl<InternalUser | null>(null);
 
   queryResultSet?: QueryResultSet;
@@ -75,8 +71,6 @@ export class EmployeesInboxManagementComponent
     'RISK_STATUS',
     'actions',
   ];
-
-  riskStatus = this.lookupService.lookups.riskStatus;
 
   actions: ContextMenuActionContract<InboxResult>[] = [
     {
@@ -97,7 +91,6 @@ export class EmployeesInboxManagementComponent
   ngOnInit(): void {
     this.listenToDepartmentChange();
     this.listenToOuChange();
-    this.listenToTeamChange();
     this.listenToEmployeeChange();
     this.ouControl.disable(); // until implementing super admin from BE side
   }
@@ -120,16 +113,6 @@ export class EmployeesInboxManagementComponent
     this.ouControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(ouId => {
-        this.teamControl.setValue(null);
-        this.loadTeams();
-      });
-  }
-
-  listenToTeamChange() {
-    this.teamControl.valueChanges
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(tId => {
-        this.employeeControl.setValue(null);
         this.loadEmployees();
       });
   }
@@ -142,19 +125,11 @@ export class EmployeesInboxManagementComponent
       });
   }
 
-  loadTeams() {
-    this.selection.clear();
-    this.teamService
-      .loadDepartmentTeams(this.ouControl.value!)
-      .pipe(ignoreErrors())
-      .subscribe(teams => (this.teams = teams));
-  }
-
   loadEmployees() {
-    if (!this.teamControl.value) return;
+    if (!this.ouControl.value) return;
     this.selection.clear();
-    this.teamService
-      .loadTeamMembersById(this.teamControl.value!, this.ouControl.value!)
+    this.internalUserService
+      .loadUsersByOuId(this.ouControl.value!, false)
       .pipe(ignoreErrors())
       .subscribe(emps => {
         this.employees = emps;
@@ -196,21 +171,32 @@ export class EmployeesInboxManagementComponent
       : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  openReassignPopup(tasks: InboxResult[]) {
-    this.dialog
-      .open(ReassignTaskPopupComponent, {
-        data: {
-          tasks,
-          employees: this.employees.filter(
-            e => e.id !== this.employeeControl.value?.id,
-          ),
-        },
-      })
-      .afterClosed()
-      .pipe(
-        take(1),
-        filter(res => res === UserClick.YES),
-      )
-      .subscribe(() => this.loadEmployeeInbox());
+  openReassignPopup(tasks: InboxResult[]): void {
+    const ouId = this.ouControl.value!;
+    const currentEmployeeId = this.employeeControl.value?.id;
+
+    this.internalUserService
+      .loadUsersByOuId(ouId)
+      .pipe(ignoreErrors())
+      .subscribe(employees => {
+        const availableEmployees = employees.filter(
+          emp => emp.id !== currentEmployeeId,
+        );
+
+        const dialogRef = this.dialog.open(ReassignTaskPopupComponent, {
+          data: {
+            tasks,
+            employees: availableEmployees,
+          },
+        });
+
+        dialogRef
+          .afterClosed()
+          .pipe(
+            take(1),
+            filter(response => response === UserClick.YES),
+          )
+          .subscribe(() => this.loadEmployeeInbox());
+      });
   }
 }
