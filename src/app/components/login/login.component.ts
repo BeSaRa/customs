@@ -1,12 +1,7 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { LangService } from '@services/lang.service';
 import { AuthService } from '@services/auth.service';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Subject, switchMap } from 'rxjs';
 import { ignoreErrors } from '@utils/utils';
 import { ToastService } from '@services/toast.service';
@@ -14,6 +9,7 @@ import { Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppRoutes } from '@constants/app-routes';
 import { CommonService } from '@services/common.service';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-login',
@@ -46,14 +42,10 @@ export class LoginComponent implements OnInit {
   };
   selectedPasswordOptions = this.eyeIcons['eye-off'];
 
-  form: FormGroup<{
-    lang: FormControl<string>;
-    userName: FormControl<string>;
-    userPassword: FormControl<string>;
-  }> = this.fb.nonNullable.group({
+  form = this.fb.nonNullable.group({
     lang: ['AR'],
-    userName: ['', Validators.required],
-    userPassword: ['', Validators.required],
+    userName: ['', CustomValidators.required],
+    userPassword: ['', CustomValidators.required],
   });
 
   login$: Subject<void> = new Subject<void>();
