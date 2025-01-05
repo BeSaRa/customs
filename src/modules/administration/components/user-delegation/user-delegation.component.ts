@@ -13,6 +13,9 @@ import { StatusTypes } from '@enums/status-types';
 import { UserDelegationService } from '@services/user-delegation.service';
 import { BehaviorSubject, Subject, switchMap } from 'rxjs';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { SelectFilterColumn } from '@models/select-filter-column';
+import { OrganizationUnitService } from '@services/organization-unit.service';
+import { InternalUserService } from '@services/internal-user.service';
 
 @Component({
   selector: 'app-user-delegation',
@@ -27,6 +30,7 @@ export class UserDelegationComponent extends AdminComponent<
   type = input<UserDelegationType>();
   config = inject(ConfigService);
   service = inject(UserDelegationService);
+  internalEmployees = inject(InternalUserService).loadAsLookups();
   actions: ContextMenuActionContract<UserDelegation>[] = [
     {
       name: 'view',
@@ -41,12 +45,32 @@ export class UserDelegationComponent extends AdminComponent<
   // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<UserDelegation> = new ColumnsWrapper(
     new NoneFilterColumn('select'),
-    new TextFilterColumn('delegator'),
-    new TextFilterColumn('delegatee'),
-    new TextFilterColumn('department'),
-    new TextFilterColumn('startDate'),
-    new TextFilterColumn('endDate'),
-    new TextFilterColumn('status'),
+    new SelectFilterColumn(
+      'delegatorId',
+      this.internalEmployees,
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'delegateeId',
+      this.internalEmployees,
+      'id',
+      'getNames',
+    ),
+    new SelectFilterColumn(
+      'departmentId',
+      inject(OrganizationUnitService).loadAsLookups(),
+      'id',
+      'getNames',
+    ),
+    new NoneFilterColumn('startDate'),
+    new NoneFilterColumn('endDate'),
+    new SelectFilterColumn(
+      'status',
+      this.lookupService.lookups.commonStatus,
+      'lookupKey',
+      'getNames',
+    ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
   viewDecisionFile$ = new Subject<string>();
@@ -57,6 +81,7 @@ export class UserDelegationComponent extends AdminComponent<
       delegationType: this.type() ?? UserDelegationType.ADMIN,
     });
     this.listenToViewDecisionFile();
+    this.filter$.next({ status: StatusTypes.ACTIVE });
   }
 
   isDelegator(element: UserDelegation) {
