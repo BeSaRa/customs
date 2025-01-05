@@ -99,19 +99,19 @@ export class InternalUserService extends BaseCrudWithDialogService<
     return this.http.get<InternalUser[]>(url);
   }
 
-  @CastResponse()
-  getAdminEmployees(ouId: number): Observable<InternalUser[]> {
-    const url = `${this.getUrlSegment()}/admin/delegation/users`;
-    return this.http.get<InternalUser[]>(url, {
-      params: new HttpParams({ fromObject: { ouId } }),
-    });
-  }
+  // @CastResponse()
+  // getAdminEmployees(ouId: number): Observable<InternalUser[]> {
+  //   const url = `${this.getUrlSegment()}/admin/delegation/users`;
+  //   return this.http.get<InternalUser[]>(url, {
+  //     params: new HttpParams({ fromObject: { ouId } }),
+  //   });
+  // }
 
-  @CastResponse()
-  getPreferencesEmployees(): Observable<InternalUser[]> {
-    const url = `${this.getUrlSegment()}/delegation/users`;
-    return this.http.get<InternalUser[]>(url);
-  }
+  // @CastResponse()
+  // getPreferencesEmployees(): Observable<InternalUser[]> {
+  //   const url = `${this.getUrlSegment()}/delegation/users`;
+  //   return this.http.get<InternalUser[]>(url);
+  // }
 
   @CastResponse()
   loadUsersByOuId(ouId: number, active = true) {

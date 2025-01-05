@@ -27,6 +27,7 @@ export class UserDelegationPopupComponent
   type: UserDelegationType = this.data.extras!.type as UserDelegationType;
 
   employees: InternalUser[] = [];
+  activeEmployees: InternalUser[] = [];
   internalUserService = inject(InternalUserService);
   employeeService = inject(EmployeeService);
   departments!: OrganizationUnit[];
@@ -111,13 +112,20 @@ export class UserDelegationPopupComponent
     if (this.isFromUserPreferences()) {
       if (!this.employees.length)
         this.internalUserService
-          .getPreferencesEmployees()
+          .loadUsersByOuId(this.departmentId.value!, false)
           .subscribe(users => (this.employees = users));
+      this.internalUserService
+        .loadUsersByOuId(this.departmentId.value!)
+        .subscribe(users => (this.activeEmployees = users));
     } else {
       this.departmentId.value &&
         this.internalUserService
-          .getAdminEmployees(this.departmentId.value!)
+          .loadUsersByOuId(this.departmentId.value!, false)
           .subscribe(users => (this.employees = users));
+      this.departmentId.value &&
+        this.internalUserService
+          .loadUsersByOuId(this.departmentId.value!)
+          .subscribe(users => (this.activeEmployees = users));
     }
   }
 
@@ -152,7 +160,7 @@ export class UserDelegationPopupComponent
   }
 
   getDelegatees() {
-    return this.employees.filter(u => u.id !== this.delegatorId.value);
+    return this.activeEmployees.filter(u => u.id !== this.delegatorId.value);
   }
 
   getDelegators() {
