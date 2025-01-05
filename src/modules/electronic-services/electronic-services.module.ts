@@ -49,7 +49,7 @@ import { CallRequestsComponent } from '@standalone/components/call-requests/call
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 import { CourtDecisionListComponent } from '@standalone/components/court-decision-list/court-decision-list.component';
-import { EmployeesInboxManagmentComponent } from './components/employees-inbox-managment/employees-inbox-managment.component';
+import { EmployeesInboxManagementComponent } from '@modules/electronic-services/components/employees-inbox-managament/employees-inbox-management.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 
@@ -65,7 +65,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
     InvestigationDraftsComponent,
     FinesComponent,
     CourtDecisionsComponent,
-    EmployeesInboxManagmentComponent,
+    EmployeesInboxManagementComponent,
   ],
   imports: [
     CommonModule,

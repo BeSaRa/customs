@@ -148,7 +148,7 @@ export const Menus: MenuItemContract[] = [
   },
   {
     id: MenuIdes.EMPLOYEES_INBOX_MANAGEMENT,
-    langKey: 'employees_inbox_managment',
+    langKey: 'employees_inbox_management',
     icon: AppIcons.MANAGE_INBOX,
     path: AppFullRoutes.EMPLOYEES_INBOX_MANAGEMENT,
     parent: MenuIdes.ELECTRONIC_SERVICES,
