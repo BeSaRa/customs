@@ -53,6 +53,15 @@ export class UserDelegationPopupComponent
     this.listenToDepartmentIdChange();
   }
 
+  protected override _afterBuildForm() {
+    super._afterBuildForm();
+    if (this.inEditMode()) {
+      this.delegateeId.disable();
+      this.delegatorId.disable();
+      this.departmentId.disable();
+    }
+  }
+
   listenToDepartmentIdChange() {
     this.departmentId.valueChanges
       .pipe(takeUntil(this.destroy$))
