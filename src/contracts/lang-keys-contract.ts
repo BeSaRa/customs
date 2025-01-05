@@ -735,7 +735,7 @@ export interface LangKeysContract {
   investigation_status: string;
   save_and_prepare_for_approve: string;
   an_error_occured_while_preparing_for_approve: string;
-  employees_inbox_managment: string;
+  employees_inbox_management: string;
   please_review_the_legal_books_that_are_permitted_to_be_viewed_by_other_departments: string;
   disclaimer: string;
   sub_lists: string;

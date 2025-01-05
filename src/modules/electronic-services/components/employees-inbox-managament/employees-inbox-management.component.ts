@@ -26,11 +26,11 @@ import { ignoreErrors } from '@utils/utils';
 import { filter, take, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-employees-inbox-managment',
-  templateUrl: './employees-inbox-managment.component.html',
-  styleUrl: './employees-inbox-managment.component.scss',
+  selector: 'app-employees-inbox-management',
+  templateUrl: './employees-inbox-management.component.html',
+  styleUrl: './employees-inbox-management.component.scss',
 })
-export class EmployeesInboxManagmentComponent
+export class EmployeesInboxManagementComponent
   extends OnDestroyMixin(class {})
   implements OnInit
 {
