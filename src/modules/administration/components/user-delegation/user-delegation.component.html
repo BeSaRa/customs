@@ -119,12 +119,12 @@
             [matTooltip]="lang.map.view"
             (click)="view$.next(element)"
             icon="VIEW"></app-icon-button>
-          @if (!isDelegateeOnPreferences(element)) {
+          @if (!isDelegateeOnPreferences(element) && isActive(element)) {
             <app-icon-button
-            [disabled]="(loading$ | async)!"
-            [matTooltip]="lang.map.edit"
-            (click)="edit$.next(element)"
-            icon="EDIT"></app-icon-button>
+              [disabled]="(loading$ | async)!"
+              [matTooltip]="lang.map.edit"
+              (click)="edit$.next(element)"
+              icon="EDIT"></app-icon-button>
             @if(element.status !== StatusTypes.DELETED){
               <app-icon-button
                 [disabled]="(loading$ | async)!"

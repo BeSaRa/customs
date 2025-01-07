@@ -109,6 +109,9 @@ export class UserDelegationComponent extends AdminComponent<
   isFromUserPreferences() {
     return this.type() === UserDelegationType.PREFERENCES;
   }
+  isActive(element: UserDelegation) {
+    return element.status === StatusTypes.ACTIVE;
+  }
   private listenToViewDelegationFile() {
     this.viewDelegationFile$
       .pipe(
