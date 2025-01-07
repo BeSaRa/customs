@@ -131,12 +131,4 @@ export class UserDelegationService extends BaseCrudWithDialogService<
       model,
     );
   }
-
-  getFileAttachments(delegationVsId: string): Observable<BlobModel> {
-    return this.http
-      .get(`/investigation-case/document/latest/${delegationVsId}/content`, {
-        responseType: 'blob',
-      })
-      .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
-  }
 }

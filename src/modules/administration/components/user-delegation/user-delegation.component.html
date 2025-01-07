@@ -137,7 +137,7 @@
             <app-icon-button
               [disabled]="(loading$ | async)!"
               [matTooltip]="lang.map.attachment"
-              (click)="viewDecisionFile$.next(element.delegationVsId)"
+              (click)="viewDelegationFile$.next(element.delegationVsId)"
               icon="ATTACHMENT" />
           }
         </div>
