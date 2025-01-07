@@ -15,6 +15,7 @@ import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { InternalUserService } from '@services/internal-user.service';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-user-delegation',
@@ -29,6 +30,7 @@ export class UserDelegationComponent extends AdminComponent<
   type = input<UserDelegationType>();
   config = inject(ConfigService);
   service = inject(UserDelegationService);
+  investigationService = inject(InvestigationService);
   internalEmployees = inject(InternalUserService).loadAsLookups();
   actions: ContextMenuActionContract<UserDelegation>[] = [
     {
@@ -72,7 +74,7 @@ export class UserDelegationComponent extends AdminComponent<
     ),
     new NoneFilterColumn('actions'),
   ).attacheFilter(this.filter$);
-  viewDecisionFile$ = new Subject<string>();
+  viewDelegationFile$ = new Subject<string>();
 
   override ngOnInit(): void {
     super.ngOnInit();
@@ -83,7 +85,7 @@ export class UserDelegationComponent extends AdminComponent<
           ? StatusTypes.ACTIVE
           : undefined,
     });
-    this.listenToViewDecisionFile();
+    this.listenToViewDelegationFile();
   }
 
   isDelegator(element: UserDelegation) {
@@ -107,11 +109,13 @@ export class UserDelegationComponent extends AdminComponent<
   isFromUserPreferences() {
     return this.type() === UserDelegationType.PREFERENCES;
   }
-  private listenToViewDecisionFile() {
-    this.viewDecisionFile$
+  private listenToViewDelegationFile() {
+    this.viewDelegationFile$
       .pipe(
         switchMap(delegationVsId => {
-          return this.service.getFileAttachments(delegationVsId);
+          return this.investigationService.getDecisionFileAttachments(
+            delegationVsId,
+          );
         }),
       )
       .pipe(
