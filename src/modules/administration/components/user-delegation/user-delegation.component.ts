@@ -5,7 +5,6 @@ import { ContextMenuActionContract } from '@contracts/context-menu-action-contra
 import { UserDelegationType } from '@enums/user-delegation-type';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { NoneFilterColumn } from '@models/none-filter-column';
-import { TextFilterColumn } from '@models/text-filter-column';
 import { UserDelegation } from '@models/user-delegation';
 import { UserDelegationPopupComponent } from '@modules/administration/popups/user-delegation-popup/user-delegation-popup.component';
 import { ConfigService } from '@services/config.service';
@@ -67,7 +66,7 @@ export class UserDelegationComponent extends AdminComponent<
     new NoneFilterColumn('endDate'),
     new SelectFilterColumn(
       'status',
-      this.lookupService.lookups.commonStatus,
+      this.lookupService.lookups.DelegationStatus,
       'lookupKey',
       'getNames',
     ),
@@ -79,9 +78,12 @@ export class UserDelegationComponent extends AdminComponent<
     super.ngOnInit();
     this.filter$ = new BehaviorSubject<Partial<UserDelegation>>({
       delegationType: this.type() ?? UserDelegationType.ADMIN,
+      status:
+        this.type() !== UserDelegationType.PREFERENCES
+          ? StatusTypes.ACTIVE
+          : undefined,
     });
     this.listenToViewDecisionFile();
-    this.filter$.next({ status: StatusTypes.ACTIVE });
   }
 
   isDelegator(element: UserDelegation) {
