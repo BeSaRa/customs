@@ -62,4 +62,5 @@ export interface LookupMapContract {
   responsibilityRepeatViolations: Lookup[];
   caseGeneralStatus: Lookup[];
   penaltyStatus: Lookup[];
+  DelegationStatus: Lookup[];
 }
