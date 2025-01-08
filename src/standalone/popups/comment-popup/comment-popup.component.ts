@@ -207,7 +207,10 @@ export class CommentPopupComponent
       .pipe(filter(() => this.form.valid))
       .pipe(
         switchMap(() => {
-          if (this.response === this.taskResponses.DC_RETURN_PA) {
+          if (
+            this.response === this.taskResponses.DC_RETURN_PA &&
+            !this.model.inMyInbox()
+          ) {
             return this.model.claim();
           }
           return of(null);
