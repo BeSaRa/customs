@@ -8,7 +8,7 @@ export const Config = {
   BASE_URL: '',
   TOKEN_HEADER_KEY: 'Authorization',
   TOKEN_STORE_KEY: '$$_T_$$',
-  DATE_FORMAT: 'dd-MM-YYYY',
+  DATE_FORMAT: 'dd-MM-yyyy',
   DATE_FORMAT_OVERRIDE: {
     parse: {
       dateInput: 'dd-MM-yyyy',
