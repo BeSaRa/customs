@@ -129,7 +129,7 @@ export class EmployeesInboxManagementComponent
     if (!this.ouControl.value) return;
     this.selection.clear();
     this.internalUserService
-      .loadUsersByOuId(this.ouControl.value!, false)
+      .loadUsersByOuIdAdmin(this.ouControl.value!, false)
       .pipe(ignoreErrors())
       .subscribe(emps => {
         this.employees = emps;
@@ -176,7 +176,7 @@ export class EmployeesInboxManagementComponent
     const currentEmployeeId = this.employeeControl.value?.id;
 
     this.internalUserService
-      .loadUsersByOuId(ouId)
+      .loadUsersByOuIdAdmin(ouId)
       .pipe(ignoreErrors())
       .subscribe(employees => {
         const availableEmployees = employees.filter(
