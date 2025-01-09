@@ -110,21 +110,20 @@ export class UserDelegationPopupComponent
 
   loadEmployees() {
     if (this.isFromUserPreferences()) {
-      if (!this.employees.length)
-        this.internalUserService
-          .loadUsersByOuId(this.departmentId.value!, false)
-          .subscribe(users => (this.employees = users));
       this.internalUserService
-        .loadUsersByOuId(this.departmentId.value!)
+        .loadUsersByMyOuId(false)
+        .subscribe(users => (this.employees = users));
+      this.internalUserService
+        .loadUsersByMyOuId(true)
         .subscribe(users => (this.activeEmployees = users));
     } else {
       this.departmentId.value &&
         this.internalUserService
-          .loadUsersByOuId(this.departmentId.value!, false)
+          .loadUsersByOuIdAdmin(this.departmentId.value!, false)
           .subscribe(users => (this.employees = users));
       this.departmentId.value &&
         this.internalUserService
-          .loadUsersByOuId(this.departmentId.value!)
+          .loadUsersByOuIdAdmin(this.departmentId.value!, true)
           .subscribe(users => (this.activeEmployees = users));
     }
   }

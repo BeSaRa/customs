@@ -114,10 +114,17 @@ export class InternalUserService extends BaseCrudWithDialogService<
   // }
 
   @CastResponse()
-  loadUsersByOuId(ouId: number, active = true) {
+  loadUsersByOuIdAdmin(ouId: number, active = true) {
     const url = `${this.getUrlSegment()}/admin/ou-tree/users`;
     return this.http.get<InternalUser[]>(url, {
       params: new HttpParams({ fromObject: { ouId, active } }),
+    });
+  }
+  @CastResponse()
+  loadUsersByMyOuId(active = true) {
+    const url = `${this.getUrlSegment()}/ou-tree/users`;
+    return this.http.get<InternalUser[]>(url, {
+      params: new HttpParams({ fromObject: { active } }),
     });
   }
 }
