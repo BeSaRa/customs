@@ -56,6 +56,6 @@ export class VerifyPopupComponent implements OnInit {
   }
 
   isValidOTP() {
-    return this.control.value.length === 4;
+    return this.control.value.length === 6;
   }
 }

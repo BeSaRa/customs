@@ -1,17 +1,17 @@
 .custom-otp-control {
   margin: auto;
-  width: 161px;
+  width: 240px;
   height: 60px;
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: 14px;
-  background-image: linear-gradient(
-    to right,
-    black 67%,
-    rgba(255, 255, 255, 0) 0%
-  );
-  background-position: 49px bottom;
-  background-size: 39px 2px;
+  text-align: center;
+  letter-spacing: 18px;
+  background-position: 0 bottom;
+  background-size: 40px 6px;
   background-repeat: repeat-x;
   outline: none;
+  background-image: linear-gradient(
+      black 67%,
+      rgba(255, 255, 255, 0) 0%
+  );
 }
