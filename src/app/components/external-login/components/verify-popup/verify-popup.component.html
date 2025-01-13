@@ -10,11 +10,11 @@
     </p>
     <div class="grid grid-cols-2 gap-4 [&>*]:col-span-2">
       <input
-        type="number"
+        type="text"
         class="custom-otp-control"
         appControl
         [formControl]="control"
-        [mask]="inputMaskPatterns.NUMBER_ONLY_WITH_LIMIT(4, false)" />
+        maxlength="6" />
     </div>
   </div>
   <div class="dialog-footer justify-end">
