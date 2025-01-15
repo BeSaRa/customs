@@ -15,7 +15,7 @@
               {{ team.team.getNames() }}
             </p>
             @for (counter of team.counters; track counter) {
-              <mat-list-option [value]="counter.counterId">{{
+              <mat-list-option [value]="counter.id">{{
                 counter.counterInfo.getNames()
               }}</mat-list-option>
             }

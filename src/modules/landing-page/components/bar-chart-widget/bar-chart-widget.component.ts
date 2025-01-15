@@ -1,17 +1,13 @@
 import { WidgetState } from '@abstracts/widget-state';
+import { AfterViewInit, Component, computed } from '@angular/core';
+import { AdminResult } from '@models/admin-result';
+import { BaseChartWidgetDirective } from '@modules/landing-page/directives/base-chart-widget.directive';
 import {
-  AfterViewInit,
-  Component,
-  effect,
-  ElementRef,
-  ViewChild,
-} from '@angular/core';
-import { Colors } from '@enums/colors';
-import { InboxCounter } from '@models/inbox-counter';
-import { BaseWidgetDirective } from '@modules/landing-page/directives/base-widget.directive';
-import { getHexColorWithOpacity } from '@utils/utils';
-import { Chart, ChartTypeRegistry, CoreChartOptions } from 'chart.js/auto';
-import { takeUntil } from 'rxjs';
+  Chart,
+  ChartTypeRegistry,
+  CoreChartOptions,
+  ScriptableContext,
+} from 'chart.js/auto';
 
 export class BarChartWidgetState extends WidgetState {}
 
@@ -21,50 +17,24 @@ export class BarChartWidgetState extends WidgetState {}
   styleUrl: './bar-chart-widget.component.scss',
 })
 export class BarChartWidgetComponent
-  extends BaseWidgetDirective
+  extends BaseChartWidgetDirective
   implements AfterViewInit
 {
-  @ViewChild('canvas') private _canvas!: ElementRef<HTMLCanvasElement>;
-
-  chart?: Chart;
-
-  private _updateEffect = effect(() => {
-    this._updateChartData();
+  private _teamsColorsIndices = computed(() => {
+    let _index = 0;
+    return this._chartWidgetCounters().reduce(
+      (acc, cur) => {
+        if (!acc[cur.teamId]) {
+          acc[cur.teamId] = [_index, cur.teamInfo];
+          _index += 1;
+        }
+        return acc;
+      },
+      {} as Record<number, [number, AdminResult]>,
+    );
   });
 
-  override _isMulti() {
-    return true;
-  }
-
-  ngAfterViewInit(): void {
-    this._initializeChart();
-    this._listToLangChange();
-  }
-
-  _listToLangChange() {
-    this.lang.change$.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      this._updateChartData();
-    });
-  }
-
-  private _updateChartData() {
-    const _counters = this.widgetCounters();
-    if (this.chart) {
-      this.chart.data.labels = this._getLabels(_counters);
-      this.chart.data.datasets[0].data = this._getValues(_counters);
-      this.chart.update();
-    }
-  }
-
-  private _getLabels(counters: InboxCounter[]) {
-    return counters.map(counter => counter.counterInfo.getNames());
-  }
-
-  private _getValues(counters: InboxCounter[]) {
-    return counters.map(counter => counter.inboxCount);
-  }
-
-  private _initializeChart() {
+  override _initializeChart() {
     this.chart = new Chart(this._canvas.nativeElement, {
       type: 'bar',
       data: {
@@ -73,7 +43,12 @@ export class BarChartWidgetComponent
           {
             data: [],
             label: '',
-            backgroundColor: getHexColorWithOpacity(Colors.PRIMARY, 0.99),
+            backgroundColor: (context: ScriptableContext<any>) =>
+              this._getColor(
+                this._teamsColorsIndices()[
+                  this._getCounterAtIndex(context.dataIndex)?.teamId ?? 0
+                ]?.[0] ?? 0,
+              ),
           },
         ],
       },
@@ -101,6 +76,30 @@ export class BarChartWidgetComponent
             },
           },
           deferred: false,
+          tooltip: {
+            callbacks: {
+              title: this._getCustomTooltipTitle,
+              label: this._getCustomTooltipLabel,
+            },
+          },
+          legend: {
+            labels: {
+              generateLabels: () => {
+                return Object.keys(this._teamsColorsIndices()).map(teamId => {
+                  return {
+                    text: this._teamsColorsIndices()[
+                      teamId as unknown as number
+                    ][1].getNames(),
+                    fillStyle: this._getColor(
+                      this._teamsColorsIndices()[
+                        teamId as unknown as number
+                      ]?.[0] ?? 0,
+                    ),
+                  };
+                });
+              },
+            },
+          },
         },
       } as unknown as CoreChartOptions<keyof ChartTypeRegistry>,
     });

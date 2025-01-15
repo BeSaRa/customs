@@ -1,5 +1,5 @@
 import { WidgetState } from '@abstracts/widget-state';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { InobxCounterTypes } from '@enums/inbox-counter-types';
@@ -18,16 +18,16 @@ export class CounterWidgetComponent extends BaseWidgetDirective {
     return false;
   }
 
+  counter = computed(() => this.widgetCounters()[0]);
+
   navigate() {
-    if (
-      this.widgetCounters()[0].counterId === InobxCounterTypes.PERSONAL_INBOX
-    ) {
+    if (this.counter().counterId === InobxCounterTypes.PERSONAL_INBOX) {
       this.router.navigate([AppFullRoutes.USER_INBOX]);
     } else {
       this.router.navigate([AppFullRoutes.TEAM_INBOX], {
         queryParams: {
-          teamId: this.widgetCounters()[0].teamId,
-          counterId: this.widgetCounters()[0].counterId,
+          teamId: this.counter().teamId,
+          counterId: this.counter().counterId,
         },
       });
     }
