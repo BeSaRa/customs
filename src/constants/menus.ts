@@ -295,4 +295,12 @@ export const Menus: MenuItemContract[] = [
     parent: MenuIdes.ADMINISTRATION,
     permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
   },
+  {
+    id: MenuIdes.AI_SEARCH,
+    langKey: 'menu_ai_search',
+    icon: AppIcons.AI_SEARCH,
+    path: AppFullRoutes.AI_SEARCH,
+    parent: MenuIdes.ADMINISTRATION,
+    // permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
+  },
 ];

@@ -121,6 +121,7 @@ export const AppIcons = {
   OPEN_IN_NEW: 'open-in-new',
   OPEN: 'open-in-new',
   CUSTOM_MENU: 'microsoft-xbox-controller-menu',
+  AI_SEARCH: 'card-search-outline',
 };
 
 export type AppIconsType = typeof AppIcons;
