@@ -23,9 +23,7 @@ export class WidgetOptionsService {
   widgetCounters = computed(() => {
     return this.inboxCounterService
       .userCounters()
-      .filter(c =>
-        this.widgetState()?.countersIds?.find(id => id === c.counterId),
-      );
+      .filter(c => this.widgetState()?.countersIds?.find(id => id === c.id));
   });
 
   setWidgetData(data: LayoutWidgetModel) {

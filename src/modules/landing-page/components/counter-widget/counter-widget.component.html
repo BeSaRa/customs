@@ -8,10 +8,10 @@
         icon="OPEN"></app-icon-button>
     }
     <span class="font-bold text-center text-2xl">
-      {{ widgetCounters()[0].counterInfo.getNames() }}</span
+      {{ counter().counterInfo.getNames() }}</span
     >
     <span
-      [countUp]="widgetCounters()[0].inboxCount"
+      [countUp]="counter().inboxCount"
       [options]="{ scrollSpyOnce: true }"
       class="text-5xl font-bold"></span>
     <span class="font-bold text-center text-sm">{{

@@ -11,7 +11,7 @@ import { AdminResult } from '@models/admin-result';
 import { InboxCounter } from '@models/inbox-counter';
 import { Pagination } from '@models/pagination';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { filter, take, timer } from 'rxjs';
+import { filter, Subscription, take, timer } from 'rxjs';
 import { ConfigService } from './config.service';
 import { EmployeeService } from './employee.service';
 
@@ -35,9 +35,11 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
   employeeService = inject(EmployeeService);
   router = inject(Router);
 
+  private _poolingSubscribtion: Subscription;
+
   constructor() {
     super();
-    this._startPolling()
+    this._poolingSubscribtion = this._startPolling()
       .pipe(
         filter(() =>
           this.employeeService.hasAllPermissions(
@@ -81,6 +83,10 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
       0,
       this.configService.CONFIG.TIME_TO_RELOAD_USER_INBOX_COUNTERS * 1000,
     );
+  }
+
+  stopPolling() {
+    this._poolingSubscribtion.unsubscribe();
   }
 
   private _loadAndSetUserCounters() {

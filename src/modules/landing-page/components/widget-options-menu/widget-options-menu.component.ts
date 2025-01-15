@@ -26,7 +26,6 @@ export class WidgetOptionsMenuComponent
   inboxCountersService = inject(InboxCounterService);
 
   optionsForm = this.fb.group(this.optionsService.widgetState()!.buildFrom());
-  // optionsForm = this.fb.group({ counterIds: [] });
 
   ngOnInit(): void {
     this.optionsForm.valueChanges
