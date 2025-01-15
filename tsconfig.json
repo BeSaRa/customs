@@ -3,6 +3,7 @@
   "compilerOptions": {
     "paths": {
       "@services/*": ["./src/services/*"],
+      "@stores/*": ["./src/stores/*"],
       "@models/*": ["./src/models/*"],
       "@modules/*": ["./src/modules/*"],
       "@contracts/*": ["./src/contracts/*"],

@@ -815,4 +815,13 @@ export interface LangKeysContract {
   incoming: string;
   unknown: string;
   go_to_page: string;
+  menu_ai_search: string;
+  search_message: string;
+  search_in_website: string;
+  search_about: string;
+  result_count: string;
+  show_less: string;
+  show_more: string;
+  cancel_recording: string;
+  click_to_speak: string;
 }

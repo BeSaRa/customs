@@ -28,6 +28,7 @@ import { ExternalLoginDataContract } from '@contracts/external-login-data-contra
 import { CommonService } from '@services/common.service';
 import { ECookieService } from '@services/e-cookie.service';
 import { ConfigService } from '@services/config.service';
+import { SpeechService } from '@services/speech.service';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,7 @@ export class AuthService
   private readonly commonService = inject(CommonService);
   private readonly eCookieService = inject(ECookieService);
   private readonly configurationService = inject(ConfigService);
+  private readonly speechService = inject(SpeechService);
 
   private authenticated = false;
 
@@ -198,6 +200,7 @@ export class AuthService
           this.menuItemService.filterStaticMenu(data.menuItems || []);
         }),
         tap(() => this.menuItemService.buildHierarchy()),
+        tap(() => this.speechService.generateSpeechToken().subscribe()),
       );
     };
   }
