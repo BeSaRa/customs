@@ -14,10 +14,10 @@ export class SpeechService {
   private readonly appStore = inject(AppStore);
 
   generateSpeechToken(): Observable<SpeechTokenContract> {
+    const url =
+      'https://ebla-ai-demo-002.azurewebsites.net/api/v1/speech/token';
     return this.http
-      .get<SpeechTokenContract>(
-        'https://ebla-ai-demo-002.azurewebsites.net/api/v1/speech/token',
-      )
+      .get<SpeechTokenContract>(url)
       .pipe(tap(res => this.appStore.updateSpeechToken(res)));
   }
 }
