@@ -8,6 +8,7 @@ import {
 } from 'rxjs';
 import { AdminResult } from '@models/admin-result';
 import { format } from 'date-fns';
+import { ICitations } from '@models/base-message';
 
 /**
  * to check if the NgControl is NgModel
@@ -330,4 +331,39 @@ export function getDateString(date: Date) {
   const mins = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
   return `${year}-${month}-${day} ${hrs}:${mins}:${seconds}`;
+}
+
+export const formatString = (text: string) => {
+  text
+    .split(' ')
+    .map(word => (isRTL(word) ? '\u202A' : '\u202C') + word)
+    .join(' ');
+  return text;
+};
+export function isRTL(str: string) {
+  return /[\u0600-\u06FF]+/.test(str);
+}
+export function formatText<T extends { context: { citations: ICitations[] } }>(
+  text: string,
+  message: T,
+): string {
+  let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Replace text between [ and ] with <a> tags
+  formattedText = formattedText.replace(/\[(.*?)\]/g, (match, p1) => {
+    const item =
+      message.context.citations[Number(p1.replace(/[^0-9]/g, '')) - 1];
+    if (!item) {
+      return match;
+    }
+    const title = item.title;
+    const url = item.url;
+
+    // eslint-disable-next-line max-len
+    return `<br /><small class="px-1 text-primary"><a target="_blank" href="${url}">${title}</a><i class="link-icon"></i></small>`;
+  });
+  // text = text.replace(/\./g, '.<br>')
+
+  // Return the formatted text
+  return formattedText.trim();
 }

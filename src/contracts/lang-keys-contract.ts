@@ -824,4 +824,9 @@ export interface LangKeysContract {
   show_more: string;
   cancel_recording: string;
   click_to_speak: string;
+  chat: string;
+  rate_conversation: string;
+  i_like: string;
+  i_dislike: string;
+  clear_chat_history: string;
 }

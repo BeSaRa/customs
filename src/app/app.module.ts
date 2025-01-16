@@ -42,7 +42,7 @@ import { MenuItemService } from '@services/menu-item.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { UrlService } from '@services/url.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
+// import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
@@ -65,6 +65,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ChatComponent } from '@standalone/components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatDateFnsModule,
     LoadingComponent,
     VersionComponent,
-    ChatAiComponent,
+    // ChatAiComponent,
+    ChatComponent,
     DragDropModule,
   ],
   providers: [

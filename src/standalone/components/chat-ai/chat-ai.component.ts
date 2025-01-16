@@ -50,173 +50,170 @@ import { ChatMessageWrapper } from '@models/chat-message-wrapper';
   templateUrl: './chat-ai.component.html',
   styleUrl: './chat-ai.component.scss',
 })
-export class ChatAiComponent
-  extends OnDestroyMixin(class {})
-  implements OnInit
-{
-  protected readonly AppIcons = AppIcons;
-  @HostBinding('class.opened')
-  protected opened = false;
-  @HostBinding('class.fullscreen')
-  protected fullscreen = false;
-  selectedContext = signal<ChatContext | undefined>(undefined);
-  context = computed(() => {
-    return !this.selectedContext()
-      ? ''
-      : this.selectedContext() === ChatContext.VIOLATIONS
-        ? this.lang.map.violations_and_penalties
-        : this.lang.map.customs_procedures;
-  });
-  protected control = new FormControl({
-    value: '',
-    disabled: !this.selectedContext(),
-  });
-  protected readonly ChatContext = ChatContext;
-  lang = inject(LangService);
-  messages = signal<ChatMessageContract[]>([]);
-  chatService = inject(ChatService);
-  private currentLang = signal(this.lang.getCurrent());
-  chatBody = viewChild<ElementRef<HTMLDivElement>>('chatBody');
-  textAreaInput = viewChild(TextareaComponent, {
-    read: ElementRef,
-  });
-
-  userMessages = computed(() => {
-    return this.messages().filter(item => item.role === ChatRoles.USER);
-  });
-
-  loading = signal(false);
-
-  loadingEffect = effect(() => {
-    this.loading()
-      ? this.control.disable()
-      : !!this.selectedContext() && this.control.enable();
-  });
-
-  scrollTop = signal(0);
-
-  dots: string[] = ['.', '.', '.'];
-
-  contextMap = {
-    [ChatContext.VIOLATIONS]: this.lang.map.violations_and_penalties,
-    [ChatContext.CUSTOMS_PROCEDURES]: this.lang.map.customs_procedures,
-  };
-
-  interval$ = interval(500)
-    .pipe(
-      tap(() => {
-        this.dots.length >= 3 ? (this.dots = []) : this.dots.push('.');
-      }),
-    )
-    .pipe(takeUntil(this.destroy$))
-    .subscribe();
-  employee = inject(EmployeeService);
-  domSanitizer = inject(DomSanitizer);
-  welcomeMessage = computed(() => {
-    this.currentLang();
-    return this.domSanitizer.sanitize(
-      SecurityContext.HTML,
-      this.lang.map.chat_welcome_x_message.change({
-        x: this.employee.getEmployee()?.getNames(),
-      }),
-    );
-  });
-
-  ngOnInit(): void {
-    this.lang.change$.subscribe(lang => {
-      this.currentLang.set(lang);
-    });
-  }
-
-  toggleChat() {
-    this.opened = !this.opened;
-  }
-
-  sendMessage($event: Event) {
-    $event.stopPropagation();
-    $event.preventDefault();
-    const messageWrapper = new ChatMessageWrapper().clone<ChatMessageWrapper>({
-      context: this.selectedContext()!,
-      messages: [
-        new ChatMessage().clone<ChatMessage>({
-          role: ChatRoles.USER,
-          content: this.control.value!,
-        }),
-      ],
-    });
-    this.control.value &&
-      this.updateMessages(messageWrapper.messages[0]) &&
-      (() => {
-        this.loading.set(true);
-        return true;
-      })() &&
-      this.chatService
-        .send(messageWrapper)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: message => {
-            this.updateMessages(message);
-            this.loading.set(false);
-          },
-          error: () => this.loading.set(false),
-          complete: () => this.loading.set(false),
-        });
-  }
-
-  updateMessages(message: ChatMessage): boolean {
-    this.messages.update(messages => [...messages, message]);
-    this.control.setValue('');
-    setTimeout(() => {
-      this.chatBody()?.nativeElement.scrollTo({
-        top: this.chatBody()?.nativeElement.scrollHeight,
-        behavior: 'smooth',
-      });
-    });
-    return true;
-  }
-
-  toggleFullScreen() {
-    this.fullscreen = !this.fullscreen;
-  }
-
-  isUser(message: ChatMessageContract) {
-    return message.role === ChatRoles.USER;
-  }
-
-  isAssistant(message: ChatMessageContract) {
-    return message.role === ChatRoles.ASSISTANT;
-  }
-
-  setContextTo(context: ChatContext) {
-    this.selectedContext.set(context);
-    this.control.enable();
-    this.textAreaInput()?.nativeElement.querySelector('textarea').focus();
-    this.messages.update(messages => [
-      ...messages,
-      {
-        context,
-        role: ChatRoles.ASSISTANT,
-        content: this.lang.map.x_context_selected_successfully.change({
-          x: this.contextMap[context],
-        }),
-      },
-    ]);
-  }
-
-  getLatestUserMessage() {
-    this.userMessages().length &&
-      (() => {
-        this.control.setValue(
-          this.userMessages()[this.userMessages().length - 1].content,
-        );
-      })();
-  }
-
-  scrolling($event: Event) {
-    this.scrollTop.set(($event.target as HTMLDivElement).scrollTop);
-  }
-
-  clearChat() {
-    this.messages.set([]);
-  }
+export class ChatAiComponent {
+  // protected readonly AppIcons = AppIcons;
+  // @HostBinding('class.opened')
+  // protected opened = false;
+  // @HostBinding('class.fullscreen')
+  // protected fullscreen = false;
+  // selectedContext = signal<ChatContext | undefined>(undefined);
+  // context = computed(() => {
+  //   return !this.selectedContext()
+  //     ? ''
+  //     : this.selectedContext() === ChatContext.VIOLATIONS
+  //       ? this.lang.map.violations_and_penalties
+  //       : this.lang.map.customs_procedures;
+  // });
+  // protected control = new FormControl({
+  //   value: '',
+  //   disabled: !this.selectedContext(),
+  // });
+  // protected readonly ChatContext = ChatContext;
+  // lang = inject(LangService);
+  // messages = signal<ChatMessageContract[]>([]);
+  // chatService = inject(ChatService);
+  // private currentLang = signal(this.lang.getCurrent());
+  // chatBody = viewChild<ElementRef<HTMLDivElement>>('chatBody');
+  // textAreaInput = viewChild(TextareaComponent, {
+  //   read: ElementRef,
+  // });
+  //
+  // userMessages = computed(() => {
+  //   return this.messages().filter(item => item.role === ChatRoles.USER);
+  // });
+  //
+  // loading = signal(false);
+  //
+  // loadingEffect = effect(() => {
+  //   this.loading()
+  //     ? this.control.disable()
+  //     : !!this.selectedContext() && this.control.enable();
+  // });
+  //
+  // scrollTop = signal(0);
+  //
+  // dots: string[] = ['.', '.', '.'];
+  //
+  // contextMap = {
+  //   [ChatContext.VIOLATIONS]: this.lang.map.violations_and_penalties,
+  //   [ChatContext.CUSTOMS_PROCEDURES]: this.lang.map.customs_procedures,
+  // };
+  //
+  // interval$ = interval(500)
+  //   .pipe(
+  //     tap(() => {
+  //       this.dots.length >= 3 ? (this.dots = []) : this.dots.push('.');
+  //     }),
+  //   )
+  //   .pipe(takeUntil(this.destroy$))
+  //   .subscribe();
+  // employee = inject(EmployeeService);
+  // domSanitizer = inject(DomSanitizer);
+  // welcomeMessage = computed(() => {
+  //   this.currentLang();
+  //   return this.domSanitizer.sanitize(
+  //     SecurityContext.HTML,
+  //     this.lang.map.chat_welcome_x_message.change({
+  //       x: this.employee.getEmployee()?.getNames(),
+  //     }),
+  //   );
+  // });
+  //
+  // ngOnInit(): void {
+  //   this.lang.change$.subscribe(lang => {
+  //     this.currentLang.set(lang);
+  //   });
+  // }
+  //
+  // toggleChat() {
+  //   this.opened = !this.opened;
+  // }
+  //
+  // sendMessage($event: Event) {
+  //   $event.stopPropagation();
+  //   $event.preventDefault();
+  //   const messageWrapper = new ChatMessageWrapper().clone<ChatMessageWrapper>({
+  //     context: this.selectedContext()!,
+  //     messages: [
+  //       new ChatMessage().clone<ChatMessage>({
+  //         role: ChatRoles.USER,
+  //         content: this.control.value!,
+  //       }),
+  //     ],
+  //   });
+  //   this.control.value &&
+  //     this.updateMessages(messageWrapper.messages[0]) &&
+  //     (() => {
+  //       this.loading.set(true);
+  //       return true;
+  //     })() &&
+  //     this.chatService
+  //       .send(messageWrapper)
+  //       .pipe(takeUntil(this.destroy$))
+  //       .subscribe({
+  //         next: message => {
+  //           this.updateMessages(message);
+  //           this.loading.set(false);
+  //         },
+  //         error: () => this.loading.set(false),
+  //         complete: () => this.loading.set(false),
+  //       });
+  // }
+  //
+  // updateMessages(message: ChatMessage): boolean {
+  //   this.messages.update(messages => [...messages, message]);
+  //   this.control.setValue('');
+  //   setTimeout(() => {
+  //     this.chatBody()?.nativeElement.scrollTo({
+  //       top: this.chatBody()?.nativeElement.scrollHeight,
+  //       behavior: 'smooth',
+  //     });
+  //   });
+  //   return true;
+  // }
+  //
+  // toggleFullScreen() {
+  //   this.fullscreen = !this.fullscreen;
+  // }
+  //
+  // isUser(message: ChatMessageContract) {
+  //   return message.role === ChatRoles.USER;
+  // }
+  //
+  // isAssistant(message: ChatMessageContract) {
+  //   return message.role === ChatRoles.ASSISTANT;
+  // }
+  //
+  // setContextTo(context: ChatContext) {
+  //   this.selectedContext.set(context);
+  //   this.control.enable();
+  //   this.textAreaInput()?.nativeElement.querySelector('textarea').focus();
+  //   this.messages.update(messages => [
+  //     ...messages,
+  //     {
+  //       context,
+  //       role: ChatRoles.ASSISTANT,
+  //       content: this.lang.map.x_context_selected_successfully.change({
+  //         x: this.contextMap[context],
+  //       }),
+  //     },
+  //   ]);
+  // }
+  //
+  // getLatestUserMessage() {
+  //   this.userMessages().length &&
+  //     (() => {
+  //       this.control.setValue(
+  //         this.userMessages()[this.userMessages().length - 1].content,
+  //       );
+  //     })();
+  // }
+  //
+  // scrolling($event: Event) {
+  //   this.scrollTop.set(($event.target as HTMLDivElement).scrollTop);
+  // }
+  //
+  // clearChat() {
+  //   this.messages.set([]);
+  // }
 }
