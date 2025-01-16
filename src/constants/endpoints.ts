@@ -68,7 +68,7 @@ export const EndPoints = {
   USER_GUIDE: '/entity/user-guide',
   INBOX_COUNTER: 'entity/counter-team',
   USER_MENU_ITEM: 'entity/user-menu-item',
-  USER_DELEGATION: '/entity/user-delegation'
+  USER_DELEGATION: '/entity/user-delegation',
 };
 
 export type EndpointsType = typeof EndPoints;

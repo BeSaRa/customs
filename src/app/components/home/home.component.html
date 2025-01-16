@@ -9,8 +9,6 @@
   </div>
   <app-version class="absolute bottom-5 ltr:right-5 rtl:left-5 drop-shadow" />
   @if (employeeService.hasPermissionTo('OPEN_AI_CHAT')) {
-    <app-chat-ai
-      class="z-50 fixed bottom-12 rtl:left-5 ltr:right-5 flex flex-col"></app-chat-ai>
-<!--    <app-chat class="fixed z-20 rtl:right-0 ltr:left-0 bottom-0" />-->
+    <app-chat class="fixed z-20 rtl:left-0 ltr:right-0 bottom-0" />
   }
 </div>
