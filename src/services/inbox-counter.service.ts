@@ -6,12 +6,12 @@ import { Constructor } from '@app-types/constructors';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
-import { NO_LOADER_TOKEN } from '@http-contexts/tokens';
+import { NO_ERROR_HANDLE, NO_LOADER_TOKEN } from '@http-contexts/tokens';
 import { AdminResult } from '@models/admin-result';
 import { InboxCounter } from '@models/inbox-counter';
 import { Pagination } from '@models/pagination';
 import { CastResponse, CastResponseContainer } from 'cast-response';
-import { filter, Subscription, take, timer } from 'rxjs';
+import { filter, Subscription, tap, timer } from 'rxjs';
 import { ConfigService } from './config.service';
 import { EmployeeService } from './employee.service';
 
@@ -35,20 +35,11 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
   employeeService = inject(EmployeeService);
   router = inject(Router);
 
-  private _poolingSubscribtion: Subscription;
+  private _poolingSubscribtion?: Subscription;
 
   constructor() {
     super();
-    this._poolingSubscribtion = this._startPolling()
-      .pipe(
-        filter(() =>
-          this.employeeService.hasAllPermissions(
-            AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
-          ),
-        ),
-        filter(() => this.router.url === AppFullRoutes.LANDING_PAGE),
-      )
-      .subscribe(() => this._loadAndSetUserCounters());
+    this.loadAndSetUserCounters(false);
   }
 
   private _userCounters = signal<InboxCounter[]>([]);
@@ -78,27 +69,47 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
     return this.urlService.URLS.INBOX_COUNTER;
   }
 
-  private _startPolling() {
-    return timer(
+  startPolling() {
+    this._poolingSubscribtion = timer(
       0,
       this.configService.CONFIG.TIME_TO_RELOAD_USER_INBOX_COUNTERS * 1000,
-    );
+    )
+      .pipe(
+        filter(() =>
+          this.employeeService.hasAllPermissions(
+            AppPermissionsGroup.DASHBOARD as unknown as (keyof AppPermissionsType)[],
+          ),
+        ),
+        filter(() => this.router.url === AppFullRoutes.LANDING_PAGE),
+      )
+      .subscribe(() => this.loadAndSetUserCounters());
   }
 
   stopPolling() {
-    this._poolingSubscribtion.unsubscribe();
+    this._poolingSubscribtion?.unsubscribe();
   }
 
-  private _loadAndSetUserCounters() {
-    this._getUserCounters()
-      .pipe(take(1))
-      .subscribe(res => this._userCounters.set(res));
+  loadAndSetUserCounters(hideEffect = true) {
+    this._getUserCounters(hideEffect)
+      .pipe(tap(() => this._userCounters.set([])))
+      .subscribe(res =>
+        setTimeout(() => {
+          this._userCounters.set(res);
+        }, 0),
+      );
   }
 
   @CastResponse()
-  private _getUserCounters() {
-    return this.http.get<InboxCounter[]>(this.getUrlSegment() + '/user', {
-      context: new HttpContext().set(NO_LOADER_TOKEN, true),
-    });
+  private _getUserCounters(hideEffect: boolean) {
+    return this.http.get<InboxCounter[]>(
+      this.getUrlSegment() + '/user',
+      hideEffect
+        ? {
+            context: new HttpContext()
+              .set(NO_LOADER_TOKEN, true)
+              .set(NO_ERROR_HANDLE, true),
+          }
+        : {},
+    );
   }
 }

@@ -12,6 +12,7 @@ import { WidgetTypes } from '@enums/widget-types';
 import { LayoutModel } from '@models/layout-model';
 import { DialogService } from '@services/dialog.service';
 import { GridService } from '@services/grid.service';
+import { InboxCounterService } from '@services/inbox-counter.service';
 import { LangService } from '@services/lang.service';
 import { LayoutService } from '@services/layout.service';
 import { WidgetService } from '@services/widget.service';
@@ -30,6 +31,7 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
   layoutService = inject(LayoutService);
   gridService = inject(GridService);
   widgetService = inject(WidgetService);
+  inboxCounterService = inject(InboxCounterService);
   lang = inject(LangService);
   dialog = inject(DialogService);
 
@@ -107,6 +109,10 @@ export class LayoutComponent implements AfterViewInit, OnDestroy {
 
   enableEdit() {
     this.gridService.enableEdit();
+  }
+
+  reloadCounters() {
+    this.inboxCounterService.loadAndSetUserCounters(false);
   }
 
   save() {
