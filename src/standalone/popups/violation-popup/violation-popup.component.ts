@@ -10,44 +10,43 @@ import {
   Signal,
 } from '@angular/core';
 
-import { ViolationTypeService } from '@services/violation-type.service';
-import { ViolationClassificationService } from '@services/violation-classification.service';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { map, Observable, of, Subject } from 'rxjs';
-import { ViolationType } from '@models/violation-type';
-import { ViolationClassification } from '@models/violation-classification';
+import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ReactiveFormsModule,
   UntypedFormControl,
   UntypedFormGroup,
 } from '@angular/forms';
-import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
-import { Violation } from '@models/violation';
-import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { ControlDirective } from '@standalone/directives/control.directive';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
-import { range } from '@utils/utils';
-import { ConfigService } from '@services/config.service';
-import { LookupService } from '@services/lookup.service';
-import { ClassificationTypes } from '@enums/violation-classification';
-import { CustomValidators } from '@validators/custom-validators';
-import { Router } from '@angular/router';
-import { DialogService } from '@services/dialog.service';
-import { DatePipe } from '@angular/common';
-import { ReportType } from '@app-types/validation-return-type';
-import { Investigation } from '@models/investigation';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { ReportType } from '@app-types/validation-return-type';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { OperationType } from '@enums/operation-type';
+import { ClassificationTypes } from '@enums/violation-classification';
+import { Investigation } from '@models/investigation';
+import { Violation } from '@models/violation';
+import { ViolationClassification } from '@models/violation-classification';
+import { ViolationType } from '@models/violation-type';
+import { ConfigService } from '@services/config.service';
+import { DialogService } from '@services/dialog.service';
+import { LookupService } from '@services/lookup.service';
+import { ViolationClassificationService } from '@services/violation-classification.service';
+import { ViolationTypeService } from '@services/violation-type.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { range } from '@utils/utils';
+import { CustomValidators } from '@validators/custom-validators';
+import { map, Observable, of, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-violation-popup',
@@ -64,7 +63,6 @@ import { OperationType } from '@enums/operation-type';
     MatDatepickerModule,
     ReactiveFormsModule,
     TextareaComponent,
-    DatePipe,
     MatTooltip,
     InputSuffixDirective,
   ],
@@ -167,9 +165,7 @@ export class ViolationPopupComponent extends AdminDialogComponent<Violation> {
     const violationType =
       this.typesMap()[this.violationType()] ||
       this.typesMap()[this.controls.violationType().value];
-    return (
-      violationType && violationType.numericTo === violationType.numericFrom
-    );
+    return violationType && violationType.numericTo <= 1;
   });
   types = computed(() => {
     return this._types().filter(type => {
