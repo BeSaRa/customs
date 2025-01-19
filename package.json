@@ -37,11 +37,13 @@
     "@mdi/angular-material": "^7.1.96",
     "@ngrx/signals": "^19.0.0",
     "@tailwindcss/typography": "^0.5.9",
+    "assert": "^2.1.0",
     "cast-response": "^2.0.0",
     "chart.js": "^4.4.3",
     "crypto-js": "^4.1.1",
     "customs-schematics": "^0.0.14",
     "date-fns": "^2.30.0",
+    "events": "^3.3.0",
     "gridstack": "^10.1.2",
     "microsoft-cognitiveservices-speech-sdk": "^1.42.0",
     "ng2-charts": "^6.0.1",
@@ -55,6 +57,8 @@
     "qs": "^6.11.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
