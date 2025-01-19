@@ -4,5 +4,6 @@
     "QA_IP": "https://192.168.53.15:9445/cdi/api/",
     "AZURE": "https://ebla-ai-demo-002.azurewebsites.net/api/"
   },
-  "BASE_ENVIRONMENT": "DEV_IP"
+  "BASE_ENVIRONMENT": "DEV_IP",
+  "AZURE_ENVIRONMENT": "AZURE"
 }
