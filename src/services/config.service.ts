@@ -20,83 +20,59 @@ export class ConfigService {
       .pipe(tap(() => this.prepareAzureBaseUrl()));
   }
 
-  private prepareBaseUrl(): string {
+  private prepareBaseUrlGeneric(
+    environmentKey: 'BASE_ENVIRONMENT' | 'AZURE_ENVIRONMENT',
+    baseUrlKey: 'BASE_URL' | 'AZURE_BASE_URL',
+  ): string {
     if (
       !Object.prototype.hasOwnProperty.call(this.CONFIG, 'ENVIRONMENTS_URLS') ||
       !Object.keys(this.CONFIG.ENVIRONMENTS_URLS).length
     ) {
       throw Error(
-        'There is no ENVIRONMENTS_URLS Property or empty provided inside app-configuration.json file Kindly check it',
+        'There is no ENVIRONMENTS_URLS property or it is empty in app-configuration.json file. Please check it.',
       );
     }
 
-    if (typeof this.CONFIG.BASE_ENVIRONMENT === 'undefined') {
+    if (typeof this.CONFIG[environmentKey] === 'undefined') {
       throw Error(
-        'there is no BASE_ENVIRONMENT_INDEX provided inside app-configuration.json file',
+        `The environment key "${environmentKey}" is not provided in app-configuration.json file.`,
       );
     }
 
-    if (
-      typeof this.CONFIG.ENVIRONMENTS_URLS[
-        this.CONFIG
-          .BASE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
-      ] === 'undefined'
-    ) {
-      throw Error(
-        'the provided BASE_ENVIRONMENT not exists inside ENVIRONMENTS_URLS array in app-configuration.json file',
-      );
-    }
-    this.BASE_URL =
+    const baseUrl =
       this.CONFIG.ENVIRONMENTS_URLS[
-        this.CONFIG
-          .BASE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
+        this.CONFIG[
+          environmentKey as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
+        ]
       ];
+
+    if (typeof baseUrl === 'undefined') {
+      throw Error(
+        `The environment "${this.CONFIG[environmentKey]}" does not exist in ENVIRONMENTS_URLS in app-configuration.json file.`,
+      );
+    }
+
+    let fullUrl: string = baseUrl;
 
     if (
       Object.prototype.hasOwnProperty.call(this.CONFIG, 'API_VERSION') &&
       this.CONFIG.API_VERSION
     ) {
-      if (this.BASE_URL.lastIndexOf('/') !== this.BASE_URL.length - 1) {
-        this.BASE_URL += '/';
+      if (fullUrl.lastIndexOf('/') !== fullUrl.length - 1) {
+        fullUrl += '/';
       }
-      this.BASE_URL += this.CONFIG.API_VERSION;
+      fullUrl += this.CONFIG.API_VERSION;
     }
-    return this.BASE_URL;
+
+    this[baseUrlKey] = fullUrl;
+    return fullUrl;
   }
-  private prepareAzureBaseUrl(): string {
-    if (typeof this.CONFIG.AZURE_ENVIRONMENT === 'undefined') {
-      throw Error(
-        'there is no BASE_ENVIRONMENT_INDEX provided inside app-configuration.json file',
-      );
-    }
-    if (
-      typeof this.CONFIG.ENVIRONMENTS_URLS[
-        this.CONFIG
-          .AZURE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
-      ] === 'undefined'
-    ) {
-      throw Error(
-        'the provided BASE_ENVIRONMENT not exists inside ENVIRONMENTS_URLS array in app-configuration.json file',
-      );
-    }
-    this.AZURE_BASE_URL =
-      this.CONFIG.ENVIRONMENTS_URLS[
-        this.CONFIG
-          .AZURE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
-      ];
 
-    if (
-      Object.prototype.hasOwnProperty.call(this.CONFIG, 'API_VERSION') &&
-      this.CONFIG.API_VERSION
-    ) {
-      if (
-        this.AZURE_BASE_URL.lastIndexOf('/') !==
-        this.AZURE_BASE_URL.length - 1
-      ) {
-        this.AZURE_BASE_URL += '/';
-      }
-      this.AZURE_BASE_URL += this.CONFIG.API_VERSION;
-    }
-    return this.AZURE_BASE_URL;
+  public prepareBaseUrl(): string {
+    return this.prepareBaseUrlGeneric('BASE_ENVIRONMENT', 'BASE_URL');
+  }
+
+  public prepareAzureBaseUrl(): string {
+    return this.prepareBaseUrlGeneric('AZURE_ENVIRONMENT', 'AZURE_BASE_URL');
   }
 }

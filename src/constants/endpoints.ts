@@ -71,7 +71,7 @@ export const EndPoints = {
   USER_DELEGATION: '/entity/user-delegation',
 };
 export const AzureEndPoints = {
-  BASE_AZURE_URL: '',
+  BASE_URL: '',
   ALL_CONVERSATIONS: '/chat-history/all-conversations',
   SEARCH_WEBSITE: '/search/search/website',
   CHAT_BOT_WEBSITE: '/chatbot/chat/website',

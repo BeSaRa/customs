@@ -37,51 +37,48 @@ export class UrlService {
       : url;
   }
 
-  public prepareUrls(): EndpointsType {
-    this.URLS.BASE_URL = UrlService.removeTrailingSlash(this.config.BASE_URL);
-    for (const key in this.urls) {
+  private prepareUrlsGeneric<T>(baseUrl: string, urls: T, isAzure = false): T {
+    const preparedUrls = { ...urls };
+    (preparedUrls as any).BASE_URL = UrlService.removeTrailingSlash(baseUrl);
+
+    for (const key in urls) {
       if (
         key !== 'BASE_URL' &&
-        Object.prototype.hasOwnProperty.call(this.urls, key)
+        Object.prototype.hasOwnProperty.call(urls, key)
       ) {
-        this.URLS[key as keyof EndpointsType] = this.addBaseUrl(
-          this.urls[key as keyof EndpointsType],
+        (preparedUrls as any)[key] = this.addBaseUrl(
+          baseUrl,
+          (urls as any)[key],
         );
       }
     }
+    return preparedUrls;
+  }
+
+  public prepareUrls(): EndpointsType {
+    this.URLS = this.prepareUrlsGeneric<EndpointsType>(
+      this.config.BASE_URL,
+      this.urls,
+    );
     return this.URLS;
   }
+
   public prepareAzureUrls(): AzureEndpointsType {
-    this.AZURE_URLS.BASE_AZURE_URL = UrlService.removeTrailingSlash(
+    this.AZURE_URLS = this.prepareUrlsGeneric<AzureEndpointsType>(
       this.config.AZURE_BASE_URL,
+      this.azure_urls,
+      true,
     );
-    for (const key in this.azure_urls) {
-      if (
-        key !== 'BASE_AZURE_URL' &&
-        Object.prototype.hasOwnProperty.call(this.azure_urls, key)
-      ) {
-        this.AZURE_URLS[key as keyof AzureEndpointsType] = this.addBaseUrl(
-          this.azure_urls[key as keyof AzureEndpointsType],
-          true,
-        );
-      }
-    }
     return this.AZURE_URLS;
   }
 
-  private addBaseUrl(url: string, azure = false): string {
+  private addBaseUrl(baseUrl: string, url: string): string {
     const external = (this.config.CONFIG.EXTERNAL_PROTOCOLS ?? []).some(
       protocol => {
         return url.toLowerCase().indexOf(protocol) === 0;
       },
     );
-    return external
-      ? url
-      : azure
-        ? this.AZURE_URLS.BASE_AZURE_URL +
-          '/' +
-          UrlService.removePrefixSlash(url)
-        : this.URLS.BASE_URL + '/' + UrlService.removePrefixSlash(url);
+    return external ? url : baseUrl + '/' + UrlService.removePrefixSlash(url);
   }
 
   setConfigService(service: ConfigService): void {
