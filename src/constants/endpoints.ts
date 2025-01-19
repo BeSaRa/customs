@@ -70,5 +70,14 @@ export const EndPoints = {
   USER_MENU_ITEM: 'entity/user-menu-item',
   USER_DELEGATION: '/entity/user-delegation',
 };
+export const AzureEndPoints = {
+  BASE_AZURE_URL: '',
+  ALL_CONVERSATIONS: '/chat-history/all-conversations',
+  SEARCH_WEBSITE: '/search/search/website',
+  CHAT_BOT_WEBSITE: '/chatbot/chat/website',
+  ADD_FEEDBACK: '/chat-history/add-feedback',
+  SPEECH_TOKEN: '/speech/token',
+};
 
 export type EndpointsType = typeof EndPoints;
+export type AzureEndpointsType = typeof AzureEndPoints;

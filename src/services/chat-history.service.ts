@@ -15,7 +15,7 @@ export class ChatHistoryService {
 
   @CastResponse(() => Conversation)
   getAllConversations(botName?: string): Observable<Conversation[]> {
-    const url = `https://ebla-ai-demo-002.azurewebsites.net/api/v1/chat-history/all-conversations`;
+    const url = this.urlService.AZURE_URLS.ALL_CONVERSATIONS;
     let params = new HttpParams();
     if (botName) {
       params = params.set('bot_name', botName);
@@ -26,7 +26,7 @@ export class ChatHistoryService {
     conversationId: string,
     feedback: FeedbackChat,
   ): Observable<string> {
-    const url = `https://ebla-ai-demo-002.azurewebsites.net/api/v1/chat-history/add-feedback`;
+    const url = this.urlService.AZURE_URLS.ADD_FEEDBACK;
     const params = new HttpParams()
       .set('conv_id', conversationId)
       .set('feedback', feedback);

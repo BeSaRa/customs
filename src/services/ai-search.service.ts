@@ -17,7 +17,7 @@ export class AiSearchService {
     searchQuery: SearchQueryContract,
   ): Observable<PaginationResultContract<SearchResultContract>> {
     console.log(this.urlService.URLS.BASE_URL);
-    const url = `https://ebla-ai-demo-002.azurewebsites.net/api/v1/search/search/website`;
+    const url = this.urlService.AZURE_URLS.SEARCH_WEBSITE;
     return this.http.post<PaginationResultContract<SearchResultContract>>(
       url,
       searchQuery,

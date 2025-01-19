@@ -174,6 +174,7 @@ export class AppModule {
       forkJoin([config.load()])
         .pipe(tap(() => url.setConfigService(config)))
         .pipe(tap(() => url.prepareUrls()))
+        .pipe(tap(() => url.prepareAzureUrls()))
         .pipe(switchMap(() => info.load()))
         .pipe(tap(info => lookup.setLookups(info.lookupMap)))
         .pipe(switchMap(() => auth.validateToken()));

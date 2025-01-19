@@ -10,12 +10,14 @@ export class ConfigService {
   private http = inject(HttpClient);
   CONFIG: ConfigType = Config;
   BASE_URL = '';
+  AZURE_BASE_URL = '';
 
   load(): Observable<ConfigType> {
     return this.http
       .get<ConfigType>('CONFIGURATIONS.json')
       .pipe(tap(res => (this.CONFIG = { ...this.CONFIG, ...res })))
-      .pipe(tap(() => this.prepareBaseUrl()));
+      .pipe(tap(() => this.prepareBaseUrl()))
+      .pipe(tap(() => this.prepareAzureBaseUrl()));
   }
 
   private prepareBaseUrl(): string {
@@ -60,5 +62,41 @@ export class ConfigService {
       this.BASE_URL += this.CONFIG.API_VERSION;
     }
     return this.BASE_URL;
+  }
+  private prepareAzureBaseUrl(): string {
+    if (typeof this.CONFIG.AZURE_ENVIRONMENT === 'undefined') {
+      throw Error(
+        'there is no BASE_ENVIRONMENT_INDEX provided inside app-configuration.json file',
+      );
+    }
+    if (
+      typeof this.CONFIG.ENVIRONMENTS_URLS[
+        this.CONFIG
+          .AZURE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
+      ] === 'undefined'
+    ) {
+      throw Error(
+        'the provided BASE_ENVIRONMENT not exists inside ENVIRONMENTS_URLS array in app-configuration.json file',
+      );
+    }
+    this.AZURE_BASE_URL =
+      this.CONFIG.ENVIRONMENTS_URLS[
+        this.CONFIG
+          .AZURE_ENVIRONMENT as unknown as keyof typeof this.CONFIG.ENVIRONMENTS_URLS
+      ];
+
+    if (
+      Object.prototype.hasOwnProperty.call(this.CONFIG, 'API_VERSION') &&
+      this.CONFIG.API_VERSION
+    ) {
+      if (
+        this.AZURE_BASE_URL.lastIndexOf('/') !==
+        this.AZURE_BASE_URL.length - 1
+      ) {
+        this.AZURE_BASE_URL += '/';
+      }
+      this.AZURE_BASE_URL += this.CONFIG.API_VERSION;
+    }
+    return this.AZURE_BASE_URL;
   }
 }

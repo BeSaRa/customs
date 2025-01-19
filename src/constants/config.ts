@@ -2,6 +2,7 @@ export const Config = {
   VERSION: 'v1.3.12',
   PRIVATE_VERSION: '',
   BASE_ENVIRONMENT: '',
+  AZURE_ENVIRONMENT: '',
   ENVIRONMENTS_URLS: {},
   API_VERSION: 'v1',
   EXTERNAL_PROTOCOLS: ['http', 'https'],

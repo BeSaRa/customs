@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EndPoints, EndpointsType } from '@constants/endpoints';
+import {
+  AzureEndPoints,
+  AzureEndpointsType,
+  EndPoints,
+  EndpointsType,
+} from '@constants/endpoints';
 import { ConfigService } from '@services/config.service';
 
 @Injectable({
@@ -7,7 +12,9 @@ import { ConfigService } from '@services/config.service';
 })
 export class UrlService {
   private urls = EndPoints as EndpointsType;
+  private azure_urls = AzureEndPoints as AzureEndpointsType;
   URLS: EndpointsType = {} as EndpointsType;
+  AZURE_URLS: AzureEndpointsType = {} as AzureEndpointsType;
   config!: ConfigService;
 
   static hasTrailingSlash(url: string): boolean {
@@ -44,8 +51,25 @@ export class UrlService {
     }
     return this.URLS;
   }
+  public prepareAzureUrls(): AzureEndpointsType {
+    this.AZURE_URLS.BASE_AZURE_URL = UrlService.removeTrailingSlash(
+      this.config.AZURE_BASE_URL,
+    );
+    for (const key in this.azure_urls) {
+      if (
+        key !== 'BASE_AZURE_URL' &&
+        Object.prototype.hasOwnProperty.call(this.azure_urls, key)
+      ) {
+        this.AZURE_URLS[key as keyof AzureEndpointsType] = this.addBaseUrl(
+          this.azure_urls[key as keyof AzureEndpointsType],
+          true,
+        );
+      }
+    }
+    return this.AZURE_URLS;
+  }
 
-  private addBaseUrl(url: string): string {
+  private addBaseUrl(url: string, azure = false): string {
     const external = (this.config.CONFIG.EXTERNAL_PROTOCOLS ?? []).some(
       protocol => {
         return url.toLowerCase().indexOf(protocol) === 0;
@@ -53,7 +77,11 @@ export class UrlService {
     );
     return external
       ? url
-      : this.URLS.BASE_URL + '/' + UrlService.removePrefixSlash(url);
+      : azure
+        ? this.AZURE_URLS.BASE_AZURE_URL +
+          '/' +
+          UrlService.removePrefixSlash(url)
+        : this.URLS.BASE_URL + '/' + UrlService.removePrefixSlash(url);
   }
 
   setConfigService(service: ConfigService): void {

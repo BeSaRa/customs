@@ -22,7 +22,7 @@ export abstract class BaseChatService {
     content: string,
     bot: string,
   ): Observable<ChatMessageResultContract> {
-    const url = `https://ebla-ai-demo-002.azurewebsites.net/api/v1/chatbot/chat/website`;
+    const url = this.urlService.AZURE_URLS.CHAT_BOT_WEBSITE;
     this.messages.update(messages => [
       ...messages,
       new Message(content, 'user'),

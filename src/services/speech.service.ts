@@ -14,8 +14,7 @@ export class SpeechService {
   private readonly appStore = inject(AppStore);
 
   generateSpeechToken(): Observable<SpeechTokenContract> {
-    const url =
-      'https://ebla-ai-demo-002.azurewebsites.net/api/v1/speech/token';
+    const url = this.urlService.AZURE_URLS.SPEECH_TOKEN;
     return this.http
       .get<SpeechTokenContract>(url)
       .pipe(tap(res => this.appStore.updateSpeechToken(res)));
