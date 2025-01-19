@@ -21,6 +21,7 @@ export const AppPermissionsGroup = {
     AppPermissions.MANAGEMNT_SYSTEM_PREFRENCES,
     AppPermissions.MANAGE_SUSPENDED_EMPLOYEE,
     AppPermissions.MANAGE_MANAGER_DELEGATION,
+    AppPermissions.MANAGE_USER_DELEGATION,
   ],
 
   DASHBOARD: [
