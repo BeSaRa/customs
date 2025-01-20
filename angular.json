@@ -22,13 +22,15 @@
               "bezier-easing",
               "ng2-flatpickr",
               "qs",
-              "@utils/prototypes/custom-prototypes"
+              "@utils/prototypes/custom-prototypes",
+              "microsoft-cognitiveservices-speech-sdk"
             ],
             "outputPath": "dist/customs",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -58,7 +60,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
+                  "maximumWarning": "3mb",
                   "maximumError": "4mb"
                 },
                 {
