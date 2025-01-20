@@ -75,19 +75,17 @@
             bindLabel="getNames" />
           <app-switch
             [disabled]="(loading$ | async)! || form.invalid"
-            [trueValue]="1"
-            [falseValue]="0"
+            [trueValue]="true"
+            [falseValue]="false"
             formControlName="enableMailNotification"
-            [label]="lang.map.mail_notifications"
-            (changed)="save$.next()"></app-switch>
+            [label]="lang.map.mail_notifications"></app-switch>
 
           <app-switch
             [disabled]="(loading$ | async)! || form.invalid"
-            [trueValue]="1"
-            [falseValue]="0"
+            [trueValue]="true"
+            [falseValue]="false"
             formControlName="enableSMSNotification"
-            [label]="lang.map.sms_notifications"
-            (changed)="save$.next()"></app-switch>
+            [label]="lang.map.sms_notifications"></app-switch>
         </div>
         <!-- <div class="flex flex-row items-center justify-start px-4">
         <span class="block font-medium text-slate-700">{{ lang.map.support_email_list }}</span>
@@ -100,7 +98,7 @@
           [falseValue]="0"
           formControlName="enableMailNotification"
           [label]="lang.map.mail_notifications"
-        (changed)="save$.next()"></app-switch>
+        ></app-switch>
       </div>
       <div class="flex flex-row col-span-4 pl-1 items-center justify-start">
         <app-switch
@@ -109,7 +107,7 @@
           [falseValue]="0"
           formControlName="enableSMSNotification"
           [label]="lang.map.sms_notifications"
-        (changed)="save$.next()"></app-switch>
+        ></app-switch>
       </div>
     </div> -->
       </ng-container>
