@@ -1,9 +1,9 @@
 import {
-  AfterViewInit,
   booleanAttribute,
   Component,
   ContentChild,
-  ContentChildren,
+  contentChildren,
+  effect,
   ElementRef,
   EventEmitter,
   inject,
@@ -13,7 +13,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  QueryList,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -63,17 +62,8 @@ import { requiredValidator } from '@validators/validation-utils';
   ],
 })
 export class SelectInputComponent
-  implements ControlValueAccessor, OnInit, OnDestroy, AfterViewInit
+  implements ControlValueAccessor, OnInit, OnDestroy
 {
-  ngAfterViewInit(): void {
-    Promise.resolve(!!this.optionTemplate).then(value => {
-      if (!value) return;
-      const options = this._selectOptions?.toArray() || [];
-      this.selectInput?.options.reset(options);
-      this.selectInput?.options.notifyOnChanges();
-    });
-  }
-
   private destroy$ = new Subject<void>();
 
   elementRef = inject(ElementRef);
@@ -127,8 +117,16 @@ export class SelectInputComponent
   @ViewChild('selectInput')
   selectInput?: MatSelect;
 
-  @ContentChildren(MatOption)
-  _selectOptions?: QueryList<MatOption>;
+  _selectOptions = contentChildren(MatOption);
+
+  optionsEffect = effect(() => {
+    if (this._selectOptions().length && this.optionTemplate) {
+      this.selectInput?.options.reset(
+        this._selectOptions() as unknown as MatOption[],
+      );
+      this.selectInput?.options.notifyOnChanges();
+    }
+  });
 
   @ContentChild(InputPrefixDirective)
   inputPrefix?: InputPrefixDirective;
