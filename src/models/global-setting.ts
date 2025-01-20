@@ -31,7 +31,7 @@ export class GlobalSetting extends BaseModel<
   supportEmailListParsed: string[] = [];
   fileTypeParsed: string[] = [];
 
-  buildForm(controls = false): object {
+  buildForm(controls = true) {
     const {
       systemArabicName,
       systemEnglishName,
