@@ -1,5 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {
+  IS_IDLE,
+  NO_ERROR_HANDLE,
+  NO_LOADER_TOKEN,
+} from '@http-contexts/tokens';
 import { Common } from '@models/common';
 import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
@@ -28,7 +33,12 @@ export class CommonService {
     unwrap: 'rs',
   })
   private _loadCounters(): Observable<Common> {
-    return this.http.get<Common>(this._getURLSegment() + '/counters');
+    return this.http.get<Common>(this._getURLSegment() + '/counters', {
+      context: new HttpContext()
+        .set(NO_LOADER_TOKEN, true)
+        .set(NO_ERROR_HANDLE, true)
+        .set(IS_IDLE, true),
+    });
   }
 
   loadCounters(): Observable<Common> {

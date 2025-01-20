@@ -1,9 +1,9 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { SpeechTokenContract } from '@constants/speech-token-contract';
 import { UrlService } from '@services/url.service';
 import { AppStore } from '@stores/app.store';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,11 @@ export class SpeechService {
   private urlService = inject(UrlService);
   private readonly appStore = inject(AppStore);
 
-  generateSpeechToken(): Observable<SpeechTokenContract> {
+  constructor() {
+    this.generateSpeechToken().subscribe();
+  }
+
+  generateSpeechToken(reload = true) {
     const url = this.urlService.AZURE_URLS.SPEECH_TOKEN;
     return this.http
       .get<SpeechTokenContract>(url)
