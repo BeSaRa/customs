@@ -2,6 +2,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgOptimizedImage } from '@angular/common';
 import {
   provideHttpClient,
+  withInterceptors,
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
@@ -32,6 +33,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
 import { Config } from '@constants/config';
 import { PaginatorLocal } from '@constants/paginator-local';
+import { idleInterceptor } from '@http-interceptors/idle.interceptor';
 import { httpInterceptors } from '@http-interceptors/index';
 import { GeneralInterceptor } from '@model-interceptors/general-interceptor';
 import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
@@ -148,7 +150,10 @@ import { ChatComponent } from '@standalone/components/chat/chat.component';
     provideNgxMask(),
     { provide: MAT_DATE_LOCALE, useValue: enUS },
     { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([idleInterceptor]),
+    ),
     {
       provide: RouteReuseStrategy,
       useClass: CustomInvestigationRouteReuseStrategy,

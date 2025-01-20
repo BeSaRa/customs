@@ -829,4 +829,5 @@ export interface LangKeysContract {
   i_like: string;
   i_dislike: string;
   clear_chat_history: string;
+  session_is_over: string;
 }

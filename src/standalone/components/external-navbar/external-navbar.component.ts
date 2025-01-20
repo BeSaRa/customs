@@ -1,22 +1,21 @@
-import { Component, inject } from '@angular/core';
-import { LangService } from '@services/lang.service';
-import { DialogService } from '@services/dialog.service';
-import { filter } from 'rxjs';
-import { UserClick } from '@enums/user-click';
-import { ToastService } from '@services/toast.service';
-import { AuthService } from '@services/auth.service';
-import { Router, RouterLink } from '@angular/router';
-import { AppRoutes } from '@constants/app-routes';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatTooltip } from '@angular/material/tooltip';
 import { NgClass, NgOptimizedImage } from '@angular/common';
-import { AppIcons } from '@constants/app-icons';
+import { Component, inject } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { EmployeeService } from '@services/employee.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { Router, RouterLink } from '@angular/router';
+import { AppIcons } from '@constants/app-icons';
+import { UserClick } from '@enums/user-click';
 import { UserTypes } from '@enums/user-types';
-import { MatButton } from '@angular/material/button';
+import { AuthService } from '@services/auth.service';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
+import { ToastService } from '@services/toast.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-external-navbar',
@@ -58,8 +57,6 @@ export class ExternalNavbarComponent {
       .pipe(filter(value => value === UserClick.YES))
       .subscribe(() => {
         this.authService.logout();
-        this.toast.success(this.lang.map.logged_out_successfully);
-        this.router.navigate([AppRoutes.EXTERNAL_LOGIN]).then();
       });
   }
 

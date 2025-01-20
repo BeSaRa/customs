@@ -6,7 +6,11 @@ import { Constructor } from '@app-types/constructors';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppPermissionsType } from '@constants/app-permissions';
 import { AppPermissionsGroup } from '@constants/app-permissions-group';
-import { NO_ERROR_HANDLE, NO_LOADER_TOKEN } from '@http-contexts/tokens';
+import {
+  IS_IDLE,
+  NO_ERROR_HANDLE,
+  NO_LOADER_TOKEN,
+} from '@http-contexts/tokens';
 import { AdminResult } from '@models/admin-result';
 import { InboxCounter } from '@models/inbox-counter';
 import { Pagination } from '@models/pagination';
@@ -107,7 +111,8 @@ export class InboxCounterService extends BaseCrudService<InboxCounter> {
         ? {
             context: new HttpContext()
               .set(NO_LOADER_TOKEN, true)
-              .set(NO_ERROR_HANDLE, true),
+              .set(NO_ERROR_HANDLE, true)
+              .set(IS_IDLE, true),
           }
         : {},
     );

@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -6,30 +7,23 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { EmployeeService } from '@services/employee.service';
 import { MatMenuModule } from '@angular/material/menu';
-import { AppIcons } from '@constants/app-icons';
-import { LangService } from '@services/lang.service';
-import { DialogService } from '@services/dialog.service';
-import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
-import { UserClick } from '@enums/user-click';
-import { ToastService } from '@services/toast.service';
-import { AuthService } from '@services/auth.service';
-import { Router } from '@angular/router';
-import { AppRoutes } from '@constants/app-routes';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { UserPreferencesService } from '@services/user-preferences.service';
-import { UserPreferences } from '@models/user-preferences';
+import { AppIcons } from '@constants/app-icons';
+import { UserClick } from '@enums/user-click';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { SelectInputComponent } from '../select-input/select-input.component';
-import { TooltipListPipe } from '@standalone/pipes/tooltip-list.pipe';
 import { OrganizationUnit } from '@models/organization-unit';
+import { UserPreferences } from '@models/user-preferences';
+import { AuthService } from '@services/auth.service';
+import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
+import { LangService } from '@services/lang.service';
 import { NavbarService } from '@services/navbar.service';
+import { UserPreferencesService } from '@services/user-preferences.service';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { exhaustMap, filter, map, Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -37,13 +31,10 @@ import { NavbarService } from '@services/navbar.service';
   imports: [
     MatButtonModule,
     MatIconModule,
-    InputComponent,
     NgOptimizedImage,
     MatMenuModule,
     IconButtonComponent,
     MatTooltipModule,
-    SelectInputComponent,
-    TooltipListPipe,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
@@ -58,9 +49,7 @@ export class NavbarComponent
   employeeService = inject(EmployeeService);
   employee = this.employeeService.getEmployee();
   dialog = inject(DialogService);
-  toast = inject(ToastService);
   authService = inject(AuthService);
-  router = inject(Router);
   userPreferencesService = inject(UserPreferencesService);
   editUserPreferences$: Subject<void> = new Subject<void>();
 
@@ -89,8 +78,6 @@ export class NavbarComponent
       .pipe(filter(value => value === UserClick.YES))
       .subscribe(() => {
         this.authService.logout();
-        this.toast.success(this.lang.map.logged_out_successfully);
-        this.router.navigate([AppRoutes.LOGIN]).then();
       });
   }
 
@@ -147,7 +134,6 @@ export class NavbarComponent
         }),
       )
       .subscribe(dep => {
-        this.toast.success(this.lang.map.organization_switched_successfully);
         this.selectedOrganization.set(dep);
         this.navBarService.departmentChange$.next();
       });

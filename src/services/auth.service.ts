@@ -10,6 +10,7 @@ import { ServiceContract } from '@contracts/service-contract';
 import { VerifyExternalCredentialsContract } from '@contracts/verify-external-credentials-contract';
 import { UserTypes } from '@enums/user-types';
 import {
+  IS_IDLE,
   IS_REFRESH,
   NO_ERROR_HANDLE,
   NO_LOADER_TOKEN,
@@ -36,7 +37,7 @@ import {
   tap,
 } from 'rxjs';
 import { ConfigService } from './config.service';
-import { SpeechService } from '@services/speech.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -54,11 +55,11 @@ export class AuthService
   private readonly langService = inject(LangService);
   private readonly commonService = inject(CommonService);
   private readonly configService = inject(ConfigService);
-  private readonly speechService = inject(SpeechService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
+  private readonly lang = inject(LangService);
 
   private authenticated = false;
-
   private _refreshSubscription?: Subscription;
 
   @CastResponse()
@@ -141,7 +142,7 @@ export class AuthService
     }
   }
 
-  private _listenToRefresh() {
+  private _setRefreshInterval() {
     if (this._refreshSubscription) this._refreshSubscription.unsubscribe();
 
     this._refreshSubscription = interval(
@@ -185,8 +186,7 @@ export class AuthService
       .pipe(map(() => true))
       .pipe(
         catchError(() => {
-          this.logout();
-          this.router.navigate([AppRoutes.LOGIN]);
+          this.logout(this.lang.map.session_is_over);
           return of(false);
         }),
       );
@@ -201,27 +201,35 @@ export class AuthService
         context: new HttpContext()
           .set(NO_LOADER_TOKEN, true)
           .set(NO_ERROR_HANDLE, true)
-          .set(IS_REFRESH, true),
+          .set(IS_REFRESH, true)
+          .set(IS_IDLE, true),
       },
     );
   }
 
-  logout(): void {
+  logout(message?: string): void {
     this.authenticated = false;
     this.tokenService.clearToken();
+    const _isExternal = this.employeeService.isExternal();
     this.employeeService.clearEmployee();
     this._refreshSubscription?.unsubscribe();
+    this.toast.success(
+      message ? message : this.lang.map.logged_out_successfully,
+    );
+    this.router.navigate(
+      _isExternal ? [AppRoutes.EXTERNAL_LOGIN] : [AppRoutes.LOGIN],
+    );
   }
 
   private setDataAfterAuthenticate(
-    listenToRefresh = true,
+    updateRefreshInterval = true,
   ): OperatorFunction<LoginDataContract, LoginDataContract> {
     return source => {
       return source.pipe(
         map(data => this.employeeService.setLoginData(data)),
         tap(data => this.tokenService.setToken(data.accessToken)),
         tap(data => this.tokenService.setRefreshToken(data.refreshToken)),
-        tap(() => listenToRefresh && this._listenToRefresh()),
+        tap(() => updateRefreshInterval && this._setRefreshInterval()),
         tap(
           data =>
             data.internalUser &&
@@ -236,7 +244,6 @@ export class AuthService
           this.menuItemService.filterStaticMenu(data.menuItems || []);
         }),
         tap(() => this.menuItemService.buildHierarchy()),
-        tap(() => this.speechService.generateSpeechToken().subscribe()),
       );
     };
   }
@@ -262,6 +269,9 @@ export class AuthService
   switchOrganization(organizationId: number): Observable<LoginDataContract> {
     return this._switchOrganization(organizationId).pipe(
       this.setDataAfterAuthenticate(false),
+      tap(() =>
+        this.toast.success(this.lang.map.organization_switched_successfully),
+      ),
     );
   }
 }
