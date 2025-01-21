@@ -1,4 +1,7 @@
 import { FormControlDirective, FormControlName, NgModel } from '@angular/forms';
+import { AdminResult } from '@models/admin-result';
+import { ICitations } from '@models/base-message';
+import { format } from 'date-fns';
 import {
   catchError,
   filter,
@@ -6,9 +9,6 @@ import {
   Observable,
   of,
 } from 'rxjs';
-import { AdminResult } from '@models/admin-result';
-import { format } from 'date-fns';
-import { ICitations } from '@models/base-message';
 
 /**
  * to check if the NgControl is NgModel
@@ -366,4 +366,11 @@ export function formatText<T extends { context: { citations: ICitations[] } }>(
 
   // Return the formatted text
   return formattedText.trim();
+}
+
+export function updateFileName(originalFile: File, newName: string) {
+  return new File([originalFile], newName, {
+    type: originalFile.type,
+    lastModified: originalFile.lastModified,
+  });
 }

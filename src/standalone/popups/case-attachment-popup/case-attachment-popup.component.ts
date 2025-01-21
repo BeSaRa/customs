@@ -34,8 +34,8 @@ import { ButtonComponent } from '@standalone/components/button/button.component'
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
-import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { updateFileName } from '@utils/utils';
 import { CustomValidators } from '@validators/custom-validators';
 import {
   combineLatest,
@@ -59,7 +59,6 @@ import { ScanPopupComponent } from '../scan-popup/scan-popup.component';
     MatDialogModule,
     ReactiveFormsModule,
     SelectInputComponent,
-    SwitchComponent,
     MatIconModule,
     MatTableModule,
     MatSortModule,
@@ -367,6 +366,12 @@ export class CaseAttachmentPopupComponent
           .pipe(takeUntil(this.destroy$))
           .subscribe(value => {
             this.attachments[i].documentTitle = value;
+            if (this.attachments[i].content) {
+              this.attachments[i].content = updateFileName(
+                this.attachments[i].content!,
+                value,
+              );
+            }
           });
       })(index);
     });
