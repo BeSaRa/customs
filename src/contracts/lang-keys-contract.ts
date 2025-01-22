@@ -830,4 +830,5 @@ export interface LangKeysContract {
   i_dislike: string;
   clear_chat_history: string;
   session_is_over: string;
+  no_users_found_with_this_criteria: string;
 }
