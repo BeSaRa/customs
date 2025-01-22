@@ -38,6 +38,7 @@ import {
 } from 'rxjs';
 import { ConfigService } from './config.service';
 import { ToastService } from './toast.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +59,7 @@ export class AuthService
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
   private readonly lang = inject(LangService);
+  private readonly dialog = inject(MatDialog);
 
   private authenticated = false;
   private _refreshSubscription?: Subscription;
@@ -213,6 +215,7 @@ export class AuthService
     const _isExternal = this.employeeService.isExternal();
     this.employeeService.clearEmployee();
     this._refreshSubscription?.unsubscribe();
+    this.dialog.closeAll();
     this.toast.success(
       message ? message : this.lang.map.logged_out_successfully,
     );
