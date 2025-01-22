@@ -404,4 +404,12 @@ export class CommentPopupComponent
   get copyToLegalAffairs() {
     return 'نسخة الى الشؤون القانونية';
   }
+
+  get buttonSaveName() {
+    return this.isStatementReply
+      ? this.lang.map.reply_to_statement
+      : this.isSendToInvestigator
+        ? this.lang.map.save
+        : this.lang.map.approve;
+  }
 }
