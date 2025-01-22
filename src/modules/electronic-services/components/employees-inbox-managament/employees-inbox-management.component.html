@@ -18,13 +18,14 @@
       bindLabel="getNames"
       bindValue="id"
       [options]="departments"
-      [nullable]="false"
-    ></app-select-input>
+      [nullable]="false"></app-select-input>
     <app-select-input
       [formControl]="employeeControl"
       [label]="lang.map.lbl_employee"
       bindLabel="getNames"
-      [options]="employees"></app-select-input>
+      [options]="employees"
+      [enableFilter]="true"
+      bindFilter="getNames"></app-select-input>
   </div>
   <table
     mat-table
