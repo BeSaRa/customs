@@ -106,7 +106,9 @@
               [label]="lang.map.send_to_hr_user"
               bindValue="id"
               bindLabel="getNames"
-              [options]="usersList" />
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
           </div>
         }
 
@@ -121,7 +123,9 @@
               [bindLabel]="
                 isReviewCustomsAffairsActivity ? 'getNames' : 'getOUUserNames'
               "
-              [options]="usersList" />
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
           </div>
         }
         @if (isSendToPAOfficeUser || isSendToPOfficeUser) {
@@ -135,7 +139,9 @@
               "
               bindValue="id"
               bindLabel="getNames"
-              [options]="usersList" />
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
           </div>
         }
         @if (isSendToInvestigator) {
@@ -145,7 +151,9 @@
               [label]="lang.map.send_to_investigator"
               bindValue="id"
               bindLabel="getNames"
-              [options]="usersList" />
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
           </div>
         }
         @if (isStatementResponse) {
@@ -174,7 +182,7 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="comment$.next()" buttonType="primary"
-      >{{ isStatementReply ? lang.map.reply_to_statement : lang.map.approve }}
+      >{{ buttonSaveName }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline"
       >{{ lang.map.close }}
