@@ -50,6 +50,7 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-witness-criteria-popup',
@@ -88,6 +89,7 @@ export class WitnessCriteriaPopupComponent
   mawaredDepartmentsService = inject(MawaredDepartmentService);
   mawaredEmployeeService = inject(MawaredEmployeeService);
   clearingAgentService = inject(ClearingAgentService);
+  dialog = inject(DialogService);
   // lookups
   personTypes = this.lookupService.lookups.personType;
   witnessTypes = this.lookupService.lookups.witnessType;
@@ -200,6 +202,8 @@ export class WitnessCriteriaPopupComponent
       .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
+        } else {
+          this.dialog.warning(this.lang.map.no_users_found_with_this_criteria);
         }
         this.employees$.next(result);
       });
@@ -223,6 +227,8 @@ export class WitnessCriteriaPopupComponent
       .subscribe(result => {
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
+        } else {
+          this.dialog.warning(this.lang.map.no_users_found_with_this_criteria);
         }
         this.clearingAgents$.next(result);
       });

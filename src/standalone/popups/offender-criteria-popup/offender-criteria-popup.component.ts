@@ -286,7 +286,7 @@ export class OffenderCriteriaPopupComponent
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
-          this.dialog.warning(this.lang.map.no_records_to_display);
+          this.dialog.warning(this.lang.map.no_users_found_with_this_criteria);
         }
         this.employees$.next(result);
       });
@@ -312,7 +312,7 @@ export class OffenderCriteriaPopupComponent
         if (result.length) {
           this.tabComponent.selectedIndex = 1;
         } else {
-          this.dialog.warning(this.lang.map.no_records_to_display);
+          this.dialog.warning(this.lang.map.no_users_found_with_this_criteria);
         }
         this.clearingAgents$.next(result);
       });

@@ -192,6 +192,8 @@ export class WitnessesListComponent
   }
 
   canManageWitness() {
+    console.log(this.employeeService.hasPermissionTo('MANAGE_WITNESS'));
+    console.log(this.readonly);
     return this.employeeService.hasPermissionTo('MANAGE_WITNESS');
   }
 }
