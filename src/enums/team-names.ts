@@ -10,7 +10,7 @@ export enum TeamNames {
   /** مدير الموارد البشرية **/
   Human_Resources_Manager = 'Human Resources Manager',
   /** الشؤون الجمركية **/
-  Customs_Affairs = 'Customs_Affairs',
+  Customs_Affairs = 'Customs Affairs',
   /** مدير الشؤون الجمركية **/
   Customs_Affairs_Manager = 'Customs Affairs Manager',
   /** الرئيس **/
