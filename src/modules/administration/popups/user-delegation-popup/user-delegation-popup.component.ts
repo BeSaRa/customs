@@ -90,7 +90,7 @@ export class UserDelegationPopupComponent
 
     if (this.isFromUserPreferences()) {
       this.departmentId.setValue(
-        this.employeeService.getLoginData()?.internalUser.defaultOUId,
+        this.employeeService.getLoginData()?.organizationUnit.id,
       );
       this.delegatorId.setValue(
         this.employeeService.getLoginData()?.internalUser.id,
