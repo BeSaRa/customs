@@ -15,6 +15,7 @@ export const validationPatterns = {
   ENG_ONLY: new RegExp(/^[a-zA-Z ]+$/),
   AR_ONLY: new RegExp(/^[\u0621-\u064A ]+$/),
   ENG_NUM_ONLY: new RegExp(/^[a-zA-Z0-9]+$/),
+  LOWER_ENG_NUM_ONLY: new RegExp(/^[a-z0-9]+$/),
   AR_NUM_ONLY: new RegExp(/^[\u0621-\u064A0-9\u0660-\u0669]+$/),
   ENG_NUM_ONE_ENG: new RegExp(/^(?=.*[a-zA-Z])([a-zA-Z0-9\- ]+)$/),
   AR_NUM_ONE_AR: new RegExp(

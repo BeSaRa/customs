@@ -1,32 +1,28 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
-import { ButtonComponent } from '@standalone/components/button/button.component';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { InputComponent } from '@standalone/components/input/input.component';
-import { MatDialogClose, MatDialogRef } from '@angular/material/dialog';
 import {
   FormControl,
   ReactiveFormsModule,
   UntypedFormControl,
 } from '@angular/forms';
+import { MatDialogClose, MatDialogRef } from '@angular/material/dialog';
+import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { AllowRegexPattern } from '@standalone/directives/allow-regex-pattern.directive';
+import { ControlDirective } from '@standalone/directives/control.directive';
+import { validationPatterns } from '@validators/validation-utils';
 import { Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { DialogService } from '@services/dialog.service';
-import { inputMaskPatterns } from '@validators/validation-utils';
-import { NgxMaskDirective } from 'ngx-mask';
-import { ControlDirective } from '@standalone/directives/control.directive';
 
 @Component({
   selector: 'app-verify-popup',
   standalone: true,
   imports: [
     ButtonComponent,
-    IconButtonComponent,
-    InputComponent,
     MatDialogClose,
     ReactiveFormsModule,
-    NgxMaskDirective,
     ControlDirective,
+    AllowRegexPattern,
   ],
   templateUrl: './verify-popup.component.html',
   styleUrl: './verify-popup.component.scss',
@@ -37,7 +33,9 @@ export class VerifyPopupComponent implements OnInit {
   dialog = inject(DialogService);
   verify$: Subject<void> = new Subject();
   control: UntypedFormControl = new FormControl('');
-  inputMaskPatterns = inputMaskPatterns;
+
+  readonly regex = validationPatterns.LOWER_ENG_NUM_ONLY;
+
   @HostListener('document:keypress', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'Enter') {
