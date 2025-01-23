@@ -7,4 +7,5 @@ export class InvestigationAttendance extends Cloner {
   status: number = 1;
   attendeeName!: string;
   qid!: string;
+  createdOn!: string;
 }

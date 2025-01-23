@@ -141,6 +141,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     disabled: true,
     value: this.datePipe.transform(Date.now(), this.config.CONFIG.DATE_FORMAT),
   });
+  date = new Date();
+  createdOnCtrl = new FormControl('');
   investigators: InternalUser[] = [];
   currentLanguage = signal(this.lang.getCurrent());
   saveQuestion$: Subject<void> = new Subject<void>();
@@ -262,6 +264,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.lang.map.need_questions_and_answers_to_take_this_action,
       );
     }
+    this.createdOnCtrl.setValue(this.date.toISOString());
     this.attendeeCategoryCtrl.markAsTouched();
     return (
       !!this.model.detailsList.length &&
@@ -281,6 +284,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         attendeeName: this.attendeeNameCtrl.getRawValue() as string,
         qid: this.qidCtrl.getRawValue() as string,
         category: this.attendeeCategoryCtrl.getRawValue() as unknown as number,
+        createdOn: this.createdOnCtrl.value!,
       });
     !this.attendeeCategoryCtrl && delete attendanceObj.category;
     !this.qidCtrl && delete attendanceObj.qid;
@@ -296,6 +300,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       attendanceList: this.attendeeCategoryCtrl.value
         ? [attendanceObj as InvestigationAttendance]
         : [],
+      createdOn: this.createdOnCtrl.value!,
     });
   }
 
