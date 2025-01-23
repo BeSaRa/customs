@@ -188,7 +188,9 @@ export class InvestigationRecordsTableComponent
         switchMap(report => {
           switch (report.status) {
             case ReportStatus.APPROVED:
-              return report.view();
+              return this.investigationService.getDecisionFileAttachments(
+                report.documentVsId!,
+              );
             default:
               return report
                 .openView({

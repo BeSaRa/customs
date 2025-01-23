@@ -51,12 +51,12 @@ export class InvestigationReport extends BaseModel<
     );
   }
 
-  view(): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
-    return this.$$getService$$<InvestigationReportService>().viewReport(
-      this.id,
-      this.getLangService().map.investigation_report,
-    );
-  }
+  // view(): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+  //   return this.$$getService$$<InvestigationReportService>().viewReport(
+  //     this.id,
+  //     this.getLangService().map.investigation_report,
+  //   );
+  // }
 
   isDraft(): boolean {
     return this.status === ReportStatus.DRAFT;

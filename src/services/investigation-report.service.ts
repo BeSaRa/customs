@@ -80,20 +80,20 @@ export class InvestigationReportService extends BaseCrudWithDialogService<
     );
   }
 
-  viewReport(
-    reportId: number,
-    title: string = '',
-  ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
-    return this.downloadReport(reportId).pipe(
-      map(blob => {
-        return this.dialog.open(ViewAttachmentPopupComponent, {
-          disableClose: true,
-          data: {
-            model: blob,
-            title: title,
-          },
-        });
-      }),
-    );
-  }
+  // viewReport(
+  //   reportId: number,
+  //   title: string = '',
+  // ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
+  //   return this.downloadReport(reportId).pipe(
+  //     map(blob => {
+  //       return this.dialog.open(ViewAttachmentPopupComponent, {
+  //         disableClose: true,
+  //         data: {
+  //           model: blob,
+  //           title: title,
+  //         },
+  //       });
+  //     }),
+  //   );
+  // }
 }
