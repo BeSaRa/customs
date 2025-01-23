@@ -29,6 +29,7 @@ export class InvestigationReport extends BaseModel<
   attendanceList: InvestigationAttendance[] = [];
   category!: number;
   createdBy!: number;
+  createdOn!: string;
   creatorInfo!: AdminResult;
   location?: string;
   documentVsId?: string;
