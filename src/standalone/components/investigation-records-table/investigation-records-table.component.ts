@@ -40,6 +40,8 @@ import { ReportStatus } from '@enums/report-status';
 import { InvestigationService } from '@services/investigation.service';
 import { EmployeeService } from '@services/employee.service';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { DialogService } from '@services/dialog.service';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -98,6 +100,7 @@ export class InvestigationRecordsTableComponent
   upload$ = new Subject<File>();
   config = inject(ConfigService);
   toast = inject(ToastService);
+  dialog = inject(DialogService);
   selectedUploadReport?: InvestigationReport;
   uploader?: HTMLInputElement;
   reloadInput = input.required<
@@ -188,9 +191,17 @@ export class InvestigationRecordsTableComponent
         switchMap(report => {
           switch (report.status) {
             case ReportStatus.APPROVED:
-              return this.investigationService.getDecisionFileAttachments(
-                report.documentVsId!,
-              );
+              return this.investigationService
+                .getDecisionFileAttachments(report.documentVsId!)
+                .pipe(
+                  switchMap(model =>
+                    this.dialog
+                      .open(ViewAttachmentPopupComponent, {
+                        data: { model },
+                      })
+                      .afterClosed(),
+                  ),
+                );
             default:
               return report
                 .openView({
