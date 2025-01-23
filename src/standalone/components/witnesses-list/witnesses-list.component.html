@@ -1,6 +1,6 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
-  @if (canManageWitness()) {
+  @if (!readonly && canManageWitness()) {
     <app-icon-button
       (click)="add$.next()"
       class="text-primary"
