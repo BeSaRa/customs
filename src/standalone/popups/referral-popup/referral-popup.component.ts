@@ -227,15 +227,25 @@ export class ReferralPopupComponent
     | TaskResponses.PA_FNL_LAUNCH_DC,
     {
       header: string;
-      footer: string;
+      footer: string | ((tab?: 'employee' | 'broker' | 'mixed') => string);
       whom: string | ((tab?: 'employee' | 'broker') => string);
       complete: string;
       suffix: string;
     }
   > = {
     [SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS]: {
-      header: this.lang.map.static_header_text_for_legal_affairs,
-      footer: this.lang.map.static_footer_text_for_legal_affairs,
+      header: this.lang.map.static_header_text_referral_to_legal_affairs,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map
+            .static_footer_text_referral_to_legal_affairs_broker;
+        } else if (tab === 'employee')
+          return this.lang.map
+            .static_footer_text_referral_to_legal_affairs_employee;
+        else
+          return this.lang.map
+            .static_footer_text_referral_to_legal_affairs_mixed;
+      },
       whom: this.lang.map.director_of_legal_affairs_department,
       complete: this.lang.map.approve,
       suffix: this.lang.map.respected,
@@ -272,8 +282,19 @@ export class ReferralPopupComponent
       suffix: this.lang.map.respected,
     },
     [SystemPenalties.REFERRAL_DISCIPLINARY_COMMITTEE]: {
-      header: this.lang.map.static_header_text_for_disciplinary_committee,
-      footer: this.lang.map.static_footer_text_for_disciplinary_committee,
+      header:
+        this.lang.map.static_header_text_referral_to_disciplinary_committee,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map
+            .static_footer_text_referral_to_disciplinary_committee_broker;
+        } else if (tab === 'employee')
+          return this.lang.map
+            .static_footer_text_referral_to_disciplinary_committee_employee;
+        else
+          return this.lang.map
+            .static_footer_text_referral_to_disciplinary_committee_mixed;
+      },
       whom: this.lang.map.chairman_of_the_disciplinary_committee,
       complete: this.lang.map.approve,
       suffix: this.lang.map.respected,
@@ -445,8 +466,21 @@ export class ReferralPopupComponent
     return this.referralTextMap[this.referralKey()].suffix;
   }
 
-  get formFooter() {
-    return this.referralTextMap[this.referralKey()].footer;
+  // get formFooter() {
+  //   return this.referralTextMap[this.referralKey()].footer;
+  // }
+  get formFooter(): string {
+    const tab = this.hasMixedOffenders()
+      ? 'mixed'
+      : this.hasBrokers()
+        ? 'broker'
+        : 'employee';
+    const method = this.referralTextMap[this.referralKey()]
+      .footer as unknown as (tab?: 'employee' | 'broker' | 'mixed') => string;
+    const stringValue = method as unknown as string;
+    return isFunction(this.referralTextMap[this.referralKey()].footer)
+      ? method(tab)
+      : stringValue;
   }
 
   get complete() {

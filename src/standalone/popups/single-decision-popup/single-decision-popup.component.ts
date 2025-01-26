@@ -353,4 +353,10 @@ export class SingleDecisionPopupComponent
   }
 
   protected readonly Config = Config;
+
+  staticFooterText() {
+    return this.offender().type === OffenderTypes.EMPLOYEE
+      ? this.lang.map.static_footer_text_for_decision_employee
+      : this.lang.map.static_footer_text_for_decision_broker;
+  }
 }
