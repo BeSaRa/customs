@@ -831,4 +831,16 @@ export interface LangKeysContract {
   clear_chat_history: string;
   session_is_over: string;
   no_users_found_with_this_criteria: string;
+  static_header_text_for_decision: string;
+  static_header_text_for_disciplinary_committee_decision: string;
+  static_footer_text_for_decision_broker: string;
+  static_footer_text_for_decision_employee: string;
+  static_header_text_referral_to_legal_affairs: string;
+  static_footer_text_referral_to_legal_affairs_employee: string;
+  static_footer_text_referral_to_legal_affairs_broker: string;
+  static_footer_text_referral_to_legal_affairs_mixed: string;
+  static_header_text_referral_to_disciplinary_committee: string;
+  static_footer_text_referral_to_disciplinary_committee_employee: string;
+  static_footer_text_referral_to_disciplinary_committee_broker: string;
+  static_footer_text_referral_to_disciplinary_committee_mixed: string;
 }

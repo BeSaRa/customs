@@ -40,7 +40,7 @@
       <span>{{ lang.map.after_greetings }}</span>
     </div>
     <div class="flex">
-      <span>{{ lang.map.based_on_your_violations }}</span>
+      <span>{{ lang.map.static_header_text_for_decision }}</span>
     </div>
     <table
       mat-table
@@ -168,6 +168,9 @@
     </div>
     <div>
       <app-textarea [formControl]="textControl" [label]="lang.map.text" />
+      <div class="flex">
+        <span>{{ staticFooterText() }}</span>
+      </div>
     </div>
     <div class="flex justify-end">
       <p class="flex flex-col">
