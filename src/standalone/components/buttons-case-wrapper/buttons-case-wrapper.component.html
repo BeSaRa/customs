@@ -699,7 +699,10 @@
       {{ lang.map.reply_to_statement }}
     </app-button>
   }
-  @if (model().inMyInbox() && model().hasResponse(taskResponses.APPROVE_MODIFICATION)) {
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.APPROVE_MODIFICATION)
+  ) {
     <app-button
       buttonType="primary"
       (click)="responseAction$.next(taskResponses.APPROVE_MODIFICATION)">
@@ -721,7 +724,7 @@
   }
 
   <!-- request statement -->
-  @if (model().isClaimed() && hasRequestStatement()) {
+  @if (hasRequestStatement()) {
     <app-button (click)="openRequestStatementDialog()" buttonType="primary"
       >{{ lang.map.request_statement }}
     </app-button>
