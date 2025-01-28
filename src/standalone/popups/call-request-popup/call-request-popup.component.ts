@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { ButtonComponent } from '@standalone/components/button/button.component';
@@ -30,6 +30,10 @@ import { ControlDirective } from '@standalone/directives/control.directive';
 import { OperationType } from '@enums/operation-type';
 import { CallRequestStatus } from '@enums/call-request-status';
 import { Investigation } from '@models/investigation';
+import {
+  NgxMatTimepickerComponent,
+  NgxMatTimepickerDirective,
+} from 'ngx-mat-timepicker';
 
 @Component({
   selector: 'app-call-request-popup',
@@ -45,12 +49,17 @@ import { Investigation } from '@models/investigation';
     MatDatepickerInput,
     MatDatepicker,
     ControlDirective,
+    NgxMatTimepickerDirective,
+    NgxMatTimepickerComponent,
   ],
   templateUrl: './call-request-popup.component.html',
   styleUrl: './call-request-popup.component.scss',
   providers: [DatePipe],
 })
-export class CallRequestPopupComponent extends AdminDialogComponent<CallRequest> {
+export class CallRequestPopupComponent
+  extends AdminDialogComponent<CallRequest>
+  implements OnInit
+{
   override form!: UntypedFormGroup;
   get summonTimeControl() {
     return this.form.get('summonTime')!;
