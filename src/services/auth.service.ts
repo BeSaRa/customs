@@ -1,5 +1,6 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AppRoutes } from '@constants/app-routes';
 import { CredentialsContract } from '@contracts/credentials-contract';
@@ -16,7 +17,6 @@ import {
   NO_LOADER_TOKEN,
 } from '@http-contexts/tokens';
 import { RegisterServiceMixin } from '@mixins/register-service-mixin';
-import { CommonService } from '@services/common.service';
 import { EmployeeService } from '@services/employee.service';
 import { LangService } from '@services/lang.service';
 import { MenuItemService } from '@services/menu-item.service';
@@ -38,7 +38,6 @@ import {
 } from 'rxjs';
 import { ConfigService } from './config.service';
 import { ToastService } from './toast.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root',
@@ -54,7 +53,6 @@ export class AuthService
   private readonly tokenService = inject(TokenService);
   private readonly menuItemService = inject(MenuItemService);
   private readonly langService = inject(LangService);
-  private readonly commonService = inject(CommonService);
   private readonly configService = inject(ConfigService);
   private readonly router = inject(Router);
   private readonly toast = inject(ToastService);
@@ -178,13 +176,6 @@ export class AuthService
           ),
         ),
       )
-      .pipe(
-        switchMap(() =>
-          !this.tokenService.getTokenFromStore()
-            ? of(null)
-            : this.commonService.loadCounters(),
-        ),
-      )
       .pipe(map(() => true))
       .pipe(
         catchError(() => {
@@ -210,6 +201,7 @@ export class AuthService
   }
 
   logout(message?: string): void {
+    if (!this.authenticated) return;
     this.authenticated = false;
     this.tokenService.clearToken();
     const _isExternal = this.employeeService.isExternal();

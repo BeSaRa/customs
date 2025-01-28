@@ -9,7 +9,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { UserClick } from '@enums/user-click';
 import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
-import { CommonService } from '@services/common.service';
 import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
@@ -33,7 +32,6 @@ import { CustomValidators } from '@validators/custom-validators';
 })
 export class ReassignTaskPopupComponent {
   lang = inject(LangService);
-  commonService = inject(CommonService);
   inboxService = inject(InboxService);
   dialogRef = inject(MatDialogRef);
   data: {

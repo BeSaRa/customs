@@ -20,6 +20,7 @@ import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { SidebarComponent } from '@standalone/components/sidebar/sidebar.component';
 import { Common } from '@models/common';
 import { CommonService } from '@services/common.service';
+import { CounterContract } from '@constants/counter-contract';
 
 @Component({
   selector: 'app-sidebar-menu-item',
@@ -69,11 +70,19 @@ export class SidebarMenuItemComponent
   get hasChildren(): boolean {
     return !!(this.item.children && this.item.children.length);
   }
-  hasCounter(s: keyof Common['counters'] | undefined): boolean {
-    return s ? this.commonService.hasCounter(s) : false;
+  hasCounter(s: keyof CounterContract | undefined): boolean {
+    return s
+      ? !!(
+          this.commonService.counters() &&
+          this.commonService.counters()![s] !== '0'
+        )
+      : false;
   }
-  getCounter(s: keyof Common['counters'] | undefined): string {
-    return s ? this.commonService.getCounter(s) : '';
+  getCounter(s: keyof CounterContract | undefined): string {
+    return s
+      ? (this.commonService.counters() && this.commonService.counters()![s]) ??
+          ''
+      : '';
   }
   trackByLangKey(index: number, item: MenuItemContract) {
     return item.langKey;
