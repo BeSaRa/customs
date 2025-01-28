@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
 import { AppIcons } from '@constants/app-icons';
 import { Config } from '@constants/config';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
+import { ActivitiesName } from '@enums/activities-name';
 import { CaseTypes } from '@enums/case-types';
+import { StepsName } from '@enums/steps-name';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { InboxResult } from '@models/inbox-result';
@@ -13,16 +15,13 @@ import { Lookup } from '@models/lookup';
 import { NoneFilterColumn } from '@models/none-filter-column';
 import { QueryResultSet } from '@models/query-result-set';
 import { SelectFilterColumn } from '@models/select-filter-column';
-import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
+import { EmployeeService } from '@services/employee.service';
 import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
-import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
-import { EmployeeService } from '@services/employee.service';
-import { ActivitiesName } from '@enums/activities-name';
-import { StepsName } from '@enums/steps-name';
 
 @Component({
   selector: 'app-user-inbox',
@@ -38,7 +37,6 @@ export class UserInboxComponent
   lang = inject(LangService);
   router = inject(Router);
   dialog = inject(DialogService);
-  commonService = inject(CommonService);
 
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
   queryResultSet?: QueryResultSet;
@@ -92,7 +90,6 @@ export class UserInboxComponent
         }),
         takeUntil(this.destroy$),
       )
-      .pipe(tap(() => this.commonService.loadCounters().subscribe()))
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };

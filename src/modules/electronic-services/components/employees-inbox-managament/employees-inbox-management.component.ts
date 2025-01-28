@@ -12,17 +12,16 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
 import { QueryResultSet } from '@models/query-result-set';
-import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
 import { InboxService } from '@services/inbox.services';
+import { InternalUserService } from '@services/internal-user.service';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { NavbarService } from '@services/navbar.service';
 import { ReassignTaskPopupComponent } from '@standalone/popups/reassign-task-popup/reassign-task-popup.component';
 import { ignoreErrors } from '@utils/utils';
 import { filter, take, takeUntil } from 'rxjs';
-import { InternalUserService } from '@services/internal-user.service';
 
 @Component({
   selector: 'app-employees-inbox-management',
@@ -39,7 +38,6 @@ export class EmployeesInboxManagementComponent
   employeeService = inject(EmployeeService);
   lookupService = inject(LookupService);
   inboxService = inject(InboxService);
-  commonService = inject(CommonService);
   lang = inject(LangService);
   dialog = inject(DialogService);
   navbarService = inject(NavbarService);

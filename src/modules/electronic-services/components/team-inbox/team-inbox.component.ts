@@ -16,7 +16,6 @@ import { NoneFilterColumn } from '@models/none-filter-column';
 import { QueryResultSet } from '@models/query-result-set';
 import { SelectFilterColumn } from '@models/select-filter-column';
 import { Team } from '@models/team';
-import { CommonService } from '@services/common.service';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
 import { InboxCounterService } from '@services/inbox-counter.service';
@@ -24,7 +23,7 @@ import { InboxService } from '@services/inbox.services';
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { NavbarService } from '@services/navbar.service';
-import { BehaviorSubject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, switchMap, takeUntil } from 'rxjs';
 import { ActionsOnCaseComponent } from '../actions-on-case/actions-on-case.component';
 
 @Component({
@@ -43,7 +42,6 @@ export class TeamInboxComponent
   router = inject(Router);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
-  commonService = inject(CommonService);
   navbarService = inject(NavbarService);
   inboxCounterService = inject(InboxCounterService);
   riskStatus: Lookup[] = this.lookupService.lookups.riskStatus;
@@ -133,7 +131,6 @@ export class TeamInboxComponent
         }),
         takeUntil(this.destroy$),
       )
-      .pipe(tap(() => this.commonService.loadCounters().subscribe()))
       .subscribe((value: QueryResultSet) => {
         this.queryResultSet = value;
         this.oldQueryResultSet = { ...value };

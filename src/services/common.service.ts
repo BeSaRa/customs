@@ -1,5 +1,5 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import {
   IS_IDLE,
   NO_ERROR_HANDLE,
@@ -10,19 +10,47 @@ import { InboxResult } from '@models/inbox-result';
 import { InternalUser } from '@models/internal-user';
 import { UrlService } from '@services/url.service';
 import { CastResponse } from 'cast-response';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of, Subscription, timer } from 'rxjs';
+import { catchError, filter, switchMap, tap } from 'rxjs/operators';
+import { AuthService } from './auth.service';
+import { ConfigService } from './config.service';
+import { EmployeeService } from './employee.service';
+import { CounterContract } from '@constants/counter-contract';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonService {
-  counters?: Common['counters'];
+  private http = inject(HttpClient);
+  private urlService = inject(UrlService);
+  private configService = inject(ConfigService);
+  private authService = inject(AuthService);
+  private employeeService = inject(EmployeeService);
 
-  constructor(
-    private http: HttpClient,
-    private urlService: UrlService,
-  ) {}
+  private _counters = signal<CounterContract | undefined>(undefined);
+  counters = computed(() => this._counters());
+
+  private _poolingSubscribtion?: Subscription;
+
+  constructor() {
+    this._startPolling();
+  }
+
+  private _startPolling() {
+    this._poolingSubscribtion = timer(
+      0,
+      this.configService.CONFIG.TIME_TO_RELOAD_USER_INBOX_COUNTERS * 1000,
+    )
+      .pipe(
+        filter(
+          () =>
+            this.authService.isAuthenticated() &&
+            !this.employeeService.isExternal(),
+        ),
+        switchMap(() => this.loadCounters()),
+      )
+      .subscribe();
+  }
 
   _getURLSegment(): string {
     return this.urlService.URLS.COMMON;
@@ -41,21 +69,15 @@ export class CommonService {
     });
   }
 
-  loadCounters(): Observable<Common> {
-    return this._loadCounters().pipe(
-      tap(counters => {
-        this.counters = counters.counters;
-      }),
-    );
-  }
-
-  hasCounter(key: keyof Common['counters']): boolean {
-    return !!(this.counters && this.counters[key] !== '0');
-  }
-
-  getCounter(key: keyof Common['counters']): string {
-    return (this.counters && this.counters[key]) || '';
-  }
+  loadCounters = () => {
+    return this._loadCounters()
+      .pipe(
+        tap(counters => {
+          this._counters.set(counters.counters);
+        }),
+      )
+      .pipe(catchError(() => of(null)));
+  };
 
   @CastResponse(() => InternalUser, {
     fallback: '$default',
