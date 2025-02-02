@@ -167,11 +167,7 @@
                   <div [matTooltip]="lang.map.situation_search">
                     <app-situation-search-btn
                       [offender]="element"
-                      [id]="
-                        element.type === offenderTypesEnum.EMPLOYEE
-                          ? element.id
-                          : element.agentId
-                      "
+                      [id]="element.getOffenderId()"
                       [type]="element.type"
                       [isCompany]="false"
                       icon="INFORMATION" />
@@ -256,11 +252,7 @@
                 @if (assertType(element).hasStatusSearch()) {
                   <app-situation-search-btn
                     [offender]="element"
-                    [id]="
-                      element.type === offenderTypesEnum.EMPLOYEE
-                        ? element.id
-                        : element.agentId
-                    "
+                    [id]="element.getOffenderId()"
                     [type]="element.type"
                     [isCompany]="false"
                     icon="INFORMATION" />

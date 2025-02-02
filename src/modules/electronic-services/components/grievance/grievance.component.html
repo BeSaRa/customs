@@ -5,8 +5,11 @@
       {{ lang.map.menu_grievances }}
     </h1>
     <div class="flex-auto"></div>
-    @if(hasRequestStatement()){
-      <app-icon-button (click)="openRequestStatementDialog()" [matTooltip]="lang.map.request_statement" icon="REQUEST_STATEMENT" />
+    @if (hasRequestStatement()) {
+      <app-icon-button
+        (click)="openRequestStatementDialog()"
+        [matTooltip]="lang.map.request_statement"
+        icon="REQUEST_STATEMENT" />
     }
   </div>
   <div class="grid gap-4 grid-cols-1 md:grid-cols-4">
@@ -69,8 +72,30 @@
         </div>
         <div class="mb-3">
           <span class="font-medium">{{ lang.map.offender_name }}</span>
-          <div class="input-form p-2 block">
+          <div
+            class="input-form p-2 relative flex justify-between items-center overflow-hidden">
             {{ model.offenderInfo.getNames() }}
+            @if (offender()) {
+              <div
+                class="absolute end-0 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                @if (offender()?.hasStatusSearch()) {
+                  <app-situation-search-btn
+                    [offender]="offender()!"
+                    [id]="offender()!.getOffenderId()!"
+                    [type]="offender()!.type"
+                    [isCompany]="false"
+                    icon="INFORMATION"></app-situation-search-btn>
+                }
+                @if (offender()?.hasStatusSearch(true)) {
+                  <app-situation-search-btn
+                    [offender]="offender()!"
+                    [id]="offender()!.getOffenderId()!"
+                    [type]="offender()!.type"
+                    [isCompany]="true"
+                    icon="CLEARING_AGENCY" />
+                }
+              </div>
+            }
           </div>
         </div>
         <div class="mb-3">
