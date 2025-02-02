@@ -1,4 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { CommonService } from '@services/common.service';
 import { EmployeeService } from '@services/employee.service';
 
 @Component({
@@ -6,9 +7,16 @@ import { EmployeeService } from '@services/employee.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
   employeeService = inject(EmployeeService);
-  // permissionService = inject(PermissionService)
-  //   .generateAppPermission()
-  //   .subscribe(console.log);
+
+  private _commonService = inject(CommonService);
+
+  ngOnInit(): void {
+    this._commonService.startPolling();
+  }
+
+  ngOnDestroy(): void {
+    this._commonService.stopPolling();
+  }
 }

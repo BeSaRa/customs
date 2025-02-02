@@ -1,11 +1,10 @@
 import { Component, HostListener, inject } from '@angular/core';
+import { AuthService } from '@services/auth.service';
+import { CacheService } from '@services/cache.service';
 import { DialogService } from '@services/dialog.service';
 import { LangService } from '@services/lang.service';
-import { AuthService } from '@services/auth.service';
-import { LocalizationService } from '@services/localization.service';
-import { CacheService } from '@services/cache.service';
 import { LoadingService } from '@services/loading.service';
-import { CommonService } from '@services/common.service';
+import { LocalizationService } from '@services/localization.service';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +18,6 @@ export class AppComponent {
   loadingService = inject(LoadingService);
   localizationService = inject(LocalizationService);
   cacheService = inject(CacheService);
-  // injecting just to make DI create an instance of commonService
-  private _commonService = inject(CommonService);
 
   get spinnerPosition(): 'right' | 'left' {
     return this.lang.getCurrent().direction === 'rtl' ? 'left' : 'right';
