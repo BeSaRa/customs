@@ -32,11 +32,7 @@ export class CommonService {
 
   private _poolingSubscribtion?: Subscription;
 
-  constructor() {
-    this._startPolling();
-  }
-
-  private _startPolling() {
+  startPolling() {
     this._poolingSubscribtion = timer(
       0,
       this.configService.CONFIG.TIME_TO_RELOAD_USER_INBOX_COUNTERS * 1000,
@@ -50,6 +46,10 @@ export class CommonService {
         switchMap(() => this.loadCounters()),
       )
       .subscribe();
+  }
+
+  stopPolling() {
+    this._poolingSubscribtion?.unsubscribe();
   }
 
   _getURLSegment(): string {
