@@ -97,13 +97,21 @@ export class Offender extends BaseModel<Offender, OffenderService> {
       : (this.offenderInfo as ClearingAgent).getCompanyName();
   }
 
-  isEmployee(item: Offender['offenderInfo']): item is MawaredEmployee {
-    return item?.type === OffenderTypes.EMPLOYEE;
+  isEmployee() {
+    return this.offenderInfo instanceof MawaredEmployee;
   }
 
   getJobGrade(): string {
-    return this.offenderInfo && this.isEmployee(this.offenderInfo)
-      ? this.offenderInfo.employeeCareerLevelInfo.getNames()
+    return this.offenderInfo && this.isEmployee()
+      ? (
+          this.offenderInfo as MawaredEmployee
+        ).employeeCareerLevelInfo.getNames()
       : 'N/A';
+  }
+
+  getOffenderId() {
+    return this.isEmployee()
+      ? this.offenderInfo?.id
+      : (this.offenderInfo as ClearingAgent)?.agentId;
   }
 }

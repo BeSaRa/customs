@@ -1,29 +1,31 @@
-import { Component, inject, input } from '@angular/core';
-import { LangService } from '@services/lang.service';
 import { BaseCaseComponent } from '@abstracts/base-case-component';
-import { Investigation } from '@models/investigation';
-import { Grievance } from '@models/grievance';
-import { GrievanceService } from '@services/grievance.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, switchMap } from 'rxjs';
-import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
-import { MatCard } from '@angular/material/card';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
-import { OpenFrom } from '@enums/open-from';
-import { OpenedInfoContract } from '@contracts/opened-info-contract';
-import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
-import { FolderType } from '@enums/folder-type.enum';
-import { LookupService } from '@services/lookup.service';
-import { DialogService } from '@services/dialog.service';
-import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
-import { MatTooltip } from '@angular/material/tooltip';
-import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-comment-popup/grievance-comment-popup.component';
-import { UntypedFormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
+import { Component, inject, input, signal } from '@angular/core';
+import { UntypedFormGroup } from '@angular/forms';
+import { MatCard } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
+import { OpenedInfoContract } from '@contracts/opened-info-contract';
 import { ActivitiesName } from '@enums/activities-name';
+import { FolderType } from '@enums/folder-type.enum';
+import { GrievanceFinalDecisionsEnum } from '@enums/grievance-final-decisions-enum';
+import { OpenFrom } from '@enums/open-from';
+import { Grievance } from '@models/grievance';
+import { Investigation } from '@models/investigation';
+import { Offender } from '@models/offender';
+import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
+import { GrievanceService } from '@services/grievance.service';
+import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
 import { StatementService } from '@services/statement.service';
+import { ButtonsCaseWrapperComponent } from '@standalone/components/buttons-case-wrapper/buttons-case-wrapper.component';
+import { CaseAttachmentsComponent } from '@standalone/components/case-attachments/case-attachments.component';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { GrievanceCommentPopupComponent } from '@standalone/popups/grievance-comment-popup/grievance-comment-popup.component';
+import { Observable, Subject, switchMap } from 'rxjs';
+import { SituationSearchBtnComponent } from '../situation-search-btn/situation-search-btn.component';
+import { OffenderService } from '@services/offender.service';
 
 @Component({
   selector: 'app-grievance',
@@ -31,12 +33,11 @@ import { StatementService } from '@services/statement.service';
   imports: [
     ButtonsCaseWrapperComponent,
     MatCard,
-    MatTab,
-    MatTabGroup,
     CaseAttachmentsComponent,
     IconButtonComponent,
     MatTooltip,
     DatePipe,
+    SituationSearchBtnComponent,
   ],
   templateUrl: './grievance.component.html',
   styleUrl: './grievance.component.scss',
@@ -53,6 +54,9 @@ export class GrievanceComponent extends BaseCaseComponent<
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
   statementService = inject(StatementService);
+  offenderService = inject(OffenderService);
+
+  offender = signal<Offender | undefined>(undefined);
 
   info = input<OpenedInfoContract | null>(null);
   form!: UntypedFormGroup;
@@ -60,8 +64,18 @@ export class GrievanceComponent extends BaseCaseComponent<
 
   protected override _init() {
     super._init();
+    this.loadOffenderData();
     this.listenToComment();
   }
+
+  loadOffenderData() {
+    this.offenderService
+      .loadByIdComposite(this.model.offenderId)
+      .subscribe(o => {
+        this.offender.set(o);
+      });
+  }
+
   listenToComment() {
     this.comment$
       .pipe(

@@ -1,10 +1,26 @@
+import { DatePipe, LocationStrategy } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AppFullRoutes } from '@constants/app-full-routes';
 import { Config } from '@constants/config';
+import { INavigatedItem } from '@contracts/inavigated-item';
+import { CaseTypes } from '@enums/case-types';
+import { OffenderTypes } from '@enums/offender-types';
+import { OpenFrom } from '@enums/open-from';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ClearingAgency } from '@models/clearing-agency';
+import { ClearingAgent } from '@models/clearing-agent';
+import { MawaredEmployee } from '@models/mawared-employee';
+import { Offender } from '@models/offender';
 import { SituationSearch } from '@models/situation-search';
+import { EncryptionService } from '@services/encryption.service';
+import { InvestigationService } from '@services/investigation.service';
 import { LangService } from '@services/lang.service';
+import { LookupService } from '@services/lookup.service';
 import { SituationSearchService } from '@services/situation-search.service';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { ignoreErrors } from '@utils/utils';
 import {
   catchError,
@@ -15,23 +31,6 @@ import {
   takeUntil,
   throwError,
 } from 'rxjs';
-import { MawaredEmployee } from '@models/mawared-employee';
-import { Offender } from '@models/offender';
-import { DatePipe, LocationStrategy } from '@angular/common';
-import { ProofTypes } from '@enums/proof-types';
-import { OffenderTypes } from '@enums/offender-types';
-import { ClearingAgent } from '@models/clearing-agent';
-import { ClearingAgency } from '@models/clearing-agency';
-import { CaseTypes } from '@enums/case-types';
-import { INavigatedItem } from '@contracts/inavigated-item';
-import { OpenFrom } from '@enums/open-from';
-import { AppFullRoutes } from '@constants/app-full-routes';
-import { EncryptionService } from '@services/encryption.service';
-import { Router } from '@angular/router';
-import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { InvestigationService } from '@services/investigation.service';
-import { FormBuilder, FormGroup, UntypedFormControl } from '@angular/forms';
-import { LookupService } from '@services/lookup.service';
 
 @Component({
   selector: 'app-situation-search',
