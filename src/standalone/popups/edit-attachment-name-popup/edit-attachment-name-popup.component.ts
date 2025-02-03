@@ -40,23 +40,15 @@ export class EditAttachmentNamePopupComponent {
   dialogRef = inject(MatDialogRef);
   toast = inject(ToastService);
 
-  title = new FormControl(this._getInitialTitle(), [CustomValidators.required]);
-
-  private _getInitialTitle() {
-    const _index = this.data.attachment.documentTitle.lastIndexOf('.');
-    return this.data.attachment.documentTitle.slice(0, _index);
-  }
-
-  private _getSuffix() {
-    const _index = this.data.attachment.documentTitle.lastIndexOf('.');
-    return this.data.attachment.documentTitle.slice(_index);
-  }
+  title = new FormControl(this.data.attachment.documentTitle, [
+    CustomValidators.required,
+  ]);
 
   save() {
     this.data.attachment
       .updateAttachmentTitle(
         this.data.service,
-        (this.title.value ?? '') + this._getSuffix(),
+        this.title.value ?? '',
         this.data.isExternal,
       )
       .pipe(take(1))
