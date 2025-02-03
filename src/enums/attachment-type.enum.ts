@@ -1,0 +1,4 @@
+export enum AttachmentTypes {
+  INVESTIGATION_REPORT_OPINION = 13,
+  ADMINISTRATIVE_INVESTIGATION = 14,
+}

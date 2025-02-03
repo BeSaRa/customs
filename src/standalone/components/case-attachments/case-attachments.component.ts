@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { Config } from '@constants/config';
+import { AttachmentTypes } from '@enums/attachment-type.enum';
 import { FolderType } from '@enums/folder-type.enum';
 import { OperationType } from '@enums/operation-type';
 import { UserClick } from '@enums/user-click';
@@ -153,8 +154,13 @@ export class CaseAttachmentsComponent
                       )
                       .filter(
                         doc =>
-                          // 13 is for Investigation report opinion
-                          !(doc.attachmentTypeId === 13 && !doc.isApproved) &&
+                          !(
+                            (doc.attachmentTypeId ===
+                              AttachmentTypes.INVESTIGATION_REPORT_OPINION ||
+                              doc.attachmentTypeId ===
+                                AttachmentTypes.ADMINISTRATIVE_INVESTIGATION) &&
+                            !doc.isApproved
+                          ) &&
                           ((doc.isLegal &&
                             (doc.isExportable ||
                               this.employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief())) ||
