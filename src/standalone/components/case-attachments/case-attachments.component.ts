@@ -153,11 +153,13 @@ export class CaseAttachmentsComponent
                       )
                       .filter(
                         doc =>
-                          (doc.isLegal &&
+                          // 13 is for Investigation report opinion
+                          !(doc.attachmentTypeId === 13 && !doc.isApproved) &&
+                          ((doc.isLegal &&
                             (doc.isExportable ||
                               this.employeeService.isLegalAffairsOrInvestigatorOrInvestigatorChief())) ||
-                          (!doc.isLegal &&
-                            (doc.isApproved === null || doc.isApproved)),
+                            (!doc.isLegal &&
+                              (doc.isApproved === null || doc.isApproved))),
                       );
                   }),
                 );
