@@ -1,6 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ lang.map.comment }}</h1>
+    <h1>{{ isReassign ? lang.map.reassign : lang.map.comment }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -170,20 +170,42 @@
             >
           </div>
         }
-        <div class="col-12 mb-3">
-          <app-textarea
-            formControlName="comment"
-            [label]="
-              isStatementReply ? lang.map.reply : lang.map.comment
-            "></app-textarea>
-        </div>
+        @if (!isReassign) {
+          <div class="col-12 mb-3">
+            <app-textarea
+              formControlName="comment"
+              [label]="
+                isStatementReply ? lang.map.reply : lang.map.comment
+              "></app-textarea>
+          </div>
+        }
       </form>
+      @if (isReassign) {
+        <form [formGroup]="reassignForm">
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="toUser"
+              [label]="lang.map.reassign_to_user"
+              bindValue="domainName"
+              bindLabel="getNames"
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
+          </div>
+        </form>
+      }
     }
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="comment$.next()" buttonType="primary"
-      >{{ buttonSaveName }}
-    </app-button>
+    @if (!isReassign) {
+      <app-button (click)="comment$.next()" buttonType="primary"
+        >{{ buttonSaveName }}
+      </app-button>
+    } @else {
+      <app-button (click)="reassign$.next()" buttonType="primary"
+        >{{ this.lang.map.reassign }}
+      </app-button>
+    }
     <app-button mat-dialog-close="" buttonType="primary-outline"
       >{{ lang.map.close }}
     </app-button>

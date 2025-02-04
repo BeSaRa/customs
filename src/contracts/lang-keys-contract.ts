@@ -848,4 +848,6 @@ export interface LangKeysContract {
   static_footer_text_referral_to_disciplinary_committee_mixed: string;
   static_header_text_call_request: string;
   static_footer_text_call_request: string;
+  reassign: string;
+  reassign_to_user: string;
 }
