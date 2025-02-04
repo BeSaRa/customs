@@ -243,6 +243,11 @@ const routes: Routes = [
   {
     path: AppRoutes.CUSTOM_MENU,
     component: CustomMenuComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.MANAGE_MENU_ITEM,
+      }),
+    ],
   },
   {
     path: AppRoutes.USER_GUIDE,
@@ -260,11 +265,11 @@ const routes: Routes = [
   {
     path: AppRoutes.AI_SEARCH,
     component: AiSearchComponent,
-    // canActivate: [
-    //   accessPageGuard({
-    //     permission: AppPermissions.MANAGE_USER_DELEGATION,
-    //   }),
-    // ],
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.OPEN_AI_CHAT,
+      }),
+    ],
   },
 ];
 

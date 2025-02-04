@@ -280,6 +280,7 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.CUSTOM_MENU,
     path: AppFullRoutes.CUSTOM_MENU,
     parent: MenuIdes.ADMINISTRATION,
+    permission: 'MANAGE_MENU_ITEM',
   },
   {
     id: MenuIdes.USER_GUIDE,
@@ -309,6 +310,6 @@ export const Menus: MenuItemContract[] = [
     icon: AppIcons.AI_SEARCH,
     path: AppFullRoutes.AI_SEARCH,
     parent: MenuIdes.ADMINISTRATION,
-    // permission: 'MANAGEMNT_SYSTEM_PREFRENCES',
+    permission: 'OPEN_AI_CHAT',
   },
 ];
