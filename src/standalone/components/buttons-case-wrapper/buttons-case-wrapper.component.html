@@ -729,6 +729,13 @@
       >{{ lang.map.request_statement }}
     </app-button>
   }
+  @if (model().inMyInbox() && isReassign()) {
+    <app-button
+      buttonType="primary"
+      (click)="this.responseAction$.next(this.taskResponses.REASSIGN)">
+      {{ lang.map.reassign }}
+    </app-button>
+  }
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.STM_COMPLETE) &&

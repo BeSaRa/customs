@@ -698,4 +698,12 @@ export class ButtonsCaseWrapperComponent
       );
     }
   }
+
+  isReassign() {
+    return [
+      ActivitiesName.REVIEW_PRESIDENT,
+      ActivitiesName.REVIEW_PRESIDENT_ASSISTANT,
+      ActivitiesName.REVIEW_FINAL_PRESIDENT_ASSISTANT,
+    ].includes(this.model().getActivityName() as ActivitiesName);
+  }
 }

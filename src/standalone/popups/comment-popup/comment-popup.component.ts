@@ -31,6 +31,9 @@ import { InternalUser } from '@models/internal-user';
 import { PenaltyDecision } from '@models/penalty-decision';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { ActivitiesName } from '@enums/activities-name';
+import { StepsName } from '@enums/steps-name';
+import { ReassignService } from '@services/reassign.service';
+import { OffenderTypes } from '@enums/offender-types';
 
 @Component({
   selector: 'app-comment-popup',
@@ -57,8 +60,11 @@ export class CommentPopupComponent
   dialogRef = inject(MatDialogRef);
   employee = inject(EmployeeService).getEmployee();
   penaltyDecisionService = inject(PenaltyDecisionService);
+  reassignService = inject(ReassignService);
   comment$ = new Subject<void>();
+  reassign$ = new Subject<void>();
   form!: UntypedFormGroup;
+  reassignForm!: UntypedFormGroup;
   model: Investigation = this.data && (this.data.model as Investigation);
   response: TaskResponses = this.data && (this.data.response as TaskResponses);
 
@@ -99,6 +105,7 @@ export class CommentPopupComponent
   ngOnInit() {
     this.buildForm();
     this.listenToComment();
+    this.listenToReassign();
     this._loadUsersList();
     this.isPreviewForm = this.previewFormList.includes(this.response);
   }
@@ -135,20 +142,21 @@ export class CommentPopupComponent
     return this.model.inActivity(ActivitiesName.REVIEW_CUSTOMS_AFFAIRS);
   }
 
+  get isReassign() {
+    return this.response === TaskResponses.REASSIGN;
+  }
+
   private _loadUsersList() {
-    if (this.isSendToHrUser) {
-      this.teamService
-        .loadTeamMembers(TeamNames.Human_Resources, this.ouId)
-        .subscribe(data => {
-          this.usersList = data;
-        });
-    } else if (this.isSendToUser) {
-      this.isReviewCustomsAffairsActivity
-        ? this.teamService
-            .loadTeamMembers(TeamNames.Customs_Affairs, this.ouId)
-            .subscribe(data => {
-              this.usersList = data;
-            })
+    const loadTeamMembers = (team: TeamNames) => {
+      this.teamService.loadTeamMembers(team, this.ouId).subscribe(data => {
+        this.usersList = data;
+      });
+    };
+
+    if (this.isSendToHrUser) return loadTeamMembers(TeamNames.Human_Resources);
+    if (this.isSendToUser) {
+      return this.isReviewCustomsAffairsActivity
+        ? loadTeamMembers(TeamNames.Customs_Affairs)
         : this.internalUserOUService
             .internalUserOUCriteria({
               organizationUnitId:
@@ -157,27 +165,71 @@ export class CommentPopupComponent
             .subscribe(data => {
               this.usersList = data;
             });
-    } else if (this.isSendToInvestigator) {
-      this.teamService
-        .loadTeamMembers(TeamNames.Investigator, this.ouId)
-        .subscribe(data => {
-          this.usersList = data;
-        });
-    } else if (
+    }
+    if (this.isSendToInvestigator)
+      return loadTeamMembers(TeamNames.Investigator);
+    if (
       this.isSendToPAOfficeUser &&
       this.employeeService.getOrganizationUnit()?.id
     ) {
-      this.teamService
-        .loadTeamMembers(TeamNames.President_Assistant_Office, this.ouId)
-        .subscribe(data => {
-          this.usersList = data;
-        });
-    } else if (this.isSendToPOfficeUser) {
-      this.teamService
-        .loadTeamMembers(TeamNames.President_Office, this.ouId)
-        .subscribe(data => {
-          this.usersList = data;
-        });
+      return loadTeamMembers(TeamNames.President_Assistant_Office);
+    }
+    if (this.isSendToPOfficeUser)
+      return loadTeamMembers(TeamNames.President_Office);
+
+    if (this.isReassign) return this._handleReassignment();
+  }
+
+  private _handleReassignment() {
+    const loadTeamMembers = (team: TeamNames) => {
+      this.teamService.loadTeamMembers(team, this.ouId).subscribe(data => {
+        this.usersList = data;
+      });
+    };
+
+    const taskName = this.model.taskDetails.name as StepsName;
+    const activityName = this.model.getActivityName();
+    const isEmployee = this.isEmployee;
+
+    const teamMappings: Record<string, Record<string, TeamNames>> = {
+      [ActivitiesName.REVIEW_PRESIDENT]: {
+        [StepsName.PRESIDENT_USER_REVIEW]: TeamNames.President,
+        [StepsName.PRESIDENT_REVIEW]: TeamNames.President,
+        [StepsName.PRESIDENT_OFFICE_USER_REVIEW]: TeamNames.President_Office,
+        [StepsName.PRESIDENT_OFFICE_REVIEW]: TeamNames.President_Office,
+      },
+      [ActivitiesName.REVIEW_PRESIDENT_ASSISTANT]: {
+        [StepsName.PRESIDENT_ASSISTANT_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant
+          : TeamNames.CA_President_Assistant,
+        [StepsName.PRESIDENT_ASSISTANT_USER_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant
+          : TeamNames.CA_President_Assistant,
+        [StepsName.PRESIDENT_ASSISTANT_OFFICE_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant_Office
+          : TeamNames.CA_President_Assistant_Office,
+        [StepsName.PRESIDENT_ASSISTANT_OFFICE_USER_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant_Office
+          : TeamNames.CA_President_Assistant_Office,
+      },
+      [ActivitiesName.REVIEW_FINAL_PRESIDENT_ASSISTANT]: {
+        [StepsName.PRESIDENT_ASSISTANT_FINAL_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant
+          : TeamNames.CA_President_Assistant,
+        [StepsName.PRESIDENT_ASSISTANT_FINAL_USER_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant
+          : TeamNames.CA_President_Assistant,
+        [StepsName.PRESIDENT_ASSISTANT_OFFICE_FINAL_USER_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant_Office
+          : TeamNames.CA_President_Assistant_Office,
+        [StepsName.PRESIDENT_ASSISTANT_OFFICE_FINAL_REVIEW]: isEmployee
+          ? TeamNames.President_Assistant_Office
+          : TeamNames.CA_President_Assistant_Office,
+      },
+    };
+
+    if (activityName && taskName && teamMappings[activityName]?.[taskName]) {
+      return loadTeamMembers(teamMappings[activityName][taskName]);
     }
   }
 
@@ -186,6 +238,10 @@ export class CommentPopupComponent
       comment: new UntypedFormControl('', [CustomValidators.maxLength(100000)]),
       userId: new UntypedFormControl(null, []),
     });
+    if (this.isReassign)
+      this.reassignForm = new UntypedFormGroup({
+        toUser: new UntypedFormControl(''),
+      });
     if (
       this.isSendToUser ||
       this.isSendToInvestigator ||
@@ -201,6 +257,24 @@ export class CommentPopupComponent
     }
   }
 
+  listenToReassign() {
+    this.reassign$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(filter(() => this.reassignForm.valid))
+      .pipe(
+        switchMap(() => {
+          const completeBody = {
+            tkiid: this.model.taskDetails.tkiid,
+            caseId: this.model.id,
+            toUser: this.reassignForm.value.toUser,
+          };
+          return this.reassignService.reassign(completeBody);
+        }),
+      )
+      .subscribe(() => {
+        this.dialogRef.close(UserClick.YES);
+      });
+  }
   listenToComment() {
     this.comment$
       .pipe(takeUntil(this.destroy$))
@@ -390,7 +464,7 @@ export class CommentPopupComponent
   }
 
   get isEmployee() {
-    return true;
+    return this.model.offenderInfo[0].type === OffenderTypes.EMPLOYEE;
   }
 
   get isClearingAgent() {
