@@ -1,3 +1,10 @@
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { DatePipe } from '@angular/common';
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
@@ -6,15 +13,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppFullRoutes } from '@constants/app-full-routes';
 import { AppIcons } from '@constants/app-icons';
+import { Config } from '@constants/config';
 import { ContextMenuActionContract } from '@contracts/context-menu-action-contract';
 import { INavigatedItem } from '@contracts/inavigated-item';
 import { OffenderTypeWithNone } from '@enums/offender-type-with-none';
+import { OffenderTypes } from '@enums/offender-types';
 import { OpenFrom } from '@enums/open-from';
+import { ClassificationTypes } from '@enums/violation-classification';
+import { AdminResult } from '@models/admin-result';
 import { ColumnsWrapper } from '@models/columns-wrapper';
 import { Investigation } from '@models/investigation';
 import { InvestigationSearchCriteria } from '@models/Investigation-search-criteria';
 import { NoneFilterColumn } from '@models/none-filter-column';
+import { OffenderViolation } from '@models/offender-violation';
 import { OrganizationUnit } from '@models/organization-unit';
+import { Violation } from '@models/violation';
+import { ViolationClassification } from '@models/violation-classification';
 import { ActionsOnCaseComponent } from '@modules/electronic-services/components/actions-on-case/actions-on-case.component';
 import { ConfigService } from '@services/config.service';
 import { DialogService } from '@services/dialog.service';
@@ -24,6 +38,7 @@ import { InvestigationSearchService } from '@services/investigation-search.servi
 import { LangService } from '@services/lang.service';
 import { LookupService } from '@services/lookup.service';
 import { OrganizationUnitService } from '@services/organization-unit.service';
+import { ViolationClassificationService } from '@services/violation-classification.service';
 import { range } from '@utils/utils';
 import {
   BehaviorSubject,
@@ -38,20 +53,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { Config } from '@constants/config';
-import { OffenderViolation } from '@models/offender-violation';
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
-import { ClassificationTypes } from '@enums/violation-classification';
-import { AdminResult } from '@models/admin-result';
-import { OffenderTypes } from '@enums/offender-types';
-import { ViolationClassification } from '@models/violation-classification';
-import { ViolationClassificationService } from '@services/violation-classification.service';
 
 @Component({
   selector: 'app-investigation-search',
@@ -105,7 +106,7 @@ export class InvestigationSearchComponent implements OnInit {
     limit: 50,
   });
   length = 50;
-  offenderViolationInfo: Map<string, OffenderViolation[]> = new Map();
+  violationInfo: Map<string, Violation[]> = new Map();
   readonly OffenderTypeWithNone = OffenderTypeWithNone;
 
   @HostListener('document:keypress', ['$event'])
@@ -165,16 +166,14 @@ export class InvestigationSearchComponent implements OnInit {
     });
   }
 
-  showInvestigationViolationClassification(
-    OffendersViolations: OffenderViolation[],
-  ) {
+  showInvestigationViolationClassification(violations: Violation[]) {
     const map = new Map();
-    OffendersViolations.forEach(offenderViolation => {
-      if (!map.has(offenderViolation.violationInfo.classificationInfo.id)) {
+    violations.forEach(violation => {
+      if (!map.has(violation.classificationInfo.id)) {
         map.set(
-          offenderViolation.violationInfo.classificationInfo.id,
+          violation.classificationInfo.id,
           AdminResult.createInstance({
-            ...offenderViolation.violationInfo.classificationInfo,
+            ...violation.classificationInfo,
           }),
         );
       }
@@ -313,9 +312,9 @@ export class InvestigationSearchComponent implements OnInit {
       .pipe(
         tap(data => {
           data.forEach(element => {
-            this.offenderViolationInfo.set(element.id, [
+            this.violationInfo.set(element.id, [
               ...this.showInvestigationViolationClassification(
-                element.offenderViolationInfo,
+                element.violationInfo,
               ),
             ]);
           });
