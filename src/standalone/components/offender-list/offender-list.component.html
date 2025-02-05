@@ -103,7 +103,7 @@
           @if (assertType(element).hasStatusSearch()) {
             <app-situation-search-btn
               [offender]="element"
-              [id]="element.getOffenderId()"
+              [id]="assertType(element).getOffenderId()!"
               [type]="element.type"
               [isCompany]="false"
               icon="INFORMATION" />
