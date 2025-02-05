@@ -22,6 +22,7 @@ export class ChatHistoryService {
     }
     return this.http.get<Conversation[]>(url, { params: params });
   }
+
   addFeedback(
     conversationId: string,
     feedback: FeedbackChat,
