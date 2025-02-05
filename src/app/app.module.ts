@@ -1,6 +1,7 @@
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { NgOptimizedImage } from '@angular/common';
 import {
+  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptors,
   withInterceptorsFromDi,
@@ -46,7 +47,6 @@ import { MenuItemService } from '@services/menu-item.service';
 import { PenaltyDecisionService } from '@services/penalty-decision.service';
 import { UrlService } from '@services/url.service';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-// import { ChatAiComponent } from '@standalone/components/chat-ai/chat-ai.component';
 import { InputComponent } from '@standalone/components/input/input.component';
 import { LoadingComponent } from '@standalone/components/loading/loading.component';
 import { NavbarComponent } from '@standalone/components/navbar/navbar.component';
@@ -68,6 +68,7 @@ import { ExternalLoginComponent } from './components/external-login/external-log
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ChatComponent } from '@standalone/components/chat/chat.component';
+import { AzureAuthInterceptor } from '@model-interceptors/azure-auth.service';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,11 @@ import { ChatComponent } from '@standalone/components/chat/chat.component';
     DragDropModule,
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AzureAuthInterceptor,
+      multi: true,
+    },
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,

@@ -18,15 +18,13 @@ export abstract class BaseChatService {
   abstract status: WritableSignal<boolean>;
   abstract conversationId: WritableSignal<string>;
 
-  sendMessage(
-    content: string,
-    bot: string,
-  ): Observable<ChatMessageResultContract> {
+  sendMessage(content: string): Observable<ChatMessageResultContract> {
     const url = this.urlService.AZURE_URLS.CHAT_BOT_WEBSITE;
     this.messages.update(messages => [
       ...messages,
       new Message(content, 'user'),
     ]);
+
     return this.http
       .post<ChatMessageResultContract>(url, {
         messages: this.messages(),

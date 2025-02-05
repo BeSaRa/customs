@@ -16,7 +16,6 @@ export class AiSearchService {
   search(
     searchQuery: SearchQueryContract,
   ): Observable<PaginationResultContract<SearchResultContract>> {
-    console.log(this.urlService.URLS.BASE_URL);
     const url = this.urlService.AZURE_URLS.SEARCH_WEBSITE;
     return this.http.post<PaginationResultContract<SearchResultContract>>(
       url,
