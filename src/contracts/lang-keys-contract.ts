@@ -851,4 +851,5 @@ export interface LangKeysContract {
   reassign: string;
   reassign_to_user: string;
   request_is_added_and_sent_to_group_mail: string;
+  immunization_duration: string;
 }

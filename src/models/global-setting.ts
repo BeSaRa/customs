@@ -27,6 +27,7 @@ export class GlobalSetting extends BaseModel<
   maxInvestigationDelay!: number;
   customsAffairsPAOU!: number;
   customsAffairsPAOUInfo!: AdminResult;
+  immunizationDuration!: number;
   // extra properties
   supportEmailListParsed: string[] = [];
   fileTypeParsed: string[] = [];
@@ -44,6 +45,7 @@ export class GlobalSetting extends BaseModel<
       enableSMSNotification,
       managerMaxViolation,
       maxInvestigationDelay,
+      immunizationDuration,
     } = this;
     return {
       systemArabicName: controls
@@ -100,6 +102,12 @@ export class GlobalSetting extends BaseModel<
               Validators.min(5),
               Validators.max(300),
             ],
+          ]
+        : null,
+      immunizationDuration: controls
+        ? [
+            immunizationDuration,
+            [CustomValidators.required, CustomValidators.positiveNumber],
           ]
         : null,
       supportEmailListParsed: new FormBuilder().array([
