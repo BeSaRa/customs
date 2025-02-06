@@ -850,4 +850,5 @@ export interface LangKeysContract {
   static_footer_text_call_request: string;
   reassign: string;
   reassign_to_user: string;
+  request_is_added_and_sent_to_group_mail: string;
 }
