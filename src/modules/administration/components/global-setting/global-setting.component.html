@@ -64,8 +64,15 @@
             [label]="
               lang.map.max_investigation_delay + ' (' + lang.map.day + ')'
             " />
+          <app-input
+            [disabled]="(loading$ | async)!"
+            formControlName="immunizationDuration"
+            type="number"
+            [label]="
+              lang.map.immunization_duration + ' (' + lang.map.day + ')'
+            " />
           <app-select-input
-            class="col-span-2"
+            class="col-span-3"
             [disabled]="(loading$ | async)!"
             formControlName="fileTypeParsed"
             [options]="fileTypes"
