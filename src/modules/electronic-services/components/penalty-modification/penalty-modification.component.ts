@@ -110,6 +110,10 @@ export class PenaltyModificationComponent implements OnInit {
             );
         }),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.dialog.success(
+          this.lang.map.request_is_added_and_sent_to_group_mail,
+        );
+      });
   }
 }
