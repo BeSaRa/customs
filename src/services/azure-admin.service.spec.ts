@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AzureAuthInterceptor } from './azure-auth.service';
-describe('AzureAuthService', () => {
-  let service: AzureAuthInterceptor;
+import { AzureAdminService } from './azure-admin.service';
+
+describe('AzureAdminService', () => {
+  let service: AzureAdminService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AzureAuthInterceptor);
+    service = TestBed.inject(AzureAdminService);
   });
 
   it('should be created', () => {

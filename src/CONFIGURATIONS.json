@@ -5,5 +5,6 @@
     "AZURE": "https://fun-sw-prd-cdi-cbai-01.azurewebsites.net/api/"
   },
   "BASE_ENVIRONMENT": "DEV_IP",
-  "AZURE_ENVIRONMENT": "AZURE"
+  "AZURE_ENVIRONMENT": "AZURE",
+  "AZURE_X_FUNCTION_KEY": "eW3JzV4TJRYiJTkxhcKKO6hySeq9t9KKxjp8eJUHz4F6AzFuxVxblQ=="
 }
