@@ -68,6 +68,7 @@ import { ExternalLoginComponent } from './components/external-login/external-log
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ChatComponent } from '@standalone/components/chat/chat.component';
+import { azureInterceptor } from '@http-interceptors/azure.interceptor';
 
 @NgModule({
   declarations: [
@@ -152,7 +153,7 @@ import { ChatComponent } from '@standalone/components/chat/chat.component';
     { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
     provideHttpClient(
       withInterceptorsFromDi(),
-      withInterceptors([idleInterceptor]),
+      withInterceptors([idleInterceptor, azureInterceptor]),
     ),
     {
       provide: RouteReuseStrategy,

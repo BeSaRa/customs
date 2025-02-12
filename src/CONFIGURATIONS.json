@@ -2,8 +2,9 @@
   "ENVIRONMENTS_URLS": {
     "DEV_IP": "https://192.168.51.5:9445/cdi/api/",
     "QA_IP": "https://192.168.53.15:9445/cdi/api/",
-    "AZURE": "https://ebla-ai-demo-002.azurewebsites.net/api/"
+    "AZURE": "https://fun-sw-prd-cdi-cbai-01.azurewebsites.net/api/"
   },
   "BASE_ENVIRONMENT": "DEV_IP",
-  "AZURE_ENVIRONMENT": "AZURE"
+  "AZURE_ENVIRONMENT": "AZURE",
+  "AZURE_X_FUNCTION_KEY": "eW3JzV4TJRYiJTkxhcKKO6hySeq9t9KKxjp8eJUHz4F6AzFuxVxblQ=="
 }

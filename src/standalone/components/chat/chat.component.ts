@@ -1,3 +1,4 @@
+import { AsyncPipe, DOCUMENT, NgClass } from '@angular/common';
 import {
   Component,
   effect,
@@ -9,8 +10,12 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatRipple } from '@angular/material/core';
-import { AsyncPipe, DOCUMENT, NgClass } from '@angular/common';
+import { MatTooltip } from '@angular/material/tooltip';
+import { ChatService } from '@services/chat.service';
+import { ignoreErrors } from '@utils/utils';
+import PerfectScrollbar from 'perfect-scrollbar';
 import {
   catchError,
   exhaustMap,
@@ -20,21 +25,17 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import PerfectScrollbar from 'perfect-scrollbar';
-import { ChatService } from '@services/chat.service';
-import { ignoreErrors } from '@utils/utils';
-import { MatTooltip } from '@angular/material/tooltip';
 // import { AvatarVideoComponent } from '@/components/avatar-video/avatar-video.component'
 import { CdkDrag, CdkDragHandle } from '@angular/cdk/drag-drop';
 // import { slideFromBottom } from '@/animations/fade-in-slide'
-import { ChatHistoryService } from '@services/chat-history.service';
 import { FeedbackChat } from '@enums/feedback-chat';
+import { ChatHistoryService } from '@services/chat-history.service';
 // import { AvatarInterrupterBtnComponent } from '@/components/avatar-interrupter-btn/avatar-interrupter-btn.component'
-import { LangService } from '@services/lang.service';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { TextWriterAnimatorDirective } from '@standalone/directives/text-writer-animator.directive';
 import { RecorderComponent } from '@modules/administration/components/recorder/recorder.component';
+import { LangService } from '@services/lang.service';
+import { TextWriterAnimatorDirective } from '@standalone/directives/text-writer-animator.directive';
+import { AzureAdminService } from '@services/azure-admin.service';
 
 @Component({
   selector: 'app-chat',
@@ -63,6 +64,7 @@ export class ChatComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   chatService = inject(ChatService);
   chatHistoryService = inject(ChatHistoryService);
+  azureAdminService = inject(AzureAdminService);
   status = this.chatService.status;
   chatContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('chatContainer');
@@ -124,6 +126,26 @@ export class ChatComponent extends OnDestroyMixin(class {}) implements OnInit {
     this.listenToSendMessage();
     // this.listenToBotNameChange()
     this.detectFullScreenMode();
+  }
+
+  private _listenToDynamicAnchorTagsClick() {
+    const _anchorElements: NodeListOf<HTMLAnchorElement> =
+      document.querySelectorAll('a.chat-link');
+    _anchorElements.forEach(anchor => {
+      anchor.addEventListener('click', event => {
+        event.preventDefault();
+        this.azureAdminService.getSasToken(anchor.href).subscribe(res => {
+          window.open(res, '_blank');
+        });
+      });
+    });
+  }
+
+  onTextAnimating(event: boolean) {
+    this.animating.set(event);
+    if (!event) {
+      this._listenToDynamicAnchorTagsClick();
+    }
   }
 
   // listenToBotNameChange() {

@@ -360,7 +360,7 @@ export function formatText<T extends { context: { citations: ICitations[] } }>(
     const url = item.url;
 
     // eslint-disable-next-line max-len
-    return `<br /><small class="px-1 text-primary"><a target="_blank" href="${url}">${title}</a><i class="link-icon"></i></small>`;
+    return `<br /><small class="px-1 text-primary"><a class="chat-link" target="_blank" href="${url}">${title}</a><i class="link-icon"></i></small>`;
   });
   // text = text.replace(/\./g, '.<br>')
 

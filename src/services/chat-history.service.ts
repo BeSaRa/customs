@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { UrlService } from './url.service';
-import { Observable } from 'rxjs';
-import { CastResponse } from 'cast-response';
-import { Conversation } from '@models/conversation';
 import { FeedbackChat } from '@enums/feedback-chat';
+import { Conversation } from '@models/conversation';
+import { CastResponse } from 'cast-response';
+import { Observable } from 'rxjs';
+import { UrlService } from './url.service';
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +30,8 @@ export class ChatHistoryService {
     const params = new HttpParams()
       .set('conv_id', conversationId)
       .set('feedback', feedback);
-    return this.http.post<string>(url, null, { params: params });
+    return this.http.post<string>(url, null, {
+      params: params,
+    });
   }
 }
