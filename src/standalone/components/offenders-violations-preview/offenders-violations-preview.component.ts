@@ -77,6 +77,7 @@ import { OffenderStatusEnum } from '@enums/offender-status.enum';
 import { OffenderInvStatus } from '@enums/offender-inv-status';
 import { MatDialogClose } from '@angular/material/dialog';
 import { ModifiedPenaltyComponent } from '@modules/electronic-services/components/modified-penalty/modified-penalty.component';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -183,7 +184,11 @@ export class OffendersViolationsPreviewComponent
     }, {});
   loadPenalties$ = new Subject<void>();
   penaltiesLoaded$ = this.loadPenalties$
-    .pipe(filter(() => this.canLoadPenalties()))
+    .pipe(
+      filter(
+        () => this.canLoadPenalties() || this.openFrom === OpenFrom.SEARCH,
+      ),
+    )
     .pipe(switchMap(() => this.loadPenalties()))
     .pipe(takeUntil(this.destroy$))
     .pipe(tap(data => this.penaltyMap.set(data)))
@@ -606,7 +611,9 @@ export class OffendersViolationsPreviewComponent
           .getService()
           .getCasePenalty(
             this.model().id as string,
-            this.model().getActivityName()!,
+            this.openFrom === OpenFrom.SEARCH
+              ? ActivitiesName.REVIEW_PENALTY_MODIFICATION
+              : this.model().getActivityName()!,
           )
           .pipe(
             catchError(() => {
@@ -761,5 +768,15 @@ export class OffendersViolationsPreviewComponent
 
   isPenaltyModified(element: Offender) {
     return element.status === OffenderStatusEnum.PENALTY_UPDATED;
+  }
+
+  canMakePenaltyModification(offender: Offender) {
+    return (
+      !!offender.decisionSerial &&
+      this.openFrom === OpenFrom.SEARCH &&
+      this.employeeService.hasPermissionTo(
+        'CREATE_PENALTY_MODIFICATION_REQUEST',
+      )
+    );
   }
 }

@@ -70,6 +70,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-single-decision-popup',
@@ -117,6 +118,7 @@ export class SingleDecisionPopupComponent
     model: InputSignal<Investigation>;
     updateModel: InputSignal<EventEmitter<void>>;
     offenderPenalties: { first: number; second: Penalty[] };
+    isPenaltyModification: boolean;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   lang = inject(LangService);
@@ -125,6 +127,7 @@ export class SingleDecisionPopupComponent
   save$ = new Subject<void>();
   employeeService = inject(EmployeeService);
   dialog = inject(DialogService);
+  investigationService = inject(InvestigationService);
   offenderViolationService = inject(OffenderViolationService);
   offender = signal(this.data.offender);
 
@@ -135,6 +138,7 @@ export class SingleDecisionPopupComponent
   });
 
   model = this.data.model;
+  isPenaltyModification = this.data.isPenaltyModification;
   offenderViolations = this.model().offenderViolationInfo.filter(item => {
     return item.offenderId === this.offender().id;
   });
@@ -300,48 +304,50 @@ export class SingleDecisionPopupComponent
         : null),
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
       tkiid: this.model().getTaskId(),
-      roleAuthName: this.model().getTeamDisplayName(),
+      roleAuthName: this.isPenaltyModification
+        ? 'Penalty Modification'
+        : this.model().getTeamDisplayName(),
     });
   }
 
   private listenToSave() {
     this.save$
-      .pipe(takeUntil(this.destroy$))
-      .pipe(map(() => this.penaltyControl.valid && this.textControl.valid))
       .pipe(
-        tap(
-          valid =>
-            !valid &&
+        takeUntil(this.destroy$),
+        map(() => this.penaltyControl.valid && this.textControl.valid),
+        tap(valid => {
+          if (!valid) {
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
-            ),
-        ),
-        filter(valid => {
-          return valid;
+            );
+          }
         }),
-      )
-      .pipe(
-        map(() => {
-          return this.prepareModel();
-        }),
-      )
-      .pipe(
-        exhaustMap(model => {
-          return model.create().pipe(
-            map(saved => {
-              return new PenaltyDecision().clone<PenaltyDecision>({
+        filter(valid => valid),
+        map(() => this.prepareModel()),
+        exhaustMap(model =>
+          model.create().pipe(
+            map(saved =>
+              new PenaltyDecision().clone<PenaltyDecision>({
                 ...model,
                 id: saved.id,
-              });
-            }),
-          );
+              }),
+            ),
+          ),
+        ),
+        switchMap(model => {
+          this.model().removePenaltyDecision(this.oldPenaltyDecision());
+          this.model().appendPenaltyDecision(model);
+          this.updateModel().emit();
+          this.toast.success(this.lang.map.the_penalty_saved_successfully);
+
+          return this.isPenaltyModification
+            ? this.investigationService.requestPenaltyModification(
+                this.offender().decisionSerial,
+              )
+            : of(null);
         }),
       )
-      .subscribe(model => {
-        this.model().removePenaltyDecision(this.oldPenaltyDecision());
-        this.model().appendPenaltyDecision(model);
-        this.updateModel().emit();
-        this.toast.success(this.lang.map.the_penalty_saved_successfully);
+      .subscribe(() => {
         this.dialogRef.close();
       });
   }

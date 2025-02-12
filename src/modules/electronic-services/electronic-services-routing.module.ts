@@ -45,15 +45,6 @@ const routes: Routes = [
     component: TeamInboxComponent,
   },
   {
-    path: AppRoutes.PENALTY_MODIFICATION,
-    component: PenaltyModificationComponent,
-    canActivate: [
-      accessPageGuard({
-        permission: AppPermissions.CREATE_PENALTY_MODIFICATION_REQUEST,
-      }),
-    ],
-  },
-  {
     path: AppRoutes.EMPLOYEES_INBOX_MANAGEMENT,
     component: EmployeesInboxManagementComponent,
     canActivate: [

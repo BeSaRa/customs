@@ -52,6 +52,7 @@ export class DecisionMakerComponent
   dialog = inject(DialogService);
 
   model = input.required<Investigation>();
+  isPenaltyModification = input.required<boolean>();
   updateModel = input.required<EventEmitter<void>>();
   offender = input.required<Offender>();
   penaltyMap =
@@ -164,6 +165,7 @@ export class DecisionMakerComponent
           this.model,
           this.updateModel,
           this.penaltyMap()[offender.id],
+          this.isPenaltyModification(),
         );
       });
   }
