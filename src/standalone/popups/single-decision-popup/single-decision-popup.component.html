@@ -3,6 +3,11 @@
     <h1>
       {{ lang.map.make_penalty_decision_action }} {{ lang.map.for }} :
       {{ offender().getNames() }}
+      {{
+        isPenaltyModification
+          ? '(' + lang.map.penalty_modification_request + ')'
+          : ''
+      }}
     </h1>
     <app-icon-button
       tabindex="-1"
@@ -191,7 +196,11 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="save$.next()" buttonType="primary"
-      >{{ lang.map.save }}
+      >{{
+        isPenaltyModification
+          ? lang.map.penalty_modification_request
+          : lang.map.save
+      }}
     </app-button>
     <app-button mat-dialog-close="" buttonType="primary-outline">
       {{ lang.map.close }}

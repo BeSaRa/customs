@@ -56,6 +56,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     model: InputSignal<Investigation>,
     updateModel: InputSignal<EventEmitter<void>>,
     offenderPenalties: { first: number | null; second: Penalty[] },
+    isPenaltyModification: boolean,
   ) {
     return this.dialog.open(SingleDecisionPopupComponent, {
       data: {
@@ -63,6 +64,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         model,
         updateModel,
         offenderPenalties,
+        isPenaltyModification,
       },
     });
   }
