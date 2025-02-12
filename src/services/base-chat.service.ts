@@ -1,11 +1,12 @@
 import { ChatMessageResultContract } from '@contracts/chat-message-result-contract';
 import { formatString, formatText } from '@utils/utils';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable, WritableSignal } from '@angular/core';
 import { Observable, catchError, map } from 'rxjs';
 import { UrlService } from './url.service';
 import { AppStore } from '@stores/app.store';
 import { Message } from '@models/message';
+import { NO_LOADER_TOKEN } from '@http-contexts/tokens';
 
 @Injectable({
   providedIn: 'root',
@@ -26,15 +27,19 @@ export abstract class BaseChatService {
     ]);
 
     return this.http
-      .post<ChatMessageResultContract>(url, {
-        messages: this.messages(),
-        ...(this.store.streamId()
-          ? { stream_id: this.store.streamId() }
-          : null),
-        ...(this.conversationId()
-          ? { conversation_id: this.conversationId() }
-          : null),
-      })
+      .post<ChatMessageResultContract>(
+        url,
+        {
+          messages: this.messages(),
+          ...(this.store.streamId()
+            ? { stream_id: this.store.streamId() }
+            : null),
+          ...(this.conversationId()
+            ? { conversation_id: this.conversationId() }
+            : null),
+        },
+        { context: new HttpContext().set(NO_LOADER_TOKEN, true) },
+      )
       .pipe(
         catchError(err => {
           new Message().clone({

@@ -68,7 +68,7 @@ import { ExternalLoginComponent } from './components/external-login/external-log
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { ChatComponent } from '@standalone/components/chat/chat.component';
-import { AzureAuthInterceptor } from '@model-interceptors/azure-auth.service';
+import { azureInterceptor } from '@http-interceptors/azure.interceptor';
 
 @NgModule({
   declarations: [
@@ -113,11 +113,6 @@ import { AzureAuthInterceptor } from '@model-interceptors/azure-auth.service';
     DragDropModule,
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AzureAuthInterceptor,
-      multi: true,
-    },
     MAT_SELECT_SCROLL_STRATEGY_PROVIDER,
     {
       provide: APP_INITIALIZER,
@@ -158,7 +153,7 @@ import { AzureAuthInterceptor } from '@model-interceptors/azure-auth.service';
     { provide: MAT_DATE_FORMATS, useValue: Config.DATE_FORMAT_OVERRIDE },
     provideHttpClient(
       withInterceptorsFromDi(),
-      withInterceptors([idleInterceptor]),
+      withInterceptors([idleInterceptor, azureInterceptor]),
     ),
     {
       provide: RouteReuseStrategy,

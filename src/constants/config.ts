@@ -3,6 +3,7 @@ export const Config = {
   PRIVATE_VERSION: '',
   BASE_ENVIRONMENT: '',
   AZURE_ENVIRONMENT: '',
+  AZURE_X_FUNCTION_KEY: '',
   ENVIRONMENTS_URLS: {},
   API_VERSION: 'v1',
   EXTERNAL_PROTOCOLS: ['http', 'https'],
