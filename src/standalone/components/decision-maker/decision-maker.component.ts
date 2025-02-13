@@ -171,7 +171,11 @@ export class DecisionMakerComponent
   }
 
   getSystemPenalties(id: number) {
-    return (this.penalties()[id] && this.penalties()[id].system) || [];
+    return this.isPenaltyModification()
+      ? ((this.penalties()[id] && this.penalties()[id].system) || []).filter(
+          penalty => penalty.penaltyKey === SystemPenalties.TERMINATE,
+        )
+      : (this.penalties()[id] && this.penalties()[id].system) || [];
   }
 
   private listenToSystemActionChanges() {
