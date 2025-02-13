@@ -5,4 +5,5 @@ export enum OffenderStatusEnum {
   SAVED = 5,
   DELAYED = 11,
   PENALTY_UPDATED = 14,
+  UNDER_MODIFICATION = 15,
 }
