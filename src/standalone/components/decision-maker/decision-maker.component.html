@@ -10,9 +10,7 @@
       icon="GAVEL" />
   </div>
   <app-icon-button
-    [disabled]="
-      !canMakeSystemDecision(offender().id) || isPenaltyModification()
-    "
+    [disabled]="!canMakeSystemDecision(offender().id)"
     [matMenuTriggerFor]="menu"
     icon="DOTS_VERTICAL"
     [matTooltip]="lang.map.take_action">
