@@ -29,11 +29,9 @@ export class ChatMessageAnchorRedirectDirective implements OnInit, OnDestroy {
       event.target.hasAttribute('chat-link')
     ) {
       event.preventDefault();
-      this.azureAdminService
-        .getSasToken((event as unknown as HTMLAnchorElement).href)
-        .subscribe(res => {
-          window.open(res, '_blank');
-        });
+      this.azureAdminService.getSasToken(event.target.href).subscribe(res => {
+        window.open(res, '_blank');
+      });
     }
   };
 }
