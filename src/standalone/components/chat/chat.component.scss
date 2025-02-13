@@ -12,7 +12,7 @@
   @apply bg-primary text-white;
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     right: -12px;
     top: 0;
@@ -26,7 +26,7 @@
 .assistant-message {
   @apply bg-gray-200 text-black;
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     left: -10px;
     top: 0;
@@ -37,10 +37,10 @@
   }
 }
 
-html[dir='ltr'] {
+html[dir="ltr"] {
   .user-message {
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       left: -12px;
       top: 0;
@@ -53,7 +53,7 @@ html[dir='ltr'] {
 
   .assistant-message {
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       right: -12px;
       top: 0;
@@ -65,10 +65,10 @@ html[dir='ltr'] {
   }
 }
 
-html[dir='rtl'] {
+html[dir="rtl"] {
   .user-message {
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       right: -12px;
       top: 0;
@@ -82,7 +82,7 @@ html[dir='rtl'] {
   .assistant-message {
     @apply self-end #{!important};
     &:before {
-      content: '';
+      content: "";
       position: absolute;
       left: -10px;
       top: 0;
@@ -159,4 +159,3 @@ html[dir='rtl'] {
   width: 0;
   height: 0;
 }
-
