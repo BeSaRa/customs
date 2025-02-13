@@ -35,7 +35,7 @@ import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { RecorderComponent } from '@modules/administration/components/recorder/recorder.component';
 import { LangService } from '@services/lang.service';
 import { TextWriterAnimatorDirective } from '@standalone/directives/text-writer-animator.directive';
-import { AzureAdminService } from '@services/azure-admin.service';
+import { ChatMessageAnchorRedirectDirective } from '@standalone/directives/chat-message-anchor-redirect.directive';
 
 @Component({
   selector: 'app-chat',
@@ -52,6 +52,7 @@ import { AzureAdminService } from '@services/azure-admin.service';
     CdkDragHandle,
     // AvatarInterrupterBtnComponent,
     AsyncPipe,
+    ChatMessageAnchorRedirectDirective,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
@@ -64,7 +65,6 @@ export class ChatComponent extends OnDestroyMixin(class {}) implements OnInit {
   lang = inject(LangService);
   chatService = inject(ChatService);
   chatHistoryService = inject(ChatHistoryService);
-  azureAdminService = inject(AzureAdminService);
   status = this.chatService.status;
   chatContainer =
     viewChild.required<ElementRef<HTMLDivElement>>('chatContainer');
@@ -128,24 +128,8 @@ export class ChatComponent extends OnDestroyMixin(class {}) implements OnInit {
     this.detectFullScreenMode();
   }
 
-  private _listenToDynamicAnchorTagsClick() {
-    const _anchorElements: NodeListOf<HTMLAnchorElement> =
-      document.querySelectorAll('a.chat-link');
-    _anchorElements.forEach(anchor => {
-      anchor.addEventListener('click', event => {
-        event.preventDefault();
-        this.azureAdminService.getSasToken(anchor.href).subscribe(res => {
-          window.open(res, '_blank');
-        });
-      });
-    });
-  }
-
   onTextAnimating(event: boolean) {
     this.animating.set(event);
-    if (!event) {
-      this._listenToDynamicAnchorTagsClick();
-    }
   }
 
   // listenToBotNameChange() {
