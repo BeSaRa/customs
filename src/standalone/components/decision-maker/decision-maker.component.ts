@@ -20,6 +20,8 @@ import { PenaltyService } from '@services/penalty.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
+import { ActivitiesName } from '@enums/activities-name';
+import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
   selector: 'app-decision-maker',
@@ -171,7 +173,9 @@ export class DecisionMakerComponent
   }
 
   getSystemPenalties(id: number) {
-    return this.isPenaltyModification()
+    if (this.notUnderModificationOnModificationCase()) return [];
+    return this.isPenaltyModification() ||
+      this.offender().status === OffenderStatusEnum.UNDER_MODIFICATION
       ? ((this.penalties()[id] && this.penalties()[id].system) || []).filter(
           penalty => penalty.penaltyKey === SystemPenalties.TERMINATE,
         )
@@ -353,6 +357,14 @@ export class DecisionMakerComponent
       this.penaltyMap()[this.offender().id].second.find(
         item => item.penaltyKey === penaltyKey,
       )!,
+    );
+  }
+
+  notUnderModificationOnModificationCase() {
+    return (
+      this.model().getActivityName() ===
+        ActivitiesName.REVIEW_PENALTY_MODIFICATION &&
+      this.offender().status !== OffenderStatusEnum.UNDER_MODIFICATION
     );
   }
 }

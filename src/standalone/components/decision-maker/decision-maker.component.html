@@ -3,14 +3,18 @@
     <app-icon-button
       [disabled]="
         !canMakeNormalDecision(offender().id) ||
-        !isSomeOffenderViolationsProofed()
+        !isSomeOffenderViolationsProofed() ||
+        notUnderModificationOnModificationCase()
       "
       [matTooltip]="lang.map.make_penalty_decision"
       (click)="openDecisionDialog(offender())"
       icon="GAVEL" />
   </div>
   <app-icon-button
-    [disabled]="!canMakeSystemDecision(offender().id)"
+    [disabled]="
+      !canMakeSystemDecision(offender().id) ||
+      !getSystemPenalties(offender().id).length
+    "
     [matMenuTriggerFor]="menu"
     icon="DOTS_VERTICAL"
     [matTooltip]="lang.map.take_action">
