@@ -51,7 +51,11 @@
   </div>
   <div class="dialog-footer justify-end">
     <app-button (click)="save$.next()" buttonType="primary">
-      {{ lang.map.save }}
+      {{
+        isPenaltyModification
+          ? lang.map.penalty_modification_request
+          : lang.map.save
+      }}
     </app-button>
 
     <app-button mat-dialog-close="" buttonType="primary-outline">

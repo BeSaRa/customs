@@ -343,6 +343,7 @@ export class DecisionMakerComponent
       this.penaltyMap()[this.offender().id].second.find(
         item => item.penaltyKey === SystemPenalties.TERMINATE,
       )!,
+      this.isPenaltyModification(),
     );
   }
 

@@ -91,6 +91,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     model: InputSignal<Investigation>,
     updateModel: InputSignal<EventEmitter<void>>,
     selectedPenalty: Penalty,
+    isPenaltyModification: boolean = false,
   ): MatDialogRef<unknown> {
     return this.dialog.open(TerminatePopupComponent, {
       data: {
@@ -99,6 +100,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         updateModel,
         selectedPenalty,
         isSingle: offenders.length === 1,
+        isPenaltyModification,
       },
     });
   }
