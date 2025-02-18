@@ -297,12 +297,23 @@ export class Investigation extends BaseCase<
       this.taskDetails.activityProperties.OffenderIds.value.items.length
     );
   }
+  concernedOffenderId() {
+    return this.hasTask()
+      ? this.taskDetails?.activityProperties?.OffenderId?.value
+      : undefined;
+  }
   isPenaltyModification() {
     return !!(
       this.hasTask() &&
       this.taskDetails.activityProperties &&
       this.taskDetails.activityProperties.IsModification &&
       this.taskDetails.activityProperties.IsModification.value
+    );
+  }
+  isModificationPenaltyCase() {
+    return (
+      this.getActivityName() === ActivitiesName.REVIEW_PENALTY_MODIFICATION ||
+      this.isPenaltyModification()
     );
   }
 

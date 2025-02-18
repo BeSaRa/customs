@@ -20,7 +20,6 @@ import { PenaltyService } from '@services/penalty.service';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
-import { ActivitiesName } from '@enums/activities-name';
 import { OffenderStatusEnum } from '@enums/offender-status.enum';
 
 @Component({
@@ -78,31 +77,24 @@ export class DecisionMakerComponent
     );
   }
 
+  private getValidPenalties(offenderId: number, type: 'system' | 'normal') {
+    return this.penalties()?.[offenderId]?.[type] ?? [];
+  }
   canMakeSystemDecision(offenderId: number): boolean {
-    return !!(
-      (
-        this.penalties() &&
-        this.penalties()[offenderId] &&
-        this.penalties()[offenderId].system.length &&
-        (!this.model().hasConcernedOffenders() ||
-          (this.model().hasConcernedOffenders() &&
-            this.model().isOffenderConcerned(offenderId)))
-      ) /*&&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
+    const penalties = this.getValidPenalties(offenderId, 'system');
+    const hasConcernedOffenders = this.model().hasConcernedOffenders();
+    return (
+      penalties.length > 0 &&
+      (!hasConcernedOffenders || this.model().isOffenderConcerned(offenderId))
     );
   }
 
   canMakeNormalDecision(offenderId: number): boolean {
-    return !!(
-      (
-        this.penalties() &&
-        this.penalties()[offenderId] &&
-        this.penalties()[offenderId].normal.length &&
-        (!this.model().hasConcernedOffenders() ||
-          (this.model().hasConcernedOffenders() &&
-            this.model().isOffenderConcerned(offenderId)))
-      ) /*&&
-      this.employeeService.hasPermissionTo('MANAGE_OFFENDER_VIOLATION')*/
+    const penalties = this.getValidPenalties(offenderId, 'normal');
+    const hasConcernedOffenders = this.model().hasConcernedOffenders();
+    return (
+      penalties.length > 0 &&
+      (!hasConcernedOffenders || this.model().isOffenderConcerned(offenderId))
     );
   }
 
@@ -170,16 +162,6 @@ export class DecisionMakerComponent
           this.isPenaltyModification(),
         );
       });
-  }
-
-  getSystemPenalties(id: number) {
-    if (this.notUnderModificationOnModificationCase()) return [];
-    return this.isPenaltyModification() ||
-      this.offender().status === OffenderStatusEnum.UNDER_MODIFICATION
-      ? ((this.penalties()[id] && this.penalties()[id].system) || []).filter(
-          penalty => penalty.penaltyKey === SystemPenalties.TERMINATE,
-        )
-      : (this.penalties()[id] && this.penalties()[id].system) || [];
   }
 
   private listenToSystemActionChanges() {
@@ -361,11 +343,40 @@ export class DecisionMakerComponent
     );
   }
 
-  notUnderModificationOnModificationCase() {
+  shouldDisableNormalDecision(): boolean {
+    const offenderId = this.offender().id;
     return (
-      this.model().getActivityName() ===
-        ActivitiesName.REVIEW_PENALTY_MODIFICATION &&
+      !this.canMakeNormalDecision(offenderId) ||
+      !this.isSomeOffenderViolationsProofed ||
+      this.notUnderModificationOnModificationCase()
+    );
+  }
+
+  shouldDisableSystemDecision(): boolean {
+    const offenderId = this.offender().id;
+    return (
+      !this.canMakeSystemDecision(offenderId) ||
+      this.getSystemPenalties(offenderId).length === 0 ||
+      this.notUnderModificationOnModificationCase()
+    );
+  }
+
+  notUnderModificationOnModificationCase(): boolean {
+    return (
+      this.model().isModificationPenaltyCase() &&
       this.offender().status !== OffenderStatusEnum.UNDER_MODIFICATION
     );
+  }
+
+  getSystemPenalties(id: number) {
+    if (this.notUnderModificationOnModificationCase()) return [];
+
+    const penalties = this.penalties()?.[id]?.system ?? [];
+
+    return this.isPenaltyModification()
+      ? penalties.filter(
+          penalty => penalty.penaltyKey === SystemPenalties.TERMINATE,
+        )
+      : penalties;
   }
 }

@@ -236,19 +236,21 @@
                 {{ violation.violationInfo.violationTypeInfo.getNames() }}
               </h5>
 
-              <div class="relative ps-4 min-w-40 w-40">
-                <app-select-input
-                  nullable="false"
-                  [formControl]="violationProofStatus()[element.id][$index]"
-                  size="sm"
-                  class="w-32 block"
-                  noMargin="true"
-                  (selectChange)="proofStatusChanged(violation, $index)"
-                  [label]="lang.map.is_proved"
-                  [options]="proofStatus"
-                  bindValue="lookupKey"
-                  bindLabel="getNames" />
-              </div>
+              @if (isDecisionEnabled(element)) {
+                <div class="relative ps-4 min-w-40 w-40">
+                  <app-select-input
+                    nullable="false"
+                    [formControl]="violationProofStatus()[element.id][$index]"
+                    size="sm"
+                    class="w-32 block"
+                    noMargin="true"
+                    (selectChange)="proofStatusChanged(violation, $index)"
+                    [label]="lang.map.is_proved"
+                    [options]="proofStatus"
+                    bindValue="lookupKey"
+                    bindLabel="getNames" />
+                </div>
+              }
             </div>
             <!-- classificationInfo -->
             <span
