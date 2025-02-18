@@ -779,4 +779,28 @@ export class OffendersViolationsPreviewComponent
       )
     );
   }
+
+  underModification(offender: Offender) {
+    return (
+      offender.id === this.model().concernedOffenderId() &&
+      this.model().isModificationPenaltyCase()
+    );
+  }
+
+  isDecisionEnabled(element: Offender) {
+    return this.notUnderModificationOnModificationCase(element)
+      ? false
+      : (this.isClaimed() &&
+          (!this.model().isModificationPenaltyCase() ||
+            this.underModification(element))) ||
+          (!this.isClaimed() && this.canMakePenaltyModification(element));
+  }
+
+  notUnderModificationOnModificationCase(element: Offender): boolean {
+    return (
+      this.model().getActivityName() ===
+        ActivitiesName.REVIEW_PENALTY_MODIFICATION &&
+      element.status !== OffenderStatusEnum.UNDER_MODIFICATION
+    );
+  }
 }

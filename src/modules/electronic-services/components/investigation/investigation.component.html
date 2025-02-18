@@ -4,7 +4,7 @@
     <h1 class="text-xl min-h-[3rem] align-middle flex items-center">
       {{ lang.map.draft }} {{ lang.map.menu_investigation }}
     </h1>
-    @if (isReviewPenaltyModification()) {
+    @if (model.isModificationPenaltyCase()) {
       <h1 class="text-xl min-h-[3rem] align-middle flex items-center mx-1">
         ({{ lang.map.menu_penalty_modification }})
       </h1>
@@ -302,7 +302,7 @@
       <app-disciplinary-committee
         [model]="model"
         [isOpenedFromSearch]="isOpenedFromSearch()"
-        [isPenaltyModification]="isReviewPenaltyModification()" />
+        [isPenaltyModification]="model.isModificationPenaltyCase()" />
     </div>
   </ng-template>
   <ng-template #review_minutes>

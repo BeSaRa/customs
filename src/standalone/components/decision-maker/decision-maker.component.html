@@ -1,20 +1,12 @@
 <div class="flex justify-center gap-2">
-  <div>
-    <app-icon-button
-      [disabled]="
-        !canMakeNormalDecision(offender().id) ||
-        !isSomeOffenderViolationsProofed() ||
-        notUnderModificationOnModificationCase()
-      "
-      [matTooltip]="lang.map.make_penalty_decision"
-      (click)="openDecisionDialog(offender())"
-      icon="GAVEL" />
-  </div>
   <app-icon-button
-    [disabled]="
-      !canMakeSystemDecision(offender().id) ||
-      !getSystemPenalties(offender().id).length
-    "
+    [disabled]="shouldDisableNormalDecision()"
+    [matTooltip]="lang.map.make_penalty_decision"
+    (click)="openDecisionDialog(offender())"
+    icon="GAVEL" />
+
+  <app-icon-button
+    [disabled]="shouldDisableSystemDecision()"
     [matMenuTriggerFor]="menu"
     icon="DOTS_VERTICAL"
     [matTooltip]="lang.map.take_action">

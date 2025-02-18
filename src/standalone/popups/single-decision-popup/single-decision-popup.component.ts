@@ -60,7 +60,7 @@ import { SelectInputComponent } from '@standalone/components/select-input/select
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { OptionTemplateDirective } from '@standalone/directives/option-template.directive';
 import { CustomValidators } from '@validators/custom-validators';
-import { of, Subject } from 'rxjs';
+import { concatMap, of, Subject, timer } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -335,16 +335,25 @@ export class SingleDecisionPopupComponent
           ),
         ),
         switchMap(model => {
-          this.model().removePenaltyDecision(this.oldPenaltyDecision());
-          this.model().appendPenaltyDecision(model);
-          this.updateModel().emit();
-          this.toast.success(this.lang.map.the_penalty_saved_successfully);
+          try {
+            this.model().removePenaltyDecision(this.oldPenaltyDecision());
+            this.model().appendPenaltyDecision(model);
+            this.updateModel().emit();
+            this.toast.success(this.lang.map.the_penalty_saved_successfully);
 
-          return this.isPenaltyModification
-            ? this.investigationService.requestPenaltyModification(
-                this.offender().decisionSerial,
-              )
-            : of(null);
+            return this.isPenaltyModification
+              ? timer(1000).pipe(
+                  concatMap(() =>
+                    this.investigationService.requestPenaltyModification(
+                      this.offender().decisionSerial,
+                    ),
+                  ),
+                )
+              : of(null);
+          } catch (error) {
+            console.error('Error updating the penalty:', error);
+            return of(null);
+          }
         }),
       )
       .subscribe(() => {
