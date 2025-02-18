@@ -34,4 +34,7 @@ export interface ActivityPropertiesContract {
   DescriptionId: {
     value: number;
   };
+  IsModification: {
+    value: boolean;
+  };
 }
