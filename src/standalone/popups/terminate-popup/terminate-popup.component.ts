@@ -39,6 +39,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-terminate-popup',
@@ -73,15 +74,18 @@ export class TerminatePopupComponent implements OnInit {
     updateModel: InputSignal<EventEmitter<void>>;
     selectedPenalty: Penalty;
     isSingle: boolean;
+    isPenaltyModification: boolean;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(DialogRef);
   toast = inject(ToastService);
   lang = inject(LangService);
   employeeService = inject(EmployeeService);
+  investigationService = inject(InvestigationService);
   save$ = new Subject<void>();
   isSingle = this.data.isSingle;
   offenders = this.data.offenders;
   offender = this.offenders[0];
+  isPenaltyModification = this.data.isPenaltyModification;
   model = this.data.model;
   updateModel = this.data.updateModel;
   oldPenaltiesMap = computed(() => {
@@ -125,19 +129,18 @@ export class TerminatePopupComponent implements OnInit {
   private listenToSave() {
     this.save$
       .pipe(
-        map(() => {
-          return this.control.valid;
-        }),
+        map(() => this.control.valid),
         tap(isValid => {
-          !isValid &&
+          if (!isValid) {
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
             );
+          }
         }),
         filter(isValid => isValid),
-        map(() => {
-          return this.offenders.map(offender => {
-            return new PenaltyDecision().clone<PenaltyDecision>({
+        map(() =>
+          this.offenders.map(offender =>
+            new PenaltyDecision().clone<PenaltyDecision>({
               ...this.oldPenaltiesMap()[offender.id],
               caseId: this.model().id,
               penaltyId: this.selectedPenalty.id,
@@ -146,35 +149,43 @@ export class TerminatePopupComponent implements OnInit {
               comment: this.control.value,
               offenderId: offender.id,
               tkiid: this.model().getTaskId(),
-              roleAuthName: this.model().getTeamDisplayName(),
-            });
-          });
-        }),
-        switchMap(models => {
-          return forkJoin(
-            models.map(model => {
-              return model.create().pipe(
+              roleAuthName: this.isPenaltyModification
+                ? 'Penalty Modification'
+                : this.model().getTeamDisplayName(),
+            }),
+          ),
+        ),
+        switchMap(models =>
+          forkJoin(
+            models.map(model =>
+              model.create().pipe(
                 map(item =>
                   model.clone<PenaltyDecision>({
                     id: item.id,
                     penaltyInfo: this.selectedPenalty,
                   }),
                 ),
-              );
-            }),
-          );
-        }),
-      )
-      .subscribe(models => {
-        models &&
+              ),
+            ),
+          ),
+        ),
+        switchMap(models => {
           models.forEach(model => {
             this.model().removePenaltyDecision(
               this.oldPenaltiesMap()[model.offenderId],
             );
             this.model().appendPenaltyDecision(model);
           });
-        this.toast.success(this.lang.map.the_penalty_saved_successfully);
-        this.updateModel().emit();
+
+          this.toast.success(this.lang.map.the_penalty_saved_successfully);
+          this.updateModel().emit();
+
+          return this.investigationService.requestPenaltyModification(
+            this.offender.decisionSerial,
+          );
+        }),
+      )
+      .subscribe(() => {
         this.dialogRef.close();
       });
   }
