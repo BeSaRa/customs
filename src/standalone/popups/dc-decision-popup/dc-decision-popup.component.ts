@@ -104,6 +104,7 @@ export class DcDecisionPopupComponent
     model: Signal<Investigation>;
     offenderPenalties: { first: number; second: Penalty[] };
     isView?: boolean;
+    isPenaltyModification?: boolean;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   lang = inject(LangService);
@@ -184,6 +185,8 @@ export class DcDecisionPopupComponent
     return this.oldPenaltyDecision()?.comment;
   });
   offenderPenalties = signal(this.data.offenderPenalties);
+  isPenaltyModification = signal(this.data.isPenaltyModification);
+
   penalties = computed(() => {
     return this.offenderPenalties().second;
   });
@@ -296,8 +299,10 @@ export class DcDecisionPopupComponent
       comment: this.textControl.value,
       status: 1,
       penaltyInfo: this.penaltiesMap()[this.penaltyControl.value!],
-      tkiid: this.model().getTaskId(),
-      roleAuthName: this.model().getTeamDisplayName(),
+      tkiid: this.isPenaltyModification() ? null : this.model().getTaskId(),
+      roleAuthName: this.isPenaltyModification()
+        ? 'Penalty Modification'
+        : this.model().getTeamDisplayName(),
     });
   }
 

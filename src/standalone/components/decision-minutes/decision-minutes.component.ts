@@ -105,6 +105,7 @@ export class DecisionMinutesComponent
     .pipe(shareReplay(1));
 
   model = input.required<Investigation>();
+  isPenaltyModification = input.required<boolean>();
   dataList: DecisionMinutes[] = [];
   config = Config;
   generalStatusEnum = GeneralStatusEnum;
@@ -300,6 +301,7 @@ export class DecisionMinutesComponent
                   caseId: this.model().id,
                   decisionMinutesList: this.dataList,
                   penaltyMap: this.penaltyMap,
+                  isPenaltyModification: this.isPenaltyModification(),
                 },
               },
             })

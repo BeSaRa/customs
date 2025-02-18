@@ -658,7 +658,8 @@ export class InvestigationComponent
   isReviewPenaltyModification() {
     return (
       this.model.getActivityName() ===
-      ActivitiesName.REVIEW_PENALTY_MODIFICATION
+        ActivitiesName.REVIEW_PENALTY_MODIFICATION ||
+      this.model.isPenaltyModification()
     );
   }
 

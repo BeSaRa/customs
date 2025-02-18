@@ -23,6 +23,7 @@ import { MeetingMinutes } from '@models/meeting-minutes';
 export class DisciplinaryCommitteeComponent extends OnDestroyMixin(class {}) {
   model = input.required<Investigation>();
   isOpenedFromSearch = input.required<boolean>();
+  isPenaltyModification = input.required<boolean>();
   protected readonly ActivitiesName = ActivitiesName;
   meetingMinutesList: MeetingMinutes[] = [];
 }

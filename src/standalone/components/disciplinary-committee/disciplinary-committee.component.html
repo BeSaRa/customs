@@ -17,7 +17,8 @@
 <div class="p-4">
   <app-decision-minutes
     [readonly]="!model().inActivity(ActivitiesName.REVIEW_DISCIPLINARY_COUNCIL)"
-    [model]="model()"></app-decision-minutes>
+    [model]="model()"
+    [isPenaltyModification]="isPenaltyModification()"></app-decision-minutes>
 </div>
 <div class="p-4">
   <app-persons-list

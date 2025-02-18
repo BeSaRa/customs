@@ -297,6 +297,14 @@ export class Investigation extends BaseCase<
       this.taskDetails.activityProperties.OffenderIds.value.items.length
     );
   }
+  isPenaltyModification() {
+    return !!(
+      this.hasTask() &&
+      this.taskDetails.activityProperties &&
+      this.taskDetails.activityProperties.IsModification &&
+      this.taskDetails.activityProperties.IsModification.value
+    );
+  }
 
   isDecision() {
     return !!(

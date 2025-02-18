@@ -62,6 +62,7 @@ export class DecisionMinutesPopupComponent
   >;
   save$: Subject<PenaltyDecision> = new Subject<PenaltyDecision>();
   decisionMinutesList: DecisionMinutes[] = this.data.extras.decisionMinutesList;
+  isPenaltyModification: boolean = this.data.extras.isPenaltyModification;
 
   offenderInfo = computed(() => {
     return this.model().offenderInfo.filter(
@@ -76,11 +77,13 @@ export class DecisionMinutesPopupComponent
     CustomValidators.required,
   );
   get filteredOffenders() {
-    return this.model().offenderInfo.filter(
-      offender =>
-        this.model().getConcernedOffendersIds().includes(offender.id) &&
-        !this.hasDecisionMinutes(offender.id),
-    );
+    return this.isPenaltyModification
+      ? this.model().offenderInfo
+      : this.model().offenderInfo.filter(
+          offender =>
+            this.model().getConcernedOffendersIds().includes(offender.id) &&
+            !this.hasDecisionMinutes(offender.id),
+        );
   }
   ngOnInit(): void {
     this.listenToSave();
@@ -120,7 +123,10 @@ export class DecisionMinutesPopupComponent
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(decision => {
-          if (this.hasDecisionMinutes(decision.offenderId)) {
+          if (
+            this.hasDecisionMinutes(decision.offenderId) &&
+            !this.isPenaltyModification
+          ) {
             if (
               this.getDecisionMinutes(decision.offenderId)?.generalStatus ===
               GeneralStatusEnum.DC_M_LAUNCHED
