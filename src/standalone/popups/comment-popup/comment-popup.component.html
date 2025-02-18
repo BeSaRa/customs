@@ -1,6 +1,8 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>{{ isReassign ? lang.map.reassign : lang.map.comment }}</h1>
+    <h1>
+      {{ getTitle() }}
+    </h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -185,7 +187,9 @@
           <div class="col-12 mb-3">
             <app-select-input
               formControlName="toUser"
-              [label]="lang.map.reassign_to_user"
+              [label]="
+                isOnlyReassign ? lang.map.reassign_to_user : lang.map.user_name
+              "
               bindValue="domainName"
               bindLabel="getNames"
               [options]="usersList"
@@ -203,7 +207,7 @@
       </app-button>
     } @else {
       <app-button (click)="reassign$.next()" buttonType="primary"
-        >{{ this.lang.map.reassign }}
+        >{{ isOnlyReassign ? this.lang.map.reassign : this.lang.map.send }}
       </app-button>
     }
     <app-button mat-dialog-close="" buttonType="primary-outline"
