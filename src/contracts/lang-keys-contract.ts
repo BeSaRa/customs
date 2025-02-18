@@ -853,4 +853,8 @@ export interface LangKeysContract {
   request_is_added_and_sent_to_group_mail: string;
   immunization_duration: string;
   penalty_modification_request: string;
+  send_to_president_assistant: string;
+  send_to_president: string;
+  send_to_specified_user_in_president_team: string;
+  send_to_specified_user_in_president_assistant_team: string;
 }

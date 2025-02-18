@@ -143,6 +143,14 @@ export class CommentPopupComponent
   }
 
   get isReassign() {
+    return [
+      TaskResponses.REASSIGN,
+      TaskResponses.TO_PA_USER,
+      TaskResponses.TO_PR_USER,
+    ].some(t => t === this.response);
+  }
+
+  get isOnlyReassign() {
     return this.response === TaskResponses.REASSIGN;
   }
 
@@ -485,5 +493,15 @@ export class CommentPopupComponent
       : this.isSendToInvestigator
         ? this.lang.map.save
         : this.lang.map.approve;
+  }
+
+  getTitle() {
+    return this.isReassign
+      ? this.isOnlyReassign
+        ? this.lang.map.reassign
+        : this.response === TaskResponses.TO_PR_USER
+          ? this.lang.map.send_to_specified_user_in_president_team
+          : this.lang.map.send_to_specified_user_in_president_assistant_team
+      : this.lang.map.comment;
   }
 }

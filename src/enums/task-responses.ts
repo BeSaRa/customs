@@ -59,4 +59,8 @@ export enum TaskResponses {
   STM_COMPLETE = 'stm_complete',
   APPROVE_MODIFICATION = 'approve_modification',
   REASSIGN = 'reassign',
+  TO_PA = 'to_pa',
+  TO_PA_USER = 'to_pa_user',
+  TO_PR = 'to_pr',
+  TO_PR_USER = 'to_pr_user',
 }

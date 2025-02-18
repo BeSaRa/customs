@@ -736,6 +736,43 @@
       {{ lang.map.reassign }}
     </app-button>
   }
+
+  <!-- send to president from president office -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PR)) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="responseAction$.next(taskResponses.TO_PR)">
+      {{ lang.map.send_to_president }}
+    </app-button>
+  }
+
+  <!-- send to user in president team from president office -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PR_USER)) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="responseAction$.next(taskResponses.TO_PR_USER)">
+      {{ lang.map.send_to_specified_user_in_president_team }}
+    </app-button>
+  }
+
+  <!-- send to president assistant from president assistant office -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PA)) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="responseAction$.next(taskResponses.TO_PA)">
+      {{ lang.map.send_to_president_assistant }}
+    </app-button>
+  }
+
+  <!-- send to user in president assistant team from president assistant office -->
+  @if (model().inMyInbox() && model().hasResponse(taskResponses.TO_PA_USER)) {
+    <app-button
+      [buttonType]="'secondary'"
+      (click)="responseAction$.next(taskResponses.TO_PA_USER)">
+      {{ lang.map.send_to_specified_user_in_president_assistant_team }}
+    </app-button>
+  }
+
   @if (
     model().inMyInbox() &&
     model().hasResponse(taskResponses.STM_COMPLETE) &&
