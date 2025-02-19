@@ -77,7 +77,7 @@ export const AzureEndPoints = {
   ALL_CONVERSATIONS: '/chat-history/all-conversations',
   SEARCH_WEBSITE: '/search/search/website',
   CHAT_BOT_WEBSITE: '/chatbot/chat/website',
-  ADD_FEEDBACK: '/chat-history/add-feedback',
+  ADD_FEEDBACK: '/chat-history/add-conversation-feedback',
   SPEECH_TOKEN: '/speech/token',
 };
 
