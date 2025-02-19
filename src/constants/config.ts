@@ -1,5 +1,5 @@
 export const Config = {
-  VERSION: 'v1.3.20',
+  VERSION: 'v1.3.21',
   PRIVATE_VERSION: '',
   BASE_ENVIRONMENT: '',
   AZURE_ENVIRONMENT: '',
