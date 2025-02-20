@@ -24,6 +24,7 @@ export class ActionsOnCase {
   addedOn!: string;
   time!: string;
   guid?: string;
+  actionType?: number;
   userInfo!: AdminResult;
   offendersInfo!: AdminResult;
   actionInfo!: AdminResult;

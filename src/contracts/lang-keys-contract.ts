@@ -858,4 +858,5 @@ export interface LangKeysContract {
   send_to_specified_user_in_president_team: string;
   send_to_specified_user_in_president_assistant_team: string;
   penalty_modification_request_has_been_added_and_sent_to_the_group_email: string;
+  penalty_modification_requests: string;
 }
