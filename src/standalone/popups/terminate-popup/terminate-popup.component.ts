@@ -13,7 +13,7 @@ import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
 import { LangService } from '@services/lang.service';
-import { forkJoin, Subject, switchMap, tap } from 'rxjs';
+import { concatMap, forkJoin, of, Subject, switchMap, tap, timer } from 'rxjs';
 import { TextareaComponent } from '@standalone/components/textarea/textarea.component';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
@@ -180,9 +180,22 @@ export class TerminatePopupComponent implements OnInit {
           this.toast.success(this.lang.map.the_penalty_saved_successfully);
           this.updateModel().emit();
 
-          return this.investigationService.requestPenaltyModification(
-            this.offender.decisionSerial,
-          );
+          return this.isPenaltyModification
+            ? timer(1000).pipe(
+                concatMap(() =>
+                  this.investigationService
+                    .requestPenaltyModification(this.offender.decisionSerial)
+                    .pipe(
+                      tap(() =>
+                        this.toast.success(
+                          this.lang.map
+                            .penalty_modification_request_has_been_added_and_sent_to_the_group_email,
+                        ),
+                      ),
+                    ),
+                ),
+              )
+            : of(null);
         }),
       )
       .subscribe(() => {
