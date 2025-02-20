@@ -17,6 +17,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { NgTemplateOutlet } from '@angular/common';
 import { ActionOnCaseIds } from '@enums/action-on-case-ids';
+import { ActionTypes } from '@enums/action-types';
 
 @Component({
   selector: 'app-actions-on-case',
@@ -61,8 +62,11 @@ export class ActionsOnCaseComponent implements OnInit {
   ActionsOnCaseDisplayedListForSeen = new MatTableDataSource<ActionsOnCase>();
   ActionsOnCaseDisplayedListForStatementRequest =
     new MatTableDataSource<ActionsOnCase>();
+  ActionsOnCaseDisplayedListForPenaltyModificationRecords =
+    new MatTableDataSource<ActionsOnCase>();
   assignedToDisplayedList = new MatTableDataSource<AssignedTo>();
   isStatementRequestActionEmpty = signal(true);
+  isPenaltyModificationsEmpty = signal(true);
   isSeenEmpty = signal(true);
   isActionsEmpty = signal(true);
 
@@ -93,24 +97,40 @@ export class ActionsOnCaseComponent implements OnInit {
             new Date(b.updatedOn).getTime() - new Date(a.updatedOn).getTime()
           );
         });
-        const [others, seenRecords, statmentRequestRecords] = [
+        const [
+          others,
+          seenRecords,
+          statementRequestRecords,
+          penaltyModificationRecords,
+        ] = [
           sortedData.filter(
             el => !el.guid && el.actionId !== ActionOnCaseIds.SEEN,
           ),
           sortedData.filter(
             el => !el.guid && el.actionId === ActionOnCaseIds.SEEN,
           ),
-          sortedData.filter(el => el.guid),
+          sortedData.filter(
+            el => el.guid && el.actionType === ActionTypes.STATEMENT_REQUEST,
+          ),
+          sortedData.filter(
+            el => el.guid && el.actionType === ActionTypes.PENALTY_MODIFICATION,
+          ),
         ];
         this.ActionsOnCaseDisplayedList = new MatTableDataSource(others);
         this.ActionsOnCaseDisplayedListForSeen = new MatTableDataSource(
           seenRecords,
         );
         this.ActionsOnCaseDisplayedListForStatementRequest =
-          new MatTableDataSource(statmentRequestRecords);
-        this.isStatementRequestActionEmpty.set(!statmentRequestRecords.length);
-        this.isSeenEmpty.set(!seenRecords.length);
+          new MatTableDataSource(statementRequestRecords);
+        this.ActionsOnCaseDisplayedListForPenaltyModificationRecords =
+          new MatTableDataSource(penaltyModificationRecords);
+
         this.isActionsEmpty.set(!others.length);
+        this.isSeenEmpty.set(!seenRecords.length);
+        this.isStatementRequestActionEmpty.set(!statementRequestRecords.length);
+        this.isPenaltyModificationsEmpty.set(
+          !penaltyModificationRecords.length,
+        );
       });
   }
 
