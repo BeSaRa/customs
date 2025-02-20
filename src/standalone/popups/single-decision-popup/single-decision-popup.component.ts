@@ -335,25 +335,27 @@ export class SingleDecisionPopupComponent
           ),
         ),
         switchMap(model => {
-          try {
-            this.model().removePenaltyDecision(this.oldPenaltyDecision());
-            this.model().appendPenaltyDecision(model);
-            this.updateModel().emit();
-            this.toast.success(this.lang.map.the_penalty_saved_successfully);
+          this.model().removePenaltyDecision(this.oldPenaltyDecision());
+          this.model().appendPenaltyDecision(model);
+          this.updateModel().emit();
+          this.toast.success(this.lang.map.the_penalty_saved_successfully);
 
-            return this.isPenaltyModification
-              ? timer(1000).pipe(
-                  concatMap(() =>
-                    this.investigationService.requestPenaltyModification(
-                      this.offender().decisionSerial,
+          return this.isPenaltyModification
+            ? timer(1000).pipe(
+                concatMap(() =>
+                  this.investigationService
+                    .requestPenaltyModification(this.offender().decisionSerial)
+                    .pipe(
+                      tap(() =>
+                        this.toast.success(
+                          this.lang.map
+                            .penalty_modification_request_has_been_added_and_sent_to_the_group_email,
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              : of(null);
-          } catch (error) {
-            console.error('Error updating the penalty:', error);
-            return of(null);
-          }
+                ),
+              )
+            : of(null);
         }),
       )
       .subscribe(() => {
