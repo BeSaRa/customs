@@ -63,6 +63,7 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
+import { CustomValidators } from '@validators/custom-validators';
 
 @Component({
   selector: 'app-archivist-grievance',
@@ -121,6 +122,8 @@ export class ArchivistGrievanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group(new PenaltyDecisionCriteria().buildForm());
+    this.form.get('decisionDate')?.setValidators(CustomValidators.required);
+    this.form.updateValueAndValidity();
     this.listenToSearch();
     this.loadPenalties();
     this.listenGrievance();
