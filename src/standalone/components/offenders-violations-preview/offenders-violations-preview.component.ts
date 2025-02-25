@@ -767,7 +767,10 @@ export class OffendersViolationsPreviewComponent
   }
 
   isPenaltyModified(element: Offender) {
-    return element.status === OffenderStatusEnum.PENALTY_UPDATED;
+    return (
+      element.status === OffenderStatusEnum.UNDER_MODIFICATION ||
+      element.status === OffenderStatusEnum.PENALTY_MODIFIED
+    );
   }
 
   canMakePenaltyModification(offender: Offender) {
