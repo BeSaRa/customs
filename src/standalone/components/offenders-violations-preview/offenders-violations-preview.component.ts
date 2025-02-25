@@ -776,6 +776,7 @@ export class OffendersViolationsPreviewComponent
   canMakePenaltyModification(offender: Offender) {
     return (
       !!offender.decisionSerial &&
+      offender.status !== OffenderStatusEnum.PENALTY_UPDATED &&
       this.openFrom === OpenFrom.SEARCH &&
       this.employeeService.hasPermissionTo(
         'CREATE_PENALTY_MODIFICATION_REQUEST',
