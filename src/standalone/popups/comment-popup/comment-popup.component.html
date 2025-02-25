@@ -158,6 +158,32 @@
               bindFilter="getNames" />
           </div>
         }
+        @if (isSendToPaUser) {
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="userId"
+              [label]="lang.map.send_to_specified_user_in_president_team"
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
+          </div>
+        }
+        @if (isSendToPrUser) {
+          <div class="col-12 mb-3">
+            <app-select-input
+              formControlName="userId"
+              [label]="
+                lang.map.send_to_specified_user_in_president_assistant_team
+              "
+              bindValue="id"
+              bindLabel="getNames"
+              [options]="usersList"
+              [enableFilter]="true"
+              bindFilter="getNames" />
+          </div>
+        }
         @if (isStatementResponse) {
           <div class="flex justify-end">
             <span>{{ lang.map.statement_serial_number }} : </span>
@@ -187,9 +213,7 @@
           <div class="col-12 mb-3">
             <app-select-input
               formControlName="toUser"
-              [label]="
-                isOnlyReassign ? lang.map.reassign_to_user : lang.map.user_name
-              "
+              [label]="lang.map.reassign_to_user"
               bindValue="domainName"
               bindLabel="getNames"
               [options]="usersList"
@@ -207,7 +231,7 @@
       </app-button>
     } @else {
       <app-button (click)="reassign$.next()" buttonType="primary"
-        >{{ isOnlyReassign ? this.lang.map.reassign : this.lang.map.send }}
+        >{{ this.lang.map.reassign }}
       </app-button>
     }
     <app-button mat-dialog-close="" buttonType="primary-outline"

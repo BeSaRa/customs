@@ -143,15 +143,23 @@ export class CommentPopupComponent
   }
 
   get isReassign() {
-    return [
-      TaskResponses.REASSIGN,
-      TaskResponses.TO_PA_USER,
-      TaskResponses.TO_PR_USER,
-    ].some(t => t === this.response);
+    return this.response === TaskResponses.REASSIGN;
+    // return [
+    //   TaskResponses.REASSIGN,
+    //   TaskResponses.TO_PA_USER,
+    //   TaskResponses.TO_PR_USER,
+    // ].some(t => t === this.response);
   }
 
-  get isOnlyReassign() {
-    return this.response === TaskResponses.REASSIGN;
+  // get isOnlyReassign() {
+  //   return this.response === TaskResponses.REASSIGN;
+  // }
+
+  get isSendToPaUser() {
+    return this.response === TaskResponses.TO_PA_USER;
+  }
+  get isSendToPrUser() {
+    return this.response === TaskResponses.TO_PR_USER;
   }
 
   private _loadUsersList() {
@@ -173,6 +181,12 @@ export class CommentPopupComponent
             .subscribe(data => {
               this.usersList = data;
             });
+    }
+    if (this.isSendToPaUser) {
+      return loadTeamMembers(TeamNames.President_Assistant);
+    }
+    if (this.isSendToPrUser) {
+      return loadTeamMembers(TeamNames.President);
     }
     if (this.isSendToInvestigator)
       return loadTeamMembers(TeamNames.Investigator);
@@ -255,7 +269,9 @@ export class CommentPopupComponent
       this.isSendToInvestigator ||
       this.isSendToHrUser ||
       this.isSendToPAOfficeUser ||
-      this.isSendToPOfficeUser
+      this.isSendToPOfficeUser ||
+      this.isSendToPaUser ||
+      this.isSendToPrUser
     ) {
       this.form.get('userId')?.setValidators([CustomValidators.required]);
       this.form.get('userId')?.updateValueAndValidity();
@@ -496,12 +512,6 @@ export class CommentPopupComponent
   }
 
   getTitle() {
-    return this.isReassign
-      ? this.isOnlyReassign
-        ? this.lang.map.reassign
-        : this.response === TaskResponses.TO_PR_USER
-          ? this.lang.map.send_to_specified_user_in_president_team
-          : this.lang.map.send_to_specified_user_in_president_assistant_team
-      : this.lang.map.comment;
+    return this.isReassign ? this.lang.map.reassign : this.lang.map.comment;
   }
 }
