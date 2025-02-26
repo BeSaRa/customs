@@ -183,7 +183,11 @@ export class CommentPopupComponent
             });
     }
     if (this.isSendToPaUser) {
-      return loadTeamMembers(TeamNames.President_Assistant);
+      return loadTeamMembers(
+        this.isEmployee
+          ? TeamNames.President_Assistant
+          : TeamNames.CA_President_Assistant,
+      );
     }
     if (this.isSendToPrUser) {
       return loadTeamMembers(TeamNames.President);
@@ -194,7 +198,11 @@ export class CommentPopupComponent
       this.isSendToPAOfficeUser &&
       this.employeeService.getOrganizationUnit()?.id
     ) {
-      return loadTeamMembers(TeamNames.President_Assistant_Office);
+      return loadTeamMembers(
+        this.isEmployee
+          ? TeamNames.President_Assistant_Office
+          : TeamNames.CA_President_Assistant_Office,
+      );
     }
     if (this.isSendToPOfficeUser)
       return loadTeamMembers(TeamNames.President_Office);
@@ -249,7 +257,6 @@ export class CommentPopupComponent
           : TeamNames.CA_President_Assistant_Office,
       },
     };
-
     if (activityName && taskName && teamMappings[activityName]?.[taskName]) {
       return loadTeamMembers(teamMappings[activityName][taskName]);
     }
@@ -488,7 +495,7 @@ export class CommentPopupComponent
   }
 
   get isEmployee() {
-    return this.model.offenderInfo[0].type === OffenderTypes.EMPLOYEE;
+    return this.model.getConcernedOffendersType() === OffenderTypes.EMPLOYEE;
   }
 
   get isClearingAgent() {
