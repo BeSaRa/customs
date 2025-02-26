@@ -1,10 +1,10 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject, ViewChild, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { CustomMenu } from '@models/custom-menu';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OperationType } from '@enums/operation-type';
 import { Lookup } from '@models/lookup';
 import { LookupService } from '@services/lookup.service';
@@ -21,7 +21,10 @@ import { CustomMenuService } from '@services/custom-menu.service';
   templateUrl: './custom-menu-popup.component.html',
   styleUrls: ['./custom-menu-popup.component.scss'],
 })
-export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
+export class CustomMenuPopupComponent
+  extends AdminDialogComponent<CustomMenu>
+  implements OnInit
+{
   form!: UntypedFormGroup;
   data: CrudDialogDataContract<CustomMenu> = inject(MAT_DIALOG_DATA);
   saveVisible = true;
@@ -29,14 +32,9 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
   menuItemService = inject(MenuItemService);
   customMenuService = inject(CustomMenuService);
   menuTypes: Lookup[] = this.lookupService.lookups.menuType;
-  userTypes: Lookup[] = this.lookupService.lookups.userType;
-  menuViews: Lookup[] = this.lookupService.lookups.menuView;
   parentMenu?: CustomMenu;
   customMenus!: CustomMenu[];
-  defaultParent?: MenuItemContract;
   defaultParents: MenuItemContract[] = [];
-  selectedTabIndex$: Subject<number> = new Subject<number>();
-  defaultSelectedTab: string = 'basic';
   validateFieldsVisible: boolean = true;
   selectedPopupTab = this.data.extras?.selectedPopupTab;
   @ViewChild('customMenuChildren') customMenuChildrenRef!: CustomMenuComponent;
@@ -86,9 +84,6 @@ export class CustomMenuPopupComponent extends AdminDialogComponent<CustomMenu> {
     value.urlParamsParsed = this.urlHandlerComponentRef
       ? this.urlHandlerComponentRef.variableList
       : [];
-    // if (this.defaultParent) {
-    //   value.parentMenuItemId = -1;
-    // }
     return value;
   }
 
