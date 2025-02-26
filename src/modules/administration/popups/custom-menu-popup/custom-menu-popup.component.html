@@ -35,29 +35,18 @@
             formControlName="menuOrder"
             type="number"
             [label]="lang.map.menu_order"></app-input>
-<!--          <app-input-->
-<!--            formControlName="parentMenuItemId"-->
-<!--            type="number"-->
-<!--            [label]="lang.map.parent_menu_item"></app-input>-->
           <app-select-input
             [label]="lang.map.parent_menu_item"
             formControlName="parentMenuItemId"
             [options]="customMenus"
             bindLabel="getNames"
-            bindValue="id"
-          />
+            bindValue="id" />
           <app-select-input
             [label]="lang.map.menu_type"
             bindLabel="getNames"
             bindValue="lookupKey"
             formControlName="menuType"
             [options]="menuTypes" />
-          <app-select-input
-            [label]="lang.map.user_type"
-            bindLabel="getNames"
-            formControlName="userType"
-            bindValue="lookupKey"
-            [options]="userTypes" />
           <div class="flex content-start">
             <span class="px-2">
               {{ lang.map.is_private_menu }}

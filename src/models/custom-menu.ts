@@ -49,7 +49,6 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
       menuOrder,
       menuType,
       menuView,
-      userType,
       parentMenuItemId,
       systemMenuKey,
     } = this;
@@ -71,8 +70,6 @@ export class CustomMenu extends BaseModel<CustomMenu, CustomMenuService> {
         : menuOrder,
       menuType: controls ? [menuType, [CustomValidators.required]] : menuType,
       menuView: controls ? [menuView, []] : menuView,
-      userType: controls ? [userType, [CustomValidators.required]] : userType,
-      // icon: controls ? [icon, []] : icon,
       parentMenuItemId: controls ? [parentMenuItemId, []] : parentMenuItemId,
       systemMenuKey: controls ? [systemMenuKey, []] : systemMenuKey,
     };
