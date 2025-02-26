@@ -354,7 +354,9 @@ export class CommentPopupComponent
             !this.isSendToInvestigator &&
             !this.isSendToHrUser &&
             !this.isSendToPAOfficeUser &&
-            !this.isSendToPOfficeUser
+            !this.isSendToPOfficeUser &&
+            !this.isSendToPaUser &&
+            !this.isSendToPrUser
           ) {
             delete completeBody.userId;
           }
