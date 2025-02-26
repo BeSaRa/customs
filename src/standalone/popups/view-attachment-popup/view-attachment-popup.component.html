@@ -18,7 +18,11 @@
       "></app-icon-button>
   </div>
   <div class="dialog-content !p-0 h-[86vh]">
-    <iframe class="w-full h-full" [src]="data.model.safeUrl"></iframe>
+    @if (isPdf) {
+      <iframe class="w-full h-full" [src]="data.model.safeUrl"></iframe>
+    } @else {
+      <img class="w-full h-full" fill [ngSrc]="data.model.safeUrl" alt="img" />
+    }
   </div>
   <div class="dialog-footer justify-end">
     <app-button mat-dialog-close="" buttonType="primary">{{
