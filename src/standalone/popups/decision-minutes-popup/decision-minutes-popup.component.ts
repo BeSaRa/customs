@@ -78,7 +78,9 @@ export class DecisionMinutesPopupComponent
   );
   get filteredOffenders() {
     return this.isPenaltyModification
-      ? this.model().offenderInfo
+      ? this.model().offenderInfo.filter(offender =>
+          this.model().getConcernedOffendersIds().includes(offender.id),
+        )
       : this.model().offenderInfo.filter(
           offender =>
             this.model().getConcernedOffendersIds().includes(offender.id) &&
