@@ -15,6 +15,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { TaskResponses } from '@enums/task-responses';
 import { Pagination } from '@models/pagination';
 import { DcDecisionPopupComponent } from '@standalone/popups/dc-decision-popup/dc-decision-popup.component';
+import { OpenFrom } from '@enums/open-from';
 @CastResponseContainer({
   $default: {
     model: () => PenaltyDecision,
@@ -57,6 +58,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
     updateModel: InputSignal<EventEmitter<void>>,
     offenderPenalties: { first: number | null; second: Penalty[] },
     isPenaltyModification: boolean,
+    openFrom: OpenFrom,
   ) {
     return this.dialog.open(SingleDecisionPopupComponent, {
       data: {
@@ -65,6 +67,7 @@ export class PenaltyDecisionService extends BaseCrudWithDialogService<
         updateModel,
         offenderPenalties,
         isPenaltyModification,
+        openFrom,
       },
     });
   }
