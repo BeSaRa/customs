@@ -198,7 +198,10 @@
       </div>
     </th>
     <td mat-cell *matCellDef="let element">
-      @if (isClaimed() || canMakePenaltyModification(element)) {
+      @if (
+        (isClaimed() && isDecisionEnabled(element)) ||
+        canMakePenaltyModification(element)
+      ) {
         <div class="flex justify-start gap-2">
           <div [matTooltip]="lang.map.view">
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
