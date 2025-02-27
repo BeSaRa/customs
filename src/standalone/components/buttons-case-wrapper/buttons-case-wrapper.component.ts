@@ -384,61 +384,59 @@ export class ButtonsCaseWrapperComponent
           return click === UserClick.YES;
         }),
         switchMap(response => {
-          if (
-            (this.model() as Investigation).inSubmitInvestigationActivity() ||
-            response.response === TaskResponses.PR_FRST_APPROVE ||
-            response.response === TaskResponses.PA_FRST_APPROVE
-          ) {
-            return (this.model() as Investigation).penaltyDecisions.length
-              ? this.penaltyDecisionService
-                  .createBulkFull(
-                    (this.model() as Investigation).penaltyDecisions
-                      .map(item => {
-                        return item.clone<PenaltyDecision>({
-                          ...item,
-                          signerId: this.employee!.id,
-                          tkiid: this.model().getTaskId(),
-                          roleAuthName: (
-                            this.model() as Investigation
-                          ).getTeamDisplayName(),
-                        });
-                      })
-                      .filter(pd =>
-                        (this.model() as Investigation)
-                          .getConcernedOffendersIds()
-                          .find(oId => oId === pd.offenderId),
-                      ),
-                  )
-                  .pipe(map(() => response))
-              : of(response);
-          } else if (
-            (this.model() as Investigation).inReviewApplicantDepartment() &&
-            (this.model() as Investigation).getConcernedOffendersIds()
-          ) {
-            return (this.model() as Investigation).getConcernedOffendersIds()
-              ? this.penaltyDecisionService
-                  .createBulkFull(
-                    (this.model() as Investigation)
-                      .getConcernedOffendersIds()
-                      .map(offenderId => {
-                        const item = (
-                          this.model() as Investigation
-                        ).penaltyDecisions.find(
+          const model = this.model();
+
+          if (model instanceof Investigation) {
+            if (
+              model.inSubmitInvestigationActivity() ||
+              response.response === TaskResponses.PR_FRST_APPROVE ||
+              response.response === TaskResponses.PA_FRST_APPROVE
+            ) {
+              return model.penaltyDecisions.length
+                ? this.penaltyDecisionService
+                    .createBulkFull(
+                      model.penaltyDecisions
+                        .map(item => {
+                          return item.clone<PenaltyDecision>({
+                            ...item,
+                            signerId: this.employee!.id,
+                            tkiid: model.getTaskId(),
+                            roleAuthName: model.getTeamDisplayName(),
+                          });
+                        })
+                        .filter(pd =>
+                          model
+                            .getConcernedOffendersIds()
+                            .includes(pd.offenderId),
+                        ),
+                    )
+                    .pipe(map(() => response))
+                : of(response);
+            } else if (
+              model.inReviewApplicantDepartment() &&
+              model.getConcernedOffendersIds()
+            ) {
+              return model.getConcernedOffendersIds()
+                ? this.penaltyDecisionService
+                    .createBulkFull(
+                      model.getConcernedOffendersIds().map(offenderId => {
+                        const item = model.penaltyDecisions.find(
                           item => item.offenderId === offenderId,
                         )!;
                         return item.clone<PenaltyDecision>({
                           ...item,
                           signerId: this.employee!.id,
-                          tkiid: this.model().getTaskId(),
-                          roleAuthName: (
-                            this.model() as Investigation
-                          ).getTeamDisplayName(),
+                          tkiid: model.getTaskId(),
+                          roleAuthName: model.getTeamDisplayName(),
                         });
                       }),
-                  )
-                  .pipe(map(() => response))
-              : of(response);
-          } else return of(response);
+                    )
+                    .pipe(map(() => response))
+                : of(response);
+            }
+          }
+
+          return of(response);
         }),
         switchMap(({ response }) => {
           return (
