@@ -21,6 +21,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { of, Subject, tap } from 'rxjs';
 import { filter, map, switchMap, take } from 'rxjs/operators';
 import { OffenderStatusEnum } from '@enums/offender-status.enum';
+import { OpenFrom } from '@enums/open-from';
 
 @Component({
   selector: 'app-decision-maker',
@@ -53,6 +54,7 @@ export class DecisionMakerComponent
   dialog = inject(DialogService);
 
   model = input.required<Investigation>();
+  openFrom = input.required<OpenFrom>();
   isPenaltyModification = input.required<boolean>();
   updateModel = input.required<EventEmitter<void>>();
   offender = input.required<Offender>();
@@ -160,6 +162,7 @@ export class DecisionMakerComponent
           this.updateModel,
           this.penaltyMap()[offender.id],
           this.isPenaltyModification(),
+          this.openFrom(),
         );
       });
   }

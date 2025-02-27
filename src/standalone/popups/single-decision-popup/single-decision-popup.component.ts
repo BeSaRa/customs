@@ -71,6 +71,8 @@ import {
   tap,
 } from 'rxjs/operators';
 import { InvestigationService } from '@services/investigation.service';
+import { OpenFrom } from '@enums/open-from';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-single-decision-popup',
@@ -119,6 +121,7 @@ export class SingleDecisionPopupComponent
     updateModel: InputSignal<EventEmitter<void>>;
     offenderPenalties: { first: number; second: Penalty[] };
     isPenaltyModification: boolean;
+    openFrom: OpenFrom;
   }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
   lang = inject(LangService);
@@ -138,6 +141,7 @@ export class SingleDecisionPopupComponent
   });
 
   model = this.data.model;
+  openFrom = this.data.openFrom;
   isPenaltyModification = this.data.isPenaltyModification;
   offenderViolations = this.model().offenderViolationInfo.filter(item => {
     return item.offenderId === this.offender().id;
@@ -271,7 +275,9 @@ export class SingleDecisionPopupComponent
       .getService()
       .getCasePenalty(
         this.model().id as string,
-        this.model().getActivityName()!,
+        this.openFrom === OpenFrom.SEARCH
+          ? ActivitiesName.REVIEW_PENALTY_MODIFICATION
+          : this.model().getActivityName()!,
       )
       .pipe(
         catchError(() => {
