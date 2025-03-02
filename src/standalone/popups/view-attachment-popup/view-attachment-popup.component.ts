@@ -1,5 +1,4 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 
 import { ButtonComponent } from '@standalone/components/button/button.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -29,22 +28,22 @@ import { MatTooltip } from '@angular/material/tooltip';
     SelectInputComponent,
     SwitchComponent,
     MatTooltip,
-    NgOptimizedImage,
   ],
   templateUrl: './view-attachment-popup.component.html',
   styleUrls: ['./view-attachment-popup.component.scss'],
 })
 export class ViewAttachmentPopupComponent implements OnDestroy, OnInit {
   lang = inject(LangService);
-  data: { title: string; model: BlobModel } = inject(MAT_DIALOG_DATA);
+  data: { title: string; model: BlobModel; mimeType: string } =
+    inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<ViewAttachmentPopupComponent>);
   isFullScreen = true;
-  isPdf = false;
+  isPdf = true;
   ngOnDestroy(): void {
     this.data.model.dispose();
   }
   ngOnInit(): void {
-    this.isPdf = this.data.model.blob.type === 'application/pdf';
+    this.isPdf = this.data.mimeType === 'application/pdf';
   }
   toggleSize() {
     this.isFullScreen = !this.isFullScreen;

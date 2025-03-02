@@ -168,7 +168,7 @@ export class MemorandumOpinionListComponent
       .pipe(
         switchMap(model =>
           this.investigationService
-            .viewAttachment(model.id, this.lang.map.view_memo)
+            .viewAttachment(model.id, model.mimeType, this.lang.map.view_memo)
             .pipe(ignoreErrors()),
         ),
       )
