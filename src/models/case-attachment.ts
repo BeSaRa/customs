@@ -49,7 +49,7 @@ export class CaseAttachment extends ClonerMixin(class {}) {
   view(
     service: BaseCaseService<unknown>,
   ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
-    return service.viewAttachment(this.id);
+    return service.viewAttachment(this.vsId, this.mimeType);
   }
 
   updateAttachmentTitle(

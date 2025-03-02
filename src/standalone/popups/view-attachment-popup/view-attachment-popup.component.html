@@ -21,7 +21,7 @@
     @if (isPdf) {
       <iframe class="w-full h-full" [src]="data.model.safeUrl"></iframe>
     } @else {
-      <img class="w-full h-full" fill [ngSrc]="data.model.safeUrl" alt="img" />
+      <img class="w-full h-full" [src]="data.model.safeUrl" alt="img" />
     }
   </div>
   <div class="dialog-footer justify-end">

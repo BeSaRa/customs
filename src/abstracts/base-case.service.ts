@@ -414,14 +414,18 @@ export abstract class BaseCaseService<M>
 
   downloadAttachment(attachmentId: string): Observable<BlobModel> {
     return this.http
-      .get(this.getUrlSegment() + '/document/' + attachmentId + '/download', {
-        responseType: 'blob',
-      })
+      .get(
+        this.getUrlSegment() + '/document/latest/' + attachmentId + '/content',
+        {
+          responseType: 'blob',
+        },
+      )
       .pipe(map(blob => new BlobModel(blob, this.domSanitizer)));
   }
 
   viewAttachment(
     attachmentId: string,
+    mimeType = 'application/pdf',
     title = 'Document',
   ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
     return this.downloadAttachment(attachmentId).pipe(
@@ -436,6 +440,7 @@ export abstract class BaseCaseService<M>
           data: {
             model: blob,
             title: title,
+            mimeType: mimeType,
           },
         });
       }),
