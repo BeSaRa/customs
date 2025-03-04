@@ -172,6 +172,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       [CustomValidators.required, CustomValidators.maxLength(3100)],
     ],
     answer: ['', [CustomValidators.required, CustomValidators.maxLength(3100)]],
+    id: '',
   });
 
   questionsList: Signal<ElementRef<HTMLUListElement> | undefined> = viewChild(
@@ -384,6 +385,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         this.questionForm.setValue({
           question: question.question,
           answer: question.answer,
+          id: question.id,
         });
       });
   }
