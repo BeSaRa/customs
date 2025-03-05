@@ -43,7 +43,8 @@ export class ViewAttachmentPopupComponent implements OnDestroy, OnInit {
     this.data.model.dispose();
   }
   ngOnInit(): void {
-    this.isPdf = this.data.mimeType === 'application/pdf';
+    this.isPdf =
+      !this.data.mimeType || this.data.mimeType === 'application/pdf';
   }
   toggleSize() {
     this.isFullScreen = !this.isFullScreen;
