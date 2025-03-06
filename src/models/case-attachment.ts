@@ -6,6 +6,7 @@ import { BaseCaseService } from '@abstracts/base-case.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { CaseAttachmentInterceptor } from '@model-interceptors/case-attachment-interceptor';
 import { InterceptModel } from 'cast-response';
+import { AttachmentTypes } from '@enums/attachment-type.enum';
 
 const { send, receive } = new CaseAttachmentInterceptor();
 
@@ -62,5 +63,21 @@ export class CaseAttachment extends ClonerMixin(class {}) {
 
   delete(service: BaseCaseService<unknown>): Observable<unknown> {
     return service.deleteAttachment(this.id);
+  }
+
+  isInvestigationReportOpinion() {
+    return (
+      this.attachmentTypeId === AttachmentTypes.INVESTIGATION_REPORT_OPINION
+    );
+  }
+
+  isAdministrativeInvestigation() {
+    return (
+      this.attachmentTypeId === AttachmentTypes.ADMINISTRATIVE_INVESTIGATION
+    );
+  }
+
+  isInvestigationResult() {
+    return this.attachmentTypeId === AttachmentTypes.INVESTIGATION_RESULT;
   }
 }
