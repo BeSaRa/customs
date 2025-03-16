@@ -248,14 +248,17 @@ export class AuthService
           this.menuItemService.filterStaticMenu(data.menuItems || []);
         }),
         tap(() => this.menuItemService.buildHierarchy()),
-        mergeMap((data: LoginDataContract) =>
-          this._getReportToken().pipe(
-            tap(reportTokenData =>
-              this.tokenService.setReportToken(reportTokenData.accessToken),
-            ),
-            map(() => data),
-          ),
-        ),
+        mergeMap((data: LoginDataContract) => {
+          if (data.internalUser) {
+            return this._getReportToken().pipe(
+              tap(reportTokenData =>
+                this.tokenService.setReportToken(reportTokenData.accessToken),
+              ),
+              map(() => data),
+            );
+          }
+          return of(data);
+        }),
       );
     };
   }
