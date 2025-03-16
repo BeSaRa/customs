@@ -11,6 +11,7 @@ export const EndPoints = {
   SWITCH_ORGANIZATION: '/auth/internal/organization-unit',
   VALIDATE_TOKEN: '/auth/validate-token',
   REFRESH_TOKEN: '/auth/refresh-token',
+  REPORT_TOKEN: '/auth/report-token',
   PERMISSION: '/entity/permission',
   INTERNAL_USER: '/entity/internal/user',
   USER_PREFERENCES: '/entity/user-preferences/internal-user-id',

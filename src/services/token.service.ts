@@ -17,16 +17,24 @@ export class TokenService
   private readonly eCookieService = inject(ECookieService);
   private readonly config = inject(ConfigService);
   private readonly tokenStoreKey = this.config.CONFIG.TOKEN_STORE_KEY;
+  private readonly reportTokenStoreKey =
+    this.config.CONFIG.REPORT_TOKEN_STORE_KEY;
   private readonly refreshTokenStoreKey =
     this.config.CONFIG.REFRESH_TOKEN_STORE_KEY;
   private readonly http = inject(HttpClient);
   private readonly urlService = inject(UrlService);
   private token?: string;
+  private reportToken?: string;
   private refreshToken?: string;
 
   setToken(token: string | undefined): void {
     this.token = token;
     this.token && this.eCookieService.putE(this.tokenStoreKey, this.token);
+  }
+  setReportToken(reportToken: string | undefined): void {
+    this.reportToken = reportToken;
+    this.reportToken &&
+      this.eCookieService.putE(this.reportTokenStoreKey, this.reportToken);
   }
 
   setRefreshToken(token: string | undefined): void {
@@ -37,6 +45,9 @@ export class TokenService
 
   getToken(): string | undefined {
     return this.token;
+  }
+  getReportToken(): string | undefined {
+    return this.reportToken;
   }
 
   getRefreshToken(): string | undefined {
@@ -66,7 +77,9 @@ export class TokenService
   clearToken(): void {
     this.token = undefined;
     this.refreshToken = undefined;
+    this.reportToken = undefined;
     this.eCookieService.removeE(this.tokenStoreKey);
     this.eCookieService.removeE(this.refreshTokenStoreKey);
+    this.eCookieService.removeE(this.reportTokenStoreKey);
   }
 }
