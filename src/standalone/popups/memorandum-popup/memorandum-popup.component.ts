@@ -246,38 +246,46 @@ export class MemorandumPopupComponent
   }
 
   get saveDisabled() {
+    for (const offender of this.offenders()) {
+      const offenderPenaltyId =
+        this.penaltiesDecisionsMap[offender.id]?.penaltyId;
+
+      if (!offenderPenaltyId) return true;
+
+      const hasPenalty = this.offenderPenalties(offender.id).some(
+        penalty => penalty.id === offenderPenaltyId,
+      );
+
+      if (!hasPenalty) return true;
+    }
+
     if (
-      Object.values(this.offenderInvStatusControls).filter(
+      Object.values(this.offenderInvStatusControls).some(
         c =>
           c.value !== OffenderInvStatus.INVESTIGATION_DONE &&
           c.value !== OffenderInvStatus.INVESTIGATION_POSTPONED,
-      ).length
+      )
     ) {
       return true;
-    } else {
-      const _offendersIDs = Object.keys(this.offenderInvStatusControls).filter(
-        o =>
-          this.offenderInvStatusControls[o as unknown as number].value !==
-          OffenderInvStatus.INVESTIGATION_POSTPONED,
-      );
-      const _offendersViolationsIds = Object.keys(this.offenderViolationsMap())
-        .filter(key => _offendersIDs.find(o => o === key))
-        .reduce((acc, cur) => {
-          acc = [
-            ...acc,
-            ...this.offenderViolationsMap()[cur as unknown as number].map(
-              ov => ov.id,
-            ),
-          ];
-          return acc;
-        }, [] as number[]);
-      return !!Object.keys(this.controls).filter(
-        key =>
-          _offendersViolationsIds.find(ov => ov === parseInt(key)) &&
-          this.controls[key as unknown as number].value ===
-            ProofTypes.UNDEFINED,
-      ).length;
     }
+
+    const _offendersIDs = Object.keys(this.offenderInvStatusControls).filter(
+      o =>
+        this.offenderInvStatusControls[o as unknown as number].value !==
+        OffenderInvStatus.INVESTIGATION_POSTPONED,
+    );
+
+    const _offendersViolationsIds = Object.keys(this.offenderViolationsMap())
+      .filter(key => _offendersIDs.includes(key))
+      .flatMap(cur =>
+        this.offenderViolationsMap()[cur as unknown as number].map(ov => ov.id),
+      );
+
+    return Object.keys(this.controls).some(
+      key =>
+        _offendersViolationsIds.includes(parseInt(key)) &&
+        this.controls[key as unknown as number].value === ProofTypes.UNDEFINED,
+    );
   }
 
   private completeTask(model: Memorandum) {
