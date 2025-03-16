@@ -249,6 +249,9 @@ export class CustomMenuService extends BaseCrudWithDialogService<
       case MenuItemParametersEnum.DOMAIN_NAME:
         value = this.employeeService.getEmployee()?.domainName;
         break;
+      case MenuItemParametersEnum.REPORT_TOKEN:
+        value = this.tokenService.getReportToken()?.replace('Bearer ', '');
+        break;
     }
     return (value ?? '') + '';
   }

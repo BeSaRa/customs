@@ -29,6 +29,7 @@ import {
   iif,
   interval,
   map,
+  mergeMap,
   Observable,
   of,
   OperatorFunction,
@@ -69,6 +70,14 @@ export class AuthService
     return this.http.post<LoginDataContract>(
       this.urlService.URLS.AUTH,
       credentials,
+    );
+  }
+
+  @CastResponse()
+  private _getReportToken(): Observable<LoginDataContract> {
+    return this.http.post<LoginDataContract>(
+      this.urlService.URLS.REPORT_TOKEN,
+      {},
     );
   }
 
@@ -239,6 +248,14 @@ export class AuthService
           this.menuItemService.filterStaticMenu(data.menuItems || []);
         }),
         tap(() => this.menuItemService.buildHierarchy()),
+        mergeMap((data: LoginDataContract) =>
+          this._getReportToken().pipe(
+            tap(reportTokenData =>
+              this.tokenService.setReportToken(reportTokenData.accessToken),
+            ),
+            map(() => data),
+          ),
+        ),
       );
     };
   }
