@@ -11,12 +11,6 @@
   }
 </div>
 <div class="shadow relative max-h-[30vh] overflow-y-auto">
-  @if (loading$ | async) {
-    <div
-      class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-      <mat-spinner [diameter]="75"></mat-spinner>
-    </div>
-  }
   <table mat-table class="table-style" [dataSource]="dataSource">
     <!-- organizationUnitId -->
     <ng-container matColumnDef="organizationUnitId">

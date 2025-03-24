@@ -9,12 +9,6 @@
     icon="RELOAD"></app-icon-button>
 </div>
 <div class="shadow relative overflow-auto">
-  @if (loading$ | async) {
-    <div
-      class="z-20 bg-black bg-opacity-5 absolute inset-0 flex justify-center">
-      <mat-spinner [diameter]="75"></mat-spinner>
-    </div>
-  }
   <table
     mat-table
     matSort
