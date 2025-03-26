@@ -19,6 +19,7 @@ import {
   catchError,
   combineLatest,
   filter,
+  forkJoin,
   map,
   Observable,
   of,
@@ -41,6 +42,7 @@ import { InternalUserOU } from '@models/internal-user-ou';
 import { MatRipple } from '@angular/material/core';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { OrganizationUnitType } from '@enums/organization-unit-type';
+import { InternalUserOUService } from '@services/internal-user-ou.service';
 
 @Component({
   selector: 'app-internal-user-permissions-popup',
@@ -75,6 +77,7 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
 
   lang = inject(LangService);
   permissionService = inject(PermissionService);
+  internalUserOUService = inject(InternalUserOUService);
   organizationUnitService = inject(OrganizationUnitService);
   lookupService = inject(LookupService);
   dialogRef = inject(MatDialogRef);
@@ -82,11 +85,13 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
   data: CrudDialogDataContract<InternalUserOU> = inject(MAT_DIALOG_DATA);
   ouId = this.data.model.organizationUnitId;
   internalUserId = this.data.model.internalUserId;
+
   inViewMode = !!this.data.extras?.inViewMode;
   protected readonly AppIcons = AppIcons;
 
   private readonly permissionRoleService = inject(PermissionRoleService);
-  permissionRoleId = new FormControl();
+  permissionRoleIdCtrl = new FormControl();
+  permissionRoleId = this.data.model.permissionRoleId;
   selectedIds: number[] = [];
   groups: CheckGroup<Permission>[] = [];
   permissionsByGroup: Record<number, Permission[]> = {} as Record<
@@ -97,19 +102,22 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
   private loadPermissionsRoles() {
     this.permissionRoleService.loadAsLookups().subscribe(permissionsRoles => {
       this.permissionsRoles = permissionsRoles;
+      this.permissionRoleIdCtrl.setValue(this.permissionRoleId);
     });
   }
 
   private listenToPermissionRoleChange() {
-    this.permissionRoleId?.valueChanges.subscribe(val => {
-      const selectedRoleId = this.permissionsRoles.find(
-        permission => permission.id === val,
-      );
-      this.selectedIds = selectedRoleId!.permissionSet.map(
-        permission => permission.permissionId,
-      );
-      this.loadGroups();
-    });
+    this.permissionRoleIdCtrl?.valueChanges
+      .pipe(filter(val => val !== null && val !== undefined))
+      .subscribe(val => {
+        const selectedRoleId = this.permissionsRoles.find(
+          permission => permission.id === val,
+        );
+        this.selectedIds = selectedRoleId!.permissionSet.map(
+          permission => permission.permissionId,
+        );
+        this.loadGroups();
+      });
   }
 
   loadGroups() {
@@ -178,12 +186,35 @@ export class InternalUserPermissionsPopupComponent implements OnInit {
 
   save() {
     const permissions = this.groups.map(g => g.getSelectedValue()).flat();
-    this.permissionService
-      .savePermissions(this.internalUserId, this.ouId, permissions)
-      .pipe(
-        catchError(() => of(null)),
-        filter(response => response !== null),
-      )
-      .subscribe(() => this.dialogRef.close());
+
+    const savePermissions$ = this.permissionService.savePermissions(
+      this.internalUserId,
+      this.ouId,
+      permissions,
+    );
+
+    if (this.permissionRoleId === this.permissionRoleIdCtrl.value) {
+      savePermissions$
+        .pipe(
+          catchError(() => of(null)),
+          filter(response => response !== null),
+        )
+        .subscribe(() => this.dialogRef.close());
+    } else {
+      forkJoin({
+        savePermissions: savePermissions$,
+        updateRole: this.internalUserOUService.updatePermissionRole({
+          internalUserId: this.internalUserId,
+          organizationUnitId: this.ouId,
+          permissionRoleId: this.permissionRoleIdCtrl.value,
+          id: this.data.model.id,
+        }),
+      })
+        .pipe(
+          catchError(() => of(null)),
+          filter(response => response !== null),
+        )
+        .subscribe(() => this.dialogRef.close());
+    }
   }
 }

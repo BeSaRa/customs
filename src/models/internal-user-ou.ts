@@ -20,6 +20,7 @@ export class InternalUserOU extends BaseModel<
   organizationUnitInfo!: AdminResult;
   organizationUnitArray!: number[];
   administrationAndSectionUnit!: number;
+  permissionRoleId!: number;
   override status = 1;
 
   buildForm(controls = false): object {

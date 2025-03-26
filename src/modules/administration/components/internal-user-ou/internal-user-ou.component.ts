@@ -37,23 +37,11 @@ export class InternalUserOUComponent
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.data$
-      .pipe(
-        map(internalUsers =>
-          internalUsers.map(
-            internalUserOu => internalUserOu.organizationUnitId,
-          ),
-        ),
-      )
-      .subscribe(
-        organizationUnitIds => (this.organizationUnits = organizationUnitIds),
-      );
-    this.filter$.next({ internalUserId: this.internalUser.id });
+    this.setUserOus();
     this.defaultOUId = this.internalUser.defaultOUId;
     this.listenToEditUserPermissions();
     this.listenToEditUserTeams();
   }
-
   service = inject(InternalUserOUService);
   internalUserService = inject(InternalUserService);
   actions: ContextMenuActionContract<InternalUserOU>[] = [
@@ -86,7 +74,6 @@ export class InternalUserOUComponent
       },
     },
   ];
-  // here we have a new implementation for displayed/filter Columns for the table
   columnsWrapper: ColumnsWrapper<InternalUserOU> = new ColumnsWrapper(
     new TextFilterColumn('organizationUnitId'),
     new NoneFilterColumn('default'),
@@ -98,6 +85,21 @@ export class InternalUserOUComponent
       internalUserId: this.internalUser.id,
       organizationUnits: this.organizationUnits,
     };
+  }
+
+  setUserOus() {
+    this.data$
+      .pipe(
+        map(internalUsers =>
+          internalUsers.map(
+            internalUserOu => internalUserOu.organizationUnitId,
+          ),
+        ),
+      )
+      .subscribe(
+        organizationUnitIds => (this.organizationUnits = organizationUnitIds),
+      );
+    this.filter$.next({ internalUserId: this.internalUser.id });
   }
 
   changeDefaultDepartment(
@@ -123,26 +125,38 @@ export class InternalUserOUComponent
 
   listenToEditUserPermissions() {
     this.editUserPermissions$.subscribe(item => {
-      this.dialog.open(InternalUserPermissionsPopupComponent, {
-        data: {
-          model: item,
-          extras: {
-            inViewMode: this.inViewMode,
+      this.dialog
+        .open(InternalUserPermissionsPopupComponent, {
+          data: {
+            model: item,
+            extras: {
+              inViewMode: this.inViewMode,
+            },
           },
-        },
-      });
+        })
+        .afterClosed()
+        .subscribe(() => {
+          this.reload$.next();
+          this.setUserOus();
+        });
     });
   }
   listenToEditUserTeams() {
     this.editUserTeams$.subscribe(item => {
-      this.dialog.open(InternalUserTeamsPopupComponent, {
-        data: {
-          model: item,
-          extras: {
-            inViewMode: this.inViewMode,
+      this.dialog
+        .open(InternalUserTeamsPopupComponent, {
+          data: {
+            model: item,
+            extras: {
+              inViewMode: this.inViewMode,
+            },
           },
-        },
-      });
+        })
+        .afterClosed()
+        .subscribe(() => {
+          this.reload$.next();
+          this.setUserOus();
+        });
     });
   }
 }

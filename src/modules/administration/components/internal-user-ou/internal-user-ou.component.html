@@ -3,6 +3,10 @@
   <h1 class="text-xl min-h-[3rem] align-middle flex items-center px-3">
     {{ lang.map.menu_internal_user_ou }}
   </h1>
+  <app-icon-button
+    [matTooltip]="lang.map.reload"
+    (click)="reload$.next(); setUserOus()"
+    icon="RELOAD"></app-icon-button>
   @if (!inViewMode) {
     <app-icon-button
       [matTooltip]="lang.map.add"

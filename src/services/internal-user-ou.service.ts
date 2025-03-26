@@ -55,4 +55,16 @@ export class InternalUserOUService extends BaseCrudWithDialogService<
       params: new HttpParams({ fromObject: { ...criteria } }),
     });
   }
+
+  @CastResponse()
+  updatePermissionRole(criteria: {
+    internalUserId: number;
+    organizationUnitId: number;
+    permissionRoleId: number;
+    id: number;
+  }) {
+    return this.http.put(this.getUrlSegment() + '/admin', {
+      ...criteria,
+    });
+  }
 }
