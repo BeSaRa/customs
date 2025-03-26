@@ -17,7 +17,7 @@
             bindValue="id"
             bindLabel="getNames"
             [label]="lang.map.lbl_custom_role"
-            [formControl]="permissionRoleId"></app-select-input>
+            [formControl]="permissionRoleIdCtrl"></app-select-input>
         }
       </div>
 
@@ -26,7 +26,7 @@
           <div class="border-b flex items-center justify-between bg-slate-300">
             <mat-checkbox
               [disabled]="
-                !group.list.length || inViewMode || !permissionRoleId.valid
+                !group.list.length || inViewMode || !permissionRoleIdCtrl.valid
               "
               (change)="group.toggleSelection()"
               [checked]="group.isFull()"
@@ -76,7 +76,7 @@
               track permission
             ) {
               <mat-checkbox
-                [disabled]="!permissionRoleId.valid || inViewMode"
+                [disabled]="!permissionRoleIdCtrl.valid || inViewMode"
                 [checked]="group.isSelected(permission.id)"
                 (change)="group.toggle(permission.id)">
                 <span
