@@ -249,14 +249,17 @@ export class MemorandumPopupComponent
     for (const offender of this.offenders()) {
       const offenderPenaltyId =
         this.penaltiesDecisionsMap[offender.id]?.penaltyId;
-
       if (!offenderPenaltyId) return true;
 
       const hasPenalty = this.offenderPenalties(offender.id).some(
         penalty => penalty.id === offenderPenaltyId,
       );
-
-      if (!hasPenalty) return true;
+      if (
+        !hasPenalty &&
+        this.offenderInvStatusControls[offender.id].value !==
+          OffenderInvStatus.INVESTIGATION_POSTPONED
+      )
+        return true;
     }
 
     if (
