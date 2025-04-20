@@ -26,6 +26,15 @@
         {{ assertType(element).creatorInfo.getNames() }}
       </td>
     </ng-container>
+    <!-- opinion_full_serial -->
+    <ng-container matColumnDef="opinionFullSerial">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ lang.map.opinion_full_serial }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ assertType(element).opinionFullSerial }}
+      </td>
+    </ng-container>
     <!-- referralNumber -->
     <ng-container matColumnDef="referralNumber">
       <th mat-header-cell *matHeaderCellDef>

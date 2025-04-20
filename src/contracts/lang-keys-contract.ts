@@ -872,4 +872,5 @@ export interface LangKeysContract {
   penalty_modification_request_has_been_added_and_sent_to_the_group_email: string;
   penalty_modification_requests: string;
   statement_complete: string;
+  opinion_full_serial: string;
 }

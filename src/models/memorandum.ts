@@ -10,6 +10,7 @@ const { send, receive } = new MemorandumInterceptor();
 @InterceptModel({ send, receive })
 export class Memorandum extends ClonerMixin(AppDocument) {
   declare requestCaseId: string;
+  declare opinionFullSerial: string;
   declare category: number;
   declare decisionFullSerial: string | null;
   declare referralDate: string;
