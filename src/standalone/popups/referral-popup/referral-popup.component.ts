@@ -251,15 +251,30 @@ export class ReferralPopupComponent
       suffix: this.lang.map.respected,
     },
     [SystemPenalties.REFERRAL_TO_PRESIDENT]: {
-      header: this.lang.map.request_static_header_for_president,
-      footer: this.lang.map.request_static_footer_for_president,
+      header: this.lang.map.static_header_text_referral_to_president,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        return tab === 'mixed'
+          ? this.lang.map.static_footer_text_referral_to_president_mixed
+          : tab === 'employee'
+            ? this.lang.map.static_footer_text_referral_to_president
+            : this.lang.map
+                .static_footer_text_referral_to_president_for_brokers;
+      },
       whom: this.lang.map.president_of_gac,
       complete: this.lang.map.approve,
       suffix: this.lang.map.venerable,
     },
     [SystemPenalties.REFERRAL_TO_PRESIDENT_ASSISTANT]: {
-      header: this.lang.map.request_static_header_for_president_assistant,
-      footer: this.lang.map.request_static_footer_for_president_assistant,
+      header: this.lang.map.static_header_text_referral_to_president_assistant,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        return tab === 'mixed'
+          ? this.lang.map
+              .static_footer_text_referral_to_president_assistant_mixed
+          : tab === 'employee'
+            ? this.lang.map.static_footer_text_referral_to_president_assistant
+            : this.lang.map
+                .static_footer_text_referral_to_president_assistant_for_customs_affairs;
+      },
       whom: (tab?: 'employee' | 'broker') => {
         if (!tab) {
           return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
@@ -322,9 +337,11 @@ export class ReferralPopupComponent
     },
     [TaskResponses.RETURN_TO_PA]: {
       header:
-        this.lang.map.static_header_text_for_return_to_president_assistant,
+        this.lang.map
+          .static_header_text_return_from_legal_affair_to_president_assistant,
       footer:
-        this.lang.map.static_footer_text_for_return_to_president_assistant,
+        this.lang.map
+          .static_footer_text_return_from_legal_affair_to_president_assistant,
       whom: (tab?: string) => {
         if (!tab) {
           return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
