@@ -144,16 +144,7 @@ export class CommentPopupComponent
 
   get isReassign() {
     return this.response === TaskResponses.REASSIGN;
-    // return [
-    //   TaskResponses.REASSIGN,
-    //   TaskResponses.TO_PA_USER,
-    //   TaskResponses.TO_PR_USER,
-    // ].some(t => t === this.response);
   }
-
-  // get isOnlyReassign() {
-  //   return this.response === TaskResponses.REASSIGN;
-  // }
 
   get isSendToPaUser() {
     return this.response === TaskResponses.TO_PA_USER;
@@ -434,36 +425,12 @@ export class CommentPopupComponent
   get formName() {
     if (this.response === this.taskResponses.TO_MANAGER) {
       return 'اسم النموذج';
-    }
-    // else if (this.response === this.taskResponses) {
-    //   return 'نوع القرار';
-    // }
-    else if (
+    } else if (
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
       this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
     ) {
       return 'طلب احالة';
     }
-    return '';
-  }
-
-  get upperFixedText() {
-    if (
-      this.response === this.taskResponses.TO_MANAGER ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-    )
-      return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
-    return '';
-  }
-
-  get lowerFixedText() {
-    if (
-      this.response === this.taskResponses.TO_MANAGER ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT ||
-      this.response === this.taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-    )
-      return 'نص ثابت تقوم بتوفيره الهيئة نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص نص';
     return '';
   }
 
@@ -478,12 +445,6 @@ export class CommentPopupComponent
   get sendFromJobTitle() {
     return 'صفة الموقع';
   }
-
-  offenders!: [
-    { name: string; jobTitle: string; violations: [{ name: 'مخالفة ١' }] },
-  ];
-  violations = [{ name: 'مخالفة ١' }, { name: 'مخالفة ٢' }];
-  violation = { name: 'مخالفة ١', date: '1/1/2021' };
 
   get justifyEnd() {
     return this.response === this.taskResponses.TO_MANAGER;
@@ -512,15 +473,72 @@ export class CommentPopupComponent
     return 'نسخة الى الشؤون القانونية';
   }
 
-  get buttonSaveName() {
-    return this.isStatementReply
-      ? this.lang.map.reply_to_statement
-      : this.isSendToInvestigator
-        ? this.lang.map.save
-        : this.lang.map.approve;
+  defaultCommentText = {
+    header: '',
+    footer: '',
+    complete: this.lang.map.approve,
+    title: this.lang.map.comment,
+  };
+
+  get responseKey() {
+    return this.response as
+      | TaskResponses.RETURN_APP_MANAGER
+      | TaskResponses.STM_REPLY
+      | TaskResponses.TO_INV_USER
+      | TaskResponses.REASSIGN;
   }
 
-  getTitle() {
-    return this.isReassign ? this.lang.map.reassign : this.lang.map.comment;
+  commentTextMap: Record<
+    | TaskResponses.RETURN_APP_MANAGER
+    | TaskResponses.STM_REPLY
+    | TaskResponses.TO_INV_USER
+    | TaskResponses.REASSIGN,
+    {
+      header: string;
+      footer: string;
+      complete: string;
+      title: string;
+    }
+  > = {
+    [TaskResponses.RETURN_APP_MANAGER]: {
+      ...this.defaultCommentText,
+      header:
+        this.lang.map
+          .static_header_text_return_from_president_assistant_to_app_manager,
+      footer:
+        this.lang.map
+          .static_footer_text_return_from_president_assistant_to_app_manager,
+    },
+    [TaskResponses.STM_REPLY]: {
+      ...this.defaultCommentText,
+      complete: this.lang.map.reply_to_statement,
+    },
+    [TaskResponses.TO_INV_USER]: {
+      ...this.defaultCommentText,
+      complete: this.lang.map.save,
+    },
+    [TaskResponses.REASSIGN]: {
+      ...this.defaultCommentText,
+      title: this.lang.map.reassign,
+    },
+  };
+
+  get commentText() {
+    return this.commentTextMap[this.responseKey] || this.defaultCommentText;
+  }
+  get formHeader() {
+    return this.commentText.header;
+  }
+
+  get formFooter() {
+    return this.commentText.footer;
+  }
+
+  get formTitle() {
+    return this.commentText.title;
+  }
+
+  get formComplete() {
+    return this.commentText.complete;
   }
 }

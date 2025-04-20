@@ -1,8 +1,6 @@
 <div class="dialog-container">
   <div class="dialog-header bg-primary">
-    <h1>
-      {{ getTitle() }}
-    </h1>
+    <h1>{{ formTitle }}</h1>
     <app-icon-button
       tabindex="-1"
       mat-dialog-close=""
@@ -33,38 +31,18 @@
         </h4>
         <div class="px-8">
           <p class="mb-4">
-            {{ upperFixedText }}
+            {{ formHeader }}
           </p>
-          @if (
-            response === taskResponses.TO_MANAGER ||
-            response === taskResponses.REFERRAL_TO_PRESIDENT ||
-            response === taskResponses.REFERRAL_TO_PRESIDENT_ASSISTANT
-          ) {
-            <div class="mb-4">
-              @for (offender of offenders; track offender) {
-                <div>
-                  <h5>
-                    <strong>{{ offender.name }}</strong>
-                  </h5>
-                  <ul class="list-none">
-                    <li>{{ offender.jobTitle + ' ' + offender.name }}</li>
-                    @for (violation of offender.violations; track violation) {
-                      <li>
-                        {{ violation.name }}
-                      </li>
-                    }
-                  </ul>
-                </div>
-              }
-            </div>
-          }
+
           <form [formGroup]="form" class="mb-3">
             <app-textarea
               formControlName="comment"
               label="الوصف والتعليقات الأخرى"
               placeholder="((التعليقات المضافة في النظام قبل ارسال الطلب))"></app-textarea>
           </form>
-          <p class="mb-4">{{ lowerFixedText }}</p>
+          <p class="mb-4">
+            {{ formFooter }}
+          </p>
           <div
             class="flex"
             [ngClass]="{
@@ -227,7 +205,7 @@
   <div class="dialog-footer justify-end">
     @if (!isReassign) {
       <app-button (click)="comment$.next()" buttonType="primary"
-        >{{ buttonSaveName }}
+        >{{ formComplete }}
       </app-button>
     } @else {
       <app-button (click)="reassign$.next()" buttonType="primary"
