@@ -80,6 +80,7 @@ export class MemorandumOpinionListComponent
   models: Memorandum[] = [];
   displayedColumns: string[] = [
     'investigator',
+    'opinionFullSerial',
     'referralNumber',
     'referralDate',
     'memoDate',
