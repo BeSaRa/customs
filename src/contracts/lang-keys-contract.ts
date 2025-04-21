@@ -873,4 +873,5 @@ export interface LangKeysContract {
   penalty_modification_requests: string;
   statement_complete: string;
   opinion_full_serial: string;
+  does_attend: string;
 }

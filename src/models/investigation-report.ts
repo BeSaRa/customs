@@ -24,6 +24,7 @@ export class InvestigationReport extends BaseModel<
   summonedType!: number;
   summonedId!: number;
   detailsList: Question[] = [];
+  comment!: string;
   summonedTypeInfo!: AdminResult;
   summonedInfo!: AdminResult;
   attendanceList: InvestigationAttendance[] = [];

@@ -48,6 +48,7 @@ import { TeamNames } from '@enums/team-names';
 import { InternalUser } from '@models/internal-user';
 import { InvestigationAttendance } from '@models/investigation-attendance';
 import { EmployeeService } from '@services/employee.service';
+import { SwitchComponent } from '@standalone/components/switch/switch.component';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -62,6 +63,7 @@ import { EmployeeService } from '@services/employee.service';
     MatTooltip,
     MatIcon,
     SelectInputComponent,
+    SwitchComponent,
   ],
   providers: [DatePipe],
   templateUrl: './investigation-report-popup.component.html',
@@ -134,6 +136,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   locationCtrl = new FormControl();
   attendeeCategoryCtrl = new FormControl<number | null>(null);
   attendeeCtrl = new FormControl<number | null>(null);
+  doesAttendCtrl = new FormControl<boolean>(true);
+  commentCtrl = new FormControl<string>('');
   qidCtrl = new FormControl('');
   attendeeNameCtrl = new FormControl('');
 
@@ -223,6 +227,16 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.qidCtrl.updateValueAndValidity();
     this.attendeeNameCtrl.updateValueAndValidity();
   }
+  handleDoesAttendChanged() {
+    this.questionForm.reset();
+    this.commentCtrl.reset();
+    if (this.doesAttendCtrl.value) {
+      this.commentCtrl.setValidators([]);
+    } else {
+      this.commentCtrl.setValidators(CustomValidators.required);
+    }
+    this.commentCtrl.updateValueAndValidity();
+  }
 
   override _buildForm(): void {
     if (this.inViewMode()) {
@@ -231,12 +245,16 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.attendeeCtrl.disable();
       this.qidCtrl.disable();
       this.attendeeNameCtrl.disable();
+      this.doesAttendCtrl.disable();
+      this.commentCtrl.disable();
     } else {
       this.locationCtrl.enable();
       this.attendeeCategoryCtrl.enable();
       this.attendeeCtrl.enable();
       this.qidCtrl.enable();
       this.attendeeNameCtrl.enable();
+      this.doesAttendCtrl.enable();
+      this.commentCtrl.enable();
     }
     this.locationCtrl.patchValue(this.model.location!);
     this.model.attendanceList[0] &&
@@ -251,6 +269,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.attendeeNameCtrl.patchValue(
         this.model.attendanceList[0].attendeeName,
       );
+    this.model.comment && this.commentCtrl.patchValue(this.model.comment);
+    this.model.comment && this.doesAttendCtrl.patchValue(false);
     this.listenToSaveQuestion();
     this.listenToEditQuestion();
     this.listenToDeleteQuestion();
@@ -260,7 +280,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {
-    if (!this.model.detailsList.length) {
+    if (!this.model.detailsList.length && !this.commentCtrl.value) {
       this.dialog.error(
         this.lang.map.need_questions_and_answers_to_take_this_action,
       );
@@ -268,7 +288,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
     this.createdOnCtrl.setValue(this.date.toISOString());
     this.attendeeCategoryCtrl.markAsTouched();
     return (
-      !!this.model.detailsList.length &&
+      (!!this.model.detailsList.length || this.commentCtrl.valid) &&
       this.attendeeCtrl.valid &&
       this.qidCtrl.valid &&
       this.attendeeNameCtrl.valid &&
@@ -302,6 +322,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
         ? [attendanceObj as InvestigationAttendance]
         : [],
       createdOn: this.createdOnCtrl.value!,
+      comment: this.commentCtrl.value!,
     });
   }
 
