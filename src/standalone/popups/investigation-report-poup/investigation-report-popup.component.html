@@ -7,133 +7,129 @@
       class="close-btn"
       icon="CLOSE"></app-icon-button>
   </div>
-  <div class="dialog-content gap-4 w-[1000px]">
-    <div class="flex gap-2">
-      <div class="flex flex-auto flex-col">
-        <app-input [formControl]="personControl" [label]="personName()" />
-        <app-input
-          [formControl]="investigatorCtrl"
-          [label]="lang.map.investigator_name" />
-      </div>
-      <div class="w-20"></div>
-      <div class="flex flex-auto flex-col">
-        <app-input
-          [formControl]="creationDate"
-          [label]="lang.map.creation_date" />
-        <app-input [formControl]="locationCtrl" [label]="lang.map.location" />
-      </div>
-    </div>
-    <div class="flex gap-16">
-      <div class="flex-grow">
-        <app-select-input
-          [options]="attendeeTypes"
-          bindValue="lookupKey"
-          bindLabel="getNames"
-          [formControl]="attendeeCategoryCtrl"
-          [isMultiple]="false"
-          (selectChange)="handleAttendeeTypeChange($event)"
-          [label]="lang.map.investigation_writer_type" />
-      </div>
+  <div class="dialog-content w-[1000px] space-y-6 p-6">
+    <div class="grid grid-cols-3 gap-6">
+      <app-input [formControl]="personControl" [label]="personName()" />
+      <app-input
+        [formControl]="investigatorCtrl"
+        [label]="lang.map.investigator_name" />
+      <app-input
+        [formControl]="creationDate"
+        [label]="lang.map.creation_date" />
+
+      <app-input [formControl]="locationCtrl" [label]="lang.map.location" />
+
+      <app-select-input
+        [options]="attendeeTypes"
+        bindValue="lookupKey"
+        bindLabel="getNames"
+        [formControl]="attendeeCategoryCtrl"
+        [isMultiple]="false"
+        (selectChange)="handleAttendeeTypeChange($event)"
+        [label]="lang.map.investigation_writer_type" />
       @if (attendeeCategoryCtrl.value === AttendeeTypeEnum.External) {
-        <div class="flex-grow">
-          <app-input [formControl]="qidCtrl" [label]="lang.map.qid" />
-        </div>
-        <div class="flex-grow">
-          <app-input
-            [formControl]="attendeeNameCtrl"
-            [label]="lang.map.investigation_writer_name" />
-        </div>
+        <app-input [formControl]="qidCtrl" [label]="lang.map.qid" />
+        <app-input
+          [formControl]="attendeeNameCtrl"
+          [label]="lang.map.investigation_writer_name" />
       } @else {
-        <div class="flex-grow">
-          <app-select-input
-            [options]="investigators"
-            bindValue="id"
-            bindLabel="getNames"
-            [formControl]="attendeeCtrl"
-            [isMultiple]="false"
-            [label]="lang.map.investigation_writer" />
-        </div>
+        <app-select-input
+          [options]="investigators"
+          bindValue="id"
+          bindLabel="getNames"
+          [formControl]="attendeeCtrl"
+          [isMultiple]="false"
+          [label]="lang.map.investigation_writer" />
       }
+
+      <div class="flex items-center pt-6">
+        <app-switch
+          [formControl]="doesAttendCtrl"
+          [label]="lang.map.does_attend"
+          (changed)="handleDoesAttendChanged()" />
+      </div>
     </div>
-    <ul
-      #questionsList
-      class="flex flex-col gap-2 rounded-lg border min-h-[300px] max-h-[300px] overflow-y-auto p-2">
-      @for (
-        question of model.detailsList;
-        let index = $index;
-        track question.id
-      ) {
-        <li @addRemoveQuestion class="bg-gray-100 p-2 rounded-lg divide-y-2">
-          <div class="p-2">
-            <b>{{ lang.map.question }}</b> : {{ question.question }}
-          </div>
-          <div class="p-2 relative">
-            <b>{{ lang.map.answer }}</b> : {{ question.answer }}
-            @if (!inViewMode()) {
-              <div
-                class="absolute -top-7 end-2 flex items-center justify-center gap-2">
-                <app-icon-button
-                  (click)="editQuestion$.next({ index, question })"
-                  icon="EDIT" />
-                <app-icon-button
-                  (click)="deleteQuestion$.next(question)"
-                  icon="DELETE" />
-              </div>
-            }
-          </div>
-        </li>
-      } @empty {
-        <li class="flex flex-col justify-center min-h-[150px] items-center">
-          <div>{{ lang.map.no_questions_to_display }}</div>
-        </li>
-      }
-    </ul>
-    @if (!inViewMode()) {
-      <div class="flex gap-2">
-        <ul class="flex flex-auto flex-col gap-2 rounded-lg">
-          <li
-            [formGroup]="questionForm"
-            class="bg-gray-100 p-2 rounded-lg divide-y-2">
-            <div class="p-2 flex gap-2">
-              <div>
-                <b>{{ lang.map.question }}</b>
-              </div>
-              <app-textarea
-                formControlName="question"
-                class="flex-auto"
-                rows="1"
-                label="" />
+    @if (!doesAttendCtrl.value) {
+      <app-textarea [formControl]="commentCtrl" [label]="lang.map.comment" />
+    }
+    @if (doesAttendCtrl.value) {
+      <ul
+        #questionsList
+        class="flex flex-col gap-2 rounded-lg border min-h-[300px] max-h-[300px] overflow-y-auto p-2">
+        @for (
+          question of model.detailsList;
+          let index = $index;
+          track question.id
+        ) {
+          <li @addRemoveQuestion class="bg-gray-100 p-2 rounded-lg divide-y-2">
+            <div class="p-2">
+              <b>{{ lang.map.question }}</b> : {{ question.question }}
             </div>
-            <div class="p-2 flex gap-2">
-              <div>
-                <b>{{ lang.map.answer }}</b>
-              </div>
-              <app-textarea
-                formControlName="answer"
-                class="flex-auto"
-                rows="1"
-                label="" />
+            <div class="p-2 relative">
+              <b>{{ lang.map.answer }}</b> : {{ question.answer }}
+              @if (!inViewMode()) {
+                <div
+                  class="absolute -top-7 end-2 flex items-center justify-center gap-2">
+                  <app-icon-button
+                    (click)="editQuestion$.next({ index, question })"
+                    icon="EDIT" />
+                  <app-icon-button
+                    (click)="deleteQuestion$.next(question)"
+                    icon="DELETE" />
+                </div>
+              }
             </div>
           </li>
-        </ul>
-        <div class="flex flex-col">
-          <app-icon-button
-            tabindex="1"
-            matTooltipPosition="above"
-            [matTooltip]="lang.map.save"
-            (click)="saveQuestion$.next()"
-            [icon]="
-              editedQuestion()
-                ? 'CONTENT_SAVE_EDIT_OUTLINE'
-                : 'CONTENT_SAVE_OUTLINE'
-            " />
-          <app-icon-button
-            matTooltipPosition="above"
-            [matTooltip]="lang.map.reset"
-            (click)="clearForm()"
-            icon="RELOAD" />
+        } @empty {
+          <li class="flex flex-col justify-center min-h-[150px] items-center">
+            <div>{{ lang.map.no_questions_to_display }}</div>
+          </li>
+        }
+      </ul>
+    }
+    @if (!inViewMode()) {
+      @if (doesAttendCtrl.value) {
+        <div class="flex gap-4">
+          <form [formGroup]="questionForm" class="flex-grow space-y-4">
+            <div class="bg-gray-50 rounded-md p-4 space-y-4">
+              <div class="flex gap-2 items-start">
+                <b class="pt-2">{{ lang.map.question }}</b>
+                <app-textarea
+                  formControlName="question"
+                  class="flex-grow"
+                  rows="1"
+                  label="" />
+              </div>
+              <div class="flex gap-2 items-start">
+                <b class="pt-2">{{ lang.map.answer }}</b>
+                <app-textarea
+                  formControlName="answer"
+                  class="flex-grow"
+                  rows="1"
+                  label="" />
+              </div>
+            </div>
+          </form>
+
+          <div class="flex flex-col gap-2 pt-2">
+            <app-icon-button
+              tabindex="1"
+              matTooltipPosition="above"
+              [matTooltip]="lang.map.save"
+              (click)="saveQuestion$.next()"
+              [icon]="
+                editedQuestion()
+                  ? 'CONTENT_SAVE_EDIT_OUTLINE'
+                  : 'CONTENT_SAVE_OUTLINE'
+              " />
+            <app-icon-button
+              matTooltipPosition="above"
+              [matTooltip]="lang.map.reset"
+              (click)="clearForm()"
+              icon="RELOAD" />
+          </div>
         </div>
-      </div>
+      }
     }
   </div>
   <div class="dialog-footer justify-end">
