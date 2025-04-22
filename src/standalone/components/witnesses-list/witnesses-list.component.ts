@@ -151,9 +151,7 @@ export class WitnessesListComponent
         switchMap(model =>
           this.dialog
             .confirm(
-              this.lang.map.msg_delete_x_confirm.change({
-                x: model.getNames(),
-              }),
+              `${this.lang.map.msg_delete_x_confirm.change({ x: model.getNames() })}<br>${this.lang.map.msg_external_person_deletion_alert}`,
             )
             .afterClosed()
             .pipe(map(userClick => ({ userClick, model }))),
