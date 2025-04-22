@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Constructor } from '@app-types/constructors';
 import { InvestigationReport } from '@models/investigation-report';
-import { CastResponseContainer } from 'cast-response';
+import { CastResponse, CastResponseContainer } from 'cast-response';
 import { Pagination } from '@models/pagination';
 import { BaseCrudWithDialogService } from '@abstracts/base-crud-with-dialog-service';
 import { InvestigationReportPopupComponent } from '@standalone/popups/investigation-report-poup/investigation-report-popup.component';
@@ -11,8 +11,7 @@ import { BlobModel } from '@models/blob-model';
 import { map } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
-import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
-import { MatDialogRef } from '@angular/material/dialog';
+import { SituationSearch } from '@models/situation-search';
 
 @CastResponseContainer({
   $default: {
@@ -96,4 +95,33 @@ export class InvestigationReportService extends BaseCrudWithDialogService<
   //     }),
   //   );
   // }
+  @CastResponse(() => class {}, {
+    unwrap: 'rs',
+    fallback: '$default',
+  })
+  sendOTP(data: {
+    lang: string;
+    qid: string;
+    phoneNumber?: string;
+  }): Observable<{ mfaToken: string }> {
+    return this.http.post<{ mfaToken: string }>(
+      `${this.urlService.URLS.INVESTIGATION_REPORT}/investigator`,
+      data,
+    );
+  }
+  @CastResponse(() => class {}, {
+    unwrap: 'rs',
+    fallback: '$default',
+  })
+  verifyOTP(data: {
+    lang: string;
+    qid: string;
+    otp: string;
+    mfaToken: string;
+  }): Observable<boolean> {
+    return this.http.post<boolean>(
+      `${this.urlService.URLS.INVESTIGATION_REPORT}/investigator/verify`,
+      data,
+    );
+  }
 }
