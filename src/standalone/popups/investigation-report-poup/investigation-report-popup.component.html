@@ -39,7 +39,8 @@
           bindLabel="getNames"
           [formControl]="attendeeCtrl"
           [isMultiple]="false"
-          [label]="lang.map.investigation_writer" />
+          [label]="lang.map.investigation_writer"
+          (selectChange)="onInvestigatorChanged($event)" />
       }
 
       <div class="flex items-center pt-6">
@@ -163,7 +164,10 @@
             class="hidden" />
         </app-button>
       }
-      <app-button (click)="save$.next()" buttonType="primary">
+      <app-button
+        (click)="save$.next()"
+        buttonType="primary"
+        [disabled]="!isValidOtp">
         {{ lang.map.save }}
       </app-button>
     } @else {

@@ -49,6 +49,7 @@ import { InternalUser } from '@models/internal-user';
 import { InvestigationAttendance } from '@models/investigation-attendance';
 import { EmployeeService } from '@services/employee.service';
 import { SwitchComponent } from '@standalone/components/switch/switch.component';
+import { VerifyPopupComponent } from '../../../app/components/external-login/components/verify-popup/verify-popup.component';
 
 @Component({
   selector: 'app-investigation-report-popup',
@@ -190,7 +191,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
 
   savePDF$ = new Subject<void>();
   uploadPDF$ = new Subject<File>();
-
+  isValidOtp = false;
   protected override _init() {
     super._init();
     this.lang.change$.subscribe(current => {
@@ -280,6 +281,9 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {
+    if (!this.isValidOtp) {
+      this.dialog.error(this.lang.map.invalid_otp);
+    }
     if (!this.model.detailsList.length && !this.commentCtrl.value) {
       this.dialog.error(
         this.lang.map.need_questions_and_answers_to_take_this_action,
@@ -292,7 +296,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.attendeeCtrl.valid &&
       this.qidCtrl.valid &&
       this.attendeeNameCtrl.valid &&
-      this.attendeeCategoryCtrl.valid
+      this.attendeeCategoryCtrl.valid &&
+      this.isValidOtp
     );
   }
 
@@ -479,6 +484,44 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       .subscribe(() => {
         this.operation = OperationType.VIEW;
         this.toast.success(this.lang.map.file_uploaded_successfully);
+      });
+  }
+  onInvestigatorChanged(event: unknown) {
+    this.isValidOtp = false;
+    const investigator = this.investigators.find(
+      investigator => investigator.id === event,
+    )!;
+
+    this.investigationReportService
+      .sendOTP({
+        lang: this.lang.getCurrent().code.toUpperCase(),
+        qid: investigator.qid,
+        phoneNumber: investigator.phoneNumber,
+      })
+      .pipe(
+        switchMap(res => {
+          return this.dialog
+            .open(VerifyPopupComponent)
+            .afterClosed()
+            .pipe(
+              filter(result => !!result),
+              map(otp => {
+                const payload = {
+                  lang: this.lang.getCurrent().code.toUpperCase(),
+                  qid: investigator.qid,
+                  mfaToken: res.mfaToken,
+                  otp: otp as string,
+                };
+                return payload;
+              }),
+            );
+        }),
+        switchMap(payload => {
+          return this.investigationReportService.verifyOTP(payload);
+        }),
+      )
+      .subscribe(response => {
+        this.isValidOtp = response;
       });
   }
 
