@@ -875,4 +875,5 @@ export interface LangKeysContract {
   opinion_full_serial: string;
   does_attend: string;
   invalid_otp: string;
+  msg_external_person_deletion_alert: string;
 }
