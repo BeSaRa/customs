@@ -71,6 +71,30 @@ export class TeamService extends BaseCrudWithDialogService<
       { params },
     );
   }
+  @CastResponse(() => InternalUser, {
+    unwrap: 'rs',
+    fallback: 'internalUser$',
+  })
+  loadTeamMembersWithPS(
+    authName: TeamNames,
+    offenderIds: number[],
+    ouId?: number,
+  ) {
+    let params = new HttpParams();
+
+    offenderIds.forEach(id => {
+      params = params.append('offenderIds', id.toString());
+    });
+
+    if (ouId) {
+      params = params.set('ouId', ouId.toString());
+    }
+
+    return this.http.get<InternalUser[]>(
+      `${this.getUrlSegment()}/members/auth-with-ps/${authName}`,
+      { params },
+    );
+  }
 
   @CastResponse(() => InternalUser, {
     unwrap: 'rs',
