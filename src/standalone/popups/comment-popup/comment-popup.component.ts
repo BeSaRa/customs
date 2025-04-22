@@ -184,7 +184,15 @@ export class CommentPopupComponent
       return loadTeamMembers(TeamNames.President);
     }
     if (this.isSendToInvestigator)
-      return loadTeamMembers(TeamNames.Investigator);
+      return this.teamService
+        .loadTeamMembersWithPS(
+          TeamNames.Investigator,
+          this.model.getConcernedOffendersIds(),
+          this.ouId,
+        )
+        .subscribe(data => {
+          this.usersList = data;
+        });
     if (
       this.isSendToPAOfficeUser &&
       this.employeeService.getOrganizationUnit()?.id
