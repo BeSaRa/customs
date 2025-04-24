@@ -49,57 +49,29 @@ import { requiredValidator } from '@validators/validation-utils';
 export class InputComponent
   implements ControlValueAccessor, OnInit, OnDestroy, AfterContentInit
 {
-  ngAfterContentInit(): void {
-    this.hasCustomControl = !!this.template;
-    Promise.resolve().then(() => {
-      if (this.template) {
-        const input =
-          this.template.element.nativeElement.querySelector('input') ??
-          this.template.element.nativeElement;
-        this.setInputMissingProperties(input);
-        this.ctrl = this.template.control;
-      }
-    });
-  }
-
   private destroy$ = new Subject<void>();
-  @Input({ transform: booleanAttribute })
-  disabled = false;
-  @Input({ transform: booleanAttribute })
-  displayErrors = true;
-  @Input()
-  size: 'sm' | 'md' | 'lg' = 'md';
-  @Input()
-  placeholder = '';
-  @Input()
-  label = 'Please Provide Label';
-  @Input()
-  labelColor = 'text-slate-700';
-  @Input()
-  inputColor = 'text-slate-700';
-  @Input()
-  type = 'text';
-  @Input()
-  marginBottom = 'mb-5';
-  @Input({ transform: booleanAttribute })
-  noMargin = false;
-  @Input()
-  name = generateUUID();
 
-  @ContentChild(ControlDirective)
-  template?: ControlDirective;
+  @Input({ transform: booleanAttribute }) disabled = false;
+  @Input({ transform: booleanAttribute }) displayErrors = true;
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() placeholder = '';
+  @Input() label = 'Please Provide Label';
+  @Input() labelColor = 'text-slate-700';
+  @Input() inputColor = 'text-slate-700';
+  @Input() type = 'text';
+  @Input() marginBottom = 'mb-5';
+  @Input({ transform: booleanAttribute }) noMargin = false;
+  @Input() labelPosition: 'above' | 'before' = 'above';
+  @Input() name = generateUUID();
 
-  @ContentChild(InputPrefixDirective)
-  inputPrefix?: InputPrefixDirective;
-
-  @ContentChild(InputSuffixDirective)
-  inputSuffix?: InputSuffixDirective;
+  @ContentChild(ControlDirective) template?: ControlDirective;
+  @ContentChild(InputPrefixDirective) inputPrefix?: InputPrefixDirective;
+  @ContentChild(InputSuffixDirective) inputSuffix?: InputSuffixDirective;
 
   tailwindClass =
     'flex-auto ltr:peer-[.suffix]:pr-0 rtl:peer-[.suffix]:pl-0 ltr:peer-[.prefix]:pl-0 rtl:peer-[.prefix]:pr-0 outline-none group-[.lg]/input-wrapper:text-lg group-[.md]/input-wrapper:text-base group-[.sm]/input-wrapper:text-sm group-[.sm]/input-wrapper:px-2 group-[.sm]/input-wrapper:py-1 group-[.md]/input-wrapper:px-3 group-[.md]/input-wrapper:py-2 group-[.lg]/input-wrapper:px-5 group-[.lg]/input-wrapper:py-3';
 
   private injector = inject(Injector);
-
   private ctrl!: NgControl | null;
 
   get errors(): Observable<ValidationErrors | null | undefined> {
@@ -120,7 +92,7 @@ export class InputComponent
 
   control = new FormControl('');
   hasCustomControl = false;
-  // noinspection JSUnusedLocalSymbols
+
   private values = this.control.valueChanges
     .pipe(takeUntil(this.destroy$))
     .subscribe(value => this.onChange && this.onChange(value));
@@ -136,10 +108,22 @@ export class InputComponent
       : this.control.enable({ emitEvent: false });
   }
 
+  ngAfterContentInit(): void {
+    this.hasCustomControl = !!this.template;
+    Promise.resolve().then(() => {
+      if (this.template) {
+        const input =
+          this.template.element.nativeElement.querySelector('input') ??
+          this.template.element.nativeElement;
+        this.setInputMissingProperties(input);
+        this.ctrl = this.template.control;
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    this.destroy$.unsubscribe();
   }
 
   writeValue(value: string): void {
@@ -167,5 +151,31 @@ export class InputComponent
 
   setInputMissingProperties(element: HTMLElement): void {
     element.classList.add(...this.tailwindClass.split(' '));
+  }
+
+  get containerClasses(): string[] {
+    const classes = [];
+
+    if (this.labelPosition === 'above') {
+      classes.push('flex', 'flex-col');
+    } else {
+      classes.push('flex', 'items-start', 'gap-4', 'w-full');
+    }
+
+    if (!this.noMargin) {
+      classes.push(this.marginBottom);
+    }
+
+    return classes;
+  }
+
+  get labelClasses(): string {
+    let classes = this.labelColor + ' font-medium';
+    if (this.labelPosition === 'above') {
+      classes += ' mb-1';
+    } else {
+      classes += ' whitespace-nowrap flex-shrink-0 min-w-[6rem] max-w-[10rem]';
+    }
+    return classes;
   }
 }

@@ -1,17 +1,16 @@
-<label
-  [ngClass]="{ 'has-error': !!(errors | async) && displayErrors }"
-  class="group block relative {{ !noMargin ? marginBottom : '' }}">
-  <span [ngClass]="labelColor" class="block font-medium"
-    >{{ label }}
+<div [ngClass]="containerClasses" class="group relative items-center">
+  <label [ngClass]="labelClasses">
+    {{ label }}
     @if (isRequired) {
       <span class="text-amber-700">*</span>
     }
-  </span>
+  </label>
+
   <div
     [ngClass]="size"
     class="group/input-wrapper input-form {{
       inputColor
-    }} flex items-center justify-start">
+    }} flex items-center justify-start flex-1 min-w-0">
     <ng-content select="[appInputPrefix]"></ng-content>
     <span
       [ngClass]="{ prefix: inputPrefix, suffix: inputSuffix }"
@@ -25,14 +24,14 @@
         (blur)="inputTouch()"
         [name]="name"
         [placeholder]="placeholder"
-        [formControl]="control" />
+        [formControl]="control"
+        class="w-full" />
     }
-    @if (hasCustomControl) {
-      <ng-content select="[appControl]"></ng-content>
-    }
+
+    <ng-content select="[appControl]"></ng-content>
     <ng-content select="[appInputSuffix]"></ng-content>
   </div>
   @if (displayErrors) {
     <app-validation-errors [errors]="errors | async"></app-validation-errors>
   }
-</label>
+</div>
