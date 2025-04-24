@@ -124,7 +124,10 @@ export class CaseAttachmentsComponent
     this.listenToView();
     this.listenToDelete();
     this._load();
-    if (this.caseId() && this.operation !== OperationType.CREATE) {
+    if (
+      (this.caseId() && this.operation !== OperationType.CREATE) ||
+      this.folderType === this.FolderType.OFFENDER
+    ) {
       this.reload$.next();
     }
     if (this.folderType === FolderType.OFFICIAL) {
