@@ -301,13 +301,14 @@
 
   <!-- return -->
   @if (
-    model().inMyInbox() &&
-    (model().hasResponse(taskResponses.TO_USER) ||
-      model().hasResponse(taskResponses.RETURN_TO_HR) ||
-      model().hasResponse(taskResponses.RETURN_TO_SAME) ||
-      model().hasResponse(taskResponses.RETURN_TO_APP) ||
-      model().hasResponse(taskResponses.RETURN_TO_CA) ||
-      model().hasResponse(taskResponses.RETURN_TO_PO))
+    (model().inMyInbox() &&
+      (model().hasResponse(taskResponses.TO_USER) ||
+        model().hasResponse(taskResponses.RETURN_TO_HR) ||
+        model().hasResponse(taskResponses.RETURN_TO_SAME) ||
+        model().hasResponse(taskResponses.RETURN_TO_APP) ||
+        model().hasResponse(taskResponses.RETURN_TO_CA) ||
+        model().hasResponse(taskResponses.RETURN_TO_PO))) ||
+    model().hasResponse(taskResponses.RETURN_TO_PAE)
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
@@ -322,6 +323,15 @@
           mat-menu-item
           (click)="responseAction$.next(taskResponses.RETURN_TO_PO)">
           {{ lang.map.return_to_president_office }}
+        </button>
+      }
+      @if (
+        model().inMyInbox() && model().hasResponse(taskResponses.RETURN_TO_PAE)
+      ) {
+        <button
+          mat-menu-item
+          (click)="responseAction$.next(taskResponses.RETURN_TO_PAE)">
+          {{ lang.map.return_to_president_assistant_office }}
         </button>
       }
       @if (
