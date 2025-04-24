@@ -248,6 +248,8 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.attendeeNameCtrl.disable();
       this.doesAttendCtrl.disable();
       this.commentCtrl.disable();
+      this.model.attendanceList[0] &&
+        this.attendeeCtrl.patchValue(this.model.attendanceList[0].attendeeId);
     } else {
       this.locationCtrl.enable();
       this.attendeeCategoryCtrl.enable();
@@ -262,8 +264,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.attendeeCategoryCtrl.patchValue(
         this.model.attendanceList[0].category,
       );
-    this.model.attendanceList[0] &&
-      this.attendeeCtrl.patchValue(this.model.attendanceList[0].attendeeId);
     this.model.attendanceList[0] &&
       this.qidCtrl.patchValue(this.model.attendanceList[0].qid);
     this.model.attendanceList[0] &&
