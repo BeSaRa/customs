@@ -159,7 +159,7 @@ export class InputComponent
     if (this.labelPosition === 'above') {
       classes.push('flex', 'flex-col');
     } else {
-      classes.push('flex', 'items-start', 'gap-4', 'w-full');
+      classes.push('flex', 'gap-4', 'w-full', 'items-center');
     }
 
     if (!this.noMargin) {
