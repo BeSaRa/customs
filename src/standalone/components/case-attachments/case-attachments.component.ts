@@ -11,13 +11,12 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatSortModule, Sort } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Config } from '@constants/config';
 import { FolderType } from '@enums/folder-type.enum';
 import { OperationType } from '@enums/operation-type';
 import { UserClick } from '@enums/user-click';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
-import { AppTableDataSource } from '@models/app-table-data-source';
 import { CaseAttachment } from '@models/case-attachment';
 import { DialogService } from '@services/dialog.service';
 import { EmployeeService } from '@services/employee.service';
@@ -27,6 +26,7 @@ import { IconButtonComponent } from '@standalone/components/icon-button/icon-but
 import { EditAttachmentNamePopupComponent } from '@standalone/popups/edit-attachment-name-popup/edit-attachment-name-popup.component';
 import { ignoreErrors } from '@utils/utils';
 import {
+  BehaviorSubject,
   combineLatest,
   exhaustMap,
   filter,
@@ -39,6 +39,8 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { InputComponent } from '@standalone/components/input/input.component';
 
 @Component({
   selector: 'app-case-attachments',
@@ -49,6 +51,8 @@ import {
     MatSortModule,
     MatTableModule,
     MatCardModule,
+    ReactiveFormsModule,
+    InputComponent,
   ],
   templateUrl: './case-attachments.component.html',
   styleUrls: ['./case-attachments.component.scss'],
@@ -88,13 +92,20 @@ export class CaseAttachmentsComponent
   @Input()
   readonly = false;
 
-  data: Subject<CaseAttachment[]> = new Subject<CaseAttachment[]>();
-  dataSource: AppTableDataSource<CaseAttachment> =
-    new AppTableDataSource<CaseAttachment>(this.data);
+  employeeNumberControl: FormControl<string> = new FormControl('', {
+    nonNullable: true,
+  });
+
+  data: BehaviorSubject<CaseAttachment[]> = new BehaviorSubject<
+    CaseAttachment[]
+  >([]);
+  dataSource: MatTableDataSource<CaseAttachment> =
+    new MatTableDataSource<CaseAttachment>();
 
   displayedColumns: string[] = [
     'documentTitle',
     'attachmentType',
+    'employeeNo',
     'creationDate',
     'creator',
     'actions',
@@ -119,6 +130,25 @@ export class CaseAttachmentsComponent
     if (this.folderType === FolderType.OFFICIAL) {
       this.displayedColumns.shift();
     }
+    this.listenToEmployeeNumberChange();
+  }
+
+  listenToEmployeeNumberChange() {
+    this.employeeNumberControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(value => {
+        this.applyFilter(value);
+      });
+  }
+
+  applyFilter(value: string) {
+    if (value === '') {
+      this.dataSource.data = this.data.value;
+      return;
+    }
+    this.dataSource.data = this.data.value.filter(item =>
+      item.employeeNo?.toString().includes(value),
+    );
   }
 
   private _load() {
@@ -194,6 +224,7 @@ export class CaseAttachmentsComponent
       )
       .subscribe(data => {
         this.data.next(data);
+        this.dataSource.data = data;
       });
   }
 
@@ -286,5 +317,12 @@ export class CaseAttachmentsComponent
 
   resetDataList() {
     this.data.next([]);
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Delete'];
+    if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   }
 }
