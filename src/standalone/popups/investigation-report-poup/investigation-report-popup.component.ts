@@ -138,7 +138,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   attendeeCategoryCtrl = new FormControl<number | null>(null);
   attendeeCtrl = new FormControl<number | null>(null);
   doesAttendCtrl = new FormControl<boolean>(true);
-  commentCtrl = new FormControl<string>('');
+  commentCtrl = new FormControl<string>('', [CustomValidators.required]);
   qidCtrl = new FormControl('');
   attendeeNameCtrl = new FormControl('');
 
@@ -192,6 +192,13 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   savePDF$ = new Subject<void>();
   uploadPDF$ = new Subject<File>();
   isValidOtp = false;
+
+  get isValidAttendee() {
+    return (
+      this.isValidOtp ||
+      this.attendeeCategoryCtrl.value === AttendeeTypeEnum.External
+    );
+  }
   protected override _init() {
     super._init();
     this.lang.change$.subscribe(current => {
@@ -231,12 +238,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   handleDoesAttendChanged() {
     this.questionForm.reset();
     this.commentCtrl.reset();
-    if (this.doesAttendCtrl.value) {
-      this.commentCtrl.setValidators([]);
-    } else {
-      this.commentCtrl.setValidators(CustomValidators.required);
-    }
-    this.commentCtrl.updateValueAndValidity();
   }
 
   override _buildForm(): void {
@@ -281,9 +282,6 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {
-    if (!this.isValidOtp) {
-      this.dialog.error(this.lang.map.invalid_otp);
-    }
     if (!this.model.detailsList.length && !this.commentCtrl.value) {
       this.dialog.error(
         this.lang.map.need_questions_and_answers_to_take_this_action,
@@ -297,7 +295,7 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
       this.qidCtrl.valid &&
       this.attendeeNameCtrl.valid &&
       this.attendeeCategoryCtrl.valid &&
-      this.isValidOtp
+      this.isValidAttendee
     );
   }
 
