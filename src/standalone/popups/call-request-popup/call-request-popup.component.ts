@@ -77,6 +77,7 @@ export class CallRequestPopupComponent
         offender?: Offender;
         witness?: Witness;
         caseId: string;
+        cameFromCalendar: boolean;
       }
     >
   >(MAT_DIALOG_DATA);
@@ -85,6 +86,7 @@ export class CallRequestPopupComponent
   dialog = inject(DialogService);
   offender = signal(this.data.extras!.offender);
   witness = signal(this.data.extras!.witness);
+  cameFromCalendar = signal(this.data.extras!.cameFromCalendar || false);
   isOffender = signal(!!this.offender());
   isWitness = signal(!!this.witness());
   investigationModel = signal(this.data.extras!.model!);
@@ -105,7 +107,12 @@ export class CallRequestPopupComponent
   });
 
   person = computed(() => {
-    return this.isOffender() ? this.offender() : this.witness();
+    if (this.isOffender()) {
+      const offender = this.offender() as Offender;
+      offender.setUseOwnGetNames(this.cameFromCalendar());
+      return offender;
+    }
+    return this.witness();
   });
 
   private _times = generateTimeList();
@@ -153,6 +160,9 @@ export class CallRequestPopupComponent
 
   override _buildForm(): void {
     this.form = this.fb.group(this.model.buildForm(true));
+    if (this.inViewMode()) {
+      this.form.disable();
+    }
   }
 
   protected override _beforeSave(): boolean | Observable<boolean> {
