@@ -86,6 +86,7 @@ const routes: Routes = [
     canActivate: [
       accessPageGuard({
         permissionFromTeam: TeamNames.Disciplinary_Committee,
+        permission: AppPermissions.MANAGE_OBLIGATION_TO_ATTEND,
       }),
     ],
   },

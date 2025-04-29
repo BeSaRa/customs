@@ -17,6 +17,7 @@ export class PersonDetails {
   email!: string;
   status!: number;
   statusDateModified!: string;
+  employeeDepartmentId!: number;
   typeInfo!: AdminResult;
   statusInfo!: AdminResult;
 }

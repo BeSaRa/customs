@@ -56,7 +56,10 @@
     <span>{{ this.lang.map.static_footer_text_call_request }}</span>
   </div>
   <div class="dialog-footer justify-end">
-    <app-button (click)="save$.next()" buttonType="primary"
+    <app-button
+      (click)="save$.next()"
+      [disabled]="inViewMode()"
+      buttonType="primary"
       >{{ lang.map.save }}
     </app-button>
 

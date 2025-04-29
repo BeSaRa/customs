@@ -49,8 +49,15 @@ export class Offender extends BaseModel<Offender, OffenderService> {
   penaltyAppliedDate!: string;
   hasRunningGrievance!: number;
   vsid!: string;
+  private useOwnGetNames = false;
 
+  setUseOwnGetNames(value: boolean) {
+    this.useOwnGetNames = value;
+  }
   override getNames(): string {
+    if (this.useOwnGetNames) {
+      return super.getNames();
+    }
     return this.offenderInfo?.getNames() || '';
   }
 

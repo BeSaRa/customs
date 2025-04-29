@@ -19,45 +19,118 @@
 </div>
 <div class="shadow relative overflow-auto">
   <div class="p-1 pt-5 overflow-hidden max-h-[80vh]">
-    <full-calendar
-      [options]="calendarOptions"
-      #calendarComponent
-      class="max-h-[79vh]">
-      <ng-template #eventContent let-meeting>
-        <li
-          class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
-          [ngClass]="{
-            'bg-blue-200 border-blue-500': !isExpiredMeetingDate(
-              meeting.event.extendedProps.meetingDate
-            ),
-            'bg-red-200 border-red-500': isExpiredMeetingDate(
-              meeting.event.extendedProps.meetingDate
-            )
-          }">
-          <div class="w-full">
-            <h2>
-              {{ meeting.event.title }}
-            </h2>
-            <small>
-              <strong>{{ lang.map.lbl_date }}:</strong>
-              {{
-                meeting.event.extendedProps.meetingDate
-                  | date: config.DATE_FORMAT
-              }}
-            </small>
-            <p>
-              {{ meeting.event.extendedProps.meetingTimeFrom }} -
-              {{ meeting.event.extendedProps.meetingTimeTo }}
-            </p>
+    <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+      <!-- Disciplinary Committee Tab -->
+      @if (hasDisciplinaryTeam) {
+        <mat-tab
+          [label]="
+            lang.map.lbl_calendar + ' / ' + lang.map.disciplinary_committee
+          ">
+          <div class="max-h-[79vh] overflow-auto">
+            <full-calendar
+              [options]="meetingCalendarOptions"
+              #meetingCalendarComponent
+              class="max-h-[79vh]">
+              <ng-template #eventContent let-meeting>
+                <li
+                  class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
+                  [ngClass]="{
+                    'bg-blue-200 border-blue-500': !isExpiredDate(
+                      meeting.event.extendedProps.meetingDate
+                    ),
+                    'bg-red-200 border-red-500': isExpiredDate(
+                      meeting.event.extendedProps.meetingDate
+                    )
+                  }">
+                  <div class="w-full">
+                    <h2>
+                      {{ meeting.event.title }}
+                    </h2>
+                    <small>
+                      <strong>{{ lang.map.lbl_date }}:</strong>
+                      {{
+                        meeting.event.extendedProps.meetingDate
+                          | date: config.DATE_FORMAT
+                      }}
+                    </small>
+                    <p>
+                      {{ meeting.event.extendedProps.meetingTimeFrom }} -
+                      {{ meeting.event.extendedProps.meetingTimeTo }}
+                    </p>
+                  </div>
+                  @if (
+                    meeting.event.extendedProps.status !==
+                    meetingStatusEnum.held
+                  ) {
+                    <app-icon-button
+                      [matTooltip]="lang.map.edit"
+                      (click)="
+                        handleEditMeeting($event, meeting.event.extendedProps)
+                      "
+                      icon="EDIT" />
+                  }
+                </li>
+              </ng-template>
+            </full-calendar>
           </div>
-          @if (meeting.event.extendedProps.status !== meetingStatusEnum.held) {
-            <app-icon-button
-              [matTooltip]="lang.map.edit"
-              (click)="handleEditMeeting($event, meeting.event.extendedProps)"
-              icon="EDIT" />
-          }
-        </li>
-      </ng-template>
-    </full-calendar>
+        </mat-tab>
+      }
+
+      <!-- Call Requests Tab -->
+      @if (hasManageObligationToAttendPermission) {
+        <mat-tab
+          [label]="
+            lang.map.lbl_calendar + ' / ' + lang.map.assignment_to_attend
+          ">
+          <div class="max-h-[79vh] overflow-auto">
+            <full-calendar
+              [options]="callRequestsCalendarOptions"
+              #callRequestCalendarComponent
+              class="max-h-[79vh]">
+              <ng-template #eventContent let-meeting>
+                <li
+                  class="w-full flex p-3 mx-1 hover:bg-gray-200 border border-dashed"
+                  [ngClass]="{
+                    'bg-blue-200 border-blue-500': !isExpiredDate(
+                      meeting.event.extendedProps.summonDate
+                    ),
+                    'bg-red-200 border-red-500': isExpiredDate(
+                      meeting.event.extendedProps.summonDate
+                    )
+                  }">
+                  <div class="w-full">
+                    <h2>
+                      {{ meeting.event.title }}
+                    </h2>
+                    <small>
+                      <strong>{{ lang.map.lbl_date }}:</strong>
+                      {{
+                        meeting.event.extendedProps.summonDate
+                          | date: config.DATE_FORMAT
+                      }}
+                    </small>
+                    <!--                    <p>-->
+                    <!--                      {{ meeting.event.extendedProps.meetingTimeFrom }} - -->
+                    <!--                      {{ meeting.event.extendedProps.meetingTimeTo }}-->
+                    <!--                    </p>-->
+                  </div>
+                  <!--                  @if (-->
+                  <!--                    meeting.event.extendedProps.status !==-->
+                  <!--                    meetingStatusEnum.held-->
+                  <!--                    ) {-->
+                  <!--                    <app-icon-button-->
+                  <!--                      [matTooltip]="lang.map.edit"-->
+                  <!--                      (click)="-->
+                  <!--                        handleEditMeeting($event, meeting.event.extendedProps)-->
+                  <!--                      "-->
+                  <!--                      icon="EDIT" />-->
+                  <!--                  }-->
+                </li>
+              </ng-template>
+            </full-calendar>
+          </div>
+        </mat-tab>
+      }
+    </mat-tab-group>
   </div>
 </div>

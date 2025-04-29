@@ -233,6 +233,7 @@ export const Menus: MenuItemContract[] = [
     path: AppFullRoutes.CALENDAR,
     parent: MenuIdes.ELECTRONIC_SERVICES,
     permissionFromTeam: TeamNames.Disciplinary_Committee,
+    permission: 'MANAGE_OBLIGATION_TO_ATTEND',
   },
   {
     id: MenuIdes.MANAGER_DELEGATION,

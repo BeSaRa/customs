@@ -38,11 +38,9 @@ export class CallRequestInterceptor
   receive(model: CallRequest): CallRequest {
     model.statusInfo = AdminResult.createInstance(model.statusInfo);
     model.createdByInfo = AdminResult.createInstance(model.createdByInfo);
-    try {
+    if (model.summonTime) {
       const time = getTime(parseISO(model.summonTime as string));
       model.summonTime = format(time, 'hh:mm a');
-    } catch (e) {
-      console.log('failed to parse call request', e);
     }
     return model;
   }
