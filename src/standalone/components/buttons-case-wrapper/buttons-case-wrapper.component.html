@@ -301,14 +301,14 @@
 
   <!-- return -->
   @if (
-    (model().inMyInbox() &&
-      (model().hasResponse(taskResponses.TO_USER) ||
-        model().hasResponse(taskResponses.RETURN_TO_HR) ||
-        model().hasResponse(taskResponses.RETURN_TO_SAME) ||
-        model().hasResponse(taskResponses.RETURN_TO_APP) ||
-        model().hasResponse(taskResponses.RETURN_TO_CA) ||
-        model().hasResponse(taskResponses.RETURN_TO_PO))) ||
-    model().hasResponse(taskResponses.RETURN_TO_PAE)
+    model().inMyInbox() &&
+    (model().hasResponse(taskResponses.TO_USER) ||
+      model().hasResponse(taskResponses.RETURN_TO_HR) ||
+      model().hasResponse(taskResponses.RETURN_TO_SAME) ||
+      model().hasResponse(taskResponses.RETURN_TO_APP) ||
+      model().hasResponse(taskResponses.RETURN_TO_CA) ||
+      model().hasResponse(taskResponses.RETURN_TO_PAE) ||
+      model().hasResponse(taskResponses.RETURN_TO_PO))
   ) {
     <app-button buttonType="secondary" [matMenuTriggerFor]="returnMenu">
       {{ lang.map.return }}
