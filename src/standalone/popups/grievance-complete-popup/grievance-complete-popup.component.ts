@@ -156,7 +156,10 @@ export class GrievanceCompletePopupComponent
         }),
       )
       .subscribe(() => {
-        this.dialogRef.close(UserClick.YES);
+        this.dialogRef.close({
+          click: UserClick.YES,
+          comment: this.form.get('comment')?.value,
+        });
       });
   }
 

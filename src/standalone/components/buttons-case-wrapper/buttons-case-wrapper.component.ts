@@ -45,6 +45,7 @@ import { GrievanceCompletePopupComponent } from '@standalone/popups/grievance-co
 import {
   exhaustMap,
   filter,
+  Observable,
   of,
   Subject,
   switchMap,
@@ -465,41 +466,45 @@ export class ButtonsCaseWrapperComponent
 
   listenToGrievanceCompleteAction() {
     this.grievanceCompleteAction$
-      .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(response => {
-          return this.dialog
-            .open(GrievanceCompletePopupComponent, {
-              data: {
-                model: this.model(),
-              },
-            })
-            .afterClosed()
-            .pipe(
-              map(click => {
-                return { response, click };
-              }),
-            );
-        }),
-      )
-      .pipe(filter(({ click }) => click === UserClick.YES))
-      .pipe(
-        switchMap(({ response }) => {
-          return (
+        takeUntil(this.destroy$),
+        switchMap(response =>
+          (
+            this.dialog
+              .open(GrievanceCompletePopupComponent, {
+                data: {
+                  model: this.model(),
+                },
+              })
+              .afterClosed() as Observable<{
+              click: UserClick;
+              comment: string;
+            }>
+          ).pipe(
+            map(({ click, comment }) => ({
+              response,
+              click,
+              comment,
+            })),
+          ),
+        ),
+        filter(({ click }) => click === UserClick.YES),
+        switchMap(({ response, comment }) =>
+          (
             this.model().getService() as BaseCaseService<Grievance>
           ).completeTask(
             (this.model() as BaseCase<never, never>).getTaskId()!,
             {
               selectedResponse: response,
+              comment: comment,
             },
-          );
-        }),
+          ),
+        ),
       )
       .subscribe(() => {
         this.navigateToSamePageThatUserCameFrom.emit();
       });
   }
-
   private listenToAskAction() {
     this.ask$
       .pipe(takeUntil(this.destroy$))

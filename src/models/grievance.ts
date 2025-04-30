@@ -72,6 +72,7 @@ export class Grievance extends BaseCase<GrievanceService, Grievance> {
           disabled: true,
         },
       ],
+      comment: [''],
     };
   }
 }
