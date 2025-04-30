@@ -62,20 +62,22 @@
             matTooltipPosition="above"
             (click)="edit$.next(assertType(element))"
             icon="EDIT" />
-          <app-icon-button
-            [matTooltip]="lang.map.download"
-            matTooltipPosition="above"
-            (click)="download$.next(assertType(element))"
-            icon="FILE_DOWNLOAD_OUTLINE" />
-          @if (
-            assertType(element).hasDocumentVsId() &&
-            assertType(element).isDraft()
-          ) {
+          @if (!assertType(element).hasComment()) {
             <app-icon-button
-              [matTooltip]="lang.map.upload_files"
+              [matTooltip]="lang.map.download"
               matTooltipPosition="above"
-              (click)="clickOnUploadButton(uploader, assertType(element))"
-              icon="FILE_UPLOAD_OUTLINE" />
+              (click)="download$.next(assertType(element))"
+              icon="FILE_DOWNLOAD_OUTLINE" />
+            @if (
+              assertType(element).hasDocumentVsId() &&
+              assertType(element).isDraft()
+            ) {
+              <app-icon-button
+                [matTooltip]="lang.map.upload_files"
+                matTooltipPosition="above"
+                (click)="clickOnUploadButton(uploader, assertType(element))"
+                icon="FILE_UPLOAD_OUTLINE" />
+            }
           }
           @if (
             assertType(element).hasDocumentVsId() &&
@@ -88,6 +90,13 @@
               class="mt-1"
               (change)="changeIsExportableStatus$.next(element)">
             </mat-checkbox>
+          }
+          @if (assertType(element).hasDocumentVsId()) {
+            <app-icon-button
+              [matTooltip]="lang.map.view_history"
+              matTooltipPosition="above"
+              (click)="viewRelated$.next(assertType(element))"
+              icon="HISTORY" />
           }
         </div>
       </td>

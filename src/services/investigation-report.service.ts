@@ -11,7 +11,6 @@ import { BlobModel } from '@models/blob-model';
 import { map } from 'rxjs/operators';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpParams } from '@angular/common/http';
-import { SituationSearch } from '@models/situation-search';
 
 @CastResponseContainer({
   $default: {

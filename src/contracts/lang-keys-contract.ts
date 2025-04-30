@@ -876,4 +876,6 @@ export interface LangKeysContract {
   does_attend: string;
   invalid_otp: string;
   msg_external_person_deletion_alert: string;
+  versions: string;
+  view_history: string;
 }

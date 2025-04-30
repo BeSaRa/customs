@@ -38,6 +38,7 @@ import { MemorandumPopupComponent } from '@standalone/popups/memorandum-popup/me
 import { ViolationPopupComponent } from '@standalone/popups/violation-popup/violation-popup.component';
 import { b64toBlob } from '@utils/utils';
 import { map, Observable } from 'rxjs';
+import { InvestigationReport } from '@models/investigation-report';
 
 @CastResponseContainer({
   $default: {
@@ -138,6 +139,14 @@ export class InvestigationService
           },
         }),
       },
+    );
+  }
+  @CastResponse(() => InvestigationReport, { unwrap: 'rs' })
+  loadInvestigationReportVersions(
+    vsid: string,
+  ): Observable<InvestigationReport[]> {
+    return this.http.get<InvestigationReport[]>(
+      this.getUrlSegment() + `/document/${vsid}/versions`,
     );
   }
 
