@@ -46,7 +46,11 @@
       <div class="flex items-center pt-6">
         <app-switch
           [formControl]="doesAttendCtrl"
-          [label]="lang.map.does_attend"
+          [label]="
+            doesAttendCtrl.value
+              ? lang.map.does_attend
+              : lang.map.does_not_attend
+          "
           (changed)="handleDoesAttendChanged()" />
       </div>
     </div>
