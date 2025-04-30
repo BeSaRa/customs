@@ -1,0 +1,125 @@
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
+import { MAT_DIALOG_DATA, MatDialogClose } from '@angular/material/dialog';
+import { ButtonComponent } from '@standalone/components/button/button.component';
+import { LangService } from '@services/lang.service';
+import { DatePipe } from '@angular/common';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatNoDataRow,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
+import { InvestigationReport } from '@models/investigation-report';
+import { ConfigService } from '@services/config.service';
+import { MatTooltip } from '@angular/material/tooltip';
+import { Offender } from '@models/offender';
+import { Investigation } from '@models/investigation';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
+import { Subject } from 'rxjs';
+import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
+import { ignoreErrors } from '@utils/utils';
+import { InvestigationService } from '@services/investigation.service';
+import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
+import { DialogService } from '@services/dialog.service';
+
+@Component({
+  selector: 'app-related-investigation-records-popup',
+  standalone: true,
+  imports: [
+    IconButtonComponent,
+    MatDialogClose,
+    ButtonComponent,
+    DatePipe,
+    MatCell,
+    MatTable,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatCellDef,
+    MatNoDataRow,
+    MatTooltip,
+  ],
+  templateUrl: './related-investigation-records-popup.component.html',
+  styleUrl: './related-investigation-records-popup.component.scss',
+})
+export class RelatedInvestigationRecordsPopupComponent
+  extends OnDestroyMixin(class {})
+  implements OnInit
+{
+  lang = inject(LangService);
+  config = inject(ConfigService);
+  dialog = inject(DialogService);
+  investigationService = inject(InvestigationService);
+  view$ = new Subject<InvestigationReport>();
+  load$ = new Subject<void>();
+  models!: InvestigationReport[];
+  data: CrudDialogDataContract<Investigation> = inject(MAT_DIALOG_DATA);
+  displayedColumns = ['creator', 'actions'];
+
+  person = this.data.extras?.person;
+  recordId = this.data.extras?.recordId as string;
+
+  isOffender = computed(() => {
+    const person = this.person;
+    return person instanceof Offender;
+  });
+  ngOnInit(): void {
+    this.listenToLoad();
+    this.listenToView();
+    this.load$.next();
+  }
+
+  assertType(item: unknown): InvestigationReport {
+    return item as InvestigationReport;
+  }
+
+  private listenToLoad() {
+    this.load$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(() => {
+          return this.investigationService
+            .loadInvestigationReportVersions(this.recordId)
+            .pipe(ignoreErrors());
+        }),
+      )
+      .subscribe(result => {
+        console.log(result);
+        this.models = result;
+      });
+  }
+
+  listenToView() {
+    this.view$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(report => {
+          return this.investigationService
+            .getDecisionFileAttachments(report.vsId!)
+            .pipe(
+              switchMap(model =>
+                this.dialog
+                  .open(ViewAttachmentPopupComponent, {
+                    data: { model },
+                  })
+                  .afterClosed(),
+              ),
+            );
+        }),
+      )
+      .subscribe();
+  }
+}

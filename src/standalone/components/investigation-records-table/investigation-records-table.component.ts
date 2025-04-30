@@ -42,6 +42,8 @@ import { EmployeeService } from '@services/employee.service';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { DialogService } from '@services/dialog.service';
+import { OperationType } from '@enums/operation-type';
+import { RelatedInvestigationRecordsPopupComponent } from '@modules/administration/popups/related-investigation-records-popup/related-investigation-records-popup.component';
 
 @Component({
   selector: 'app-investigation-records-table',
@@ -80,10 +82,12 @@ export class InvestigationRecordsTableComponent
   selected = input<Offender | Witness>();
 
   isOffender = computed(() => {
-    return this.person() instanceof Offender;
+    const person = this.person();
+    return person instanceof Offender;
   });
   isWitness = computed(() => {
-    return this.person() instanceof Witness;
+    const person = this.person();
+    return person instanceof Witness;
   });
   reload$ = new Subject<void>();
   selectedChange = effect(() => {
@@ -125,6 +129,7 @@ export class InvestigationRecordsTableComponent
   changeIsExportableStatus$: Subject<InvestigationReport> =
     new Subject<InvestigationReport>();
   protected employeeService = inject(EmployeeService);
+  viewRelated$ = new Subject<InvestigationReport>();
 
   assertType(item: unknown): InvestigationReport {
     return item as InvestigationReport;
@@ -138,6 +143,7 @@ export class InvestigationRecordsTableComponent
     this.listenToUpload();
     this.listenToChangeIsExportableStatus();
     this.listenToReloadInput();
+    this.listenToViewRelated();
   }
 
   listenToChangeIsExportableStatus() {
@@ -322,5 +328,28 @@ export class InvestigationRecordsTableComponent
           ),
         )
         .subscribe(() => this.reload$.next());
+  }
+
+  private listenToViewRelated() {
+    this.viewRelated$
+      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        switchMap(report => {
+          return this.dialog
+            .open(RelatedInvestigationRecordsPopupComponent, {
+              data: {
+                model: this.model(),
+                operation: OperationType.VIEW,
+                extras: {
+                  report: report,
+                  recordId: report.documentVsId,
+                  person: this.person(),
+                },
+              },
+            })
+            .afterClosed();
+        }),
+      )
+      .subscribe();
   }
 }

@@ -8,8 +8,6 @@ import { Observable, tap } from 'rxjs';
 import { BlobModel } from '@models/blob-model';
 import { downloadLink } from '@utils/utils';
 import { ReportStatus } from '@enums/report-status';
-import { MatDialogRef } from '@angular/material/dialog';
-import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { InvestigationAttendance } from '@models/investigation-attendance';
 
 const { send, receive } = new InvestigationReportInterceptor();
@@ -34,6 +32,7 @@ export class InvestigationReport extends BaseModel<
   creatorInfo!: AdminResult;
   location?: string;
   documentVsId?: string;
+  vsId?: string;
   isExportable?: boolean;
   override status: number = 1;
 
@@ -70,5 +69,8 @@ export class InvestigationReport extends BaseModel<
 
   hasDocumentVsId(): boolean {
     return !!this.documentVsId;
+  }
+  hasComment(): boolean {
+    return !!this.comment;
   }
 }
