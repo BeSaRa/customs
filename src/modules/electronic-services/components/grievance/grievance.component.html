@@ -137,13 +137,15 @@
         <!--              </div>-->
         <!--            </div>-->
         <!--          }-->
-        <!--          <div class="mb-3 col-span-1 md:col-span-3">-->
-        <!--            <span class="font-medium">{{ lang.map.lbl_justification }}</span>-->
-        <!--            <div class="input-form min-h-[60px] p-2 block">-->
-        <!--              {{ model.justification }}-->
-        <!--            </div>-->
-        <!--          </div>-->
         <!--        }-->
+        @if (model.justification) {
+          <div class="mb-3 col-span-1 md:col-span-3">
+            <span class="font-medium">{{ lang.map.lbl_justification }}</span>
+            <div class="input-form min-h-[60px] p-2 block">
+              {{ model.justification }}
+            </div>
+          </div>
+        }
         <div class="col-span-1 md:col-span-3">
           <div class="mb-3 col-span-1 md:col-span-3">
             <span class="font-medium">{{ lang.map.description }}</span>
