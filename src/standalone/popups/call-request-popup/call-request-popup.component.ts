@@ -34,6 +34,7 @@ import {
   NgxMatTimepickerComponent,
   NgxMatTimepickerDirective,
 } from 'ngx-mat-timepicker';
+import { EmployeeService } from '@services/employee.service';
 
 @Component({
   selector: 'app-call-request-popup',
@@ -84,6 +85,7 @@ export class CallRequestPopupComponent
 
   datePipe = inject(DatePipe);
   dialog = inject(DialogService);
+  employeeService = inject(EmployeeService);
   offender = signal(this.data.extras!.offender);
   witness = signal(this.data.extras!.witness);
   cameFromCalendar = signal(this.data.extras!.cameFromCalendar || false);
@@ -176,6 +178,8 @@ export class CallRequestPopupComponent
       caseId: this.data.extras?.caseId,
       summonedType: this.summonedType(),
       summonedId: this.personId(),
+      createdByOUId: this.employeeService.getEmployee()?.defaultOUId,
+      isInDC: !!this.employeeService.isDisciplinaryCommittee(),
       status: this.inCreateMode()
         ? CallRequestStatus.UNDER_PROCEDURE
         : this.model.status,

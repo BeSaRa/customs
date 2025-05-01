@@ -26,6 +26,8 @@ export class CallRequest extends BaseModel<CallRequest, CallRequestService> {
   createdBy!: number;
   isApologize!: boolean;
   isExportable!: boolean;
+  createdByOUId!: number;
+  isInDC!: boolean;
   apologyReason!: string;
   apologyReasonId!: number;
   apologyReasonDate!: string;
