@@ -91,6 +91,8 @@ export class CaseAttachmentsComponent
   service!: BaseCaseService<unknown>;
   @Input()
   readonly = false;
+  @Input()
+  showOpinionFullSerial = false;
 
   employeeNumberControl: FormControl<string> = new FormControl('', {
     nonNullable: true,
@@ -131,7 +133,16 @@ export class CaseAttachmentsComponent
       this.reload$.next();
     }
     if (this.folderType === FolderType.OFFICIAL) {
-      this.displayedColumns.shift();
+      this.displayedColumns = this.displayedColumns.filter(
+        col => col !== 'documentTitle',
+      );
+    }
+    if (this.showOpinionFullSerial) {
+      this.displayedColumns = [
+        this.displayedColumns[0],
+        'opinionFullSerial',
+        ...this.displayedColumns.slice(1),
+      ];
     }
     this.listenToEmployeeNumberChange();
   }
