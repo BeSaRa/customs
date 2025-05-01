@@ -113,7 +113,13 @@ export class CalendarComponent implements OnInit {
 
     if (this.hasManageObligationToAttendPermission) {
       this.reload$
-        .pipe(switchMap(() => this.callRequestService.load({})))
+        .pipe(
+          switchMap(() =>
+            this.callRequestService.load(undefined, {
+              createdByOUId: this.employeeService.getEmployee()?.defaultOUId,
+            }),
+          ),
+        )
         .subscribe((list: { rs: CallRequest[] }) => {
           this.callRequestsList.set(list.rs);
           this.setCallRequestsOnCalendar();

@@ -99,7 +99,10 @@
                     )
                   }">
                   <div class="w-full">
-                    <h2>
+                    <h2
+                      class="truncate max-w-full"
+                      [matTooltip]="meeting.event.title"
+                      matTooltipPosition="above">
                       {{ meeting.event.title }}
                     </h2>
                     <small>
@@ -109,22 +112,7 @@
                           | date: config.DATE_FORMAT
                       }}
                     </small>
-                    <!--                    <p>-->
-                    <!--                      {{ meeting.event.extendedProps.meetingTimeFrom }} - -->
-                    <!--                      {{ meeting.event.extendedProps.meetingTimeTo }}-->
-                    <!--                    </p>-->
                   </div>
-                  <!--                  @if (-->
-                  <!--                    meeting.event.extendedProps.status !==-->
-                  <!--                    meetingStatusEnum.held-->
-                  <!--                    ) {-->
-                  <!--                    <app-icon-button-->
-                  <!--                      [matTooltip]="lang.map.edit"-->
-                  <!--                      (click)="-->
-                  <!--                        handleEditMeeting($event, meeting.event.extendedProps)-->
-                  <!--                      "-->
-                  <!--                      icon="EDIT" />-->
-                  <!--                  }-->
                 </li>
               </ng-template>
             </full-calendar>
