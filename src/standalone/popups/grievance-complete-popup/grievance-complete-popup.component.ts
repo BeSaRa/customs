@@ -35,6 +35,7 @@ import { ReportStatus } from '@enums/report-status';
 import { EmployeeService } from '@services/employee.service';
 import { TeamNames } from '@enums/team-names';
 import { Config } from '@constants/config';
+import { ActivitiesName } from '@enums/activities-name';
 
 @Component({
   selector: 'app-grievance-complete-popup',
@@ -126,13 +127,10 @@ export class GrievanceCompletePopupComponent
               caseId: this.model.id,
               offenderId: this.model.offenderId,
               signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: this.penaltyCtrl.value!,
+              penaltyId: this.getSelectedPenaltyId(),
               recommendedPenaltyId: this.recommendedPenaltyCtrl.value!,
               comment: this.form.getRawValue().justification,
               status: 1,
-              // ...(this.isBroker()
-              //   ? { customsViolationEffect: this.oldDecisionCustomsViolationEffect.value }
-              //   : null),
               penaltyInfo: this.penaltiesMap()[this.penaltyCtrl.value!],
               tkiid: this.model.getTaskId(),
               roleAuthName: this.model.getTeamDisplayName(),
@@ -161,6 +159,13 @@ export class GrievanceCompletePopupComponent
           comment: this.form.get('comment')?.value,
         });
       });
+  }
+  private getSelectedPenaltyId(): number {
+    const activity = this.model.getActivityName();
+    return activity === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT_ASSISTANT ||
+      activity === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
+      ? this.recommendedPenaltyCtrl.value!
+      : this.penaltyCtrl.value!;
   }
 
   private loadPenalties() {
