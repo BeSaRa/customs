@@ -139,7 +139,7 @@
   </div>
   <div class="dialog-footer justify-end">
     @if (!inViewMode()) {
-      @if (model.id && model.isDraft()) {
+      @if (model.id && model.isDraft() && model.hasDocumentVsId()) {
         <app-button
           [matTooltip]="lang.map.save_pdf"
           (click)="savePDF$.next()"
@@ -150,7 +150,6 @@
           </div>
         </app-button>
       }
-
       @if (model.id && model.isDraft() && model.hasDocumentVsId()) {
         <app-button
           [matTooltip]="lang.map.upload_files"
