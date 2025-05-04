@@ -20,7 +20,16 @@ import { Penalty } from '@models/penalty';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
 import { IconButtonComponent } from '@standalone/components/icon-button/icon-button.component';
 import { ButtonComponent } from '@standalone/components/button/button.component';
-import { exhaustMap, forkJoin, Subject, tap } from 'rxjs';
+import {
+  concatMap,
+  exhaustMap,
+  forkJoin,
+  from,
+  of,
+  Subject,
+  tap,
+  toArray,
+} from 'rxjs';
 import { filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { SystemPenalties } from '@enums/system-penalties';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -57,6 +66,8 @@ import { LangKeysContract } from '@contracts/lang-keys-contract';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { OrganizationUnit } from '@models/organization-unit';
 import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { PenaltyService } from '@services/penalty.service';
+import { PenaltyDecisionService } from '@services/penalty-decision.service';
 
 @Component({
   selector: 'app-referral-popup',
@@ -95,6 +106,8 @@ export class ReferralPopupComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   employeeService = inject(EmployeeService);
+  penaltyService = inject(PenaltyService);
+  penaltyDecisionService = inject(PenaltyDecisionService);
   organizationUnitService = inject(OrganizationUnitService);
   customsAffairsPAOUInfo =
     inject(InfoService).info.globalSetting.customsAffairsPAOUInfo;
@@ -584,25 +597,66 @@ export class ReferralPopupComponent
 
   private listenToComplete() {
     this.complete$
-      .pipe(takeUntil(this.destroy$))
       .pipe(
+        takeUntil(this.destroy$),
         map(() =>
           this.displayDefaultForm()
             ? this.commentControl.valid &&
               (this.isAskDepartment() ? this.organizationControl.valid : true)
             : this.brokersComment.valid && this.employeesComment.valid,
         ),
-      )
-      .pipe(
         filter(valid => {
-          !valid &&
+          if (!valid) {
             this.dialog.error(
               this.lang.map.msg_make_sure_all_required_fields_are_filled,
             );
+          }
           return valid;
         }),
-      )
-      .pipe(
+        exhaustMap(() => {
+          if (
+            this.response === TaskResponses.RETURN_TO_PA &&
+            Array.isArray(this.offenders())
+          ) {
+            return this.penaltyService.loadAsLookups().pipe(
+              switchMap(penalties => {
+                const referralPenalty = penalties.find(
+                  p =>
+                    p.penaltyKey === SystemPenalties.REFERRAL_TO_LEGAL_AFFAIRS,
+                );
+
+                return from(this.offenders()).pipe(
+                  concatMap((offender: Offender) => {
+                    const currentDecision =
+                      this.oldPenaltyDecisionsMap()[offender.id];
+                    const isAlreadyReferral =
+                      currentDecision?.penaltyId === referralPenalty?.id;
+
+                    if (isAlreadyReferral) {
+                      return of(currentDecision);
+                    }
+
+                    const updatedDecision = {
+                      ...currentDecision,
+                      penaltyId:
+                        referralPenalty?.id ?? currentDecision.penaltyId,
+                      comment:
+                        'Automatically updated penalty to "Referral to Legal Affairs" due to task return.',
+                      status: 1,
+                    };
+
+                    return this.penaltyDecisionService.updateFull(
+                      updatedDecision as PenaltyDecision,
+                    );
+                  }),
+                  toArray(),
+                );
+              }),
+            );
+          } else {
+            return of(null);
+          }
+        }),
         exhaustMap(() => {
           const service = this.model().getService();
           return this.isAskDepartment()
