@@ -68,10 +68,7 @@
               matTooltipPosition="above"
               (click)="download$.next(assertType(element))"
               icon="FILE_DOWNLOAD_OUTLINE" />
-            @if (
-              assertType(element).hasDocumentVsId() &&
-              assertType(element).isDraft()
-            ) {
+            @if (assertType(element).hasDocumentVsId()) {
               <app-icon-button
                 [matTooltip]="lang.map.upload_files"
                 matTooltipPosition="above"
@@ -91,7 +88,10 @@
               (change)="changeIsExportableStatus$.next(element)">
             </mat-checkbox>
           }
-          @if (assertType(element).hasDocumentVsId()) {
+          @if (
+            assertType(element).hasDocumentVsId() &&
+            !assertType(element).isDraft()
+          ) {
             <app-icon-button
               [matTooltip]="lang.map.view_history"
               matTooltipPosition="above"
