@@ -352,9 +352,15 @@ export class ReferralPopupComponent
       header:
         this.lang.map
           .static_header_text_return_from_legal_affair_to_president_assistant,
-      footer:
-        this.lang.map
-          .static_footer_text_return_from_legal_affair_to_president_assistant,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map.static_footer_text_for_decision_broker;
+        } else if (tab === 'employee')
+          return this.lang.map.static_footer_text_for_decision_employee;
+        else
+          return this.lang.map
+            .static_footer_text_return_from_legal_affair_to_president_assistant;
+      },
       whom: (tab?: string) => {
         if (!tab) {
           return this.offenders()[0]?.type === OffenderTypes.EMPLOYEE
@@ -408,7 +414,7 @@ export class ReferralPopupComponent
 
   responseTranslateMap: Record<string, keyof LangKeysContract> = {
     [TaskResponses.RETURN_TO_PR]: 'return_to_president',
-    [TaskResponses.RETURN_TO_PA]: 'return_to_president_assistant',
+    [TaskResponses.RETURN_TO_PA]: 'return_referral_request',
     [TaskResponses.ASK_ANOTHER_DEPARTMENT]: 'request_for_department_statement',
     [TaskResponses.PA_FNL_LAUNCH_LEGAL_AFFAIRS]: 'referral_to_legal_affairs',
     [TaskResponses.PA_FNL_LAUNCH_DISCIPLINARY_COUNCIL]:
