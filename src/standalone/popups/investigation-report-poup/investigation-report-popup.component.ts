@@ -283,9 +283,10 @@ export class InvestigationReportPopupComponent extends AdminDialogComponent<Inve
 
   protected override _beforeSave(): boolean | Observable<boolean> {
     if (!this.model.detailsList.length && !this.commentCtrl.value) {
-      this.dialog.error(
-        this.lang.map.need_questions_and_answers_to_take_this_action,
-      );
+      const message = !this.doesAttendCtrl.value
+        ? this.lang.map.need_comment_to_take_this_action
+        : this.lang.map.need_questions_and_answers_to_take_this_action;
+      this.dialog.error(message);
     }
     this.createdOnCtrl.setValue(this.date.toISOString());
     this.attendeeCategoryCtrl.markAsTouched();
