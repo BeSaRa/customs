@@ -849,6 +849,8 @@ export interface LangKeysContract {
   static_footer_text_referral_to_president: string;
   static_footer_text_referral_to_president_for_brokers: string;
   static_header_text_return_from_legal_affair_to_president_assistant: string;
+  static_footer_text_return_from_legal_affair_to_president_assistant_employee: string;
+  static_footer_text_return_from_legal_affair_to_president_assistant_broker: string;
   static_footer_text_return_from_legal_affair_to_president_assistant: string;
   static_footer_text_referral_to_legal_affairs_broker: string;
   static_footer_text_referral_to_legal_affairs_mixed: string;
@@ -879,4 +881,8 @@ export interface LangKeysContract {
   msg_external_person_deletion_alert: string;
   versions: string;
   view_history: string;
+  need_comment_to_take_this_action: string;
+  return_referral_request: string;
+  static_footer_text_return_from_president_assistant_to_app_manager_broker: string;
+  static_footer_text_return_from_president_assistant_to_app_manager_employee: string;
 }

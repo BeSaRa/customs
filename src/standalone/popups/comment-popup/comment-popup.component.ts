@@ -34,6 +34,7 @@ import { ActivitiesName } from '@enums/activities-name';
 import { StepsName } from '@enums/steps-name';
 import { ReassignService } from '@services/reassign.service';
 import { OffenderTypes } from '@enums/offender-types';
+import { isFunction } from 'rxjs/internal/util/isFunction';
 
 @Component({
   selector: 'app-comment-popup',
@@ -493,17 +494,19 @@ export class CommentPopupComponent
       | TaskResponses.RETURN_APP_MANAGER
       | TaskResponses.STM_REPLY
       | TaskResponses.TO_INV_USER
-      | TaskResponses.REASSIGN;
+      | TaskResponses.REASSIGN
+      | TaskResponses.DC_RETURN_PA;
   }
 
   commentTextMap: Record<
     | TaskResponses.RETURN_APP_MANAGER
     | TaskResponses.STM_REPLY
     | TaskResponses.TO_INV_USER
-    | TaskResponses.REASSIGN,
+    | TaskResponses.REASSIGN
+    | TaskResponses.DC_RETURN_PA,
     {
       header: string;
-      footer: string;
+      footer: string | ((tab?: 'employee' | 'broker' | 'mixed') => string);
       complete: string;
       title: string;
     }
@@ -513,9 +516,15 @@ export class CommentPopupComponent
       header:
         this.lang.map
           .static_header_text_return_from_president_assistant_to_app_manager,
-      footer:
-        this.lang.map
-          .static_footer_text_return_from_president_assistant_to_app_manager,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map
+            .static_footer_text_return_from_president_assistant_to_app_manager_broker;
+        } else if (tab === 'employee')
+          return this.lang.map.static_footer_text_for_decision_employee;
+        else return this.lang.map.static_footer_text_for_decision_broker;
+      },
+      title: this.lang.map.return_referral_request,
     },
     [TaskResponses.STM_REPLY]: {
       ...this.defaultCommentText,
@@ -529,6 +538,21 @@ export class CommentPopupComponent
       ...this.defaultCommentText,
       title: this.lang.map.reassign,
     },
+    [TaskResponses.DC_RETURN_PA]: {
+      ...this.defaultCommentText,
+      header:
+        this.lang.map
+          .static_header_text_return_from_president_assistant_to_app_manager,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map
+            .static_footer_text_return_from_president_assistant_to_app_manager_broker;
+        } else if (tab === 'employee')
+          return this.lang.map.static_footer_text_for_decision_employee;
+        else return this.lang.map.static_footer_text_for_decision_broker;
+      },
+      title: this.lang.map.return_referral_request,
+    },
   };
 
   get commentText() {
@@ -537,9 +561,27 @@ export class CommentPopupComponent
   get formHeader() {
     return this.commentText.header;
   }
-
-  get formFooter() {
-    return this.commentText.footer;
+  hasEmployees = computed(() => {
+    return this.concernedOffenders().some(
+      item => item.type === OffenderTypes.EMPLOYEE,
+    );
+  });
+  hasBrokers = computed(() => {
+    return this.concernedOffenders().some(
+      item => item.type === OffenderTypes.BROKER,
+    );
+  });
+  hasMixedOffenders = computed(() => {
+    return this.hasBrokers() && this.hasEmployees();
+  });
+  get formFooter(): string {
+    const footer = this.commentText.footer;
+    const tab = this.hasMixedOffenders()
+      ? 'mixed'
+      : this.hasBrokers()
+        ? 'broker'
+        : 'employee';
+    return isFunction(footer) ? footer(tab) : footer;
   }
 
   get formTitle() {
