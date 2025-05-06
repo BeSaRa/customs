@@ -14,6 +14,7 @@ export const Config = {
   REFRESH_TOKEN_STORE_KEY: '$$_R_$$',
   ACCESS_TOKEN_TIMEOUT_IN_MINUTES: 15,
   DATE_FORMAT: 'dd-MM-yyyy',
+  DATE_FORMAT_WITH_TIME: 'dd/MM/yyyy HH:mm',
   DATE_FORMAT_OVERRIDE: {
     parse: {
       dateInput: 'dd-MM-yyyy',

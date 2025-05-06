@@ -18,7 +18,6 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { InvestigationReport } from '@models/investigation-report';
-import { ConfigService } from '@services/config.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
@@ -30,6 +29,7 @@ import { ignoreErrors } from '@utils/utils';
 import { InvestigationService } from '@services/investigation.service';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { DialogService } from '@services/dialog.service';
+import { Config } from '@constants/config';
 
 @Component({
   selector: 'app-related-investigation-records-popup',
@@ -60,14 +60,14 @@ export class RelatedInvestigationRecordsPopupComponent
   implements OnInit
 {
   lang = inject(LangService);
-  config = inject(ConfigService);
   dialog = inject(DialogService);
   investigationService = inject(InvestigationService);
   view$ = new Subject<InvestigationReport>();
   load$ = new Subject<void>();
   models!: InvestigationReport[];
   data: CrudDialogDataContract<Investigation> = inject(MAT_DIALOG_DATA);
-  displayedColumns = ['creator', 'actions'];
+  displayedColumns = ['creator', 'createdDate', 'actions'];
+  protected readonly Config = Config;
 
   person = this.data.extras?.person;
   recordId = this.data.extras?.recordId as string;
