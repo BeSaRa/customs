@@ -21,7 +21,7 @@ import { InvestigationReport } from '@models/investigation-report';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Offender } from '@models/offender';
 import { Investigation } from '@models/investigation';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { Subject } from 'rxjs';
 import { OnDestroyMixin } from '@mixins/on-destroy-mixin';
@@ -30,6 +30,7 @@ import { InvestigationService } from '@services/investigation.service';
 import { CrudDialogDataContract } from '@contracts/crud-dialog-data-contract';
 import { DialogService } from '@services/dialog.service';
 import { Config } from '@constants/config';
+import { InvestigationReportService } from '@services/investigation-report.service';
 
 @Component({
   selector: 'app-related-investigation-records-popup',
@@ -62,6 +63,7 @@ export class RelatedInvestigationRecordsPopupComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   investigationService = inject(InvestigationService);
+  investigationReportService = inject(InvestigationReportService);
   view$ = new Subject<InvestigationReport>();
   load$ = new Subject<void>();
   models!: InvestigationReport[];
@@ -97,27 +99,31 @@ export class RelatedInvestigationRecordsPopupComponent
         }),
       )
       .subscribe(result => {
-        console.log(result);
         this.models = result;
       });
   }
-
   listenToView() {
     this.view$
       .pipe(takeUntil(this.destroy$))
       .pipe(
         switchMap(report => {
-          return this.investigationService
-            .getDecisionFileAttachments(report.vsId!)
-            .pipe(
-              switchMap(model =>
-                this.dialog
-                  .open(ViewAttachmentPopupComponent, {
-                    data: { model },
-                  })
-                  .afterClosed(),
-              ),
-            );
+          return this.investigationService.downloadDocumentById(report.id).pipe(
+            map(blob => {
+              return {
+                report,
+                blob,
+              };
+            }),
+          );
+        }),
+        map(({ blob }) => {
+          return this.dialog.open(ViewAttachmentPopupComponent, {
+            disableClose: true,
+            data: {
+              model: blob,
+              title: this.lang.map.preview_related_documents,
+            },
+          });
         }),
       )
       .subscribe();
