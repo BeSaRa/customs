@@ -621,7 +621,8 @@ export class ReferralPopupComponent
         }),
         exhaustMap(() => {
           if (
-            this.response === TaskResponses.RETURN_TO_PA &&
+            (this.response === TaskResponses.RETURN_TO_PA ||
+              this.response === TaskResponses.RETURN_TO_PR) &&
             Array.isArray(this.offenders())
           ) {
             return this.penaltyService.loadAsLookups().pipe(
