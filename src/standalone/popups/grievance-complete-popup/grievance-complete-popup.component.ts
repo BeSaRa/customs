@@ -127,7 +127,7 @@ export class GrievanceCompletePopupComponent
               caseId: this.model.id,
               offenderId: this.model.offenderId,
               signerId: this.employeeService.getEmployee()?.id,
-              penaltyId: this.getSelectedPenaltyId(),
+              penaltyId: this.penaltyCtrl.value!,
               recommendedPenaltyId: this.recommendedPenaltyCtrl.value!,
               comment: this.form.getRawValue().justification,
               status: 1,
@@ -160,13 +160,6 @@ export class GrievanceCompletePopupComponent
         });
       });
   }
-  private getSelectedPenaltyId(): number {
-    const activity = this.model.getActivityName();
-    return activity === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT_ASSISTANT ||
-      activity === ActivitiesName.SUBMIT_GRIEVANCE_PRESIDENT
-      ? this.recommendedPenaltyCtrl.value!
-      : this.penaltyCtrl.value!;
-  }
 
   private loadPenalties() {
     return this.model.getService().grievancePenalty(this.model.offenderId);
@@ -174,11 +167,13 @@ export class GrievanceCompletePopupComponent
 
   handleFinalDecisionChanged(decision: unknown) {
     this.recommendedPenaltyCtrl.setValidators([]);
+    this.recommendedPenaltyCtrl.setValue(null);
     this.recommendedPenaltyCtrl.disable();
     if (decision === GrievanceFinalDecisionsEnum.UPDATE_PENALTY) {
-      this.recommendedPenaltyCtrl.enable();
       this.recommendedPenaltyCtrl.setValidators([CustomValidators.required]);
+      this.recommendedPenaltyCtrl.enable();
     }
+    this.recommendedPenaltyCtrl.updateValueAndValidity();
   }
 
   get penaltyCtrl(): FormControl {
