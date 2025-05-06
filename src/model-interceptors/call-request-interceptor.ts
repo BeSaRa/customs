@@ -2,7 +2,7 @@ import { AdminResult } from '@models/admin-result';
 import { CallRequest } from '@models/call-request';
 import { getDateString } from '@utils/utils';
 import { ModelInterceptorContract } from 'cast-response';
-import { format, getTime, parseISO } from 'date-fns';
+import { format, getTime, parseISO, set } from 'date-fns';
 
 export class CallRequestInterceptor
   implements ModelInterceptorContract<CallRequest>
@@ -13,24 +13,23 @@ export class CallRequestInterceptor
       const [minutes, AMPM] = minutesWithAMPM.split(' ');
 
       const hours =
-        AMPM === 'PM'
+        AMPM === 'PM' && Number(myHours) !== 12
           ? Number(myHours) + 12
-          : Number(myHours) >= 12
-            ? Number(myHours) - 12
+          : AMPM === 'AM' && Number(myHours) === 12
+            ? 0
             : Number(myHours);
 
-      const _date = new Date(
-        format(new Date(model.summonDate!), 'yyyy-MM-dd', {
-          locale: undefined,
-        }),
-      );
+      const summonDate = new Date(model.summonDate!);
 
-      _date.setHours(0);
-      _date.setMinutes(0);
-      model.summonDate = getDateString(new Date(_date));
-      _date.setHours(hours);
-      _date.setMinutes(Number(minutes));
-      model.summonTime = getDateString(_date);
+      const combinedDateTime = set(summonDate, {
+        hours: hours,
+        minutes: Number(minutes),
+        seconds: 0,
+        milliseconds: 0,
+      });
+
+      model.summonDate = getDateString(summonDate);
+      model.summonTime = getDateString(combinedDateTime);
     }
     return model;
   }
