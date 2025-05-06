@@ -163,6 +163,17 @@ export abstract class BaseCaseService<M>
       this.getUrlSegment() + '/document/' + docId + '/download',
     );
   }
+  downloadDocumentById(docId: number): Observable<BlobModel> {
+    return this.http
+      .get(this.getUrlSegment() + '/document/' + docId + '/download', {
+        responseType: 'blob',
+      })
+      .pipe(
+        map(blob => {
+          return new BlobModel(blob, this.domSanitizer);
+        }),
+      );
+  }
 
   deleteDocuments(docIds: string[]): Observable<unknown> {
     return this.http.delete<unknown>(this.getUrlSegment() + '/document/bulk', {
