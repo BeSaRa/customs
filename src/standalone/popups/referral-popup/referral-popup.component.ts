@@ -342,8 +342,17 @@ export class ReferralPopupComponent
       suffix: this.lang.map.respected,
     },
     [TaskResponses.RETURN_TO_PR]: {
-      header: this.lang.map.static_header_text_for_return_to_president,
-      footer: this.lang.map.static_footer_text_for_return_to_president,
+      header:
+        this.lang.map.static_header_text_return_from_legal_affair_to_president,
+      footer: (tab?: 'employee' | 'broker' | 'mixed') => {
+        if (tab === 'broker') {
+          return this.lang.map.static_footer_text_for_decision_broker;
+        } else if (tab === 'employee')
+          return this.lang.map.static_footer_text_for_decision_employee;
+        else
+          return this.lang.map
+            .static_footer_text_return_from_legal_affair_to_president;
+      },
       whom: this.lang.map.president,
       complete: this.lang.map.approve,
       suffix: this.lang.map.respected,

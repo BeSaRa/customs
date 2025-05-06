@@ -292,10 +292,16 @@ export function generateTimeList(steps = ['00', '30']): string[] {
   return times;
 }
 
-export function getTimeAsNumberFromGeneratedTime(time: string) {
-  let hours = parseInt(time.slice(0, 2));
-  if (time.slice(6, 8).toLowerCase() === 'pm' && hours !== 12) hours += 12;
-  const minutes = parseInt(time.slice(3, 5));
+export function getTimeAsNumberFromGeneratedTime(timeStr: string): {
+  hours: number;
+  minutes: number;
+} {
+  const [time, modifier] = timeStr.split(' ');
+  // eslint-disable-next-line prefer-const
+  let [hours, minutes] = time.split(':').map(Number);
+
+  if (modifier === 'PM' && hours < 12) hours += 12;
+  if (modifier === 'AM' && hours === 12) hours = 0;
 
   return { hours, minutes };
 }
@@ -309,6 +315,9 @@ export function compareTwoDates(date1: Date, date2: Date) {
       locale: undefined,
     })
   );
+}
+export function formatDateToString(date: Date): string {
+  return format(date, 'yyyy-MM-dd HH:mm:ss');
 }
 
 export function downloadLink(value: string, fileName = 'download.pdf') {
