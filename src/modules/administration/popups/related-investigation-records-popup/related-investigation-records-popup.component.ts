@@ -90,16 +90,17 @@ export class RelatedInvestigationRecordsPopupComponent
 
   private listenToLoad() {
     this.load$
-      .pipe(takeUntil(this.destroy$))
       .pipe(
-        switchMap(() => {
-          return this.investigationService
+        takeUntil(this.destroy$),
+        switchMap(() =>
+          this.investigationService
             .loadInvestigationReportVersions(this.recordId)
-            .pipe(ignoreErrors());
-        }),
+            .pipe(ignoreErrors()),
+        ),
+        map(result => result.filter(item => item.isApproved)),
       )
-      .subscribe(result => {
-        this.models = result;
+      .subscribe(filtered => {
+        this.models = filtered;
       });
   }
   listenToView() {
