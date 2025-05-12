@@ -522,7 +522,9 @@ export class CommentPopupComponent
             .static_footer_text_return_from_president_assistant_to_app_manager_broker;
         } else if (tab === 'employee')
           return this.lang.map.static_footer_text_for_decision_employee;
-        else return this.lang.map.static_footer_text_for_decision_broker;
+        else
+          return this.lang.map
+            .static_footer_text_return_from_president_assistant_to_app_manager;
       },
       title: this.lang.map.return_referral_request,
     },
@@ -549,7 +551,9 @@ export class CommentPopupComponent
             .static_footer_text_return_from_president_assistant_to_app_manager_broker;
         } else if (tab === 'employee')
           return this.lang.map.static_footer_text_for_decision_employee;
-        else return this.lang.map.static_footer_text_for_decision_broker;
+        else
+          return this.lang.map
+            .static_footer_text_return_from_president_assistant_to_app_manager;
       },
       title: this.lang.map.return_referral_request,
     },
