@@ -12,6 +12,7 @@ import {
   validateSum,
   positiveNumberValidator,
   inputMaskPatterns,
+  minTimeValidatorFactory,
 } from '@validators/validation-utils';
 
 export const CustomValidators = {
@@ -27,5 +28,6 @@ export const CustomValidators = {
   anyFieldsHasLength,
   unique: uniqueValidator,
   positiveNumber: positiveNumberValidator,
+  minTime: minTimeValidatorFactory,
   inputMaskPatterns,
 };
