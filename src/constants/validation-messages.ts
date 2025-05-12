@@ -8,6 +8,7 @@ export const ValidationMessages: Record<string, ValidationMessageContract> = {
   ENG_ONLY: { key: 'only_english_letters' },
   positiveNumber: { key: 'only_positive_number' },
   number: { key: 'only_numbers' },
+  minTime: { key: 'min_time' },
   ENG_NUM_ONLY: { key: 'only_english_numbers' },
   EMAIL: { key: 'email_format' },
   EMAIL_WITH_CAPITAL_LETTERS: { key: 'email_format' },

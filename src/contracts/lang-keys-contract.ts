@@ -886,4 +886,5 @@ export interface LangKeysContract {
   static_footer_text_return_from_president_assistant_to_app_manager_broker: string;
   static_header_text_return_from_legal_affair_to_president: string;
   static_footer_text_return_from_legal_affair_to_president: string;
+  min_time: string;
 }

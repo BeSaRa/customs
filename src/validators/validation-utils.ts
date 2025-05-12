@@ -141,6 +141,47 @@ export function positiveNumberValidator(
   return !isValid ? { positiveNumber: true } : null;
 }
 
+export function minTimeValidatorFactory(
+  dateGetter: () => string | Date | null,
+): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const timeValue = control.value;
+    const dateValue = dateGetter();
+
+    if (!dateValue || !timeValue) {
+      return null;
+    }
+
+    const [rawHour, minutePart] = timeValue
+      .replace(/am|pm/i, '')
+      .trim()
+      .split(':')
+      .map(Number);
+
+    if (isNaN(rawHour) || isNaN(minutePart)) {
+      return { minTime: true };
+    }
+
+    let hourPart = rawHour;
+    const isAm = /am/i.test(timeValue);
+    const isPm = /pm/i.test(timeValue);
+
+    if (isPm && hourPart < 12) hourPart += 12;
+    if (isAm && hourPart === 12) hourPart = 0;
+
+    const now = new Date();
+    const minTime = new Date();
+    minTime.setHours(now.getHours() + 2, now.getMinutes(), 0, 0);
+
+    const selected = new Date(dateValue);
+    selected.setHours(hourPart, minutePart, 0, 0);
+
+    const isSameDay = new Date(dateValue).toDateString() === now.toDateString();
+
+    return isSameDay && selected < minTime ? { minTime: true } : null;
+  };
+}
+
 export function decimalValidator(numberOfPlaces = 2): ValidatorFn {
   // , allowNegative: boolean = false
   if (!isValidValue(numberOfPlaces)) {
