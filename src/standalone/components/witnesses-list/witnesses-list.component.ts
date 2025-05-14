@@ -104,7 +104,7 @@ export class WitnessesListComponent
     this.listenToDelete();
     this.listenToAssignmentToAttend();
     this.reload$.next();
-    if (this.canManageWitness()) {
+    if (this.canShowActionAndAddButton()) {
       this.displayedColumns.push('actions');
     }
   }
@@ -191,5 +191,15 @@ export class WitnessesListComponent
 
   canManageWitness() {
     return this.employeeService.hasPermissionTo('MANAGE_WITNESS');
+  }
+
+  canShowActionAndAddButton(): boolean {
+    const canManage = this.canManageWitness();
+    const isLegalAffairs = this.employeeService.isOneOfLegalAffairsTeams();
+
+    return (
+      (!this.readonly && canManage) ||
+      (this.readonly && isLegalAffairs && canManage)
+    );
   }
 }

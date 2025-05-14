@@ -1,6 +1,6 @@
 <div class="flex justify-start items-center">
   <h1 class="text-primary text-xl">{{ title }}</h1>
-  @if (!readonly && canManageWitness()) {
+  @if (canShowActionAndAddButton()) {
     <app-icon-button
       (click)="add$.next()"
       class="text-primary"
@@ -66,31 +66,19 @@
       <td mat-cell *matCellDef="let element">{{ element.email || '---' }}</td>
     </ng-container>
     <!-- actions -->
-    @if (canManageWitness()) {
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
-          {{ lang.map.actions }}
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <div class="flex gap-2">
-            @if (!readonly) {
-              <div [matTooltip]="lang.map.delete">
-                <app-icon-button
-                  (click)="delete$.next(element)"
-                  icon="DELETE" />
-              </div>
-            }
-            <!--            @if (model().inMyInbox()) {-->
-            <!--              <div [matTooltip]="lang.map.assignment_to_attend">-->
-            <!--                <app-icon-button-->
-            <!--                  (click)="assignmentToAttend$.next(element)"-->
-            <!--                  icon="ACCOUNT_EDIT_OUTLINE" />-->
-            <!--              </div>-->
-            <!--            }-->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell mat-sort-header="actions" *matHeaderCellDef>
+        {{ lang.map.actions }}
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <div class="flex gap-2">
+          <div [matTooltip]="lang.map.delete">
+            <app-icon-button (click)="delete$.next(element)" icon="DELETE" />
           </div>
-        </td>
-      </ng-container>
-    }
+        </div>
+      </td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
     <!-- Row shown when there is no matching data. -->
