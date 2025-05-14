@@ -42,11 +42,6 @@
           <app-button buttonType="primary">{{ lang.map.save }}</app-button>
         </ng-template>
       </app-input>
-      @if (form.get('summonTime')?.hasError('minTime')) {
-        <span>
-          {{ 'time_must_be_at_least_2_hours_from_now' }}
-        </span>
-      }
       <app-input
         class="col-span-2"
         formControlName="summonsPlace"
