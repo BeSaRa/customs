@@ -50,6 +50,8 @@ export class TeamPopupComponent extends AdminDialogComponent<Team> {
         );
       this.form.get('secretary')?.setValidators(CustomValidators.required);
       this.form.get('president')?.setValidators(CustomValidators.required);
+      this.form.get('member1')?.setValidators(CustomValidators.required);
+      this.form.get('member2')?.setValidators(CustomValidators.required);
     }
   }
 

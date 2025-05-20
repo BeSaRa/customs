@@ -52,6 +52,18 @@
             [label]="lang.map.president"
             bindValue="id"
             bindLabel="getNames" />
+          <app-select-input
+            formControlName="member1"
+            [options]="employeesOnDisciplinary"
+            [label]="lang.map.member1"
+            bindValue="id"
+            bindLabel="getNames" />
+          <app-select-input
+            formControlName="member2"
+            [options]="employeesOnDisciplinary"
+            [label]="lang.map.member2"
+            bindValue="id"
+            bindLabel="getNames" />
         </div>
       }
     </ng-container>
