@@ -887,4 +887,6 @@ export interface LangKeysContract {
   static_header_text_return_from_legal_affair_to_president: string;
   static_footer_text_return_from_legal_affair_to_president: string;
   min_time: string;
+  member1: string;
+  member2: string;
 }

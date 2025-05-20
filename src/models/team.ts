@@ -20,6 +20,8 @@ export class Team extends BaseModel<Team, TeamService> {
   // for disciplinary committee only
   secretary!: number;
   president!: number;
+  member1!: number;
+  member2!: number;
 
   buildForm(controls = false): object {
     const {
@@ -32,6 +34,8 @@ export class Team extends BaseModel<Team, TeamService> {
       authName,
       secretary,
       president,
+      member1,
+      member2,
     } = this;
     return {
       ldapGroupName: ldapGroupName,
@@ -61,6 +65,8 @@ export class Team extends BaseModel<Team, TeamService> {
       authName: authName,
       secretary: controls ? [secretary] : secretary,
       president: controls ? [president] : president,
+      member1: controls ? [member1] : member1,
+      member2: controls ? [member2] : member2,
     };
   }
 }
