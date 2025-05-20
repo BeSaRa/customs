@@ -41,6 +41,9 @@ import {
 } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputComponent } from '@standalone/components/input/input.component';
+import { SelectInputComponent } from '@standalone/components/select-input/select-input.component';
+import { AttachmentType } from '@models/attachment-type';
+import { AttachmentTypeService } from '@services/attachment-type.service';
 
 @Component({
   selector: 'app-case-attachments',
@@ -53,6 +56,7 @@ import { InputComponent } from '@standalone/components/input/input.component';
     MatCardModule,
     ReactiveFormsModule,
     InputComponent,
+    SelectInputComponent,
   ],
   templateUrl: './case-attachments.component.html',
   styleUrls: ['./case-attachments.component.scss'],
@@ -68,6 +72,7 @@ export class CaseAttachmentsComponent
   lang = inject(LangService);
   dialog = inject(DialogService);
   toast = inject(ToastService);
+  attachmentTypeService = inject(AttachmentTypeService);
   employeeService = inject(EmployeeService);
   protected readonly FolderType = FolderType;
   caseId: InputSignal<
@@ -93,10 +98,11 @@ export class CaseAttachmentsComponent
   readonly = false;
   @Input()
   showOpinionFullSerial = false;
-
+  attachmentTypes: AttachmentType[] = [];
   employeeNumberControl: FormControl<string> = new FormControl('', {
     nonNullable: true,
   });
+  attachmentTypeControl: FormControl<number | null> = new FormControl(null);
 
   data: BehaviorSubject<CaseAttachment[]> = new BehaviorSubject<
     CaseAttachment[]
@@ -112,7 +118,7 @@ export class CaseAttachmentsComponent
     'creator',
     'actions',
   ];
-
+  filterDisplayedColumns: string[] = [];
   constructor() {
     super();
     effect(() => {
@@ -126,6 +132,7 @@ export class CaseAttachmentsComponent
     this.listenToView();
     this.listenToDelete();
     this._load();
+    this.loadAttachmentTypes();
     if (
       (this.caseId() && this.operation !== OperationType.CREATE) ||
       this.folderType === this.FolderType.OFFENDER
@@ -144,25 +151,53 @@ export class CaseAttachmentsComponent
         ...this.displayedColumns.slice(1),
       ];
     }
-    this.listenToEmployeeNumberChange();
+    this.setupFilterColumns();
+    this.listenToFiltersChange();
   }
 
-  listenToEmployeeNumberChange() {
+  setupFilterColumns() {
+    this.filterDisplayedColumns = this.displayedColumns.map(
+      col => `${col}Filter`,
+    );
+  }
+  listenToFiltersChange() {
     this.employeeNumberControl.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe(value => {
-        this.applyFilter(value);
+      .subscribe(() => {
+        this.applyFilters();
+      });
+    this.attachmentTypeControl.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.applyFilters();
       });
   }
+  applyFilters() {
+    const employeeNumber = this.employeeNumberControl.value.trim();
+    const attachmentType = this.attachmentTypeControl.value;
 
-  applyFilter(value: string) {
-    if (value === '') {
-      this.dataSource.data = this.data.value;
-      return;
+    let filteredData = [...this.data.value];
+
+    if (employeeNumber) {
+      filteredData = filteredData.filter(item =>
+        item.employeeNo?.toString().includes(employeeNumber),
+      );
     }
-    this.dataSource.data = this.data.value.filter(item =>
-      item.employeeNo?.toString().includes(value),
-    );
+
+    if (attachmentType) {
+      filteredData = filteredData.filter(
+        item => item.attachmentTypeId === attachmentType,
+      );
+    }
+    this.dataSource.data = filteredData;
+  }
+  loadAttachmentTypes() {
+    this.attachmentTypeService
+      .loadAsLookups()
+      .pipe(
+        map(attachmentTypes => attachmentTypes.filter(type => type.isSystem)),
+      )
+      .subscribe(attachmentTypes => (this.attachmentTypes = attachmentTypes));
   }
 
   private _load() {
