@@ -1,12 +1,13 @@
 import { AdminResult } from '@models/admin-result';
 import { ClonerMixin } from '@mixins/cloner-mixin';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { BaseCaseService } from '@abstracts/base-case.service';
 import { ViewAttachmentPopupComponent } from '@standalone/popups/view-attachment-popup/view-attachment-popup.component';
 import { CaseAttachmentInterceptor } from '@model-interceptors/case-attachment-interceptor';
 import { InterceptModel } from 'cast-response';
 import { AttachmentTypes } from '@enums/attachment-type.enum';
+import { map } from 'rxjs/operators';
 
 const { send, receive } = new CaseAttachmentInterceptor();
 
@@ -50,8 +51,27 @@ export class CaseAttachment extends ClonerMixin(class {}) {
 
   view(
     service: BaseCaseService<unknown>,
-  ): Observable<MatDialogRef<ViewAttachmentPopupComponent>> {
-    return service.viewAttachment(this.vsId, this.mimeType);
+  ): Observable<MatDialogRef<ViewAttachmentPopupComponent> | void> {
+    if (
+      this.mimeType === 'application/pdf' ||
+      this.mimeType.startsWith('image')
+    ) {
+      return service.viewAttachment(this.vsId, this.mimeType);
+    } else {
+      return service.downloadAttachment(this.vsId).pipe(
+        tap(blob => {
+          const url = window.URL.createObjectURL(blob.blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'document';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }),
+        map(() => void 0),
+      );
+    }
   }
 
   updateAttachmentTitle(
