@@ -11,46 +11,48 @@
     <div class="flex">
       <span>{{ this.lang.map.static_header_text_call_request }}</span>
     </div>
-    <div [formGroup]="form" class="grid grid-cols-2 gap-y-2 gap-x-4">
-      <app-input formControlName="summonDate" [label]="lang.map.date">
-        <input
-          appControl
-          formControlName="summonDate"
-          (click)="picker.open()"
-          [matDatepicker]="picker"
-          [min]="today" />
-        <mat-datepicker #picker></mat-datepicker>
-      </app-input>
-      <app-input
-        formControlName="summonTime"
-        [label]="lang.map.meeting_time_from">
-        <input
-          appControl
+    @if (form) {
+      <form [formGroup]="form" class="grid grid-cols-2 gap-y-2 gap-x-4">
+        <app-input formControlName="summonDate" [label]="lang.map.date">
+          <input
+            appControl
+            formControlName="summonDate"
+            (click)="picker.open()"
+            [matDatepicker]="picker"
+            [min]="today" />
+          <mat-datepicker #picker></mat-datepicker>
+        </app-input>
+        <app-input
           formControlName="summonTime"
-          [ngxMatTimepicker]="timePickerFrom" />
-        <ngx-mat-timepicker
-          [cancelBtnTmpl]="cancelBtn"
-          [confirmBtnTmpl]="confirmBtn"
-          [minutesGap]="5"
-          #timePickerFrom></ngx-mat-timepicker>
-        <ng-template #cancelBtn>
-          <app-button class="me-2 inline-block" buttonType="primary-outline">
-            {{ lang.map.close }}
-          </app-button>
-        </ng-template>
-        <ng-template #confirmBtn>
-          <app-button buttonType="primary">{{ lang.map.save }}</app-button>
-        </ng-template>
-      </app-input>
-      <app-input
-        class="col-span-2"
-        formControlName="summonsPlace"
-        [label]="lang.map.location" />
-      <app-textarea
-        formControlName="note"
-        class="col-span-2"
-        [label]="lang.map.note" />
-    </div>
+          [label]="lang.map.meeting_time_from">
+          <input
+            appControl
+            formControlName="summonTime"
+            [ngxMatTimepicker]="timePickerFrom" />
+          <ngx-mat-timepicker
+            [cancelBtnTmpl]="cancelBtn"
+            [confirmBtnTmpl]="confirmBtn"
+            [minutesGap]="5"
+            #timePickerFrom></ngx-mat-timepicker>
+          <ng-template #cancelBtn>
+            <app-button class="me-2 inline-block" buttonType="primary-outline">
+              {{ lang.map.close }}
+            </app-button>
+          </ng-template>
+          <ng-template #confirmBtn>
+            <app-button buttonType="primary">{{ lang.map.save }}</app-button>
+          </ng-template>
+        </app-input>
+        <app-input
+          class="col-span-2"
+          formControlName="summonsPlace"
+          [label]="lang.map.location" />
+        <app-textarea
+          formControlName="note"
+          class="col-span-2"
+          [label]="lang.map.note" />
+      </form>
+    }
   </div>
   <div class="flex">
     <span>{{ this.lang.map.static_footer_text_call_request }}</span>

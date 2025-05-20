@@ -9,12 +9,7 @@ import { Offender } from '@models/offender';
 import { Witness } from '@models/witness';
 import { AdminDialogComponent } from '@abstracts/admin-dialog-component';
 import { CallRequest } from '@models/call-request';
-import {
-  AbstractControl,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-  ValidationErrors,
-} from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { DialogService } from '@services/dialog.service';
 import { InvestigationCategory } from '@enums/investigation-category';
@@ -141,44 +136,6 @@ export class CallRequestPopupComponent
     }
   }
 
-  // private minTimeValidator(): ValidationErrors | null {
-  //   const selectedDate = this.summonDateControl.value;
-  //   const selectedTime = this.summonTimeControl.value;
-  //
-  //   if (!selectedDate || !selectedTime) return null;
-  //
-  //   const now = new Date();
-  //   const selected = new Date(selectedDate);
-  //
-  //   const isAm = selectedTime.toLowerCase().includes('am');
-  //   const isPm = selectedTime.toLowerCase().includes('pm');
-  //
-  //   let hourPart;
-  //   const [rawHour, minutePart] = selectedTime
-  //     .replace(/am|pm/i, '')
-  //     .trim()
-  //     .split(':')
-  //     .map(Number);
-  //
-  //   hourPart = rawHour;
-  //   if (isPm && hourPart < 12) hourPart += 12;
-  //   if (isAm && hourPart === 12) hourPart = 0;
-  //
-  //   selected.setHours(hourPart, minutePart, 0, 0);
-  //
-  //   const minTime = new Date();
-  //   minTime.setHours(now.getHours() + 2, now.getMinutes(), 0, 0);
-  //
-  //   const isToday =
-  //     new Date(selectedDate).toDateString() === now.toDateString();
-  //
-  //   if (isToday && selected < minTime) {
-  //     return { minTime: true };
-  //   }
-  //
-  //   return null;
-  // }
-
   private _refreshSummonTime(reset = true) {
     if (
       reset &&
@@ -208,6 +165,9 @@ export class CallRequestPopupComponent
     this.form = this.fb.group(this.model.buildForm(true));
     if (this.inViewMode()) {
       this.form.disable();
+    }
+    if (!this.summonTimeControl) {
+      console.warn('summonTime control is missing from form definition!');
     }
     this.summonTimeControl.setValidators([
       CustomValidators.required,
