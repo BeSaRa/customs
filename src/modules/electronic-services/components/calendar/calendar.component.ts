@@ -116,7 +116,7 @@ export class CalendarComponent implements OnInit {
         .pipe(
           switchMap(() =>
             this.callRequestService.load(undefined, {
-              createdByOUId: this.employeeService.getEmployee()?.defaultOUId,
+              createdByOUId: this.employeeService.getOrganizationUnit()?.id,
             }),
           ),
         )

@@ -191,7 +191,7 @@ export class CallRequestPopupComponent
       caseId: this.data.extras?.caseId,
       summonedType: this.summonedType(),
       summonedId: this.personId(),
-      createdByOUId: this.employeeService.getEmployee()?.defaultOUId,
+      createdByOUId: this.employeeService.getOrganizationUnit()?.id,
       isInDC: !!this.employeeService.isDisciplinaryCommittee(),
       status: this.inCreateMode()
         ? CallRequestStatus.UNDER_PROCEDURE
