@@ -31,12 +31,23 @@ export class CallRequestInterceptor
       model.summonDate = getDateString(summonDate);
       model.summonTime = getDateString(combinedDateTime);
     }
+    delete model.apologyReasonInfo;
+    delete model.createdByInfo;
+    delete model.statusInfo;
+    delete model.summonInfo;
+    delete model.summonTypeInfo;
+    delete model.typeInfo;
     return model;
   }
 
   receive(model: CallRequest): CallRequest {
     model.statusInfo = AdminResult.createInstance(model.statusInfo);
     model.createdByInfo = AdminResult.createInstance(model.createdByInfo);
+    model.apologyReasonInfo = AdminResult.createInstance(
+      model.apologyReasonInfo,
+    );
+    model.summonTypeInfo = AdminResult.createInstance(model.summonTypeInfo);
+    model.typeInfo = AdminResult.createInstance(model.typeInfo);
     if (model.summonTime) {
       const time = getTime(parseISO(model.summonTime as string));
       model.summonTime = format(time, 'hh:mm a');
