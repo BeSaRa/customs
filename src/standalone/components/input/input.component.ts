@@ -60,6 +60,7 @@ export class InputComponent
   @Input() inputColor = 'text-slate-700';
   @Input() type = 'text';
   @Input() marginBottom = 'mb-5';
+  @Input() labelMarginBottom = 'mb-1';
   @Input({ transform: booleanAttribute }) noMargin = false;
   @Input() labelPosition: 'above' | 'before' = 'above';
   @Input() name = generateUUID();
@@ -172,7 +173,7 @@ export class InputComponent
   get labelClasses(): string {
     let classes = this.labelColor + ' font-medium';
     if (this.labelPosition === 'above') {
-      classes += ' mb-1';
+      classes += ` ${this.labelMarginBottom}`;
     } else {
       classes += ' whitespace-nowrap flex-shrink-0 min-w-[6rem] max-w-[10rem]';
     }

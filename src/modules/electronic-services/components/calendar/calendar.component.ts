@@ -32,6 +32,10 @@ import { Offender } from '@models/offender';
 import { OffenderTypes } from '@enums/offender-types';
 import { Witness } from '@models/witness';
 import { WitnessTypes } from '@enums/witness-types';
+import { InputComponent } from '@standalone/components/input/input.component';
+import { PersonDetails } from '@models/person-details';
+import { LangCodes } from '@enums/lang-codes';
+
 @Component({
   selector: 'app-calendar',
   standalone: true,
@@ -45,6 +49,7 @@ import { WitnessTypes } from '@enums/witness-types';
     ReactiveFormsModule,
     MatTab,
     MatTabGroup,
+    InputComponent,
   ],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
@@ -68,7 +73,9 @@ export class CalendarComponent implements OnInit {
     nonNullable: true,
   });
   protected readonly meetingStatusEnum = MeetingStatusEnum;
-
+  employeeNumberCtrl = new FormControl();
+  employeeNameCtrl = new FormControl();
+  summonsArray: PersonDetails[] = [];
   @ViewChild('meetingCalendarComponent')
   meetingCalendar?: FullCalendarComponent;
   @ViewChild('callRequestCalendarComponent')
@@ -89,6 +96,30 @@ export class CalendarComponent implements OnInit {
         this.callRequestCalendar?.getApi()?.render();
       }
     }, 1);
+    this.onFiltersChange();
+    this.lang.change$.subscribe(() => this.setSummonsArray());
+  }
+  onFiltersChange() {
+    this.employeeNumberCtrl.valueChanges.subscribe(() =>
+      this.changeCallRequests(),
+    );
+    this.employeeNameCtrl.valueChanges.subscribe(() =>
+      this.changeCallRequests(),
+    );
+  }
+  changeCallRequests() {
+    const employeeNumber = this.employeeNumberCtrl.value;
+    const employeeId = this.employeeNameCtrl.value;
+    let callRequests = this.callRequestsList();
+    if (employeeId) {
+      callRequests = callRequests.filter(cr => cr.summonInfo.id === employeeId);
+    }
+    if (employeeNumber !== '') {
+      callRequests = callRequests.filter(cr =>
+        cr.summonInfo.employeeNo.toString().includes(employeeNumber),
+      );
+    }
+    this.setCallRequestsOnCalendar(callRequests);
   }
 
   get hasDisciplinaryTeam() {
@@ -123,8 +154,25 @@ export class CalendarComponent implements OnInit {
         .subscribe((list: { rs: CallRequest[] }) => {
           this.callRequestsList.set(list.rs);
           this.setCallRequestsOnCalendar();
+          this.setSummonsArray();
         });
     }
+  }
+  setSummonsArray() {
+    const uniqueMap = new Map<number, PersonDetails>();
+
+    this.callRequestsList().forEach(cr => {
+      const summon = cr.summonInfo;
+      if (summon && !uniqueMap.has(summon.id)) {
+        const label =
+          this.lang.getCurrent().code === LangCodes.AR
+            ? summon.arName
+            : summon.enName;
+        uniqueMap.set(summon.id, { ...summon, label });
+      }
+    });
+
+    this.summonsArray = Array.from(uniqueMap.values());
   }
 
   _listenToDetails() {
@@ -256,8 +304,9 @@ export class CalendarComponent implements OnInit {
     };
   }
 
-  setCallRequestsOnCalendar() {
-    const events = this.callRequestsList().map(callRequest => ({
+  setCallRequestsOnCalendar(callRequests?: CallRequest[]) {
+    const crs = callRequests ? callRequests : this.callRequestsList();
+    const events = crs.map(callRequest => ({
       title: callRequest.note,
       date: new Date(callRequest.summonDate),
       extendedProps: { ...callRequest },

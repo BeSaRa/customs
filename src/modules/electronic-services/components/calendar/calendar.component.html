@@ -82,6 +82,25 @@
           [label]="
             lang.map.lbl_calendar + ' / ' + lang.map.assignment_to_attend
           ">
+          <div class="grid grid-cols-2 gap-2">
+            <app-input
+              class="w-full"
+              marginBottom="mb-1"
+              labelMarginBottom="mb-0"
+              [label]="lang.map.employee_number"
+              [formControl]="employeeNumberCtrl"></app-input>
+            <app-select-input
+              class="w-full"
+              marginBottom="mb-1"
+              [options]="summonsArray"
+              [enableFilter]="true"
+              bindFilter="label"
+              bindValue="id"
+              bindLabel="label"
+              [label]="lang.map.employee_name"
+              [formControl]="employeeNameCtrl">
+            </app-select-input>
+          </div>
           <div class="max-h-[79vh] overflow-auto">
             <full-calendar
               [options]="callRequestsCalendarOptions"

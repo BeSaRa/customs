@@ -18,6 +18,10 @@ export class PersonDetails {
   status!: number;
   statusDateModified!: string;
   employeeDepartmentId!: number;
+  employeeNo!: number;
   typeInfo!: AdminResult;
   statusInfo!: AdminResult;
+
+  //extra
+  label!: string;
 }
