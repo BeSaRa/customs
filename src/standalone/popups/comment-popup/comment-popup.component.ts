@@ -114,9 +114,6 @@ export class CommentPopupComponent
   get isStatementReply() {
     return this.response === TaskResponses.STM_REPLY;
   }
-  get isStatementApprove() {
-    return this.response === TaskResponses.STM_DEP_APPROVE;
-  }
 
   get isSendToUser() {
     return this.response === TaskResponses.TO_USER;
@@ -288,11 +285,6 @@ export class CommentPopupComponent
     }
     if (this.isStatementReply) {
       this.form.get('comment')?.setValidators([CustomValidators.required]);
-    }
-    if (this.isStatementApprove) {
-      this.form
-        .get('comment')
-        ?.setValue(this.model.taskDetails.fullDescription);
     }
     this.form.updateValueAndValidity();
   }

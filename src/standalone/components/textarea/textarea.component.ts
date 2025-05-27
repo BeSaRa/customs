@@ -24,6 +24,7 @@ import { ControlDirective } from '@standalone/directives/control.directive';
 import { generateUUID, isNgModel } from '@utils/utils';
 import { ValidationErrorsComponent } from '@standalone/components/validation-errors/validation-errors.component';
 import { requiredValidator } from '@validators/validation-utils';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @Component({
   selector: 'app-textarea',
@@ -67,6 +68,8 @@ export class TextareaComponent
   name = generateUUID();
   @ContentChild(ControlDirective)
   template?: ControlDirective;
+  @ContentChild(InputSuffixDirective)
+  inputSuffix?: InputSuffixDirective;
   @Input()
   placeholder = '';
   @Input()

@@ -632,6 +632,7 @@ export class InvestigationComponent
       .loadAsLookups()
       .subscribe(ous => (this.organizationUnits = ous));
   }
+  private initialDescriptionValue: string | null = null;
 
   private setReviewStatementFormValues() {
     const { reviewerOuId, description, reply, statementSerial } =
@@ -640,6 +641,7 @@ export class InvestigationComponent
       reviewerOuId,
       description,
     });
+    this.initialDescriptionValue = description ?? null;
     if (reply) {
       this.reviewStatementForm.get('reply')?.setValue(reply);
     }
@@ -649,6 +651,9 @@ export class InvestigationComponent
         ?.setValue(statementSerial);
     }
     this.reviewStatementForm.disable();
+    if (this.model.hasResponse(TaskResponses.STM_DEP_APPROVE)) {
+      this.reviewStatementForm.get('description')?.enable();
+    }
   }
 
   get isStatementReply() {
@@ -657,5 +662,23 @@ export class InvestigationComponent
 
   get hasStatementReply(): boolean {
     return !!this.reviewStatementForm.get('reply')?.value;
+  }
+
+  statementRequestEditable(): boolean {
+    const descriptionControl = this.reviewStatementForm.get('description');
+    return (
+      this.model.hasResponse(TaskResponses.STM_DEP_APPROVE) &&
+      this.model.isClaimed() &&
+      descriptionControl?.value !== this.initialDescriptionValue
+    );
+  }
+
+  editStatementRequestDescription() {
+    this.service
+      .updateStatementRequestDescription(
+        this.model.taskDetails.activityProperties!.DescriptionId.value,
+        this.reviewStatementForm.get('description')?.value,
+      )
+      .subscribe();
   }
 }

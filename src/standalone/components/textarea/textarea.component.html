@@ -13,6 +13,9 @@
     class="group/text-area-wrapper input-form {{
       inputColor
     }} flex items-center justify-start">
+    <span
+      [ngClass]="{ suffix: inputSuffix }"
+      class="peer absolute hidden pointer-events-none"></span>
     @if (!hasCustomControl) {
       <textarea
         [rows]="rows"
@@ -26,6 +29,7 @@
     @if (hasCustomControl) {
       <ng-content select="[appControl]"></ng-content>
     }
+    <ng-content select="[appInputSuffix]"></ng-content>
   </div>
   @if (displayErrors) {
     <app-validation-errors [errors]="errors | async"></app-validation-errors>

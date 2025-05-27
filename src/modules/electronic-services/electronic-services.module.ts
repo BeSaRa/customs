@@ -53,6 +53,7 @@ import { EmployeesInboxManagementComponent } from '@modules/electronic-services/
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { PenaltyModificationComponent } from '@modules/electronic-services/components/penalty-modification/penalty-modification.component';
+import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { PenaltyModificationComponent } from '@modules/electronic-services/compo
     MatCheckboxModule,
     HighlightPipe,
     MatSortHeader,
+    InputSuffixDirective,
   ],
 })
 export class ElectronicServicesModule {}

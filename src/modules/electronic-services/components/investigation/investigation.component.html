@@ -286,10 +286,19 @@
         [bindLabel]="'getNames'"
         [nullable]="false">
       </app-select-input>
+
       <app-textarea
         formControlName="description"
         [label]="lang.map.description">
+        @if (statementRequestEditable()) {
+          <app-icon-button
+            (click)="editStatementRequestDescription()"
+            appInputSuffix
+            [matTooltip]="lang.map.edit"
+            icon="EDIT"></app-icon-button>
+        }
       </app-textarea>
+
       @if (hasStatementReply) {
         <app-textarea
           formControlName="reply"
