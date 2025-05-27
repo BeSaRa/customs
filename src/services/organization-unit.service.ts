@@ -12,6 +12,7 @@ import { BlobModel } from '@models/blob-model';
 import { HttpParams } from '@angular/common/http';
 import { OuLogo } from '@models/ou_logo';
 import { OrganizationUnitType } from '@enums/organization-unit-type';
+import { FetchOptionsContract } from '@contracts/fetch-options-contract';
 
 @CastResponseContainer({
   $pagination: {
@@ -80,5 +81,19 @@ export class OrganizationUnitService extends BaseCrudWithDialogService<
         fromObject: ouLogo as never,
       }),
     });
+  }
+
+  @CastResponse()
+  loadStatementOUsAsLookups(
+    options?: FetchOptionsContract,
+  ): Observable<OrganizationUnit[]> {
+    return this.http.get<OrganizationUnit[]>(
+      this.getUrlSegment() + '/statement/lookup',
+      {
+        params: new HttpParams({
+          fromObject: { ...options },
+        }),
+      },
+    );
   }
 }
