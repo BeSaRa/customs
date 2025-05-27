@@ -80,7 +80,7 @@ export class RequestStatementPopupComponent implements OnInit {
     return this.employeeService.hasPermissionTo('STATEMENT_APPROVAL');
   }
   loadOrganizationUnits() {
-    this.organizationUnitService.loadAsLookups().subscribe(ous => {
+    this.organizationUnitService.loadStatementOUsAsLookups().subscribe(ous => {
       this.organizationUnits = ous;
       this.fillDataForRework();
     });
