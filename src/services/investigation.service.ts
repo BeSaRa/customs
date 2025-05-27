@@ -400,4 +400,10 @@ export class InvestigationService
       organizationIds,
     );
   }
+
+  updateStatementRequestDescription(descId: number, description: string) {
+    return this.http.put(this.getUrlSegment() + `/statement-review/${descId}`, {
+      description,
+    });
+  }
 }
