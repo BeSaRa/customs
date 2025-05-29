@@ -120,6 +120,12 @@
                   <div class="w-full">
                     <h2
                       class="truncate max-w-full"
+                      [matTooltip]="meeting.event.extendedProps.employeeName"
+                      matTooltipPosition="above">
+                      {{ meeting.event.extendedProps.employeeName }}
+                    </h2>
+                    <h2
+                      class="truncate max-w-full"
                       [matTooltip]="meeting.event.title"
                       matTooltipPosition="above">
                       {{ meeting.event.title }}

@@ -114,9 +114,11 @@ export class CalendarComponent implements OnInit {
     if (employeeId) {
       callRequests = callRequests.filter(cr => cr.summonInfo.id === employeeId);
     }
-    if (employeeNumber !== '') {
-      callRequests = callRequests.filter(cr =>
-        cr.summonInfo.employeeNo.toString().includes(employeeNumber),
+    if (employeeNumber) {
+      callRequests = callRequests.filter(
+        cr =>
+          cr.summonInfo.employeeNo &&
+          cr.summonInfo.employeeNo.toString().includes(employeeNumber),
       );
     }
     this.setCallRequestsOnCalendar(callRequests);
@@ -309,7 +311,13 @@ export class CalendarComponent implements OnInit {
     const events = crs.map(callRequest => ({
       title: callRequest.note,
       date: new Date(callRequest.summonDate),
-      extendedProps: { ...callRequest },
+      extendedProps: {
+        ...callRequest,
+        employeeName:
+          this.lang.getCurrent().code === LangCodes.AR
+            ? callRequest.summonInfo.arName
+            : callRequest.summonInfo.enName,
+      },
     }));
     this.callRequestsCalendarOptions = {
       ...this.callRequestsCalendarOptions,
