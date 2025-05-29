@@ -67,6 +67,7 @@ import { OrganizationUnit } from '@models/organization-unit';
 import { OrganizationUnitService } from '@services/organization-unit.service';
 import { CommonCaseStatus } from '@enums/common-case-status';
 import { TaskResponses } from '@enums/task-responses';
+import { CaseTypes } from '@enums/case-types';
 
 @Component({
   selector: 'app-investigation',

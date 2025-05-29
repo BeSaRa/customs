@@ -133,13 +133,13 @@ export class GrievanceComponent extends BaseCaseComponent<
   protected readonly GrievanceFinalDecisionsEnum = GrievanceFinalDecisionsEnum;
   protected readonly ActivitiesName = ActivitiesName;
 
-  hasRequestStatement() {
-    return (
-      !this.model.isReviewStatement() &&
-      this.hasStatementCreatorPermission() &&
-      !!this.model.id
-    );
-  }
+  // hasRequestStatement() {
+  //   return (
+  //     !this.model.isReviewStatement() &&
+  //     this.hasStatementCreatorPermission() &&
+  //     !!this.model.id
+  //   );
+  // }
   openRequestStatementDialog() {
     this.statementService.openRequestStatementDialog(this.model, true);
   }
