@@ -103,6 +103,7 @@ export const AppIcons = {
   CHECK: 'check-bold',
   CLOSE_THICK: 'close-thick',
   CONTENT_SAVE_EDIT_OUTLINE: 'content-save-edit-outline',
+  CONTENT_SAVE_CHECK_OUTLINE: 'content-save-check-outline',
   CASH: 'cash',
   DASHBOARD: 'view-dashboard',
   REFERRAL_DISCIPLINARY_COMMITTEE: 'account-alert',

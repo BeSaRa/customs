@@ -889,4 +889,5 @@ export interface LangKeysContract {
   min_time: string;
   member1: string;
   member2: string;
+  save_the_edit: string;
 }

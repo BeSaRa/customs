@@ -292,10 +292,11 @@
         [label]="lang.map.description">
         @if (statementRequestEditable()) {
           <app-icon-button
+            class="bg-primary rounded-full text-white mx-1"
             (click)="editStatementRequestDescription()"
             appInputSuffix
-            [matTooltip]="lang.map.edit"
-            icon="EDIT"></app-icon-button>
+            [matTooltip]="lang.map.save_the_edit"
+            icon="CONTENT_SAVE_CHECK_OUTLINE"></app-icon-button>
         }
       </app-textarea>
 
