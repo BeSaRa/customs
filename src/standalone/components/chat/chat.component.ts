@@ -1,4 +1,9 @@
-import { AsyncPipe, DOCUMENT, NgClass } from '@angular/common';
+import {
+  AsyncPipe,
+  DOCUMENT,
+  NgClass,
+  NgOptimizedImage,
+} from '@angular/common';
 import {
   Component,
   effect,
@@ -53,6 +58,7 @@ import { ChatMessageAnchorRedirectDirective } from '@standalone/directives/chat-
     // AvatarInterrupterBtnComponent,
     AsyncPipe,
     ChatMessageAnchorRedirectDirective,
+    NgOptimizedImage,
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
