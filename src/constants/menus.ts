@@ -302,7 +302,6 @@ export const Menus: MenuItemContract[] = [
     langKey: 'menu_ai_search',
     icon: AppIcons.AI_SEARCH,
     path: AppFullRoutes.AI_SEARCH,
-    parent: MenuIdes.ADMINISTRATION,
     permission: 'OPEN_AI_CHAT',
   },
 ];

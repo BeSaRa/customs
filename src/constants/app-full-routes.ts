@@ -43,5 +43,5 @@ export const AppFullRoutes = {
   USER_GUIDE: '/home/user-guide',
   USER_DELEGATION: '/home/administration/user-delegation',
   PENALTY_MODIFICATION: '/home/electronic-services/penalty-modification',
-  AI_SEARCH: '/home/administration/ai-search',
+  AI_SEARCH: '/home/electronic-services/ai-search',
 };

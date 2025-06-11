@@ -54,6 +54,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { HighlightPipe } from '@standalone/directives/highlight.pipe';
 import { PenaltyModificationComponent } from '@modules/electronic-services/components/penalty-modification/penalty-modification.component';
 import { InputSuffixDirective } from '@standalone/directives/input-suffix.directive';
+import { AiSearchComponent } from '@modules/administration/components/ai-search/ai-search.component';
+import { RecorderComponent } from '@modules/administration/components/recorder/recorder.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,7 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
     CourtDecisionsComponent,
     PenaltyModificationComponent,
     EmployeesInboxManagementComponent,
+    AiSearchComponent,
   ],
   imports: [
     CommonModule,
@@ -116,6 +119,7 @@ import { InputSuffixDirective } from '@standalone/directives/input-suffix.direct
     HighlightPipe,
     MatSortHeader,
     InputSuffixDirective,
+    RecorderComponent,
   ],
 })
 export class ElectronicServicesModule {}

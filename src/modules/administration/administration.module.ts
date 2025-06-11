@@ -100,8 +100,6 @@ import { AdministrationRoutingModule } from './administration-routing.module';
 import { AdministrationComponent } from './administration.component';
 import { LocalizationComponent } from './components/localization/localization.component';
 import { UserPreferencesPopupComponent } from './popups/user-preferences-popup/user-preferences-popup.component';
-import { AiSearchComponent } from './components/ai-search/ai-search.component';
-import { RecorderComponent } from '@modules/administration/components/recorder/recorder.component';
 
 @NgModule({
   declarations: [
@@ -158,7 +156,6 @@ import { RecorderComponent } from '@modules/administration/components/recorder/r
     CustomMenuPopupComponent,
     UserDelegationComponent,
     UserDelegationPopupComponent,
-    AiSearchComponent,
   ],
   imports: [
     CommonModule,
@@ -215,7 +212,6 @@ import { RecorderComponent } from '@modules/administration/components/recorder/r
     CustomMenuUrlHandlerComponent,
     UserCustomMenusComponent,
     NgComponentOutlet,
-    RecorderComponent,
   ],
 })
 export class AdministrationModule {}
