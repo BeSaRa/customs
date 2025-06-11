@@ -9,6 +9,7 @@ export const azureInterceptor: HttpInterceptorFn = (req, next) => {
     req = req.clone({
       setHeaders: {
         'x-functions-key': config.CONFIG.AZURE_X_FUNCTION_KEY,
+        'Ocp-Apim-Subscription-Key': config.CONFIG.OCP_APIM_SUBSCRIPTION_KEY,
       },
     });
   }
