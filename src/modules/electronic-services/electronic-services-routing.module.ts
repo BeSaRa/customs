@@ -19,8 +19,8 @@ import { ArchivistGrievanceComponent } from '@modules/electronic-services/compon
 import { FinesComponent } from '@modules/electronic-services/components/fines/fines.component';
 import { CourtDecisionsComponent } from './components/court-decisions/court-decisions.component';
 import { CustomInvestigationRouteReuseStrategy } from '@models/custom-investigation-route-reuse-strategy';
-import { PenaltyModificationComponent } from '@modules/electronic-services/components/penalty-modification/penalty-modification.component';
 import { EmployeesInboxManagementComponent } from '@modules/electronic-services/components/employees-inbox-managament/employees-inbox-management.component';
+import { AiSearchComponent } from '@modules/administration/components/ai-search/ai-search.component';
 
 const routes: Routes = [
   { path: '', component: ElectronicServicesComponent },
@@ -116,6 +116,15 @@ const routes: Routes = [
     //     permission: AppPermissions.OFFLINE_PAYMENT,
     //   }),
     // ],
+  },
+  {
+    path: AppRoutes.AI_SEARCH,
+    component: AiSearchComponent,
+    canActivate: [
+      accessPageGuard({
+        permission: AppPermissions.OPEN_AI_CHAT,
+      }),
+    ],
   },
 ];
 

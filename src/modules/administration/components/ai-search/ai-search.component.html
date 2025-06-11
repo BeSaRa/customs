@@ -14,8 +14,11 @@
         @if (loadingSubject$ | async) {
           <ng-container [ngTemplateOutlet]="spinnerIcon" />
         }
-      </div> 
-          <app-recorder #recorder (recognized$)="searchForm.setValue($event)" (recognizing$)="searchForm.setValue($event)" />
+      </div>
+      <app-recorder
+        #recorder
+        (recognized$)="searchForm.setValue($event)"
+        (recognizing$)="searchForm.setValue($event)" />
     </div>
   </div>
 </div>
@@ -27,40 +30,61 @@
         <ng-container
           *ngTemplateOutlet="
             badge;
-            context: { $implicit: lang.map.search_about, value: searchToken(), klass: 'truncate max-w-[50%]' }
+            context: {
+              $implicit: lang.map.search_about,
+              value: searchToken(),
+              klass: 'truncate max-w-[50%]'
+            }
           " />
       }
       @if (total()) {
-        <ng-container *ngTemplateOutlet="badge; context: { $implicit: lang.map.result_count, value: total() }" />
+        <ng-container
+          *ngTemplateOutlet="
+            badge;
+            context: { $implicit: lang.map.result_count, value: total() }
+          " />
       }
     </div>
     <div class="flex justify-center items-center">
       <dl
         class="bg-gray-200 shadow-gray-200 overflow-hidden relative shadow-sm w-full rounded-md border-gray-400 border p-4 text-gray-700">
-        @for (item of searchResults; track getItem(item).chunk_id; let i = $index) {
-
-          <div class="flex flex-col border-b last-of-type:border-none border-gray-400 p-2 space-y-3">
+        @for (
+          item of searchResults;
+          track getItem(item).chunk_id;
+          let i = $index
+        ) {
+          <div
+            class="flex flex-col border-b last-of-type:border-none border-gray-400 p-2 space-y-3">
             <dt>
-              <a class="font-semibold text-primary underline cursor-pointer" [href]="getItem(item).ref_url" target="_blank">
+              <a
+                class="font-semibold text-primary underline cursor-pointer"
+                [href]="getItem(item).ref_url"
+                target="_blank">
                 {{ item.title }}
               </a>
               @if (item['@search.highlights']) {
                 <ng-template
                   *ngTemplateOutlet="
                     highlightOptions;
-                    context: { $implicit: getAsHighlight(item['@search.highlights']).merged_content }
+                    context: {
+                      $implicit: getAsHighlight(item['@search.highlights'])
+                        .merged_content
+                    }
                   " />
                 <ng-template
                   *ngTemplateOutlet="
                     highlightOptions;
-                    context: { $implicit: getAsHighlight(item['@search.highlights']).imageCaption }
+                    context: {
+                      $implicit: getAsHighlight(item['@search.highlights'])
+                        .imageCaption
+                    }
                   " />
               }
             </dt>
             <dd
               [ngClass]="{
                 '!truncate': isTruncatedContent()[i],
-                '!whitespace-nowrap': isTruncatedContent()[i],
+                '!whitespace-nowrap': isTruncatedContent()[i]
               }">
               {{ item.chunk }}
             </dd>
@@ -68,14 +92,28 @@
               class="text-blue-600 outline-none text-base bg-transparent underline flex justify-start items-center gap-1"
               type="button"
               (click)="isTruncatedContent()[i] = !isTruncatedContent()[i]">
-              {{ isTruncatedContent()[i] ? lang.map.show_more : lang.map.show_less }}
+              {{
+                isTruncatedContent()[i]
+                  ? lang.map.show_more
+                  : lang.map.show_less
+              }}
               @if (isTruncatedContent()[i]) {
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
                 </svg>
               } @else {
-                <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="size-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" />
                 </svg>
               }
             </button>
@@ -94,7 +132,8 @@
 }
 
 <ng-template #searchIcon>
-  <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+  <div
+    class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
     <svg
       class="w-4 h-4 text-gray-500"
       aria-hidden="true"
@@ -111,7 +150,8 @@
   </div>
 </ng-template>
 <ng-template #spinnerIcon>
-  <div class="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
+  <div
+    class="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
     <div
       class="animate-spin inline-block size-6 border-[3px] border-current border-t-transparent text-primary rounded-full"
       role="status"
@@ -126,7 +166,7 @@
     class="bg-primary  {{
       klass
     }} text-gray-200 rounded-md text-base px-2.5 py-0.5 border border-primary shadow-gray-200 shadow-sm"
-  >{{ label }} : <strong>{{ value }}</strong></span
+    >{{ label }} : <strong>{{ value }}</strong></span
   >
 </ng-template>
 
