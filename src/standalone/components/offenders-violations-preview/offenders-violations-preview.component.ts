@@ -30,6 +30,7 @@ import { Offender } from '@models/offender';
 import {
   filter,
   iif,
+  merge,
   of,
   shareReplay,
   Subject,
@@ -78,6 +79,7 @@ import { OffenderInvStatus } from '@enums/offender-inv-status';
 import { MatDialogClose } from '@angular/material/dialog';
 import { ModifiedPenaltyComponent } from '@modules/electronic-services/components/modified-penalty/modified-penalty.component';
 import { ActivitiesName } from '@enums/activities-name';
+import { InvestigationService } from '@services/investigation.service';
 
 @Component({
   selector: 'app-offenders-violations-preview',
@@ -123,6 +125,7 @@ export class OffendersViolationsPreviewComponent
   dialog = inject(DialogService);
   lookupService = inject(LookupService);
   employeeService = inject(EmployeeService);
+  investigationService = inject(InvestigationService);
   suspendedEmployeeService = inject(SuspendedEmployeeService);
   offenderTypes = OffenderTypes;
   reload$: Subject<void> = new Subject<void>();
@@ -131,6 +134,9 @@ export class OffendersViolationsPreviewComponent
   attachments$: Subject<Offender> = new Subject<Offender>();
   assignmentToAttend$: Subject<Offender> = new Subject<Offender>();
   suspendEmployee$ = new Subject<{ offender: Offender }>();
+  revokeReferralRequest$: Subject<Offender> = new Subject<Offender>();
+  revokeReferral$: Subject<Offender> = new Subject<Offender>();
+
   // referralOrTerminateDecision$ = new Subject<{
   //   offender: Offender;
   //   penaltyId: number | undefined;
@@ -428,6 +434,7 @@ export class OffendersViolationsPreviewComponent
 
   ngOnInit(): void {
     this.listenToView();
+    this.listenToRevokeReferralActions();
     this.listenToMakeDecision();
     this.listenToAttachments();
     this.listenToAssignmentToAttend();
@@ -477,6 +484,24 @@ export class OffendersViolationsPreviewComponent
         ),
       )
       .subscribe();
+  }
+  private listenToRevokeReferralActions() {
+    merge(
+      this.revokeReferralRequest$.pipe(map(() => true)),
+      this.revokeReferral$.pipe(map(() => false)),
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isRequest => {
+        this.investigationService
+          .referralWithdrawalAction(this.model().id, isRequest)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(() => {
+            const message = isRequest
+              ? this.lang.map.revoke_referral_request_success
+              : this.lang.map.revoke_referral_success;
+            this.dialog.success(message);
+          });
+      });
   }
 
   private listenToAttachments() {
@@ -805,6 +830,22 @@ export class OffendersViolationsPreviewComponent
       this.model().getActivityName() ===
         ActivitiesName.REVIEW_PENALTY_MODIFICATION &&
       element.status !== OffenderStatusEnum.UNDER_MODIFICATION
+    );
+  }
+
+  showRevokeReferralRequest(element: Offender) {
+    return (
+      this.openFrom === OpenFrom.SEARCH &&
+      (element.status ===
+        OffenderStatusEnum.REFERRED_TO_THE_ASSISTANT_PRESIDENT ||
+        element.status ===
+          OffenderStatusEnum.REFERRED_TO_THE_ASSISTANT_PRESIDENT_ASSISTANT)
+    );
+  }
+  showRevokeReferral(element: Offender) {
+    return (
+      this.openFrom === OpenFrom.SEARCH &&
+      element.status === OffenderStatusEnum.REFERRED_TO_LEGAL_AFFAIRS
     );
   }
 }

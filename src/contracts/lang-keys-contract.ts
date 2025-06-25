@@ -890,4 +890,9 @@ export interface LangKeysContract {
   member1: string;
   member2: string;
   save_the_edit: string;
+  revoke_referral: string;
+  revoke_referral_request: string;
+  revoke_referral_request_success: string;
+  revoke_referral_success: string;
+  approve_referral_withdraw: string;
 }

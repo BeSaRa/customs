@@ -223,4 +223,9 @@ export abstract class BaseCase<Service extends BaseCaseService<Model>, Model>
       this.getActivityName() === ActivitiesName.REVIEW_DEPARTMENT_STATEMENT
     );
   }
+  isReviewReferralWithdrawRequest() {
+    return (
+      this.getActivityName() === ActivitiesName.REVIEW_REFERRAL_WITHDRAW_REQUEST
+    );
+  }
 }

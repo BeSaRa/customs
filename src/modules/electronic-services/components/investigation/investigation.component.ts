@@ -362,7 +362,8 @@ export class InvestigationComponent
     if (
       (((!model.inMyInbox() && !this.isInvestigator()) || !model.canSave()) &&
         !model.isDrafted) ||
-      model.isReviewStatement()
+      model.isReviewStatement() ||
+      model.isReviewReferralWithdrawRequest()
     ) {
       this.readonly = true;
       this.canManageInvestigationElements = false; // specified for violations, offenders, external persons and attachments

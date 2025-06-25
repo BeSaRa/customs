@@ -36,6 +36,16 @@
       {{ lang.map.manager_approve }}
     </app-button>
   }
+  <!--  approve referral withdraw-->
+  @if (
+    model().inMyInbox() &&
+    model().hasResponse(taskResponses.APPROVE_REFERRAL_WITHDRAW)
+  ) {
+    <app-button
+      (click)="approve$.next(taskResponses.APPROVE_REFERRAL_WITHDRAW)">
+      {{ lang.map.approve_referral_withdraw }}
+    </app-button>
+  }
   <!-- hr manager approve -->
   @if (model().inMyInbox() && model().hasResponse(taskResponses.HR_APPROVE)) {
     <app-button (click)="approve$.next(taskResponses.HR_APPROVE)">
