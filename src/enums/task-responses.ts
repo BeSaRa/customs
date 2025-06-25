@@ -63,4 +63,5 @@ export enum TaskResponses {
   TO_PA_USER = 'to_pa_user',
   TO_PR = 'to_pr',
   TO_PR_USER = 'to_pr_user',
+  APPROVE_REFERRAL_WITHDRAW = 'approve_referral_withdraw',
 }

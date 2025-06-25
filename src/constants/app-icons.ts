@@ -124,6 +124,7 @@ export const AppIcons = {
   CUSTOM_MENU: 'microsoft-xbox-controller-menu',
   MODIFICATION_PENALTIES: 'receipt-text-edit-outline',
   AI_SEARCH: 'card-search-outline',
+  REVOKE_REFERRAL: 'file-undo',
 };
 
 export type AppIconsType = typeof AppIcons;

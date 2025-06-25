@@ -400,10 +400,20 @@ export class InvestigationService
       organizationIds,
     );
   }
-
   updateStatementRequestDescription(descId: number, description: string) {
     return this.http.put(this.getUrlSegment() + `/statement-review/${descId}`, {
       description,
     });
+  }
+  referralWithdrawalAction(
+    caseId: string,
+    request: boolean,
+  ): Observable<unknown> {
+    const action = request
+      ? 'referral-withdraw-request'
+      : 'referral-withdrawal';
+    const url = `${this.getUrlSegment()}/${action}/start`;
+    const params = new HttpParams().set('caseId', caseId);
+    return this.http.post(url, null, { params });
   }
 }

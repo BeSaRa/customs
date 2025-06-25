@@ -198,11 +198,11 @@
       </div>
     </th>
     <td mat-cell *matCellDef="let element">
-      @if (
-        (isClaimed() && isDecisionEnabled(element)) ||
-        canMakePenaltyModification(element)
-      ) {
-        <div class="flex justify-start gap-2">
+      <div class="flex justify-start gap-2">
+        @if (
+          (isClaimed() && isDecisionEnabled(element)) ||
+          canMakePenaltyModification(element)
+        ) {
           <div [matTooltip]="lang.map.view">
             <app-icon-button (click)="view$.next(element)" icon="VIEW" />
           </div>
@@ -217,8 +217,22 @@
             [isSomeOffenderViolationsProofed]="
               isSomeOffenderViolationsProofed(element.id)
             " />
-        </div>
-      }
+        }
+        @if (showRevokeReferralRequest(element)) {
+          <div [matTooltip]="lang.map.revoke_referral_request">
+            <app-icon-button
+              (click)="revokeReferralRequest$.next(element)"
+              icon="REVOKE_REFERRAL" />
+          </div>
+        }
+        @if (showRevokeReferral(element)) {
+          <div [matTooltip]="lang.map.revoke_referral">
+            <app-icon-button
+              (click)="revokeReferral$.next(element)"
+              icon="REVOKE_REFERRAL" />
+          </div>
+        }
+      </div>
     </td>
   </ng-container>
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
